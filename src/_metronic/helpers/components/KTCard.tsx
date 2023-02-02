@@ -38,27 +38,27 @@ const KTCard: FC<Props & WithChildren> = (props) => {
     children,
   } = props
   return (
-      <div
-          id={id}
-          className={clsx(
-              'card',
-              className && className,
-              {
-                'shadow-sm': shadow,
-                'card-flush': flush,
-                'card-px-0': resetSidePaddings,
-                'card-bordered': border,
-                'card-dashed': dashed,
-              },
-              stretch && `card-${stretch}`,
-              utilityP && `p-${utilityP}`,
-              utilityPX && `px-${utilityPX}`,
-              utilityPY && `py-${utilityPY}`,
-              rounded && `card-${rounded}`
-          )}
-      >
-        {children}
-      </div>
+    <div
+      id={id}
+      className={clsx(
+        'card',
+        className && className,
+        {
+          'shadow-sm': shadow,
+          'card-flush': flush,
+          'card-px-0': resetSidePaddings,
+          'card-bordered': border,
+          'card-dashed': dashed,
+        },
+        stretch && `card-${stretch}`,
+        utilityP && `p-${utilityP}`,
+        utilityPX && `px-${utilityPX}`,
+        utilityPY && `py-${utilityPY}`,
+        rounded && `card-${rounded}`
+      )}
+    >
+      {children}
+    </div>
   )
 }
 

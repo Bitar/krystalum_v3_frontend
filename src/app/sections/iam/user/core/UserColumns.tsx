@@ -7,28 +7,28 @@ import {User} from '../models/User'
 
 const UserColumns: ReadonlyArray<Column<User>> = [
   {
-    Header: (props) => <CustomHeader tableProps={props} title='Name' className='min-w-125px'/>,
+    Header: (props) => <CustomHeader tableProps={props} title='Name' className='min-w-125px' />,
     id: 'name',
-    Cell: ({...props}) => <TextCell dObject={props.data[props.row.index].name}/>,
+    Cell: ({...props}) => <TextCell dObject={props.data[props.row.index].name} />,
   },
   {
-    Header: (props) => <CustomHeader tableProps={props} title='Name' className='min-w-125px'/>,
+    Header: (props) => <CustomHeader tableProps={props} title='Name' className='min-w-125px' />,
     id: 'email',
-    Cell: ({...props}) => <TextCell dObject={props.data[props.row.index].email}/>,
+    Cell: ({...props}) => <TextCell dObject={props.data[props.row.index].email} />,
   },
   {
     Header: (props) => (
-        <CustomHeader tableProps={props} title='Actions' className='text-end min-w-100px'/>
+      <CustomHeader tableProps={props} title='Actions' className='text-end min-w-100px' />
     ),
     id: 'actions',
     Cell: ({...props}) => (
-        <ActionsCell
-            id={props.data[props.row.index].id}
-            path={'users'}
-            queryKey={QUERIES.USERS_LIST}
-            showView={true}
-            showEdit={false}
-        />
+      <ActionsCell
+        id={props.data[props.row.index].id}
+        path={'users'}
+        queryKey={QUERIES.USERS_LIST}
+        showView={true}
+        showEdit={false}
+      />
     ),
   },
 ]

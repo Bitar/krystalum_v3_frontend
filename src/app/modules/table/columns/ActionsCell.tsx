@@ -19,14 +19,14 @@ type Props = {
 }
 
 const ActionsCell: FC<React.PropsWithChildren<Props>> = ({
-                                                           id,
-                                                           path,
-                                                           queryKey,
-                                                           showEdit,
-                                                           showDelete = true,
-                                                           showView,
-                                                           callBackFn,
-                                                         }) => {
+  id,
+  path,
+  queryKey,
+  showEdit,
+  showDelete = true,
+  showView,
+  callBackFn,
+}) => {
   const queryClient = useQueryClient()
   const {state} = useQueryRequest()
   const [query] = useState<string>(stringifyRequestQuery(state))
@@ -35,43 +35,44 @@ const ActionsCell: FC<React.PropsWithChildren<Props>> = ({
     MenuComponent.reinitialization()
   }, [])
 
-
   const deleteItem = () => {
-    deleteObject(path + '/' + id).then(() => {
-      queryClient.invalidateQueries(`${queryKey}-${query}`)
-    }).finally(() => {
-      if (callBackFn) {
-        callBackFn()
-      }
-    })
+    deleteObject(path + '/' + id)
+      .then(() => {
+        queryClient.invalidateQueries(`${queryKey}-${query}`)
+      })
+      .finally(() => {
+        if (callBackFn) {
+          callBackFn()
+        }
+      })
   }
 
   return (
-      <>
-        {showView && (
-            <Link to={'/' + path + '/' + id} className='btn btn-icon btn-sm btn-active-light-info'>
-              <i className={clsx('fa fs-2 text-info', 'fa-eye')}></i>
-            </Link>
-        )}
+    <>
+      {showView && (
+        <Link to={'/' + path + '/' + id} className='btn btn-icon btn-sm btn-active-light-info'>
+          <i className={clsx('fa fs-2 text-info', 'fa-eye')}></i>
+        </Link>
+      )}
 
-        {showEdit && (
-            <Link
-                to={'/' + path + '/' + id + '/edit'}
-                className='btn btn-icon btn-sm btn-active-light-warning'
-            >
-              <i className={clsx('fa fs-2 text-warning', 'fa-pencil')}></i>
-            </Link>
-        )}
+      {showEdit && (
+        <Link
+          to={'/' + path + '/' + id + '/edit'}
+          className='btn btn-icon btn-sm btn-active-light-warning'
+        >
+          <i className={clsx('fa fs-2 text-warning', 'fa-pencil')}></i>
+        </Link>
+      )}
 
-        {showDelete && (
-            <a
-                className='btn btn-icon btn-sm btn-active-light-danger'
-                onClick={async () => deleteItem()}
-            >
-              <i className={clsx('fa fs-2 text-danger', 'fa-trash')}></i>
-            </a>
-        )}
-      </>
+      {showDelete && (
+        <a
+          className='btn btn-icon btn-sm btn-active-light-danger'
+          onClick={async () => deleteItem()}
+        >
+          <i className={clsx('fa fs-2 text-danger', 'fa-trash')}></i>
+        </a>
+      )}
+    </>
   )
 }
 

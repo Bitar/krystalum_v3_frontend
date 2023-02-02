@@ -33,6 +33,7 @@ export function Login() {
       const {data: auth} = await login(values.email, values.password)
 
       saveAuth(auth)
+
       const {data: user} = await getUserByToken(auth.token)
       setCurrentUser(user)
     } catch (error) {
@@ -71,13 +72,6 @@ export function Login() {
             <div className='d-flex justify-content-between mt-n5'>
               <div className='d-flex flex-stack mb-2'>
                 <label className='form-label fw-bolder text-dark fs-6 mb-0'>Password</label>
-                <Link
-                  to='/auth/forgot-password'
-                  className='link-primary fs-6 fw-bolder'
-                  style={{marginLeft: '5px'}}
-                >
-                  Forgot Password?
-                </Link>
               </div>
             </div>
             <Field
@@ -93,7 +87,7 @@ export function Login() {
           </div>
 
           <div className='text-center'>
-            <button type='submit' className='btn btn-lg btn-primary w-100 mb-5'>
+            <button type='submit' className='btn btn-lg btn-krys btn-hover-primary w-100 mb-5'>
               <span className='indicator-label'>Login</span>
               {isSubmitting && (
                 <span className='indicator-progress'>
@@ -102,6 +96,15 @@ export function Login() {
                 </span>
               )}
             </button>
+            <div className="text-start">
+              <Link
+                  to='/auth/forgot-password'
+                  className='link-primary fs-6 fw-bolder'
+                  style={{marginLeft: '5px'}}
+              >
+                Forgot Password?
+              </Link>
+            </div>
           </div>
         </Form>
       )}

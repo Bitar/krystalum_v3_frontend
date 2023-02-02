@@ -49,7 +49,7 @@ export function getUserByToken(token: string) {
     },
     transformResponse: [
       function (data) {
-        return JSON.parse(data).data.user
+        return JSON.parse(data).data
       },
     ],
   })

@@ -5,14 +5,14 @@ import {useLayout} from '../../../core/LayoutProvider'
 import {usePageData} from '../../../core/PageData'
 
 const DefaultTitle: FC = () => {
-  const {pageTitle, pageDescription, pageBreadcrumbs} = usePageData()
+  const {pageTitle, pageDescription, pageBreadcrumbs, showPageTitle} = usePageData()
   const {config} = useLayout()
   return (
     <div className='page-title d-flex justify-content-center flex-column me-5'>
       {/* begin::Title */}
       {pageTitle && (
         <h1 className='d-flex flex-column text-dark fw-bolder fs-3 mb-0'>
-          {pageTitle}
+          {showPageTitle && pageTitle}
           {pageDescription && config.pageTitle && config.pageTitle.description && (
             <>
               <span className='h-20px border-gray-200 border-start ms-3 mx-2'></span>

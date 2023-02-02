@@ -62,7 +62,6 @@ export const initialQueryResponse = {
   refetch: () => {},
   query: '',
   isLoading: false,
-
 }
 
 export type ListViewContextProps = {
