@@ -14,24 +14,20 @@ const AuthLayout = () => {
 
   return (
     <div
-      className='d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed'
-      style={{
-        backgroundImage: `url(${toAbsoluteUrl('/media/illustrations/sketchy-1/14.png')})`,
-      }}
-    >
+      className='d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed'>
       {/* begin::Content */}
       <div className='d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20'>
         {/* begin::Logo */}
         <a href='#' className='mb-12'>
           <img
             alt='Logo'
-            src={toAbsoluteUrl('/media/logos/default-dark.svg')}
-            className='theme-dark-show h-45px'
+            src={toAbsoluteUrl('/media/logos/logo-krystalum.png')}
+            className='theme-dark-show h-100px'
           />
           <img
             alt='Logo'
-            src={toAbsoluteUrl('/media/logos/default.svg')}
-            className='theme-light-show h-45px'
+            src={toAbsoluteUrl('/media/logos/logo-krystalum.png')}
+            className='theme-light-show h-100px'
           ></img>
         </a>
         {/* end::Logo */}
@@ -43,21 +39,21 @@ const AuthLayout = () => {
       </div>
       {/* end::Content */}
       {/* begin::Footer */}
-      <div className='d-flex flex-center flex-column-auto p-10'>
-        <div className='d-flex align-items-center fw-semibold fs-6'>
-          <a href='#' className='text-muted text-hover-primary px-2'>
-            About
-          </a>
+      {/*<div className='d-flex flex-center flex-column-auto p-10'>*/}
+      {/*  <div className='d-flex align-items-center fw-semibold fs-6'>*/}
+      {/*    <a href='#' className='text-muted text-hover-primary px-2'>*/}
+      {/*      About*/}
+      {/*    </a>*/}
 
-          <a href='#' className='text-muted text-hover-primary px-2'>
-            Contact
-          </a>
+      {/*    <a href='#' className='text-muted text-hover-primary px-2'>*/}
+      {/*      Contact*/}
+      {/*    </a>*/}
 
-          <a href='#' className='text-muted text-hover-primary px-2'>
-            Contact Us
-          </a>
-        </div>
-      </div>
+      {/*    <a href='#' className='text-muted text-hover-primary px-2'>*/}
+      {/*      Contact Us*/}
+      {/*    </a>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
       {/* end::Footer */}
     </div>
   )

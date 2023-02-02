@@ -1,13 +1,13 @@
 import {FC} from 'react'
 
 type Props = {
-  dObject: any
+  text: string
 }
 
-const TextCell: FC<Props> = ({dObject}) => (
+const TextCell: FC<Props> = ({text}) => (
   <div className='d-flex align-items-center'>
     <div className='d-flex flex-column'>
-      <span className='text-gray-800 pe-none mb-1'>{dObject}</span>
+      <span className='text-gray-800 pe-none mb-1 text-truncate'>{text}</span>
     </div>
   </div>
 )

@@ -13,7 +13,7 @@ import {AuthModel} from './_models'
 import * as authHelper from './AuthHelpers'
 import {getUserByToken} from './_requests'
 import {WithChildren} from '../../../../_metronic/helpers'
-import {User} from '../../../sections/iam/user/models/User'
+import {User} from '../../../models/iam/User'
 
 type AuthContextProps = {
   auth: AuthModel | undefined

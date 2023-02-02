@@ -10,7 +10,7 @@ const AsideToolbar = () => {
     <>
       <div className='aside-user d-flex align-items-sm-center justify-content-center py-5'>
         <div className='symbol symbol-50px'>
-          <img src={toAbsoluteUrl('/media/avatars/300-1.jpg')} alt='' />
+          <img src={currentUser?.image} alt='' />
         </div>
 
         <div className='aside-user-info flex-row-fluid flex-wrap ms-5'>
@@ -18,7 +18,7 @@ const AsideToolbar = () => {
             <div className='flex-grow-1 me-2'>
               <span className='text-white fs-6 fw-bold'>{currentUser?.name}</span>
 
-              <span className='text-gray-600 fw-bold d-block fs-8 mb-1'>Main Role</span>
+              <span className='text-gray-600 fw-bold d-block fs-8 mb-1'>{(currentUser?.roles.length !== undefined && currentUser?.roles.length) > 0 ? currentUser?.roles[0].name : 'N/A'}</span>
             </div>
 
             <div className='me-n2'>

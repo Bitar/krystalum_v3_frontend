@@ -99,7 +99,7 @@ export function Login() {
             <div className="text-start">
               <Link
                   to='/auth/forgot-password'
-                  className='link-primary fs-6 fw-bolder'
+                  className='link-krys fs-6 fw-bolder'
                   style={{marginLeft: '5px'}}
               >
                 Forgot Password?

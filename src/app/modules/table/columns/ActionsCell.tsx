@@ -50,8 +50,8 @@ const ActionsCell: FC<React.PropsWithChildren<Props>> = ({
   return (
     <>
       {showView && (
-        <Link to={'/' + path + '/' + id} className='btn btn-icon btn-sm btn-active-light-info'>
-          <i className={clsx('fa fs-2 text-info', 'fa-eye')}></i>
+        <Link to={'/' + path + '/' + id} className='btn btn-icon btn-active-light-primary'>
+          <i className={clsx('fa-duotone fs-3 text-primary', 'fa-eye')}></i>
         </Link>
       )}
 
@@ -60,7 +60,7 @@ const ActionsCell: FC<React.PropsWithChildren<Props>> = ({
           to={'/' + path + '/' + id + '/edit'}
           className='btn btn-icon btn-sm btn-active-light-warning'
         >
-          <i className={clsx('fa fs-2 text-warning', 'fa-pencil')}></i>
+          <i className={clsx('fa-duotone fs-3 text-warning', 'fa-pencil')}></i>
         </Link>
       )}
 
@@ -69,7 +69,7 @@ const ActionsCell: FC<React.PropsWithChildren<Props>> = ({
           className='btn btn-icon btn-sm btn-active-light-danger'
           onClick={async () => deleteItem()}
         >
-          <i className={clsx('fa fs-2 text-danger', 'fa-trash')}></i>
+          <i className={clsx('fa-duotone fs-3 text-danger', 'fa-trash')}></i>
         </a>
       )}
     </>

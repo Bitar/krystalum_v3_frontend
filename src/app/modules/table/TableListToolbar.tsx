@@ -1,6 +1,7 @@
-import {Link} from 'react-router-dom'
+// import {Link} from 'react-router-dom'
 import React, {FC} from 'react'
-import clsx from 'clsx'
+// import clsx from 'clsx'
+import CreateButton from '../../components/buttons/Create';
 
 type Props = {
   name: string
@@ -29,9 +30,10 @@ const TableListToolbar: FC<React.PropsWithChildren<Props>> = ({name, url, showAd
       {/*}*/}
 
       {showAdd && (
-        <Link to={url + '/create'} className='btn-icon btn btn-primary'>
-          <i className={clsx('fa fs-2', 'fa-plus')}></i>
-        </Link>
+          <CreateButton url={url}/>
+        // <Link to={url + '/create'} className='btn-icon btn btn-primary'>
+        //   <i className={clsx('fa fs-2', 'fa-plus')}></i>
+        // </Link>
       )}
     </div>
   )

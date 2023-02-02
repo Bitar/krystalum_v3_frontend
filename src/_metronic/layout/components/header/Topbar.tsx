@@ -73,7 +73,7 @@ const Topbar: FC = () => {
         {/* end::Menu wrapper */}
       </div>
 
-      {/* Quick links */}
+      {/* Quick buttons */}
       <div className={clsx('d-flex align-items-center', toolbarButtonMarginClass)}>
         {/* begin::Menu wrapper */}
         <div

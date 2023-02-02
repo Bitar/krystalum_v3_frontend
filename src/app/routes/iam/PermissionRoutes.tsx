@@ -1,17 +1,13 @@
-import {Navigate, Route, Routes} from 'react-router-dom'
-// import {UserCreate} from '../UserCreate'
-// import {PageLink, PageTitle} from '../../../../layout/core'
+import {Route, Routes} from 'react-router-dom'
 import React from 'react'
-import {PageLink, PageTitle} from '../../../../../_metronic/layout/core'
-import {SuspenseView} from '../../../../components/SuspenseView'
-import UserIndex from './UserIndex'
-// import {UserView} from './UserView'
-// import {SuspenseView} from '../../../../layout/SuspenseView'
+import {PageLink, PageTitle} from '../../../_metronic/layout/core'
+import {SuspenseView} from '../../components/SuspenseView'
+import PermissionIndex from '../../sections/iam/permission/pages/Index';
 
-const usersBreadCrumbs: Array<PageLink> = [
+const permissionsBreadcrumbs: Array<PageLink> = [
     {
-        title: 'Users',
-        path: '/iam/users/',
+        title: 'Permissions',
+        path: '/iam/permissions/',
         isSeparator: false,
         isActive: false,
     },
@@ -23,13 +19,13 @@ const usersBreadCrumbs: Array<PageLink> = [
     },
 ]
 
-const UserRoutes: React.FC = () => {
+const PermissionRoutes: React.FC = () => {
     return (
         <Routes>
             <Route index element={
                 <SuspenseView>
-                    <PageTitle breadcrumbs={[]}>{'Users'}</PageTitle>
-                    <UserIndex/>
+                    <PageTitle breadcrumbs={[]}>{'Permissions'}</PageTitle>
+                    <PermissionIndex/>
                 </SuspenseView>
             }/>
             <Route
@@ -37,7 +33,7 @@ const UserRoutes: React.FC = () => {
                 element={
                     <>
                         <SuspenseView>
-                            <PageTitle breadcrumbs={usersBreadCrumbs} showPageTitle={false}>{'Add User'}</PageTitle>
+                            <PageTitle breadcrumbs={permissionsBreadcrumbs} showPageTitle={false}>{'Add Permission'}</PageTitle>
                             {/*<UserCreate />*/}
                         </SuspenseView>
                     </>
@@ -48,7 +44,7 @@ const UserRoutes: React.FC = () => {
                 element={
                     <>
                         <SuspenseView>
-                            <PageTitle breadcrumbs={usersBreadCrumbs}>{'View User'}</PageTitle>
+                            <PageTitle breadcrumbs={permissionsBreadcrumbs}>{'View Permission'}</PageTitle>
                             {/*<UserView />*/}
                         </SuspenseView>
                     </>
@@ -58,4 +54,4 @@ const UserRoutes: React.FC = () => {
     )
 }
 
-export default UserRoutes;
+export default PermissionRoutes;

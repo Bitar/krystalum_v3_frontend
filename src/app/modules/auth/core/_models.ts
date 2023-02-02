@@ -1,4 +1,4 @@
-import {User} from '../../../sections/iam/user/models/User'
+import {User} from '../../../models/iam/User'
 
 export interface AuthModel {
   data: User
