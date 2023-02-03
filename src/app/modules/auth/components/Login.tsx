@@ -48,11 +48,11 @@ export function Login() {
     <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={loginSchema}>
       {({isSubmitting}) => (
         <Form className='form w-100'>
-          {hasErrors && <Alert variant={'danger'}> {errorMessage} </Alert>}
-
           <div className='text-center mb-10'>
             <h1 className='text-dark mb-3'>Sign In to Krystalum</h1>
           </div>
+
+          {hasErrors && <Alert variant={'danger'}> {errorMessage} </Alert>}
 
           <div className='fv-row mb-10'>
             <label className='form-label fs-6 fw-bolder text-dark'>Email</label>
