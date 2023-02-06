@@ -1,13 +1,13 @@
 import {Navigate, Route, Routes} from 'react-router-dom'
 import {MasterLayout} from '../../_metronic/layout/MasterLayout'
-import {DashboardWrapper} from '../pages/dashboard/DashboardWrapper'
+import {DashboardWrapper} from './home/DashboardWrapper'
 import {SuspenseView} from '../components/SuspenseView'
 import {lazy} from 'react'
 
 export const PrivateRoutes = () => {
-    const UserRoutes = lazy(() => import('../routes/iam/UserRoutes'));
-    const PermissionRoutes = lazy(() => import('../routes/iam/PermissionRoutes'));
-    const RoleRoutes = lazy(() => import('../routes/iam/RoleRoutes'));
+    const UserRoutes = lazy(() => import('./iam/UserRoutes'));
+    const PermissionRoutes = lazy(() => import('./iam/PermissionRoutes'));
+    const RoleRoutes = lazy(() => import('./iam/RoleRoutes'));
 
     return (
         <Routes>

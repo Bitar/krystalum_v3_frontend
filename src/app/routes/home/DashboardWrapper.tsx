@@ -1,0 +1,17 @@
+import {useIntl} from 'react-intl'
+import {PageTitle} from '../../../_metronic/layout/core'
+
+const DashboardPage = () => <></>
+
+const DashboardWrapper = () => {
+    const intl = useIntl()
+
+    return (
+        <>
+            <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.DASHBOARD'})}</PageTitle>
+            <DashboardPage/>
+        </>
+    )
+}
+
+export {DashboardWrapper};

@@ -3,6 +3,8 @@ import React from 'react'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/SuspenseView'
 import PermissionIndex from '../../sections/iam/permission/pages/Index';
+import PermissionCreate from '../../sections/iam/permission/pages/Create';
+import PermissionEdit from '../../sections/iam/permission/pages/Edit';
 
 const permissionsBreadcrumbs: Array<PageLink> = [
     {
@@ -33,19 +35,19 @@ const PermissionRoutes: React.FC = () => {
                 element={
                     <>
                         <SuspenseView>
-                            <PageTitle breadcrumbs={permissionsBreadcrumbs} showPageTitle={false}>{'Add Permission'}</PageTitle>
-                            {/*<UserCreate />*/}
+                            <PageTitle breadcrumbs={permissionsBreadcrumbs} showPageTitle={false}>{'Create'}</PageTitle>
+                            <PermissionCreate />
                         </SuspenseView>
                     </>
                 }
             />
             <Route
-                path='/:id/*'
+                path='/:id/edit'
                 element={
                     <>
                         <SuspenseView>
-                            <PageTitle breadcrumbs={permissionsBreadcrumbs}>{'View Permission'}</PageTitle>
-                            {/*<UserView />*/}
+                            <PageTitle breadcrumbs={permissionsBreadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
+                            <PermissionEdit />
                         </SuspenseView>
                     </>
                 }

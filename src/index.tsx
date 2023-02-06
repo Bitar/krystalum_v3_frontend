@@ -15,7 +15,7 @@ import 'nouislider/dist/nouislider.css'
 import './_metronic/assets/sass/style.scss'
 import './_metronic/assets/sass/plugins.scss'
 import './_metronic/assets/sass/style.react.scss'
-import {AppRoutes} from './app/routing/AppRoutes'
+import {AppRoutes} from './app/routes/AppRoutes'
 import {AuthProvider, setupAxios} from './app/modules/auth'
 import {ThemeModeProvider} from './_metronic/partials/layout/theme-mode/ThemeModeProvider'
 /**

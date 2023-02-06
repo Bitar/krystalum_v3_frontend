@@ -7,7 +7,7 @@ type Props = {
 
 const CreateButton: React.FC<Props> = ({url}) => {
     return (
-        <a href={(url ? url : '') + '/create'} className='btn btn-icon btn-success text-hover-success' data-bs-toggle='tooltip'
+        <a href={(url ? url : '') + '/create'} className='btn btn-icon btn-success text-hover-success fs-6' data-bs-toggle='tooltip'
            data-bs-trigger='hover'
            data-bs-dismiss-='click'
            title='Create'>
