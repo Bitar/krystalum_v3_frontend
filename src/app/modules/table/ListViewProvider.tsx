@@ -6,8 +6,7 @@ import {
   groupingOnSelect,
   initialListView,
   ListViewContextProps,
-  groupingOnSelectAll,
-  WithChildren,
+  groupingOnSelectAll
 } from '../../../_metronic/helpers'
 import {useQueryResponse, useQueryResponseData} from './QueryResponseProvider'
 

@@ -19,6 +19,22 @@ $theme-light-colors: map-merge($theme-light-colors, ('krys': $krys-light));
 $theme-active-colors: map-merge($theme-light-colors, ('krys': $krys-active));
 $theme-inverse-colors: map-merge($theme-light-colors, ('krys': $krys-inverse));
 
+.css-13cymwt-control:hover, .css-t3ipsp-control:hover {
+  border-color: var(--bs-gray-300) !important;
+  box-shadow: none !important;
+}
+
+.css-13cymwt-control, .css-t3ipsp-control {
+  border-color: var(--bs-gray-300) !important;
+  box-shadow: none !important;
+  font-weight: 500;
+}
+
+.css-1jqq78o-placeholder {
+  color: var(--bs-gray-500) !important;
+  font-size: 1.075rem;
+}
+
 // Bootstrap initialization
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';

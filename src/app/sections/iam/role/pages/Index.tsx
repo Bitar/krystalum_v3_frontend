@@ -1,3 +1,5 @@
+import {useMemo} from 'react'
+
 import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers'
 import {QueryRequestProvider} from '../../../../modules/table/QueryRequestProvider'
 import {
@@ -6,19 +8,28 @@ import {
     useQueryResponseLoading,
 } from '../../../../modules/table/QueryResponseProvider'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
-import {useMemo} from 'react'
-import {TableHeader} from '../../../../modules/table/TableHeader'
 import {RolesColumns} from '../core/TableColumns';
 import KrysTable from '../../../../components/KrysTable';
 import {getRoles} from '../../../../requests/iam/Role';
+import {Actions} from '../../../../helpers/variables';
+import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import {useSearchParams} from 'react-router-dom';
+import FormSuccess from '../../../../components/form/FormSuccess';
 
 const RoleIndex = () => {
+    const [searchParams] = useSearchParams();
+
     return (
         <QueryRequestProvider>
             <QueryResponseProvider id={QUERIES.ROLES_LIST} requestFunction={getRoles}>
                 <ListViewProvider>
+                    {
+                        searchParams.has('success') ? <FormSuccess type={searchParams.get('success')} model='role' /> : <></>
+                    }
+
                     <KTCard>
-                        <TableHeader name='Role' url='/iam/roles' showFilter={false}/>
+                        <KTCardHeader text='All Roles' icon="fa-regular fa-list" icon_style="fs-3 text-primary" actions={[{type: Actions.CREATE, url: '/iam/roles'}]}/>
+
                         <KTCardBody>
                             {/*<UserFilter />*/}
                             <RoleTable/>

@@ -3,6 +3,8 @@ import React from 'react'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/SuspenseView'
 import RoleIndex from '../../sections/iam/role/pages/Index';
+import RoleCreate from '../../sections/iam/role/pages/Create';
+import RoleEdit from '../../sections/iam/role/pages/Edit';
 
 const rolesBreadcrumbs: Array<PageLink> = [
     {
@@ -33,19 +35,19 @@ const RoleRoutes: React.FC = () => {
                 element={
                     <>
                         <SuspenseView>
-                            <PageTitle breadcrumbs={rolesBreadcrumbs} showPageTitle={false}>{'Add Role'}</PageTitle>
-                            {/*<UserCreate />*/}
+                            <PageTitle breadcrumbs={rolesBreadcrumbs} showPageTitle={false}>{'Create'}</PageTitle>
+                            <RoleCreate />
                         </SuspenseView>
                     </>
                 }
             />
             <Route
-                path='/:id/*'
+                path='/:id/edit'
                 element={
                     <>
                         <SuspenseView>
-                            <PageTitle breadcrumbs={rolesBreadcrumbs}>{'View Role'}</PageTitle>
-                            {/*<UserView />*/}
+                            <PageTitle breadcrumbs={rolesBreadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
+                            <RoleEdit />
                         </SuspenseView>
                     </>
                 }

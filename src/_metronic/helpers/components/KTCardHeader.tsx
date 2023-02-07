@@ -63,9 +63,9 @@ const KTCardHeader: FC<Props> = ({
                 (actions && actions.length > 0) ? <div className="card-toolbar">
                     {
                         actions.map((cardAction, index) => {
-                            if(cardAction.type == Actions.CREATE) {
+                            if(cardAction.type === Actions.CREATE) {
                                 return (
-                                    <CreateButton url={cardAction.url}/>
+                                    <CreateButton url={cardAction.url} key={index}/>
                                 );
                             } else {
                                 return <></>;

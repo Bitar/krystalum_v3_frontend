@@ -3,6 +3,7 @@ import React from 'react'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/SuspenseView'
 import UserIndex from '../../sections/iam/user/pages/Index'
+import UserCreate from '../../sections/iam/user/pages/Create';
 
 const usersBreadCrumbs: Array<PageLink> = [
     {
@@ -33,8 +34,8 @@ const UserRoutes: React.FC = () => {
                 element={
                     <>
                         <SuspenseView>
-                            <PageTitle breadcrumbs={usersBreadCrumbs} showPageTitle={false}>{'Add User'}</PageTitle>
-                            {/*<UserCreate />*/}
+                            <PageTitle breadcrumbs={usersBreadCrumbs} showPageTitle={false}>{'Create'}</PageTitle>
+                            <UserCreate />
                         </SuspenseView>
                     </>
                 }
@@ -44,7 +45,7 @@ const UserRoutes: React.FC = () => {
                 element={
                     <>
                         <SuspenseView>
-                            <PageTitle breadcrumbs={usersBreadCrumbs}>{'View User'}</PageTitle>
+                            <PageTitle breadcrumbs={usersBreadCrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
                             {/*<UserView />*/}
                         </SuspenseView>
                     </>

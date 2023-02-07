@@ -19,10 +19,11 @@ const KrysTable: React.FC<Props> = ({data, columns, model, isLoading}) => {
     })
 
     return (
-        <>
-            <div className='table-responsive'>
+        // className="border rounded px-5"
+        <div >
+            <div className='table-responsive border rounded'>
                 <Table
-                    className='table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer'
+                    className='align-middle table-row-bordered fs-6 gy-5 gs-7 dataTable table-striped no-footer'
                     {...getTableProps()}
                 >
                     <thead>
@@ -52,7 +53,7 @@ const KrysTable: React.FC<Props> = ({data, columns, model, isLoading}) => {
             </div>
             <TableListPagination/>
             {isLoading && <TableListLoading/>}
-        </>
+        </div>
     );
 }
 

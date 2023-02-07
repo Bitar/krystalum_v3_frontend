@@ -13,3 +13,19 @@ export const extractErrors = (error: any) => {
         return [];
     }
 }
+
+export const createFormData = (form: any) => {
+    let formData = new FormData();
+
+    for (const key in form) {
+        if(form[key] instanceof Array) {
+            for (const item in form[key]) {
+                formData.append(`${key}[]`, form[key][item].id)
+            }
+        } else {
+            formData.append(key, form[key])
+        }
+    }
+
+    return formData;
+}

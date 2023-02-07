@@ -16,7 +16,7 @@ import KrysFormFooter from '../../../../components/form/KrysFormFooter';
 import {Actions} from '../../../../helpers/variables';
 
 
-const PermissionCreate = () => {
+const PermissionCreate: React.FC = () => {
     const [permission, setPermission] = useState<Permission>(defaultPermission);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -61,7 +61,7 @@ const PermissionCreate = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true} />
 
-                                    <Field className="form-control form-control-solid" type="text"
+                                    <Field className="form-control fs-6" type="text"
                                            placeholder="Enter permission name" name="name"/>
 
                                     <div className="mt-1 text-danger">

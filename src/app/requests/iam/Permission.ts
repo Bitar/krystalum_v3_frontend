@@ -1,18 +1,9 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
 import {Permission, PermissionPaginate} from '../../models/iam/Permission';
+import {createFormData} from '../helpers';
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/permissions`
-
-const createPermissionFormData = (permission: any) => {
-    let formData = new FormData();
-
-    for (const key in permission) {
-        formData.append(key, permission[key])
-    }
-
-    return formData;
-}
 
 export const getPermissions = (query?: String): Promise<PermissionPaginate> => {
     let url = `${ENDPOINT}`;
@@ -34,7 +25,7 @@ export const getPermission = async (id: number): Promise<Permission | AxiosError
 }
 
 export const storePermission = async (permission: any): Promise<Permission | AxiosError | undefined> => {
-    let formData = createPermissionFormData(permission);
+    let formData = createFormData(permission);
 
     return await axios.post(ENDPOINT + '/', formData)
         .then(res => res.data.data)
@@ -46,7 +37,7 @@ export const storePermission = async (permission: any): Promise<Permission | Axi
 }
 
 export const updatePermission = async (permission: any): Promise<Permission | AxiosError | undefined> => {
-    let formData = createPermissionFormData(permission);
+    let formData = createFormData(permission);
 
     formData.append('_method', 'put');
 

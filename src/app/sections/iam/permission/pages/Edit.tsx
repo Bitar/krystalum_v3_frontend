@@ -8,7 +8,7 @@ import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
 import {defaultPermission, Permission} from '../../../../models/iam/Permission';
-import {getPermission, storePermission, updatePermission} from '../../../../requests/iam/Permission';
+import {getPermission, updatePermission} from '../../../../requests/iam/Permission';
 import {extractErrors} from '../../../../requests/helpers';
 import FormErrors from '../../../../components/form/FormErrors';
 import KrysFormLabel from '../../../../components/form/KrysFormLabel';
@@ -16,7 +16,7 @@ import KrysFormFooter from '../../../../components/form/KrysFormFooter';
 import {Actions} from '../../../../helpers/variables';
 
 
-const PermissionEdit = () => {
+const PermissionEdit: React.FC = () => {
     const [permission, setPermission] = useState<Permission>(defaultPermission);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -67,7 +67,6 @@ const PermissionEdit = () => {
         });
     }
 
-
     return (
         <KTCard>
             <KTCardHeader text="Edit Permission" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
@@ -82,7 +81,7 @@ const PermissionEdit = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true} />
 
-                                    <Field className="form-control form-control-solid" type="text"
+                                    <Field className="form-control fs-6" type="text"
                                            placeholder="Enter permission name" name="name"/>
 
                                     <div className="mt-1 text-danger">

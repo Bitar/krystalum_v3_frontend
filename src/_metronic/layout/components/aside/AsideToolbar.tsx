@@ -1,5 +1,5 @@
 import {useAuth} from '../../../../app/modules/auth'
-import {KTSVG, toAbsoluteUrl} from '../../../helpers'
+import {KTSVG} from '../../../helpers'
 import {HeaderUserMenu} from '../../../partials'
 
 /* eslint-disable jsx-a11y/anchor-is-valid */

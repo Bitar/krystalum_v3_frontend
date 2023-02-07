@@ -29,7 +29,7 @@ const UserInfoCell: FC<Props> = ({user}) => (
         )}
       </a>
     </div>
-    <div className='d-flex flex-column'>
+    <div className='d-flex flex-column' style={{fontSize: '13px'}}>
       <a href='#' className='text-gray-800 text-hover-primary mb-1 fw-bold'>
         {user.name}
       </a>

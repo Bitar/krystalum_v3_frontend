@@ -25,7 +25,7 @@ const RolesColumns: ReadonlyArray<Column<Role>> = [
         Cell: ({...props}) => (
             <ActionsCell
                 id={props.data[props.row.index].id}
-                path={'roles'}
+                path={'iam/roles'}
                 queryKey={QUERIES.ROLES_LIST}
                 showView={true}
                 showEdit={true}

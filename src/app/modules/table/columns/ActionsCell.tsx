@@ -50,8 +50,8 @@ const ActionsCell: FC<React.PropsWithChildren<Props>> = ({
   return (
     <>
       {showView && (
-        <Link to={'/' + path + '/' + id} className='btn btn-icon btn-active-light-primary'>
-          <i className={clsx('fa-duotone fs-3 text-primary', 'fa-eye')}></i>
+        <Link to={'/' + path + '/' + id} className='btn btn-icon btn-active-light-info'>
+          <i className={clsx('fa-duotone fs-3 text-info', 'fa-circle-info')}></i>
         </Link>
       )}
 

@@ -8,3 +8,5 @@ export type Role = {
 }
 
 export type RolePaginate = Response<Role[]>
+
+export const defaultRole: Role = {id: 0, name: "", permissions: []};

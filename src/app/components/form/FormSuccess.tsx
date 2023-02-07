@@ -1,5 +1,5 @@
 import React from 'react'
-import {Alert} from 'react-bootstrap';
+
 import {Actions} from '../../helpers/variables';
 
 interface Props {
@@ -10,9 +10,9 @@ interface Props {
 const FormSuccess: React.FC<Props> = ({type, model}) => {
     let message: string | undefined = undefined;
 
-    if (type !== null && parseInt(type) == Actions.CREATE) {
+    if (type !== null && parseInt(type) === Actions.CREATE) {
         message = `The ${model} was created.`
-    } else if (type !== null && parseInt(type) == Actions.EDIT) {
+    } else if (type !== null && parseInt(type) === Actions.EDIT) {
         message = `The ${model} was updated.`
     }
 
