@@ -27,8 +27,10 @@ const RolesColumns: ReadonlyArray<Column<Role>> = [
                 id={props.data[props.row.index].id}
                 path={'iam/roles'}
                 queryKey={QUERIES.ROLES_LIST}
-                showView={true}
+                showView={false}
                 showEdit={true}
+                title="Delete Role"
+                text={`Are you sure you want to delete the role '${props.data[props.row.index].name}'?`}
             />
         ),
     },

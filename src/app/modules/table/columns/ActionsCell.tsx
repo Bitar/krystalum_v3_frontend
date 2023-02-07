@@ -7,73 +7,110 @@ import {useQueryClient} from 'react-query'
 import {deleteObject} from '../../../requests'
 import {useQueryRequest} from '../QueryRequestProvider'
 import clsx from 'clsx'
+import Swal from 'sweetalert2';
+import axios from 'axios';
+import {extractErrors} from '../../../requests/helpers';
 
 type Props = {
-  id: ID
-  path: string
-  queryKey: string
-  showEdit?: boolean
-  showDelete?: boolean
-  showView?: boolean
-  callBackFn?: any
+    id: ID
+    path: string
+    queryKey: string
+    showEdit?: boolean
+    showDelete?: boolean
+    showView?: boolean
+    callBackFn?: any
+    title?: string,
+    text?: string
 }
 
 const ActionsCell: FC<React.PropsWithChildren<Props>> = ({
-  id,
-  path,
-  queryKey,
-  showEdit,
-  showDelete = true,
-  showView,
-  callBackFn,
-}) => {
-  const queryClient = useQueryClient()
-  const {state} = useQueryRequest()
-  const [query] = useState<string>(stringifyRequestQuery(state))
+                                                             id,
+                                                             path,
+                                                             queryKey,
+                                                             showEdit,
+                                                             showDelete = true,
+                                                             showView,
+                                                             callBackFn,
+                                                             title,
+                                                             text
+                                                         }) => {
+    const queryClient = useQueryClient()
+    const {state} = useQueryRequest()
+    const [query] = useState<string>(stringifyRequestQuery(state))
 
-  useEffect(() => {
-    MenuComponent.reinitialization()
-  }, [])
+    useEffect(() => {
+        MenuComponent.reinitialization()
+    }, [])
 
-  const deleteItem = () => {
-    deleteObject(path + '/' + id)
-      .then(() => {
-        queryClient.invalidateQueries(`${queryKey}-${query}`)
-      })
-      .finally(() => {
-        if (callBackFn) {
-          callBackFn()
+    const deleteItem = async () => {
+        const {isConfirmed} = await Swal.fire({
+            title: title ? title : 'Delete',
+            text: text ? text : 'Are you sure you want to delete this item?',
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: 'Confirm Delete',
+            confirmButtonColor: "#DB4437",
+            cancelButtonText: 'Dismiss',
+            reverseButtons: true
+        })
+
+        if (isConfirmed) {
+            deleteObject(path + '/' + id)
+                .then(() => {
+                    queryClient.invalidateQueries(`${queryKey}-${query}`)
+                }).catch((error) => {
+                if (axios.isAxiosError(error)) {
+                    const errorMessages = extractErrors(error).map((errorMessage) => `<li>${errorMessage}</li>`)
+
+                    // we need to show the error
+                    Swal.fire(
+                        'Something Wrong Happened',
+                        "<p>" + errorMessages.join() + "</p>",
+                        "error"
+                    );
+                } else if (error === undefined) {
+                    // we need to show a generic error
+                    Swal.fire(
+                        'Something Wrong Happened',
+                        "<p>Could not complete your request. Please try again later.</p>",
+                        "error"
+                    );
+                }
+            }).finally(() => {
+                if (callBackFn) {
+                    callBackFn()
+                }
+            });
         }
-      })
-  }
+    }
 
-  return (
-    <>
-      {showView && (
-        <Link to={'/' + path + '/' + id} className='btn btn-icon btn-active-light-info'>
-          <i className={clsx('fa-duotone fs-3 text-info', 'fa-circle-info')}></i>
-        </Link>
-      )}
+    return (
+        <>
+            {showView && (
+                <Link to={'/' + path + '/' + id} className='btn btn-icon btn-active-light-info'>
+                    <i className={clsx('fa-duotone fs-3 text-info', 'fa-circle-info')}></i>
+                </Link>
+            )}
 
-      {showEdit && (
-        <Link
-          to={'/' + path + '/' + id + '/edit'}
-          className='btn btn-icon btn-sm btn-active-light-warning'
-        >
-          <i className={clsx('fa-duotone fs-3 text-warning', 'fa-pencil')}></i>
-        </Link>
-      )}
+            {showEdit && (
+                <Link
+                    to={'/' + path + '/' + id + '/edit'}
+                    className='btn btn-icon btn-sm btn-active-light-warning'
+                >
+                    <i className={clsx('fa-duotone fs-3 text-warning', 'fa-pencil')}></i>
+                </Link>
+            )}
 
-      {showDelete && (
-        <a
-          className='btn btn-icon btn-sm btn-active-light-danger'
-          onClick={async () => deleteItem()}
-        >
-          <i className={clsx('fa-duotone fs-3 text-danger', 'fa-trash')}></i>
-        </a>
-      )}
-    </>
-  )
+            {showDelete && (
+                <a
+                    className='btn btn-icon btn-sm btn-active-light-danger'
+                    onClick={async () => deleteItem()}
+                >
+                    <i className={clsx('fa-duotone fs-3 text-danger', 'fa-trash')}></i>
+                </a>
+            )}
+        </>
+    )
 }
 
 export {ActionsCell}

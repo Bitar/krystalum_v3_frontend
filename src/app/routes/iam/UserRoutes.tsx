@@ -4,6 +4,7 @@ import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/SuspenseView'
 import UserIndex from '../../sections/iam/user/pages/Index'
 import UserCreate from '../../sections/iam/user/pages/Create';
+import UserEdit from '../../sections/iam/user/pages/Edit';
 
 const usersBreadCrumbs: Array<PageLink> = [
     {
@@ -41,12 +42,12 @@ const UserRoutes: React.FC = () => {
                 }
             />
             <Route
-                path='/:id/*'
+                path='/:id/edit'
                 element={
                     <>
                         <SuspenseView>
                             <PageTitle breadcrumbs={usersBreadCrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
-                            {/*<UserView />*/}
+                            <UserEdit />
                         </SuspenseView>
                     </>
                 }

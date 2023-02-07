@@ -4,7 +4,7 @@ import {Role, RolePaginate} from '../../models/iam/Role';
 import {createFormData} from '../helpers';
 
 const API_URL = process.env.REACT_APP_API_URL
-const ENDPOINT = `${API_URL}/roles`
+const ENDPOINT = `${API_URL}/iam/roles`
 
 export const getRoles = (query?: String): Promise<RolePaginate> => {
     let url = `${ENDPOINT}`;

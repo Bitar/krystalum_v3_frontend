@@ -3,7 +3,7 @@ import {Permission, PermissionPaginate} from '../../models/iam/Permission';
 import {createFormData} from '../helpers';
 
 const API_URL = process.env.REACT_APP_API_URL
-const ENDPOINT = `${API_URL}/permissions`
+const ENDPOINT = `${API_URL}/iam/permissions`
 
 export const getPermissions = (query?: String): Promise<PermissionPaginate> => {
     let url = `${ENDPOINT}`;

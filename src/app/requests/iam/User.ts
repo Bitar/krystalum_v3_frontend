@@ -3,7 +3,7 @@ import axios, {AxiosError, AxiosResponse} from 'axios'
 import {createFormData} from '../helpers';
 
 const API_URL = process.env.REACT_APP_API_URL
-const ENDPOINT = `${API_URL}/users`
+const ENDPOINT = `${API_URL}/iam/users`
 
 export const getUsers = (query?: String): Promise<UserPaginate> => {
   let url = `${ENDPOINT}`

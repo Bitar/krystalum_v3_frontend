@@ -21,8 +21,10 @@ const PermissionsColumns: ReadonlyArray<Column<Permission>> = [
                 id={props.data[props.row.index].id}
                 path={'iam/permissions'}
                 queryKey={QUERIES.PERMISSIONS_LIST}
-                showView={true}
+                showView={false}
                 showEdit={true}
+                title="Delete Permission"
+                text={`Are you sure you want to delete the permission '${props.data[props.row.index].name}'?`}
             />
         ),
     },

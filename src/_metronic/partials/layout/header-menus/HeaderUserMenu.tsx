@@ -2,7 +2,6 @@
 import {FC} from 'react'
 import {Link} from 'react-router-dom'
 import {useAuth} from '../../../../app/modules/auth'
-import {toAbsoluteUrl} from '../../../helpers'
 
 const HeaderUserMenu: FC = () => {
   const {currentUser, logout} = useAuth()
@@ -12,17 +11,17 @@ const HeaderUserMenu: FC = () => {
       data-kt-menu='true'
       data-popper-placement='bottom-start'
     >
-      <div className='menu-item px-3'>
+      <div className='menu-item px-3 text-truncate'>
         <div className='menu-content d-flex align-items-center px-3'>
           <div className='symbol symbol-50px me-5'>
-            <img alt='Logo' src={toAbsoluteUrl('/media/avatars/300-1.jpg')} />
+            <img alt='Logo' src={currentUser?.image} />
           </div>
 
           <div className='d-flex flex-column'>
             <div className='fw-bolder d-flex align-items-center fs-5'>{currentUser?.name}</div>
-            <a href='#' className='fw-bold text-muted text-hover-primary fs-7'>
+            <span className='fw-bold text-muted text-hover-primary fs-7'>
               {currentUser?.email}
-            </a>
+            </span>
           </div>
         </div>
       </div>
@@ -30,7 +29,7 @@ const HeaderUserMenu: FC = () => {
       <div className='separator my-2'></div>
 
       <div className='menu-item px-5'>
-        <Link to={'/crafted/pages/profile'} className='menu-link px-5'>
+        <Link to={`/iam/users/${currentUser?.id}`} className='menu-link px-5'>
           My Profile
         </Link>
       </div>

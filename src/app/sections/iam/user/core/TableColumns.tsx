@@ -26,10 +26,12 @@ const TableColumns: ReadonlyArray<Column<User>> = [
     Cell: ({...props}) => (
       <ActionsCell
         id={props.data[props.row.index].id}
-        path={'users'}
+        path={'iam/users'}
         queryKey={QUERIES.USERS_LIST}
         showView={true}
         showEdit={true}
+        title="Delete User"
+        text={`Are you sure you want to delete the user '${props.data[props.row.index].name}'?`}
       />
     ),
   },
