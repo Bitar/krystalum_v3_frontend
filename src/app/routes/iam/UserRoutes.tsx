@@ -5,6 +5,7 @@ import {SuspenseView} from '../../components/SuspenseView'
 import UserIndex from '../../sections/iam/user/pages/Index'
 import UserCreate from '../../sections/iam/user/pages/Create';
 import UserEdit from '../../sections/iam/user/pages/Edit';
+import {UserShow} from '../../sections/iam/user/pages/Show';
 
 const usersBreadCrumbs: Array<PageLink> = [
     {
@@ -41,6 +42,19 @@ const UserRoutes: React.FC = () => {
                     </>
                 }
             />
+
+            <Route
+                path='/:id/'
+                element={
+                    <>
+                        <SuspenseView>
+                            <PageTitle breadcrumbs={usersBreadCrumbs} showPageTitle={false}>{'Show'}</PageTitle>
+                            <UserShow />
+                        </SuspenseView>
+                    </>
+                }
+            />
+
             <Route
                 path='/:id/edit'
                 element={
