@@ -30,6 +30,11 @@ $theme-inverse-colors: map-merge($theme-light-colors, ('krys': $krys-inverse));
   font-weight: 500;
 }
 
+.css-13cymwt-control {
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+}
+
 .css-1jqq78o-placeholder {
   color: var(--bs-gray-500) !important;
   font-size: 1.075rem;
