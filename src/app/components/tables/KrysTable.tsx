@@ -1,10 +1,10 @@
 import React from 'react';
 import {Table} from 'react-bootstrap';
 import {Column, ColumnInstance, Row, useTable} from 'react-table';
-import {CustomHeaderColumn} from '../modules/table/columns/CustomHeaderColumn';
-import {CustomRow} from '../modules/table/columns/CustomRow';
-import {TableListPagination} from '../modules/table/TableListPagination';
-import {TableListLoading} from '../modules/table/TableListLoading';
+import {CustomHeaderColumn} from '../../modules/table/columns/CustomHeaderColumn';
+import {CustomRow} from '../../modules/table/columns/CustomRow';
+import {TableListPagination} from '../../modules/table/TableListPagination';
+import {TableListLoading} from '../../modules/table/TableListLoading';
 
 type Props = {
     data: any[],

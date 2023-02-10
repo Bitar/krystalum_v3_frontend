@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const extractErrors = (error: any) => {
     if(error.response && error.response.data && error.response.data.errors) {
         const errors = error.response.data.errors;
@@ -28,4 +30,10 @@ export const createFormData = (form: any) => {
     }
 
     return formData;
+}
+
+export const deleteObject = async (link: string): Promise<void> => {
+    const API_URL = process.env.REACT_APP_API_URL;
+
+    return axios.delete(`${API_URL}/${link}`);
 }

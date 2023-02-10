@@ -9,7 +9,7 @@ import {Role} from '../../../../models/iam/Role';
 import {defaultUser, User} from '../../../../models/iam/User';
 import {getUser, updateUser} from '../../../../requests/iam/User';
 import {getRoles} from '../../../../requests/iam/Role';
-import {extractErrors} from '../../../../requests/helpers';
+import {extractErrors} from '../../../../helpers/requests';
 import {
     GenericErrorMessage, genericHandleSingleFile,
     genericMultiSelectOnChangeHandler,
@@ -19,10 +19,10 @@ import {
 import {Actions} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-import FormErrors from '../../../../components/form/FormErrors';
-import KrysFormLabel from '../../../../components/form/KrysFormLabel';
+import FormErrors from '../../../../components/forms/FormErrors';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 
-import KrysFormFooter from '../../../../components/form/KrysFormFooter';
+import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 
 interface FormFields {
     name: string,

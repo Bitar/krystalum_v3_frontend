@@ -1,7 +1,7 @@
 import {Route, Routes} from 'react-router-dom'
 import React from 'react'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
-import {SuspenseView} from '../../components/SuspenseView'
+import {SuspenseView} from '../../components/misc/SuspenseView'
 import RoleIndex from '../../sections/iam/role/pages/Index';
 import RoleCreate from '../../sections/iam/role/pages/Create';
 import RoleEdit from '../../sections/iam/role/pages/Edit';

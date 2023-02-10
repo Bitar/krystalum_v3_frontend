@@ -1,7 +1,7 @@
 import {Navigate, Route, Routes} from 'react-router-dom'
 import {MasterLayout} from '../../_metronic/layout/MasterLayout'
 import {DashboardWrapper} from './home/DashboardWrapper'
-import {SuspenseView} from '../components/SuspenseView'
+import {SuspenseView} from '../components/misc/SuspenseView'
 import {lazy} from 'react'
 
 export const PrivateRoutes = () => {

@@ -3,7 +3,7 @@ import {defaultRole, Role} from '../../../../models/iam/Role';
 import {Permission} from '../../../../models/iam/Permission';
 import {getPermissions} from '../../../../requests/iam/Permission';
 import axios from 'axios';
-import {extractErrors} from '../../../../requests/helpers';
+import {extractErrors} from '../../../../helpers/requests';
 import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
 import {useNavigate, useParams} from 'react-router-dom';
 import * as Yup from 'yup';
@@ -11,11 +11,11 @@ import {Actions} from '../../../../helpers/variables';
 import {getRole, updateRole} from '../../../../requests/iam/Role';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-import FormErrors from '../../../../components/form/FormErrors';
+import FormErrors from '../../../../components/forms/FormErrors';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
-import KrysFormLabel from '../../../../components/form/KrysFormLabel';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import Select from 'react-select';
-import KrysFormFooter from '../../../../components/form/KrysFormFooter';
+import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 
 const RoleEdit: React.FC = () => {
     const [role, setRole] = useState<Role>(defaultRole);

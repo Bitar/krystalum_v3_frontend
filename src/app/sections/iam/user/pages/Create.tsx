@@ -7,9 +7,9 @@ import {ErrorMessage, Field, Form, Formik, FormikProps} from 'formik';
 
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-import FormErrors from '../../../../components/form/FormErrors';
-import KrysFormLabel from '../../../../components/form/KrysFormLabel';
-import KrysFormFooter from '../../../../components/form/KrysFormFooter';
+import FormErrors from '../../../../components/forms/FormErrors';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {
     GenericErrorMessage, genericHandleSingleFile,
     genericMultiSelectOnChangeHandler, genericOnChangeHandler,
@@ -17,7 +17,7 @@ import {
 } from '../../../../helpers/form';
 import {Role} from '../../../../models/iam/Role';
 import {getRoles} from '../../../../requests/iam/Role';
-import {extractErrors} from '../../../../requests/helpers';
+import {extractErrors} from '../../../../helpers/requests';
 import {Actions} from '../../../../helpers/variables';
 import {storeUser} from '../../../../requests/iam/User';
 

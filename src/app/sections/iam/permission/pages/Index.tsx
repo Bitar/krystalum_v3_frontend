@@ -11,9 +11,9 @@ import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import {useMemo} from 'react'
 import {getPermissions} from '../../../../requests/iam/Permission';
 import {PermissionsColumns} from '../core/TableColumns';
-import KrysTable from '../../../../components/KrysTable';
+import KrysTable from '../../../../components/tables/KrysTable';
 import {Actions} from '../../../../helpers/variables';
-import FormSuccess from '../../../../components/form/FormSuccess';
+import FormSuccess from '../../../../components/forms/FormSuccess';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 
 const PermissionIndex = () => {

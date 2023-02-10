@@ -1,7 +1,7 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
 
 import {Role, RolePaginate} from '../../models/iam/Role';
-import {createFormData} from '../helpers';
+import {createFormData} from '../../helpers/requests';
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/iam/roles`

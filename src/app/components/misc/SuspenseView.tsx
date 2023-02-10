@@ -1,6 +1,6 @@
 import {FC, Suspense} from 'react'
-import {WithChildren} from '../../_metronic/helpers'
-import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
+import {WithChildren} from '../../../_metronic/helpers'
+import {getCSSVariableValue} from '../../../_metronic/assets/ts/_utils'
 import TopBarProgress from 'react-topbar-progress-indicator'
 
 export const SuspenseView: FC<WithChildren> = ({children}) => {

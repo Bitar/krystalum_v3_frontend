@@ -9,10 +9,10 @@ import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHe
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
 import {defaultPermission, Permission} from '../../../../models/iam/Permission';
 import {getPermission, updatePermission} from '../../../../requests/iam/Permission';
-import {extractErrors} from '../../../../requests/helpers';
-import FormErrors from '../../../../components/form/FormErrors';
-import KrysFormLabel from '../../../../components/form/KrysFormLabel';
-import KrysFormFooter from '../../../../components/form/KrysFormFooter';
+import {extractErrors} from '../../../../helpers/requests';
+import FormErrors from '../../../../components/forms/FormErrors';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {Actions} from '../../../../helpers/variables';
 
 

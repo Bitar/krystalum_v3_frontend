@@ -4,12 +4,11 @@ import {ID, stringifyRequestQuery} from '../../../../_metronic/helpers'
 import {MenuComponent} from '../../../../_metronic/assets/ts/components'
 import {Link} from 'react-router-dom'
 import {useQueryClient} from 'react-query'
-import {deleteObject} from '../../../requests'
 import {useQueryRequest} from '../QueryRequestProvider'
 import clsx from 'clsx'
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import {extractErrors} from '../../../requests/helpers';
+import {deleteObject, extractErrors} from '../../../helpers/requests';
 
 type Props = {
     id: ID

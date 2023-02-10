@@ -9,12 +9,12 @@ import {
 } from '../../../../modules/table/QueryResponseProvider'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import {RolesColumns} from '../core/TableColumns';
-import KrysTable from '../../../../components/KrysTable';
+import KrysTable from '../../../../components/tables/KrysTable';
 import {getRoles} from '../../../../requests/iam/Role';
 import {Actions} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {useSearchParams} from 'react-router-dom';
-import FormSuccess from '../../../../components/form/FormSuccess';
+import FormSuccess from '../../../../components/forms/FormSuccess';
 
 const RoleIndex = () => {
     const [searchParams] = useSearchParams();

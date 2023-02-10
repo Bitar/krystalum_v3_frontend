@@ -73,7 +73,7 @@ const KTCardHeader: FC<Props> = ({
                                 );
                             } else if(cardAction.type === Actions.FILTER) {
                                 return (
-                                    <FilterButton target={cardAction.target} showFilter={cardAction.showFilter} setShowFilter={cardAction.setShowFilter} className='ms-2'/>
+                                    <FilterButton key={index} target={cardAction.target} showFilter={cardAction.showFilter} setShowFilter={cardAction.setShowFilter} className='ms-2'/>
                                 )
                             } else {
                                 return <></>;
