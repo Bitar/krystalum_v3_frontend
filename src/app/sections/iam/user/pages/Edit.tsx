@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
 import {ErrorMessage, Field, Form, Formik, FormikProps} from 'formik';
-import * as Yup from 'yup';
 import Select from 'react-select';
 
 import {Role} from '../../../../models/iam/Role';
@@ -13,36 +12,22 @@ import {extractErrors} from '../../../../helpers/requests';
 import {
     GenericErrorMessage, genericHandleSingleFile,
     genericMultiSelectOnChangeHandler,
-    genericOnChangeHandler,
-    SUPPORTED_IMAGE_FORMATS
+    genericOnChangeHandler
 } from '../../../../helpers/form';
 import {Actions} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-
-interface FormFields {
-    name: string,
-    email: string,
-    image?: File,
-    roles: Role[]
-}
-
-const defaultFormFields: FormFields = {
-    name: '',
-    email: '',
-    image: undefined,
-    roles: []
-}
+import {defaultFormFields, EditUserSchema, FormFields} from '../core/form';
 
 const UserEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
+    const [formErrors, setFormErrors] = useState<string[]>([]);
+
     const [user, setUser] = useState<User>(defaultUser);
     const [roles, setRoles] = useState<Role[]>([]);
-    const [formErrors, setFormErrors] = useState<string[]>([]);
 
     let {id} = useParams();
     const navigate = useNavigate();
@@ -61,11 +46,11 @@ const UserEdit: React.FC = () => {
                 } else {
                     setUser(response);
 
-                    const {image, ...user} = response
+                    const {image, roles, ...currentUser} = response
 
                     // was able to get the user we want to edit
                     // the form is the same as user but without the image
-                    setForm(user);
+                    setForm({...currentUser, roles: user.roles.map(role => role.id)});
                 }
             });
 
@@ -77,7 +62,7 @@ const UserEdit: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // if we were able to get the list of roles, then we fill our state with them
-                    if(response.data) {
+                    if (response.data) {
                         setRoles(response.data);
                     }
                 }
@@ -93,20 +78,6 @@ const UserEdit: React.FC = () => {
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
     };
-
-    const EditUserSchema = Yup.object().shape({
-        name: Yup.string().required(),
-        email: Yup.string().required().email(),
-        image: Yup.mixed().nullable().notRequired().test('fileFormat', 'The file must be an image of type .jpg .jpeg .gif or .png', value => !value || (value && SUPPORTED_IMAGE_FORMATS.includes(value.type))),
-        roles: Yup.array().of(Yup.object().shape({
-            id: Yup.number(),
-            name: Yup.string(),
-            permissions: Yup.array().of(Yup.object().shape({
-                id: Yup.number(),
-                name: Yup.string()
-            }))
-        })).required().min(1, 'You must select at least one role.')
-    });
 
     const handleFile = (e: any, formik: FormikProps<any>) => {
         genericHandleSingleFile(e, formik, form, setForm, 'image');
@@ -182,11 +153,16 @@ const UserEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Roles" isRequired={true}/>
 
-                                    <Select isMulti name="roles" value={form.roles}
-                                            options={roles}
-                                            getOptionLabel={(role) => role?.name}
-                                            getOptionValue={(role) => role?.id.toString()}
-                                            onChange={multiSelectChangeHandler}/>
+                                    {
+                                        user?.roles?.length > 0 &&
+
+                                        <Select isMulti name="roles" defaultValue={user.roles}
+                                                options={roles}
+                                                getOptionLabel={(role) => role?.name}
+                                                getOptionValue={(role) => role?.id.toString()}
+                                                onChange={multiSelectChangeHandler}/>
+                                    }
+
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="roles" className="mt-2"/>

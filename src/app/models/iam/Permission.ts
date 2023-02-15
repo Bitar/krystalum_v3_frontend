@@ -7,4 +7,8 @@ export type Permission = {
 
 export type PermissionPaginate = Response<Permission[]>;
 
+export type PermissionList = {
+    data: Permission[]
+}
+
 export const defaultPermission: Permission = {id: 0, name: ""};

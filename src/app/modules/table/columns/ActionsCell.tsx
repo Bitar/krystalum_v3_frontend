@@ -33,13 +33,17 @@ const ActionsCell: FC<React.PropsWithChildren<Props>> = ({
                                                              title,
                                                              text
                                                          }) => {
-    const queryClient = useQueryClient()
-    const {state} = useQueryRequest()
-    const [query] = useState<string>(stringifyRequestQuery(state))
+    const queryClient = useQueryClient();
+    const {state} = useQueryRequest();
+    const [query, setQuery] = useState<string>(stringifyRequestQuery(state));
 
     useEffect(() => {
         MenuComponent.reinitialization()
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        setQuery(stringifyRequestQuery(state));
+    }, [state]);
 
     const deleteItem = async () => {
         const {isConfirmed} = await Swal.fire({

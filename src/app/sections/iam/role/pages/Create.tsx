@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import * as Yup from 'yup';
 
-import {defaultRole, Role} from '../../../../models/iam/Role';
 import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
@@ -15,35 +13,29 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import Select from 'react-select';
-import {getPermissions} from '../../../../requests/iam/Permission';
+import {getAllPermissions} from '../../../../requests/iam/Permission';
 import {Permission} from '../../../../models/iam/Permission';
+import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
 
 const RoleCreate: React.FC = () => {
-    const [role, setRole] = useState<Role>(defaultRole);
-    const [permissions, setPermissions] = useState<Permission[]>([]);
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
-    const CreateRoleSchema = Yup.object().shape({
-        name: Yup.string().required(),
-        permissions: Yup.array().of(Yup.object().shape({
-            id: Yup.number(),
-            name: Yup.string()
-        })).required().min(1, 'You must select at least one permission.')
-    });
+    const [permissions, setPermissions] = useState<Permission[]>([]);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, role, setRole);
+        genericOnChangeHandler(e, form, setForm);
     };
 
     const multiSelectChangeHandler = (e: any) => {
-        genericMultiSelectOnChangeHandler(e, role, setRole, 'permissions');
+        genericMultiSelectOnChangeHandler(e, form, setForm, 'permissions');
     };
 
     const navigate = useNavigate();
 
     useEffect(() => {
         // get the permissions so we can edit the role's permissions
-        getPermissions().then(response => {
+        getAllPermissions().then(response => {
             if (axios.isAxiosError(response)) {
                 setFormErrors(extractErrors(response));
             } else if (response === undefined) {
@@ -58,7 +50,7 @@ const RoleCreate: React.FC = () => {
 
     const handleCreate = (e: any) => {
         // send API request to create the permission
-        storeRole(role).then(response => {
+        storeRole(form).then(response => {
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
                     setFormErrors(extractErrors(response));
@@ -80,7 +72,8 @@ const RoleCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={role} validationSchema={CreateRoleSchema} onSubmit={handleCreate} enableReinitialize>
+                <Formik initialValues={form} validationSchema={RoleSchema} onSubmit={handleCreate}
+                        enableReinitialize>
                     {
                         (formik) => (
                             <Form onChange={onChangeHandler}>

@@ -17,7 +17,11 @@ export const genericOnChangeHandler = (e: any, form: any, setForm: React.Dispatc
 export const GenericErrorMessage: string = 'Oops! Something went wrong. Try again later.';
 
 export const genericMultiSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
-    setForm({...form, [key]: e});
+    if(e.length > 0) {
+        setForm({...form, [key]: e.map((entity: any) => entity.id)});
+    } else {
+        setForm({...form, [key]: []});
+    }
 };
 
 export const SUPPORTED_IMAGE_FORMATS = [

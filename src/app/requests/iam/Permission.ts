@@ -1,9 +1,15 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
-import {Permission, PermissionPaginate} from '../../models/iam/Permission';
+import {Permission, PermissionList, PermissionPaginate} from '../../models/iam/Permission';
 import {createFormData} from '../../helpers/requests';
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/iam/permissions`
+
+export const getAllPermissions = async (): Promise<PermissionList | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<PermissionList>) => response.data).catch((error) => {
+        return error;
+    });
+}
 
 export const getPermissions = (query?: String): Promise<PermissionPaginate> => {
     let url = `${ENDPOINT}`;

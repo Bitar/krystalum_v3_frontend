@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import * as Yup from 'yup';
 import axios from 'axios';
 import Select from 'react-select';
 import {useNavigate} from 'react-router-dom';
@@ -12,44 +11,27 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {
     GenericErrorMessage, genericHandleSingleFile,
-    genericMultiSelectOnChangeHandler, genericOnChangeHandler,
-    SUPPORTED_IMAGE_FORMATS
+    genericMultiSelectOnChangeHandler, genericOnChangeHandler
 } from '../../../../helpers/form';
 import {Role} from '../../../../models/iam/Role';
-import {getRoles} from '../../../../requests/iam/Role';
+import {getAllRoles} from '../../../../requests/iam/Role';
 import {extractErrors} from '../../../../helpers/requests';
 import {Actions} from '../../../../helpers/variables';
 import {storeUser} from '../../../../requests/iam/User';
-
-interface FormFields {
-    name: string,
-    password: string,
-    password_confirmation: string,
-    email: string,
-    image?: File,
-    roles: Role[]
-}
-
-const defaultFormFields: FormFields = {
-    name: '',
-    password: '',
-    password_confirmation: '',
-    email: '',
-    image: undefined,
-    roles: []
-}
+import {CreateUserSchema, defaultFormFields, FormFields} from '../core/form';
 
 const UserCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
-    const [roles, setRoles] = useState<Role[]>([]);
     const [formErrors, setFormErrors] = useState<string[]>([]);
+
+    const [roles, setRoles] = useState<Role[]>([]);
 
     // we use this to navigate to the index page after the new user is saved
     const navigate = useNavigate();
 
     useEffect(() => {
         // get the roles so we can edit the user's roles
-        getRoles().then(response => {
+        getAllRoles().then(response => {
             if (axios.isAxiosError(response)) {
                 setFormErrors(extractErrors(response));
             } else if (response === undefined) {
@@ -71,22 +53,6 @@ const UserCreate: React.FC = () => {
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
     };
-
-    const CreateUserSchema = Yup.object().shape({
-        name: Yup.string().required(),
-        email: Yup.string().required().email(),
-        password: Yup.string().required().min(6, 'The password must be at least 6 characters.'),
-        password_confirmation: Yup.string().required().oneOf([Yup.ref("password")], "Passwords do not match."),
-        image: Yup.mixed().nullable().notRequired().test('fileFormat', 'The file must be an image of type .jpg .jpeg .gif or .png', value => !value || (value && SUPPORTED_IMAGE_FORMATS.includes(value.type))),
-        roles: Yup.array().of(Yup.object().shape({
-            id: Yup.number(),
-            name: Yup.string(),
-            permissions: Yup.array().of(Yup.object().shape({
-                id: Yup.number(),
-                name: Yup.string()
-            }))
-        })).required().min(1, 'You must select at least one role.')
-    });
 
     const handleFile = (e: any, formik: FormikProps<any>) => {
         genericHandleSingleFile(e, formik, form, setForm, 'image');

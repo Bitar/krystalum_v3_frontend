@@ -1,24 +1,28 @@
 import React, {useEffect, useState} from 'react';
+import Select from 'react-select';
+import axios from 'axios';
+import {useNavigate, useParams} from 'react-router-dom';
+import {ErrorMessage, Field, Form, Formik} from 'formik';
+
 import {defaultRole, Role} from '../../../../models/iam/Role';
 import {Permission} from '../../../../models/iam/Permission';
-import {getPermissions} from '../../../../requests/iam/Permission';
-import axios from 'axios';
+import {getAllPermissions} from '../../../../requests/iam/Permission';
 import {extractErrors} from '../../../../helpers/requests';
 import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
-import {useNavigate, useParams} from 'react-router-dom';
-import * as Yup from 'yup';
 import {Actions} from '../../../../helpers/variables';
 import {getRole, updateRole} from '../../../../requests/iam/Role';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import Select from 'react-select';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
+import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
 
 const RoleEdit: React.FC = () => {
     const [role, setRole] = useState<Role>(defaultRole);
+    const [form, setForm] = useState<FormFields>(defaultFormFields)
+
+
     const [permissions, setPermissions] = useState<Permission[]>([]);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -29,7 +33,7 @@ const RoleEdit: React.FC = () => {
     useEffect(() => {
         if(id) {
             // get the permissions so we can edit the role's permissions
-            getPermissions().then(response => {
+            getAllPermissions().then(response => {
                 if (axios.isAxiosError(response)) {
                     setFormErrors(extractErrors(response));
                 } else if (response === undefined) {
@@ -51,32 +55,27 @@ const RoleEdit: React.FC = () => {
                 } else {
                     // we were able to fetch current permission to edit
                     setRole(response);
+
+                    const {permissions, ...currentRole} = response
+
+                    setForm({...currentRole, permissions: role.permissions.map(permission => permission.id)});
                 }
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
-    const EditRoleSchema = Yup.object().shape({
-        name: Yup.string().required(),
-        permissions: Yup.array().of(Yup.object().shape({
-            id: Yup.number(),
-            name: Yup.string()
-        })).required().min(1, 'You must select at least one permission.')
-    });
-
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, role, setRole);
+        genericOnChangeHandler(e, form, setForm);
     };
 
-
     const multiSelectChangeHandler = (e: any) => {
-        genericMultiSelectOnChangeHandler(e, role, setRole, 'permissions');
+        genericMultiSelectOnChangeHandler(e, form, setForm, 'permissions');
     };
 
     const handleEdit = (e: any) => {
         // we need to update the permission's data by doing API call with form
-        updateRole(role).then(response => {
+        updateRole(form).then(response => {
             if(axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
@@ -97,7 +96,7 @@ const RoleEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={role} validationSchema={EditRoleSchema} onSubmit={handleEdit} enableReinitialize>
+                <Formik initialValues={form} validationSchema={RoleSchema} onSubmit={handleEdit} enableReinitialize>
                     {
                         (formik) => (
                             <Form onChange={onChangeHandler}>
@@ -115,12 +114,16 @@ const RoleEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Permissions" isRequired={true}/>
 
-                                    <Select isMulti name="permissions" value={role.permissions}
+                                    {role?.permissions?.length > 0 &&
+                                    <Select isMulti
+                                            name="permissions"
+                                            defaultValue={role?.permissions}
                                             options={permissions}
                                             getOptionLabel={(permission) => permission?.name}
                                             getOptionValue={(permission) => permission?.id ? permission?.id.toString() : '0'}
                                             onChange={multiSelectChangeHandler}
                                             placeholder="Select one or more permissions"/>
+                                    }
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="permissions" className="mt-2"/>

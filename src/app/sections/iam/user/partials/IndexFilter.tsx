@@ -1,7 +1,6 @@
 import Select from 'react-select';
-import * as Yup from 'yup';
-import React, {useEffect, useState} from 'react';
-import {Button, Col, Collapse, Row} from 'react-bootstrap';
+import React, {useEffect, useRef, useState} from 'react';
+import {Col, Collapse, Row} from 'react-bootstrap';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import axios from 'axios';
 
@@ -10,21 +9,10 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
 import {Role} from '../../../../models/iam/Role';
 import {getRoles} from '../../../../requests/iam/Role';
-import {createFormData, extractErrors} from '../../../../helpers/requests';
+import {extractErrors} from '../../../../helpers/requests';
 import {initialQueryState} from '../../../../../_metronic/helpers';
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
-
-interface FilterFields {
-    name?: string,
-    email?: string,
-    roles?: []
-}
-
-const initialValues = {
-    name: '',
-    email: '',
-    roles: []
-}
+import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
 
 interface Props {
     showFilter: boolean
@@ -36,6 +24,7 @@ const UserIndexFilter: React.FC<Props> = ({showFilter}) => {
     const [roles, setRoles] = useState<Role[]>([]);
     const [filterErrors, setFilterErrors] = useState<string[]>([]);
     const [filters, setFilters] = useState<FilterFields>();
+    const [reset, setReset] = useState<boolean>(false);
 
     useEffect(() => {
         // get the roles so we can edit the user's roles
@@ -54,22 +43,8 @@ const UserIndexFilter: React.FC<Props> = ({showFilter}) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const UsersFilterSchema = Yup.object().shape({
-        name: Yup.string().notRequired(),
-        email: Yup.string().notRequired().email(),
-        roles: Yup.array().of(Yup.object().shape({
-            id: Yup.number(),
-            name: Yup.string(),
-            permissions: Yup.array().of(Yup.object().shape({
-                id: Yup.number(),
-                name: Yup.string()
-            }))
-        })).notRequired()
-    });
-
     const multiSelectChangeHandler = (e: any) => {
-        setFilters({...filters, 'roles': e.map((role: Role) => role.id)});
-        // genericMultiSelectOnChangeHandler(e, filters, setFilters, 'roles');
+        genericMultiSelectOnChangeHandler(e, filters, setFilters, 'roles');
     };
 
     const onChangeHandler = (e: any) => {
@@ -78,10 +53,24 @@ const UserIndexFilter: React.FC<Props> = ({showFilter}) => {
 
     const handleFilter = () => {
         updateState({
-            filter: filters,
+            filter: reset ? undefined : filters,
             ...initialQueryState,
         });
     }
+
+    useEffect(() => {
+        handleFilter();
+        selectRef.current?.clearValue();
+        setReset(false);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [reset]);
+
+    const resetFilter = () => {
+        setFilters(defaultFilterFields);
+        setReset(true);
+    }
+
+    const selectRef = useRef<any>(null);
 
     return (
         <Collapse in={showFilter}>
@@ -90,7 +79,7 @@ const UserIndexFilter: React.FC<Props> = ({showFilter}) => {
                     <div className="card-rounded bg-primary bg-opacity-5 p-10 mb-15">
                         <FormErrors errorMessages={filterErrors}/>
 
-                        <Formik initialValues={initialValues} validationSchema={UsersFilterSchema}
+                        <Formik initialValues={defaultFilterFields} validationSchema={FilterSchema}
                                 onSubmit={handleFilter}
                                 enableReinitialize>
                             {
@@ -126,6 +115,7 @@ const UserIndexFilter: React.FC<Props> = ({showFilter}) => {
                                                         getOptionLabel={(role) => role?.name}
                                                         getOptionValue={(role) => role?.id.toString()}
                                                         onChange={multiSelectChangeHandler}
+                                                        ref={selectRef}
                                                         placeholder='Filter by role'/>
 
                                                 <div className="mt-1 text-danger">
@@ -135,7 +125,21 @@ const UserIndexFilter: React.FC<Props> = ({showFilter}) => {
                                         </Row>
 
                                         <div className="d-flex justify-content-end mt-6">
-                                            <Button variant="primary" type="submit">Filter</Button>
+                                            <button type='reset' className='btn btn-secondary btn-sm me-2'
+                                                    ref={(el) => {
+                                                        if (el) {
+                                                            el.style.setProperty('background-color', '#e1e3ea', 'important');
+                                                        }
+                                                    }} onClick={resetFilter}>Reset
+                                            </button>
+
+                                            <button type='submit' className='btn btn-sm btn-primary'
+                                                    ref={(el) => {
+                                                        if (el) {
+                                                            el.style.setProperty('background-color', '#009ef7', 'important');
+                                                        }
+                                                    }}>Filter
+                                            </button>
                                         </div>
                                     </Form>
                                 )

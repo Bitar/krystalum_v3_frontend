@@ -63,4 +63,4 @@ const UserTable = () => {
     )
 }
 
-export default UserIndex
+export default UserIndex;

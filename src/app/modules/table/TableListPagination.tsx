@@ -79,9 +79,9 @@ const PaginationItem: FC<{ link: any }> = ({link}) => {
         >
             <a
                 className={clsx('page-link', {
-                    'page-text text-hover-krys': link.label === 'Previous' || link.label === 'Next',
+                    'page-text text-hover-krys': link.label === 'Previous' || link.label === 'Next' || !link.active,
                     'me-5': link.label === 'Previous',
-                    'bg-krys': link.label !== 'Previous' && link.label !== 'Next'
+                    'bg-krys': link.label !== 'Previous' && link.label !== 'Next' && link.active
                 })}
                 onClick={() => updatePage(currentPage(link))}
                 style={{cursor: 'pointer'}}
