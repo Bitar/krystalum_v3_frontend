@@ -5,6 +5,7 @@ import {Registration} from './components/Registration'
 import {ForgotPassword} from './components/ForgotPassword'
 import {Login} from './components/Login'
 import {toAbsoluteUrl} from '../../../_metronic/helpers'
+import {ResetPassword} from './components/ResetPassword';
 
 const AuthLayout = () => {
   useEffect(() => {
@@ -65,6 +66,7 @@ const AuthPage = () => (
       <Route path='login' element={<Login />} />
       <Route path='registration' element={<Registration />} />
       <Route path='forgot-password' element={<ForgotPassword />} />
+      <Route path='reset-password' element={<ResetPassword />} />
       <Route index element={<Login />} />
     </Route>
   </Routes>

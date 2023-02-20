@@ -6,7 +6,7 @@ import {useFormik} from 'formik'
 import {requestPassword} from '../core/_requests'
 
 const initialValues = {
-  email: 'admin@demo.com',
+  email: '',
 }
 
 const forgotPasswordSchema = Yup.object().shape({
@@ -14,11 +14,11 @@ const forgotPasswordSchema = Yup.object().shape({
     .email('Wrong email format')
     .min(3, 'Minimum 3 symbols')
     .max(50, 'Maximum 50 symbols')
-    .required('Email is required'),
+    .required(),
 })
 
 export function ForgotPassword() {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [hasErrors, setHasErrors] = useState<boolean | undefined>(undefined)
   const formik = useFormik({
     initialValues,
@@ -52,11 +52,11 @@ export function ForgotPassword() {
       >
         <div className='text-center mb-10'>
           {/* begin::Title */}
-          <h1 className='text-dark mb-3'>Forgot Password ?</h1>
+          <h1 className='text-dark mb-3 fs-2'>Forgot Password?</h1>
           {/* end::Title */}
 
           {/* begin::Link */}
-          <div className='text-gray-400 fw-bold fs-4'>Enter your email to reset your password.</div>
+          <div className='text-gray-400 fw-bold fs-5'>Enter your email to reset your password.</div>
           {/* end::Link */}
         </div>
 
@@ -70,18 +70,18 @@ export function ForgotPassword() {
         )}
 
         {hasErrors === false && (
-          <div className='mb-10 bg-light-info p-8 rounded'>
-            <div className='text-info'>Sent password reset. Please check your email</div>
+          <div className='mb-10 bg-light-success p-8 rounded'>
+            <div className='text-success'>Password reset link was sent. Please check your inbox.</div>
           </div>
         )}
         {/* end::Title */}
 
         {/* begin::Form group */}
         <div className='fv-row mb-10'>
-          <label className='form-label fw-bolder text-gray-900 fs-6'>Email</label>
+          <label className='form-label fw-bolder text-gray-900 fs-6'>Email address</label>
           <input
             type='email'
-            placeholder=''
+            placeholder='example@domain.com'
             autoComplete='off'
             {...formik.getFieldProps('email')}
             className={clsx(
@@ -107,7 +107,7 @@ export function ForgotPassword() {
           <button
             type='submit'
             id='kt_password_reset_submit'
-            className='btn btn-lg btn-primary fw-bolder me-4'
+            className='btn btn-lg btn-krys me-4'
           >
             <span className='indicator-label'>Submit</span>
             {loading && (
@@ -121,7 +121,7 @@ export function ForgotPassword() {
             <button
               type='button'
               id='kt_login_password_reset_form_cancel_button'
-              className='btn btn-lg btn-light-primary fw-bolder'
+              className='btn btn-lg btn-light-secondary text-black'
               disabled={formik.isSubmitting || !formik.isValid}
             >
               Cancel
