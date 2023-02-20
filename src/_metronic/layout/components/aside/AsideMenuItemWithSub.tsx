@@ -38,7 +38,7 @@ const AsideMenuItemWithSub: React.FC<Props & WithChildren> = ({
             <KTSVG path={icon} className='svg-icon-2' />
           </span>
         )}
-        {fontIcon && <i className={clsx('bi fs-3', fontIcon)}></i>}
+        {fontIcon && <i className={clsx('bi fs-4', fontIcon)}></i>}
         <span className='menu-title'>{title}</span>
         <span className='menu-arrow'></span>
       </span>

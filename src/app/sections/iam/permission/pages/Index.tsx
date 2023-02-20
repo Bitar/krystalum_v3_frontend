@@ -1,4 +1,5 @@
 import {useSearchParams} from 'react-router-dom';
+import {useMemo, useState} from 'react'
 
 import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers'
 import {QueryRequestProvider} from '../../../../modules/table/QueryRequestProvider'
@@ -8,16 +9,18 @@ import {
     useQueryResponseLoading,
 } from '../../../../modules/table/QueryResponseProvider'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
-import {useMemo} from 'react'
 import {getPermissions} from '../../../../requests/iam/Permission';
 import {PermissionsColumns} from '../core/TableColumns';
 import KrysTable from '../../../../components/tables/KrysTable';
 import {Actions} from '../../../../helpers/variables';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import PermissionIndexFilter from '../partials/IndexFilter';
 
 const PermissionIndex = () => {
     const [searchParams] = useSearchParams();
+
+    const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
         <QueryRequestProvider>
@@ -28,9 +31,16 @@ const PermissionIndex = () => {
                     }
 
                     <KTCard>
-                        <KTCardHeader text='All Permissions' icon="fa-regular fa-list" icon_style="fs-3 text-primary" actions={[{type: Actions.CREATE, url: '/iam/permissions'}]}/>
+                        <KTCardHeader text='All Permissions' icon="fa-regular fa-list" icon_style="fs-3 text-primary" actions={[{
+                            type: Actions.FILTER,
+                            target: 'permissions-list-filter',
+                            showFilter: showFilter,
+                            setShowFilter: setShowFilter
+                        }, {type: Actions.CREATE, url: '/iam/permissions'}]}/>
 
                         <KTCardBody>
+                            <PermissionIndexFilter showFilter={showFilter} />
+
                             <PermissionTable/>
                         </KTCardBody>
                     </KTCard>

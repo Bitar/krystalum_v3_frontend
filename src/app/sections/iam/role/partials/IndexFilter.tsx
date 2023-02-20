@@ -1,35 +1,35 @@
-import Select from 'react-select';
 import React, {useEffect, useRef, useState} from 'react';
-import {Col, Collapse, Row} from 'react-bootstrap';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
 import axios from 'axios';
+import Select from 'react-select';
+import {ErrorMessage, Field, Form, Formik} from 'formik';
+import {Col, Collapse, Row} from 'react-bootstrap';
 
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import FormErrors from '../../../../components/forms/FormErrors';
-import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
-import {Role} from '../../../../models/iam/Role';
-import {getAllRoles} from '../../../../requests/iam/Role';
-import {extractErrors} from '../../../../helpers/requests';
-import {initialQueryState} from '../../../../../_metronic/helpers';
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
 import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
+import {extractErrors} from '../../../../helpers/requests';
+import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
+import {initialQueryState} from '../../../../../_metronic/helpers';
+import FormErrors from '../../../../components/forms/FormErrors';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import {Permission} from '../../../../models/iam/Permission';
+import {getAllPermissions} from '../../../../requests/iam/Permission';
 import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
 
 interface Props {
     showFilter: boolean
 }
 
-const UserIndexFilter: React.FC<Props> = ({showFilter}) => {
+const RoleIndexFilter: React.FC<Props> = ({showFilter}) => {
     const {updateState} = useQueryRequest();
 
-    const [roles, setRoles] = useState<Role[]>([]);
+    const [permissions, setPermissions] = useState<Permission[]>([]);
     const [filterErrors, setFilterErrors] = useState<string[]>([]);
     const [filters, setFilters] = useState<FilterFields>();
     const [reset, setReset] = useState<boolean>(false);
 
     useEffect(() => {
-        // get the roles so we can edit the user's roles
-        getAllRoles().then(response => {
+        // get the permissions so we can add them to the filter dropdown
+        getAllPermissions().then(response => {
             if (axios.isAxiosError(response)) {
                 setFilterErrors(extractErrors(response));
             } else if (response === undefined) {
@@ -37,7 +37,9 @@ const UserIndexFilter: React.FC<Props> = ({showFilter}) => {
             } else {
                 // if we were able to get the list of roles, then we fill our state with them
                 if (response.data) {
-                    setRoles(response.data);
+                    setPermissions(response.data);
+                } else {
+                    setPermissions([]);
                 }
             }
         });
@@ -45,7 +47,7 @@ const UserIndexFilter: React.FC<Props> = ({showFilter}) => {
     }, []);
 
     const multiSelectChangeHandler = (e: any) => {
-        genericMultiSelectOnChangeHandler(e, filters, setFilters, 'roles');
+        genericMultiSelectOnChangeHandler(e, filters, setFilters, 'permissions');
     };
 
     const onChangeHandler = (e: any) => {
@@ -75,7 +77,7 @@ const UserIndexFilter: React.FC<Props> = ({showFilter}) => {
 
     return (
         <Collapse in={showFilter}>
-            <Row id='#users-list-filter'>
+            <Row id='#roles-list-filter'>
                 <Col>
                     <div className="card-rounded bg-primary bg-opacity-5 p-10 mb-15">
                         <FormErrors errorMessages={filterErrors}/>
@@ -97,30 +99,20 @@ const UserIndexFilter: React.FC<Props> = ({showFilter}) => {
                                                     <ErrorMessage name="name" className="mt-2"/>
                                                 </div>
                                             </Col>
-                                            <Col md={4}>
-                                                <KrysFormLabel text="Email address"
-                                                               isRequired={false}/>
 
-                                                <Field className="form-control fs-6" type="text"
-                                                       placeholder="Filter by email" name="email"/>
+                                            <Col md={4}>
+                                                <KrysFormLabel text="Permissions" isRequired={false}/>
+
+                                                <Select isMulti name="permissions"
+                                                         options={permissions}
+                                                         getOptionLabel={(permission) => permission?.name}
+                                                         getOptionValue={(permission) => permission?.id ? permission?.id.toString() : ''}
+                                                         onChange={multiSelectChangeHandler}
+                                                         ref={selectRef}
+                                                         placeholder='Filter by permission'/>
 
                                                 <div className="mt-1 text-danger">
-                                                    <ErrorMessage name="email" className="mt-2"/>
-                                                </div>
-                                            </Col>
-                                            <Col md={4}>
-                                                <KrysFormLabel text="Roles" isRequired={false}/>
-
-                                                <Select isMulti name="roles"
-                                                        options={roles}
-                                                        getOptionLabel={(role) => role?.name}
-                                                        getOptionValue={(role) => role?.id ? role?.id.toString(): ''}
-                                                        onChange={multiSelectChangeHandler}
-                                                        ref={selectRef}
-                                                        placeholder='Filter by role'/>
-
-                                                <div className="mt-1 text-danger">
-                                                    <ErrorMessage name="roles" className="mt-2"/>
+                                                    <ErrorMessage name="permissions" className="mt-2"/>
                                                 </div>
                                             </Col>
                                         </Row>
@@ -137,4 +129,4 @@ const UserIndexFilter: React.FC<Props> = ({showFilter}) => {
     );
 }
 
-export default UserIndexFilter;
+export default RoleIndexFilter;

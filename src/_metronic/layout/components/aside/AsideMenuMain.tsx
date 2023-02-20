@@ -20,7 +20,7 @@ export function AsideMenuMain() {
         </div>
       </div>
 
-      <AsideMenuItemWithSub to='/iam' title='IAM' icon='/media/icons/duotune/communication/com006.svg'>
+      <AsideMenuItemWithSub to='/iam' title='IAM' icon='/media/icons/duotune/general/gen049.svg'>
         <AsideMenuItem to='/iam/users' title='Users' hasBullet={true} />
         <AsideMenuItem to='/iam/roles' title='Roles' hasBullet={true} />
         <AsideMenuItem to='/iam/permissions' title='Permissions' hasBullet={true} />

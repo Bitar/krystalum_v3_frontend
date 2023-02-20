@@ -1,4 +1,5 @@
-import {useMemo} from 'react'
+import React, {useMemo, useState} from 'react'
+import {useSearchParams} from 'react-router-dom';
 
 import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers'
 import {QueryRequestProvider} from '../../../../modules/table/QueryRequestProvider'
@@ -13,11 +14,13 @@ import KrysTable from '../../../../components/tables/KrysTable';
 import {getRoles} from '../../../../requests/iam/Role';
 import {Actions} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {useSearchParams} from 'react-router-dom';
 import FormSuccess from '../../../../components/forms/FormSuccess';
+import RoleIndexFilter from '../partials/IndexFilter';
 
 const RoleIndex = () => {
     const [searchParams] = useSearchParams();
+
+    const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
         <QueryRequestProvider>
@@ -28,10 +31,16 @@ const RoleIndex = () => {
                     }
 
                     <KTCard>
-                        <KTCardHeader text='All Roles' icon="fa-regular fa-list" icon_style="fs-3 text-primary" actions={[{type: Actions.CREATE, url: '/iam/roles'}]}/>
+                        <KTCardHeader text='All Roles' icon="fa-regular fa-list" icon_style="fs-3 text-primary" actions={[{
+                            type: Actions.FILTER,
+                            target: 'roles-list-filter',
+                            showFilter: showFilter,
+                            setShowFilter: setShowFilter
+                        }, {type: Actions.CREATE, url: '/iam/roles'}]}/>
 
                         <KTCardBody>
-                            {/*<UserFilter />*/}
+                            <RoleIndexFilter showFilter={showFilter} />
+
                             <RoleTable/>
                         </KTCardBody>
                     </KTCard>

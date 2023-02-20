@@ -5,7 +5,8 @@ import { useNavigate, useParams} from 'react-router-dom'
 import {defaultUser, User} from '../../../../models/iam/User';
 import {getUser} from '../../../../requests/iam/User';
 import {KTCard, KTCardBody, KTSVG} from '../../../../../_metronic/helpers';
-import EditButton from '../../../../components/buttons/Edit';
+import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import {Actions} from '../../../../helpers/variables';
 
 const UserShow: React.FC = () => {
     const [user, setUser] = useState<User>(defaultUser);
@@ -35,6 +36,10 @@ const UserShow: React.FC = () => {
 
     return (
         <KTCard className='mb-5 mb-xl-10'>
+            <KTCardHeader text='Overview' icon="fa-regular fa-circle-info" icon_style="fs-3 text-info" actions={[
+                {type: Actions.EDIT, url: `/iam/users/${user.id}`}
+            ]} />
+
             <KTCardBody className='pt-9 pb-0'>
                 <div className='d-flex flex-wrap flex-sm-nowrap mb-3'>
                     {
@@ -70,10 +75,6 @@ const UserShow: React.FC = () => {
                                         {user.email}
                                     </span>
                                 </div>
-                            </div>
-
-                            <div className='d-flex my-4'>
-                                <EditButton url={`/iam/users/${user.id}`}/>
                             </div>
                         </div>
                     </div>

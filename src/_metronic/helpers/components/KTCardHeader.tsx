@@ -3,6 +3,8 @@ import clsx from 'clsx'
 import CreateButton from '../../../app/components/buttons/Create';
 import {Actions} from '../../../app/helpers/variables';
 import FilterButton from '../../../app/components/buttons/Filter';
+import CardAction from '../../../app/components/misc/CardAction';
+import EditButton from '../../../app/components/buttons/Edit';
 
 type Props = {
     className?: string
@@ -15,14 +17,6 @@ type Props = {
     actions?: CardAction[],
     icon?: string,
     icon_style?: string
-}
-
-type CardAction = {
-    type: Actions,
-    url?: string,
-    target?: string,
-    showFilter?: boolean,
-    setShowFilter?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const KTCardHeader: FC<Props> = ({
@@ -75,7 +69,12 @@ const KTCardHeader: FC<Props> = ({
                                 return (
                                     <FilterButton key={index} target={cardAction.target} showFilter={cardAction.showFilter} setShowFilter={cardAction.setShowFilter} className='ms-2'/>
                                 )
-                            } else {
+                            } else if(cardAction.type === Actions.EDIT) {
+                                return (
+                                    <EditButton url={cardAction.url} key={index} className='ms-2'/>
+                                )
+                            }
+                            else {
                                 return <></>;
                             }
                         })

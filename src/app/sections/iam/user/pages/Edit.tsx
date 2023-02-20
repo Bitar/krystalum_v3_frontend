@@ -159,7 +159,7 @@ const UserEdit: React.FC = () => {
                                         <Select isMulti name="roles" defaultValue={user.roles}
                                                 options={roles}
                                                 getOptionLabel={(role) => role?.name}
-                                                getOptionValue={(role) => role?.id.toString()}
+                                                getOptionValue={(role) => role?.id ? role?.id.toString() : ''}
                                                 onChange={multiSelectChangeHandler}/>
                                     }
 

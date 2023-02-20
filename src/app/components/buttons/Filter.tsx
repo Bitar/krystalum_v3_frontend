@@ -13,7 +13,10 @@ const FilterButton: React.FC<Props> = ({target, showFilter, setShowFilter, class
     return (
         <Button className={clsx('btn btn-light-primary fs-6', className)} title='Filter' onClick={() => setShowFilter && setShowFilter(!showFilter)} aria-controls={target}
                 aria-expanded={showFilter}>
-            <i className={clsx('fa fs-2', 'fa-solid fa-filter', 'pe-0')}></i>
+            {
+                showFilter ? <i className={clsx('fa fs-2', 'fa-solid fa-filter-slash', 'pe-0')}></i> : <i className={clsx('fa fs-2', 'fa-solid fa-filter', 'pe-0')}></i>
+            }
+
         </Button>
     );
 }
