@@ -19,7 +19,7 @@ import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
 import {useKrys} from "../../../../modules/general/KrysProvider";
 import {generatePageTitle} from "../../../../helpers/general";
-import {DASHBOARD, IAM_ROLES} from "../../../../helpers/modules";
+import {IAM_ROLES} from "../../../../helpers/modules";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
 
 const RoleEdit: React.FC = () => {
@@ -64,7 +64,7 @@ const RoleEdit: React.FC = () => {
 
                     const {permissions, ...currentRole} = response
 
-                    setForm({...currentRole, permissions: role.permissions.map(permission => permission.id)});
+                    setForm({...currentRole, permissions: response.permissions.map(permission => permission.id)});
                 }
             });
         }
@@ -73,6 +73,7 @@ const RoleEdit: React.FC = () => {
 
     useEffect(() => {
         krys.setPageTitle(generatePageTitle(IAM_ROLES, PageTypes.EDIT, role.name))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [role]);
 
     const onChangeHandler = (e: any) => {

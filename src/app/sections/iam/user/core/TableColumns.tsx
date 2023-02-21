@@ -6,6 +6,7 @@ import {QUERIES} from '../../../../../_metronic/helpers';
 import {User} from '../../../../models/iam/User';
 import {UserInfoCell} from '../../../../modules/table/columns/UserInfoCell';
 import {Role} from '../../../../models/iam/Role';
+import {truncateText} from '../../../../helpers/stringGenerator';
 
 const TableColumns: ReadonlyArray<Column<User>> = [
   {
@@ -16,7 +17,7 @@ const TableColumns: ReadonlyArray<Column<User>> = [
   {
     Header: (props) => <CustomHeader tableProps={props} title='Roles' className='min-w-125px' />,
     id: 'roles',
-    Cell: ({...props}) => <TextCell text={props.data[props.row.index].roles.map((role: Role) => role.name).join(", ")} />,
+    Cell: ({...props}) => <TextCell text={truncateText(props.data[props.row.index].roles.map((role: Role) => role.name).join(", "))} />,
   },
   {
     Header: (props) => (

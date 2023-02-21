@@ -7,7 +7,7 @@ import Select from 'react-select';
 import {Role} from '../../../../models/iam/Role';
 import {defaultUser, User} from '../../../../models/iam/User';
 import {getUser, updateUser} from '../../../../requests/iam/User';
-import {getRoles} from '../../../../requests/iam/Role';
+import {getAllRoles} from '../../../../requests/iam/Role';
 import {extractErrors} from '../../../../helpers/requests';
 import {
     GenericErrorMessage, genericHandleSingleFile,
@@ -56,12 +56,12 @@ const UserEdit: React.FC = () => {
 
                     // was able to get the user we want to edit
                     // the form is the same as user but without the image
-                    setForm({...currentUser, roles: user.roles.map(role => role.id)});
+                    setForm({...currentUser, roles: response.roles.map(role => role.id)});
                 }
             });
 
             // get the roles so we can edit the user's roles
-            getRoles().then(response => {
+            getAllRoles().then(response => {
                 if (axios.isAxiosError(response)) {
                     setFormErrors(extractErrors(response));
                 } else if (response === undefined) {
@@ -79,6 +79,7 @@ const UserEdit: React.FC = () => {
 
     useEffect(() => {
         krys.setPageTitle(generatePageTitle(IAM_USERS, PageTypes.EDIT, user.name))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
     const multiSelectChangeHandler = (e: any) => {
