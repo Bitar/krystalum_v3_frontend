@@ -46,22 +46,23 @@ const KrysProvider: FC<WithChildren> = ({children}) => {
     }, [pageTitle]);
 
     useEffect(() => {
-        setTimeout(() => {
-            toast.dismiss();
-            setAlert(undefined);
-        }, 2000);
+        if (alert != undefined) {
+            (toast as any)[alert.type](alert.message, {
+                id: `alert-${alert.type}`,
+                duration: 2000,
+                position: 'top-center'
+            })
+
+            setTimeout(() => {
+                toast.dismiss();
+                setAlert(undefined);
+            }, 2000);
+        }
     }, [alert]);
 
     return (
         <KrysContext.Provider value={{alert, setAlert, pageTitle, setPageTitle}}>
             {children}
-            {alert && (
-                (toast as any)[alert.type](alert.message, {
-                    id: `alert-${alert.type}`,
-                    duration: 2000,
-                    position: 'top-center'
-                })
-            )}
             <Toaster/>
         </KrysContext.Provider>
     )
