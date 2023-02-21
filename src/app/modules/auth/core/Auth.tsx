@@ -48,7 +48,7 @@ const AuthProvider: FC<WithChildren> = ({children}) => {
       authHelper.removeAuth()
     }
   }
-  console.log("Test 2")
+
   const logout = () => {
     saveAuth(undefined)
     setCurrentUser(undefined)
@@ -73,7 +73,6 @@ const AuthInit: FC<WithChildren> = ({children}) => {
         if (!didRequest.current) {
           const {data} = await getUserByToken(apiToken)
 
-          console.log(data)
           if (data) {
             setCurrentUser(data)
           }
