@@ -130,7 +130,7 @@ const RoleEdit: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter/>
+                                <KrysFormFooter cancelUrl={'/iam/roles'}/>
                             </Form>
                         )
                     }

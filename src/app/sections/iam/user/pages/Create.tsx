@@ -156,7 +156,7 @@ const UserCreate: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter/>
+                                <KrysFormFooter cancelUrl={'/iam/users'}/>
                             </Form>
                         )
                     }

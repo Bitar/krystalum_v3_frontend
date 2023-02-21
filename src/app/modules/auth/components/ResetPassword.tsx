@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import * as Yup from 'yup'
 import axios from 'axios';
 import {useNavigate, useSearchParams} from 'react-router-dom'
 import {ErrorMessage, Field, Form, Formik} from 'formik'
@@ -10,32 +9,17 @@ import KrysFormFooter from '../../../components/forms/KrysFormFooter';
 import {extractErrors} from '../../../helpers/requests';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../helpers/form';
 import FormErrors from '../../../components/forms/FormErrors';
-
-const resetPasswordSchema = Yup.object().shape({
-    email: Yup.string().email().min(3, 'The email must be at least 3 characters.').max(50, 'The email must be at most 50 characters.').required(),
-    password: Yup.string().required().min(6, 'The password must be at least 6 characters.'),
-    password_confirmation: Yup.string().required().oneOf([Yup.ref("password")], "Passwords do not match."),
-})
-
-interface FormFields {
-    token: string,
-    email: string,
-    password: string,
-    password_confirmation: string
-}
-
-const defaultFormFields: FormFields = {
-    token: '',
-    email: '',
-    password: '',
-    password_confirmation: ''
-}
+import {defaultResetPasswordFormFields, ResetPasswordFormFields, resetPasswordSchema} from '../core/_forms';
+import FormSuccess from '../../../components/forms/FormSuccess';
 
 export function ResetPassword() {
     const [searchParams] = useSearchParams();
-    const [form, setForm] = useState<FormFields>(defaultFormFields);
+    const [form, setForm] = useState<ResetPasswordFormFields>(defaultResetPasswordFormFields);
     const [token, setToken] = useState<string>('');
     const [email, setEmail] = useState<string>('');
+    const [formErrors, setFormErrors] = useState<string[]>([]);
+    const [isSuccess, setIsSuccess] = useState<boolean>(false);
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -60,7 +44,7 @@ export function ResetPassword() {
     }, []);
 
     useEffect(() => {
-        let updatedFormFields: FormFields = {
+        let updatedFormFields: ResetPasswordFormFields = {
             token: token,
             email: email,
             password: '',
@@ -69,9 +53,6 @@ export function ResetPassword() {
 
         setForm(updatedFormFields);
     }, [token, email]);
-
-    const [formErrors, setFormErrors] = useState<string[]>([]);
-    const [loading, setLoading] = useState(false);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
@@ -83,7 +64,7 @@ export function ResetPassword() {
         // when done we need to redirect to login page
 
         resetPassword(form).then(response => {
-            setLoading(false);
+                setLoading(false);
 
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
@@ -92,10 +73,12 @@ export function ResetPassword() {
                     // show generic error message
                     setFormErrors([GenericErrorMessage])
                 } else {
+                    setIsSuccess(true);
+
                     // we were able to store the user
                     setTimeout(() => {
                         navigate('/auth/login');
-                    }, 1000)
+                    }, 3000)
                 }
             }
         );
@@ -104,6 +87,11 @@ export function ResetPassword() {
     return (
         <>
             <FormErrors errorMessages={formErrors}/>
+
+            {
+                isSuccess && <FormSuccess
+                    message={'The password was successfully changed. You will now be redirected to login with your new password.'}/>
+            }
 
             <Formik initialValues={form} validationSchema={resetPasswordSchema} onSubmit={handlePasswordReset}
                     enableReinitialize>
@@ -141,7 +129,7 @@ export function ResetPassword() {
                                 </div>
                             </div>
 
-                            <KrysFormFooter loading={loading}/>
+                            <KrysFormFooter loading={loading} cancelUrl={'/auth/login'} useSeparator={false}/>
                         </Form>
                     )
                 }

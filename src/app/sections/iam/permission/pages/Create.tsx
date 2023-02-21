@@ -69,7 +69,7 @@ const PermissionCreate: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter />
+                                <KrysFormFooter cancelUrl={'/iam/permissions'}/>
                             </Form>
                         )
                     }
