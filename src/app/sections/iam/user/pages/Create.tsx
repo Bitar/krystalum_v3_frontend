@@ -16,15 +16,24 @@ import {
 import {Role} from '../../../../models/iam/Role';
 import {getAllRoles} from '../../../../requests/iam/Role';
 import {extractErrors} from '../../../../helpers/requests';
-import {Actions} from '../../../../helpers/variables';
+import {Actions, PageTypes} from '../../../../helpers/variables';
 import {storeUser} from '../../../../requests/iam/User';
 import {CreateUserSchema, defaultFormFields, FormFields} from '../core/form';
+import {useKrys} from "../../../../modules/general/KrysProvider";
+import {generatePageTitle} from "../../../../helpers/general";
+import {DASHBOARD, IAM_USERS} from "../../../../helpers/modules";
 
 const UserCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const [roles, setRoles] = useState<Role[]>([]);
+
+    const krys = useKrys();
+
+    useEffect(() => {
+        krys.setPageTitle(generatePageTitle(IAM_USERS, PageTypes.CREATE))
+    }, []);
 
     // we use this to navigate to the index page after the new user is saved
     const navigate = useNavigate();

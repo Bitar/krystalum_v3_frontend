@@ -1,6 +1,6 @@
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 
@@ -13,12 +13,21 @@ import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions} from '../../../../helpers/variables';
+import {Actions, PageTypes} from '../../../../helpers/variables';
+import {useKrys} from "../../../../modules/general/KrysProvider";
+import {generatePageTitle} from "../../../../helpers/general";
+import {DASHBOARD, IAM_PERMISSIONS} from "../../../../helpers/modules";
 
 
 const PermissionCreate: React.FC = () => {
     const [permission, setPermission] = useState<Permission>(defaultPermission);
     const [formErrors, setFormErrors] = useState<string[]>([]);
+
+    const krys = useKrys();
+
+    useEffect(() => {
+        krys.setPageTitle(generatePageTitle(IAM_PERMISSIONS, PageTypes.CREATE))
+    }, []);
 
     const CreatePermissionSchema = Yup.object().shape({
         name: Yup.string().required()

@@ -14,13 +14,16 @@ import {
     genericMultiSelectOnChangeHandler,
     genericOnChangeHandler
 } from '../../../../helpers/form';
-import {Actions} from '../../../../helpers/variables';
+import {Actions, PageTypes} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, EditUserSchema, FormFields} from '../core/form';
+import {useKrys} from "../../../../modules/general/KrysProvider";
+import {generatePageTitle} from "../../../../helpers/general";
+import {IAM_USERS} from "../../../../helpers/modules";
 
 const UserEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -28,6 +31,8 @@ const UserEdit: React.FC = () => {
 
     const [user, setUser] = useState<User>(defaultUser);
     const [roles, setRoles] = useState<Role[]>([]);
+
+    const krys = useKrys();
 
     let {id} = useParams();
     const navigate = useNavigate();
@@ -70,6 +75,10 @@ const UserEdit: React.FC = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
+
+    useEffect(() => {
+        krys.setPageTitle(generatePageTitle(IAM_USERS, PageTypes.EDIT, user.name))
+    }, [user]);
 
     const multiSelectChangeHandler = (e: any) => {
         genericMultiSelectOnChangeHandler(e, form, setForm, 'roles');
