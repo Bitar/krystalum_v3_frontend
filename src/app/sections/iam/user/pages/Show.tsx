@@ -6,10 +6,15 @@ import {defaultUser, User} from '../../../../models/iam/User';
 import {getUser} from '../../../../requests/iam/User';
 import {KTCard, KTCardBody, KTSVG} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {Actions} from '../../../../helpers/variables';
+import {Actions, PageTypes} from '../../../../helpers/variables';
+import {useKrys} from "../../../../modules/general/KrysProvider";
+import {generatePageTitle} from "../../../../helpers/general";
+import {IAM_USERS} from "../../../../helpers/modules";
 
 const UserShow: React.FC = () => {
     const [user, setUser] = useState<User>(defaultUser);
+
+    const krys = useKrys();
 
     let {id} = useParams();
 
@@ -33,6 +38,10 @@ const UserShow: React.FC = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
+
+    useEffect(() => {
+        krys.setPageTitle(generatePageTitle(IAM_USERS, PageTypes.SHOW, user.name))
+    }, [user]);
 
     return (
         <KTCard className='mb-5 mb-xl-10'>

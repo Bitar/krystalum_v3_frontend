@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import {useSearchParams} from 'react-router-dom';
 
 import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers'
@@ -12,12 +12,21 @@ import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import {RolesColumns} from '../core/TableColumns';
 import KrysTable from '../../../../components/tables/KrysTable';
 import {getRoles} from '../../../../requests/iam/Role';
-import {Actions} from '../../../../helpers/variables';
+import {Actions, PageTypes} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import RoleIndexFilter from '../partials/IndexFilter';
+import {useKrys} from "../../../../modules/general/KrysProvider";
+import {generatePageTitle} from "../../../../helpers/general";
+import {DASHBOARD, IAM_ROLES} from "../../../../helpers/modules";
 
 const RoleIndex = () => {
+    const krys = useKrys();
+
+    useEffect(() => {
+        krys.setPageTitle(generatePageTitle(IAM_ROLES, PageTypes.INDEX))
+    }, []);
+
     const [searchParams] = useSearchParams();
 
     const [showFilter, setShowFilter] = useState<boolean>(false);

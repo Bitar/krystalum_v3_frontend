@@ -11,8 +11,6 @@ type Props = {
 }
 
 const TableListToolbar: FC<React.PropsWithChildren<Props>> = ({name, url, showAdd, showFilter}) => {
-  console.log(url + '/create')
-
   return (
     <div className='d-flex justify-content-end' data-kt-user-table-toolbar='base'>
       {/* begin::Export */}

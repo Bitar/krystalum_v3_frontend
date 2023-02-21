@@ -3,3 +3,11 @@ export enum Actions {
     EDIT,
     FILTER
 }
+
+export enum PageTypes {
+    INDEX = 'index',
+    CREATE = 'create',
+    EDIT = 'edit',
+    SHOW = 'show',
+    REPORT = 'report'
+}

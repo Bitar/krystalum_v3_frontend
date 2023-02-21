@@ -9,7 +9,7 @@ import {Permission} from '../../../../models/iam/Permission';
 import {getAllPermissions} from '../../../../requests/iam/Permission';
 import {extractErrors} from '../../../../helpers/requests';
 import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
-import {Actions} from '../../../../helpers/variables';
+import {Actions, PageTypes} from '../../../../helpers/variables';
 import {getRole, updateRole} from '../../../../requests/iam/Role';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
@@ -17,6 +17,10 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
+import {useKrys} from "../../../../modules/general/KrysProvider";
+import {generatePageTitle} from "../../../../helpers/general";
+import {DASHBOARD, IAM_ROLES} from "../../../../helpers/modules";
+import {generateSuccessMessage} from "../../../../helpers/alerts";
 
 const RoleEdit: React.FC = () => {
     const [role, setRole] = useState<Role>(defaultRole);
@@ -25,6 +29,8 @@ const RoleEdit: React.FC = () => {
 
     const [permissions, setPermissions] = useState<Permission[]>([]);
     const [formErrors, setFormErrors] = useState<string[]>([]);
+
+    const krys = useKrys();
 
     const navigate = useNavigate();
 
@@ -65,6 +71,10 @@ const RoleEdit: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
+    useEffect(() => {
+        krys.setPageTitle(generatePageTitle(IAM_ROLES, PageTypes.EDIT, role.name))
+    }, [role]);
+
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
     };
@@ -84,7 +94,8 @@ const RoleEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated permission so we're good
-                navigate(`/iam/roles?success=${Actions.EDIT}`);
+                krys.setAlert({message: generateSuccessMessage('role', Actions.EDIT), type: 'success'})
+                navigate(`/iam/roles`);
             }
         });
     }

@@ -1,5 +1,5 @@
 import {useSearchParams} from 'react-router-dom';
-import {useMemo, useState} from 'react'
+import {useEffect, useMemo, useState} from 'react'
 
 import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers'
 import {QueryRequestProvider} from '../../../../modules/table/QueryRequestProvider'
@@ -12,12 +12,21 @@ import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import {getPermissions} from '../../../../requests/iam/Permission';
 import {PermissionsColumns} from '../core/TableColumns';
 import KrysTable from '../../../../components/tables/KrysTable';
-import {Actions} from '../../../../helpers/variables';
+import {Actions, PageTypes} from '../../../../helpers/variables';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import PermissionIndexFilter from '../partials/IndexFilter';
+import {useKrys} from "../../../../modules/general/KrysProvider";
+import {generatePageTitle} from "../../../../helpers/general";
+import {IAM_PERMISSIONS} from "../../../../helpers/modules";
 
 const PermissionIndex = () => {
+    const krys = useKrys();
+
+    useEffect(() => {
+        krys.setPageTitle(generatePageTitle(IAM_PERMISSIONS, PageTypes.INDEX))
+    }, []);
+
     const [searchParams] = useSearchParams();
 
     const [showFilter, setShowFilter] = useState<boolean>(false);

@@ -4,7 +4,7 @@ import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeH
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import {extractErrors} from '../../../../helpers/requests';
-import {Actions} from '../../../../helpers/variables';
+import {Actions, PageTypes} from '../../../../helpers/variables';
 import {storeRole} from '../../../../requests/iam/Role';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
@@ -16,12 +16,22 @@ import Select from 'react-select';
 import {getAllPermissions} from '../../../../requests/iam/Permission';
 import {Permission} from '../../../../models/iam/Permission';
 import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
+import {useKrys} from "../../../../modules/general/KrysProvider";
+import {generatePageTitle} from "../../../../helpers/general";
+import {DASHBOARD, IAM_ROLES} from "../../../../helpers/modules";
+import {generateSuccessMessage} from "../../../../helpers/alerts";
 
 const RoleCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const [permissions, setPermissions] = useState<Permission[]>([]);
+
+    const krys = useKrys();
+
+    useEffect(() => {
+        krys.setPageTitle(generatePageTitle(IAM_ROLES, PageTypes.CREATE))
+    }, []);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
@@ -59,7 +69,8 @@ const RoleCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's permission for sure
-                    navigate(`/iam/roles?success=${Actions.CREATE}`);
+                    krys.setAlert({message: generateSuccessMessage('role', Actions.CREATE), type: 'success'})
+                    navigate(`/iam/roles`);
                 }
             }
         );
