@@ -17,6 +17,7 @@ import {Actions, PageTypes} from '../../../../helpers/variables';
 import {useKrys} from "../../../../modules/general/KrysProvider";
 import {generatePageTitle} from "../../../../helpers/general";
 import {IAM_PERMISSIONS} from "../../../../helpers/modules";
+import {generateSuccessMessage} from "../../../../helpers/alerts";
 
 
 const PermissionEdit: React.FC = () => {
@@ -71,7 +72,8 @@ const PermissionEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated permission so we're good
-                navigate(`/iam/permissions?success=${Actions.EDIT}`);
+                krys.setAlert({message: generateSuccessMessage('permission', Actions.EDIT), type: 'success'})
+                navigate(`/iam/permissions`);
             }
         });
     }

@@ -17,6 +17,7 @@ import {Actions, PageTypes} from '../../../../helpers/variables';
 import {useKrys} from "../../../../modules/general/KrysProvider";
 import {generatePageTitle} from "../../../../helpers/general";
 import {DASHBOARD, IAM_PERMISSIONS} from "../../../../helpers/modules";
+import {generateSuccessMessage} from "../../../../helpers/alerts";
 
 
 const PermissionCreate: React.FC = () => {
@@ -50,7 +51,8 @@ const PermissionCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's permission for sure
-                    navigate(`/iam/permissions?success=${Actions.CREATE}`);
+                    krys.setAlert({message: generateSuccessMessage('permission', Actions.CREATE), type: 'success'})
+                    navigate(`/iam/permissions`);
                 }
             }
         );

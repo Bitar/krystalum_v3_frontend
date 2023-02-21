@@ -20,6 +20,7 @@ import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
 import {useKrys} from "../../../../modules/general/KrysProvider";
 import {generatePageTitle} from "../../../../helpers/general";
 import {DASHBOARD, IAM_ROLES} from "../../../../helpers/modules";
+import {generateSuccessMessage} from "../../../../helpers/alerts";
 
 const RoleEdit: React.FC = () => {
     const [role, setRole] = useState<Role>(defaultRole);
@@ -93,7 +94,8 @@ const RoleEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated permission so we're good
-                navigate(`/iam/roles?success=${Actions.EDIT}`);
+                krys.setAlert({message: generateSuccessMessage('role', Actions.EDIT), type: 'success'})
+                navigate(`/iam/roles`);
             }
         });
     }

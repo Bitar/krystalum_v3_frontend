@@ -19,6 +19,7 @@ import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
 import {useKrys} from "../../../../modules/general/KrysProvider";
 import {generatePageTitle} from "../../../../helpers/general";
 import {DASHBOARD, IAM_ROLES} from "../../../../helpers/modules";
+import {generateSuccessMessage} from "../../../../helpers/alerts";
 
 const RoleCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -68,7 +69,8 @@ const RoleCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's permission for sure
-                    navigate(`/iam/roles?success=${Actions.CREATE}`);
+                    krys.setAlert({message: generateSuccessMessage('role', Actions.CREATE), type: 'success'})
+                    navigate(`/iam/roles`);
                 }
             }
         );

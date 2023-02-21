@@ -24,6 +24,7 @@ import {defaultFormFields, EditUserSchema, FormFields} from '../core/form';
 import {useKrys} from "../../../../modules/general/KrysProvider";
 import {generatePageTitle} from "../../../../helpers/general";
 import {IAM_USERS} from "../../../../helpers/modules";
+import {generateSuccessMessage} from "../../../../helpers/alerts";
 
 const UserEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -103,7 +104,8 @@ const UserEdit: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // we were able to store the user
-                    navigate(`/iam/users?success=${Actions.EDIT}`);
+                    krys.setAlert({message: generateSuccessMessage('user', Actions.EDIT), type: 'success'})
+                    navigate(`/iam/users`);
                 }
             }
         );

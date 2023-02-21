@@ -22,6 +22,7 @@ import {CreateUserSchema, defaultFormFields, FormFields} from '../core/form';
 import {useKrys} from "../../../../modules/general/KrysProvider";
 import {generatePageTitle} from "../../../../helpers/general";
 import {DASHBOARD, IAM_USERS} from "../../../../helpers/modules";
+import {generateSuccessMessage} from "../../../../helpers/alerts";
 
 const UserCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -78,7 +79,8 @@ const UserCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // we were able to store the user
-                    navigate(`/iam/users?success=${Actions.CREATE}`);
+                    krys.setAlert({message: generateSuccessMessage('user', Actions.CREATE), type: 'success'})
+                    navigate(`/iam/users`);
                 }
             }
         );
