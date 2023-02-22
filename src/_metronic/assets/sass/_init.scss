@@ -13,12 +13,6 @@
 @import './core/components/variables';
 @import './core/components/variables-dark';
 
-//$theme-colors: map-merge($theme-colors, ('krys': $krys));
-//$theme-text-colors: map-merge($theme-text-colors, ('krys': $krys));
-//$theme-light-colors: map-merge($theme-light-colors, ('krys': $krys-light));
-//$theme-active-colors: map-merge($theme-light-colors, ('krys': $krys-active));
-//$theme-inverse-colors: map-merge($theme-light-colors, ('krys': $krys-inverse));
-
 .css-13cymwt-control:hover, .css-t3ipsp-control:hover {
   border-color: var(--bs-gray-300) !important;
   box-shadow: none !important;
