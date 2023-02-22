@@ -20,9 +20,9 @@ import {Actions, PageTypes} from '../../../../helpers/variables';
 import {storeUser} from '../../../../requests/iam/User';
 import {CreateUserSchema, defaultFormFields, FormFields} from '../core/form';
 import {useKrys} from "../../../../modules/general/KrysProvider";
-import {generatePageTitle} from "../../../../helpers/general";
-import {DASHBOARD, IAM_USERS} from "../../../../helpers/modules";
+import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
+import {Modules} from "../../../../helpers/modules";
 
 const UserCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -33,7 +33,8 @@ const UserCreate: React.FC = () => {
     const krys = useKrys();
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(IAM_USERS, PageTypes.CREATE))
+        krys.setPageTitle(generatePageTitle(Modules.IAM_USERS, PageTypes.CREATE))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // we use this to navigate to the index page after the new user is saved

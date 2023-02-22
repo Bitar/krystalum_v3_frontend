@@ -15,9 +15,9 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {Actions, PageTypes} from '../../../../helpers/variables';
 import {useKrys} from "../../../../modules/general/KrysProvider";
-import {generatePageTitle} from "../../../../helpers/general";
-import {IAM_PERMISSIONS} from "../../../../helpers/modules";
+import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
+import {Modules} from "../../../../helpers/modules";
 
 
 const PermissionEdit: React.FC = () => {
@@ -50,7 +50,8 @@ const PermissionEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(IAM_PERMISSIONS, PageTypes.EDIT, permission.name))
+        krys.setPageTitle(generatePageTitle(Modules.IAM_PERMISSIONS, PageTypes.EDIT, permission.name))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [permission]);
 
     const EditPermissionSchema = Yup.object().shape({

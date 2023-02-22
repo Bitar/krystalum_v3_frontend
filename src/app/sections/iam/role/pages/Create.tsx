@@ -17,9 +17,9 @@ import {getAllPermissions} from '../../../../requests/iam/Permission';
 import {Permission} from '../../../../models/iam/Permission';
 import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
 import {useKrys} from "../../../../modules/general/KrysProvider";
-import {generatePageTitle} from "../../../../helpers/general";
-import {DASHBOARD, IAM_ROLES} from "../../../../helpers/modules";
+import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
+import {Modules} from "../../../../helpers/modules";
 
 const RoleCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -30,7 +30,8 @@ const RoleCreate: React.FC = () => {
     const krys = useKrys();
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(IAM_ROLES, PageTypes.CREATE))
+        krys.setPageTitle(generatePageTitle(Modules.IAM_ROLES, PageTypes.CREATE))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onChangeHandler = (e: any) => {

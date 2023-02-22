@@ -1,16 +1,16 @@
 import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {useEffect} from "react";
-import {generatePageTitle} from "../../helpers/general";
-import {DASHBOARD, IAM_PERMISSIONS} from "../../helpers/modules";
+import {generatePageTitle} from "../../helpers/pageTitleUtils";
 import {PageTypes} from "../../helpers/variables";
 import {useKrys} from "../../modules/general/KrysProvider";
+import {Modules} from "../../helpers/modules";
 
 const DashboardPage = () => {
     const krys = useKrys();
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(DASHBOARD, PageTypes.INDEX))
+        krys.setPageTitle(generatePageTitle(Modules.DASHBOARD, PageTypes.INDEX))
     }, []);
 
     return <></>

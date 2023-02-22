@@ -49,14 +49,9 @@ const KrysProvider: FC<WithChildren> = ({children}) => {
         if (alert != undefined) {
             (toast as any)[alert.type](alert.message, {
                 id: `alert-${alert.type}`,
-                duration: 2000,
+                duration: 4000,
                 position: 'top-center'
             })
-
-            setTimeout(() => {
-                toast.dismiss();
-                setAlert(undefined);
-            }, 2000);
         }
     }, [alert]);
 

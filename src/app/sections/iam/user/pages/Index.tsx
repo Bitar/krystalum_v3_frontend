@@ -16,15 +16,16 @@ import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHe
 import {useSearchParams} from 'react-router-dom';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import UserIndexFilter from '../partials/IndexFilter';
-import {generatePageTitle} from "../../../../helpers/general";
-import {IAM_USERS} from "../../../../helpers/modules";
+import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
 import {useKrys} from "../../../../modules/general/KrysProvider";
+import {Modules} from "../../../../helpers/modules";
 
 const UserIndex = () => {
     const krys = useKrys();
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(IAM_USERS, PageTypes.INDEX))
+        krys.setPageTitle(generatePageTitle(Modules.IAM_USERS, PageTypes.INDEX))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const [searchParams] = useSearchParams();

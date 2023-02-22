@@ -1,4 +1,6 @@
-export const DASHBOARD = "Dashboard";
-export const IAM_PERMISSIONS = "Permissions";
-export const IAM_ROLES = "Roles";
-export const IAM_USERS = "Users";
+export enum Modules {
+    DASHBOARD = 'Dashboard',
+    IAM_PERMISSIONS = 'Permissions',
+    IAM_ROLES = 'Roles',
+    IAM_USERS = 'Users'
+}

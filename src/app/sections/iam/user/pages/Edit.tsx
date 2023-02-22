@@ -22,9 +22,9 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, EditUserSchema, FormFields} from '../core/form';
 import {useKrys} from "../../../../modules/general/KrysProvider";
-import {generatePageTitle} from "../../../../helpers/general";
-import {IAM_USERS} from "../../../../helpers/modules";
+import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
+import {Modules} from "../../../../helpers/modules";
 
 const UserEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -78,7 +78,7 @@ const UserEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(IAM_USERS, PageTypes.EDIT, user.name))
+        krys.setPageTitle(generatePageTitle(Modules.IAM_USERS, PageTypes.EDIT, user.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 

@@ -18,9 +18,9 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
 import {useKrys} from "../../../../modules/general/KrysProvider";
-import {generatePageTitle} from "../../../../helpers/general";
-import {IAM_ROLES} from "../../../../helpers/modules";
+import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
+import {Modules} from "../../../../helpers/modules";
 
 const RoleEdit: React.FC = () => {
     const [role, setRole] = useState<Role>(defaultRole);
@@ -72,7 +72,7 @@ const RoleEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(IAM_ROLES, PageTypes.EDIT, role.name))
+        krys.setPageTitle(generatePageTitle(Modules.IAM_ROLES, PageTypes.EDIT, role.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [role]);
 

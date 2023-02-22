@@ -17,14 +17,15 @@ import FormSuccess from '../../../../components/forms/FormSuccess';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import PermissionIndexFilter from '../partials/IndexFilter';
 import {useKrys} from "../../../../modules/general/KrysProvider";
-import {generatePageTitle} from "../../../../helpers/general";
-import {IAM_PERMISSIONS} from "../../../../helpers/modules";
+import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
+import {Modules} from "../../../../helpers/modules";
 
 const PermissionIndex = () => {
     const krys = useKrys();
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(IAM_PERMISSIONS, PageTypes.INDEX))
+        krys.setPageTitle(generatePageTitle(Modules.IAM_PERMISSIONS, PageTypes.INDEX))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const [searchParams] = useSearchParams();
