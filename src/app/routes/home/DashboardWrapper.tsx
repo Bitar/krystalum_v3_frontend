@@ -1,16 +1,17 @@
 import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {useEffect} from "react";
-import {generatePageTitle} from "../../helpers/pageTitleUtils";
+import {generatePageTitle} from "../../helpers/pageTitleGenerator";
 import {PageTypes} from "../../helpers/variables";
 import {useKrysApp} from "../../modules/general/KrysApp";
-import {Modules} from "../../helpers/modules";
+import {Sections} from "../../helpers/sections";
 
 const DashboardPage = () => {
     const krysApp = useKrysApp();
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Modules.DASHBOARD, PageTypes.INDEX))
+        krysApp.setPageTitle(generatePageTitle(Sections.DASHBOARD, PageTypes.INDEX))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return <></>

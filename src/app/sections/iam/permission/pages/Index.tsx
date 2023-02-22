@@ -17,14 +17,14 @@ import FormSuccess from '../../../../components/forms/FormSuccess';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import PermissionIndexFilter from '../partials/IndexFilter';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
-import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
-import {Modules} from "../../../../helpers/modules";
+import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
+import {Sections} from "../../../../helpers/sections";
 
 const PermissionIndex = () => {
     const krysApp = useKrysApp();
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Modules.IAM_PERMISSIONS, PageTypes.INDEX))
+        krysApp.setPageTitle(generatePageTitle(Sections.IAM_PERMISSIONS, PageTypes.INDEX))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

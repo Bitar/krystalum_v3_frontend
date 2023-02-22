@@ -1,4 +1,4 @@
-import {Actions, PageTypes} from "./variables";
+import {Actions} from "./variables";
 
 export const generateSuccessMessage = (module: string, type: number) => {
     switch (type) {
@@ -12,9 +12,9 @@ export const generateSuccessMessage = (module: string, type: number) => {
 }
 
 const create = (module: string) => {
-    return `The ${module} was created.`
+    return `Success! The ${module} was created.`
 };
 
 const edit = (module: string) => {
-    return `The ${module} was updated.`
+    return `Success! The ${module} was updated.`
 };

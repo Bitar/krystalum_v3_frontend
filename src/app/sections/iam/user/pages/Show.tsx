@@ -8,8 +8,8 @@ import {KTCard, KTCardBody, KTSVG} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {Actions, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
-import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
-import {Modules} from "../../../../helpers/modules";
+import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
+import {Sections} from "../../../../helpers/sections";
 
 const UserShow: React.FC = () => {
     const [user, setUser] = useState<User>(defaultUser);
@@ -40,7 +40,7 @@ const UserShow: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Modules.IAM_USERS, PageTypes.SHOW, user.name))
+        krysApp.setPageTitle(generatePageTitle(Sections.IAM_USERS, PageTypes.SHOW, user.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 

@@ -20,9 +20,9 @@ import {Actions, PageTypes} from '../../../../helpers/variables';
 import {storeUser} from '../../../../requests/iam/User';
 import {CreateUserSchema, defaultFormFields, FormFields} from '../core/form';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
-import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
+import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
-import {Modules} from "../../../../helpers/modules";
+import {Sections} from "../../../../helpers/sections";
 
 const UserCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -33,7 +33,7 @@ const UserCreate: React.FC = () => {
     const krysApp = useKrysApp();
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Modules.IAM_USERS, PageTypes.CREATE))
+        krysApp.setPageTitle(generatePageTitle(Sections.IAM_USERS, PageTypes.CREATE))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

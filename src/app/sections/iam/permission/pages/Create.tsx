@@ -15,9 +15,9 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {Actions, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
-import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
+import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
-import {Modules} from "../../../../helpers/modules";
+import {Sections} from "../../../../helpers/sections";
 
 
 const PermissionCreate: React.FC = () => {
@@ -27,7 +27,7 @@ const PermissionCreate: React.FC = () => {
     const krysApp = useKrysApp();
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Modules.IAM_PERMISSIONS, PageTypes.CREATE))
+        krysApp.setPageTitle(generatePageTitle(Sections.IAM_PERMISSIONS, PageTypes.CREATE))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

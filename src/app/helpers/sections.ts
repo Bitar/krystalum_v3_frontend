@@ -1,4 +1,4 @@
-export enum Modules {
+export enum Sections {
     DASHBOARD = 'Dashboard',
     IAM_PERMISSIONS = 'Permissions',
     IAM_ROLES = 'Roles',
