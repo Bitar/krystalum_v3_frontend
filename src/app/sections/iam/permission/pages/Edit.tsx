@@ -14,17 +14,17 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {Actions, PageTypes} from '../../../../helpers/variables';
-import {useKrys} from "../../../../modules/general/KrysProvider";
-import {generatePageTitle} from "../../../../helpers/general";
-import {IAM_PERMISSIONS} from "../../../../helpers/modules";
+import {useKrysApp} from "../../../../modules/general/KrysApp";
+import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
+import {Sections} from "../../../../helpers/sections";
 
 
 const PermissionEdit: React.FC = () => {
     const [permission, setPermission] = useState<Permission>(defaultPermission);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
-    const krys = useKrys();
+    const krysApp = useKrysApp();
 
     const navigate = useNavigate();
 
@@ -50,7 +50,8 @@ const PermissionEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(IAM_PERMISSIONS, PageTypes.EDIT, permission.name))
+        krysApp.setPageTitle(generatePageTitle(Sections.IAM_PERMISSIONS, PageTypes.EDIT, permission.name))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [permission]);
 
     const EditPermissionSchema = Yup.object().shape({
@@ -72,7 +73,7 @@ const PermissionEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated permission so we're good
-                krys.setAlert({message: generateSuccessMessage('permission', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({message: generateSuccessMessage('permission', Actions.EDIT), type: 'success'})
                 navigate(`/iam/permissions`);
             }
         });
@@ -100,7 +101,7 @@ const PermissionEdit: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter />
+                                <KrysFormFooter cancelUrl={'/iam/permissions'}/>
                             </Form>
                         )
                     }

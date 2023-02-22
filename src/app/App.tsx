@@ -4,7 +4,7 @@ import {I18nProvider} from '../_metronic/i18n/i18nProvider'
 import {LayoutProvider, LayoutSplashScreen} from '../_metronic/layout/core'
 import {MasterInit} from '../_metronic/layout/MasterInit'
 import {AuthInit} from './modules/auth'
-import {KrysProvider} from './modules/general/KrysProvider';
+import {KrysApp} from './modules/general/KrysApp';
 
 const App = () => {
     return (
@@ -12,10 +12,10 @@ const App = () => {
             <I18nProvider>
                 <LayoutProvider>
                     <AuthInit>
-                        <KrysProvider>
+                        <KrysApp>
                             <Outlet/>
                             <MasterInit/>
-                        </KrysProvider>
+                        </KrysApp>
                     </AuthInit>
                 </LayoutProvider>
             </I18nProvider>

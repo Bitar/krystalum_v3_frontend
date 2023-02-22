@@ -16,10 +16,10 @@ import Select from 'react-select';
 import {getAllPermissions} from '../../../../requests/iam/Permission';
 import {Permission} from '../../../../models/iam/Permission';
 import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
-import {useKrys} from "../../../../modules/general/KrysProvider";
-import {generatePageTitle} from "../../../../helpers/general";
-import {DASHBOARD, IAM_ROLES} from "../../../../helpers/modules";
+import {useKrysApp} from "../../../../modules/general/KrysApp";
+import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
+import {Sections} from "../../../../helpers/sections";
 
 const RoleCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -27,10 +27,11 @@ const RoleCreate: React.FC = () => {
 
     const [permissions, setPermissions] = useState<Permission[]>([]);
 
-    const krys = useKrys();
+    const krysApp = useKrysApp();
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(IAM_ROLES, PageTypes.CREATE))
+        krysApp.setPageTitle(generatePageTitle(Sections.IAM_ROLES, PageTypes.CREATE))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onChangeHandler = (e: any) => {
@@ -69,7 +70,7 @@ const RoleCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's permission for sure
-                    krys.setAlert({message: generateSuccessMessage('role', Actions.CREATE), type: 'success'})
+                    krysApp.setAlert({message: generateSuccessMessage('role', Actions.CREATE), type: 'success'})
                     navigate(`/iam/roles`);
                 }
             }
@@ -114,7 +115,7 @@ const RoleCreate: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter/>
+                                <KrysFormFooter cancelUrl={'/iam/roles'}/>
                             </Form>
                         )
                     }

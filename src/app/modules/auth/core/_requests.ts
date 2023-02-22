@@ -38,10 +38,22 @@ export function register(
 }
 
 // Server should return object => { result: boolean } (Is Email in DB)
-export function requestPassword(email: string) {
-    return axios.post<{ result: boolean }>(REQUEST_PASSWORD_URL, {
-        email,
-    })
+// export function requestPassword(email: string) {
+//     return axios.post<{ result: boolean }>(REQUEST_PASSWORD_URL, {
+//         email,
+//     })
+// }
+
+export const requestPassword = async (form: any): Promise<string | AxiosError | undefined> => {
+    let formData = createFormData(form);
+
+    return await axios.post(REQUEST_PASSWORD_URL, formData)
+        .then(res => res.data)
+        .catch((error) => {
+            error = error as AxiosError;
+
+            return error;
+        });
 }
 
 export const resetPassword = async (form: any): Promise<string | AxiosError | undefined> => {

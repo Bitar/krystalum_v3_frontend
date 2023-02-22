@@ -5,6 +5,7 @@ import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {QUERIES} from '../../../../../_metronic/helpers'
 import {Role} from '../../../../models/iam/Role';
 import {Permission} from '../../../../models/iam/Permission';
+import {truncateText} from '../../../../helpers/stringGenerator';
 
 const RolesColumns: ReadonlyArray<Column<Role>> = [
     {
@@ -15,7 +16,7 @@ const RolesColumns: ReadonlyArray<Column<Role>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title='Permissions' className='min-w-125px' />,
         id: 'permissions',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].permissions.map((permission: Permission) => permission.name).join(", ")} />,
+        Cell: ({...props}) => <TextCell text={truncateText(props.data[props.row.index].permissions.map((permission: Permission) => permission.name).join(", "))} />,
     },
     {
         Header: (props) => (

@@ -7,14 +7,14 @@ import {getUser} from '../../../../requests/iam/User';
 import {KTCard, KTCardBody, KTSVG} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {Actions, PageTypes} from '../../../../helpers/variables';
-import {useKrys} from "../../../../modules/general/KrysProvider";
-import {generatePageTitle} from "../../../../helpers/general";
-import {IAM_USERS} from "../../../../helpers/modules";
+import {useKrysApp} from "../../../../modules/general/KrysApp";
+import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
+import {Sections} from "../../../../helpers/sections";
 
 const UserShow: React.FC = () => {
     const [user, setUser] = useState<User>(defaultUser);
 
-    const krys = useKrys();
+    const krysApp = useKrysApp();
 
     let {id} = useParams();
 
@@ -40,7 +40,8 @@ const UserShow: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(IAM_USERS, PageTypes.SHOW, user.name))
+        krysApp.setPageTitle(generatePageTitle(Sections.IAM_USERS, PageTypes.SHOW, user.name))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
     return (

@@ -1,135 +1,87 @@
 import React, {useState} from 'react'
-import * as Yup from 'yup'
-import clsx from 'clsx'
-import {Link} from 'react-router-dom'
-import {useFormik} from 'formik'
+import {ErrorMessage, Field, Form, Formik} from 'formik'
+import axios from 'axios';
+
 import {requestPassword} from '../core/_requests'
-
-const initialValues = {
-  email: '',
-}
-
-const forgotPasswordSchema = Yup.object().shape({
-  email: Yup.string()
-    .email('Wrong email format')
-    .min(3, 'Minimum 3 symbols')
-    .max(50, 'Maximum 50 symbols')
-    .required(),
-})
+import {
+  defaultForgotPasswordFormFields, ForgotPasswordFormFields, forgotPasswordSchema
+} from '../core/_forms';
+import FormErrors from '../../../components/forms/FormErrors';
+import {GenericErrorMessage, genericOnChangeHandler} from '../../../helpers/form';
+import KrysFormFooter from '../../../components/forms/KrysFormFooter';
+import {extractErrors} from '../../../helpers/requests';
+import FormSuccess from '../../../components/forms/FormSuccess';
 
 export function ForgotPassword() {
-  const [loading, setLoading] = useState(true)
-  const [hasErrors, setHasErrors] = useState<boolean | undefined>(undefined)
-  const formik = useFormik({
-    initialValues,
-    validationSchema: forgotPasswordSchema,
-    onSubmit: (values, {setStatus, setSubmitting}) => {
-      setLoading(true)
-      setHasErrors(undefined)
-      setTimeout(() => {
-        requestPassword(values.email)
-          .then(({data: {result}}) => {
-            setHasErrors(false)
-            setLoading(false)
-          })
-          .catch(() => {
-            setHasErrors(true)
-            setLoading(false)
-            setSubmitting(false)
-            setStatus('The login detail is incorrect')
-          })
-      }, 1000)
-    },
-  })
+    const [form, setForm] = useState<ForgotPasswordFormFields>(defaultForgotPasswordFormFields);
+    const [formErrors, setFormErrors] = useState<string[]>([]);
+    const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
-  return (
-    <>
-      <form
-        className='form w-100 fv-plugins-bootstrap5 fv-plugins-framework'
-        noValidate
-        id='kt_login_password_reset_form'
-        onSubmit={formik.handleSubmit}
-      >
-        <div className='text-center mb-10'>
-          {/* begin::Title */}
-          <h1 className='text-dark mb-3 fs-2'>Forgot Password?</h1>
-          {/* end::Title */}
+    const [loading, setLoading] = useState(false);
 
-          {/* begin::Link */}
-          <div className='text-gray-400 fw-bold fs-5'>Enter your email to reset your password.</div>
-          {/* end::Link */}
-        </div>
+    const handleForgotPassword = (e: any) => {
+        setLoading(true);
 
-        {/* begin::Title */}
-        {hasErrors === true && (
-          <div className='mb-lg-15 alert alert-danger'>
-            <div className='alert-text font-weight-bold'>
-              Sorry, looks like there are some errors detected, please try again.
+        requestPassword(form).then(response => {
+                setLoading(false);
+
+                if (axios.isAxiosError(response)) {
+                    // we need to show the errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error message
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    // we sent the request to reset password so we need to show success message
+                    setIsSuccess(true);
+                }
+            }
+        );
+    };
+
+    const onChangeHandler = (e: any) => {
+        genericOnChangeHandler(e, form, setForm);
+    };
+
+    return (
+        <>
+            <div className='text-center mb-10'>
+                {/* begin::Title */}
+                <h1 className='text-dark mb-3 fs-2'>Forgot Password?</h1>
+                {/* end::Title */}
+
+                {/* begin::Link */}
+                <div className='text-gray-400 fw-bold fs-5'>Enter your email to reset your password.</div>
+                {/* end::Link */}
             </div>
-          </div>
-        )}
 
-        {hasErrors === false && (
-          <div className='mb-10 bg-light-success p-8 rounded'>
-            <div className='text-success'>Password reset link was sent. Please check your inbox.</div>
-          </div>
-        )}
-        {/* end::Title */}
+            <FormErrors errorMessages={formErrors}/>
 
-        {/* begin::Form group */}
-        <div className='fv-row mb-10'>
-          <label className='form-label fw-bolder text-gray-900 fs-6'>Email address</label>
-          <input
-            type='email'
-            placeholder='example@domain.com'
-            autoComplete='off'
-            {...formik.getFieldProps('email')}
-            className={clsx(
-              'form-control form-control-lg form-control-solid',
-              {'is-invalid': formik.touched.email && formik.errors.email},
-              {
-                'is-valid': formik.touched.email && !formik.errors.email,
-              }
-            )}
-          />
-          {formik.touched.email && formik.errors.email && (
-            <div className='fv-plugins-message-container'>
-              <div className='fv-help-block'>
-                <span role='alert'>{formik.errors.email}</span>
-              </div>
-            </div>
-          )}
-        </div>
-        {/* end::Form group */}
+            {
+                isSuccess && <FormSuccess
+                    message={'The password reset request was sent. Check your inbox for further instructions.'}/>
+            }
 
-        {/* begin::Form group */}
-        <div className='d-flex flex-wrap justify-content-center pb-lg-0'>
-          <button
-            type='submit'
-            id='kt_password_reset_submit'
-            className='btn btn-lg btn-krys me-4'
-          >
-            <span className='indicator-label'>Submit</span>
-            {loading && (
-              <span className='indicator-progress'>
-                Please wait...
-                <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
-              </span>
-            )}
-          </button>
-          <Link to='/auth/login'>
-            <button
-              type='button'
-              id='kt_login_password_reset_form_cancel_button'
-              className='btn btn-lg btn-light-secondary text-black'
-              disabled={formik.isSubmitting || !formik.isValid}
-            >
-              Cancel
-            </button>
-          </Link>{' '}
-        </div>
-        {/* end::Form group */}
-      </form>
-    </>
-  )
+            <Formik initialValues={defaultForgotPasswordFormFields} validationSchema={forgotPasswordSchema}
+                    onSubmit={handleForgotPassword}
+                    enableReinitialize>
+                {
+                    () => (
+                        <Form onChange={onChangeHandler}>
+                            <div className="mb-7">
+                                <Field className="form-control fs-6" type="text"
+                                       placeholder="Enter email address" name="email"/>
+
+                                <div className="mt-1 text-danger">
+                                    <ErrorMessage name="email" className="mt-2"/>
+                                </div>
+                            </div>
+
+                            <KrysFormFooter loading={loading} cancelUrl={'/auth/login'} useSeparator={false}/>
+                        </Form>
+                    )
+                }
+            </Formik>
+        </>
+    )
 }

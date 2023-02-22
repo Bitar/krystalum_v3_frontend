@@ -7,7 +7,7 @@ import Select from 'react-select';
 import {Role} from '../../../../models/iam/Role';
 import {defaultUser, User} from '../../../../models/iam/User';
 import {getUser, updateUser} from '../../../../requests/iam/User';
-import {getRoles} from '../../../../requests/iam/Role';
+import {getAllRoles} from '../../../../requests/iam/Role';
 import {extractErrors} from '../../../../helpers/requests';
 import {
     GenericErrorMessage, genericHandleSingleFile,
@@ -21,10 +21,10 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, EditUserSchema, FormFields} from '../core/form';
-import {useKrys} from "../../../../modules/general/KrysProvider";
-import {generatePageTitle} from "../../../../helpers/general";
-import {IAM_USERS} from "../../../../helpers/modules";
+import {useKrysApp} from "../../../../modules/general/KrysApp";
+import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
+import {Sections} from "../../../../helpers/sections";
 
 const UserEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -33,7 +33,7 @@ const UserEdit: React.FC = () => {
     const [user, setUser] = useState<User>(defaultUser);
     const [roles, setRoles] = useState<Role[]>([]);
 
-    const krys = useKrys();
+    const krysApp = useKrysApp();
 
     let {id} = useParams();
     const navigate = useNavigate();
@@ -56,12 +56,12 @@ const UserEdit: React.FC = () => {
 
                     // was able to get the user we want to edit
                     // the form is the same as user but without the image
-                    setForm({...currentUser, roles: user.roles.map(role => role.id)});
+                    setForm({...currentUser, roles: response.roles.map(role => role.id)});
                 }
             });
 
             // get the roles so we can edit the user's roles
-            getRoles().then(response => {
+            getAllRoles().then(response => {
                 if (axios.isAxiosError(response)) {
                     setFormErrors(extractErrors(response));
                 } else if (response === undefined) {
@@ -78,7 +78,8 @@ const UserEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(IAM_USERS, PageTypes.EDIT, user.name))
+        krysApp.setPageTitle(generatePageTitle(Sections.IAM_USERS, PageTypes.EDIT, user.name))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
     const multiSelectChangeHandler = (e: any) => {
@@ -104,7 +105,7 @@ const UserEdit: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // we were able to store the user
-                    krys.setAlert({message: generateSuccessMessage('user', Actions.EDIT), type: 'success'})
+                    krysApp.setAlert({message: generateSuccessMessage('user', Actions.EDIT), type: 'success'})
                     navigate(`/iam/users`);
                 }
             }
@@ -180,7 +181,7 @@ const UserEdit: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter/>
+                                <KrysFormFooter cancelUrl={'/iam/users'}/>
                             </Form>
                         )
                     }

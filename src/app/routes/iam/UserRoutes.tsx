@@ -6,10 +6,11 @@ import UserIndex from '../../sections/iam/user/pages/Index'
 import UserCreate from '../../sections/iam/user/pages/Create';
 import UserEdit from '../../sections/iam/user/pages/Edit';
 import {UserShow} from '../../sections/iam/user/pages/Show';
+import {Sections} from '../../helpers/sections';
 
 const usersBreadCrumbs: Array<PageLink> = [
     {
-        title: 'Users',
+        title: Sections.IAM_USERS,
         path: '/iam/users/',
         isSeparator: false,
         isActive: false,

@@ -5,10 +5,11 @@ import {SuspenseView} from '../../components/misc/SuspenseView'
 import PermissionIndex from '../../sections/iam/permission/pages/Index';
 import PermissionCreate from '../../sections/iam/permission/pages/Create';
 import PermissionEdit from '../../sections/iam/permission/pages/Edit';
+import {Sections} from '../../helpers/sections';
 
 const permissionsBreadcrumbs: Array<PageLink> = [
     {
-        title: 'Permissions',
+        title: Sections.IAM_PERMISSIONS,
         path: '/iam/permissions/',
         isSeparator: false,
         isActive: false,

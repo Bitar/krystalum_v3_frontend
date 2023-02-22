@@ -19,10 +19,10 @@ import {extractErrors} from '../../../../helpers/requests';
 import {Actions, PageTypes} from '../../../../helpers/variables';
 import {storeUser} from '../../../../requests/iam/User';
 import {CreateUserSchema, defaultFormFields, FormFields} from '../core/form';
-import {useKrys} from "../../../../modules/general/KrysProvider";
-import {generatePageTitle} from "../../../../helpers/general";
-import {DASHBOARD, IAM_USERS} from "../../../../helpers/modules";
+import {useKrysApp} from "../../../../modules/general/KrysApp";
+import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
+import {Sections} from "../../../../helpers/sections";
 
 const UserCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -30,10 +30,11 @@ const UserCreate: React.FC = () => {
 
     const [roles, setRoles] = useState<Role[]>([]);
 
-    const krys = useKrys();
+    const krysApp = useKrysApp();
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(IAM_USERS, PageTypes.CREATE))
+        krysApp.setPageTitle(generatePageTitle(Sections.IAM_USERS, PageTypes.CREATE))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // we use this to navigate to the index page after the new user is saved
@@ -79,7 +80,7 @@ const UserCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // we were able to store the user
-                    krys.setAlert({message: generateSuccessMessage('user', Actions.CREATE), type: 'success'})
+                    krysApp.setAlert({message: generateSuccessMessage('user', Actions.CREATE), type: 'success'})
                     navigate(`/iam/users`);
                 }
             }
@@ -167,7 +168,7 @@ const UserCreate: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter/>
+                                <KrysFormFooter cancelUrl={'/iam/users'}/>
                             </Form>
                         )
                     }

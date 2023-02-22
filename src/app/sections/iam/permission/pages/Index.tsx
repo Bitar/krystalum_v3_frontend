@@ -16,15 +16,16 @@ import {Actions, PageTypes} from '../../../../helpers/variables';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import PermissionIndexFilter from '../partials/IndexFilter';
-import {useKrys} from "../../../../modules/general/KrysProvider";
-import {generatePageTitle} from "../../../../helpers/general";
-import {IAM_PERMISSIONS} from "../../../../helpers/modules";
+import {useKrysApp} from "../../../../modules/general/KrysApp";
+import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
+import {Sections} from "../../../../helpers/sections";
 
 const PermissionIndex = () => {
-    const krys = useKrys();
+    const krysApp = useKrysApp();
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(IAM_PERMISSIONS, PageTypes.INDEX))
+        krysApp.setPageTitle(generatePageTitle(Sections.IAM_PERMISSIONS, PageTypes.INDEX))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const [searchParams] = useSearchParams();

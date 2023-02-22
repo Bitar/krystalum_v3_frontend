@@ -5,10 +5,11 @@ import {SuspenseView} from '../../components/misc/SuspenseView'
 import RoleIndex from '../../sections/iam/role/pages/Index';
 import RoleCreate from '../../sections/iam/role/pages/Create';
 import RoleEdit from '../../sections/iam/role/pages/Edit';
+import {Sections} from '../../helpers/sections';
 
 const rolesBreadcrumbs: Array<PageLink> = [
     {
-        title: 'Roles',
+        title: Sections.IAM_ROLES,
         path: '/iam/roles/',
         isSeparator: false,
         isActive: false,

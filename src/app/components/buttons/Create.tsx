@@ -10,7 +10,7 @@ type Props = {
 const CreateButton: React.FC<Props> = ({url, className}) => {
     return (
         <Link to={(url ? url : '') + '/create'} className={clsx('btn btn-light-success fs-6', className)} title='Create'>
-            <i className={clsx('fa fs-2', 'fa-plus', 'pe-0')}></i>
+            <i className={clsx('fa fs-4', 'fa-plus', 'pe-0')}></i>
         </Link>
     );
 }

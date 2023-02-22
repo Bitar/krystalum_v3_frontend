@@ -17,10 +17,10 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
-import {useKrys} from "../../../../modules/general/KrysProvider";
-import {generatePageTitle} from "../../../../helpers/general";
-import {DASHBOARD, IAM_ROLES} from "../../../../helpers/modules";
+import {useKrysApp} from "../../../../modules/general/KrysApp";
+import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
+import {Sections} from "../../../../helpers/sections";
 
 const RoleEdit: React.FC = () => {
     const [role, setRole] = useState<Role>(defaultRole);
@@ -30,7 +30,7 @@ const RoleEdit: React.FC = () => {
     const [permissions, setPermissions] = useState<Permission[]>([]);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
-    const krys = useKrys();
+    const krysApp = useKrysApp();
 
     const navigate = useNavigate();
 
@@ -64,7 +64,7 @@ const RoleEdit: React.FC = () => {
 
                     const {permissions, ...currentRole} = response
 
-                    setForm({...currentRole, permissions: role.permissions.map(permission => permission.id)});
+                    setForm({...currentRole, permissions: response.permissions.map(permission => permission.id)});
                 }
             });
         }
@@ -72,7 +72,8 @@ const RoleEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(IAM_ROLES, PageTypes.EDIT, role.name))
+        krysApp.setPageTitle(generatePageTitle(Sections.IAM_ROLES, PageTypes.EDIT, role.name))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [role]);
 
     const onChangeHandler = (e: any) => {
@@ -94,7 +95,7 @@ const RoleEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated permission so we're good
-                krys.setAlert({message: generateSuccessMessage('role', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({message: generateSuccessMessage('role', Actions.EDIT), type: 'success'})
                 navigate(`/iam/roles`);
             }
         });
@@ -141,7 +142,7 @@ const RoleEdit: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter/>
+                                <KrysFormFooter cancelUrl={'/iam/roles'}/>
                             </Form>
                         )
                     }

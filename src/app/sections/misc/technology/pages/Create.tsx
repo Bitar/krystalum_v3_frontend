@@ -1,49 +1,42 @@
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-import * as Yup from 'yup';
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 
-import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
-import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {Sections} from '../../../../helpers/sections';
+import {Actions, PageTypes} from '../../../../helpers/variables';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {defaultFormFields, FormFields, TechnologySchema} from '../core/form';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
-import {defaultPermission, Permission} from '../../../../models/iam/Permission';
-import {storePermission} from '../../../../requests/iam/Permission';
 import {extractErrors} from '../../../../helpers/requests';
+import {generateSuccessMessage} from '../../../../helpers/alerts';
+import {storeTechnology} from '../../../../requests/misc/Technology';
+import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from "../../../../modules/general/KrysApp";
-import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {generateSuccessMessage} from "../../../../helpers/alerts";
-import {Sections} from "../../../../helpers/sections";
 
-
-const PermissionCreate: React.FC = () => {
-    const [permission, setPermission] = useState<Permission>(defaultPermission);
+const TechnologyCreate: React.FC = () => {
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
+    const navigate = useNavigate();
     const krysApp = useKrysApp();
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.IAM_PERMISSIONS, PageTypes.CREATE))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_TECHNOLOGIES, PageTypes.CREATE))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const CreatePermissionSchema = Yup.object().shape({
-        name: Yup.string().required()
-    });
-
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, permission, setPermission);
+        genericOnChangeHandler(e, form, setForm);
     };
-
-    const navigate = useNavigate();
 
     const handleCreate = (e: any) => {
         // send API request to create the permission
-        storePermission(permission).then(response => {
+        storeTechnology(form).then(response => {
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
                     setFormErrors(extractErrors(response));
@@ -52,8 +45,8 @@ const PermissionCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's permission for sure
-                    krysApp.setAlert({message: generateSuccessMessage('permission', Actions.CREATE), type: 'success'})
-                    navigate(`/iam/permissions`);
+                    krysApp.setAlert({message: generateSuccessMessage('technology', Actions.CREATE), type: 'success'})
+                    navigate(`/iam/technologies`);
                 }
             }
         );
@@ -61,12 +54,12 @@ const PermissionCreate: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New Permission" icon="fa-regular fa-plus" icon_style="fs-3 text-success"/>
+            <KTCardHeader text="Create New Technology" icon="fa-regular fa-plus" icon_style="fs-3 text-success"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={permission} validationSchema={CreatePermissionSchema} onSubmit={handleCreate}>
+                <Formik initialValues={form} validationSchema={TechnologySchema} onSubmit={handleCreate}>
                     {
                         (formik) => (
                             <Form onChange={onChangeHandler}>
@@ -74,14 +67,14 @@ const PermissionCreate: React.FC = () => {
                                     <KrysFormLabel text="Name" isRequired={true} />
 
                                     <Field className="form-control fs-6" type="text"
-                                           placeholder="Enter permission name" name="name"/>
+                                           placeholder="Enter technology name" name="name"/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="name" className="mt-2"/>
                                     </div>
                                 </div>
 
-                                <KrysFormFooter cancelUrl={'/iam/permissions'}/>
+                                <KrysFormFooter cancelUrl={'/iam/technologies'}/>
                             </Form>
                         )
                     }
@@ -91,4 +84,4 @@ const PermissionCreate: React.FC = () => {
     )
 }
 
-export default PermissionCreate;
+export default TechnologyCreate;

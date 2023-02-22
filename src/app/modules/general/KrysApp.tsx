@@ -5,7 +5,7 @@ import {
     createContext,
     useContext,
     Dispatch,
-    SetStateAction, useRef,
+    SetStateAction
 } from 'react'
 import {WithChildren} from '../../../_metronic/helpers';
 import toast, {Toaster, ToastType} from 'react-hot-toast';
@@ -33,31 +33,37 @@ const iniKrysContextPropsState = {
 
 const KrysContext = createContext<KrysContextProps>(iniKrysContextPropsState)
 
-const useKrys = () => {
+const useKrysApp = () => {
     return useContext(KrysContext)
 }
 
-const KrysProvider: FC<WithChildren> = ({children}) => {
+const KrysApp: FC<WithChildren> = ({children}) => {
     const [alert, setAlert] = useState<Alert | undefined>(undefined)
     const [pageTitle, setPageTitle] = useState<string>('')
+
+    const color = {
+        'success': '#50cd89',
+        'error': '#f1416c'
+    }
 
     useEffect(() => {
         document.title = pageTitle;
     }, [pageTitle]);
 
     useEffect(() => {
-        if (alert != undefined) {
+        if (alert !== undefined) {
             (toast as any)[alert.type](alert.message, {
                 id: `alert-${alert.type}`,
-                duration: 2000,
-                position: 'top-center'
+                duration: 4000,
+                position: 'top-center',
+                style: {
+                    border: '1px solid ' + (color as any)[alert.type],
+                    padding: '16px',
+                    color: '#000000',
+                }
             })
-
-            setTimeout(() => {
-                toast.dismiss();
-                setAlert(undefined);
-            }, 2000);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [alert]);
 
     return (
@@ -68,4 +74,4 @@ const KrysProvider: FC<WithChildren> = ({children}) => {
     )
 }
 
-export {KrysProvider, useKrys}
+export {KrysApp, useKrysApp}
