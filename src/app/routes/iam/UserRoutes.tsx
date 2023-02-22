@@ -2,10 +2,10 @@ import {Route, Routes} from 'react-router-dom'
 import React from 'react'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
-import UserIndex from '../../sections/iam/user/pages/Index'
-import UserCreate from '../../sections/iam/user/pages/Create';
-import UserEdit from '../../sections/iam/user/pages/Edit';
-import {UserShow} from '../../sections/iam/user/pages/Show';
+import UserIndex from '../../sections/iam/users/pages/Index'
+import UserCreate from '../../sections/iam/users/pages/Create';
+import UserEdit from '../../sections/iam/users/pages/Edit';
+import {UserShow} from '../../sections/iam/users/pages/Show';
 import {Sections} from '../../helpers/sections';
 
 const usersBreadCrumbs: Array<PageLink> = [

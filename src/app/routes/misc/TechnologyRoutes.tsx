@@ -3,7 +3,7 @@ import React from 'react'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections';
-import TechnologyCreate from '../../sections/misc/technology/pages/Create';
+import TechnologyCreate from '../../sections/misc/technologies/pages/Create';
 
 const breadcrumbs: Array<PageLink> = [
     {
