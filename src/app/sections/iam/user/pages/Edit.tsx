@@ -21,7 +21,7 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, EditUserSchema, FormFields} from '../core/form';
-import {useKrys} from "../../../../modules/general/KrysProvider";
+import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
 import {Modules} from "../../../../helpers/modules";
@@ -33,7 +33,7 @@ const UserEdit: React.FC = () => {
     const [user, setUser] = useState<User>(defaultUser);
     const [roles, setRoles] = useState<Role[]>([]);
 
-    const krys = useKrys();
+    const krysApp = useKrysApp();
 
     let {id} = useParams();
     const navigate = useNavigate();
@@ -78,7 +78,7 @@ const UserEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(Modules.IAM_USERS, PageTypes.EDIT, user.name))
+        krysApp.setPageTitle(generatePageTitle(Modules.IAM_USERS, PageTypes.EDIT, user.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
@@ -105,7 +105,7 @@ const UserEdit: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // we were able to store the user
-                    krys.setAlert({message: generateSuccessMessage('user', Actions.EDIT), type: 'success'})
+                    krysApp.setAlert({message: generateSuccessMessage('user', Actions.EDIT), type: 'success'})
                     navigate(`/iam/users`);
                 }
             }

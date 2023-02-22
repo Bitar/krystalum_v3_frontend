@@ -16,15 +16,15 @@ import {Actions, PageTypes} from '../../../../helpers/variables';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import PermissionIndexFilter from '../partials/IndexFilter';
-import {useKrys} from "../../../../modules/general/KrysProvider";
+import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
 import {Modules} from "../../../../helpers/modules";
 
 const PermissionIndex = () => {
-    const krys = useKrys();
+    const krysApp = useKrysApp();
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(Modules.IAM_PERMISSIONS, PageTypes.INDEX))
+        krysApp.setPageTitle(generatePageTitle(Modules.IAM_PERMISSIONS, PageTypes.INDEX))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

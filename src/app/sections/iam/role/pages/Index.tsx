@@ -16,15 +16,15 @@ import {Actions, PageTypes} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import RoleIndexFilter from '../partials/IndexFilter';
-import {useKrys} from "../../../../modules/general/KrysProvider";
+import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
 import {Modules} from "../../../../helpers/modules";
 
 const RoleIndex = () => {
-    const krys = useKrys();
+    const krysApp = useKrysApp();
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(Modules.IAM_ROLES, PageTypes.INDEX))
+        krysApp.setPageTitle(generatePageTitle(Modules.IAM_ROLES, PageTypes.INDEX))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

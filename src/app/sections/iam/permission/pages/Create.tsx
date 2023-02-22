@@ -14,7 +14,7 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {Actions, PageTypes} from '../../../../helpers/variables';
-import {useKrys} from "../../../../modules/general/KrysProvider";
+import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
 import {Modules} from "../../../../helpers/modules";
@@ -24,10 +24,10 @@ const PermissionCreate: React.FC = () => {
     const [permission, setPermission] = useState<Permission>(defaultPermission);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
-    const krys = useKrys();
+    const krysApp = useKrysApp();
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(Modules.IAM_PERMISSIONS, PageTypes.CREATE))
+        krysApp.setPageTitle(generatePageTitle(Modules.IAM_PERMISSIONS, PageTypes.CREATE))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -52,7 +52,7 @@ const PermissionCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's permission for sure
-                    krys.setAlert({message: generateSuccessMessage('permission', Actions.CREATE), type: 'success'})
+                    krysApp.setAlert({message: generateSuccessMessage('permission', Actions.CREATE), type: 'success'})
                     navigate(`/iam/permissions`);
                 }
             }

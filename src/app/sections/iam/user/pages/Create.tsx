@@ -19,7 +19,7 @@ import {extractErrors} from '../../../../helpers/requests';
 import {Actions, PageTypes} from '../../../../helpers/variables';
 import {storeUser} from '../../../../requests/iam/User';
 import {CreateUserSchema, defaultFormFields, FormFields} from '../core/form';
-import {useKrys} from "../../../../modules/general/KrysProvider";
+import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
 import {Modules} from "../../../../helpers/modules";
@@ -30,10 +30,10 @@ const UserCreate: React.FC = () => {
 
     const [roles, setRoles] = useState<Role[]>([]);
 
-    const krys = useKrys();
+    const krysApp = useKrysApp();
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(Modules.IAM_USERS, PageTypes.CREATE))
+        krysApp.setPageTitle(generatePageTitle(Modules.IAM_USERS, PageTypes.CREATE))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -80,7 +80,7 @@ const UserCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // we were able to store the user
-                    krys.setAlert({message: generateSuccessMessage('user', Actions.CREATE), type: 'success'})
+                    krysApp.setAlert({message: generateSuccessMessage('user', Actions.CREATE), type: 'success'})
                     navigate(`/iam/users`);
                 }
             }

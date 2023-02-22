@@ -7,14 +7,14 @@ import {getUser} from '../../../../requests/iam/User';
 import {KTCard, KTCardBody, KTSVG} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {Actions, PageTypes} from '../../../../helpers/variables';
-import {useKrys} from "../../../../modules/general/KrysProvider";
+import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
 import {Modules} from "../../../../helpers/modules";
 
 const UserShow: React.FC = () => {
     const [user, setUser] = useState<User>(defaultUser);
 
-    const krys = useKrys();
+    const krysApp = useKrysApp();
 
     let {id} = useParams();
 
@@ -40,7 +40,7 @@ const UserShow: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(Modules.IAM_USERS, PageTypes.SHOW, user.name))
+        krysApp.setPageTitle(generatePageTitle(Modules.IAM_USERS, PageTypes.SHOW, user.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 

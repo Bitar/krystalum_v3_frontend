@@ -16,7 +16,7 @@ import Select from 'react-select';
 import {getAllPermissions} from '../../../../requests/iam/Permission';
 import {Permission} from '../../../../models/iam/Permission';
 import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
-import {useKrys} from "../../../../modules/general/KrysProvider";
+import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
 import {Modules} from "../../../../helpers/modules";
@@ -27,10 +27,10 @@ const RoleCreate: React.FC = () => {
 
     const [permissions, setPermissions] = useState<Permission[]>([]);
 
-    const krys = useKrys();
+    const krysApp = useKrysApp();
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(Modules.IAM_ROLES, PageTypes.CREATE))
+        krysApp.setPageTitle(generatePageTitle(Modules.IAM_ROLES, PageTypes.CREATE))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -70,7 +70,7 @@ const RoleCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's permission for sure
-                    krys.setAlert({message: generateSuccessMessage('role', Actions.CREATE), type: 'success'})
+                    krysApp.setAlert({message: generateSuccessMessage('role', Actions.CREATE), type: 'success'})
                     navigate(`/iam/roles`);
                 }
             }

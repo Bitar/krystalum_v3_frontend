@@ -17,7 +17,7 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
-import {useKrys} from "../../../../modules/general/KrysProvider";
+import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
 import {Modules} from "../../../../helpers/modules";
@@ -30,7 +30,7 @@ const RoleEdit: React.FC = () => {
     const [permissions, setPermissions] = useState<Permission[]>([]);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
-    const krys = useKrys();
+    const krysApp = useKrysApp();
 
     const navigate = useNavigate();
 
@@ -72,7 +72,7 @@ const RoleEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(Modules.IAM_ROLES, PageTypes.EDIT, role.name))
+        krysApp.setPageTitle(generatePageTitle(Modules.IAM_ROLES, PageTypes.EDIT, role.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [role]);
 
@@ -95,7 +95,7 @@ const RoleEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated permission so we're good
-                krys.setAlert({message: generateSuccessMessage('role', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({message: generateSuccessMessage('role', Actions.EDIT), type: 'success'})
                 navigate(`/iam/roles`);
             }
         });

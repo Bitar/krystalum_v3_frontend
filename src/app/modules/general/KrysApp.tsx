@@ -33,11 +33,11 @@ const iniKrysContextPropsState = {
 
 const KrysContext = createContext<KrysContextProps>(iniKrysContextPropsState)
 
-const useKrys = () => {
+const useKrysApp = () => {
     return useContext(KrysContext)
 }
 
-const KrysProvider: FC<WithChildren> = ({children}) => {
+const KrysApp: FC<WithChildren> = ({children}) => {
     const [alert, setAlert] = useState<Alert | undefined>(undefined)
     const [pageTitle, setPageTitle] = useState<string>('')
 
@@ -63,4 +63,4 @@ const KrysProvider: FC<WithChildren> = ({children}) => {
     )
 }
 
-export {KrysProvider, useKrys}
+export {KrysApp, useKrysApp}

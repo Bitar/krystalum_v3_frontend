@@ -17,14 +17,14 @@ import {useSearchParams} from 'react-router-dom';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import UserIndexFilter from '../partials/IndexFilter';
 import {generatePageTitle} from "../../../../helpers/pageTitleUtils";
-import {useKrys} from "../../../../modules/general/KrysProvider";
+import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {Modules} from "../../../../helpers/modules";
 
 const UserIndex = () => {
-    const krys = useKrys();
+    const krysApp = useKrysApp();
 
     useEffect(() => {
-        krys.setPageTitle(generatePageTitle(Modules.IAM_USERS, PageTypes.INDEX))
+        krysApp.setPageTitle(generatePageTitle(Modules.IAM_USERS, PageTypes.INDEX))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
