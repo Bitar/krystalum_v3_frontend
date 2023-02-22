@@ -13,11 +13,11 @@
 @import './core/components/variables';
 @import './core/components/variables-dark';
 
-$theme-colors: map-merge($theme-colors, ('krys': $krys));
-$theme-text-colors: map-merge($theme-text-colors, ('krys': $krys));
-$theme-light-colors: map-merge($theme-light-colors, ('krys': $krys-light));
-$theme-active-colors: map-merge($theme-light-colors, ('krys': $krys-active));
-$theme-inverse-colors: map-merge($theme-light-colors, ('krys': $krys-inverse));
+//$theme-colors: map-merge($theme-colors, ('krys': $krys));
+//$theme-text-colors: map-merge($theme-text-colors, ('krys': $krys));
+//$theme-light-colors: map-merge($theme-light-colors, ('krys': $krys-light));
+//$theme-active-colors: map-merge($theme-light-colors, ('krys': $krys-active));
+//$theme-inverse-colors: map-merge($theme-light-colors, ('krys': $krys-inverse));
 
 .css-13cymwt-control:hover, .css-t3ipsp-control:hover {
   border-color: var(--bs-gray-300) !important;
@@ -44,6 +44,7 @@ $theme-inverse-colors: map-merge($theme-light-colors, ('krys': $krys-inverse));
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
 @import '~bootstrap/scss/variables-dark';
+
 @import '~bootstrap/scss/maps';
 @import '~bootstrap/scss/mixins';
 @import '~bootstrap/scss/utilities';
