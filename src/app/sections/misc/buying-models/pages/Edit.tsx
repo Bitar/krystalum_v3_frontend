@@ -15,13 +15,13 @@ import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {Sections} from '../../../../helpers/sections';
-import {BookingType, defaultBookingType} from '../../../../models/misc/BookingType';
-import {getBookingType, updateBookingType} from '../../../../requests/misc/BookingType';
-import {BookingTypeSchema} from '../core/form';
+import {BuyingModel, defaultBuyingModel} from '../../../../models/misc/BuyingModel';
+import {getBuyingModel, updateBuyingModel} from '../../../../requests/misc/BuyingModel';
+import {BuyingModelSchema} from '../core/form';
 
 
-const BookingTypeEdit: React.FC = () => {
-    const [bookingType, setBookingType] = useState<BookingType>(defaultBookingType);
+const BuyingModelEdit: React.FC = () => {
+    const [buyingModel, setBuyingModel] = useState<BuyingModel>(defaultBuyingModel);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -32,17 +32,17 @@ const BookingTypeEdit: React.FC = () => {
 
     useEffect(() => {
         if (id) {
-            // get the booking type we need to edit from the database
-            getBookingType(parseInt(id)).then(response => {
+            // get the buying model we need to edit from the database
+            getBuyingModel(parseInt(id)).then(response => {
                 if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the booking type to edit, so we need to redirect
+                    // we were not able to fetch the buying model to edit, so we need to redirect
                     // to error page
                     navigate('/error/404');
                 } else if (response === undefined) {
                     navigate('/error/400');
                 } else {
-                    // we were able to fetch current booking type to edit
-                    setBookingType(response);
+                    // we were able to fetch current buying model to edit
+                    setBuyingModel(response);
                 }
             });
         }
@@ -50,17 +50,17 @@ const BookingTypeEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_BOOKING_TYPES, PageTypes.EDIT, bookingType.name))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUYING_MODELS, PageTypes.EDIT, buyingModel.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [bookingType]);
+    }, [buyingModel]);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, bookingType, setBookingType);
+        genericOnChangeHandler(e, buyingModel, setBuyingModel);
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the booking type's data by doing API call with form
-        updateBookingType(bookingType).then(response => {
+        // we need to update the buying model's data by doing API call with form
+        updateBuyingModel(buyingModel).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
@@ -68,21 +68,21 @@ const BookingTypeEdit: React.FC = () => {
                 // show generic error
                 setFormErrors([GenericErrorMessage]);
             } else {
-                // we got the booking type so we're good
-                krysApp.setAlert({message: generateSuccessMessage('booking type', Actions.EDIT), type: 'success'})
-                navigate(`/misc/booking-types`);
+                // we got the buying model so we're good
+                krysApp.setAlert({message: generateSuccessMessage('buying model', Actions.EDIT), type: 'success'})
+                navigate(`/misc/buying-models`);
             }
         });
     }
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Booking Type" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
+            <KTCardHeader text="Edit Buying Model" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={bookingType} validationSchema={BookingTypeSchema} onSubmit={handleEdit}
+                <Formik initialValues={buyingModel} validationSchema={BuyingModelSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         (formik) => (
@@ -91,14 +91,14 @@ const BookingTypeEdit: React.FC = () => {
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
                                     <Field className="form-control fs-6" type="text"
-                                           placeholder="Enter booking type name" name="name"/>
+                                           placeholder="Enter buying model name" name="name"/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="name" className="mt-2"/>
                                     </div>
                                 </div>
 
-                                <KrysFormFooter cancelUrl={'/misc/booking-types'}/>
+                                <KrysFormFooter cancelUrl={'/misc/buying-models'}/>
                             </Form>
                         )
                     }
@@ -108,4 +108,4 @@ const BookingTypeEdit: React.FC = () => {
     )
 }
 
-export default BookingTypeEdit;
+export default BuyingModelEdit;
