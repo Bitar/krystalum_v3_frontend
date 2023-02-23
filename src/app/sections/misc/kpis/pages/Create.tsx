@@ -17,6 +17,7 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeKpi} from '../../../../requests/misc/Kpi';
+import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
 
 const KpiCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -31,7 +32,11 @@ const KpiCreate: React.FC = () => {
     }, []);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, form, setForm);
+        const name:string = e.target.name;
+
+        if(name !== 'is_rate' && name !== 'is_conversion') {
+            genericOnChangeHandler(e, form, setForm);
+        }
     };
 
     const handleCreate = (e: any) => {
@@ -64,13 +69,35 @@ const KpiCreate: React.FC = () => {
                         (formik) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Name" isRequired={true} />
+                                    <KrysFormLabel text="Name" isRequired={true}/>
 
                                     <Field className="form-control fs-6" type="text"
                                            placeholder="Enter KPI name" name="name"/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="name" className="mt-2"/>
+                                    </div>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Is this KPI a rate?" isRequired={true}/>
+
+                                    <KrysCheckbox name="is_rate" onChangeHandler={() => setForm({...form, is_rate: !form.is_rate})}
+                                                  defaultValue={form.is_rate}/>
+
+                                    <div className="mt-1 text-danger">
+                                        <ErrorMessage name="is_rate" className="mt-2"/>
+                                    </div>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Is this a conversion KPI?" isRequired={true}/>
+
+                                    <KrysCheckbox name="is_conversion" onChangeHandler={() => setForm({...form, is_conversion: !form.is_conversion})}
+                                                  defaultValue={form.is_conversion}/>
+
+                                    <div className="mt-1 text-danger">
+                                        <ErrorMessage name="is_conversion" className="mt-2"/>
                                     </div>
                                 </div>
 

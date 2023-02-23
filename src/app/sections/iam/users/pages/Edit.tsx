@@ -87,7 +87,11 @@ const UserEdit: React.FC = () => {
     };
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, form, setForm);
+        const name: string = e.target.name;
+
+        if(name !== 'image') {
+            genericOnChangeHandler(e, form, setForm);
+        }
     };
 
     const handleFile = (e: any, formik: FormikProps<any>) => {
