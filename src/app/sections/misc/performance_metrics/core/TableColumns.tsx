@@ -20,7 +20,7 @@ const PerformanceMetricsColumns: ReadonlyArray<Column<PerformanceMetric>> = [
         Cell: ({...props}) => (
             <ActionsCell
                 id={props.data[props.row.index].id}
-                path={'iam/performance-metrics'}
+                path={'misc/performance-metrics'}
                 queryKey={QUERIES.PERFORMANCE_METRICS_LIST}
                 showView={false}
                 showEdit={true}

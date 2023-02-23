@@ -20,7 +20,7 @@ const VideoPlayersColumns: ReadonlyArray<Column<VideoPlayer>> = [
         Cell: ({...props}) => (
             <ActionsCell
                 id={props.data[props.row.index].id}
-                path={'iam/video-players'}
+                path={'misc/video-players'}
                 queryKey={QUERIES.VIDEO_PLAYERS_LIST}
                 showView={false}
                 showEdit={true}

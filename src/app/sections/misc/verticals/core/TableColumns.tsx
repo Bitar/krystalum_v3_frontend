@@ -20,7 +20,7 @@ const VerticalsColumns: ReadonlyArray<Column<Vertical>> = [
         Cell: ({...props}) => (
             <ActionsCell
                 id={props.data[props.row.index].id}
-                path={'iam/verticals'}
+                path={'misc/verticals'}
                 queryKey={QUERIES.VERTICALS_LIST}
                 showView={false}
                 showEdit={true}

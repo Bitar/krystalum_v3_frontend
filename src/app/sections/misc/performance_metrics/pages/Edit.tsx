@@ -1,9 +1,9 @@
 import React from 'react';
 
-const TechnologyEdit: React.FC = () => {
+const PerformanceMetricEdit: React.FC = () => {
     return (
         <></>
     )
 }
 
-export default TechnologyEdit;
+export default PerformanceMetricEdit;

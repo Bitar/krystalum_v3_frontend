@@ -33,7 +33,7 @@ const KpisColumns: ReadonlyArray<Column<Kpi>> = [
         Cell: ({...props}) => (
             <ActionsCell
                 id={props.data[props.row.index].id}
-                path={'iam/kpis'}
+                path={'misc/kpis'}
                 queryKey={QUERIES.KPIS_LIST}
                 showView={false}
                 showEdit={true}

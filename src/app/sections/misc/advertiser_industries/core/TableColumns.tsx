@@ -20,7 +20,7 @@ const AdvertiserIndustriesColumns: ReadonlyArray<Column<AdvertiserIndustry>> = [
         Cell: ({...props}) => (
             <ActionsCell
                 id={props.data[props.row.index].id}
-                path={'iam/advertiser-industries'}
+                path={'misc/advertiser-industries'}
                 queryKey={QUERIES.ADVERTISER_INDUSTRIES_LIST}
                 showView={false}
                 showEdit={true}

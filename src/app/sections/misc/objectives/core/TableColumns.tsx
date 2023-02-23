@@ -20,7 +20,7 @@ const ObjectivesColumns: ReadonlyArray<Column<Objective>> = [
         Cell: ({...props}) => (
             <ActionsCell
                 id={props.data[props.row.index].id}
-                path={'iam/objectives'}
+                path={'misc/objectives'}
                 queryKey={QUERIES.OBJECTIVES_LIST}
                 showView={false}
                 showEdit={true}

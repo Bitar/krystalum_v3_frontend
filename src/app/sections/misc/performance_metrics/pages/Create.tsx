@@ -46,7 +46,7 @@ const PerformanceMetricCreate: React.FC = () => {
                 } else {
                     // it's permission for sure
                     krysApp.setAlert({message: generateSuccessMessage('performance metric', Actions.CREATE), type: 'success'})
-                    navigate(`/iam/performance-metrics`);
+                    navigate(`/misc/performance-metrics`);
                 }
             }
         );
@@ -74,7 +74,7 @@ const PerformanceMetricCreate: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter cancelUrl={'/iam/performance-metrics'}/>
+                                <KrysFormFooter cancelUrl={'/misc/performance-metrics'}/>
                             </Form>
                         )
                     }

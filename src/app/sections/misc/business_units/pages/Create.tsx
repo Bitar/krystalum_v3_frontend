@@ -46,7 +46,7 @@ const BusinessUnitCreate: React.FC = () => {
                 } else {
                     // it's permission for sure
                     krysApp.setAlert({message: generateSuccessMessage('business unit', Actions.CREATE), type: 'success'})
-                    navigate(`/iam/business-units`);
+                    navigate(`/misc/business-units`);
                 }
             }
         );
@@ -74,7 +74,7 @@ const BusinessUnitCreate: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter cancelUrl={'/iam/business-units'}/>
+                                <KrysFormFooter cancelUrl={'/misc/business-units'}/>
                             </Form>
                         )
                     }

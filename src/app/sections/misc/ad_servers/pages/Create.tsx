@@ -46,7 +46,7 @@ const AdServerCreate: React.FC = () => {
                 } else {
                     // it's permission for sure
                     krysApp.setAlert({message: generateSuccessMessage('ad server', Actions.CREATE), type: 'success'})
-                    navigate(`/iam/ad-servers`);
+                    navigate(`/misc/ad-servers`);
                 }
             }
         );
@@ -74,7 +74,7 @@ const AdServerCreate: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter cancelUrl={'/iam/ad-servers'}/>
+                                <KrysFormFooter cancelUrl={'/misc/ad-servers'}/>
                             </Form>
                         )
                     }

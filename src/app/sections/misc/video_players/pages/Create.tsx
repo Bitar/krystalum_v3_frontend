@@ -46,7 +46,7 @@ const VideoPlayerCreate: React.FC = () => {
                 } else {
                     // it's permission for sure
                     krysApp.setAlert({message: generateSuccessMessage('video player', Actions.CREATE), type: 'success'})
-                    navigate(`/iam/video-players`);
+                    navigate(`/misc/video-players`);
                 }
             }
         );
@@ -74,7 +74,7 @@ const VideoPlayerCreate: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter cancelUrl={'/iam/video-players'}/>
+                                <KrysFormFooter cancelUrl={'/misc/video-players'}/>
                             </Form>
                         )
                     }

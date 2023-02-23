@@ -20,7 +20,7 @@ const AdServersColumns: ReadonlyArray<Column<AdServer>> = [
         Cell: ({...props}) => (
             <ActionsCell
                 id={props.data[props.row.index].id}
-                path={'iam/ad-servers'}
+                path={'misc/ad-servers'}
                 queryKey={QUERIES.AD_SERVERS_LIST}
                 showView={false}
                 showEdit={true}

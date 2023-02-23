@@ -46,7 +46,7 @@ const ObjectiveCreate: React.FC = () => {
                 } else {
                     // it's permission for sure
                     krysApp.setAlert({message: generateSuccessMessage('objective', Actions.CREATE), type: 'success'})
-                    navigate(`/iam/objectives`);
+                    navigate(`/misc/objectives`);
                 }
             }
         );
@@ -74,7 +74,7 @@ const ObjectiveCreate: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter cancelUrl={'/iam/objectives'}/>
+                                <KrysFormFooter cancelUrl={'/misc/objectives'}/>
                             </Form>
                         )
                     }

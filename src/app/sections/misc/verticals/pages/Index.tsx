@@ -1,9 +1,9 @@
 import React from 'react';
 
-const TechnologyIndex: React.FC = () => {
+const VerticalIndex: React.FC = () => {
     return (
         <></>
     )
 }
 
-export default TechnologyIndex;
+export default VerticalIndex;

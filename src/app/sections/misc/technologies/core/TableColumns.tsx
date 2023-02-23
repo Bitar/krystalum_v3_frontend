@@ -20,7 +20,7 @@ const TechnologiesColumns: ReadonlyArray<Column<Technology>> = [
         Cell: ({...props}) => (
             <ActionsCell
                 id={props.data[props.row.index].id}
-                path={'iam/technologies'}
+                path={'misc/technologies'}
                 queryKey={QUERIES.TECHNOLOGIES_LIST}
                 showView={false}
                 showEdit={true}

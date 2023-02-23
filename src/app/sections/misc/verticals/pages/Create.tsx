@@ -46,7 +46,7 @@ const VerticalCreate: React.FC = () => {
                 } else {
                     // it's permission for sure
                     krysApp.setAlert({message: generateSuccessMessage('vertical', Actions.CREATE), type: 'success'})
-                    navigate(`/iam/verticals`);
+                    navigate(`/misc/verticals`);
                 }
             }
         );
@@ -74,7 +74,7 @@ const VerticalCreate: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter cancelUrl={'/iam/verticals'}/>
+                                <KrysFormFooter cancelUrl={'/misc/verticals'}/>
                             </Form>
                         )
                     }

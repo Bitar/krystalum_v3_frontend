@@ -46,7 +46,7 @@ const TechnologyCreate: React.FC = () => {
                 } else {
                     // it's permission for sure
                     krysApp.setAlert({message: generateSuccessMessage('technology', Actions.CREATE), type: 'success'})
-                    navigate(`/iam/technologies`);
+                    navigate(`/misc/technologies`);
                 }
             }
         );
@@ -74,7 +74,7 @@ const TechnologyCreate: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter cancelUrl={'/iam/technologies'}/>
+                                <KrysFormFooter cancelUrl={'/misc/technologies'}/>
                             </Form>
                         )
                     }

@@ -46,7 +46,7 @@ const AdvertiserIndustryCreate: React.FC = () => {
                 } else {
                     // it's permission for sure
                     krysApp.setAlert({message: generateSuccessMessage('advertiser industry', Actions.CREATE), type: 'success'})
-                    navigate(`/iam/advertiser-industries`);
+                    navigate(`/misc/advertiser-industries`);
                 }
             }
         );
@@ -74,7 +74,7 @@ const AdvertiserIndustryCreate: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter cancelUrl={'/iam/advertiser-industries'}/>
+                                <KrysFormFooter cancelUrl={'/misc/advertiser-industries'}/>
                             </Form>
                         )
                     }

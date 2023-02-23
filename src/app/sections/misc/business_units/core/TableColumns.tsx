@@ -20,7 +20,7 @@ const BusinessUnitsColumns: ReadonlyArray<Column<BusinessUnit>> = [
         Cell: ({...props}) => (
             <ActionsCell
                 id={props.data[props.row.index].id}
-                path={'iam/business-units'}
+                path={'misc/business-units'}
                 queryKey={QUERIES.BUSINESS_UNITS_LIST}
                 showView={false}
                 showEdit={true}

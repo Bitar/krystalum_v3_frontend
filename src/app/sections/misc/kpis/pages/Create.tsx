@@ -46,7 +46,7 @@ const KpiCreate: React.FC = () => {
                 } else {
                     // it's permission for sure
                     krysApp.setAlert({message: generateSuccessMessage('kpi', Actions.CREATE), type: 'success'})
-                    navigate(`/iam/kpis`);
+                    navigate(`/misc/kpis`);
                 }
             }
         );
@@ -74,7 +74,7 @@ const KpiCreate: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter cancelUrl={'/iam/kpis'}/>
+                                <KrysFormFooter cancelUrl={'/misc/kpis'}/>
                             </Form>
                         )
                     }
