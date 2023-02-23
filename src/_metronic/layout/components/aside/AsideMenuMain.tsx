@@ -31,7 +31,7 @@ export function AsideMenuMain() {
                 <AsideMenuItem to='/misc/advertiser-industries' title='Advertiser industries' hasBullet={true}/>
                 <AsideMenuItem to='/misc/audiences' title='Audiences' hasBullet={true}/>
                 <AsideMenuItem to='/misc/booking-types' title='Booking types' hasBullet={true}/>
-                <AsideMenuItem to='/misc/business-units' title='Business Units' hasBullet={true}/>
+                <AsideMenuItem to='/misc/business-units' title='Business units' hasBullet={true}/>
                 <AsideMenuItem to='/misc/buy-types' title='Buy types' hasBullet={true}/>
                 <AsideMenuItem to='/misc/buying-models' title='Buying Models' hasBullet={true}/>
                 <AsideMenuItem to='/misc/cities' title='Cities' hasBullet={true}/>

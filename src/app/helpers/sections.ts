@@ -10,4 +10,5 @@ export enum Sections {
     MISC_CITIES = 'Cities',
     MISC_BUYING_MODELS = 'Buying Models',
     MISC_METRICS = 'Metrics',
+    MISC_AUDIENCES = 'Audiences',
 }

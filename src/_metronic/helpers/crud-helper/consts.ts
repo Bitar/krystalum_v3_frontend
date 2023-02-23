@@ -8,6 +8,7 @@ const QUERIES = {
   CITY_LIST: 'cities-list',
   BUYING_MODEL_LIST: 'buying-models-list',
   METRICS_LIST: 'metrics-list',
+  AUDIENCES_LIST: 'audiences-list',
 }
 
 export {QUERIES}
