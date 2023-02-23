@@ -5,6 +5,7 @@ const QUERIES = {
   BUY_TYPE_LIST: 'buy-types-list',
   BOOKING_TYPE_LIST: 'booking-types-list',
   COUNTRY_LIST: 'countries-list',
+  CITY_LIST: 'cities-list',
 }
 
 export {QUERIES}

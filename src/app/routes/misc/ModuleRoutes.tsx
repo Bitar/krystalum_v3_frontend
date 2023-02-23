@@ -7,6 +7,7 @@ const MiscModuleRoutes: React.FC = () => {
     const BuyTypeRoutes = lazy(() => import('./BuyTypeRoutes'));
     const BookingTypeRoutes = lazy(() => import('./BookingTypeRoutes'));
     const CountryRoutes = lazy(() => import('./CountryRoutes'));
+    const CityRoutes = lazy(() => import('./CityRoutes'));
 
     return (
         <Routes>
@@ -43,6 +44,15 @@ const MiscModuleRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <CountryRoutes/>
+                    </SuspenseView>
+                }
+            ></Route>
+
+            <Route
+                path='cities/*'
+                element={
+                    <SuspenseView>
+                        <CityRoutes/>
                     </SuspenseView>
                 }
             ></Route>
