@@ -4,11 +4,12 @@ import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections';
 import BuyTypeCreate from '../../sections/misc/buy-types/pages/Create';
+import BuyTypeIndex from '../../sections/misc/buy-types/pages/Index';
 
 const breadcrumbs: Array<PageLink> = [
     {
         title: Sections.MISC_BUY_TYPES,
-        path: '/iam/buy-types/',
+        path: '/misc/buy-types/',
         isSeparator: false,
         isActive: false,
     },
@@ -26,7 +27,7 @@ const BuyTypeRoutes: React.FC = () => {
             <Route index element={
                 <SuspenseView>
                     <PageTitle breadcrumbs={[]}>{Sections.MISC_BUY_TYPES}</PageTitle>
-                    {/*<RoleIndex/>*/}
+                    <BuyTypeIndex/>
                 </SuspenseView>
             }/>
             <Route
@@ -34,7 +35,7 @@ const BuyTypeRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Create'}</PageTitle>
-                        <BuyTypeCreate />
+                        <BuyTypeCreate/>
                     </SuspenseView>
                 }
             />

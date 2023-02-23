@@ -46,7 +46,7 @@ const BuyTypeCreate: React.FC = () => {
                 } else {
                     // it's permission for sure
                     krysApp.setAlert({message: generateSuccessMessage('buy type', Actions.CREATE), type: 'success'})
-                    navigate(`/iam/buy-types`);
+                    navigate(`/misc/buy-types`);
                 }
             }
         );
@@ -85,7 +85,7 @@ const BuyTypeCreate: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter cancelUrl={'/iam/buy-types'}/>
+                                <KrysFormFooter cancelUrl={'/misc/buy-types'}/>
                             </Form>
                         )
                     }

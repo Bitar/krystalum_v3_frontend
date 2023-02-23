@@ -11,4 +11,4 @@ export type BuyTypeList = {
     data: BuyType[]
 }
 
-export const defaultTechnology: BuyType = {id: 0, name: ""};
+export const defaultBuyType: BuyType = {id: 0, name: ""};
