@@ -3,14 +3,11 @@ import React from 'react'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections';
-import BuyTypeCreate from '../../sections/misc/buy-types/pages/Create';
-import BuyTypeIndex from '../../sections/misc/buy-types/pages/Index';
-import BuyTypeEdit from '../../sections/misc/buy-types/pages/Edit';
 
 const breadcrumbs: Array<PageLink> = [
     {
-        title: Sections.MISC_BUY_TYPES,
-        path: '/misc/buy-types/',
+        title: Sections.MISC_BOOKING_TYPES,
+        path: '/misc/booking-types/',
         isSeparator: false,
         isActive: false,
     },
@@ -22,13 +19,13 @@ const breadcrumbs: Array<PageLink> = [
     },
 ]
 
-const BuyTypeRoutes: React.FC = () => {
+const BookingTypeRoutes: React.FC = () => {
     return (
         <Routes>
             <Route index element={
                 <SuspenseView>
-                    <PageTitle breadcrumbs={[]}>{Sections.MISC_BUY_TYPES}</PageTitle>
-                    <BuyTypeIndex/>
+                    <PageTitle breadcrumbs={[]}>{Sections.MISC_BOOKING_TYPES}</PageTitle>
+                    {/*<BuyTypeIndex/>*/}
                 </SuspenseView>
             }/>
             <Route
@@ -36,7 +33,7 @@ const BuyTypeRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Create'}</PageTitle>
-                        <BuyTypeCreate/>
+                        {/*<BuyTypeCreate/>*/}
                     </SuspenseView>
                 }
             />
@@ -45,7 +42,7 @@ const BuyTypeRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
-                        <BuyTypeEdit/>
+                        {/*<RoleEdit />*/}
                     </SuspenseView>
                 }
             />
@@ -53,4 +50,4 @@ const BuyTypeRoutes: React.FC = () => {
     )
 }
 
-export default BuyTypeRoutes;
+export default BookingTypeRoutes;
