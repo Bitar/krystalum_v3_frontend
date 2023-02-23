@@ -12,4 +12,5 @@ export enum Sections {
     MISC_METRICS = 'Metrics',
     MISC_AUDIENCES = 'Audiences',
     MISC_DEVICES = 'Devices',
+    MISC_LANGUAGES = 'Languages',
 }

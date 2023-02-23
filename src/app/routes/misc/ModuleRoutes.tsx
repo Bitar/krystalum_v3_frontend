@@ -1,6 +1,7 @@
 import React, {lazy} from 'react';
 import {Route, Routes} from 'react-router-dom';
 import {SuspenseView} from '../../components/misc/SuspenseView';
+import LanguageRoutes from './LanguageRoutes';
 
 const MiscModuleRoutes: React.FC = () => {
     const TechnologyRoutes = lazy(() => import('./TechnologyRoutes'));
@@ -93,6 +94,15 @@ const MiscModuleRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <DeviceRoutes/>
+                    </SuspenseView>
+                }
+            ></Route>
+
+            <Route
+                path='languages/*'
+                element={
+                    <SuspenseView>
+                        <LanguageRoutes/>
                     </SuspenseView>
                 }
             ></Route>
