@@ -4,6 +4,7 @@ import {SuspenseView} from '../../components/misc/SuspenseView';
 
 const MiscModuleRoutes: React.FC = () => {
     const TechnologyRoutes = lazy(() => import('./TechnologyRoutes'));
+    const BuyTypeRoutes = lazy(() => import('./BuyTypeRoutes'));
 
     return (
         <Routes>
@@ -13,6 +14,15 @@ const MiscModuleRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <TechnologyRoutes/>
+                    </SuspenseView>
+                }
+            ></Route>
+
+            <Route
+                path='buy-types/*'
+                element={
+                    <SuspenseView>
+                        <BuyTypeRoutes/>
                     </SuspenseView>
                 }
             ></Route>
