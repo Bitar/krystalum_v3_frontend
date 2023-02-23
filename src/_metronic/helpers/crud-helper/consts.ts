@@ -9,6 +9,7 @@ const QUERIES = {
   BUYING_MODEL_LIST: 'buying-models-list',
   METRICS_LIST: 'metrics-list',
   AUDIENCES_LIST: 'audiences-list',
+  DEVICES_LIST: 'devices-list',
 }
 
 export {QUERIES}
