@@ -13,6 +13,7 @@ const MiscModuleRoutes: React.FC = () => {
     const MetricRoutes = lazy(() => import('./MetricRoutes'));
     const AudienceRoutes = lazy(() => import('./AudienceRoutes'));
     const DeviceRoutes = lazy(() => import('./DeviceRoutes'));
+    const OperatingSystemRoutes = lazy(() => import('./OperatingSystemRoutes'));
 
     return (
         <Routes>
@@ -103,6 +104,15 @@ const MiscModuleRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <LanguageRoutes/>
+                    </SuspenseView>
+                }
+            ></Route>
+
+            <Route
+                path='operating-systems/*'
+                element={
+                    <SuspenseView>
+                        <OperatingSystemRoutes/>
                     </SuspenseView>
                 }
             ></Route>

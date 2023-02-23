@@ -11,6 +11,7 @@ const QUERIES = {
     AUDIENCES_LIST: 'audiences-list',
     DEVICES_LIST: 'devices-list',
     LANGUAGES_LIST: 'languages-list',
+    OPERATING_SYSTEMS_LIST: 'operating-systems-list',
 }
 
 export {QUERIES}

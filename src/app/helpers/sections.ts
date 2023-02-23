@@ -13,4 +13,5 @@ export enum Sections {
     MISC_AUDIENCES = 'Audiences',
     MISC_DEVICES = 'Devices',
     MISC_LANGUAGES = 'Languages',
+    MISC_OPERATING_SYSTEMS = 'Operating Systems',
 }
