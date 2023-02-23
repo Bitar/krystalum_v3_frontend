@@ -3,6 +3,9 @@ import React from 'react'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections';
+import BookingTypeIndex from '../../sections/misc/booking-types/pages/Index';
+import BookingTypeCreate from '../../sections/misc/booking-types/pages/Create';
+import BookingTypeEdit from '../../sections/misc/booking-types/pages/Edit';
 
 const breadcrumbs: Array<PageLink> = [
     {
@@ -25,7 +28,7 @@ const BookingTypeRoutes: React.FC = () => {
             <Route index element={
                 <SuspenseView>
                     <PageTitle breadcrumbs={[]}>{Sections.MISC_BOOKING_TYPES}</PageTitle>
-                    {/*<BuyTypeIndex/>*/}
+                    <BookingTypeIndex/>
                 </SuspenseView>
             }/>
             <Route
@@ -33,7 +36,7 @@ const BookingTypeRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Create'}</PageTitle>
-                        {/*<BuyTypeCreate/>*/}
+                        <BookingTypeCreate/>
                     </SuspenseView>
                 }
             />
@@ -42,7 +45,7 @@ const BookingTypeRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
-                        {/*<RoleEdit />*/}
+                        <BookingTypeEdit/>
                     </SuspenseView>
                 }
             />
