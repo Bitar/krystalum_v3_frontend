@@ -18,6 +18,7 @@ import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {Sections} from '../../../../helpers/sections';
 import {Country, defaultCountry} from '../../../../models/misc/Country';
 import {getCountry, updateCountry} from '../../../../requests/misc/Country';
+import {CountrySchema} from '../core/form';
 
 
 const CountryEdit: React.FC = () => {
@@ -54,13 +55,6 @@ const CountryEdit: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [country]);
 
-    const EditCountrySchema = Yup.object().shape({
-        name: Yup.string().required(),
-        code: Yup.string().required(),
-        currency: Yup.string().required().matches(/^[A-Z]{3}$/, 'Currency should be all capital and three letters only'),
-        phone_code: Yup.number().required()
-    });
-
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, country, setCountry);
     };
@@ -89,7 +83,7 @@ const CountryEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={country} validationSchema={EditCountrySchema} onSubmit={handleEdit}
+                <Formik initialValues={country} validationSchema={CountrySchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         (formik) => (
@@ -106,7 +100,7 @@ const CountryEdit: React.FC = () => {
                                 </div>
 
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Code" isRequired={true} />
+                                    <KrysFormLabel text="Code" isRequired={true}/>
 
                                     <Field className="form-control fs-6" type="text"
                                            placeholder="Enter country code" name="code"/>
@@ -117,7 +111,7 @@ const CountryEdit: React.FC = () => {
                                 </div>
 
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Currency" isRequired={true} />
+                                    <KrysFormLabel text="Currency" isRequired={true}/>
 
                                     <Field className="form-control fs-6" type="text"
                                            placeholder="Enter country currency" name="currency"/>
@@ -128,7 +122,7 @@ const CountryEdit: React.FC = () => {
                                 </div>
 
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Phone code" isRequired={true} />
+                                    <KrysFormLabel text="Phone code" isRequired={true}/>
 
                                     <Field className="form-control fs-6" type="number"
                                            placeholder="Enter country phone code" name="phone_code"/>

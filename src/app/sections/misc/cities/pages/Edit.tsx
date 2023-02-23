@@ -21,6 +21,7 @@ import {getCity, updateCity} from '../../../../requests/misc/City';
 import Select from 'react-select';
 import {Country} from '../../../../models/misc/Country';
 import {getAllCountries} from '../../../../requests/misc/Country';
+import {CitySchema} from '../core/form';
 
 const CityEdit: React.FC = () => {
     const [city, setCity] = useState<City>(defaultCity);
@@ -72,13 +73,6 @@ const CityEdit: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [city]);
 
-    const EditCitySchema = Yup.object().shape({
-        name: Yup.string().required(),
-        code: Yup.string().required(),
-        currency: Yup.string().required().matches(/^[A-Z]{3}$/, 'Currency should be all capital and three letters only'),
-        phone_code: Yup.number().required()
-    });
-
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, city, setCity);
     };
@@ -111,7 +105,7 @@ const CityEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={city} validationSchema={EditCitySchema} onSubmit={handleEdit}
+                <Formik initialValues={city} validationSchema={CitySchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         (formik) => (

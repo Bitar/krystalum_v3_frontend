@@ -18,6 +18,7 @@ import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {Sections} from '../../../../helpers/sections';
 import {BookingType, defaultBookingType} from '../../../../models/misc/BookingType';
 import {getBookingType, updateBookingType} from '../../../../requests/misc/BookingType';
+import {BookingTypeSchema} from '../core/form';
 
 
 const BookingTypeEdit: React.FC = () => {
@@ -54,10 +55,6 @@ const BookingTypeEdit: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bookingType]);
 
-    const EditBookingTypeSchema = Yup.object().shape({
-        name: Yup.string().required()
-    });
-
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, bookingType, setBookingType);
     };
@@ -72,7 +69,7 @@ const BookingTypeEdit: React.FC = () => {
                 // show generic error
                 setFormErrors([GenericErrorMessage]);
             } else {
-                // we got the booking booking type so we're good
+                // we got the booking type so we're good
                 krysApp.setAlert({message: generateSuccessMessage('booking type', Actions.EDIT), type: 'success'})
                 navigate(`/misc/booking-types`);
             }
@@ -86,7 +83,7 @@ const BookingTypeEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={bookingType} validationSchema={EditBookingTypeSchema} onSubmit={handleEdit}
+                <Formik initialValues={bookingType} validationSchema={BookingTypeSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         (formik) => (

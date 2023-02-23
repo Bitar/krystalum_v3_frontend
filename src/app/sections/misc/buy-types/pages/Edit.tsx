@@ -18,6 +18,7 @@ import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {Sections} from '../../../../helpers/sections';
 import {BuyType, defaultBuyType} from '../../../../models/misc/BuyType';
 import {getBuyType, updateBuyType} from '../../../../requests/misc/BuyType';
+import {BuyTypeSchema} from '../core/form';
 
 
 const BuyTypeEdit: React.FC = () => {
@@ -54,11 +55,6 @@ const BuyTypeEdit: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [buyType]);
 
-    const EditBuyTypeSchema = Yup.object().shape({
-        name: Yup.string().required(),
-        code: Yup.string().required(),
-    });
-
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, buyType, setBuyType);
     };
@@ -87,7 +83,7 @@ const BuyTypeEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={buyType} validationSchema={EditBuyTypeSchema} onSubmit={handleEdit}
+                <Formik initialValues={buyType} validationSchema={BuyTypeSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         (formik) => (
