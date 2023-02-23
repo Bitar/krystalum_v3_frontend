@@ -6,7 +6,8 @@ type CardAction = {
     url?: string,
     target?: string,
     showFilter?: boolean,
-    setShowFilter?: React.Dispatch<React.SetStateAction<boolean>>
+    setShowFilter?: React.Dispatch<React.SetStateAction<boolean>>,
+    downloadAction?: () => boolean
 }
 
 export default CardAction;

@@ -3,14 +3,14 @@ import React from 'react'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections';
-import TechnologyCreate from '../../sections/misc/technologies/pages/Create';
-import TechnologyIndex from '../../sections/misc/technologies/pages/Index';
-import TechnologyEdit from '../../sections/misc/technologies/pages/Edit';
+import AdvertiserIndustryIndex from '../../sections/misc/advertiser_industries/pages/Index';
+import AdvertiserIndustryCreate from '../../sections/misc/advertiser_industries/pages/Create';
+import AdvertiserIndustryEdit from '../../sections/misc/advertiser_industries/pages/Edit';
 
 const breadcrumbs: Array<PageLink> = [
     {
-        title: Sections.MISC_TECHNOLOGIES,
-        path: '/misc/technologies/',
+        title: Sections.MISC_ADVERTISER_INDUSTRIES,
+        path: '/misc/advertiser-industries/',
         isSeparator: false,
         isActive: false,
     },
@@ -22,13 +22,13 @@ const breadcrumbs: Array<PageLink> = [
     },
 ]
 
-const TechnologyRoutes: React.FC = () => {
+const AdvertiserIndustryRoutes: React.FC = () => {
     return (
         <Routes>
             <Route index element={
                 <SuspenseView>
-                    <PageTitle breadcrumbs={[]}>{Sections.MISC_TECHNOLOGIES}</PageTitle>
-                    <TechnologyIndex/>
+                    <PageTitle breadcrumbs={[]}>{Sections.MISC_ADVERTISER_INDUSTRIES}</PageTitle>
+                    <AdvertiserIndustryIndex/>
                 </SuspenseView>
             }/>
             <Route
@@ -36,7 +36,7 @@ const TechnologyRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Create'}</PageTitle>
-                        <TechnologyCreate />
+                        <AdvertiserIndustryCreate/>
                     </SuspenseView>
                 }
             />
@@ -45,7 +45,7 @@ const TechnologyRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
-                        <TechnologyEdit />
+                        <AdvertiserIndustryEdit/>
                     </SuspenseView>
                 }
             />
@@ -53,4 +53,4 @@ const TechnologyRoutes: React.FC = () => {
     )
 }
 
-export default TechnologyRoutes;
+export default AdvertiserIndustryRoutes;

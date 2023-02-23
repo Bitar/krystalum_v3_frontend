@@ -11,7 +11,7 @@ type Props = {
 
 const FilterButton: React.FC<Props> = ({target, showFilter, setShowFilter, className}) => {
     return (
-        <Button className={clsx('btn btn-light-primary fs-6', className)} title='Filter' onClick={() => setShowFilter && setShowFilter(!showFilter)} aria-controls={target}
+        <Button className={clsx('btn btn-light-primary fs-6', className && className)} title='Filter' onClick={() => setShowFilter && setShowFilter(!showFilter)} aria-controls={target}
                 aria-expanded={showFilter}>
             {
                 showFilter ? <i className={clsx('fa fs-4', 'fa-solid fa-filter-slash', 'pe-0')}></i> : <i className={clsx('fa fs-4', 'fa-solid fa-filter', 'pe-0')}></i>

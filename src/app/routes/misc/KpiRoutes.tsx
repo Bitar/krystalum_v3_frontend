@@ -1,16 +1,17 @@
 import {Route, Routes} from 'react-router-dom'
 import React from 'react'
+
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections';
-import TechnologyCreate from '../../sections/misc/technologies/pages/Create';
-import TechnologyIndex from '../../sections/misc/technologies/pages/Index';
-import TechnologyEdit from '../../sections/misc/technologies/pages/Edit';
+import KpiIndex from '../../sections/misc/kpis/pages/Index';
+import KpiCreate from '../../sections/misc/kpis/pages/Create';
+import KpiEdit from '../../sections/misc/kpis/pages/Edit';
 
 const breadcrumbs: Array<PageLink> = [
     {
-        title: Sections.MISC_TECHNOLOGIES,
-        path: '/misc/technologies/',
+        title: Sections.MISC_KPIS,
+        path: '/misc/kpis/',
         isSeparator: false,
         isActive: false,
     },
@@ -22,13 +23,13 @@ const breadcrumbs: Array<PageLink> = [
     },
 ]
 
-const TechnologyRoutes: React.FC = () => {
+const KpiRoutes: React.FC = () => {
     return (
         <Routes>
             <Route index element={
                 <SuspenseView>
-                    <PageTitle breadcrumbs={[]}>{Sections.MISC_TECHNOLOGIES}</PageTitle>
-                    <TechnologyIndex/>
+                    <PageTitle breadcrumbs={[]}>{Sections.MISC_KPIS}</PageTitle>
+                    <KpiIndex/>
                 </SuspenseView>
             }/>
             <Route
@@ -36,7 +37,7 @@ const TechnologyRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Create'}</PageTitle>
-                        <TechnologyCreate />
+                        <KpiCreate/>
                     </SuspenseView>
                 }
             />
@@ -45,7 +46,7 @@ const TechnologyRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
-                        <TechnologyEdit />
+                        <KpiEdit/>
                     </SuspenseView>
                 }
             />
@@ -53,4 +54,4 @@ const TechnologyRoutes: React.FC = () => {
     )
 }
 
-export default TechnologyRoutes;
+export default KpiRoutes;

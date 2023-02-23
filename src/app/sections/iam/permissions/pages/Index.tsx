@@ -37,19 +37,21 @@ const PermissionIndex = () => {
             <QueryResponseProvider id={QUERIES.PERMISSIONS_LIST} requestFunction={getPermissions}>
                 <ListViewProvider>
                     {
-                        searchParams.has('success') ? <FormSuccess type={searchParams.get('success')} model='permission' /> : <></>
+                        searchParams.has('success') ?
+                            <FormSuccess type={searchParams.get('success')} model='permission'/> : <></>
                     }
 
                     <KTCard>
-                        <KTCardHeader text='All Permissions' icon="fa-regular fa-list" icon_style="fs-3 text-primary" actions={[{
-                            type: Actions.FILTER,
-                            target: 'permissions-list-filter',
-                            showFilter: showFilter,
-                            setShowFilter: setShowFilter
-                        }, {type: Actions.CREATE, url: '/iam/permissions'}]}/>
+                        <KTCardHeader text='All Permissions' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
+                                      actions={[{
+                                          type: Actions.FILTER,
+                                          target: 'permissions-list-filter',
+                                          showFilter: showFilter,
+                                          setShowFilter: setShowFilter
+                                      }, {type: Actions.CREATE, url: '/iam/permissions'}]}/>
 
                         <KTCardBody>
-                            <PermissionIndexFilter showFilter={showFilter} />
+                            <PermissionIndexFilter showFilter={showFilter}/>
 
                             <PermissionTable/>
                         </KTCardBody>
@@ -67,7 +69,8 @@ const PermissionTable = () => {
     const columns = useMemo(() => PermissionsColumns, []);
 
     return (
-        <KrysTable data={data} columns={columns} model={permissions.length > 0 ? permissions[0] : null} isLoading={isLoading} />
+        <KrysTable data={data} columns={columns} model={permissions.length > 0 ? permissions[0] : null}
+                   isLoading={isLoading}/>
     )
 }
 

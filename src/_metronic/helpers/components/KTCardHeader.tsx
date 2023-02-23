@@ -73,8 +73,7 @@ const KTCardHeader: FC<Props> = ({
                                 return (
                                     <EditButton url={cardAction.url} key={index} className='ms-2'/>
                                 )
-                            }
-                            else {
+                            } else {
                                 return <></>;
                             }
                         })

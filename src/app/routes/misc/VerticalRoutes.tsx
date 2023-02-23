@@ -1,16 +1,17 @@
-import {Route, Routes} from 'react-router-dom'
-import React from 'react'
-import {PageLink, PageTitle} from '../../../_metronic/layout/core'
-import {SuspenseView} from '../../components/misc/SuspenseView'
+import {Route, Routes} from 'react-router-dom';
+import React from 'react';
+
+import {PageLink, PageTitle} from '../../../_metronic/layout/core';
+import {SuspenseView} from '../../components/misc/SuspenseView';
 import {Sections} from '../../helpers/sections';
-import TechnologyCreate from '../../sections/misc/technologies/pages/Create';
-import TechnologyIndex from '../../sections/misc/technologies/pages/Index';
-import TechnologyEdit from '../../sections/misc/technologies/pages/Edit';
+import VerticalIndex from '../../sections/misc/verticals/pages/Index';
+import VerticalCreate from '../../sections/misc/verticals/pages/Create';
+import VerticalEdit from '../../sections/misc/verticals/pages/Edit';
 
 const breadcrumbs: Array<PageLink> = [
     {
-        title: Sections.MISC_TECHNOLOGIES,
-        path: '/misc/technologies/',
+        title: Sections.MISC_VERTICALS,
+        path: '/misc/verticals/',
         isSeparator: false,
         isActive: false,
     },
@@ -22,13 +23,13 @@ const breadcrumbs: Array<PageLink> = [
     },
 ]
 
-const TechnologyRoutes: React.FC = () => {
+const VerticalRoutes: React.FC = () => {
     return (
         <Routes>
             <Route index element={
                 <SuspenseView>
-                    <PageTitle breadcrumbs={[]}>{Sections.MISC_TECHNOLOGIES}</PageTitle>
-                    <TechnologyIndex/>
+                    <PageTitle breadcrumbs={[]}>{Sections.MISC_VERTICALS}</PageTitle>
+                    <VerticalIndex/>
                 </SuspenseView>
             }/>
             <Route
@@ -36,7 +37,7 @@ const TechnologyRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Create'}</PageTitle>
-                        <TechnologyCreate />
+                        <VerticalCreate />
                     </SuspenseView>
                 }
             />
@@ -45,7 +46,7 @@ const TechnologyRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
-                        <TechnologyEdit />
+                        <VerticalEdit />
                     </SuspenseView>
                 }
             />
@@ -53,4 +54,4 @@ const TechnologyRoutes: React.FC = () => {
     )
 }
 
-export default TechnologyRoutes;
+export default VerticalRoutes;

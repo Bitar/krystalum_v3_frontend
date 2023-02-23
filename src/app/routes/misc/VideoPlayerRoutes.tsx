@@ -3,14 +3,14 @@ import React from 'react'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections';
-import TechnologyCreate from '../../sections/misc/technologies/pages/Create';
-import TechnologyIndex from '../../sections/misc/technologies/pages/Index';
-import TechnologyEdit from '../../sections/misc/technologies/pages/Edit';
+import VideoPlayerIndex from '../../sections/misc/video_players/pages/Index';
+import VideoPlayerCreate from '../../sections/misc/video_players/pages/Create';
+import VideoPlayerEdit from '../../sections/misc/video_players/pages/Edit';
 
 const breadcrumbs: Array<PageLink> = [
     {
-        title: Sections.MISC_TECHNOLOGIES,
-        path: '/misc/technologies/',
+        title: Sections.MISC_VIDEO_PLAYERS,
+        path: '/misc/video-players/',
         isSeparator: false,
         isActive: false,
     },
@@ -22,13 +22,13 @@ const breadcrumbs: Array<PageLink> = [
     },
 ]
 
-const TechnologyRoutes: React.FC = () => {
+const VideoPlayerRoutes: React.FC = () => {
     return (
         <Routes>
             <Route index element={
                 <SuspenseView>
-                    <PageTitle breadcrumbs={[]}>{Sections.MISC_TECHNOLOGIES}</PageTitle>
-                    <TechnologyIndex/>
+                    <PageTitle breadcrumbs={[]}>{Sections.MISC_VIDEO_PLAYERS}</PageTitle>
+                    <VideoPlayerIndex/>
                 </SuspenseView>
             }/>
             <Route
@@ -36,7 +36,7 @@ const TechnologyRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Create'}</PageTitle>
-                        <TechnologyCreate />
+                        <VideoPlayerCreate/>
                     </SuspenseView>
                 }
             />
@@ -45,7 +45,7 @@ const TechnologyRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
-                        <TechnologyEdit />
+                        <VideoPlayerEdit/>
                     </SuspenseView>
                 }
             />
@@ -53,4 +53,4 @@ const TechnologyRoutes: React.FC = () => {
     )
 }
 
-export default TechnologyRoutes;
+export default VideoPlayerRoutes;

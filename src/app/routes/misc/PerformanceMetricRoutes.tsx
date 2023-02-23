@@ -1,16 +1,17 @@
-import {Route, Routes} from 'react-router-dom'
-import React from 'react'
-import {PageLink, PageTitle} from '../../../_metronic/layout/core'
-import {SuspenseView} from '../../components/misc/SuspenseView'
+import {Route, Routes} from 'react-router-dom';
+import React from 'react';
+
+import {PageLink, PageTitle} from '../../../_metronic/layout/core';
+import {SuspenseView} from '../../components/misc/SuspenseView';
 import {Sections} from '../../helpers/sections';
-import TechnologyCreate from '../../sections/misc/technologies/pages/Create';
-import TechnologyIndex from '../../sections/misc/technologies/pages/Index';
-import TechnologyEdit from '../../sections/misc/technologies/pages/Edit';
+import PerformanceMetricIndex from '../../sections/misc/performance_metrics/pages/Index';
+import PerformanceMetricCreate from '../../sections/misc/performance_metrics/pages/Create';
+import PerformanceMetricEdit from '../../sections/misc/performance_metrics/pages/Edit';
 
 const breadcrumbs: Array<PageLink> = [
     {
-        title: Sections.MISC_TECHNOLOGIES,
-        path: '/misc/technologies/',
+        title: Sections.MISC_PERFORMANCE_METRICS,
+        path: '/misc/performance-metrics/',
         isSeparator: false,
         isActive: false,
     },
@@ -22,13 +23,13 @@ const breadcrumbs: Array<PageLink> = [
     },
 ]
 
-const TechnologyRoutes: React.FC = () => {
+const PerformanceMetricRoutes: React.FC = () => {
     return (
         <Routes>
             <Route index element={
                 <SuspenseView>
-                    <PageTitle breadcrumbs={[]}>{Sections.MISC_TECHNOLOGIES}</PageTitle>
-                    <TechnologyIndex/>
+                    <PageTitle breadcrumbs={[]}>{Sections.MISC_PERFORMANCE_METRICS}</PageTitle>
+                    <PerformanceMetricIndex/>
                 </SuspenseView>
             }/>
             <Route
@@ -36,7 +37,7 @@ const TechnologyRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Create'}</PageTitle>
-                        <TechnologyCreate />
+                        <PerformanceMetricCreate/>
                     </SuspenseView>
                 }
             />
@@ -45,7 +46,7 @@ const TechnologyRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
-                        <TechnologyEdit />
+                        <PerformanceMetricEdit/>
                     </SuspenseView>
                 }
             />
@@ -53,4 +54,4 @@ const TechnologyRoutes: React.FC = () => {
     )
 }
 
-export default TechnologyRoutes;
+export default PerformanceMetricRoutes;
