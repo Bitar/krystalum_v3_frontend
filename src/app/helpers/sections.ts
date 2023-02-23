@@ -6,4 +6,5 @@ export enum Sections {
     MISC_TECHNOLOGIES = 'Technologies',
     MISC_BUY_TYPES = 'Buy Types',
     MISC_BOOKING_TYPES = 'Booking Types',
+    MISC_COUNTRIES = 'Countries',
 }
