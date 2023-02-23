@@ -24,7 +24,7 @@ const AudienceIndex = () => {
     const krysApp = useKrysApp();
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_METRICS, PageTypes.INDEX))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_AUDIENCES, PageTypes.INDEX))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
