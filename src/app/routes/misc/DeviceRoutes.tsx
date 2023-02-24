@@ -9,7 +9,7 @@ import DeviceEdit from '../../sections/misc/devices/pages/Edit';
 
 const breadcrumbs: Array<PageLink> = [
     {
-        title: Sections.MISC_METRICS,
+        title: Sections.MISC_DEVICES,
         path: '/misc/devices/',
         isSeparator: false,
         isActive: false,

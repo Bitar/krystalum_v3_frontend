@@ -9,7 +9,6 @@ export enum Sections {
     MISC_COUNTRIES = 'Countries',
     MISC_CITIES = 'Cities',
     MISC_BUYING_MODELS = 'Buying Models',
-    MISC_METRICS = 'Metrics',
     MISC_AUDIENCES = 'Audiences',
     MISC_DEVICES = 'Devices',
     MISC_LANGUAGES = 'Languages',
