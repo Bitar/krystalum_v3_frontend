@@ -74,6 +74,17 @@ const BookingTypeCreate: React.FC = () => {
                                     </div>
                                 </div>
 
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Code" isRequired={true} />
+
+                                    <Field className="form-control fs-6" type="text"
+                                           placeholder="Enter booking type code" name="code"/>
+
+                                    <div className="mt-1 text-danger">
+                                        <ErrorMessage name="code" className="mt-2"/>
+                                    </div>
+                                </div>
+
                                 <KrysFormFooter cancelUrl={'/misc/booking-types'}/>
                             </Form>
                         )

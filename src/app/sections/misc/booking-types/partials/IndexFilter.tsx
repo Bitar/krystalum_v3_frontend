@@ -66,6 +66,17 @@ const BookingTypeIndexFilter: React.FC<Props> = ({showFilter}) => {
                                                     <ErrorMessage name="name" className="mt-2"/>
                                                 </div>
                                             </Col>
+
+                                            <Col md={4}>
+                                                <KrysFormLabel text="Code" isRequired={false}/>
+
+                                                <Field className="form-control fs-6" type="text"
+                                                       placeholder="Filter by code" name="code"/>
+
+                                                <div className="mt-1 text-danger">
+                                                    <ErrorMessage name="code" className="mt-2"/>
+                                                </div>
+                                            </Col>
                                         </Row>
 
                                         <FilterFormFooter resetFilter={resetFilter} />

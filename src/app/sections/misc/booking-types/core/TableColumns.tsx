@@ -12,6 +12,11 @@ const BookingTypesColumns: ReadonlyArray<Column<BookingType>> = [
         Cell: ({...props}) => <TextCell text={props.data[props.row.index].name} />,
     },
     {
+        Header: (props) => <CustomHeader tableProps={props} title='Code' className='min-w-125px' />,
+        id: 'code',
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].code} />,
+    },
+    {
         Header: (props) => (
             <CustomHeader tableProps={props} title='Actions' className='text-end min-w-100px' />
         ),
