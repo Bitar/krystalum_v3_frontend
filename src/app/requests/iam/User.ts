@@ -1,41 +1,48 @@
-import {User, UserPaginate} from '../../models/iam/User'
+import {User, UserList, UserPaginate} from '../../models/iam/User'
 import axios, {AxiosError, AxiosResponse} from 'axios'
 import {createFormData} from '../../helpers/requests';
+import {RoleList} from '../../models/iam/Role';
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/iam/users`
 
+export const getAllUsers = async (): Promise<UserList | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<RoleList>) => response.data).catch((error) => {
+        return error;
+    });
+}
+
 export const getUsers = (query?: String): Promise<UserPaginate> => {
-  let url = `${ENDPOINT}`
+    let url = `${ENDPOINT}`
 
-  if (query) {
-    url += `?${query}`
-  }
+    if (query) {
+        url += `?${query}`
+    }
 
-  return axios.get(url).then((response: AxiosResponse<UserPaginate>) => response.data)
+    return axios.get(url).then((response: AxiosResponse<UserPaginate>) => response.data)
 }
 
 export const getUser = async (id: number): Promise<User | AxiosError | undefined> => {
-  return await axios.get(ENDPOINT + '/' + id)
-      .then(res => res.data.data).catch((error) => {
-        return error;
-      });
+    return await axios.get(ENDPOINT + '/' + id)
+        .then(res => res.data.data).catch((error) => {
+            return error;
+        });
 }
 
 export const updateUser = async (user: any): Promise<User | AxiosError | undefined> => {
-  let formData = createFormData(user);
+    let formData = createFormData(user);
 
-  formData.append('_method', 'put');
+    formData.append('_method', 'put');
 
-  return await axios.post(ENDPOINT + '/' + user.id, formData).then(res => res.data.data).catch((error) => {
-    return error;
-  });
+    return await axios.post(ENDPOINT + '/' + user.id, formData).then(res => res.data.data).catch((error) => {
+        return error;
+    });
 }
 
 export const storeUser = async (user: any): Promise<User | AxiosError | undefined> => {
-  let formData = createFormData(user);
+    let formData = createFormData(user);
 
-  return await axios.post(ENDPOINT + '/', formData).then(res => res.data.data).catch((error) => {
-    return error;
-  });
+    return await axios.post(ENDPOINT + '/', formData).then(res => res.data.data).catch((error) => {
+        return error;
+    });
 }
