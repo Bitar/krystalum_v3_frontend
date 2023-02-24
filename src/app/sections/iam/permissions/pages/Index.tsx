@@ -9,7 +9,7 @@ import {
     useQueryResponseLoading,
 } from '../../../../modules/table/QueryResponseProvider'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
-import {getPermissions} from '../../../../requests/iam/Permission';
+import {getAllPermissions, getPermissions} from '../../../../requests/iam/Permission';
 import {PermissionsColumns} from '../core/TableColumns';
 import KrysTable from '../../../../components/tables/KrysTable';
 import {Actions, PageTypes} from '../../../../helpers/variables';
@@ -25,6 +25,7 @@ const PermissionIndex = () => {
 
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.IAM_PERMISSIONS, PageTypes.INDEX))
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -46,7 +47,8 @@ const PermissionIndex = () => {
                             target: 'permissions-list-filter',
                             showFilter: showFilter,
                             setShowFilter: setShowFilter
-                        }, {type: Actions.CREATE, url: '/iam/permissions'}]}/>
+                        }, {type: Actions.CREATE, url: '/iam/permissions'},
+                            {type: Actions.EXPORT, getExportData: getAllPermissions, fileName: 'permissions', fileExtension: 'xlsx' }]}/>
 
                         <KTCardBody>
                             <PermissionIndexFilter showFilter={showFilter} />

@@ -19,6 +19,7 @@ import UserIndexFilter from '../partials/IndexFilter';
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {Sections} from "../../../../helpers/sections";
+import {getRoles} from '../../../../requests/iam/Role';
 
 const UserIndex = () => {
     const krysApp = useKrysApp();
@@ -48,7 +49,8 @@ const UserIndex = () => {
                                           target: 'users-list-filter',
                                           showFilter: showFilter,
                                           setShowFilter: setShowFilter
-                                      }, {type: Actions.CREATE, url: '/iam/users'}]}/>
+                                      }, {type: Actions.CREATE, url: '/iam/users'},
+                                          {type: Actions.EXPORT, getExportData: getUsers, fileName: 'users', fileExtension: 'xlsx' }]}/>
 
                         <KTCardBody>
                             <UserIndexFilter showFilter={showFilter} />

@@ -11,7 +11,7 @@ import {
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import {RolesColumns} from '../core/TableColumns';
 import KrysTable from '../../../../components/tables/KrysTable';
-import {getRoles} from '../../../../requests/iam/Role';
+import {getAllRoles, getRoles} from '../../../../requests/iam/Role';
 import {Actions, PageTypes} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormSuccess from '../../../../components/forms/FormSuccess';
@@ -46,7 +46,8 @@ const RoleIndex = () => {
                             target: 'roles-list-filter',
                             showFilter: showFilter,
                             setShowFilter: setShowFilter
-                        }, {type: Actions.CREATE, url: '/iam/roles'}]}/>
+                        }, {type: Actions.CREATE, url: '/iam/roles'},
+                            {type: Actions.EXPORT, getExportData: getRoles, fileName: 'roles', fileExtension: 'xlsx' }]}/>
 
                         <KTCardBody>
                             <RoleIndexFilter showFilter={showFilter} />
