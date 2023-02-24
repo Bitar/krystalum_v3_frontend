@@ -11,14 +11,14 @@ import {
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import {RolesColumns} from '../core/TableColumns';
 import KrysTable from '../../../../components/tables/KrysTable';
-import {getAllRoles, getRoles} from '../../../../requests/iam/Role';
+import {getRoles} from '../../../../requests/iam/Role';
 import {Actions, PageTypes} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import RoleIndexFilter from '../partials/IndexFilter';
-import {useKrysApp} from "../../../../modules/general/KrysApp";
-import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {Sections} from "../../../../helpers/sections";
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {Sections} from '../../../../helpers/sections';
 
 const RoleIndex = () => {
     const krysApp = useKrysApp();

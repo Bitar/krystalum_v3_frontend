@@ -49,7 +49,7 @@ const ActionsCell: FC<React.PropsWithChildren<Props>> = ({
         const {isConfirmed} = await Swal.fire({
             title: title ? title : 'Delete',
             text: text ? text : 'Are you sure you want to delete this item?',
-            icon: "warning",
+            icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Confirm Delete',
             confirmButtonColor: "#DB4437",

@@ -16,10 +16,9 @@ import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHe
 import {useSearchParams} from 'react-router-dom';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import UserIndexFilter from '../partials/IndexFilter';
-import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {useKrysApp} from "../../../../modules/general/KrysApp";
-import {Sections} from "../../../../helpers/sections";
-import {getRoles} from '../../../../requests/iam/Role';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {Sections} from '../../../../helpers/sections';
 
 const UserIndex = () => {
     const krysApp = useKrysApp();

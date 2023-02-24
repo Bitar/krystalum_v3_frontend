@@ -46,7 +46,8 @@ const BuyTypeIndex = () => {
                             target: 'buy-types-list-filter',
                             showFilter: showFilter,
                             setShowFilter: setShowFilter
-                        }, {type: Actions.CREATE, url: '/misc/buy-types'}]}/>
+                        }, {type: Actions.CREATE, url: '/misc/buy-types'},
+                            {type: Actions.EXPORT, getExportData: getBuyTypes, fileName: 'buy-types', fileExtension: 'xlsx' }]}/>
 
                         <KTCardBody>
                             <BuyTypeIndexFilter showFilter={showFilter} />

@@ -1,10 +1,10 @@
+import {useEffect} from 'react';
 import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
-import {useEffect} from "react";
-import {generatePageTitle} from "../../helpers/pageTitleGenerator";
-import {PageTypes} from "../../helpers/variables";
-import {useKrysApp} from "../../modules/general/KrysApp";
-import {Sections} from "../../helpers/sections";
+import {generatePageTitle} from '../../helpers/pageTitleGenerator';
+import {PageTypes} from '../../helpers/variables';
+import {useKrysApp} from '../../modules/general/KrysApp';
+import {Sections} from '../../helpers/sections';
 
 const DashboardPage = () => {
     const krysApp = useKrysApp();

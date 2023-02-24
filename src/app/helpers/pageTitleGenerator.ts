@@ -1,4 +1,4 @@
-import {PageTypes} from "./variables";
+import {PageTypes} from './variables';
 
 const APP_NAME = process.env.REACT_APP_THEME_NAME
 const SEPARATOR = '|'

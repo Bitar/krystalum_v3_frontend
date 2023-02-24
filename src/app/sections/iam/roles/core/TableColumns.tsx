@@ -30,7 +30,7 @@ const RolesColumns: ReadonlyArray<Column<Role>> = [
                 queryKey={QUERIES.ROLES_LIST}
                 showView={false}
                 showEdit={true}
-                title="Delete Role"
+                title='Delete Role'
                 text={`Are you sure you want to delete the role '${props.data[props.row.index].name}'?`}
             />
         ),

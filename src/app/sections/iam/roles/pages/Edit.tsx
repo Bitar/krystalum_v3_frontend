@@ -17,10 +17,10 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
-import {useKrysApp} from "../../../../modules/general/KrysApp";
-import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {generateSuccessMessage} from "../../../../helpers/alerts";
-import {Sections} from "../../../../helpers/sections";
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {generateSuccessMessage} from '../../../../helpers/alerts';
+import {Sections} from '../../../../helpers/sections';
 
 const RoleEdit: React.FC = () => {
     const [role, setRole] = useState<Role>(defaultRole);

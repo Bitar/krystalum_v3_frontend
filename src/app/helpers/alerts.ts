@@ -1,4 +1,4 @@
-import {Actions} from "./variables";
+import {Actions} from './variables';
 
 export const generateSuccessMessage = (module: string, type: number) => {
     switch (type) {

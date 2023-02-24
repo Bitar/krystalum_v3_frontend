@@ -42,7 +42,7 @@ export const defaultForgotPasswordFormFields: ForgotPasswordFormFields = {
 export const resetPasswordSchema = Yup.object().shape({
     email: Yup.string().email().min(3, 'The email must be at least 3 characters.').max(50, 'The email must be at most 50 characters.').required(),
     password: Yup.string().required().min(6, 'The password must be at least 6 characters.'),
-    password_confirmation: Yup.string().required().oneOf([Yup.ref("password")], "Passwords do not match."),
+    password_confirmation: Yup.string().required().oneOf([Yup.ref('password')], 'Passwords do not match.'),
 })
 
 export interface ResetPasswordFormFields {

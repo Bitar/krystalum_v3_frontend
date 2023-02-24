@@ -16,10 +16,10 @@ import Select from 'react-select';
 import {getAllPermissions} from '../../../../requests/iam/Permission';
 import {Permission} from '../../../../models/iam/Permission';
 import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
-import {useKrysApp} from "../../../../modules/general/KrysApp";
-import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {generateSuccessMessage} from "../../../../helpers/alerts";
-import {Sections} from "../../../../helpers/sections";
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {generateSuccessMessage} from '../../../../helpers/alerts';
+import {Sections} from '../../../../helpers/sections';
 
 const RoleCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
