@@ -3,9 +3,9 @@ import React from 'react'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections';
-import AdServerIndex from '../../sections/misc/ad_servers/pages/Index';
-import AdServerCreate from '../../sections/misc/ad_servers/pages/Create';
-import AdServerEdit from '../../sections/misc/ad_servers/pages/Edit';
+import AdServerIndex from '../../sections/misc/ad-servers/pages/Index';
+import AdServerCreate from '../../sections/misc/ad-servers/pages/Create';
+import AdServerEdit from '../../sections/misc/ad-servers/pages/Edit';
 
 const breadcrumbs: Array<PageLink> = [
     {

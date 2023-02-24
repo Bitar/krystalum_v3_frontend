@@ -3,9 +3,9 @@ import React from 'react'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections';
-import VideoPlayerIndex from '../../sections/misc/video_players/pages/Index';
-import VideoPlayerCreate from '../../sections/misc/video_players/pages/Create';
-import VideoPlayerEdit from '../../sections/misc/video_players/pages/Edit';
+import VideoPlayerIndex from '../../sections/misc/video-players/pages/Index';
+import VideoPlayerCreate from '../../sections/misc/video-players/pages/Create';
+import VideoPlayerEdit from '../../sections/misc/video-players/pages/Edit';
 
 const breadcrumbs: Array<PageLink> = [
     {

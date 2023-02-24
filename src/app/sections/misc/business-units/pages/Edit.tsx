@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {defaultFormFields, FormFields, ObjectiveSchema} from '../core/form';
+import {BusinessUnitSchema, defaultFormFields, FormFields} from '../core/form';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
-
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {Actions, PageTypes} from '../../../../helpers/variables';
@@ -16,9 +15,9 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {getObjective, updateObjective} from '../../../../requests/misc/Objective';
+import {getBusinessUnit, updateBusinessUnit} from '../../../../requests/misc/BusinessUnit';
 
-const ObjectiveEdit: React.FC = () => {
+const BusinessUnitEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -31,7 +30,7 @@ const ObjectiveEdit: React.FC = () => {
     useEffect(() => {
         if(id) {
             // get the permission we need to edit from the database
-            getObjective(parseInt(id)).then(response => {
+            getBusinessUnit(parseInt(id)).then(response => {
                 if(axios.isAxiosError(response)) {
                     // we were not able to fetch the permission to edit so we need to redirect
                     // to error page
@@ -48,7 +47,7 @@ const ObjectiveEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_OBJECTIVES, PageTypes.EDIT, form.name))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUSINESS_UNITS, PageTypes.EDIT, form.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -58,7 +57,7 @@ const ObjectiveEdit: React.FC = () => {
 
     const handleEdit = (e: any) => {
         // we need to update the permission's data by doing API call with form
-        updateObjective(form).then(response => {
+        updateBusinessUnit(form).then(response => {
             if(axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
@@ -67,20 +66,20 @@ const ObjectiveEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated permission so we're good
-                krysApp.setAlert({message: generateSuccessMessage('objective', Actions.EDIT), type: 'success'})
-                navigate(`/misc/objectives`);
+                krysApp.setAlert({message: generateSuccessMessage('business unit', Actions.EDIT), type: 'success'})
+                navigate(`/misc/business-units`);
             }
         });
     }
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Objective" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
+            <KTCardHeader text="Edit Business Unit" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={ObjectiveSchema} onSubmit={handleEdit} enableReinitialize>
+                <Formik initialValues={form} validationSchema={BusinessUnitSchema} onSubmit={handleEdit} enableReinitialize>
                     {
                         (formik) => (
                             <Form onChange={onChangeHandler}>
@@ -88,14 +87,14 @@ const ObjectiveEdit: React.FC = () => {
                                     <KrysFormLabel text="Name" isRequired={true} />
 
                                     <Field className="form-control fs-6" type="text"
-                                           placeholder="Enter objective name" name="name"/>
+                                           placeholder="Enter business unit name" name="name"/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="name" className="mt-2"/>
                                     </div>
                                 </div>
 
-                                <KrysFormFooter cancelUrl={'/misc/objectives'}/>
+                                <KrysFormFooter cancelUrl={'/misc/business-units'}/>
                             </Form>
                         )
                     }
@@ -105,4 +104,4 @@ const ObjectiveEdit: React.FC = () => {
     )
 }
 
-export default ObjectiveEdit;
+export default BusinessUnitEdit;

@@ -5,7 +5,7 @@ import {
     useQueryResponseLoading
 } from '../../../../modules/table/QueryResponseProvider';
 import KrysTable from '../../../../components/tables/KrysTable';
-import {ObjectivesColumns} from '../core/TableColumns';
+import {VideoPlayersColumns} from '../core/TableColumns';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
@@ -14,14 +14,14 @@ import {QueryRequestProvider} from '../../../../modules/table/QueryRequestProvid
 import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import ObjectiveIndexFilter from '../partials/IndexFilter';
-import {getObjectives} from '../../../../requests/misc/Objective';
+import {getVideoPlayers} from '../../../../requests/misc/VideoPlayer';
+import VideoPlayerIndexFilter from '../partials/IndexFilter';
 
-const ObjectiveIndex: React.FC = () => {
+const VideoPlayerIndex: React.FC = () => {
     const krysApp = useKrysApp();
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_OBJECTIVES, PageTypes.INDEX))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_VIDEO_PLAYERS, PageTypes.INDEX))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -29,21 +29,21 @@ const ObjectiveIndex: React.FC = () => {
 
     return (
         <QueryRequestProvider>
-            <QueryResponseProvider id={QUERIES.OBJECTIVES_LIST} requestFunction={getObjectives}>
+            <QueryResponseProvider id={QUERIES.VIDEO_PLAYERS_LIST} requestFunction={getVideoPlayers}>
                 <ListViewProvider>
                     <KTCard>
-                        <KTCardHeader text='All Objectives' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
+                        <KTCardHeader text='All Video Players' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[{
                                           type: Actions.FILTER,
-                                          target: 'objectives-list-filter',
+                                          target: 'video-players-list-filter',
                                           showFilter: showFilter,
                                           setShowFilter: setShowFilter
-                                      }, {type: Actions.CREATE, url: '/misc/objectives'}]}/>
+                                      }, {type: Actions.CREATE, url: '/misc/video-players'}]}/>
 
                         <KTCardBody>
-                            <ObjectiveIndexFilter showFilter={showFilter}/>
+                            <VideoPlayerIndexFilter showFilter={showFilter}/>
 
-                            <ObjectiveTable/>
+                            <VideoPlayerTable/>
                         </KTCardBody>
                     </KTCard>
                 </ListViewProvider>
@@ -52,16 +52,16 @@ const ObjectiveIndex: React.FC = () => {
     )
 }
 
-const ObjectiveTable = () => {
-    const objectives = useQueryResponseData();
+const VideoPlayerTable = () => {
+    const videoPlayers = useQueryResponseData();
     const isLoading = useQueryResponseLoading();
-    const data = useMemo(() => objectives, [objectives]);
-    const columns = useMemo(() => ObjectivesColumns, []);
+    const data = useMemo(() => videoPlayers, [videoPlayers]);
+    const columns = useMemo(() => VideoPlayersColumns, []);
 
     return (
-        <KrysTable data={data} columns={columns} model={objectives.length > 0 ? objectives[0] : null}
+        <KrysTable data={data} columns={columns} model={videoPlayers.length > 0 ? videoPlayers[0] : null}
                    isLoading={isLoading}/>
     )
 }
 
-export default ObjectiveIndex;
+export default VideoPlayerIndex;

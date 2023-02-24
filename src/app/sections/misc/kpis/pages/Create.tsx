@@ -1,19 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import Select from 'react-select';
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {Actions, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {defaultFormFields, FormFields, KpiSchema} from '../core/form';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
+import {
+    GenericErrorMessage,
+    genericOnChangeHandler,
+    genericSelectOnChangeHandler
+} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeKpi} from '../../../../requests/misc/Kpi';
@@ -27,16 +32,20 @@ const KpiCreate: React.FC = () => {
     const krysApp = useKrysApp();
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_KPIS, PageTypes.CREATE))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_KPIS, PageTypes.CREATE));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onChangeHandler = (e: any) => {
-        const name:string = e.target.name;
+        const name: string = e.target.name;
 
-        if(name !== 'is_rate' && name !== 'is_conversion') {
+        if (name !== 'is_rate' && name !== 'is_conversion') {
             genericOnChangeHandler(e, form, setForm);
         }
+    };
+
+    const selectChangeHandler = (e: any) => {
+        genericSelectOnChangeHandler(e, form, setForm, 'metric');
     };
 
     const handleCreate = (e: any) => {
@@ -82,7 +91,8 @@ const KpiCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Is this KPI a rate?" isRequired={true}/>
 
-                                    <KrysCheckbox name="is_rate" onChangeHandler={() => setForm({...form, is_rate: !form.is_rate})}
+                                    <KrysCheckbox name="is_rate"
+                                                  onChangeHandler={() => setForm({...form, is_rate: !form.is_rate})}
                                                   defaultValue={form.is_rate}/>
 
                                     <div className="mt-1 text-danger">
@@ -93,11 +103,29 @@ const KpiCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Is this a conversion KPI?" isRequired={true}/>
 
-                                    <KrysCheckbox name="is_conversion" onChangeHandler={() => setForm({...form, is_conversion: !form.is_conversion})}
+                                    <KrysCheckbox name="is_conversion" onChangeHandler={() => setForm({
+                                        ...form,
+                                        is_conversion: !form.is_conversion
+                                    })}
                                                   defaultValue={form.is_conversion}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="is_conversion" className="mt-2"/>
+                                    </div>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Corresponding metric" isRequired={true}/>
+
+                                    {/*<Select isMulti={false} name="metric" defaultValue={defaultMetric}*/}
+                                    {/*        placeholder={"Select one or more permissions"}*/}
+                                    {/*        options={metrics}*/}
+                                    {/*        getOptionLabel={(metric) => metric?.name}*/}
+                                    {/*        getOptionValue={(metric) => metric?.id ? metric?.id.toString() : ''}*/}
+                                    {/*        onChange={selectChangeHandler}/>*/}
+
+                                    <div className="mt-1 text-danger">
+                                        <ErrorMessage name="metrics" className="mt-2"/>
                                     </div>
                                 </div>
 

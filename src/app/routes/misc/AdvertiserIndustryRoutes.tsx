@@ -3,9 +3,9 @@ import React from 'react'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections';
-import AdvertiserIndustryIndex from '../../sections/misc/advertiser_industries/pages/Index';
-import AdvertiserIndustryCreate from '../../sections/misc/advertiser_industries/pages/Create';
-import AdvertiserIndustryEdit from '../../sections/misc/advertiser_industries/pages/Edit';
+import AdvertiserIndustryIndex from '../../sections/misc/advertiser-industries/pages/Index';
+import AdvertiserIndustryCreate from '../../sections/misc/advertiser-industries/pages/Create';
+import AdvertiserIndustryEdit from '../../sections/misc/advertiser-industries/pages/Edit';
 
 const breadcrumbs: Array<PageLink> = [
     {

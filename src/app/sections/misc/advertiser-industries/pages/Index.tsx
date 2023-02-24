@@ -13,15 +13,15 @@ import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import KrysTable from '../../../../components/tables/KrysTable';
-import {TechnologiesColumns} from '../core/TableColumns';
-import {getTechnologies} from '../../../../requests/misc/Technology';
-import TechnologyIndexFilter from '../partials/IndexFilter';
+import {getAdvertiserIndustries} from '../../../../requests/misc/AdvertiserIndustry';
+import AdvertiserIndustryIndexFilter from '../partials/IndexFilter';
+import {AdvertiserIndustriesColumns} from '../core/TableColumns';
 
-const TechnologyIndex: React.FC = () => {
+const AdvertiserIndustryIndex: React.FC = () => {
     const krysApp = useKrysApp();
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_TECHNOLOGIES, PageTypes.INDEX))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_ADVERTISER_INDUSTRIES, PageTypes.INDEX))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -29,21 +29,21 @@ const TechnologyIndex: React.FC = () => {
 
     return (
         <QueryRequestProvider>
-            <QueryResponseProvider id={QUERIES.TECHNOLOGIES_LIST} requestFunction={getTechnologies}>
+            <QueryResponseProvider id={QUERIES.ADVERTISER_INDUSTRIES_LIST} requestFunction={getAdvertiserIndustries}>
                 <ListViewProvider>
                     <KTCard>
-                        <KTCardHeader text='All Technologies' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
+                        <KTCardHeader text='All Advertiser Industries' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[{
                                           type: Actions.FILTER,
-                                          target: 'technologies-list-filter',
+                                          target: 'advertiser-industries-list-filter',
                                           showFilter: showFilter,
                                           setShowFilter: setShowFilter
-                                      }, {type: Actions.CREATE, url: '/misc/technologies'}]}/>
+                                      }, {type: Actions.CREATE, url: '/misc/advertiser-industries'}]}/>
 
                         <KTCardBody>
-                            <TechnologyIndexFilter showFilter={showFilter}/>
+                            <AdvertiserIndustryIndexFilter showFilter={showFilter}/>
 
-                            <TechnologyTable/>
+                            <AdvertiserIndustryTable/>
                         </KTCardBody>
                     </KTCard>
                 </ListViewProvider>
@@ -52,16 +52,16 @@ const TechnologyIndex: React.FC = () => {
     )
 }
 
-const TechnologyTable = () => {
-    const technologies = useQueryResponseData();
+const AdvertiserIndustryTable = () => {
+    const advertiserIndustries = useQueryResponseData();
     const isLoading = useQueryResponseLoading();
-    const data = useMemo(() => technologies, [technologies]);
-    const columns = useMemo(() => TechnologiesColumns, []);
+    const data = useMemo(() => advertiserIndustries, [advertiserIndustries]);
+    const columns = useMemo(() => AdvertiserIndustriesColumns, []);
 
     return (
-        <KrysTable data={data} columns={columns} model={technologies.length > 0 ? technologies[0] : null}
+        <KrysTable data={data} columns={columns} model={advertiserIndustries.length > 0 ? advertiserIndustries[0] : null}
                    isLoading={isLoading}/>
     )
 }
 
-export default TechnologyIndex;
+export default AdvertiserIndustryIndex;

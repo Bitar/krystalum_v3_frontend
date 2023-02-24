@@ -1,27 +1,27 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {
-    QueryResponseProvider,
-    useQueryResponseData,
-    useQueryResponseLoading
-} from '../../../../modules/table/QueryResponseProvider';
-import KrysTable from '../../../../components/tables/KrysTable';
-import {ObjectivesColumns} from '../core/TableColumns';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {Actions, PageTypes} from '../../../../helpers/variables';
 import {QueryRequestProvider} from '../../../../modules/table/QueryRequestProvider';
+import {
+    QueryResponseProvider,
+    useQueryResponseData,
+    useQueryResponseLoading
+} from '../../../../modules/table/QueryResponseProvider';
 import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import ObjectiveIndexFilter from '../partials/IndexFilter';
-import {getObjectives} from '../../../../requests/misc/Objective';
+import KrysTable from '../../../../components/tables/KrysTable';
+import {getAdServers} from '../../../../requests/misc/AdServer';
+import AdServerIndexFilter from '../partials/IndexFilter';
+import {AdServersColumns} from '../core/TableColumns';
 
-const ObjectiveIndex: React.FC = () => {
+const AdServerIndex: React.FC = () => {
     const krysApp = useKrysApp();
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_OBJECTIVES, PageTypes.INDEX))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_AD_SERVERS, PageTypes.INDEX))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -29,21 +29,21 @@ const ObjectiveIndex: React.FC = () => {
 
     return (
         <QueryRequestProvider>
-            <QueryResponseProvider id={QUERIES.OBJECTIVES_LIST} requestFunction={getObjectives}>
+            <QueryResponseProvider id={QUERIES.AD_SERVERS_LIST} requestFunction={getAdServers}>
                 <ListViewProvider>
                     <KTCard>
-                        <KTCardHeader text='All Objectives' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
+                        <KTCardHeader text='All Ad Servers' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[{
                                           type: Actions.FILTER,
-                                          target: 'objectives-list-filter',
+                                          target: 'ad-servers-list-filter',
                                           showFilter: showFilter,
                                           setShowFilter: setShowFilter
-                                      }, {type: Actions.CREATE, url: '/misc/objectives'}]}/>
+                                      }, {type: Actions.CREATE, url: '/misc/ad-servers'}]}/>
 
                         <KTCardBody>
-                            <ObjectiveIndexFilter showFilter={showFilter}/>
+                            <AdServerIndexFilter showFilter={showFilter}/>
 
-                            <ObjectiveTable/>
+                            <AdServerTable/>
                         </KTCardBody>
                     </KTCard>
                 </ListViewProvider>
@@ -52,16 +52,16 @@ const ObjectiveIndex: React.FC = () => {
     )
 }
 
-const ObjectiveTable = () => {
-    const objectives = useQueryResponseData();
+const AdServerTable = () => {
+    const adServers = useQueryResponseData();
     const isLoading = useQueryResponseLoading();
-    const data = useMemo(() => objectives, [objectives]);
-    const columns = useMemo(() => ObjectivesColumns, []);
+    const data = useMemo(() => adServers, [adServers]);
+    const columns = useMemo(() => AdServersColumns, []);
 
     return (
-        <KrysTable data={data} columns={columns} model={objectives.length > 0 ? objectives[0] : null}
+        <KrysTable data={data} columns={columns} model={adServers.length > 0 ? adServers[0] : null}
                    isLoading={isLoading}/>
     )
 }
 
-export default ObjectiveIndex;
+export default AdServerIndex;

@@ -24,6 +24,11 @@ export const genericMultiSelectOnChangeHandler = (e: any, form: any, setForm: Re
     }
 };
 
+export const genericSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
+
+    setForm({...form, [key]: e.id});
+};
+
 export const SUPPORTED_IMAGE_FORMATS = [
     "image/jpg",
     "image/jpeg",

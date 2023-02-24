@@ -4,9 +4,9 @@ import React from 'react';
 import {PageLink, PageTitle} from '../../../_metronic/layout/core';
 import {SuspenseView} from '../../components/misc/SuspenseView';
 import {Sections} from '../../helpers/sections';
-import PerformanceMetricIndex from '../../sections/misc/performance_metrics/pages/Index';
-import PerformanceMetricCreate from '../../sections/misc/performance_metrics/pages/Create';
-import PerformanceMetricEdit from '../../sections/misc/performance_metrics/pages/Edit';
+import PerformanceMetricIndex from '../../sections/misc/performance-metrics/pages/Index';
+import PerformanceMetricCreate from '../../sections/misc/performance-metrics/pages/Create';
+import PerformanceMetricEdit from '../../sections/misc/performance-metrics/pages/Edit';
 
 const breadcrumbs: Array<PageLink> = [
     {
