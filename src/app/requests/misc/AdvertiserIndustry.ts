@@ -11,7 +11,7 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/advertiser-industries`
 
 export const getAllAdvertiserIndustries = async (): Promise<AdvertiserIndustryList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<AdvertiserIndustryList>) => response.data).catch((error) => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<AdvertiserIndustryList>) => response.data).catch((error) => {
         return error;
     });
 }

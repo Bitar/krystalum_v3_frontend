@@ -7,7 +7,7 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/ad-servers`
 
 export const getAllAdServers = async (): Promise<AdServerList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<AdServerList>) => response.data).catch((error) => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<AdServerList>) => response.data).catch((error) => {
         return error;
     });
 }

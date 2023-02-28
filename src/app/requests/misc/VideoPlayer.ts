@@ -7,7 +7,7 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/video-players`
 
 export const getAllVideoPlayers = async (): Promise<VideoPlayerList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<VideoPlayerList>) => response.data).catch((error) => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<VideoPlayerList>) => response.data).catch((error) => {
         return error;
     });
 }

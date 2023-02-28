@@ -6,6 +6,8 @@ import {ActionsCell} from '../../../../modules/table/columns/ActionsCell';
 import {QUERIES} from '../../../../../_metronic/helpers';
 import {Kpi} from '../../../../models/misc/Kpi';
 import {BadgeCell} from '../../../../modules/table/columns/BadgeCell';
+import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
+import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
 
 const KpisColumns: ReadonlyArray<Column<Kpi>> = [
     {
@@ -14,16 +16,19 @@ const KpisColumns: ReadonlyArray<Column<Kpi>> = [
         Cell: ({...props}) => <TextCell text={props.data[props.row.index].name}/>,
     },
     {
-        Header: (props) => <CustomHeader tableProps={props} title='Attributes' className='min-w-125px'/>,
-        id: 'attributes',
-        Cell: ({...props}) => <><BadgeCell status={props.data[props.row.index].is_rate ? 'Rate' : 'Decimal'}
-                                           color='info'/> <BadgeCell
-            status={props.data[props.row.index].is_conversion ? 'Conversion' : 'Not Conversion'} color='success'/></>,
+        Header: (props) => <CustomHeader tableProps={props} title='Is rate?' className='min-w-125px'/>,
+        id: 'is_rate',
+        Cell: ({...props}) => <><BadgeCell status={props.data[props.row.index].is_rate ? 'Yes' : 'No'} color={props.data[props.row.index].is_rate ? 'light-success' : 'light-danger'} align='left'/></>,
     },
     {
-        Header: (props) => <CustomHeader tableProps={props} title='Related Metric' className='min-w-125px'/>,
-        id: 'related-metric',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].metric.name}/>,
+        Header: (props) => <CustomHeader tableProps={props} title='Is conversion?' className='min-w-125px'/>,
+        id: 'is_conversion',
+        Cell: ({...props}) => <><BadgeCell status={props.data[props.row.index].is_conversion ? 'Yes' : 'No'} color={props.data[props.row.index].is_conversion ? 'light-success' : 'light-danger'} align='left' /></>,
+    },
+    {
+        Header: (props) => <CustomHeader tableProps={props} title='Related Metrics' className='min-w-125px'/>,
+        id: 'performance-metrics',
+        Cell: ({...props}) => <BadgesCell texts={props.data[props.row.index].performanceMetrics.map((metric: PerformanceMetric) => metric.name)} color='light-info' align='left'/>,
     },
     {
         Header: (props) => (

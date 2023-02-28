@@ -7,7 +7,7 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/business-units`
 
 export const getAllBusinessUnits = async (): Promise<BusinessUnitList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<BusinessUnitList>) => response.data).catch((error) => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<BusinessUnitList>) => response.data).catch((error) => {
         return error;
     });
 }

@@ -6,7 +6,7 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/technologies`
 
 export const getAllTechnologies = async (): Promise<TechnologyList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<TechnologyList>) => response.data).catch((error) => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<TechnologyList>) => response.data).catch((error) => {
         return error;
     });
 }
