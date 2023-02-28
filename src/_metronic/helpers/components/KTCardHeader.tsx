@@ -1,11 +1,8 @@
 import React, {FC} from 'react'
 import clsx from 'clsx'
-import CreateButton from '../../../app/components/buttons/Create';
-import {Actions} from '../../../app/helpers/variables';
-import FilterButton from '../../../app/components/buttons/Filter';
-import CardAction from '../../../app/components/misc/CardAction';
-import EditButton from '../../../app/components/buttons/Edit';
-import ExportButton from '../../../app/components/buttons/Export';
+import {
+    CardAction,
+} from '../../../app/components/misc/CardAction';
 
 type Props = {
     className?: string
@@ -62,25 +59,7 @@ const KTCardHeader: FC<Props> = ({
                 (actions && actions.length > 0) ? <div className="card-toolbar">
                     {
                         actions.map((cardAction, index) => {
-                            if(cardAction.type === Actions.CREATE) {
-                                return (
-                                    <CreateButton url={cardAction.url} key={index} className='ms-2'/>
-                                );
-                            } else if(cardAction.type === Actions.FILTER) {
-                                return (
-                                    <FilterButton key={index} target={cardAction.target} showFilter={cardAction.showFilter} setShowFilter={cardAction.setShowFilter} className='ms-2'/>
-                                )
-                            } else if(cardAction.type === Actions.EDIT) {
-                                return (
-                                    <EditButton url={cardAction.url} key={index} className='ms-2'/>
-                                )
-                            } else if(cardAction.type === Actions.EXPORT) {
-                                return (
-                                    <ExportButton exportQuery={cardAction.exportQuery} exportApiCall={cardAction.exportApiCall} key={index} className='ms-2' />
-                                )
-                            } else {
-                                return <></>;
-                            }
+                            return cardAction.getHtmlComponent(index);
                         })
                     }
                 </div> : <></>

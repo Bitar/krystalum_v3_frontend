@@ -11,7 +11,7 @@ import {exportUsers, getUsers} from '../../../../requests/iam/User'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import {TableColumns} from '../core/TableColumns'
 import KrysTable from '../../../../components/tables/KrysTable';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {PageTypes} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {useSearchParams} from 'react-router-dom';
 import FormSuccess from '../../../../components/forms/FormSuccess';
@@ -19,6 +19,7 @@ import UserIndexFilter from '../partials/IndexFilter';
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {Sections} from "../../../../helpers/sections";
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 
 const UserIndex = () => {
     const krysApp = useKrysApp();
@@ -44,21 +45,9 @@ const UserIndex = () => {
 
                     <KTCard>
                         <KTCardHeader text='All Users' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[
-                                          {
-                                              type: Actions.EXPORT,
-                                              exportQuery: exportQuery,
-                                              exportApiCall: exportUsers
-                                          },
-                                          {
-                                              type: Actions.FILTER,
-                                              target: 'users-list-filter',
-                                              showFilter: showFilter,
-                                              setShowFilter: setShowFilter
-                                          },
-                                          {
-                                              type: Actions.CREATE, url: '/iam/users'
-                                          }
+                                      actions={[new ExportCardAction(exportQuery, exportUsers),
+                                          new FilterCardAction('users-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/iam/users')
                                       ]}/>
 
                         <KTCardBody>

@@ -12,13 +12,14 @@ import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import {RolesColumns} from '../core/TableColumns';
 import KrysTable from '../../../../components/tables/KrysTable';
 import {exportRoles, getRoles} from '../../../../requests/iam/Role';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {PageTypes} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import RoleIndexFilter from '../partials/IndexFilter';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {Sections} from "../../../../helpers/sections";
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 
 const RoleIndex = () => {
     const krysApp = useKrysApp();
@@ -44,21 +45,9 @@ const RoleIndex = () => {
 
                     <KTCard>
                         <KTCardHeader text='All Roles' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[
-                                          {
-                                              type: Actions.EXPORT,
-                                              exportQuery: exportQuery,
-                                              exportApiCall: exportRoles
-                                          },
-                                          {
-                                              type: Actions.FILTER,
-                                              target: 'roles-list-filter',
-                                              showFilter: showFilter,
-                                              setShowFilter: setShowFilter
-                                          },
-                                          {
-                                              type: Actions.CREATE, url: '/iam/roles'
-                                          }
+                                      actions={[new ExportCardAction(exportQuery, exportRoles),
+                                          new FilterCardAction('roles-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/iam/roles')
                                       ]}/>
 
                         <KTCardBody>
