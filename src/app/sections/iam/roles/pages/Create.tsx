@@ -35,7 +35,11 @@ const RoleCreate: React.FC = () => {
     }, []);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, form, setForm);
+        // in case of multi select, the element doesn't have a name because
+        // we get only a list of values from the select and not an element with target value and name
+        if(e.target.name !== '') {
+            genericOnChangeHandler(e, form, setForm);
+        }
     };
 
     const multiSelectChangeHandler = (e: any) => {

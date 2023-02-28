@@ -7,7 +7,7 @@ import {
     useQueryResponseData,
     useQueryResponseLoading,
 } from '../../../../modules/table/QueryResponseProvider'
-import {getUsers} from '../../../../requests/iam/User'
+import {exportUsers, getUsers} from '../../../../requests/iam/User'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import {TableColumns} from '../core/TableColumns'
 import KrysTable from '../../../../components/tables/KrysTable';
@@ -30,6 +30,7 @@ const UserIndex = () => {
 
     const [searchParams] = useSearchParams();
 
+    const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
@@ -43,15 +44,25 @@ const UserIndex = () => {
 
                     <KTCard>
                         <KTCardHeader text='All Users' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[{
-                                          type: Actions.FILTER,
-                                          target: 'users-list-filter',
-                                          showFilter: showFilter,
-                                          setShowFilter: setShowFilter
-                                      }, {type: Actions.CREATE, url: '/iam/users'}]}/>
+                                      actions={[
+                                          {
+                                              type: Actions.EXPORT,
+                                              exportQuery: exportQuery,
+                                              exportApiCall: exportUsers
+                                          },
+                                          {
+                                              type: Actions.FILTER,
+                                              target: 'users-list-filter',
+                                              showFilter: showFilter,
+                                              setShowFilter: setShowFilter
+                                          },
+                                          {
+                                              type: Actions.CREATE, url: '/iam/users'
+                                          }
+                                      ]}/>
 
                         <KTCardBody>
-                            <UserIndexFilter showFilter={showFilter} />
+                            <UserIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <UserTable/>
                         </KTCardBody>

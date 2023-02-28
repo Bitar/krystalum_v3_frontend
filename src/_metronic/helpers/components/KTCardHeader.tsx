@@ -5,6 +5,7 @@ import {Actions} from '../../../app/helpers/variables';
 import FilterButton from '../../../app/components/buttons/Filter';
 import CardAction from '../../../app/components/misc/CardAction';
 import EditButton from '../../../app/components/buttons/Edit';
+import ExportButton from '../../../app/components/buttons/Export';
 
 type Props = {
     className?: string
@@ -73,8 +74,11 @@ const KTCardHeader: FC<Props> = ({
                                 return (
                                     <EditButton url={cardAction.url} key={index} className='ms-2'/>
                                 )
-                            }
-                            else {
+                            } else if(cardAction.type === Actions.EXPORT) {
+                                return (
+                                    <ExportButton exportQuery={cardAction.exportQuery} exportApiCall={cardAction.exportApiCall} key={index} className='ms-2' />
+                                )
+                            } else {
                                 return <></>;
                             }
                         })

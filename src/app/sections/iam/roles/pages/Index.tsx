@@ -11,7 +11,7 @@ import {
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import {RolesColumns} from '../core/TableColumns';
 import KrysTable from '../../../../components/tables/KrysTable';
-import {getRoles} from '../../../../requests/iam/Role';
+import {exportRoles, getRoles} from '../../../../requests/iam/Role';
 import {Actions, PageTypes} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormSuccess from '../../../../components/forms/FormSuccess';
@@ -30,6 +30,7 @@ const RoleIndex = () => {
 
     const [searchParams] = useSearchParams();
 
+    const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
@@ -37,19 +38,31 @@ const RoleIndex = () => {
             <QueryResponseProvider id={QUERIES.ROLES_LIST} requestFunction={getRoles}>
                 <ListViewProvider>
                     {
-                        searchParams.has('success') ? <FormSuccess type={searchParams.get('success')} model='role' /> : <></>
+                        searchParams.has('success') ?
+                            <FormSuccess type={searchParams.get('success')} model='role'/> : <></>
                     }
 
                     <KTCard>
-                        <KTCardHeader text='All Roles' icon="fa-regular fa-list" icon_style="fs-3 text-primary" actions={[{
-                            type: Actions.FILTER,
-                            target: 'roles-list-filter',
-                            showFilter: showFilter,
-                            setShowFilter: setShowFilter
-                        }, {type: Actions.CREATE, url: '/iam/roles'}]}/>
+                        <KTCardHeader text='All Roles' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
+                                      actions={[
+                                          {
+                                              type: Actions.EXPORT,
+                                              exportQuery: exportQuery,
+                                              exportApiCall: exportRoles
+                                          },
+                                          {
+                                              type: Actions.FILTER,
+                                              target: 'roles-list-filter',
+                                              showFilter: showFilter,
+                                              setShowFilter: setShowFilter
+                                          },
+                                          {
+                                              type: Actions.CREATE, url: '/iam/roles'
+                                          }
+                                      ]}/>
 
                         <KTCardBody>
-                            <RoleIndexFilter showFilter={showFilter} />
+                            <RoleIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <RoleTable/>
                         </KTCardBody>
@@ -67,7 +80,7 @@ const RoleTable = () => {
     const columns = useMemo(() => RolesColumns, []);
 
     return (
-        <KrysTable data={data} columns={columns} model={roles.length > 0 ? roles[0] : null} isLoading={isLoading} />
+        <KrysTable data={data} columns={columns} model={roles.length > 0 ? roles[0] : null} isLoading={isLoading}/>
     )
 }
 
