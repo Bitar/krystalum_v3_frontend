@@ -17,7 +17,7 @@ import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {getCountries} from '../../../../requests/misc/Country';
-import CountryIndexFilter from '../parials/IndexFilter';
+import CountryIndexFilter from '../partials/IndexFilter';
 import {CountriesColumns} from '../core/TableColumns';
 
 const CountryIndex = () => {

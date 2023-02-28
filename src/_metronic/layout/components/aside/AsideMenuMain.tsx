@@ -33,7 +33,7 @@ export function AsideMenuMain() {
                 <AsideMenuItem to='/misc/booking-types' title='Booking types' hasBullet={true}/>
                 <AsideMenuItem to='/misc/business-units' title='Business units' hasBullet={true}/>
                 <AsideMenuItem to='/misc/buy-types' title='Buy types' hasBullet={true}/>
-                <AsideMenuItem to='/misc/buying-models' title='Buying Models' hasBullet={true}/>
+                <AsideMenuItem to='/misc/buying-models' title='Buying models' hasBullet={true}/>
                 <AsideMenuItem to='/misc/cities' title='Cities' hasBullet={true}/>
                 <AsideMenuItem to='/misc/countries' title='Countries' hasBullet={true}/>
                 <AsideMenuItem to='/misc/devices' title='Devices' hasBullet={true}/>

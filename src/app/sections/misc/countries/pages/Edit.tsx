@@ -42,6 +42,7 @@ const CountryEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current country to edit
+                    console.log(country)
                     setCountry(response);
                 }
             });
