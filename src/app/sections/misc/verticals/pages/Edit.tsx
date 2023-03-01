@@ -66,7 +66,6 @@ const VerticalEdit: React.FC = () => {
                 } else {
                     // if we were able to get the list of roles, then we fill our state with them
                     if (response.data) {
-                        console.log(id);
                         // we want to remove the current vertical we are editing from the array since a vertical can't be parent of itself
                         const filteredVerticals = response.data.filter(v => v.id !== Number(id));
                         setVerticals(filteredVerticals);
@@ -94,7 +93,6 @@ const VerticalEdit: React.FC = () => {
     const handleEdit = (e: any) => {
         // we need to update the permission's data by doing API call with form
         updateVertical(form).then(response => {
-            console.log(form);
             if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
@@ -104,7 +102,7 @@ const VerticalEdit: React.FC = () => {
             } else {
                 // we got the updated permission so we're good
                 krysApp.setAlert({message: generateSuccessMessage('vertical', Actions.EDIT), type: 'success'})
-                // navigate(`/misc/verticals`);
+                navigate(`/misc/verticals`);
             }
         });
     }
