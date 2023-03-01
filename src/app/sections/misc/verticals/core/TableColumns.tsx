@@ -13,6 +13,11 @@ const VerticalsColumns: ReadonlyArray<Column<Vertical>> = [
         Cell: ({...props}) => <TextCell text={props.data[props.row.index].name} />,
     },
     {
+        Header: (props) => <CustomHeader tableProps={props} title='parent' className='min-w-125px' />,
+        id: 'parent',
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].parent?.name} />,
+    },
+    {
         Header: (props) => (
             <CustomHeader tableProps={props} title='Actions' className='text-end min-w-100px' />
         ),
