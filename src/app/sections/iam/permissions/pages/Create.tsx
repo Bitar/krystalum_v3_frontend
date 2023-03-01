@@ -13,10 +13,12 @@ import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {generateSuccessMessage} from "../../../../helpers/alerts";
+import {
+    AlertMessageGenerator
+} from "../../../../helpers/alertMessageGenerator";
 import {Sections} from "../../../../helpers/sections";
 
 
@@ -52,7 +54,7 @@ const PermissionCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's permission for sure
-                    krysApp.setAlert({message: generateSuccessMessage('permission', Actions.CREATE), type: 'success'})
+                    krysApp.setAlert({message: new AlertMessageGenerator('permission', Actions.CREATE, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
                     navigate(`/iam/permissions`);
                 }
             }

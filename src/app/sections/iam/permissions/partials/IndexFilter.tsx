@@ -8,22 +8,27 @@ import {genericOnChangeHandler} from '../../../../helpers/form';
 import {initialQueryState} from '../../../../../_metronic/helpers';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
+import {createFilterQueryParam} from '../../../../helpers/requests';
 
 interface Props {
-    showFilter: boolean
+    showFilter: boolean,
+    setExportQuery: React.Dispatch<React.SetStateAction<string>>
 }
 
-const PermissionIndexFilter: React.FC<Props> = ({showFilter}) => {
+const PermissionIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     const {updateState} = useQueryRequest();
 
-    const [filters, setFilters] = useState<FilterFields>();
+    // const [filters, setFilters] = useState<FilterFields>();
     const [reset, setReset] = useState<boolean>(false);
+    const [filters, setFilters] = useState<FilterFields>();
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, filters, setFilters);
     };
 
     const handleFilter = () => {
+        setExportQuery(createFilterQueryParam(filters));
+
         updateState({
             filter: reset ? undefined : filters,
             ...initialQueryState,
@@ -68,7 +73,7 @@ const PermissionIndexFilter: React.FC<Props> = ({showFilter}) => {
                                             </Col>
                                         </Row>
 
-                                        <FilterFormFooter resetFilter={resetFilter} />
+                                        <FilterFormFooter resetFilter={resetFilter}/>
                                     </Form>
                                 )
                             }

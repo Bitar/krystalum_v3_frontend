@@ -9,13 +9,14 @@ import {ObjectivesColumns} from '../core/TableColumns';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {PageTypes} from '../../../../helpers/variables';
 import {QueryRequestProvider} from '../../../../modules/table/QueryRequestProvider';
 import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import ObjectiveIndexFilter from '../partials/IndexFilter';
 import {getObjectives} from '../../../../requests/misc/Objective';
+import {CreateCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 
 const ObjectiveIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -33,12 +34,9 @@ const ObjectiveIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Objectives' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[{
-                                          type: Actions.FILTER,
-                                          target: 'objectives-list-filter',
-                                          showFilter: showFilter,
-                                          setShowFilter: setShowFilter
-                                      }, {type: Actions.CREATE, url: '/misc/objectives'}]}/>
+                                      actions={[
+                                          new FilterCardAction('objectives-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/misc/objectives')]}/>
 
                         <KTCardBody>
                             <ObjectiveIndexFilter showFilter={showFilter}/>

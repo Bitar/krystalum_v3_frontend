@@ -2,7 +2,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {PageTypes} from '../../../../helpers/variables';
 import {QueryRequestProvider} from '../../../../modules/table/QueryRequestProvider';
 import {
     QueryResponseProvider,
@@ -16,6 +16,7 @@ import KrysTable from '../../../../components/tables/KrysTable';
 import {TechnologiesColumns} from '../core/TableColumns';
 import {getTechnologies} from '../../../../requests/misc/Technology';
 import TechnologyIndexFilter from '../partials/IndexFilter';
+import {CreateCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 
 const TechnologyIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -33,12 +34,9 @@ const TechnologyIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Technologies' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[{
-                                          type: Actions.FILTER,
-                                          target: 'technologies-list-filter',
-                                          showFilter: showFilter,
-                                          setShowFilter: setShowFilter
-                                      }, {type: Actions.CREATE, url: '/misc/technologies'}]}/>
+                                      actions={[
+                                          new FilterCardAction('technologies-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/misc/technologies')]}/>
 
                         <KTCardBody>
                             <TechnologyIndexFilter showFilter={showFilter}/>

@@ -2,7 +2,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {PageTypes} from '../../../../helpers/variables';
 import {QueryRequestProvider} from '../../../../modules/table/QueryRequestProvider';
 import {
     QueryResponseProvider,
@@ -16,6 +16,7 @@ import KrysTable from '../../../../components/tables/KrysTable';
 import {getAdServers} from '../../../../requests/misc/AdServer';
 import AdServerIndexFilter from '../partials/IndexFilter';
 import {AdServersColumns} from '../core/TableColumns';
+import {CreateCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 
 const AdServerIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -33,12 +34,8 @@ const AdServerIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Ad Servers' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[{
-                                          type: Actions.FILTER,
-                                          target: 'ad-servers-list-filter',
-                                          showFilter: showFilter,
-                                          setShowFilter: setShowFilter
-                                      }, {type: Actions.CREATE, url: '/misc/ad-servers'}]}/>
+                                      actions={[new FilterCardAction('ad-servers-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/misc/ad-servers')]}/>
 
                         <KTCardBody>
                             <AdServerIndexFilter showFilter={showFilter}/>

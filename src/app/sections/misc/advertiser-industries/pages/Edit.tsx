@@ -6,10 +6,9 @@ import axios from 'axios';
 
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
@@ -18,6 +17,7 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {AdvertiserIndustrySchema} from '../core/form';
 import {getAdvertiserIndustry, updateAdvertiserIndustry} from '../../../../requests/misc/AdvertiserIndustry';
+import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
 
 const AdvertiserIndustryEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -68,7 +68,8 @@ const AdvertiserIndustryEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated permission so we're good
-                krysApp.setAlert({message: generateSuccessMessage('advertiser industry', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({message: new AlertMessageGenerator('advertiser industry', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS});
+
                 navigate(`/misc/advertiser-industries`);
             }
         });

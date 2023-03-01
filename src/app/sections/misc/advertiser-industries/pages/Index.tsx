@@ -2,7 +2,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {PageTypes} from '../../../../helpers/variables';
 import {QueryRequestProvider} from '../../../../modules/table/QueryRequestProvider';
 import {
     QueryResponseProvider,
@@ -16,6 +16,7 @@ import KrysTable from '../../../../components/tables/KrysTable';
 import {getAdvertiserIndustries} from '../../../../requests/misc/AdvertiserIndustry';
 import AdvertiserIndustryIndexFilter from '../partials/IndexFilter';
 import {AdvertiserIndustriesColumns} from '../core/TableColumns';
+import {CreateCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 
 const AdvertiserIndustryIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -33,12 +34,9 @@ const AdvertiserIndustryIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Advertiser Industries' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[{
-                                          type: Actions.FILTER,
-                                          target: 'advertiser-industries-list-filter',
-                                          showFilter: showFilter,
-                                          setShowFilter: setShowFilter
-                                      }, {type: Actions.CREATE, url: '/misc/advertiser-industries'}]}/>
+                                      actions={[
+                                          new FilterCardAction('advertiser-industries-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/misc/advertiser-industries')]}/>
 
                         <KTCardBody>
                             <AdvertiserIndustryIndexFilter showFilter={showFilter}/>

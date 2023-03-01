@@ -9,13 +9,14 @@ import {KpisColumns} from '../core/TableColumns';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {PageTypes} from '../../../../helpers/variables';
 import {QueryRequestProvider} from '../../../../modules/table/QueryRequestProvider';
 import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {getKpis} from '../../../../requests/misc/Kpi';
 import KpiIndexFilter from '../partials/IndexFilter';
+import {CreateCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 
 const KpiIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -33,12 +34,9 @@ const KpiIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All KPIs' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[{
-                                          type: Actions.FILTER,
-                                          target: 'kpis-list-filter',
-                                          showFilter: showFilter,
-                                          setShowFilter: setShowFilter
-                                      }, {type: Actions.CREATE, url: '/misc/kpis'}]}/>
+                                      actions={[
+                                          new FilterCardAction('kpis-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/misc/kpis')]}/>
 
                         <KTCardBody>
                             <KpiIndexFilter showFilter={showFilter}/>

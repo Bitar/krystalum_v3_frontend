@@ -6,10 +6,9 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
@@ -17,6 +16,7 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, FormFields, TechnologySchema} from '../core/form';
 import {getTechnology, updateTechnology} from '../../../../requests/misc/Technology';
+import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
 
 const TechnologyEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -67,7 +67,8 @@ const TechnologyEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated permission so we're good
-                krysApp.setAlert({message: generateSuccessMessage('technology', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({message: new AlertMessageGenerator('technology', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+
                 navigate(`/misc/technologies`);
             }
         });

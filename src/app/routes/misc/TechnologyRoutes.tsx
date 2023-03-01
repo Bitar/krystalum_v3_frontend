@@ -36,7 +36,7 @@ const TechnologyRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Create'}</PageTitle>
-                        <TechnologyCreate />
+                        <TechnologyCreate/>
                     </SuspenseView>
                 }
             />
@@ -45,7 +45,7 @@ const TechnologyRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
-                        <TechnologyEdit />
+                        <TechnologyEdit/>
                     </SuspenseView>
                 }
             />

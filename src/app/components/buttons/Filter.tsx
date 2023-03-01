@@ -16,7 +16,6 @@ const FilterButton: React.FC<Props> = ({target, showFilter, setShowFilter, class
             {
                 showFilter ? <i className={clsx('fa fs-4', 'fa-solid fa-filter-slash', 'pe-0')}></i> : <i className={clsx('fa fs-4', 'fa-solid fa-filter', 'pe-0')}></i>
             }
-
         </Button>
     );
 }

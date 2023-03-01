@@ -6,10 +6,9 @@ import axios from 'axios';
 
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
@@ -17,6 +16,7 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {getObjective, updateObjective} from '../../../../requests/misc/Objective';
+import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
 
 const ObjectiveEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -67,7 +67,8 @@ const ObjectiveEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated permission so we're good
-                krysApp.setAlert({message: generateSuccessMessage('objective', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({message: new AlertMessageGenerator('objective', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS});
+
                 navigate(`/misc/objectives`);
             }
         });

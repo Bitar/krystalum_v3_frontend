@@ -5,18 +5,18 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {defaultFormFields, FormFields, ObjectiveSchema} from '../core/form';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeObjective} from '../../../../requests/misc/Objective';
+import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
 
 const ObjectiveCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -45,7 +45,8 @@ const ObjectiveCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's permission for sure
-                    krysApp.setAlert({message: generateSuccessMessage('objective', Actions.CREATE), type: 'success'})
+                    krysApp.setAlert({message: new AlertMessageGenerator('objective', Actions.CREATE, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS});
+
                     navigate(`/misc/objectives`);
                 }
             }

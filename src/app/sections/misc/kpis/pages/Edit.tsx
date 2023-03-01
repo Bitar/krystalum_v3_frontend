@@ -7,8 +7,7 @@ import {extractErrors} from '../../../../helpers/requests';
 import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
@@ -21,6 +20,7 @@ import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
 import {getAllPerformanceMetrics} from '../../../../requests/misc/PerformanceMetric';
 import {getKpi, updateKpi} from '../../../../requests/misc/Kpi';
 import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
+import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
 
 const KpiEdit: React.FC = () => {
     const [kpi, setKpi] = useState<Kpi>(defaultKpi);
@@ -95,7 +95,8 @@ const KpiEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated permission so we're good
-                krysApp.setAlert({message: generateSuccessMessage('kpi', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({message: new AlertMessageGenerator('kpi', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS});
+
                 navigate(`/misc/kpis`);
             }
         });
