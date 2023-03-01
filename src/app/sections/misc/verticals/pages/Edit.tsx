@@ -22,11 +22,9 @@ import {defaultVertical, Vertical} from "../../../../models/misc/Vertical";
 const VerticalEdit: React.FC = () => {
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
-
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const [vertical, setVertical] = useState<Vertical>(defaultVertical);
-
     const [verticals, setVerticals] = useState<Vertical[]>([]);
 
     const krysApp = useKrysApp();
@@ -47,7 +45,9 @@ const VerticalEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current permission to edit
-                    setVertical(response);
+                    if (response.parent) {
+                        setVertical(response?.parent);
+                    }
 
                     const {parent, ...currentVertical} = response
 
@@ -66,7 +66,10 @@ const VerticalEdit: React.FC = () => {
                 } else {
                     // if we were able to get the list of roles, then we fill our state with them
                     if (response.data) {
-                        setVerticals(response.data);
+                        console.log(id);
+                        // we want to remove the current vertical we are editing from the array since a vertical can't be parent of itself
+                        const filteredVerticals = response.data.filter(v => v.id !== Number(id));
+                        setVerticals(filteredVerticals);
                     }
                 }
             });
@@ -80,11 +83,11 @@ const VerticalEdit: React.FC = () => {
     }, [vertical]);
 
     const selectChangeHandler = (e: any) => {
-        genericSelectOnChangeHandler(e, form, setForm, 'vertical');
+        setVertical(e);
+        genericSelectOnChangeHandler(e, form, setForm, 'parent');
     };
 
     const onChangeHandler = (e: any) => {
-        console.log(form);
         genericOnChangeHandler(e, form, setForm);
     };
 
@@ -113,7 +116,7 @@ const VerticalEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={vertical} validationSchema={VerticalSchema} onSubmit={handleEdit} enableReinitialize>
+                <Formik initialValues={form} validationSchema={VerticalSchema} onSubmit={handleEdit} enableReinitialize>
                     {
                         (formik) => (
                             <Form onChange={onChangeHandler}>
@@ -132,11 +135,12 @@ const VerticalEdit: React.FC = () => {
                                     <KrysFormLabel text="Vertical Parent" isRequired={false}/>
 
                                     {
-                                        <Select name="parent_id" value={vertical.parent}
+                                        <Select isMulti={false} name="parent_id" value={vertical}
                                                 options={verticals}
                                                 getOptionLabel={(vertical) => vertical?.name}
                                                 getOptionValue={(vertical) => vertical?.id ? vertical?.id.toString() : ''}
                                                 onChange={selectChangeHandler}/>
+
                                     }
 
 

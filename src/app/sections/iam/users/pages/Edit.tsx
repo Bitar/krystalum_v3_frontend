@@ -51,11 +51,8 @@ const UserEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     setUser(response);
-                    console.log(user);
-                    console.log(typeof response);
 
                     const {image, roles, ...currentUser} = response
-                    console.log(response.roles);
 
                     // was able to get the user we want to edit
                     // the form is the same as user but without the image

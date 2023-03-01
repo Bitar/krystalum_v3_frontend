@@ -61,6 +61,8 @@ const RoleEdit: React.FC = () => {
                 } else {
                     // we were able to fetch current permission to edit
                     setRole(response);
+                    console.log(response);
+                    console.log(role);
 
                     const {permissions, ...currentRole} = response
 
@@ -81,6 +83,7 @@ const RoleEdit: React.FC = () => {
     };
 
     const multiSelectChangeHandler = (e: any) => {
+        console.log(form);
         genericMultiSelectOnChangeHandler(e, form, setForm, 'permissions');
     };
 

@@ -14,5 +14,5 @@ export const defaultFormFields: FormFields = {
 
 export const VerticalSchema = Yup.object().shape({
     name: Yup.string().required(),
-    parent_id: Yup.string().notRequired()
+    parent_id: Yup.number().notRequired()
 });
