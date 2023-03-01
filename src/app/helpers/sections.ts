@@ -13,4 +13,6 @@ export enum Sections {
     MISC_DEVICES = 'Devices',
     MISC_LANGUAGES = 'Languages',
     MISC_OPERATING_SYSTEMS = 'Operating Systems',
+    MISC_GENDERS = 'Genders',
+    MISC_CAMPAIGN_TYPES = 'Campaign Types',
 }

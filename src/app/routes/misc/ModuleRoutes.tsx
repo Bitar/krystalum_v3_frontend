@@ -2,6 +2,7 @@ import React, {lazy} from 'react';
 import {Route, Routes} from 'react-router-dom';
 import {SuspenseView} from '../../components/misc/SuspenseView';
 import LanguageRoutes from './LanguageRoutes';
+import CampaignTypeRoutes from './CampaignTypeRoutes';
 
 const MiscModuleRoutes: React.FC = () => {
     const TechnologyRoutes = lazy(() => import('./TechnologyRoutes'));
@@ -13,6 +14,8 @@ const MiscModuleRoutes: React.FC = () => {
     const AudienceRoutes = lazy(() => import('./AudienceRoutes'));
     const DeviceRoutes = lazy(() => import('./DeviceRoutes'));
     const OperatingSystemRoutes = lazy(() => import('./OperatingSystemRoutes'));
+    const GenderRoutes = lazy(() => import('./GenderRoutes'));
+    const CampaignTypeRoutes = lazy(() => import('./CampaignTypeRoutes'));
 
     return (
         <Routes>
@@ -103,6 +106,24 @@ const MiscModuleRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <OperatingSystemRoutes/>
+                    </SuspenseView>
+                }
+            ></Route>
+
+            <Route
+                path='genders/*'
+                element={
+                    <SuspenseView>
+                        <GenderRoutes/>
+                    </SuspenseView>
+                }
+            ></Route>
+
+            <Route
+                path='campaign-types/*'
+                element={
+                    <SuspenseView>
+                        <CampaignTypeRoutes/>
                     </SuspenseView>
                 }
             ></Route>

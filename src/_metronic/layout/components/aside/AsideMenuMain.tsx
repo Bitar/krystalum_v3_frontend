@@ -34,9 +34,11 @@ export function AsideMenuMain() {
                 <AsideMenuItem to='/misc/business-units' title='Business units' hasBullet={true}/>
                 <AsideMenuItem to='/misc/buy-types' title='Buy types' hasBullet={true}/>
                 <AsideMenuItem to='/misc/buying-models' title='Buying models' hasBullet={true}/>
+                <AsideMenuItem to='/misc/campaign-types' title='Campaign types' hasBullet={true}/>
                 <AsideMenuItem to='/misc/cities' title='Cities' hasBullet={true}/>
                 <AsideMenuItem to='/misc/countries' title='Countries' hasBullet={true}/>
                 <AsideMenuItem to='/misc/devices' title='Devices' hasBullet={true}/>
+                <AsideMenuItem to='/misc/genders' title='Genders' hasBullet={true}/>
                 <AsideMenuItem to='/misc/kpis' title='KPIs' hasBullet={true}/>
                 <AsideMenuItem to='/misc/languages' title='Languages' hasBullet={true}/>
                 <AsideMenuItem to='/misc/operating-systems' title='Operating systems' hasBullet={true}/>
