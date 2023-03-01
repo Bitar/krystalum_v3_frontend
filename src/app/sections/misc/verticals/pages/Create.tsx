@@ -7,7 +7,7 @@ import {Sections} from '../../../../helpers/sections';
 import {Actions, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {defaultFormFields, FormFields, VerticalSchema} from '../core/form';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
+import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
@@ -16,11 +16,15 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {storeVertical} from '../../../../requests/misc/Vertical';
+import {getAllVerticals, storeVertical} from '../../../../requests/misc/Vertical';
+import Select from "react-select";
+import {Vertical} from "../../../../models/misc/Vertical";
 
 const VerticalCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
+
+    const [verticals, setVerticals] = useState<Vertical[]>([]);
 
     const navigate = useNavigate();
     const krysApp = useKrysApp();
@@ -28,7 +32,24 @@ const VerticalCreate: React.FC = () => {
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_VERTICALS, PageTypes.CREATE))
         // eslint-disable-next-line react-hooks/exhaustive-deps
+
+        getAllVerticals().then(response => {
+            if (axios.isAxiosError(response)) {
+                setFormErrors(extractErrors(response));
+            } else if (response === undefined) {
+                setFormErrors([GenericErrorMessage])
+            } else {
+                // if we were able to get the list of roles, then we fill our state with them
+                if (response.data) {
+                    setVerticals(response.data);
+                }
+            }
+        });
     }, []);
+
+    const multiSelectChangeHandler = (e: any) => {
+        genericMultiSelectOnChangeHandler(e, form, setForm, 'verticals');
+    };
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
@@ -36,6 +57,7 @@ const VerticalCreate: React.FC = () => {
 
     const handleCreate = (e: any) => {
         // send API request to create the permission
+        console.log(form)
         storeVertical(form).then(response => {
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
@@ -64,13 +86,27 @@ const VerticalCreate: React.FC = () => {
                         (formik) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Name" isRequired={true} />
+                                    <KrysFormLabel text="Name" isRequired={true}/>
 
                                     <Field className="form-control fs-6" type="text"
                                            placeholder="Enter vertical name" name="name"/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="name" className="mt-2"/>
+                                    </div>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Vertical Parent" isRequired={false}/>
+
+                                    <Select  name="parent_id"
+                                            options={verticals}
+                                            getOptionLabel={(vertical) => vertical?.name}
+                                            getOptionValue={(vertical) => vertical?.id ? vertical?.id.toString() : ''}
+                                            onChange={multiSelectChangeHandler}/>
+
+                                    <div className="mt-1 text-danger">
+                                        <ErrorMessage name="parentVertical" className="mt-2"/>
                                     </div>
                                 </div>
 
