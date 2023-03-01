@@ -5,7 +5,6 @@ type AlertFunctionType = {
     [key: string]: (module: string) => string;
 };
 
-
 export class AlertMessageGenerator {
     module: string;
     action: number;
