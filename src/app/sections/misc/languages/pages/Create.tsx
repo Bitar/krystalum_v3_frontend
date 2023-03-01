@@ -61,7 +61,7 @@ const LanguageCreate: React.FC = () => {
 
                 <Formik initialValues={form} validationSchema={LanguageSchema} onSubmit={handleCreate}>
                     {
-                        (formik) => (
+                        () => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true} />

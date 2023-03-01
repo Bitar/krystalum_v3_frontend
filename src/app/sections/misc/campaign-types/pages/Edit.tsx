@@ -85,7 +85,7 @@ const CampaignTypeEdit: React.FC = () => {
                 <Formik initialValues={campaignType} validationSchema={CampaignTypeSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
-                        (formik) => (
+                        () => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
@@ -95,17 +95,6 @@ const CampaignTypeEdit: React.FC = () => {
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="name" className="mt-2"/>
-                                    </div>
-                                </div>
-
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Code" isRequired={true} />
-
-                                    <Field className="form-control fs-6" type="text"
-                                           placeholder="Enter campaign type code" name="code"/>
-
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="code" className="mt-2"/>
                                     </div>
                                 </div>
 

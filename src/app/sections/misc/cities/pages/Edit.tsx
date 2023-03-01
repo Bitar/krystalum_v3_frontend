@@ -107,7 +107,7 @@ const CityEdit: React.FC = () => {
                 <Formik initialValues={city} validationSchema={CitySchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
-                        (formik) => (
+                        () => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>

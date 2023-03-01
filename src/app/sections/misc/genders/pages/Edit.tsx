@@ -85,7 +85,7 @@ const GenderEdit: React.FC = () => {
                 <Formik initialValues={gender} validationSchema={GenderSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
-                        (formik) => (
+                        () => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>

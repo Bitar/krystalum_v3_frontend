@@ -85,7 +85,7 @@ const BookingTypeEdit: React.FC = () => {
                 <Formik initialValues={bookingType} validationSchema={BookingTypeSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
-                        (formik) => (
+                        () => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>

@@ -61,7 +61,7 @@ const DeviceCreate: React.FC = () => {
 
                 <Formik initialValues={form} validationSchema={DeviceSchema} onSubmit={handleCreate}>
                     {
-                        (formik) => (
+                        () => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true} />

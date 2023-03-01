@@ -20,7 +20,6 @@ import {exportGenders, getGenders} from '../../../../requests/misc/Gender';
 import GenderIndexFilter from '../partials/IndexFilter';
 import {GendersColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
-import {exportPermissions} from '../../../../requests/iam/Permission';
 
 const GenderIndex = () => {
     const krysApp = useKrysApp();
@@ -48,7 +47,7 @@ const GenderIndex = () => {
                         <KTCardHeader text='All Genders' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportGenders),
                                           new FilterCardAction('genders-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/iam/genders')]}/>
+                                          new CreateCardAction('/misc/genders')]}/>
 
                         <KTCardBody>
                             <GenderIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

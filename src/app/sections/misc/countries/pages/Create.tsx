@@ -61,7 +61,7 @@ const CountryCreate: React.FC = () => {
 
                 <Formik initialValues={form} validationSchema={CountrySchema} onSubmit={handleCreate}>
                     {
-                        (formik) => (
+                        () => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true} />

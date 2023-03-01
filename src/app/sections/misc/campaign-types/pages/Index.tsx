@@ -20,7 +20,6 @@ import {exportCampaignTypes, getCampaignTypes} from '../../../../requests/misc/C
 import CampaignTypeIndexFilter from '../partials/IndexFilter';
 import {CampaignTypesColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
-import {exportPermissions} from '../../../../requests/iam/Permission';
 
 const CampaignTypeIndex = () => {
     const krysApp = useKrysApp();
@@ -48,7 +47,7 @@ const CampaignTypeIndex = () => {
                         <KTCardHeader text='All Campaign Types' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportCampaignTypes),
                                           new FilterCardAction('campaign-types-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/iam/campaign-types')]}/>
+                                          new CreateCardAction('/misc/campaign-types')]}/>
 
                         <KTCardBody>
                             <CampaignTypeIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
