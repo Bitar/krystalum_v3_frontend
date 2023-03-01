@@ -7,7 +7,7 @@ import {Sections} from '../../../../helpers/sections';
 import {Actions, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {defaultFormFields, FormFields, VerticalSchema} from '../core/form';
-import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
+import {GenericErrorMessage, genericOnChangeHandler, genericSelectOnChangeHandler} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
@@ -47,8 +47,8 @@ const VerticalCreate: React.FC = () => {
         });
     }, []);
 
-    const multiSelectChangeHandler = (e: any) => {
-        genericMultiSelectOnChangeHandler(e, form, setForm, 'verticals');
+    const selectChangeHandler = (e: any) => {
+        genericSelectOnChangeHandler(e, form, setForm, 'parent');
     };
 
     const onChangeHandler = (e: any) => {
@@ -57,7 +57,6 @@ const VerticalCreate: React.FC = () => {
 
     const handleCreate = (e: any) => {
         // send API request to create the permission
-        console.log(form)
         storeVertical(form).then(response => {
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
@@ -99,11 +98,11 @@ const VerticalCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Vertical Parent" isRequired={false}/>
 
-                                    <Select  name="parent_id"
+                                    <Select name="parent_id"
                                             options={verticals}
                                             getOptionLabel={(vertical) => vertical?.name}
                                             getOptionValue={(vertical) => vertical?.id ? vertical?.id.toString() : ''}
-                                            onChange={multiSelectChangeHandler}/>
+                                            onChange={selectChangeHandler}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="parentVertical" className="mt-2"/>

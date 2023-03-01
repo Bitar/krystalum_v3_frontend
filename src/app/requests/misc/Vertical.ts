@@ -34,6 +34,8 @@ export const getVertical = async (id: number): Promise<Vertical | AxiosError | u
 export const storeVertical = async (vertical: any): Promise<Vertical | AxiosError | undefined> => {
     let formData = createFormData(vertical);
 
+    formData.append('parent_id', vertical.parent);
+
     return await axios.post(ENDPOINT + '/', formData)
         .then(res => res.data.data)
         .catch((error) => {
@@ -46,7 +48,7 @@ export const storeVertical = async (vertical: any): Promise<Vertical | AxiosErro
 export const updateVertical = async (vertical: any): Promise<Vertical | AxiosError | undefined> => {
     let formData = createFormData(vertical);
 
-    formData.append('parent_id',vertical.parent)
+    formData.append('parent_id', vertical.parent)
     formData.append('_method', 'put');
 
     return await axios.post(ENDPOINT + '/' + vertical.id, formData).then(res => res.data.data).catch((error) => {
