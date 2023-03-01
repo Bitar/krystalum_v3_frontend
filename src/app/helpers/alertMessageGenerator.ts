@@ -32,7 +32,7 @@ export const messages: { [alert: string]: AlertFunctionType } = {
     },
     edit: {
         success: (module) => {
-            return module + " success function called"
+            return `Success! The ${module} was cupdatedreated.`
         },
         error: (module) => {
             return GenericErrorMessage;
