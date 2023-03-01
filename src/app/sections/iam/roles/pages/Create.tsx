@@ -4,7 +4,7 @@ import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeH
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import {extractErrors} from '../../../../helpers/requests';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {storeRole} from '../../../../requests/iam/Role';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
@@ -18,7 +18,7 @@ import {Permission} from '../../../../models/iam/Permission';
 import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {generateSuccessMessage} from "../../../../helpers/alerts";
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {Sections} from "../../../../helpers/sections";
 
 const RoleCreate: React.FC = () => {
@@ -74,7 +74,7 @@ const RoleCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's permission for sure
-                    krysApp.setAlert({message: generateSuccessMessage('role', Actions.CREATE), type: 'success'})
+                    krysApp.setAlert({message: new AlertMessageGenerator('role', Actions.CREATE, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
                     navigate(`/iam/roles`);
                 }
             }

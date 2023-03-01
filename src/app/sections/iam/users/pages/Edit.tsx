@@ -14,7 +14,7 @@ import {
     genericMultiSelectOnChangeHandler,
     genericOnChangeHandler
 } from '../../../../helpers/form';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
@@ -23,7 +23,7 @@ import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, EditUserSchema, FormFields} from '../core/form';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {generateSuccessMessage} from "../../../../helpers/alerts";
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {Sections} from "../../../../helpers/sections";
 
 const UserEdit: React.FC = () => {
@@ -89,7 +89,7 @@ const UserEdit: React.FC = () => {
     const onChangeHandler = (e: any) => {
         // in case of multi select, the element doesn't have a name because
         // we get only a list of values from the select and not an element with target value and name
-        if(e.target.name !== '') {
+        if (e.target.name !== '') {
             genericOnChangeHandler(e, form, setForm);
         }
     };
@@ -109,7 +109,10 @@ const UserEdit: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // we were able to store the user
-                    krysApp.setAlert({message: generateSuccessMessage('user', Actions.EDIT), type: 'success'})
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('role', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
                     navigate(`/iam/users`);
                 }
             }
