@@ -10,15 +10,16 @@ import {
 } from '../../../../modules/table/QueryResponseProvider'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import KrysTable from '../../../../components/tables/KrysTable';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {PageTypes} from '../../../../helpers/variables';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {getOperatingSystems} from '../../../../requests/misc/OperatingSystem';
+import {exportOperatingSystems, getOperatingSystems} from '../../../../requests/misc/OperatingSystem';
 import OperatingSystemIndexFilter from '../partials/IndexFilter';
 import {OperatingSystemsColumns} from '../core/TableColumns';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 
 const OperatingSystemIndex = () => {
     const krysApp = useKrysApp();
@@ -30,6 +31,7 @@ const OperatingSystemIndex = () => {
 
     const [searchParams] = useSearchParams();
 
+    const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
@@ -41,15 +43,13 @@ const OperatingSystemIndex = () => {
                     }
 
                     <KTCard>
-                        <KTCardHeader text='All Operating Systems' icon="fa-regular fa-list" icon_style="fs-3 text-primary" actions={[{
-                            type: Actions.FILTER,
-                            target: 'operating-systems-list-filter',
-                            showFilter: showFilter,
-                            setShowFilter: setShowFilter
-                        }, {type: Actions.CREATE, url: '/misc/operating-systems'}]}/>
+                        <KTCardHeader text='All Operating Systems' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
+                                      actions={[new ExportCardAction(exportQuery, exportOperatingSystems),
+                                          new FilterCardAction('operating-systems-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/iam/operating-systems')]}/>
 
                         <KTCardBody>
-                            <OperatingSystemIndexFilter showFilter={showFilter} />
+                            <OperatingSystemIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <OperatingSystemTable/>
                         </KTCardBody>

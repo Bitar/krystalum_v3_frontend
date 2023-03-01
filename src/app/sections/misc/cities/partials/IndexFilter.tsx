@@ -11,15 +11,16 @@ import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
 import Select from 'react-select';
 import {getAllCountries} from '../../../../requests/misc/Country';
 import axios from 'axios';
-import {extractErrors} from '../../../../helpers/requests';
+import {createFilterQueryParam, extractErrors} from '../../../../helpers/requests';
 import {Country} from '../../../../models/misc/Country';
 import FormErrors from '../../../../components/forms/FormErrors';
 
 interface Props {
-    showFilter: boolean
+    showFilter: boolean,
+    setExportQuery: React.Dispatch<React.SetStateAction<string>>
 }
 
-const CityIndexFilter: React.FC<Props> = ({showFilter}) => {
+const CityIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     const {updateState} = useQueryRequest();
 
     const [countries, setCountries] = useState<Country[]>([]);
@@ -53,6 +54,8 @@ const CityIndexFilter: React.FC<Props> = ({showFilter}) => {
     };
 
     const handleFilter = () => {
+        setExportQuery(createFilterQueryParam(filters));
+
         updateState({
             filter: reset ? undefined : filters,
             ...initialQueryState,

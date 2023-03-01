@@ -1,5 +1,5 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
-import {createFormData} from '../../helpers/requests';
+import {createFormData, ExportUrl} from '../../helpers/requests';
 import {BuyType, BuyTypeList, BuyTypePaginate} from '../../models/misc/BuyType';
 
 const API_URL = process.env.REACT_APP_API_URL
@@ -19,6 +19,18 @@ export const getBuyTypes = (query?: String): Promise<BuyTypePaginate> => {
     }
 
     return axios.get(url).then((response: AxiosResponse<BuyTypePaginate>) => response.data).catch((error) => {
+        return error;
+    });
+}
+
+export const exportBuyTypes = async (query?: String): Promise<ExportUrl | AxiosError | undefined> => {
+    let url = `${ENDPOINT}/export`;
+
+    if (query) {
+        url += `?${query}`;
+    }
+
+    return axios.get(url).then((response: AxiosResponse) => response.data).catch((error) => {
         return error;
     });
 }

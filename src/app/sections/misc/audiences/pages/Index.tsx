@@ -10,15 +10,16 @@ import {
 } from '../../../../modules/table/QueryResponseProvider'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import KrysTable from '../../../../components/tables/KrysTable';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {PageTypes} from '../../../../helpers/variables';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {getAudiences} from '../../../../requests/misc/Audience';
+import {exportAudiences, getAudiences} from '../../../../requests/misc/Audience';
 import AudienceIndexFilter from '../partials/IndexFilter';
 import {AudiencesColumns} from '../core/TableColumns';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 
 const AudienceIndex = () => {
     const krysApp = useKrysApp();
@@ -30,6 +31,7 @@ const AudienceIndex = () => {
 
     const [searchParams] = useSearchParams();
 
+    const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
@@ -41,15 +43,13 @@ const AudienceIndex = () => {
                     }
 
                     <KTCard>
-                        <KTCardHeader text='All Audiences' icon="fa-regular fa-list" icon_style="fs-3 text-primary" actions={[{
-                            type: Actions.FILTER,
-                            target: 'audiences-list-filter',
-                            showFilter: showFilter,
-                            setShowFilter: setShowFilter
-                        }, {type: Actions.CREATE, url: '/misc/audiences'}]}/>
+                        <KTCardHeader text='All Audiences' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
+                                      actions={[new ExportCardAction(exportQuery, exportAudiences),
+                                          new FilterCardAction('audiences-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/iam/audiences')]}/>
 
                         <KTCardBody>
-                            <AudienceIndexFilter showFilter={showFilter} />
+                            <AudienceIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <AudienceTable/>
                         </KTCardBody>

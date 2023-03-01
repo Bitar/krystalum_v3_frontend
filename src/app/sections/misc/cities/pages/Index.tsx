@@ -10,15 +10,17 @@ import {
 } from '../../../../modules/table/QueryResponseProvider'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import KrysTable from '../../../../components/tables/KrysTable';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {PageTypes} from '../../../../helpers/variables';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {getCities} from '../../../../requests/misc/City';
+import {exportCities, getCities} from '../../../../requests/misc/City';
 import {CitiesColumns} from '../core/TableColumns';
 import CityIndexFilter from '../partials/IndexFilter';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import {exportPermissions} from '../../../../requests/iam/Permission';
 
 const CityIndex = () => {
     const krysApp = useKrysApp();
@@ -30,6 +32,7 @@ const CityIndex = () => {
 
     const [searchParams] = useSearchParams();
 
+    const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
@@ -43,15 +46,12 @@ const CityIndex = () => {
 
                     <KTCard>
                         <KTCardHeader text='All Cities' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[{
-                                          type: Actions.FILTER,
-                                          target: 'cities-list-filter',
-                                          showFilter: showFilter,
-                                          setShowFilter: setShowFilter
-                                      }, {type: Actions.CREATE, url: '/misc/cities'}]}/>
+                                      actions={[new ExportCardAction(exportQuery, exportCities),
+                                          new FilterCardAction('cities-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/iam/cities')]}/>
 
                         <KTCardBody>
-                            <CityIndexFilter showFilter={showFilter}/>
+                            <CityIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <CityTable/>
                         </KTCardBody>

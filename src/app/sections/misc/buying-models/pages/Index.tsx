@@ -10,15 +10,16 @@ import {
 } from '../../../../modules/table/QueryResponseProvider'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import KrysTable from '../../../../components/tables/KrysTable';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {PageTypes} from '../../../../helpers/variables';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {getBuyingModels} from '../../../../requests/misc/BuyingModel';
+import {exportBuyingModels, getBuyingModels} from '../../../../requests/misc/BuyingModel';
 import BuyingModelIndexFilter from '../partials/IndexFilter';
 import {BuyingModelsColumns} from '../core/TableColumns';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 
 const BuyingModelIndex = () => {
     const krysApp = useKrysApp();
@@ -30,6 +31,7 @@ const BuyingModelIndex = () => {
 
     const [searchParams] = useSearchParams();
 
+    const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
@@ -37,19 +39,18 @@ const BuyingModelIndex = () => {
             <QueryResponseProvider id={QUERIES.BUYING_MODEL_LIST} requestFunction={getBuyingModels}>
                 <ListViewProvider>
                     {
-                        searchParams.has('success') ? <FormSuccess type={searchParams.get('success')} model='buying model' /> : <></>
+                        searchParams.has('success') ?
+                            <FormSuccess type={searchParams.get('success')} model='buying model'/> : <></>
                     }
 
                     <KTCard>
-                        <KTCardHeader text='All Buying Models' icon="fa-regular fa-list" icon_style="fs-3 text-primary" actions={[{
-                            type: Actions.FILTER,
-                            target: 'buying-models-list-filter',
-                            showFilter: showFilter,
-                            setShowFilter: setShowFilter
-                        }, {type: Actions.CREATE, url: '/misc/buying-models'}]}/>
+                        <KTCardHeader text='All Buying Models' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
+                                      actions={[new ExportCardAction(exportQuery, exportBuyingModels),
+                                          new FilterCardAction('buying-models-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/iam/buying-models')]}/>
 
                         <KTCardBody>
-                            <BuyingModelIndexFilter showFilter={showFilter} />
+                            <BuyingModelIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <BuyingModelTable/>
                         </KTCardBody>
@@ -67,7 +68,8 @@ const BuyingModelTable = () => {
     const columns = useMemo(() => BuyingModelsColumns, []);
 
     return (
-        <KrysTable data={data} columns={columns} model={buyingModels.length > 0 ? buyingModels[0] : null} isLoading={isLoading} />
+        <KrysTable data={data} columns={columns} model={buyingModels.length > 0 ? buyingModels[0] : null}
+                   isLoading={isLoading}/>
     )
 }
 

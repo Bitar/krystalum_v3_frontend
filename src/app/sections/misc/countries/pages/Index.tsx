@@ -10,15 +10,17 @@ import {
 } from '../../../../modules/table/QueryResponseProvider'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import KrysTable from '../../../../components/tables/KrysTable';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {PageTypes} from '../../../../helpers/variables';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {getCountries} from '../../../../requests/misc/Country';
+import {exportCountries, getCountries} from '../../../../requests/misc/Country';
 import CountryIndexFilter from '../partials/IndexFilter';
 import {CountriesColumns} from '../core/TableColumns';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import {exportPermissions} from '../../../../requests/iam/Permission';
 
 const CountryIndex = () => {
     const krysApp = useKrysApp();
@@ -30,6 +32,7 @@ const CountryIndex = () => {
 
     const [searchParams] = useSearchParams();
 
+    const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
@@ -43,15 +46,12 @@ const CountryIndex = () => {
 
                     <KTCard>
                         <KTCardHeader text='All Countries' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[{
-                                          type: Actions.FILTER,
-                                          target: 'countries-list-filter',
-                                          showFilter: showFilter,
-                                          setShowFilter: setShowFilter
-                                      }, {type: Actions.CREATE, url: '/misc/countries'}]}/>
+                                      actions={[new ExportCardAction(exportQuery, exportCountries),
+                                          new FilterCardAction('countries-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/iam/countries')]}/>
 
                         <KTCardBody>
-                            <CountryIndexFilter showFilter={showFilter}/>
+                            <CountryIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <CountryTable/>
                         </KTCardBody>

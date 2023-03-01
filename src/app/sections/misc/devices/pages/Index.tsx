@@ -10,15 +10,16 @@ import {
 } from '../../../../modules/table/QueryResponseProvider'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import KrysTable from '../../../../components/tables/KrysTable';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {PageTypes} from '../../../../helpers/variables';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {getDevices} from '../../../../requests/misc/Device';
+import {exportDevices, getDevices} from '../../../../requests/misc/Device';
 import DeviceIndexFilter from '../partials/IndexFilter';
 import {DevicesColumns} from '../core/TableColumns';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 
 const DeviceIndex = () => {
     const krysApp = useKrysApp();
@@ -30,6 +31,7 @@ const DeviceIndex = () => {
 
     const [searchParams] = useSearchParams();
 
+    const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
@@ -37,19 +39,18 @@ const DeviceIndex = () => {
             <QueryResponseProvider id={QUERIES.DEVICES_LIST} requestFunction={getDevices}>
                 <ListViewProvider>
                     {
-                        searchParams.has('success') ? <FormSuccess type={searchParams.get('success')} model='device' /> : <></>
+                        searchParams.has('success') ?
+                            <FormSuccess type={searchParams.get('success')} model='device'/> : <></>
                     }
 
                     <KTCard>
-                        <KTCardHeader text='All Devices' icon="fa-regular fa-list" icon_style="fs-3 text-primary" actions={[{
-                            type: Actions.FILTER,
-                            target: 'devices-list-filter',
-                            showFilter: showFilter,
-                            setShowFilter: setShowFilter
-                        }, {type: Actions.CREATE, url: '/misc/devices'}]}/>
+                        <KTCardHeader text='All Devices' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
+                                      actions={[new ExportCardAction(exportQuery, exportDevices),
+                                          new FilterCardAction('devices-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/iam/devices')]}/>
 
                         <KTCardBody>
-                            <DeviceIndexFilter showFilter={showFilter} />
+                            <DeviceIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <DeviceTable/>
                         </KTCardBody>
@@ -67,7 +68,7 @@ const DeviceTable = () => {
     const columns = useMemo(() => DevicesColumns, []);
 
     return (
-        <KrysTable data={data} columns={columns} model={devices.length > 0 ? devices[0] : null} isLoading={isLoading} />
+        <KrysTable data={data} columns={columns} model={devices.length > 0 ? devices[0] : null} isLoading={isLoading}/>
     )
 }
 

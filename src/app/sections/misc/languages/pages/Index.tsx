@@ -10,15 +10,16 @@ import {
 } from '../../../../modules/table/QueryResponseProvider'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import KrysTable from '../../../../components/tables/KrysTable';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {PageTypes} from '../../../../helpers/variables';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {getLanguages} from '../../../../requests/misc/Language';
+import {exportLanguages, getLanguages} from '../../../../requests/misc/Language';
 import LanguageIndexFilter from '../partials/IndexFilter';
 import {LanguagesColumns} from '../core/TableColumns';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 
 const LanguageIndex = () => {
     const krysApp = useKrysApp();
@@ -30,6 +31,7 @@ const LanguageIndex = () => {
 
     const [searchParams] = useSearchParams();
 
+    const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
@@ -41,15 +43,13 @@ const LanguageIndex = () => {
                     }
 
                     <KTCard>
-                        <KTCardHeader text='All Languages' icon="fa-regular fa-list" icon_style="fs-3 text-primary" actions={[{
-                            type: Actions.FILTER,
-                            target: 'languages-list-filter',
-                            showFilter: showFilter,
-                            setShowFilter: setShowFilter
-                        }, {type: Actions.CREATE, url: '/misc/languages'}]}/>
+                        <KTCardHeader text='All Languages' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
+                                      actions={[new ExportCardAction(exportQuery, exportLanguages),
+                                          new FilterCardAction('languages-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/iam/languages')]}/>
 
                         <KTCardBody>
-                            <LanguageIndexFilter showFilter={showFilter} />
+                            <LanguageIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <LanguageTable/>
                         </KTCardBody>

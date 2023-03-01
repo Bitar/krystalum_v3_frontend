@@ -1,5 +1,5 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
-import {createFormData} from '../../helpers/requests';
+import {createFormData, ExportUrl} from '../../helpers/requests';
 import {Device, DeviceList, DevicePaginate} from '../../models/misc/Device';
 
 const API_URL = process.env.REACT_APP_API_URL
@@ -19,6 +19,18 @@ export const getDevices = (query?: String): Promise<DevicePaginate> => {
     }
 
     return axios.get(url).then((response: AxiosResponse<DevicePaginate>) => response.data).catch((error) => {
+        return error;
+    });
+}
+
+export const exportDevices = async (query?: String): Promise<ExportUrl | AxiosError | undefined> => {
+    let url = `${ENDPOINT}/export`;
+
+    if (query) {
+        url += `?${query}`;
+    }
+
+    return axios.get(url).then((response: AxiosResponse) => response.data).catch((error) => {
         return error;
     });
 }

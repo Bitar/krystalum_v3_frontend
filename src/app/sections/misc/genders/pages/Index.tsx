@@ -10,15 +10,17 @@ import {
 } from '../../../../modules/table/QueryResponseProvider'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import KrysTable from '../../../../components/tables/KrysTable';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {PageTypes} from '../../../../helpers/variables';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {getGenders} from '../../../../requests/misc/Gender';
+import {exportGenders, getGenders} from '../../../../requests/misc/Gender';
 import GenderIndexFilter from '../partials/IndexFilter';
 import {GendersColumns} from '../core/TableColumns';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import {exportPermissions} from '../../../../requests/iam/Permission';
 
 const GenderIndex = () => {
     const krysApp = useKrysApp();
@@ -30,6 +32,7 @@ const GenderIndex = () => {
 
     const [searchParams] = useSearchParams();
 
+    const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
@@ -43,15 +46,12 @@ const GenderIndex = () => {
 
                     <KTCard>
                         <KTCardHeader text='All Genders' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[{
-                                          type: Actions.FILTER,
-                                          target: 'genders-list-filter',
-                                          showFilter: showFilter,
-                                          setShowFilter: setShowFilter
-                                      }, {type: Actions.CREATE, url: '/misc/genders'}]}/>
+                                      actions={[new ExportCardAction(exportQuery, exportGenders),
+                                          new FilterCardAction('genders-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/iam/genders')]}/>
 
                         <KTCardBody>
-                            <GenderIndexFilter showFilter={showFilter}/>
+                            <GenderIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <GenderTable/>
                         </KTCardBody>
