@@ -36,8 +36,10 @@ const VerticalCreate: React.FC = () => {
         getAllVerticals().then(response => {
             if (axios.isAxiosError(response)) {
                 setFormErrors(extractErrors(response));
+
             } else if (response === undefined) {
-                setFormErrors([GenericErrorMessage])
+                setFormErrors([GenericErrorMessage]);
+
             } else {
                 // if we were able to get the list of roles, then we fill our state with them
                 if (response.data) {
@@ -48,7 +50,7 @@ const VerticalCreate: React.FC = () => {
     }, []);
 
     const selectChangeHandler = (e: any) => {
-        genericSelectOnChangeHandler(e, form, setForm, 'parent');
+        genericSelectOnChangeHandler(e, form, setForm, 'parent_id');
     };
 
     const onChangeHandler = (e: any) => {

@@ -53,7 +53,7 @@ const VerticalEdit: React.FC = () => {
 
                     // was able to get the vertical we want to edit
                     // the form is the same as vertical
-                    setForm({...currentVertical, parent: response.parent?.id});
+                    setForm({...currentVertical, parent_id: response.parent?.id});
 
                 }
             });
@@ -83,7 +83,7 @@ const VerticalEdit: React.FC = () => {
 
     const selectChangeHandler = (e: any) => {
         setVertical(e);
-        genericSelectOnChangeHandler(e, form, setForm, 'parent');
+        genericSelectOnChangeHandler(e, form, setForm, 'parent_id');
     };
 
     const onChangeHandler = (e: any) => {

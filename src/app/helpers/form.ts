@@ -26,6 +26,7 @@ export const genericMultiSelectOnChangeHandler = (e: any, form: any, setForm: Re
 };
 
 export const genericSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
+    console.log(form);
     setForm({...form, [key]: e.id});
 };
 

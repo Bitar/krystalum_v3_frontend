@@ -4,12 +4,12 @@ import {ID} from "../../../../../_metronic/helpers";
 
 export interface FormFields {
     name: string,
-    parent: ID
+    parent_id: ID
 }
 
 export const defaultFormFields: FormFields = {
     name: '',
-    parent: undefined
+    parent_id: undefined
 }
 
 export const VerticalSchema = Yup.object().shape({
