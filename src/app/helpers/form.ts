@@ -6,7 +6,7 @@ export const genericOnChangeHandler = (e: any, form: any, setForm: React.Dispatc
     const name = e.target.name;
 
     // if the value was Array then the multi select handler would take care of it
-    if(!(value instanceof Array) && name !== 'image') {
+    if(name) {
         setForm({
             ...form,
             [name]: value
