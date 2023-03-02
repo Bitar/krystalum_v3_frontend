@@ -106,9 +106,9 @@ const KpiCreate: React.FC = () => {
                                     <KrysCheckbox name="is_rate"
                                                   onChangeHandler={(e) => {
                                                       e.stopPropagation();
-                                                      setForm({...form, is_rate: !form.is_rate});
+                                                      setForm({...form, is_rate: Number(!form.is_rate)});
                                                   }}
-                                                  defaultValue={form.is_rate}/>
+                                                  defaultValue={Boolean(form.is_rate)}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="is_rate" className="mt-2"/>
@@ -120,8 +120,8 @@ const KpiCreate: React.FC = () => {
 
                                     <KrysCheckbox name="is_conversion" onChangeHandler={(e) => {
                                         e.stopPropagation();
-                                        setForm({...form, is_conversion: !form.is_conversion});
-                                    }} defaultValue={form.is_conversion}/>
+                                        setForm({...form, is_conversion: Number(!form.is_conversion)});
+                                    }} defaultValue={Boolean(form.is_conversion)}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="is_conversion" className="mt-2"/>

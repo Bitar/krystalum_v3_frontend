@@ -4,8 +4,8 @@ import {PerformanceMetric} from './PerformanceMetric';
 export type Kpi = {
     id: ID,
     name: string,
-    is_rate: boolean,
-    is_conversion: boolean,
+    is_rate: number,
+    is_conversion: number,
     performanceMetrics: PerformanceMetric[]
 };
 
@@ -18,7 +18,7 @@ export type KpiList = {
 export const defaultKpi: Kpi = {
     id: 0,
     name: "",
-    is_rate: false,
-    is_conversion: false,
+    is_rate: 1,
+    is_conversion: 0,
     performanceMetrics: []
 };
