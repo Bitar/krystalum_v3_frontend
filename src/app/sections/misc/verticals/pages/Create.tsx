@@ -79,7 +79,7 @@ const VerticalCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={VerticalSchema} onSubmit={handleCreate}>
+                <Formik initialValues={form} validationSchema={VerticalSchema} onSubmit={handleCreate} enableReinitialize>
                     {
                         (formik) => (
                             <Form onChange={onChangeHandler}>
