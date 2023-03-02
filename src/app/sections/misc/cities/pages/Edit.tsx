@@ -20,10 +20,11 @@ import {getCity, updateCity} from '../../../../requests/misc/City';
 import Select from 'react-select';
 import {Country} from '../../../../models/misc/Country';
 import {getAllCountries} from '../../../../requests/misc/Country';
-import {CitySchema} from '../core/form';
+import {CitySchema, defaultFormFields, FormFields} from '../core/form';
 
 const CityEdit: React.FC = () => {
     const [city, setCity] = useState<City>(defaultCity);
+    const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const [countries, setCountries] = useState<Country[]>([]);
@@ -46,6 +47,7 @@ const CityEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current city to edit
+                    console.log(response)
                     setCity(response);
                 }
             });

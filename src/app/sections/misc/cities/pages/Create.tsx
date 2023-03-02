@@ -7,7 +7,11 @@ import {Sections} from '../../../../helpers/sections';
 import {Actions, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {defaultFormFields, FormFields, CitySchema} from '../core/form';
-import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
+import {
+    GenericErrorMessage,
+    genericOnChangeHandler,
+    genericSelectOnChangeHandler
+} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
@@ -53,8 +57,8 @@ const CityCreate: React.FC = () => {
         genericOnChangeHandler(e, form, setForm);
     };
 
-    const multiSelectChangeHandler = (e: any) => {
-        genericMultiSelectOnChangeHandler(e, form, setForm, 'country');
+    const selectChangeHandler = (e: any) => {
+        genericSelectOnChangeHandler(e, form, setForm, 'country_id');
     };
 
     const handleCreate = (e: any) => {
@@ -82,7 +86,7 @@ const CityCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={CitySchema} onSubmit={handleCreate}>
+                <Formik initialValues={form} validationSchema={CitySchema} onSubmit={handleCreate} enableReinitialize>
                     {
                         () => (
                             <Form onChange={onChangeHandler}>
@@ -100,14 +104,14 @@ const CityCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Country" isRequired={true}/>
 
-                                    <Select name="country"
+                                    <Select name="country_id"
                                             options={countries}
                                             getOptionLabel={(country) => country?.name}
                                             getOptionValue={(country) => country?.id ? country?.id.toString() : ''}
-                                            onChange={multiSelectChangeHandler}/>
+                                            onChange={selectChangeHandler}/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="country" className="mt-2"/>
+                                        <ErrorMessage name="country_id" className="mt-2"/>
                                     </div>
                                 </div>
 
