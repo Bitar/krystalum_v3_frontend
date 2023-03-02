@@ -104,7 +104,7 @@ const VerticalCreate: React.FC = () => {
                                             onChange={selectChangeHandler}/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="parentVertical" className="mt-2"/>
+                                        <ErrorMessage name="parent_id" className="mt-2"/>
                                     </div>
                                 </div>
 
