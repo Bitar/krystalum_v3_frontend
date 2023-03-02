@@ -8,18 +8,18 @@ import {Vertical} from '../../../../models/misc/Vertical';
 
 const VerticalsColumns: ReadonlyArray<Column<Vertical>> = [
     {
-        Header: (props) => <CustomHeader tableProps={props} title='Name' className='min-w-125px' />,
+        Header: (props) => <CustomHeader tableProps={props} title='Name' className='min-w-125px'/>,
         id: 'name',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].name} />,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].name}/>,
     },
     {
-        Header: (props) => <CustomHeader tableProps={props} title='parent' className='min-w-125px' />,
+        Header: (props) => <CustomHeader tableProps={props} title='parent' className='min-w-125px'/>,
         id: 'parent',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].parent?.name} />,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].parent?.name}/>,
     },
     {
         Header: (props) => (
-            <CustomHeader tableProps={props} title='Actions' className='text-end min-w-100px' />
+            <CustomHeader tableProps={props} title='Actions' className='text-end min-w-100px'/>
         ),
         id: 'actions',
         Cell: ({...props}) => (

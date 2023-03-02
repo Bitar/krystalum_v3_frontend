@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import {Vertical} from "../../../../models/misc/Vertical";
 import {ID} from "../../../../../_metronic/helpers";
 
 export interface FormFields {
