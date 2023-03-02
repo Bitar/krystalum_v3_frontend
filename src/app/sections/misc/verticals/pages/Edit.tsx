@@ -67,7 +67,7 @@ const VerticalEdit: React.FC = () => {
                     // if we were able to get the list of roles, then we fill our state with them
                     if (response.data) {
                         // we want to remove the current vertical we are editing from the array since a vertical can't be parent of itself
-                        const filteredVerticals = response.data.filter(v => v.id !== Number(id));
+                        const filteredVerticals = response.data.filter(vertical => vertical.id !== Number(id));
                         setVerticals(filteredVerticals);
                     }
                 }
