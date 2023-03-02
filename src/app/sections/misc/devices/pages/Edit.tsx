@@ -85,7 +85,7 @@ const DeviceEdit: React.FC = () => {
                 <Formik initialValues={device} validationSchema={DeviceSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
-                        (formik) => (
+                        () => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>

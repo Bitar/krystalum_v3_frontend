@@ -20,7 +20,6 @@ import {exportCities, getCities} from '../../../../requests/misc/City';
 import {CitiesColumns} from '../core/TableColumns';
 import CityIndexFilter from '../partials/IndexFilter';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
-import {exportPermissions} from '../../../../requests/iam/Permission';
 
 const CityIndex = () => {
     const krysApp = useKrysApp();
@@ -48,7 +47,7 @@ const CityIndex = () => {
                         <KTCardHeader text='All Cities' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportCities),
                                           new FilterCardAction('cities-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/iam/cities')]}/>
+                                          new CreateCardAction('/misc/cities')]}/>
 
                         <KTCardBody>
                             <CityIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

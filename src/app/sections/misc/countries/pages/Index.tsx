@@ -20,7 +20,6 @@ import {exportCountries, getCountries} from '../../../../requests/misc/Country';
 import CountryIndexFilter from '../partials/IndexFilter';
 import {CountriesColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
-import {exportPermissions} from '../../../../requests/iam/Permission';
 
 const CountryIndex = () => {
     const krysApp = useKrysApp();
@@ -48,7 +47,7 @@ const CountryIndex = () => {
                         <KTCardHeader text='All Countries' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportCountries),
                                           new FilterCardAction('countries-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/iam/countries')]}/>
+                                          new CreateCardAction('/misc/countries')]}/>
 
                         <KTCardBody>
                             <CountryIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

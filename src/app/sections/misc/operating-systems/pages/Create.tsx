@@ -61,7 +61,7 @@ const OperatingSystemCreate: React.FC = () => {
 
                 <Formik initialValues={form} validationSchema={OperatingSystemSchema} onSubmit={handleCreate}>
                     {
-                        (formik) => (
+                        () => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true} />

@@ -20,7 +20,7 @@ const GendersColumns: ReadonlyArray<Column<Gender>> = [
             <ActionsCell
                 id={props.data[props.row.index].id}
                 path={'misc/genders'}
-                queryKey={QUERIES.AUDIENCES_LIST}
+                queryKey={QUERIES.GENDERS_LIST}
                 showView={false}
                 showEdit={true}
                 title="Delete Gender"

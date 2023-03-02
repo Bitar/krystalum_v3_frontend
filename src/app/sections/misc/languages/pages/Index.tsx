@@ -46,7 +46,7 @@ const LanguageIndex = () => {
                         <KTCardHeader text='All Languages' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportLanguages),
                                           new FilterCardAction('languages-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/iam/languages')]}/>
+                                          new CreateCardAction('/misc/languages')]}/>
 
                         <KTCardBody>
                             <LanguageIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

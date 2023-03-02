@@ -85,7 +85,7 @@ const OperatingSystemEdit: React.FC = () => {
                 <Formik initialValues={operatingSystem} validationSchema={OperatingSystemSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
-                        (formik) => (
+                        () => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>

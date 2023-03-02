@@ -46,7 +46,7 @@ const OperatingSystemIndex = () => {
                         <KTCardHeader text='All Operating Systems' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportOperatingSystems),
                                           new FilterCardAction('operating-systems-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/iam/operating-systems')]}/>
+                                          new CreateCardAction('/misc/operating-systems')]}/>
 
                         <KTCardBody>
                             <OperatingSystemIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

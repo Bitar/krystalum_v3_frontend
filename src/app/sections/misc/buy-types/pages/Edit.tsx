@@ -85,7 +85,7 @@ const BuyTypeEdit: React.FC = () => {
                 <Formik initialValues={buyType} validationSchema={BuyTypeSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
-                        (formik) => (
+                        () => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>

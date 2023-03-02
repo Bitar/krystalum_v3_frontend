@@ -84,7 +84,7 @@ const CityCreate: React.FC = () => {
 
                 <Formik initialValues={form} validationSchema={CitySchema} onSubmit={handleCreate}>
                     {
-                        (formik) => (
+                        () => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
