@@ -1,11 +1,8 @@
-import {Region, RegionPaginate} from "../../models/misc/Region"
+import {Region, RegionList, RegionPaginate, RelationTypeList, TypeList} from "../../models/misc/Region"
 import axios, {AxiosError, AxiosResponse} from "axios";
 import {createFormData, ExportUrl} from "../../helpers/requests";
 import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
 import {CountryList} from "../../models/misc/Country";
-import {RelationType, RelationTypeList} from "../../models/misc/RelationType";
-import {Type, TypeList, TypePaginate} from "../../models/misc/Type";
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/regions`
@@ -23,6 +20,11 @@ export const getRegions = (query ?: String): Promise<RegionPaginate> => {
     });
 }
 
+export const getAllRegions = async (): Promise<RegionList | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<RegionList>) => response.data).catch((error) => {
+        return error;
+    });
+}
 export const exportRegions = async (query ?: String): Promise<ExportUrl | AxiosError | undefined> => {
 
     let url = `${ENDPOINT}`;
