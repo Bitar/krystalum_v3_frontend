@@ -4,7 +4,6 @@ import {FormikProps} from 'formik';
 export const genericOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>) => {
     const value = e.target.value;
     const name = e.target.name;
-    console.log(name);
 
     // if the value was Array then the multi select handler would take care of it
     if (!(value instanceof Array)) {
@@ -26,7 +25,6 @@ export const genericMultiSelectOnChangeHandler = (e: any, form: any, setForm: Re
 };
 
 export const genericSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
-    console.log(form);
     setForm({...form, [key]: e.id});
 };
 

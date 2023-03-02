@@ -68,7 +68,7 @@ const VerticalIndexFilter: React.FC<Props> = ({showFilter}) => {
                                             </Col>
                                         </Row>
 
-                                        <FilterFormFooter resetFilter={resetFilter} />
+                                        <FilterFormFooter resetFilter={resetFilter}/>
                                     </Form>
                                 )
                             }

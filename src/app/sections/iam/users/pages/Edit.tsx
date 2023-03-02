@@ -101,7 +101,6 @@ const UserEdit: React.FC = () => {
     const handleEdit = (e: any) => {
         // send API request to create the user
         updateUser(form).then(response => {
-            console.log(form);
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
                     setFormErrors(extractErrors(response));

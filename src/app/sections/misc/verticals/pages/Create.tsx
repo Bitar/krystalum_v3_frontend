@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
-
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {Actions, PageTypes} from '../../../../helpers/variables';
@@ -36,10 +35,8 @@ const VerticalCreate: React.FC = () => {
         getAllVerticals().then(response => {
             if (axios.isAxiosError(response)) {
                 setFormErrors(extractErrors(response));
-
             } else if (response === undefined) {
                 setFormErrors([GenericErrorMessage]);
-
             } else {
                 // if we were able to get the list of roles, then we fill our state with them
                 if (response.data) {
