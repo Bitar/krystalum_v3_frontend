@@ -30,7 +30,6 @@ const VerticalCreate: React.FC = () => {
 
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_VERTICALS, PageTypes.CREATE))
-        // eslint-disable-next-line react-hooks/exhaustive-deps
 
         getAllVerticals().then(response => {
             if (axios.isAxiosError(response)) {
@@ -44,6 +43,7 @@ const VerticalCreate: React.FC = () => {
                 }
             }
         });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const selectChangeHandler = (e: any) => {
@@ -99,8 +99,8 @@ const VerticalCreate: React.FC = () => {
 
                                     <Select name="parent_id"
                                             options={verticals}
-                                            getOptionLabel={(vertical) => vertical?.name}
-                                            getOptionValue={(vertical) => vertical?.id ? vertical?.id.toString() : ''}
+                                            getOptionLabel={(vertical) => vertical.name}
+                                            getOptionValue={(vertical) => vertical.id ? vertical?.id.toString() : ''}
                                             onChange={selectChangeHandler}/>
 
                                     <div className="mt-1 text-danger">
