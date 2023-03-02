@@ -16,6 +16,7 @@ const MiscModuleRoutes: React.FC = () => {
     const OperatingSystemRoutes = lazy(() => import('./OperatingSystemRoutes'));
     const GenderRoutes = lazy(() => import('./GenderRoutes'));
     const CampaignTypeRoutes = lazy(() => import('./CampaignTypeRoutes'));
+    const RegionRoutes = lazy(() => import('./RegionRoutes'));
 
     return (
         <Routes>
@@ -124,6 +125,15 @@ const MiscModuleRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <CampaignTypeRoutes/>
+                    </SuspenseView>
+                }
+            ></Route>
+
+            <Route
+                path='regions/*'
+                element={
+                    <SuspenseView>
+                        <RegionRoutes/>
                     </SuspenseView>
                 }
             ></Route>
