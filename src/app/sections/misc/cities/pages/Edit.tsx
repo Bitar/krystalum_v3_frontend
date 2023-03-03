@@ -5,7 +5,12 @@ import {useNavigate, useParams} from 'react-router-dom';
 
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
+import {
+    GenericErrorMessage,
+    genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler,
+    genericSelectOnChangeHandler
+} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
@@ -47,8 +52,9 @@ const CityEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current city to edit
-                    console.log(response)
                     setCity(response);
+
+                    setForm({...response, country_id: response.country.id})
                 }
             });
 
@@ -78,8 +84,8 @@ const CityEdit: React.FC = () => {
         genericOnChangeHandler(e, city, setCity);
     };
 
-    const multiSelectChangeHandler = (e: any) => {
-        genericMultiSelectOnChangeHandler(e, city, setCity, 'country');
+    const selectChangeHandler = (e: any) => {
+        genericSelectOnChangeHandler(e, form, setForm, 'country_id');
     };
 
     const handleEdit = (e: any) => {
@@ -106,7 +112,7 @@ const CityEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={city} validationSchema={CitySchema} onSubmit={handleEdit}
+                <Formik initialValues={form} validationSchema={CitySchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         () => (
@@ -125,14 +131,14 @@ const CityEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Country" isRequired={true}/>
 
-                                    <Select name="country"
+                                    <Select name="country_id"
                                             options={countries}
                                             getOptionLabel={(country) => country?.name}
                                             getOptionValue={(country) => country?.id ? country?.id.toString() : ''}
-                                            onChange={multiSelectChangeHandler}/>
+                                            onChange={selectChangeHandler}/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="country" className="mt-2"/>
+                                        <ErrorMessage name="country_id" className="mt-2"/>
                                     </div>
                                 </div>
 
