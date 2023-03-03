@@ -5,10 +5,9 @@ import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
@@ -16,6 +15,7 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {getPerformanceMetric, updatePerformanceMetric} from '../../../../requests/misc/PerformanceMetric';
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 const PerformanceMetricEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -28,14 +28,14 @@ const PerformanceMetricEdit: React.FC = () => {
     let {id} = useParams();
 
     useEffect(() => {
-        if(id) {
+        if (id) {
             // get the permission we need to edit from the database
             getPerformanceMetric(parseInt(id)).then(response => {
-                if(axios.isAxiosError(response)) {
+                if (axios.isAxiosError(response)) {
                     // we were not able to fetch the permission to edit so we need to redirect
                     // to error page
                     navigate('/error/404');
-                } else if(response === undefined) {
+                } else if (response === undefined) {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current permission to edit
@@ -58,15 +58,18 @@ const PerformanceMetricEdit: React.FC = () => {
     const handleEdit = (e: any) => {
         // we need to update the permission's data by doing API call with form
         updatePerformanceMetric(form).then(response => {
-            if(axios.isAxiosError(response)) {
+            if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
-            } else if(response === undefined) {
+            } else if (response === undefined) {
                 // show generic error
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated permission so we're good
-                krysApp.setAlert({message: generateSuccessMessage('performance metric', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('ad server', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                })
                 navigate(`/misc/performance-metrics`);
             }
         });
@@ -79,12 +82,13 @@ const PerformanceMetricEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={PerformanceMetricSchema} onSubmit={handleEdit} enableReinitialize>
+                <Formik initialValues={form} validationSchema={PerformanceMetricSchema} onSubmit={handleEdit}
+                        enableReinitialize>
                     {
                         (formik) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Name" isRequired={true} />
+                                    <KrysFormLabel text="Name" isRequired={true}/>
 
                                     <Field className="form-control fs-6" type="text"
                                            placeholder="Enter performance metric name" name="name"/>

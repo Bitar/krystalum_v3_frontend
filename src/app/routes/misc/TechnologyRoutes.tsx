@@ -4,11 +4,10 @@ import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections';
 import TechnologyCreate from '../../sections/misc/technologies/pages/Create';
-<<<<<<< HEAD
+
 import TechnologyIndex from '../../sections/misc/technologies/pages/Index';
 import TechnologyEdit from '../../sections/misc/technologies/pages/Edit';
-=======
->>>>>>> master
+
 
 const breadcrumbs: Array<PageLink> = [
     {

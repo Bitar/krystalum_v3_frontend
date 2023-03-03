@@ -6,10 +6,9 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
@@ -17,6 +16,7 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, FormFields, TechnologySchema} from '../core/form';
 import {getTechnology, updateTechnology} from '../../../../requests/misc/Technology';
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 const TechnologyEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -29,14 +29,14 @@ const TechnologyEdit: React.FC = () => {
     let {id} = useParams();
 
     useEffect(() => {
-        if(id) {
+        if (id) {
             // get the permission we need to edit from the database
             getTechnology(parseInt(id)).then(response => {
-                if(axios.isAxiosError(response)) {
+                if (axios.isAxiosError(response)) {
                     // we were not able to fetch the permission to edit so we need to redirect
                     // to error page
                     navigate('/error/404');
-                } else if(response === undefined) {
+                } else if (response === undefined) {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current permission to edit
@@ -59,15 +59,18 @@ const TechnologyEdit: React.FC = () => {
     const handleEdit = (e: any) => {
         // we need to update the permission's data by doing API call with form
         updateTechnology(form).then(response => {
-            if(axios.isAxiosError(response)) {
+            if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
-            } else if(response === undefined) {
+            } else if (response === undefined) {
                 // show generic error
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated permission so we're good
-                krysApp.setAlert({message: generateSuccessMessage('technology', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('ad server', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                })
                 navigate(`/misc/technologies`);
             }
         });
@@ -80,12 +83,13 @@ const TechnologyEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={TechnologySchema} onSubmit={handleEdit} enableReinitialize>
+                <Formik initialValues={form} validationSchema={TechnologySchema} onSubmit={handleEdit}
+                        enableReinitialize>
                     {
                         (formik) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Name" isRequired={true} />
+                                    <KrysFormLabel text="Name" isRequired={true}/>
 
                                     <Field className="form-control fs-6" type="text"
                                            placeholder="Enter technology name" name="name"/>

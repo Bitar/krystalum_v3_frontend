@@ -1,11 +1,8 @@
 import {User, UserList, UserPaginate} from '../../models/iam/User'
 import axios, {AxiosError, AxiosResponse} from 'axios'
-<<<<<<< HEAD
-import {createFormData} from '../../helpers/requests';
 import {RoleList} from '../../models/iam/Role';
-=======
 import {createFormData, ExportUrl} from '../../helpers/requests';
->>>>>>> master
+
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/iam/users`

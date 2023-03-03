@@ -11,13 +11,13 @@ import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {Sections} from "../../../../helpers/sections";
-import {Actions, PageTypes} from "../../../../helpers/variables";
+import {Actions, KrysToastType, PageTypes} from "../../../../helpers/variables";
 import {GenericErrorMessage, genericOnChangeHandler, genericSelectOnChangeHandler} from "../../../../helpers/form";
 import {extractErrors} from "../../../../helpers/requests";
-import {generateSuccessMessage} from "../../../../helpers/alerts";
 import {getAllVerticals, getVertical, updateVertical} from "../../../../requests/misc/Vertical";
 import Select from "react-select";
 import {defaultVertical, Vertical} from "../../../../models/misc/Vertical";
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 const VerticalEdit: React.FC = () => {
 
@@ -101,7 +101,10 @@ const VerticalEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated permission so we're good
-                krysApp.setAlert({message: generateSuccessMessage('vertical', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('ad server', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                })
                 navigate(`/misc/verticals`);
             }
         });
