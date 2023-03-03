@@ -4,12 +4,11 @@ import {useNavigate} from 'react-router-dom';
 
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {defaultFormFields, FormFields, PerformanceMetricSchema} from '../core/form';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
@@ -17,6 +16,7 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storePerformanceMetric} from '../../../../requests/misc/PerformanceMetric';
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 const PerformanceMetricCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -45,7 +45,10 @@ const PerformanceMetricCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's permission for sure
-                    krysApp.setAlert({message: generateSuccessMessage('performance metric', Actions.CREATE), type: 'success'})
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('performance metric', Actions.CREATE, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
                     navigate(`/misc/performance-metrics`);
                 }
             }
@@ -54,7 +57,8 @@ const PerformanceMetricCreate: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New Performance Metric" icon="fa-regular fa-plus" icon_style="fs-3 text-success"/>
+            <KTCardHeader text="Create New Performance Metric" icon="fa-regular fa-plus"
+                          icon_style="fs-3 text-success"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -64,7 +68,7 @@ const PerformanceMetricCreate: React.FC = () => {
                         (formik) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Name" isRequired={true} />
+                                    <KrysFormLabel text="Name" isRequired={true}/>
 
                                     <Field className="form-control fs-6" type="text"
                                            placeholder="Enter performance metric name" name="name"/>

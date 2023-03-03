@@ -16,6 +16,8 @@ import KrysTable from '../../../../components/tables/KrysTable';
 import {getAdvertiserIndustries} from '../../../../requests/misc/AdvertiserIndustry';
 import AdvertiserIndustryIndexFilter from '../partials/IndexFilter';
 import {AdvertiserIndustriesColumns} from '../core/TableColumns';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
+import {exportUsers} from "../../../../requests/iam/User";
 
 const AdvertiserIndustryIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -33,12 +35,9 @@ const AdvertiserIndustryIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Advertiser Industries' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[{
-                                          type: Actions.FILTER,
-                                          target: 'advertiser-industries-list-filter',
-                                          showFilter: showFilter,
-                                          setShowFilter: setShowFilter
-                                      }, {type: Actions.CREATE, url: '/misc/advertiser-industries'}]}/>
+                                      actions={[new FilterCardAction('advertiser-industries-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/iam/advertiser-industries')
+                                      ]}/>
 
                         <KTCardBody>
                             <AdvertiserIndustryIndexFilter showFilter={showFilter}/>

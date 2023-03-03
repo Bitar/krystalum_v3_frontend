@@ -1,21 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
-import Select from 'react-select';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {defaultFormFields, FormFields, KpiSchema} from '../core/form';
-import {
-    GenericErrorMessage,
-    genericOnChangeHandler,
-    genericSelectOnChangeHandler
-} from '../../../../helpers/form';
+import {GenericErrorMessage, genericOnChangeHandler, genericSelectOnChangeHandler} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
@@ -23,6 +17,7 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeKpi} from '../../../../requests/misc/Kpi';
 import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 const KpiCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -59,7 +54,10 @@ const KpiCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's permission for sure
-                    krysApp.setAlert({message: generateSuccessMessage('kpi', Actions.CREATE), type: 'success'})
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('kpi', Actions.CREATE, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
                     navigate(`/misc/kpis`);
                 }
             }

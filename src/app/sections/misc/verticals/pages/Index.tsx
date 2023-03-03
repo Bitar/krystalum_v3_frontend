@@ -8,14 +8,15 @@ import {
 import {KTCard, KTCardBody, QUERIES} from "../../../../../_metronic/helpers";
 import {ListViewProvider} from "../../../../modules/table/ListViewProvider";
 import {KTCardHeader} from "../../../../../_metronic/helpers/components/KTCardHeader";
-import {Actions, PageTypes} from "../../../../helpers/variables";
+import {PageTypes} from "../../../../helpers/variables";
 import KrysTable from "../../../../components/tables/KrysTable";
 import {VerticalsColumns} from "../core/TableColumns";
-import {getVerticals} from "../../../../requests/misc/Vertical";
+import {exportVerticals, getVerticals} from "../../../../requests/misc/Vertical";
 import VerticalIndexFilter from "../partials/IndexFilter";
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {Sections} from "../../../../helpers/sections";
+import {CreateCardAction, ExportCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
 
 const VerticalIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -25,6 +26,7 @@ const VerticalIndex: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
@@ -33,15 +35,13 @@ const VerticalIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Verticals' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[{
-                                          type: Actions.FILTER,
-                                          target: 'verticals-list-filter',
-                                          showFilter: showFilter,
-                                          setShowFilter: setShowFilter
-                                      }, {type: Actions.CREATE, url: '/misc/verticals'}]}/>
+                                      actions={[new ExportCardAction(exportQuery, exportVerticals),
+                                          new FilterCardAction('verticals-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/iam/verticals')
+                                      ]}/>
 
                         <KTCardBody>
-                            <VerticalIndexFilter showFilter={showFilter}/>
+                            <VerticalIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <VerticalTable/>
                         </KTCardBody>

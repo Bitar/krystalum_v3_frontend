@@ -16,6 +16,7 @@ import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {getVideoPlayers} from '../../../../requests/misc/VideoPlayer';
 import VideoPlayerIndexFilter from '../partials/IndexFilter';
+import {CreateCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
 
 const VideoPlayerIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -33,12 +34,9 @@ const VideoPlayerIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Video Players' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[{
-                                          type: Actions.FILTER,
-                                          target: 'video-players-list-filter',
-                                          showFilter: showFilter,
-                                          setShowFilter: setShowFilter
-                                      }, {type: Actions.CREATE, url: '/misc/video-players'}]}/>
+                                      actions={[new FilterCardAction('video-players-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/iam/video-players')
+                                      ]}/>
 
                         <KTCardBody>
                             <VideoPlayerIndexFilter showFilter={showFilter}/>

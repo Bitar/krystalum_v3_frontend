@@ -16,6 +16,8 @@ import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHe
 import {getBusinessUnits} from '../../../../requests/misc/BusinessUnit';
 import BusinessUnitIndexFilter from '../partials/IndexFilter';
 import {BusinessUnitsColumns} from '../core/TableColumns';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
+import {exportUsers} from "../../../../requests/iam/User";
 
 const BusinessUnitIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -33,12 +35,9 @@ const BusinessUnitIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Business Units' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[{
-                                          type: Actions.FILTER,
-                                          target: 'business-units-list-filter',
-                                          showFilter: showFilter,
-                                          setShowFilter: setShowFilter
-                                      }, {type: Actions.CREATE, url: '/misc/business-units'}]}/>
+                                      actions={[new FilterCardAction('business-units-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/iam/business-units')
+                                      ]}/>
 
                         <KTCardBody>
                             <BusinessUnitIndexFilter showFilter={showFilter}/>

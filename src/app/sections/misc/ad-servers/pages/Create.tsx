@@ -5,18 +5,18 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {defaultFormFields, FormFields, AdServerSchema} from '../core/form';
+import {AdServerSchema, defaultFormFields, FormFields} from '../core/form';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeAdServer} from '../../../../requests/misc/AdServer';
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 const AdServerCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -45,7 +45,10 @@ const AdServerCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's permission for sure
-                    krysApp.setAlert({message: generateSuccessMessage('ad server', Actions.CREATE), type: 'success'})
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('ad server', Actions.CREATE, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
                     navigate(`/misc/ad-servers`);
                 }
             }
@@ -64,7 +67,7 @@ const AdServerCreate: React.FC = () => {
                         (formik) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Name" isRequired={true} />
+                                    <KrysFormLabel text="Name" isRequired={true}/>
 
                                     <Field className="form-control fs-6" type="text"
                                            placeholder="Enter ad server name" name="name"/>

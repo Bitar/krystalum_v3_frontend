@@ -16,6 +16,8 @@ import KrysTable from '../../../../components/tables/KrysTable';
 import {getAdServers} from '../../../../requests/misc/AdServer';
 import AdServerIndexFilter from '../partials/IndexFilter';
 import {AdServersColumns} from '../core/TableColumns';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
+import {exportUsers} from "../../../../requests/iam/User";
 
 const AdServerIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -33,12 +35,9 @@ const AdServerIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Ad Servers' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[{
-                                          type: Actions.FILTER,
-                                          target: 'ad-servers-list-filter',
-                                          showFilter: showFilter,
-                                          setShowFilter: setShowFilter
-                                      }, {type: Actions.CREATE, url: '/misc/ad-servers'}]}/>
+                                      actions={[new FilterCardAction('ad-servers-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/iam/ad-servers')
+                                      ]}/>
 
                         <KTCardBody>
                             <AdServerIndexFilter showFilter={showFilter}/>
