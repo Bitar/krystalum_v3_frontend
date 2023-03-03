@@ -59,7 +59,7 @@ const CampaignTypeCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={CampaignTypeSchema} onSubmit={handleCreate}>
+                <Formik initialValues={form} validationSchema={CampaignTypeSchema} onSubmit={handleCreate} enableReinitialize>
                     {
                         () => (
                             <Form onChange={onChangeHandler}>

@@ -132,9 +132,9 @@ const RegionCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={RegionSchema} onSubmit={handleCreate}>
+                <Formik initialValues={form} validationSchema={RegionSchema} onSubmit={handleCreate} enableReinitialize>
                     {
-                        (formik) => (
+                        () => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>

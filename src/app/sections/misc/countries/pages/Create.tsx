@@ -59,7 +59,7 @@ const CountryCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={CountrySchema} onSubmit={handleCreate}>
+                <Formik initialValues={form} validationSchema={CountrySchema} onSubmit={handleCreate} enableReinitialize>
                     {
                         () => (
                             <Form onChange={onChangeHandler}>

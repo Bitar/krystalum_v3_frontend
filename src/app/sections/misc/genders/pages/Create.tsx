@@ -59,7 +59,7 @@ const GenderCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={GenderSchema} onSubmit={handleCreate}>
+                <Formik initialValues={form} validationSchema={GenderSchema} onSubmit={handleCreate} enableReinitialize>
                     {
                         () => (
                             <Form onChange={onChangeHandler}>

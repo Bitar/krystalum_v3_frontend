@@ -59,7 +59,7 @@ const DeviceCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={DeviceSchema} onSubmit={handleCreate}>
+                <Formik initialValues={form} validationSchema={DeviceSchema} onSubmit={handleCreate} enableReinitialize>
                     {
                         () => (
                             <Form onChange={onChangeHandler}>

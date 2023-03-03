@@ -59,7 +59,7 @@ const BuyTypeCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={BuyTypeSchema} onSubmit={handleCreate}>
+                <Formik initialValues={form} validationSchema={BuyTypeSchema} onSubmit={handleCreate} enableReinitialize>
                     {
                         () => (
                             <Form onChange={onChangeHandler}>

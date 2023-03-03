@@ -59,7 +59,7 @@ const TechnologyCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={TechnologySchema} onSubmit={handleCreate}>
+                <Formik initialValues={form} validationSchema={TechnologySchema} onSubmit={handleCreate} enableReinitialize>
                     {
                         () => (
                             <Form onChange={onChangeHandler}>

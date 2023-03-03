@@ -59,7 +59,7 @@ const BookingTypeCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={BookingTypeSchema} onSubmit={handleCreate}>
+                <Formik initialValues={form} validationSchema={BookingTypeSchema} onSubmit={handleCreate} enableReinitialize>
                     {
                         () => (
                             <Form onChange={onChangeHandler}>
