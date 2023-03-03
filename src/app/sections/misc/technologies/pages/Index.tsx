@@ -35,7 +35,7 @@ const TechnologyIndex: React.FC = () => {
                     <KTCard>
                         <KTCardHeader text='All Technologies' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new FilterCardAction('technologies-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/iam/technologies')
+                                          new CreateCardAction('/misc/technologies')
                                       ]}/>
 
                         <KTCardBody>

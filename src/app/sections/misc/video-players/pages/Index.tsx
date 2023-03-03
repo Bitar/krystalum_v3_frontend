@@ -35,7 +35,7 @@ const VideoPlayerIndex: React.FC = () => {
                     <KTCard>
                         <KTCardHeader text='All Video Players' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new FilterCardAction('video-players-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/iam/video-players')
+                                          new CreateCardAction('/misc/video-players')
                                       ]}/>
 
                         <KTCardBody>

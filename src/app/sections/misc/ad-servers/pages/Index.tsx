@@ -36,7 +36,7 @@ const AdServerIndex: React.FC = () => {
                     <KTCard>
                         <KTCardHeader text='All Ad Servers' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new FilterCardAction('ad-servers-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/iam/ad-servers')
+                                          new CreateCardAction('/misc/ad-servers')
                                       ]}/>
 
                         <KTCardBody>

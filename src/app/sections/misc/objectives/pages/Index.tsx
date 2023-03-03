@@ -35,7 +35,7 @@ const ObjectiveIndex: React.FC = () => {
                     <KTCard>
                         <KTCardHeader text='All Objectives' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new FilterCardAction('objectives-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/iam/objectives')
+                                          new CreateCardAction('/misc/objectives')
                                       ]}/>
 
                         <KTCardBody>

@@ -36,7 +36,7 @@ const PerformanceMetricIndex: React.FC = () => {
                     <KTCard>
                         <KTCardHeader text='All Performance Metrics' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new FilterCardAction('performance-metrics-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/iam/performance-metrics')
+                                          new CreateCardAction('/misc/performance-metrics')
                                       ]}/>
 
                         <KTCardBody>

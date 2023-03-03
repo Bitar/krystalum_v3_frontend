@@ -36,7 +36,7 @@ const BusinessUnitIndex: React.FC = () => {
                     <KTCard>
                         <KTCardHeader text='All Business Units' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new FilterCardAction('business-units-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/iam/business-units')
+                                          new CreateCardAction('/misc/business-units')
                                       ]}/>
 
                         <KTCardBody>
