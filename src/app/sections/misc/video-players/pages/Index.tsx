@@ -17,7 +17,6 @@ import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHe
 import {exportVideoPlayers, getVideoPlayers} from '../../../../requests/misc/VideoPlayer';
 import VideoPlayerIndexFilter from '../partials/IndexFilter';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
-import {exportUsers} from "../../../../requests/iam/User";
 
 const VideoPlayerIndex: React.FC = () => {
     const krysApp = useKrysApp();

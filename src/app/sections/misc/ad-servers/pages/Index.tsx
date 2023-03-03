@@ -17,7 +17,6 @@ import {exportAdServers, getAdServers} from '../../../../requests/misc/AdServer'
 import AdServerIndexFilter from '../partials/IndexFilter';
 import {AdServersColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
-import {exportUsers} from "../../../../requests/iam/User";
 
 const AdServerIndex: React.FC = () => {
     const krysApp = useKrysApp();

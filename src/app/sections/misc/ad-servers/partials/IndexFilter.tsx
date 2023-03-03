@@ -53,7 +53,7 @@ const AdServerIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
         <Collapse in={showFilter}>
             <Row id='#ad-servers-list-filter'>
                 <Col>
-                    <div className="card-rounded bg-primary bg-opacity-5 p-10 mb-15">
+                    <div className="card card-rounded bg-primary bg-opacity-5 p-10 mb-15">
                         <Formik initialValues={defaultFilterFields} validationSchema={FilterSchema}
                                 onSubmit={handleFilter}
                                 enableReinitialize>

@@ -17,7 +17,6 @@ import {exportAdvertiserIndustries, getAdvertiserIndustries} from '../../../../r
 import AdvertiserIndustryIndexFilter from '../partials/IndexFilter';
 import {AdvertiserIndustriesColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
-import {exportUsers} from "../../../../requests/iam/User";
 
 const AdvertiserIndustryIndex: React.FC = () => {
     const krysApp = useKrysApp();

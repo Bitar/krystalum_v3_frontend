@@ -17,7 +17,6 @@ import {PerformanceMetricsColumns} from '../core/TableColumns';
 import {exportPerformanceMetrics, getPerformanceMetrics} from '../../../../requests/misc/PerformanceMetric';
 import PerformanceMetricIndexFilter from '../partials/IndexFilter';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
-import {exportUsers} from "../../../../requests/iam/User";
 
 const PerformanceMetricIndex: React.FC = () => {
     const krysApp = useKrysApp();
