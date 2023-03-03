@@ -6,6 +6,7 @@ import CreateButton from '../buttons/Create';
 import EditButton from '../buttons/Edit';
 import FilterButton from '../buttons/Filter';
 import ExportButton from '../buttons/Export';
+import {Restricted} from '../../modules/auth/AuthAccessControl';
 
 export class CardAction {
     type: Actions
@@ -21,29 +22,41 @@ export class CardAction {
 
 export class CreateCardAction extends CardAction {
     url: string;
+    permission: string;
 
-    constructor(url: string) {
+    constructor(url: string, permission: string) {
         super(Actions.CREATE);
 
         this.url = url;
+        this.permission = permission;
     }
 
     getHtmlComponent(index?: number): JSX.Element {
-        return (<CreateButton url={this.url} key={index} className='ms-2'/>);
+        return (
+            <Restricted to={this.permission} key={index}>
+                <CreateButton url={this.url} key={index} className='ms-2'/>
+            </Restricted>
+        );
     }
 }
 
 export class EditCardAction extends CardAction {
     url: string;
+    permission: string;
 
-    constructor(url: string) {
+    constructor(url: string, permission: string) {
         super(Actions.EDIT);
 
         this.url = url;
+        this.permission = permission;
     }
 
     getHtmlComponent(index?: number): JSX.Element {
-        return (<EditButton url={this.url} key={index} className='ms-2'/>)
+        return (
+            <Restricted to={this.permission} key={index}>
+                <EditButton url={this.url} key={index} className='ms-2'/>
+            </Restricted>
+        )
     }
 }
 

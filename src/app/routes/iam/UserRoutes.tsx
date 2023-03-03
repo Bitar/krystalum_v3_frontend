@@ -32,39 +32,34 @@ const UserRoutes: React.FC = () => {
                     <UserIndex/>
                 </SuspenseView>
             }/>
+
             <Route
                 path='/create'
                 element={
-                    <>
-                        <SuspenseView>
-                            <PageTitle breadcrumbs={usersBreadCrumbs} showPageTitle={false}>{'Create'}</PageTitle>
-                            <UserCreate />
-                        </SuspenseView>
-                    </>
+                    <SuspenseView>
+                        <PageTitle breadcrumbs={usersBreadCrumbs} showPageTitle={false}>{'Create'}</PageTitle>
+                        <UserCreate/>
+                    </SuspenseView>
                 }
             />
 
             <Route
                 path='/:id/'
                 element={
-                    <>
-                        <SuspenseView>
-                            <PageTitle breadcrumbs={usersBreadCrumbs} showPageTitle={false}>{'Show'}</PageTitle>
-                            <UserShow />
-                        </SuspenseView>
-                    </>
+                    <SuspenseView>
+                        <PageTitle breadcrumbs={usersBreadCrumbs} showPageTitle={false}>{'Show'}</PageTitle>
+                        <UserShow/>
+                    </SuspenseView>
                 }
             />
 
             <Route
                 path='/:id/edit'
                 element={
-                    <>
-                        <SuspenseView>
-                            <PageTitle breadcrumbs={usersBreadCrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
-                            <UserEdit />
-                        </SuspenseView>
-                    </>
+                    <SuspenseView>
+                        <PageTitle breadcrumbs={usersBreadCrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
+                        <UserEdit/>
+                    </SuspenseView>
                 }
             />
         </Routes>

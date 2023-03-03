@@ -47,7 +47,7 @@ const RoleIndex = () => {
                         <KTCardHeader text='All Roles' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportRoles),
                                           new FilterCardAction('roles-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/iam/roles')
+                                          new CreateCardAction('/iam/roles', 'manage-iam')
                                       ]}/>
 
                         <KTCardBody>

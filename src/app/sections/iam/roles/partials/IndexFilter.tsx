@@ -60,8 +60,6 @@ const RoleIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     const handleFilter = () => {
         setExportQuery(createFilterQueryParam(filters));
 
-        console.log(filters);
-
         updateState({
             filter: reset ? undefined : filters,
             ...initialQueryState,
