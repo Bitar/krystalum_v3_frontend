@@ -13,13 +13,16 @@ import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import KrysTable from '../../../../components/tables/KrysTable';
-import {getAdServers} from '../../../../requests/misc/AdServer';
+import {exportAdServers, getAdServers} from '../../../../requests/misc/AdServer';
 import AdServerIndexFilter from '../partials/IndexFilter';
 import {AdServersColumns} from '../core/TableColumns';
-import {CreateCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import {exportUsers} from "../../../../requests/iam/User";
 
 const AdServerIndex: React.FC = () => {
     const krysApp = useKrysApp();
+
+    const [exportQuery, setExportQuery] = useState<string>('');
 
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_AD_SERVERS, PageTypes.INDEX))
@@ -34,11 +37,12 @@ const AdServerIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Ad Servers' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new FilterCardAction('ad-servers-list-filter', showFilter, setShowFilter),
+                                      actions={[new ExportCardAction(exportQuery, exportAdServers),
+                                          new FilterCardAction('ad-servers-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/ad-servers')]}/>
 
                         <KTCardBody>
-                            <AdServerIndexFilter showFilter={showFilter}/>
+                            <AdServerIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <AdServerTable/>
                         </KTCardBody>

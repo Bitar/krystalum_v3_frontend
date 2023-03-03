@@ -13,13 +13,16 @@ import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import KrysTable from '../../../../components/tables/KrysTable';
-import {getAdvertiserIndustries} from '../../../../requests/misc/AdvertiserIndustry';
+import {exportAdvertiserIndustries, getAdvertiserIndustries} from '../../../../requests/misc/AdvertiserIndustry';
 import AdvertiserIndustryIndexFilter from '../partials/IndexFilter';
 import {AdvertiserIndustriesColumns} from '../core/TableColumns';
-import {CreateCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import {exportUsers} from "../../../../requests/iam/User";
 
 const AdvertiserIndustryIndex: React.FC = () => {
     const krysApp = useKrysApp();
+
+    const [exportQuery, setExportQuery] = useState<string>('');
 
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_ADVERTISER_INDUSTRIES, PageTypes.INDEX))
@@ -34,12 +37,12 @@ const AdvertiserIndustryIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Advertiser Industries' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[
+                                      actions={[new ExportCardAction(exportQuery, exportAdvertiserIndustries),
                                           new FilterCardAction('advertiser-industries-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/advertiser-industries')]}/>
 
                         <KTCardBody>
-                            <AdvertiserIndustryIndexFilter showFilter={showFilter}/>
+                            <AdvertiserIndustryIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <AdvertiserIndustryTable/>
                         </KTCardBody>

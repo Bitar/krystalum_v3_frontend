@@ -1,6 +1,6 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
 
-import {createFormData} from '../../helpers/requests';
+import {createFormData, ExportUrl} from '../../helpers/requests';
 import {VideoPlayer, VideoPlayerList, VideoPlayerPaginate} from '../../models/misc/VideoPlayer';
 
 const API_URL = process.env.REACT_APP_API_URL
@@ -8,6 +8,18 @@ const ENDPOINT = `${API_URL}/misc/video-players`
 
 export const getAllVideoPlayers = async (): Promise<VideoPlayerList | AxiosError | undefined> => {
     return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<VideoPlayerList>) => response.data).catch((error) => {
+        return error;
+    });
+}
+
+export const exportVideoPlayers = async (query?: String): Promise<ExportUrl | AxiosError | undefined> => {
+    let url = `${ENDPOINT}/export`;
+
+    if (query) {
+        url += `?${query}`;
+    }
+
+    return axios.get(url).then((response: AxiosResponse) => response.data).catch((error) => {
         return error;
     });
 }

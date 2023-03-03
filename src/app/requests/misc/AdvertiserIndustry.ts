@@ -1,6 +1,6 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
 
-import {createFormData} from '../../helpers/requests';
+import {createFormData, ExportUrl} from '../../helpers/requests';
 import {
     AdvertiserIndustry,
     AdvertiserIndustryList,
@@ -24,6 +24,18 @@ export const getAdvertiserIndustries = (query?: String): Promise<AdvertiserIndus
     }
 
     return axios.get(url).then((response: AxiosResponse<AdvertiserIndustryPaginate>) => response.data).catch((error) => {
+        return error;
+    });
+}
+
+export const exportAdvertiserIndustries = async (query?: String): Promise<ExportUrl | AxiosError | undefined> => {
+    let url = `${ENDPOINT}/export`;
+
+    if (query) {
+        url += `?${query}`;
+    }
+
+    return axios.get(url).then((response: AxiosResponse) => response.data).catch((error) => {
         return error;
     });
 }

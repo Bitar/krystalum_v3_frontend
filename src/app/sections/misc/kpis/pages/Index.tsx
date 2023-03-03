@@ -14,9 +14,9 @@ import {QueryRequestProvider} from '../../../../modules/table/QueryRequestProvid
 import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {getKpis} from '../../../../requests/misc/Kpi';
+import {exportKpis, getKpis} from '../../../../requests/misc/Kpi';
 import KpiIndexFilter from '../partials/IndexFilter';
-import {CreateCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 
 const KpiIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -26,6 +26,7 @@ const KpiIndex: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
@@ -34,12 +35,12 @@ const KpiIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All KPIs' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[
+                                      actions={[new ExportCardAction(exportQuery, exportKpis),
                                           new FilterCardAction('kpis-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/kpis')]}/>
 
                         <KTCardBody>
-                            <KpiIndexFilter showFilter={showFilter}/>
+                            <KpiIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <KpiTable/>
                         </KTCardBody>

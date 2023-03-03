@@ -14,9 +14,10 @@ import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import KrysTable from '../../../../components/tables/KrysTable';
 import {PerformanceMetricsColumns} from '../core/TableColumns';
-import {getPerformanceMetrics} from '../../../../requests/misc/PerformanceMetric';
+import {exportPerformanceMetrics, getPerformanceMetrics} from '../../../../requests/misc/PerformanceMetric';
 import PerformanceMetricIndexFilter from '../partials/IndexFilter';
-import {CreateCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import {exportUsers} from "../../../../requests/iam/User";
 
 const PerformanceMetricIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -26,6 +27,7 @@ const PerformanceMetricIndex: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
@@ -34,12 +36,12 @@ const PerformanceMetricIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Performance Metrics' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[
+                                      actions={[new ExportCardAction(exportQuery, exportPerformanceMetrics),
                                           new FilterCardAction('performance-metrics-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/performance-metrics')]}/>
 
                         <KTCardBody>
-                            <PerformanceMetricIndexFilter showFilter={showFilter}/>
+                            <PerformanceMetricIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <PerformanceMetricTable/>
                         </KTCardBody>

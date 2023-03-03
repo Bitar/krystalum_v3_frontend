@@ -1,6 +1,6 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
 
-import {createFormData} from '../../helpers/requests';
+import {createFormData, ExportUrl} from '../../helpers/requests';
 import {BusinessUnit, BusinessUnitList, BusinessUnitPaginate} from '../../models/misc/BusinessUnit';
 
 const API_URL = process.env.REACT_APP_API_URL
@@ -20,6 +20,18 @@ export const getBusinessUnits = (query?: String): Promise<BusinessUnitPaginate> 
     }
 
     return axios.get(url).then((response: AxiosResponse<BusinessUnitPaginate>) => response.data).catch((error) => {
+        return error;
+    });
+}
+
+export const exportBusinessUnits = async (query?: String): Promise<ExportUrl | AxiosError | undefined> => {
+    let url = `${ENDPOINT}/export`;
+
+    if (query) {
+        url += `?${query}`;
+    }
+
+    return axios.get(url).then((response: AxiosResponse) => response.data).catch((error) => {
         return error;
     });
 }

@@ -9,12 +9,14 @@ import {initialQueryState} from '../../../../../_metronic/helpers';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
 import Select from 'react-select';
+import {createFilterQueryParam} from "../../../../helpers/requests";
 
 interface Props {
-    showFilter: boolean
+    showFilter: boolean,
+    setExportQuery: React.Dispatch<React.SetStateAction<string>>
 }
 
-const KpiIndexFilter: React.FC<Props> = ({showFilter}) => {
+const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     const {updateState} = useQueryRequest();
 
     const [filters, setFilters] = useState<FilterFields>();
@@ -25,6 +27,8 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter}) => {
     };
 
     const handleFilter = () => {
+        setExportQuery(createFilterQueryParam(filters));
+
         updateState({
             filter: reset ? undefined : filters,
             ...initialQueryState,
@@ -75,7 +79,7 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter}) => {
                                                         options={[{id: 1, name: 'Yes'}, {id: 0, name: 'No'}]}
                                                         getOptionLabel={(option) => option?.name}
                                                         getOptionValue={(option) => option?.id.toString()}
-                                                        // onChange={multiSelectChangeHandler}
+                                                    // onChange={multiSelectChangeHandler}
                                                         ref={selectRef}
                                                         placeholder='Filter by rate type'/>
 
@@ -101,7 +105,7 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter}) => {
                                             </Col>
                                         </Row>
 
-                                        <FilterFormFooter resetFilter={resetFilter} />
+                                        <FilterFormFooter resetFilter={resetFilter}/>
                                     </Form>
                                 )
                             }
