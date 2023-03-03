@@ -10,7 +10,8 @@ export enum PageTypes {
     CREATE = 'create',
     EDIT = 'edit',
     SHOW = 'show',
-    REPORT = 'report'
+    REPORT = 'report',
+    ERROR = 'error'
 }
 
 export enum KrysToastType {

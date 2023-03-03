@@ -15,6 +15,8 @@ export const generatePageTitle = (module: string, type: string, name?: string) =
             return show(module, name);
         case PageTypes.REPORT:
             return report(module, name);
+        case PageTypes.ERROR:
+            return error(module)
         default:
             return index(module)
     }
@@ -39,3 +41,7 @@ const show = (module: string, name: string | undefined) => {
 const report = (module: string, name: string | undefined) => {
     return `${name} ${SEPARATOR} Report ${SEPARATOR} ${module} ${SEPARATOR} ${APP_NAME}`
 };
+
+const error = (module: string) => {
+    return `Error ${module} ${SEPARATOR} ${APP_NAME}`
+}

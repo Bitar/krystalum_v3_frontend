@@ -1,5 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Link} from 'react-router-dom';
+import {generatePageTitle} from '../../helpers/pageTitleGenerator';
+import {PageTypes} from '../../helpers/variables';
+import {useKrysApp} from '../general/KrysApp';
 
 interface Props {
     code: number;
@@ -8,6 +11,13 @@ interface Props {
 }
 
 const TemplateErrorPage: React.FC<Props> = ({code, title, message}) => {
+    const krysApp = useKrysApp();
+
+    useEffect(() => {
+        krysApp.setPageTitle(generatePageTitle(String(code), PageTypes.ERROR))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <div className="d-flex flex-column flex-root" style={{backgroundColor: '#1e1e2d'}}>
             <div className="d-flex flex-column flex-center flex-column-fluid">

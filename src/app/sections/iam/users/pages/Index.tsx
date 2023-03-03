@@ -13,8 +13,6 @@ import {TableColumns} from '../core/TableColumns'
 import KrysTable from '../../../../components/tables/KrysTable';
 import {PageTypes} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {useSearchParams} from 'react-router-dom';
-import FormSuccess from '../../../../components/forms/FormSuccess';
 import UserIndexFilter from '../partials/IndexFilter';
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {useKrysApp} from "../../../../modules/general/KrysApp";
@@ -29,8 +27,6 @@ const UserIndex = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const [searchParams] = useSearchParams();
-
     const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
@@ -38,11 +34,6 @@ const UserIndex = () => {
         <QueryRequestProvider>
             <QueryResponseProvider id={QUERIES.USERS_LIST} requestFunction={getUsers}>
                 <ListViewProvider>
-                    {
-                        searchParams.has('success') ?
-                            <FormSuccess type={searchParams.get('success')} model='user'/> : <></>
-                    }
-
                     <KTCard>
                         <KTCardHeader text='All Users' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportUsers),
