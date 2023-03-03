@@ -9,7 +9,7 @@ import {Permission} from '../../../../models/iam/Permission';
 import {getAllPermissions} from '../../../../requests/iam/Permission';
 import {extractErrors} from '../../../../helpers/requests';
 import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {getRole, updateRole} from '../../../../requests/iam/Role';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
@@ -19,7 +19,7 @@ import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {generateSuccessMessage} from "../../../../helpers/alerts";
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {Sections} from "../../../../helpers/sections";
 
 const RoleEdit: React.FC = () => {
@@ -37,7 +37,7 @@ const RoleEdit: React.FC = () => {
     let {id} = useParams();
 
     useEffect(() => {
-        if(id) {
+        if (id) {
             // get the permissions so we can edit the role's permissions
             getAllPermissions().then(response => {
                 if (axios.isAxiosError(response)) {
@@ -52,11 +52,11 @@ const RoleEdit: React.FC = () => {
 
             // get the permission we need to edit from the database
             getRole(parseInt(id)).then(response => {
-                if(axios.isAxiosError(response)) {
+                if (axios.isAxiosError(response)) {
                     // we were not able to fetch the permission to edit so we need to redirect
                     // to error page
                     navigate('/error/404');
-                } else if(response === undefined) {
+                } else if (response === undefined) {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current permission to edit
@@ -77,7 +77,11 @@ const RoleEdit: React.FC = () => {
     }, [role]);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, form, setForm);
+        // in case of multi select, the element doesn't have a name because
+        // we get only a list of values from the select and not an element with target value and name
+        if (e.target.name !== '') {
+            genericOnChangeHandler(e, form, setForm);
+        }
     };
 
     const multiSelectChangeHandler = (e: any) => {
@@ -87,15 +91,15 @@ const RoleEdit: React.FC = () => {
     const handleEdit = (e: any) => {
         // we need to update the permission's data by doing API call with form
         updateRole(form).then(response => {
-            if(axios.isAxiosError(response)) {
+            if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
-            } else if(response === undefined) {
+            } else if (response === undefined) {
                 // show generic error
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated permission so we're good
-                krysApp.setAlert({message: generateSuccessMessage('role', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({message: new AlertMessageGenerator('role', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
                 navigate(`/iam/roles`);
             }
         });
@@ -127,14 +131,14 @@ const RoleEdit: React.FC = () => {
                                     <KrysFormLabel text="Permissions" isRequired={true}/>
 
                                     {role?.permissions?.length > 0 &&
-                                    <Select isMulti
-                                            name="permissions"
-                                            defaultValue={role?.permissions}
-                                            options={permissions}
-                                            getOptionLabel={(permission) => permission?.name}
-                                            getOptionValue={(permission) => permission?.id ? permission?.id.toString() : '0'}
-                                            onChange={multiSelectChangeHandler}
-                                            placeholder="Select one or more permissions"/>
+                                        <Select isMulti
+                                                name="permissions"
+                                                defaultValue={role?.permissions}
+                                                options={permissions}
+                                                getOptionLabel={(permission) => permission?.name}
+                                                getOptionValue={(permission) => permission?.id ? permission?.id.toString() : '0'}
+                                                onChange={multiSelectChangeHandler}
+                                                placeholder="Select one or more permissions"/>
                                     }
 
                                     <div className="mt-1 text-danger">

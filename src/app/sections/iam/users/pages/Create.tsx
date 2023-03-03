@@ -16,12 +16,12 @@ import {
 import {Role} from '../../../../models/iam/Role';
 import {getAllRoles} from '../../../../requests/iam/Role';
 import {extractErrors} from '../../../../helpers/requests';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {storeUser} from '../../../../requests/iam/User';
 import {CreateUserSchema, defaultFormFields, FormFields} from '../core/form';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {generateSuccessMessage} from "../../../../helpers/alerts";
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {Sections} from "../../../../helpers/sections";
 
 const UserCreate: React.FC = () => {
@@ -62,9 +62,9 @@ const UserCreate: React.FC = () => {
     };
 
     const onChangeHandler = (e: any) => {
-        const name: string = e.target.name;
-
-        if(name !== 'image') {
+        // in case of multi select, the element doesn't have a name because
+        // we get only a list of values from the select and not an element with target value and name
+        if(e.target.name !== '' && e.target.name !== 'image') {
             genericOnChangeHandler(e, form, setForm);
         }
     };
@@ -84,7 +84,7 @@ const UserCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // we were able to store the user
-                    krysApp.setAlert({message: generateSuccessMessage('user', Actions.CREATE), type: 'success'})
+                    krysApp.setAlert({message: new AlertMessageGenerator('role', Actions.CREATE, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
                     navigate(`/iam/users`);
                 }
             }

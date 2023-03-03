@@ -6,10 +6,11 @@ import {defaultUser, User} from '../../../../models/iam/User';
 import {getUser} from '../../../../requests/iam/User';
 import {KTCard, KTCardBody, KTSVG} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {Sections} from "../../../../helpers/sections";
+import {EditCardAction} from '../../../../components/misc/CardAction';
 
 const UserShow: React.FC = () => {
     const [user, setUser] = useState<User>(defaultUser);
@@ -46,9 +47,7 @@ const UserShow: React.FC = () => {
 
     return (
         <KTCard className='mb-5 mb-xl-10'>
-            <KTCardHeader text='Overview' icon="fa-regular fa-circle-info" icon_style="fs-3 text-info" actions={[
-                {type: Actions.EDIT, url: `/iam/users/${user.id}`}
-            ]} />
+            <KTCardHeader text='Overview' icon="fa-regular fa-circle-info" icon_style="fs-3 text-info" actions={[new EditCardAction(`/iam/users/${user.id}`)]} />
 
             <KTCardBody className='pt-9 pb-0'>
                 <div className='d-flex flex-wrap flex-sm-nowrap mb-3'>

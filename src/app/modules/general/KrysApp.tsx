@@ -9,10 +9,11 @@ import {
 } from 'react'
 import {WithChildren} from '../../../_metronic/helpers';
 import toast, {Toaster, ToastType} from 'react-hot-toast';
+import {KrysToastType} from '../../helpers/variables';
 
-interface Alert {
+type Alert = {
     message: string;
-    type: ToastType;
+    type: KrysToastType;
 }
 
 type KrysContextProps = {
@@ -22,7 +23,7 @@ type KrysContextProps = {
     setPageTitle: Dispatch<SetStateAction<string>>,
 }
 
-const iniKrysContextPropsState = {
+const initKrysContextPropsState = {
     alert: undefined,
     setAlert: () => {
     },
@@ -31,7 +32,7 @@ const iniKrysContextPropsState = {
     },
 }
 
-const KrysContext = createContext<KrysContextProps>(iniKrysContextPropsState)
+const KrysContext = createContext<KrysContextProps>(initKrysContextPropsState)
 
 const useKrysApp = () => {
     return useContext(KrysContext)

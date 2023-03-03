@@ -9,16 +9,17 @@ import {
     useQueryResponseLoading,
 } from '../../../../modules/table/QueryResponseProvider'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
-import {getPermissions} from '../../../../requests/iam/Permission';
+import {exportPermissions, getPermissions} from '../../../../requests/iam/Permission';
 import {PermissionsColumns} from '../core/TableColumns';
 import KrysTable from '../../../../components/tables/KrysTable';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {PageTypes} from '../../../../helpers/variables';
 import FormSuccess from '../../../../components/forms/FormSuccess';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import PermissionIndexFilter from '../partials/IndexFilter';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {Sections} from "../../../../helpers/sections";
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 
 const PermissionIndex = () => {
     const krysApp = useKrysApp();
@@ -30,6 +31,7 @@ const PermissionIndex = () => {
 
     const [searchParams] = useSearchParams();
 
+    const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
@@ -43,6 +45,7 @@ const PermissionIndex = () => {
 
                     <KTCard>
                         <KTCardHeader text='All Permissions' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
+<<<<<<< HEAD:src/app/sections/iam/permissions/pages/Index.tsx
                                       actions={[{
                                           type: Actions.FILTER,
                                           target: 'permissions-list-filter',
@@ -52,6 +55,14 @@ const PermissionIndex = () => {
 
                         <KTCardBody>
                             <PermissionIndexFilter showFilter={showFilter}/>
+=======
+                                      actions={[new ExportCardAction(exportQuery, exportPermissions),
+                                          new FilterCardAction('permissions-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/iam/permissions')]}/>
+
+                        <KTCardBody>
+                            <PermissionIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
+>>>>>>> master:src/app/sections/iam/permission/pages/Index.tsx
 
                             <PermissionTable/>
                         </KTCardBody>

@@ -9,17 +9,18 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
 import {Role} from '../../../../models/iam/Role';
 import {getAllRoles} from '../../../../requests/iam/Role';
-import {extractErrors} from '../../../../helpers/requests';
+import {createFilterQueryParam, extractErrors} from '../../../../helpers/requests';
 import {initialQueryState} from '../../../../../_metronic/helpers';
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
 import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
 import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
 
 interface Props {
-    showFilter: boolean
+    showFilter: boolean,
+    setExportQuery: React.Dispatch<React.SetStateAction<string>>
 }
 
-const UserIndexFilter: React.FC<Props> = ({showFilter}) => {
+const UserIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     const {updateState} = useQueryRequest();
 
     const [roles, setRoles] = useState<Role[]>([]);
@@ -49,10 +50,16 @@ const UserIndexFilter: React.FC<Props> = ({showFilter}) => {
     };
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, filters, setFilters);
+        // in case of multi select, the element doesn't have a name because
+        // we get only a list of values from the select and not an element with target value and name
+        if(e.target.name !== '') {
+            genericOnChangeHandler(e, filters, setFilters);
+        }
     };
 
     const handleFilter = () => {
+        setExportQuery(createFilterQueryParam(filters));
+
         updateState({
             filter: reset ? undefined : filters,
             ...initialQueryState,

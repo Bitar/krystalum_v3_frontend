@@ -1,7 +1,7 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
 
 import {Role, RoleList, RolePaginate} from '../../models/iam/Role';
-import {createFormData} from '../../helpers/requests';
+import {createFormData, ExportUrl} from '../../helpers/requests';
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/iam/roles`
@@ -20,6 +20,18 @@ export const getRoles = (query?: String): Promise<RolePaginate> => {
     }
 
     return axios.get(url).then((response: AxiosResponse<RolePaginate>) => response.data);
+}
+
+export const exportRoles = async (query?: String): Promise<ExportUrl | AxiosError | undefined> => {
+    let url = `${ENDPOINT}/export`;
+
+    if (query) {
+        url += `?${query}`;
+    }
+
+    return axios.get(url).then((response: AxiosResponse) => response.data).catch((error) => {
+        return error;
+    });
 }
 
 export const getRole = async (id: number): Promise<Role | AxiosError | undefined> => {
