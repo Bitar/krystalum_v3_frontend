@@ -38,7 +38,7 @@ const PermissionIndex = () => {
                         <KTCardHeader text='All Permissions' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportPermissions),
                                           new FilterCardAction('permissions-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/iam/permissions')]}/>
+                                          new CreateCardAction('/iam/permissions', 'manage-iam')]}/>
 
                         <KTCardBody>
                             <PermissionIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

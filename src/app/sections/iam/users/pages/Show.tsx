@@ -47,7 +47,7 @@ const UserShow: React.FC = () => {
 
     return (
         <KTCard className='mb-5 mb-xl-10'>
-            <KTCardHeader text='Overview' icon="fa-regular fa-circle-info" icon_style="fs-3 text-info" actions={[new EditCardAction(`/iam/users/${user.id}`)]} />
+            <KTCardHeader text='Overview' icon="fa-regular fa-circle-info" icon_style="fs-3 text-info" actions={[new EditCardAction(`/iam/users/${user.id}`, 'manage-iam')]} />
 
             <KTCardBody className='pt-9 pb-0'>
                 <div className='d-flex flex-wrap flex-sm-nowrap mb-3'>

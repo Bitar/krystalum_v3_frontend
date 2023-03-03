@@ -38,7 +38,7 @@ const UserIndex = () => {
                         <KTCardHeader text='All Users' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportUsers),
                                           new FilterCardAction('users-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/iam/users')
+                                          new CreateCardAction('/iam/users', 'manage-iam')
                                       ]}/>
 
                         <KTCardBody>
