@@ -1,8 +1,15 @@
-import {ActionTexts, KrysToastType} from "./variables";
+import {Actions, KrysToastType} from "./variables";
 import {GenericErrorMessage} from './form';
 
 type AlertFunctionType = {
     [key: string]: (module: string) => string;
+};
+
+const ActionTexts: { [key in Actions]: string } = {
+    [Actions.CREATE]: 'create',
+    [Actions.EDIT]: 'edit',
+    [Actions.FILTER]: 'filter',
+    [Actions.EXPORT]: 'export',
 };
 
 export class AlertMessageGenerator {
