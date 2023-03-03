@@ -28,6 +28,10 @@ export const genericSelectOnChangeHandler = (e: any, form: any, setForm: React.D
     setForm({...form, [key]: e.id});
 };
 
+export const genericSingleSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string, key2: string) => {
+    setForm({...form, [key]: e.id, [key2]: e});
+};
+
 export const SUPPORTED_IMAGE_FORMATS = [
     "image/jpg",
     "image/jpeg",

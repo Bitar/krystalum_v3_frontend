@@ -7,9 +7,8 @@ import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {
     GenericErrorMessage,
-    genericMultiSelectOnChangeHandler,
     genericOnChangeHandler,
-    genericSelectOnChangeHandler
+    genericSingleSelectOnChangeHandler
 } from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
@@ -54,6 +53,8 @@ const CityEdit: React.FC = () => {
                     // we were able to fetch current city to edit
                     setCity(response);
 
+                    // const { country, ...currentCity } = response;
+
                     setForm({...response, country_id: response.country.id})
                 }
             });
@@ -81,16 +82,16 @@ const CityEdit: React.FC = () => {
     }, [city]);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, city, setCity);
+        genericOnChangeHandler(e, form, setForm);
     };
 
     const selectChangeHandler = (e: any) => {
-        genericSelectOnChangeHandler(e, form, setForm, 'country_id');
+        genericSingleSelectOnChangeHandler(e, form, setForm, 'country_id', 'country');
     };
 
     const handleEdit = (e: any) => {
         // we need to update the city's data by doing API call with form
-        updateCity(city).then(response => {
+        updateCity(form).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
@@ -133,6 +134,7 @@ const CityEdit: React.FC = () => {
 
                                     <Select name="country_id"
                                             options={countries}
+                                            value={form.country}
                                             getOptionLabel={(country) => country?.name}
                                             getOptionValue={(country) => country?.id ? country?.id.toString() : ''}
                                             onChange={selectChangeHandler}/>
@@ -141,7 +143,6 @@ const CityEdit: React.FC = () => {
                                         <ErrorMessage name="country_id" className="mt-2"/>
                                     </div>
                                 </div>
-
                                 <KrysFormFooter cancelUrl={'/misc/cities'}/>
                             </Form>
                         )

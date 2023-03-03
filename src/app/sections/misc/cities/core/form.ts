@@ -1,9 +1,11 @@
 import {ID} from '../../../../../_metronic/helpers';
 import * as Yup from 'yup';
+import {Country} from '../../../../models/misc/Country';
 
 export interface FormFields {
     name: string,
     country_id: ID,
+    country?: Country
 }
 
 export const defaultFormFields = {name: '', country_id: undefined};
