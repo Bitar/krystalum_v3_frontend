@@ -38,7 +38,7 @@ const AdvertiserIndustryIndex: React.FC = () => {
                         <KTCardHeader text='All Advertiser Industries' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportAdvertiserIndustries),
                                           new FilterCardAction('advertiser-industries-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/advertiser-industries')]}/>
+                                          new CreateCardAction('/misc/advertiser-industries', 'manage-misc')]}/>
 
                         <KTCardBody>
                             <AdvertiserIndustryIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

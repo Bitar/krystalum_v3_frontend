@@ -5,6 +5,7 @@ import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
 import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {QUERIES} from '../../../../../_metronic/helpers'
 import {Technology} from '../../../../models/misc/Technology';
+import {Restricted} from '../../../../modules/auth/AuthAccessControl';
 
 const TechnologiesColumns: ReadonlyArray<Column<Technology>> = [
     {
@@ -14,19 +15,24 @@ const TechnologiesColumns: ReadonlyArray<Column<Technology>> = [
     },
     {
         Header: (props) => (
-            <CustomHeader tableProps={props} title='Actions' className='text-end min-w-100px' />
+            <Restricted to='manage-misc'>
+                <CustomHeader tableProps={props} title='Actions' className='text-end min-w-100px' />
+            </Restricted>
         ),
         id: 'actions',
         Cell: ({...props}) => (
-            <ActionsCell
-                id={props.data[props.row.index].id}
-                path={'misc/technologies'}
-                queryKey={QUERIES.TECHNOLOGIES_LIST}
-                showView={false}
-                showEdit={true}
-                title="Delete Technology"
-                text={`Are you sure you want to delete the technology '${props.data[props.row.index].name}'?`}
-            />
+            <Restricted to='manage-misc'>
+                <ActionsCell
+                    id={props.data[props.row.index].id}
+                    path={'misc/technologies'}
+                    queryKey={QUERIES.TECHNOLOGIES_LIST}
+                    showView={false}
+                    showEdit={true}
+                    showDelete={true}
+                    title="Delete Technology"
+                    text={`Are you sure you want to delete the technology '${props.data[props.row.index].name}'?`}
+                />
+            </Restricted>
         ),
     },
 ]

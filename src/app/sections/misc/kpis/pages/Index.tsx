@@ -37,7 +37,7 @@ const KpiIndex: React.FC = () => {
                         <KTCardHeader text='All KPIs' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportKpis),
                                           new FilterCardAction('kpis-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/kpis')]}/>
+                                          new CreateCardAction('/misc/kpis', 'manage-misc')]}/>
 
                         <KTCardBody>
                             <KpiIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

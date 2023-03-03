@@ -37,7 +37,7 @@ const BusinessUnitIndex: React.FC = () => {
                         <KTCardHeader text='All Business Units' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportBusinessUnits),
                                           new FilterCardAction('business-units-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/business-units')]}/>
+                                          new CreateCardAction('/misc/business-units', 'manage-misc')]}/>
 
                         <KTCardBody>
                             <BusinessUnitIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

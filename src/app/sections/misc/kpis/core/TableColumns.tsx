@@ -8,6 +8,7 @@ import {Kpi} from '../../../../models/misc/Kpi';
 import {BadgeCell} from '../../../../modules/table/columns/BadgeCell';
 import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
 import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
+import {Restricted} from '../../../../modules/auth/AuthAccessControl';
 
 const KpisColumns: ReadonlyArray<Column<Kpi>> = [
     {
@@ -32,19 +33,24 @@ const KpisColumns: ReadonlyArray<Column<Kpi>> = [
     },
     {
         Header: (props) => (
-            <CustomHeader tableProps={props} title='Actions' className='text-end min-w-100px'/>
+            <Restricted to='manage-misc'>
+                <CustomHeader tableProps={props} title='Actions' className='text-end min-w-100px'/>
+            </Restricted>
         ),
         id: 'actions',
         Cell: ({...props}) => (
-            <ActionsCell
-                id={props.data[props.row.index].id}
-                path={'misc/kpis'}
-                queryKey={QUERIES.KPIS_LIST}
-                showView={false}
-                showEdit={true}
-                title="Delete KPI"
-                text={`Are you sure you want to delete the KPI '${props.data[props.row.index].name}'?`}
-            />
+            <Restricted to='manage-misc'>
+                <ActionsCell
+                    id={props.data[props.row.index].id}
+                    path={'misc/kpis'}
+                    queryKey={QUERIES.KPIS_LIST}
+                    showView={false}
+                    showEdit={true}
+                    showDelete={true}
+                    title="Delete KPI"
+                    text={`Are you sure you want to delete the KPI '${props.data[props.row.index].name}'?`}
+                />
+            </Restricted>
         ),
     },
 ]

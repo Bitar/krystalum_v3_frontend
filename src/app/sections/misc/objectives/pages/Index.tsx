@@ -37,7 +37,7 @@ const ObjectiveIndex: React.FC = () => {
                         <KTCardHeader text='All Objectives' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportObjectives),
                                           new FilterCardAction('objectives-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/objectives')]}/>
+                                          new CreateCardAction('/misc/objectives', 'manage-misc')]}/>
 
                         <KTCardBody>
                             <ObjectiveIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
