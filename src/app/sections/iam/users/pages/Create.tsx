@@ -166,8 +166,8 @@ const UserCreate: React.FC = () => {
 
                                     <Select isMulti name="roles"
                                             options={roles}
-                                            getOptionLabel={(role) => role?.name}
-                                            getOptionValue={(role) => role?.id ? role?.id.toString() : ''}
+                                            getOptionLabel={(role) => role.name}
+                                            getOptionValue={(role) => role.id.toString()}
                                             onChange={multiSelectChangeHandler}/>
 
                                     <div className="mt-1 text-danger">

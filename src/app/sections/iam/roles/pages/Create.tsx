@@ -107,8 +107,8 @@ const RoleCreate: React.FC = () => {
 
                                     <Select isMulti name="permissions"
                                             options={permissions}
-                                            getOptionLabel={(permission) => permission?.name}
-                                            getOptionValue={(permission) => permission?.id ? permission?.id.toString() : '0'}
+                                            getOptionLabel={(permission) => permission.name}
+                                            getOptionValue={(permission) => permission.id.toString()}
                                             onChange={multiSelectChangeHandler}
                                             placeholder="Select one or more permissions"/>
 
