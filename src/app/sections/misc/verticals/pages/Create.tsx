@@ -62,7 +62,7 @@ const VerticalCreate: React.FC = () => {
     };
 
     const handleCreate = (e: any) => {
-        // send API request to create the permission
+        // send API request to create the vertical
         storeVertical(form).then(response => {
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
@@ -71,7 +71,7 @@ const VerticalCreate: React.FC = () => {
                     // show generic error message
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    // it's permission for sure
+                    // it's vertical for sure
 
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('vertical', Actions.CREATE, KrysToastType.SUCCESS).message,

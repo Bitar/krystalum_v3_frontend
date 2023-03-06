@@ -43,7 +43,7 @@ const ObjectiveCreate: React.FC = () => {
     };
 
     const handleCreate = (e: any) => {
-        // send API request to create the permission
+        // send API request to create the objective
         storeObjective(form).then(response => {
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
@@ -52,7 +52,7 @@ const ObjectiveCreate: React.FC = () => {
                     // show generic error message
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    // it's permission for sure
+                    // it's objective for sure
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('objective', Actions.CREATE, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS

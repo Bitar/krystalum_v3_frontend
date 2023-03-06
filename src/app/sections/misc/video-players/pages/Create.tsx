@@ -42,7 +42,7 @@ const VideoPlayerCreate: React.FC = () => {
     };
 
     const handleCreate = (e: any) => {
-        // send API request to create the permission
+        // send API request to create the video player
         storeVideoPlayer(form).then(response => {
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
@@ -51,7 +51,7 @@ const VideoPlayerCreate: React.FC = () => {
                     // show generic error message
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    // it's permission for sure
+                    // it's video player for sure
 
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('video player', Actions.CREATE, KrysToastType.SUCCESS).message,

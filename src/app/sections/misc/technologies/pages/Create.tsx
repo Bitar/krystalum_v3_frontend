@@ -41,7 +41,7 @@ const TechnologyCreate: React.FC = () => {
     };
 
     const handleCreate = (e: any) => {
-        // send API request to create the permission
+        // send API request to create the technology
         storeTechnology(form).then(response => {
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
@@ -50,7 +50,7 @@ const TechnologyCreate: React.FC = () => {
                     // show generic error message
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    // it's permission for sure
+                    // it's technology for sure
 
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('technology', Actions.CREATE, KrysToastType.SUCCESS).message,

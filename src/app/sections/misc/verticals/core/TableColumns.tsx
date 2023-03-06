@@ -34,7 +34,6 @@ const VerticalsColumns: ReadonlyArray<Column<Vertical>> = [
                 id={props.data[props.row.index].id}
                 path={'misc/verticals'}
                 queryKey={QUERIES.VERTICALS_LIST}
-                showView={true}
                 showEdit={accessControl.userCan('manage-misc')}
                 showDelete={accessControl.userCan('manage-misc')}
                 title="Delete Verticals"

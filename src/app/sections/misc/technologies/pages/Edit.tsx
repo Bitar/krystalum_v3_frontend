@@ -31,16 +31,16 @@ const TechnologyEdit: React.FC = () => {
 
     useEffect(() => {
         if (id) {
-            // get the permission we need to edit from the database
+            // get the technology we need to edit from the database
             getTechnology(parseInt(id)).then(response => {
                 if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the permission to edit so we need to redirect
+                    // we were not able to fetch the technology to edit so we need to redirect
                     // to error page
                     navigate('/error/404');
                 } else if (response === undefined) {
                     navigate('/error/400');
                 } else {
-                    // we were able to fetch current permission to edit
+                    // we were able to fetch current technology to edit
                     setForm(response);
                 }
             });
@@ -58,7 +58,7 @@ const TechnologyEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the permission's data by doing API call with form
+        // we need to update the technology's data by doing API call with form
         updateTechnology(form).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
@@ -67,7 +67,7 @@ const TechnologyEdit: React.FC = () => {
                 // show generic error
                 setFormErrors([GenericErrorMessage]);
             } else {
-                // we got the updated permission so we're good
+                // we got the updated technology so we're good
                 krysApp.setAlert({
                     message: new AlertMessageGenerator('technology', Actions.EDIT, KrysToastType.SUCCESS).message,
                     type: KrysToastType.SUCCESS

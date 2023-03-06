@@ -30,16 +30,16 @@ const BusinessUnitEdit: React.FC = () => {
 
     useEffect(() => {
         if (id) {
-            // get the permission we need to edit from the database
+            // get the business unit we need to edit from the database
             getBusinessUnit(parseInt(id)).then(response => {
                 if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the permission to edit so we need to redirect
+                    // we were not able to fetch the business unit to edit so we need to redirect
                     // to error page
                     navigate('/error/404');
                 } else if (response === undefined) {
                     navigate('/error/400');
                 } else {
-                    // we were able to fetch current permission to edit
+                    // we were able to fetch current business unit to edit
                     setForm(response);
                 }
             });
@@ -66,7 +66,7 @@ const BusinessUnitEdit: React.FC = () => {
                 // show generic error
                 setFormErrors([GenericErrorMessage]);
             } else {
-                // we got the updated permission so we're good
+                // we got the updated business unit so we're good
                 krysApp.setAlert({
                     message: new AlertMessageGenerator('business unit', Actions.EDIT, KrysToastType.SUCCESS).message,
                     type: KrysToastType.SUCCESS

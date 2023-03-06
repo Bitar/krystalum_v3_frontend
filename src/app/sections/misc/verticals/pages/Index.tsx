@@ -22,7 +22,7 @@ const VerticalIndex: React.FC = () => {
     const krysApp = useKrysApp();
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_TECHNOLOGIES, PageTypes.INDEX))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_VERTICALS, PageTypes.INDEX))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

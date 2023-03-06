@@ -40,7 +40,7 @@ const AdvertiserIndustryCreate: React.FC = () => {
     };
 
     const handleCreate = (e: any) => {
-        // send API request to create the permission
+        // send API request to create the advertiser industry
         storeAdvertiserIndustry(form).then(response => {
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
@@ -49,7 +49,7 @@ const AdvertiserIndustryCreate: React.FC = () => {
                     // show generic error message
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    // it's permission for sure
+                    // it's advertiser industry for sure
 
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('advertiser industry', Actions.CREATE, KrysToastType.SUCCESS).message,

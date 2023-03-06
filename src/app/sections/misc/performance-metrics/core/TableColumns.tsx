@@ -27,7 +27,6 @@ const PerformanceMetricsColumns: ReadonlyArray<Column<PerformanceMetric>> = [
                 id={props.data[props.row.index].id}
                 path={'misc/performance-metrics'}
                 queryKey={QUERIES.PERFORMANCE_METRICS_LIST}
-                showView={true}
                 showEdit={accessControl.userCan('manage-misc')}
                 showDelete={accessControl.userCan('manage-misc')}
                 title="Delete Performance Metric"

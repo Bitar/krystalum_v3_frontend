@@ -43,7 +43,7 @@ const KpiEdit: React.FC = () => {
                 } else if (response === undefined) {
                     setFormErrors([GenericErrorMessage])
                 } else if (response.data) {
-                    // if we were able to get the list of permissions, then we fill our state with them
+                    // if we were able to get the list of performance metrics, then we fill our state with them
                     setPerformanceMetrics(response.data);
                 }
             });
@@ -51,13 +51,13 @@ const KpiEdit: React.FC = () => {
             // get the kpi we need to edit from the database
             getKpi(parseInt(id)).then(response => {
                 if(axios.isAxiosError(response)) {
-                    // we were not able to fetch the permission to edit so we need to redirect
+                    // we were not able to fetch the kpi to edit so we need to redirect
                     // to error page
                     navigate('/error/404');
                 } else if(response === undefined) {
                     navigate('/error/400');
                 } else {
-                    // we were able to fetch current permission to edit
+                    // we were able to fetch current kpi to edit
                     setKpi(response);
 
                     console.log(response);
@@ -85,7 +85,7 @@ const KpiEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the permission's data by doing API call with form
+        // we need to update the kpi's data by doing API call with form
         updateKpi(form).then(response => {
             if(axios.isAxiosError(response)) {
                 // show errors
@@ -94,7 +94,7 @@ const KpiEdit: React.FC = () => {
                 // show generic error
                 setFormErrors([GenericErrorMessage]);
             } else {
-                // we got the updated permission so we're good
+                // we got the updated kpi so we're good
                 krysApp.setAlert({message: new AlertMessageGenerator('kpi', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS});
 
                 navigate(`/misc/kpis`);

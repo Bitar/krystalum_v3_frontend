@@ -30,16 +30,16 @@ const PerformanceMetricEdit: React.FC = () => {
 
     useEffect(() => {
         if (id) {
-            // get the permission we need to edit from the database
+            // get the performance metric we need to edit from the database
             getPerformanceMetric(parseInt(id)).then(response => {
                 if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the permission to edit so we need to redirect
+                    // we were not able to fetch the performance metric to edit so we need to redirect
                     // to error page
                     navigate('/error/404');
                 } else if (response === undefined) {
                     navigate('/error/400');
                 } else {
-                    // we were able to fetch current permission to edit
+                    // we were able to fetch current performance metric to edit
                     setForm(response);
                 }
             });
@@ -57,7 +57,7 @@ const PerformanceMetricEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the permission's data by doing API call with form
+        // we need to update the performance metrics data by doing API call with form
         updatePerformanceMetric(form).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
@@ -66,7 +66,7 @@ const PerformanceMetricEdit: React.FC = () => {
                 // show generic error
                 setFormErrors([GenericErrorMessage]);
             } else {
-                // we got the updated permission so we're good
+                // we got the updated performance metric so we're good
                 krysApp.setAlert({message: new AlertMessageGenerator('performance metric', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
 
                 navigate(`/misc/performance-metrics`);

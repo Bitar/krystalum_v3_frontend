@@ -48,7 +48,7 @@ const KpiCreate: React.FC = () => {
             } else if (response === undefined) {
                 setFormErrors([GenericErrorMessage])
             } else if (response.data) {
-                // if we were able to get the list of permissions, then we fill our state with them
+                // if we were able to get the list of performance metrics, then we fill our state with them
                 setPerformanceMetrics(response.data);
             }
         });
@@ -62,7 +62,7 @@ const KpiCreate: React.FC = () => {
     };
 
     const handleCreate = (e: any) => {
-        // send API request to create the permission
+        // send API request to create the kpi
         storeKpi(form).then(response => {
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
@@ -71,7 +71,7 @@ const KpiCreate: React.FC = () => {
                     // show generic error message
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    // it's permission for sure
+                    // it's kpi for sure
 
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('kpi', Actions.CREATE, KrysToastType.SUCCESS).message,

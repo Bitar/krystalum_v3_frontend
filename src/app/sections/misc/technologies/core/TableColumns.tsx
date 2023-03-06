@@ -26,7 +26,6 @@ const TechnologiesColumns: ReadonlyArray<Column<Technology>> = [
                 id={props.data[props.row.index].id}
                 path={'misc/technologies'}
                 queryKey={QUERIES.TECHNOLOGIES_LIST}
-                showView={true}
                 showEdit={accessControl.userCan('manage-misc')}
                 showDelete={accessControl.userCan('manage-misc')}
                 title="Delete Technology"

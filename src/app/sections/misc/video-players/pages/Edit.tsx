@@ -30,16 +30,16 @@ const VideoPlayerEdit: React.FC = () => {
 
     useEffect(() => {
         if (id) {
-            // get the permission we need to edit from the database
+            // get the video player we need to edit from the database
             getVideoPlayer(parseInt(id)).then(response => {
                 if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the permission to edit so we need to redirect
+                    // we were not able to fetch the video player to edit so we need to redirect
                     // to error page
                     navigate('/error/404');
                 } else if (response === undefined) {
                     navigate('/error/400');
                 } else {
-                    // we were able to fetch current permission to edit
+                    // we were able to fetch current video player to edit
                     setForm(response);
                 }
             });
@@ -57,7 +57,7 @@ const VideoPlayerEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the permission's data by doing API call with form
+        // we need to update the video player's data by doing API call with form
         updateVideoPlayer(form).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
@@ -66,7 +66,7 @@ const VideoPlayerEdit: React.FC = () => {
                 // show generic error
                 setFormErrors([GenericErrorMessage]);
             } else {
-                // we got the updated permission so we're good
+                // we got the updated video player so we're good
                 krysApp.setAlert({
                     message: new AlertMessageGenerator('video player', Actions.EDIT, KrysToastType.SUCCESS).message,
                     type: KrysToastType.SUCCESS

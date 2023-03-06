@@ -33,7 +33,6 @@ const AdServerCreate: React.FC = () => {
         }
 
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_AD_SERVERS, PageTypes.CREATE))
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onChangeHandler = (e: any) => {
@@ -41,7 +40,7 @@ const AdServerCreate: React.FC = () => {
     };
 
     const handleCreate = (e: any) => {
-        // send API request to create the permission
+        // send API request to create the ad server
         storeAdServer(form).then(response => {
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
@@ -50,7 +49,7 @@ const AdServerCreate: React.FC = () => {
                     // show generic error message
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    // it's permission for sure
+                    // it's ad server for sure
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('ad server', Actions.CREATE, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS
