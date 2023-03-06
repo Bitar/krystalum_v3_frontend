@@ -118,8 +118,8 @@ const UserIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
 
                                                 <Select isMulti name="roles"
                                                         options={roles}
-                                                        getOptionLabel={(role) => role?.name}
-                                                        getOptionValue={(role) => role?.id ? role?.id.toString(): ''}
+                                                        getOptionLabel={(role) => role.name}
+                                                        getOptionValue={(role) => role.id.toString()}
                                                         onChange={multiSelectChangeHandler}
                                                         ref={selectRef}
                                                         placeholder='Filter by role'/>
