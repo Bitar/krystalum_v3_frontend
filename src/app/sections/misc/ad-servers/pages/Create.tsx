@@ -33,6 +33,7 @@ const AdServerCreate: React.FC = () => {
         }
 
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_AD_SERVERS, PageTypes.CREATE))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onChangeHandler = (e: any) => {
