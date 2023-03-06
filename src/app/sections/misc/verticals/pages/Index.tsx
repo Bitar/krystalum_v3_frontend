@@ -37,7 +37,7 @@ const VerticalIndex: React.FC = () => {
                         <KTCardHeader text='All Verticals' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportVerticals),
                                           new FilterCardAction('verticals-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/verticals')
+                                          new CreateCardAction('/misc/verticals','manage-misc')
                                       ]}/>
 
                         <KTCardBody>
