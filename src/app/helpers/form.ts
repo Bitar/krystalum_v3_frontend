@@ -28,11 +28,27 @@ export const genericMultiSelectOnChangeHandler = (e: any, form: any, setForm: Re
 };
 
 export const genericSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
-    setForm({...form, [key]: e.id});
+    if(e) {
+        setForm({...form, [key]: e.id});
+    } else {
+        // this happens when we're trying to unselect an option
+        // we need to remove the [key] property from the form and set the new value as form
+        const {[key]: _, ...newForm} = form
+
+        setForm(newForm);
+    }
 };
 
 export const genericSingleSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string, key2: string) => {
-    setForm({...form, [key]: e.id, [key2]: e});
+    if(e) {
+        setForm({...form, [key]: e.id, [key2]: e});
+    } else {
+        // this happens when we're trying to unselect an option
+        // we need to remove the [key] and [key2] properties from the form and set the new value as form
+        const {[key]: _, [key2]: __, ...newForm} = form
+
+        setForm(newForm);
+    }
 };
 
 export const SUPPORTED_IMAGE_FORMATS = [

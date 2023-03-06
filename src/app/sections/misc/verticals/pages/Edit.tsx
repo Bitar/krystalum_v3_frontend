@@ -137,7 +137,8 @@ const VerticalEdit: React.FC = () => {
                                             value={form.parent}
                                             getOptionLabel={(vertical) => vertical.name}
                                             getOptionValue={(vertical) => vertical.id.toString()}
-                                            onChange={selectChangeHandler}/>
+                                            onChange={selectChangeHandler}
+                                            isClearable={true}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="parent_id" className="mt-2"/>
