@@ -22,6 +22,7 @@ import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {getAllPerformanceMetrics} from "../../../../requests/misc/PerformanceMetric";
 import {PerformanceMetric} from "../../../../models/misc/PerformanceMetric";
 import Select from "react-select";
+import {useAccessControl} from "../../../../modules/auth/AuthAccessControl";
 
 
 const KpiCreate: React.FC = () => {
@@ -31,8 +32,14 @@ const KpiCreate: React.FC = () => {
 
     const navigate = useNavigate();
     const krysApp = useKrysApp();
+    const authAccessControl = useAccessControl();
+
 
     useEffect(() => {
+        if (!authAccessControl.userCan('manage-misc')) {
+            navigate('/error/403');
+        }
+
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_KPIS, PageTypes.CREATE));
 
         getAllPerformanceMetrics().then(response => {

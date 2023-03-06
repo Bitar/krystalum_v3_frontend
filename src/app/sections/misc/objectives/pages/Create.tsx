@@ -17,6 +17,7 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeObjective} from '../../../../requests/misc/Objective';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {useAccessControl} from "../../../../modules/auth/AuthAccessControl";
 
 
 const ObjectiveCreate: React.FC = () => {
@@ -25,8 +26,14 @@ const ObjectiveCreate: React.FC = () => {
 
     const navigate = useNavigate();
     const krysApp = useKrysApp();
+    const authAccessControl = useAccessControl();
+
 
     useEffect(() => {
+        if (!authAccessControl.userCan('manage-misc')) {
+            navigate('/error/403');
+        }
+
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_OBJECTIVES, PageTypes.CREATE))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

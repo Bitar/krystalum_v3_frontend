@@ -17,6 +17,7 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeVideoPlayer} from '../../../../requests/misc/VideoPlayer';
 import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
+import {useAccessControl} from "../../../../modules/auth/AuthAccessControl";
 
 
 const VideoPlayerCreate: React.FC = () => {
@@ -25,8 +26,13 @@ const VideoPlayerCreate: React.FC = () => {
 
     const navigate = useNavigate();
     const krysApp = useKrysApp();
+    const authAccessControl = useAccessControl();
 
     useEffect(() => {
+        if (!authAccessControl.userCan('manage-misc')) {
+            navigate('/error/403');
+        }
+
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_VIDEO_PLAYERS, PageTypes.CREATE))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

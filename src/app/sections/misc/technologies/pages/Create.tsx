@@ -17,6 +17,7 @@ import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
+import {useAccessControl} from "../../../../modules/auth/AuthAccessControl";
 
 const TechnologyCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -24,8 +25,13 @@ const TechnologyCreate: React.FC = () => {
 
     const navigate = useNavigate();
     const krysApp = useKrysApp();
+    const authAccessControl = useAccessControl();
 
     useEffect(() => {
+        if (!authAccessControl.userCan('manage-misc')) {
+            navigate('/error/403');
+        }
+
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_TECHNOLOGIES, PageTypes.CREATE))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

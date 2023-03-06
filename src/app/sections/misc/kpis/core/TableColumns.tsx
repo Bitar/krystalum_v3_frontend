@@ -8,7 +8,7 @@ import {Kpi} from '../../../../models/misc/Kpi';
 import {BadgeCell} from '../../../../modules/table/columns/BadgeCell';
 import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
 import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
-import {Restricted} from '../../../../modules/auth/AuthAccessControl';
+import {Restricted, useAccessControl} from '../../../../modules/auth/AuthAccessControl';
 
 const KpisColumns: ReadonlyArray<Column<Kpi>> = [
     {
@@ -38,20 +38,20 @@ const KpisColumns: ReadonlyArray<Column<Kpi>> = [
             </Restricted>
         ),
         id: 'actions',
-        Cell: ({...props}) => (
-            <Restricted to='manage-misc'>
-                <ActionsCell
-                    id={props.data[props.row.index].id}
-                    path={'misc/kpis'}
-                    queryKey={QUERIES.KPIS_LIST}
-                    showView={false}
-                    showEdit={true}
-                    showDelete={true}
-                    title="Delete KPI"
-                    text={`Are you sure you want to delete the KPI '${props.data[props.row.index].name}'?`}
-                />
-            </Restricted>
-        ),
+        Cell: ({...props}) => {
+            const accessControl = useAccessControl();
+
+            return (<ActionsCell
+                id={props.data[props.row.index].id}
+                path={'misc/kpis'}
+                queryKey={QUERIES.KPIS_LIST}
+                showView={true}
+                showEdit={accessControl.userCan('manage-misc')}
+                showDelete={accessControl.userCan('manage-misc')}
+                title="Delete Kpi"
+                text={`Are you sure you want to delete the kpi '${props.data[props.row.index].name}'?`}
+            />)
+        },
     },
 ]
 

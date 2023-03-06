@@ -18,6 +18,7 @@ import {getAllVerticals, storeVertical} from '../../../../requests/misc/Vertical
 import Select from "react-select";
 import {Vertical} from "../../../../models/misc/Vertical";
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {useAccessControl} from "../../../../modules/auth/AuthAccessControl";
 
 
 const VerticalCreate: React.FC = () => {
@@ -28,8 +29,13 @@ const VerticalCreate: React.FC = () => {
 
     const navigate = useNavigate();
     const krysApp = useKrysApp();
+    const authAccessControl = useAccessControl();
 
     useEffect(() => {
+        if (!authAccessControl.userCan('manage-misc')) {
+            navigate('/error/403');
+        }
+
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_VERTICALS, PageTypes.CREATE))
 
         getAllVerticals().then(response => {

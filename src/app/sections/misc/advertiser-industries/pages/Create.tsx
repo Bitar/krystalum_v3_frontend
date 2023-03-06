@@ -17,6 +17,7 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeAdvertiserIndustry} from '../../../../requests/misc/AdvertiserIndustry';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {useAccessControl} from "../../../../modules/auth/AuthAccessControl";
 
 const AdvertiserIndustryCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -24,8 +25,13 @@ const AdvertiserIndustryCreate: React.FC = () => {
 
     const navigate = useNavigate();
     const krysApp = useKrysApp();
+    const authAccessControl = useAccessControl();
 
     useEffect(() => {
+        if(!authAccessControl.userCan('manage-misc')) {
+            navigate('/error/403');
+        }
+
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_ADVERTISER_INDUSTRIES, PageTypes.CREATE))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
