@@ -1,14 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import Select from 'react-select';
 import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 
-import {defaultRole, Role} from '../../../../models/iam/Role';
+import {Role} from '../../../../models/iam/Role';
 import {Permission} from '../../../../models/iam/Permission';
 import {getAllPermissions} from '../../../../requests/iam/Permission';
 import {extractErrors} from '../../../../helpers/requests';
-import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
+import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {getRole, updateRole} from '../../../../requests/iam/Role';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
@@ -21,11 +20,12 @@ import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {Sections} from "../../../../helpers/sections";
+import MultiSelect from '../../../../components/forms/MultiSelect';
 
 const RoleEdit: React.FC = () => {
-    const [role, setRole] = useState<Role>(defaultRole);
+    const [role, setRole] = useState<Role|null>(null);
     const [form, setForm] = useState<FormFields>(defaultFormFields)
-
+    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false);
 
     const [permissions, setPermissions] = useState<Permission[]>([]);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -72,7 +72,12 @@ const RoleEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.IAM_ROLES, PageTypes.EDIT, role.name))
+        if(role) {
+            setIsResourceLoaded(true);
+
+            krysApp.setPageTitle(generatePageTitle(Sections.IAM_ROLES, PageTypes.EDIT, role.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [role]);
 
@@ -80,10 +85,6 @@ const RoleEdit: React.FC = () => {
         // in case of multi select, the element doesn't have a name because
         // we get only a list of values from the select and not an element with target value and name
         genericOnChangeHandler(e, form, setForm);
-    };
-
-    const multiSelectChangeHandler = (e: any) => {
-        genericMultiSelectOnChangeHandler(e, form, setForm, 'permissions');
     };
 
     const handleEdit = (e: any) => {
@@ -128,16 +129,7 @@ const RoleEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Permissions" isRequired={true}/>
 
-                                    {role?.permissions?.length > 0 &&
-                                        <Select isMulti
-                                                name="permissions"
-                                                defaultValue={role?.permissions}
-                                                options={permissions}
-                                                getOptionLabel={(permission) => permission?.name}
-                                                getOptionValue={(permission) => permission?.id ? permission?.id.toString() : '0'}
-                                                onChange={multiSelectChangeHandler}
-                                                placeholder="Select one or more permissions"/>
-                                    }
+                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={permissions} defaultValue={role?.permissions} form={form} setForm={setForm} name={'permissions'} />
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="permissions" className="mt-2"/>

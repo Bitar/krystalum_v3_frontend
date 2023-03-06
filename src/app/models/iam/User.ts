@@ -1,8 +1,8 @@
-import {ID, Response} from '../../../_metronic/helpers'
+import {Response} from '../../../_metronic/helpers'
 import {Role} from './Role';
 
 export type User = {
-    id: ID,
+    id: number,
     name: string,
     password?: string,
     password_confirmation?: string,

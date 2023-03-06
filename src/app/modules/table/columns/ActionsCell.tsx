@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {FC, useEffect, useState} from 'react'
-import {ID, stringifyRequestQuery} from '../../../../_metronic/helpers'
+import {stringifyRequestQuery} from '../../../../_metronic/helpers'
 import {MenuComponent} from '../../../../_metronic/assets/ts/components'
 import {Link} from 'react-router-dom'
 import {useQueryClient} from 'react-query'
@@ -11,7 +11,7 @@ import axios from 'axios';
 import {deleteObject, extractErrors} from '../../../helpers/requests';
 
 type Props = {
-    id: ID
+    id: number
     path: string
     queryKey: string
     showEdit?: boolean
