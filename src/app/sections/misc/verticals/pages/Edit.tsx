@@ -110,7 +110,6 @@ const VerticalEdit: React.FC = () => {
     return (
         <KTCard>
             <KTCardHeader text="Edit Vertical"/>
-
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
