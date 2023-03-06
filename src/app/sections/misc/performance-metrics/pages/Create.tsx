@@ -49,6 +49,7 @@ const PerformanceMetricCreate: React.FC = () => {
                         message: new AlertMessageGenerator('performance metric', Actions.CREATE, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS
                     })
+
                     navigate(`/misc/performance-metrics`);
                 }
             }

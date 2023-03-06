@@ -1,12 +1,12 @@
 import {ID, Response} from '../../../_metronic/helpers';
-import {defaultPerformanceMetric, PerformanceMetric} from './PerformanceMetric';
+import {PerformanceMetric} from './PerformanceMetric';
 
 export type Kpi = {
     id: ID,
     name: string,
-    is_rate: boolean,
-    is_conversion: boolean,
-    metric: PerformanceMetric
+    is_rate: number,
+    is_conversion: number,
+    performanceMetrics: PerformanceMetric[]
 };
 
 export type KpiPaginate = Response<Kpi[]>;
@@ -18,7 +18,7 @@ export type KpiList = {
 export const defaultKpi: Kpi = {
     id: 0,
     name: "",
-    is_rate: false,
-    is_conversion: false,
-    metric: defaultPerformanceMetric
+    is_rate: 1,
+    is_conversion: 0,
+    performanceMetrics: []
 };

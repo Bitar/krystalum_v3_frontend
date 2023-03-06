@@ -15,7 +15,8 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {getVideoPlayer, updateVideoPlayer} from '../../../../requests/misc/VideoPlayer';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
+
 
 const VideoPlayerEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -70,6 +71,7 @@ const VideoPlayerEdit: React.FC = () => {
                     message: new AlertMessageGenerator('video player', Actions.EDIT, KrysToastType.SUCCESS).message,
                     type: KrysToastType.SUCCESS
                 })
+
                 navigate(`/misc/video-players`);
             }
         });

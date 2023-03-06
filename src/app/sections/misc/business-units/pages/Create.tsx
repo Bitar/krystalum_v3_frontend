@@ -18,6 +18,7 @@ import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeBusinessUnit} from '../../../../requests/misc/BusinessUnit';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
+
 const BusinessUnitCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -49,6 +50,7 @@ const BusinessUnitCreate: React.FC = () => {
                         message: new AlertMessageGenerator('business unit', Actions.CREATE, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS
                     })
+
                     navigate(`/misc/business-units`);
                 }
             }

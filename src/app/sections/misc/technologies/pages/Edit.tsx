@@ -18,6 +18,7 @@ import {defaultFormFields, FormFields, TechnologySchema} from '../core/form';
 import {getTechnology, updateTechnology} from '../../../../requests/misc/Technology';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
+
 const TechnologyEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -68,9 +69,10 @@ const TechnologyEdit: React.FC = () => {
             } else {
                 // we got the updated permission so we're good
                 krysApp.setAlert({
-                    message: new AlertMessageGenerator('ad server', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    message: new AlertMessageGenerator('technology', Actions.EDIT, KrysToastType.SUCCESS).message,
                     type: KrysToastType.SUCCESS
                 })
+
                 navigate(`/misc/technologies`);
             }
         });

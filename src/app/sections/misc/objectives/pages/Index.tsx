@@ -15,8 +15,9 @@ import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import ObjectiveIndexFilter from '../partials/IndexFilter';
-import {getObjectives} from '../../../../requests/misc/Objective';
-import {CreateCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
+import {CreateCardAction, ExportCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
+import {exportObjectives, getObjectives} from '../../../../requests/misc/Objective';
+
 
 const ObjectiveIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -26,6 +27,7 @@ const ObjectiveIndex: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
@@ -34,12 +36,12 @@ const ObjectiveIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Objectives' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new FilterCardAction('objectives-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/objectives')
-                                      ]}/>
 
+                                      actions={[new ExportCardAction(exportQuery, exportObjectives),
+                                          new FilterCardAction('objectives-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/misc/objectives', 'manage-misc')]}/>
                         <KTCardBody>
-                            <ObjectiveIndexFilter showFilter={showFilter}/>
+                            <ObjectiveIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <ObjectiveTable/>
                         </KTCardBody>

@@ -16,7 +16,8 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeVideoPlayer} from '../../../../requests/misc/VideoPlayer';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
+
 
 const VideoPlayerCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -45,10 +46,12 @@ const VideoPlayerCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's permission for sure
+
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('video player', Actions.CREATE, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS
                     })
+
                     navigate(`/misc/video-players`);
                 }
             }

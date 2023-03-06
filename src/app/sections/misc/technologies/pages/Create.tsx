@@ -45,6 +45,7 @@ const TechnologyCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's permission for sure
+
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('technology', Actions.CREATE, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS

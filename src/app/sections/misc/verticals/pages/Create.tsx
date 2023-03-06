@@ -19,6 +19,7 @@ import Select from "react-select";
 import {Vertical} from "../../../../models/misc/Vertical";
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
+
 const VerticalCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -65,10 +66,12 @@ const VerticalCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's permission for sure
+
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('vertical', Actions.CREATE, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS
                     })
+
                     navigate(`/misc/verticals`);
                 }
             }

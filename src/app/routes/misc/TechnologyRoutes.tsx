@@ -4,7 +4,6 @@ import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections';
 import TechnologyCreate from '../../sections/misc/technologies/pages/Create';
-
 import TechnologyIndex from '../../sections/misc/technologies/pages/Index';
 import TechnologyEdit from '../../sections/misc/technologies/pages/Edit';
 
@@ -38,7 +37,7 @@ const TechnologyRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Create'}</PageTitle>
-                        <TechnologyCreate />
+                        <TechnologyCreate/>
                     </SuspenseView>
                 }
             />
@@ -47,7 +46,7 @@ const TechnologyRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
-                        <TechnologyEdit />
+                        <TechnologyEdit/>
                     </SuspenseView>
                 }
             />

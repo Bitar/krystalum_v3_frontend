@@ -18,6 +18,7 @@ import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {getAdServer, updateAdServer} from '../../../../requests/misc/AdServer';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
+
 const AdServerEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -67,10 +68,12 @@ const AdServerEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated permission so we're good
+
                 krysApp.setAlert({
                     message: new AlertMessageGenerator('ad server', Actions.EDIT, KrysToastType.SUCCESS).message,
                     type: KrysToastType.SUCCESS
                 })
+
                 navigate(`/misc/ad-servers`);
             }
         });

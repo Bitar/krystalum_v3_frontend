@@ -23,6 +23,7 @@ import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {Sections} from "../../../../helpers/sections";
+import {useAccessControl} from '../../../../modules/auth/AuthAccessControl';
 
 const UserCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -31,16 +32,17 @@ const UserCreate: React.FC = () => {
     const [roles, setRoles] = useState<Role[]>([]);
 
     const krysApp = useKrysApp();
-
-    useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.IAM_USERS, PageTypes.CREATE))
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
+    const authAccessControl = useAccessControl();
     // we use this to navigate to the index page after the new user is saved
     const navigate = useNavigate();
 
     useEffect(() => {
+        if(!authAccessControl.userCan('manage-iam')) {
+            navigate('/error/403');
+        }
+
+        krysApp.setPageTitle(generatePageTitle(Sections.IAM_USERS, PageTypes.CREATE));
+
         // get the roles so we can edit the user's roles
         getAllRoles().then(response => {
             if (axios.isAxiosError(response)) {
@@ -64,6 +66,7 @@ const UserCreate: React.FC = () => {
     const onChangeHandler = (e: any) => {
         // in case of multi select, the element doesn't have a name because
         // we get only a list of values from the select and not an element with target value and name
+
         if(e.target.name !== '' && e.target.name !== 'image') {
             genericOnChangeHandler(e, form, setForm);
         }

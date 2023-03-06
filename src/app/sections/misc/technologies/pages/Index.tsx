@@ -14,9 +14,10 @@ import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import KrysTable from '../../../../components/tables/KrysTable';
 import {TechnologiesColumns} from '../core/TableColumns';
-import {getTechnologies} from '../../../../requests/misc/Technology';
+import {exportTechnologies, getTechnologies} from '../../../../requests/misc/Technology';
 import TechnologyIndexFilter from '../partials/IndexFilter';
-import {CreateCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
+import {CreateCardAction, ExportCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
+
 
 const TechnologyIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -27,6 +28,7 @@ const TechnologyIndex: React.FC = () => {
     }, []);
 
     const [showFilter, setShowFilter] = useState<boolean>(false);
+    const [exportQuery, setExportQuery] = useState<string>('');
 
     return (
         <QueryRequestProvider>
@@ -34,12 +36,12 @@ const TechnologyIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Technologies' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new FilterCardAction('technologies-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/technologies')
-                                      ]}/>
+                                      actions={[new ExportCardAction(exportQuery, exportTechnologies),
+                                          new FilterCardAction('technologies-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/misc/technologies', 'manage-misc')]}/>
 
                         <KTCardBody>
-                            <TechnologyIndexFilter showFilter={showFilter}/>
+                            <TechnologyIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <TechnologyTable/>
                         </KTCardBody>

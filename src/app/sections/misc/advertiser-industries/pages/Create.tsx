@@ -45,6 +45,7 @@ const AdvertiserIndustryCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's permission for sure
+
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('advertiser industry', Actions.CREATE, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS

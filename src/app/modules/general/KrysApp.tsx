@@ -8,7 +8,7 @@ import {
     SetStateAction
 } from 'react'
 import {WithChildren} from '../../../_metronic/helpers';
-import toast, {Toaster, ToastType} from 'react-hot-toast';
+import toast, {Toaster} from 'react-hot-toast';
 import {KrysToastType} from '../../helpers/variables';
 
 type Alert = {

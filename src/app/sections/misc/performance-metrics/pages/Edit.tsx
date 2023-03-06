@@ -17,6 +17,7 @@ import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {getPerformanceMetric, updatePerformanceMetric} from '../../../../requests/misc/PerformanceMetric';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
+
 const PerformanceMetricEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -66,10 +67,8 @@ const PerformanceMetricEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated permission so we're good
-                krysApp.setAlert({
-                    message: new AlertMessageGenerator('ad server', Actions.EDIT, KrysToastType.SUCCESS).message,
-                    type: KrysToastType.SUCCESS
-                })
+                krysApp.setAlert({message: new AlertMessageGenerator('performance metric', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+
                 navigate(`/misc/performance-metrics`);
             }
         });

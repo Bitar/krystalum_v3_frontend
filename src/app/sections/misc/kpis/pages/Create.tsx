@@ -8,7 +8,8 @@ import {Sections} from '../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {defaultFormFields, FormFields, KpiSchema} from '../core/form';
-import {GenericErrorMessage, genericOnChangeHandler, genericSelectOnChangeHandler} from '../../../../helpers/form';
+import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
+
 import {extractErrors} from '../../../../helpers/requests';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
@@ -18,29 +19,39 @@ import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeKpi} from '../../../../requests/misc/Kpi';
 import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {getAllPerformanceMetrics} from "../../../../requests/misc/PerformanceMetric";
+import {PerformanceMetric} from "../../../../models/misc/PerformanceMetric";
+import Select from "react-select";
+
 
 const KpiCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
+    const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetric[]>([]);
 
     const navigate = useNavigate();
     const krysApp = useKrysApp();
 
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_KPIS, PageTypes.CREATE));
+
+        getAllPerformanceMetrics().then(response => {
+            if (axios.isAxiosError(response)) {
+                setFormErrors(extractErrors(response));
+            } else if (response === undefined) {
+                setFormErrors([GenericErrorMessage])
+            } else if (response.data) {
+                // if we were able to get the list of permissions, then we fill our state with them
+                setPerformanceMetrics(response.data);
+            }
+        });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onChangeHandler = (e: any) => {
-        const name: string = e.target.name;
-
-        if (name !== 'is_rate' && name !== 'is_conversion') {
+        if (e.target.name !== '') {
             genericOnChangeHandler(e, form, setForm);
         }
-    };
-
-    const selectChangeHandler = (e: any) => {
-        genericSelectOnChangeHandler(e, form, setForm, 'metric');
     };
 
     const handleCreate = (e: any) => {
@@ -54,14 +65,20 @@ const KpiCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's permission for sure
+
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('kpi', Actions.CREATE, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS
-                    })
+                    });
+
                     navigate(`/misc/kpis`);
                 }
             }
         );
+    };
+
+    const multiSelectChangeHandler = (e: any) => {
+        genericMultiSelectOnChangeHandler(e, form, setForm, 'performance_metric_ids');
     };
 
     return (
@@ -71,7 +88,7 @@ const KpiCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={KpiSchema} onSubmit={handleCreate}>
+                <Formik initialValues={form} validationSchema={KpiSchema} onSubmit={handleCreate} enableReinitialize>
                     {
                         (formik) => (
                             <Form onChange={onChangeHandler}>
@@ -90,8 +107,11 @@ const KpiCreate: React.FC = () => {
                                     <KrysFormLabel text="Is this KPI a rate?" isRequired={true}/>
 
                                     <KrysCheckbox name="is_rate"
-                                                  onChangeHandler={() => setForm({...form, is_rate: !form.is_rate})}
-                                                  defaultValue={form.is_rate}/>
+                                                  onChangeHandler={(e) => {
+                                                      e.stopPropagation();
+                                                      setForm({...form, is_rate: Number(!form.is_rate)});
+                                                  }}
+                                                  defaultValue={Boolean(form.is_rate)}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="is_rate" className="mt-2"/>
@@ -101,11 +121,10 @@ const KpiCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Is this a conversion KPI?" isRequired={true}/>
 
-                                    <KrysCheckbox name="is_conversion" onChangeHandler={() => setForm({
-                                        ...form,
-                                        is_conversion: !form.is_conversion
-                                    })}
-                                                  defaultValue={form.is_conversion}/>
+                                    <KrysCheckbox name="is_conversion" onChangeHandler={(e) => {
+                                        e.stopPropagation();
+                                        setForm({...form, is_conversion: Number(!form.is_conversion)});
+                                    }} defaultValue={Boolean(form.is_conversion)}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="is_conversion" className="mt-2"/>
@@ -115,15 +134,15 @@ const KpiCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Corresponding metric" isRequired={true}/>
 
-                                    {/*<Select isMulti={false} name="metric" defaultValue={defaultMetric}*/}
-                                    {/*        placeholder={"Select one or more permissions"}*/}
-                                    {/*        options={metrics}*/}
-                                    {/*        getOptionLabel={(metric) => metric?.name}*/}
-                                    {/*        getOptionValue={(metric) => metric?.id ? metric?.id.toString() : ''}*/}
-                                    {/*        onChange={selectChangeHandler}/>*/}
+                                    <Select isMulti name="performance_metric_ids"
+                                            options={performanceMetrics}
+                                            getOptionLabel={(performanceMetric) => performanceMetric?.name}
+                                            getOptionValue={(performanceMetric) => performanceMetric?.id ? performanceMetric?.id.toString() : '0'}
+                                            onChange={multiSelectChangeHandler}
+                                            placeholder="Select one or more performance metrics"/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="metrics" className="mt-2"/>
+                                        <ErrorMessage name="performance_metric_ids" className="mt-2"/>
                                     </div>
                                 </div>
 

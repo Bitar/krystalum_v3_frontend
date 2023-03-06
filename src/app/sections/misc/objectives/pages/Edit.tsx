@@ -18,6 +18,7 @@ import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {getObjective, updateObjective} from '../../../../requests/misc/Objective';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
+
 const ObjectiveEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -67,10 +68,12 @@ const ObjectiveEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated permission so we're good
+
                 krysApp.setAlert({
                     message: new AlertMessageGenerator('objectives', Actions.EDIT, KrysToastType.SUCCESS).message,
                     type: KrysToastType.SUCCESS
-                })
+                });
+
                 navigate(`/misc/objectives`);
             }
         });

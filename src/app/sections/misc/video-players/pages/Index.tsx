@@ -9,14 +9,15 @@ import {VideoPlayersColumns} from '../core/TableColumns';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {PageTypes} from '../../../../helpers/variables';
 import {QueryRequestProvider} from '../../../../modules/table/QueryRequestProvider';
 import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {getVideoPlayers} from '../../../../requests/misc/VideoPlayer';
+import {exportVideoPlayers, getVideoPlayers} from '../../../../requests/misc/VideoPlayer';
 import VideoPlayerIndexFilter from '../partials/IndexFilter';
-import {CreateCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+
 
 const VideoPlayerIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -26,6 +27,7 @@ const VideoPlayerIndex: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
@@ -34,12 +36,12 @@ const VideoPlayerIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Video Players' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new FilterCardAction('video-players-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/video-players')
-                                      ]}/>
 
+                                      actions={[new ExportCardAction(exportQuery, exportVideoPlayers),
+                                          new FilterCardAction('video-players-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/misc/video-players', 'manage-misc')]}/>
                         <KTCardBody>
-                            <VideoPlayerIndexFilter showFilter={showFilter}/>
+                            <VideoPlayerIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <VideoPlayerTable/>
                         </KTCardBody>

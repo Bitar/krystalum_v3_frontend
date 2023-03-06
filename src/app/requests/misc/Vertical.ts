@@ -12,6 +12,7 @@ export const getAllVerticals = async (): Promise<VerticalList | AxiosError | und
     });
 }
 
+
 export const getVerticals = (query?: String): Promise<VerticalPaginate> => {
     let url = `${ENDPOINT}`;
 

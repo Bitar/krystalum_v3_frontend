@@ -4,7 +4,7 @@ import {getCSSVariableValue} from '../../../_metronic/assets/ts/_utils'
 import TopBarProgress from 'react-topbar-progress-indicator'
 
 export const SuspenseView: FC<WithChildren> = ({children}) => {
-  const baseColor = getCSSVariableValue('--bs-primary')
+  const baseColor = getCSSVariableValue('--bs-krys')
   TopBarProgress.config({
     barColors: {
       '0': baseColor,

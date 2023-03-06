@@ -1,4 +1,3 @@
-import {useSearchParams} from 'react-router-dom';
 import {useEffect, useMemo, useState} from 'react'
 
 import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers'
@@ -13,7 +12,6 @@ import {exportPermissions, getPermissions} from '../../../../requests/iam/Permis
 import {PermissionsColumns} from '../core/TableColumns';
 import KrysTable from '../../../../components/tables/KrysTable';
 import {PageTypes} from '../../../../helpers/variables';
-import FormSuccess from '../../../../components/forms/FormSuccess';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import PermissionIndexFilter from '../partials/IndexFilter';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
@@ -29,8 +27,6 @@ const PermissionIndex = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const [searchParams] = useSearchParams();
-
     const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
@@ -38,16 +34,11 @@ const PermissionIndex = () => {
         <QueryRequestProvider>
             <QueryResponseProvider id={QUERIES.PERMISSIONS_LIST} requestFunction={getPermissions}>
                 <ListViewProvider>
-                    {
-                        searchParams.has('success') ?
-                            <FormSuccess type={searchParams.get('success')} model='permission'/> : <></>
-                    }
-
                     <KTCard>
                         <KTCardHeader text='All Permissions' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportPermissions),
                                           new FilterCardAction('permissions-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/iam/permissions')]}/>
+                                          new CreateCardAction('/iam/permissions', 'manage-iam')]}/>
 
                         <KTCardBody>
                             <PermissionIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

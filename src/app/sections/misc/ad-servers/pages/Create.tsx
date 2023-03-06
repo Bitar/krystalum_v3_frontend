@@ -49,6 +49,7 @@ const AdServerCreate: React.FC = () => {
                         message: new AlertMessageGenerator('ad server', Actions.CREATE, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS
                     })
+
                     navigate(`/misc/ad-servers`);
                 }
             }

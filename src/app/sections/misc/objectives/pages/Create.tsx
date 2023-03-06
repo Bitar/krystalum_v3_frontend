@@ -18,6 +18,7 @@ import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeObjective} from '../../../../requests/misc/Objective';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
+
 const ObjectiveCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -46,9 +47,10 @@ const ObjectiveCreate: React.FC = () => {
                 } else {
                     // it's permission for sure
                     krysApp.setAlert({
-                        message: new AlertMessageGenerator('objectives', Actions.CREATE, KrysToastType.SUCCESS).message,
+                        message: new AlertMessageGenerator('objective', Actions.CREATE, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS
-                    })
+                    });
+
                     navigate(`/misc/objectives`);
                 }
             }

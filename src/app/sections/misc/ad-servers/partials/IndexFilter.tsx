@@ -8,22 +8,27 @@ import {genericOnChangeHandler} from '../../../../helpers/form';
 import {initialQueryState} from '../../../../../_metronic/helpers';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
+import {createFilterQueryParam} from "../../../../helpers/requests";
 
 interface Props {
-    showFilter: boolean
+    showFilter: boolean,
+    setExportQuery: React.Dispatch<React.SetStateAction<string>>
 }
 
-const AdServerIndexFilter: React.FC<Props> = ({showFilter}) => {
+const AdServerIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     const {updateState} = useQueryRequest();
 
     const [filters, setFilters] = useState<FilterFields>();
     const [reset, setReset] = useState<boolean>(false);
+
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, filters, setFilters);
     };
 
     const handleFilter = () => {
+        setExportQuery(createFilterQueryParam(filters));
+
         updateState({
             filter: reset ? undefined : filters,
             ...initialQueryState,
@@ -48,7 +53,7 @@ const AdServerIndexFilter: React.FC<Props> = ({showFilter}) => {
         <Collapse in={showFilter}>
             <Row id='#ad-servers-list-filter'>
                 <Col>
-                    <div className="card-rounded bg-primary bg-opacity-5 p-10 mb-15">
+                    <div className="card card-rounded bg-primary bg-opacity-5 p-10 mb-15">
                         <Formik initialValues={defaultFilterFields} validationSchema={FilterSchema}
                                 onSubmit={handleFilter}
                                 enableReinitialize>

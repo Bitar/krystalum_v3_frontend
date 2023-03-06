@@ -10,7 +10,8 @@ import {getUser, updateUser} from '../../../../requests/iam/User';
 import {getAllRoles} from '../../../../requests/iam/Role';
 import {extractErrors} from '../../../../helpers/requests';
 import {
-    GenericErrorMessage, genericHandleSingleFile,
+    GenericErrorMessage,
+    genericHandleSingleFile,
     genericMultiSelectOnChangeHandler,
     genericOnChangeHandler
 } from '../../../../helpers/form';
@@ -56,7 +57,7 @@ const UserEdit: React.FC = () => {
 
                     // was able to get the user we want to edit
                     // the form is the same as user but without the image
-                    setForm({...currentUser, roles: response.roles.map(role => role.id)});
+                    setForm({...currentUser, roles: response.roles.map((role: { id: any; }) => role.id)});
                 }
             });
 
@@ -90,6 +91,7 @@ const UserEdit: React.FC = () => {
         // in case of multi select, the element doesn't have a name because
         // we get only a list of values from the select and not an element with target value and name
         if (e.target.name !== '' && e.target.name !== 'image') {
+
             genericOnChangeHandler(e, form, setForm);
         }
     };
