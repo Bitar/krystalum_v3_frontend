@@ -4,7 +4,7 @@ import {useNavigate} from 'react-router-dom';
 
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {defaultFormFields, FormFields, CitySchema} from '../core/form';
 import {
@@ -13,7 +13,6 @@ import {
     genericSelectOnChangeHandler
 } from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
@@ -24,6 +23,7 @@ import {storeCity} from '../../../../requests/misc/City';
 import Select from 'react-select';
 import {Country} from '../../../../models/misc/Country';
 import {getAllCountries} from '../../../../requests/misc/Country';
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 const CityCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -72,7 +72,7 @@ const CityCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's city for sure
-                    krysApp.setAlert({message: generateSuccessMessage('city', Actions.CREATE), type: 'success'})
+                    krysApp.setAlert({message: new AlertMessageGenerator('city', Actions.CREATE, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
                     navigate(`/misc/cities`);
                 }
             }

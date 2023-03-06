@@ -47,7 +47,7 @@ const GenderIndex = () => {
                         <KTCardHeader text='All Genders' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportGenders),
                                           new FilterCardAction('genders-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/genders')]}/>
+                                          new CreateCardAction('/misc/genders', 'manage-misc')]}/>
 
                         <KTCardBody>
                             <GenderIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

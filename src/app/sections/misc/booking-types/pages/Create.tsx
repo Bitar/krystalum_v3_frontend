@@ -4,12 +4,11 @@ import {useNavigate} from 'react-router-dom';
 
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {defaultFormFields, FormFields, BookingTypeSchema} from '../core/form';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
@@ -17,6 +16,7 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeBookingType} from '../../../../requests/misc/BookingType';
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 const BookingTypeCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -45,7 +45,7 @@ const BookingTypeCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's booking type for sure
-                    krysApp.setAlert({message: generateSuccessMessage('booking type', Actions.CREATE), type: 'success'})
+                    krysApp.setAlert({message: new AlertMessageGenerator('booking type', Actions.CREATE, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
                     navigate(`/misc/booking-types`);
                 }
             }

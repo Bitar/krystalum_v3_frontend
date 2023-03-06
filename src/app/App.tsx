@@ -5,6 +5,7 @@ import {LayoutProvider, LayoutSplashScreen} from '../_metronic/layout/core'
 import {MasterInit} from '../_metronic/layout/MasterInit'
 import {AuthInit} from './modules/auth'
 import {KrysApp} from './modules/general/KrysApp';
+import {AccessControlProvider} from './modules/auth/AuthAccessControl';
 
 const App = () => {
     return (
@@ -12,10 +13,12 @@ const App = () => {
             <I18nProvider>
                 <LayoutProvider>
                     <AuthInit>
-                        <KrysApp>
-                            <Outlet/>
-                            <MasterInit/>
-                        </KrysApp>
+                        <AccessControlProvider>
+                            <KrysApp>
+                                <Outlet/>
+                                <MasterInit/>
+                            </KrysApp>
+                        </AccessControlProvider>
                     </AuthInit>
                 </LayoutProvider>
             </I18nProvider>

@@ -47,7 +47,7 @@ const DeviceIndex = () => {
                         <KTCardHeader text='All Devices' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportDevices),
                                           new FilterCardAction('devices-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/devices')]}/>
+                                          new CreateCardAction('/misc/devices', 'manage-misc')]}/>
 
                         <KTCardBody>
                             <DeviceIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

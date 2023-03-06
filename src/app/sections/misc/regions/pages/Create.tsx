@@ -10,21 +10,20 @@ import {useNavigate} from "react-router-dom";
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {Sections} from "../../../../helpers/sections";
-import {Actions, PageTypes} from "../../../../helpers/variables";
+import {Actions, KrysToastType, PageTypes} from "../../../../helpers/variables";
 import {
     GenericErrorMessage,
-    genericMultiSelectOnChangeHandler,
     genericOnChangeHandler,
     genericSelectOnChangeHandler
 } from "../../../../helpers/form";
 import axios from "axios";
 import {extractErrors} from "../../../../helpers/requests";
-import {generateSuccessMessage} from "../../../../helpers/alerts";
-import {getAllRegions, getRegions, getRelationTypes, getTypes, storeRegion} from "../../../../requests/misc/Region";
+import {getAllRegions, getRelationTypes, getTypes, storeRegion} from "../../../../requests/misc/Region";
 import Select from "react-select";
 import {Country} from "../../../../models/misc/Country";
 import {getAllCountries} from "../../../../requests/misc/Country";
 import {Region} from "../../../../models/misc/Region";
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 const RegionCreate: React.FC = () => {
 
@@ -114,7 +113,7 @@ const RegionCreate: React.FC = () => {
                     // show generic error message
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    krysApp.setAlert({message: generateSuccessMessage('region', Actions.CREATE), type: 'success'})
+                    krysApp.setAlert({message: new AlertMessageGenerator('region', Actions.CREATE, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
                     navigate(`/misc/regions`);
                 }
             }

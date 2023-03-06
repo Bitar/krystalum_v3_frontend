@@ -47,7 +47,7 @@ const CityIndex = () => {
                         <KTCardHeader text='All Cities' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportCities),
                                           new FilterCardAction('cities-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/cities')]}/>
+                                          new CreateCardAction('/misc/cities', 'manage-misc')]}/>
 
                         <KTCardBody>
                             <CityIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

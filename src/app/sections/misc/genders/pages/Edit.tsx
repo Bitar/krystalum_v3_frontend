@@ -10,14 +10,14 @@ import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {Sections} from '../../../../helpers/sections';
 import {Gender, defaultGender} from '../../../../models/misc/Gender';
 import {getGender, updateGender} from '../../../../requests/misc/Gender';
 import {GenderSchema} from '../core/form';
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 
 const GenderEdit: React.FC = () => {
@@ -69,7 +69,7 @@ const GenderEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the gender so we're good
-                krysApp.setAlert({message: generateSuccessMessage('gender', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({message: new AlertMessageGenerator('gender', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
                 navigate(`/misc/genders`);
             }
         });

@@ -47,7 +47,7 @@ const BuyingModelIndex = () => {
                         <KTCardHeader text='All Buying Models' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportBuyingModels),
                                           new FilterCardAction('buying-models-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/buying-models')]}/>
+                                          new CreateCardAction('/misc/buying-models', 'manage-misc')]}/>
 
                         <KTCardBody>
                             <BuyingModelIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

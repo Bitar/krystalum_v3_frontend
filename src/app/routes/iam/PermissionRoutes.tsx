@@ -31,26 +31,23 @@ const PermissionRoutes: React.FC = () => {
                     <PermissionIndex/>
                 </SuspenseView>
             }/>
+
             <Route
                 path='/create'
                 element={
-                    <>
-                        <SuspenseView>
-                            <PageTitle breadcrumbs={permissionsBreadcrumbs} showPageTitle={false}>{'Create'}</PageTitle>
-                            <PermissionCreate />
-                        </SuspenseView>
-                    </>
+                    <SuspenseView>
+                        <PageTitle breadcrumbs={permissionsBreadcrumbs} showPageTitle={false}>{'Create'}</PageTitle>
+                        <PermissionCreate/>
+                    </SuspenseView>
                 }
             />
             <Route
                 path='/:id/edit'
                 element={
-                    <>
-                        <SuspenseView>
-                            <PageTitle breadcrumbs={permissionsBreadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
-                            <PermissionEdit />
-                        </SuspenseView>
-                    </>
+                    <SuspenseView>
+                        <PageTitle breadcrumbs={permissionsBreadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
+                        <PermissionEdit/>
+                    </SuspenseView>
                 }
             />
         </Routes>

@@ -10,12 +10,12 @@ export enum PageTypes {
     CREATE = 'create',
     EDIT = 'edit',
     SHOW = 'show',
-    REPORT = 'report'
+    REPORT = 'report',
+    ERROR = 'error'
 }
 
-export enum FileFormats {
-    EXCEL_SPREADSHEET = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    WORD_DOCUMENT = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    POWER_POINT_PRESENTATION = 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-    PDF_DOCUMENT = 'application/pdf'
+export enum KrysToastType {
+    SUCCESS = 'success',
+    ERROR = 'error',
+    WARNING = 'warning'
 }

@@ -46,7 +46,7 @@ const AudienceIndex = () => {
                         <KTCardHeader text='All Audiences' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportAudiences),
                                           new FilterCardAction('audiences-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/audiences')]}/>
+                                          new CreateCardAction('/misc/audiences', 'manage-misc')]}/>
 
                         <KTCardBody>
                             <AudienceIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

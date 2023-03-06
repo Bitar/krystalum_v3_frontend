@@ -47,7 +47,7 @@ const CampaignTypeIndex = () => {
                         <KTCardHeader text='All Campaign Types' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportCampaignTypes),
                                           new FilterCardAction('campaign-types-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/campaign-types')]}/>
+                                          new CreateCardAction('/misc/campaign-types', 'manage-misc')]}/>
 
                         <KTCardBody>
                             <CampaignTypeIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

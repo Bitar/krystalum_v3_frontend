@@ -14,10 +14,9 @@ import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {Sections} from '../../../../helpers/sections';
 import {City, defaultCity} from '../../../../models/misc/City';
 import {getCity, updateCity} from '../../../../requests/misc/City';
@@ -25,6 +24,7 @@ import Select from 'react-select';
 import {Country} from '../../../../models/misc/Country';
 import {getAllCountries} from '../../../../requests/misc/Country';
 import {CitySchema, defaultFormFields, FormFields} from '../core/form';
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 const CityEdit: React.FC = () => {
     const [city, setCity] = useState<City>(defaultCity);
@@ -100,7 +100,7 @@ const CityEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the booking city so we're good
-                krysApp.setAlert({message: generateSuccessMessage('city', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({message: new AlertMessageGenerator('city', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
                 navigate(`/misc/cities`);
             }
         });
