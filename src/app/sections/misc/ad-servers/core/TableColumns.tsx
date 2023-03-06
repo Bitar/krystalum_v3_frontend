@@ -27,7 +27,6 @@ const AdServersColumns: ReadonlyArray<Column<AdServer>> = [
                 id={props.data[props.row.index].id}
                 path={'misc/ad-servers'}
                 queryKey={QUERIES.AD_SERVERS_LIST}
-                showView={true}
                 showEdit={accessControl.userCan('manage-misc')}
                 showDelete={accessControl.userCan('manage-misc')}
                 title="Delete User"

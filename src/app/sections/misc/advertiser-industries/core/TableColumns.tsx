@@ -27,7 +27,6 @@ const AdvertiserIndustriesColumns: ReadonlyArray<Column<AdvertiserIndustry>> = [
                 id={props.data[props.row.index].id}
                 path={'misc/advertiser-industries'}
                 queryKey={QUERIES.ADVERTISER_INDUSTRIES_LIST}
-                showView={true}
                 showEdit={accessControl.userCan('manage-misc')}
                 showDelete={accessControl.userCan('manage-misc')}
                 title="Delete Advertiser Industry"

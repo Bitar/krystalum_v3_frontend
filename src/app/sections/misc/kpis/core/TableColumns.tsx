@@ -45,7 +45,6 @@ const KpisColumns: ReadonlyArray<Column<Kpi>> = [
                 id={props.data[props.row.index].id}
                 path={'misc/kpis'}
                 queryKey={QUERIES.KPIS_LIST}
-                showView={true}
                 showEdit={accessControl.userCan('manage-misc')}
                 showDelete={accessControl.userCan('manage-misc')}
                 title="Delete Kpi"

@@ -27,7 +27,6 @@ const BusinessUnitsColumns: ReadonlyArray<Column<BusinessUnit>> = [
                 id={props.data[props.row.index].id}
                 path={'misc/business-units'}
                 queryKey={QUERIES.BUSINESS_UNITS_LIST}
-                showView={true}
                 showEdit={accessControl.userCan('manage-misc')}
                 showDelete={accessControl.userCan('manage-misc')}
                 title="Delete Business Units"
