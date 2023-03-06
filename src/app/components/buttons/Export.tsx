@@ -32,7 +32,7 @@ const ExportButton: React.FC<Props> = ({exportQuery, exportApiCall, className}) 
                         // we need to check the status of the response
                         if(response.data.status === 'ready' && response.data.url !== undefined) {
                             krysApp.setAlert({
-                                message: new AlertMessageGenerator('permission', Actions.EXPORT, KrysToastType.SUCCESS).message,
+                                message: new AlertMessageGenerator('', Actions.EXPORT, KrysToastType.SUCCESS).message,
                                 type: KrysToastType.SUCCESS
                             })
 
@@ -40,8 +40,11 @@ const ExportButton: React.FC<Props> = ({exportQuery, exportApiCall, className}) 
                             link.href = response.data.url;
 
                             link.click();
-                        } else if(response.data.status === 'in_progress') {
-                            // TODO mona to add message here for in progress export
+                        } else if(response.data.status === 'pending') {
+                            krysApp.setAlert({
+                                message: new AlertMessageGenerator('', Actions.EXPORT, KrysToastType.PENDING).message,
+                                type: KrysToastType.PENDING
+                            })
                         }
                     }
                 }
