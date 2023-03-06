@@ -1,7 +1,7 @@
-import {ID, Response} from '../../../_metronic/helpers';
+import {Response} from '../../../_metronic/helpers';
 
 export type Vertical = {
-    id: ID,
+    id: number,
     name: string,
     parent: Vertical | null
 };

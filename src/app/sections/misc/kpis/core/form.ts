@@ -1,11 +1,10 @@
 import * as Yup from 'yup';
-import {ID} from '../../../../../_metronic/helpers';
 
 export interface FormFields {
     name: string,
     is_rate: number,
     is_conversion: number,
-    performance_metric_ids: ID[]
+    performance_metric_ids: number[]
 }
 
 

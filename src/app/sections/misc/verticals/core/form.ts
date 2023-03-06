@@ -1,10 +1,9 @@
-import {ID} from '../../../../../_metronic/helpers';
 import * as Yup from 'yup';
 import {Vertical} from "../../../../models/misc/Vertical";
 
 export interface FormFields {
     name: string,
-    parent_id?: ID,
+    parent_id?: number,
     parent?: Vertical | null
 }
 

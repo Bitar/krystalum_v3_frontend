@@ -1,8 +1,8 @@
-import {ID, Response} from '../../../_metronic/helpers';
+import {Response} from '../../../_metronic/helpers';
 import {PerformanceMetric} from './PerformanceMetric';
 
 export type Kpi = {
-    id: ID,
+    id: number,
     name: string,
     is_rate: number,
     is_conversion: number,

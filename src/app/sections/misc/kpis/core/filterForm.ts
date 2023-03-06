@@ -1,11 +1,10 @@
 import * as Yup from 'yup';
-import {ID} from '../../../../../_metronic/helpers';
 
 export interface FilterFields {
     name?: string,
     is_rate?: boolean,
     is_conversion?: boolean,
-    metrics?: ID[]
+    metrics?: number[]
 }
 
 export const defaultFilterFields = {
