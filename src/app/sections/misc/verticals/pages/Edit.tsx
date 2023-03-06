@@ -20,8 +20,8 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import Select from 'react-select';
 import {defaultFormFields, FormFields, VerticalSchema} from '../core/form';
-import {defaultVertical, Vertical} from "../../../../models/misc/Vertical";
 import {getAllVerticals, getVertical, updateVertical} from "../../../../requests/misc/Vertical";
+import {defaultVertical, Vertical} from "../../../../models/misc/Vertical";
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 const VerticalEdit: React.FC = () => {
@@ -51,7 +51,9 @@ const VerticalEdit: React.FC = () => {
                     // we were able to fetch current city to edit
                     setVertical(response);
 
-                    setForm({...response, parent_id: response.parent?.id, parent: response.parent})
+
+                    setForm({...response, parent_id: response?.parent?.id})
+
                 }
             });
 
@@ -62,7 +64,7 @@ const VerticalEdit: React.FC = () => {
                 } else if (response === undefined) {
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    // if we were able to get the list of verticals, then we fill our state with them
+                    // if we were able to get the list of countries, then we fill our state with them
                     if (response.data) {
                         setVerticals(response.data);
                     }
@@ -82,7 +84,7 @@ const VerticalEdit: React.FC = () => {
     };
 
     const selectChangeHandler = (e: any) => {
-        genericSingleSelectOnChangeHandler(e, form, setForm, 'country_id', 'country');
+        genericSingleSelectOnChangeHandler(e, form, setForm, 'parent_id', 'parent');
     };
 
     const handleEdit = (e: any) => {
@@ -107,7 +109,7 @@ const VerticalEdit: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Vertical" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
+            <KTCardHeader text="Edit Vertical"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -121,7 +123,7 @@ const VerticalEdit: React.FC = () => {
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
                                     <Field className="form-control fs-6" type="text"
-                                           placeholder="Enter vertical name" name="name"/>
+                                           placeholder="Enter city name" name="name"/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="name" className="mt-2"/>
@@ -129,7 +131,7 @@ const VerticalEdit: React.FC = () => {
                                 </div>
 
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Country" isRequired={true}/>
+                                    <KrysFormLabel text="Vertical Parent" isRequired={false}/>
 
                                     <Select name="parent_id"
                                             options={verticals}
