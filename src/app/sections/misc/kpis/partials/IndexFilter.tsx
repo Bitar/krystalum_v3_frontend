@@ -136,8 +136,8 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
 
                                                 <Select isMulti name="performance_metric_ids"
                                                         options={performanceMetrics}
-                                                        getOptionLabel={(performanceMetric) => performanceMetric?.name}
-                                                        getOptionValue={(performanceMetric) => performanceMetric?.id ? performanceMetric?.id.toString() : '0'}
+                                                        getOptionLabel={(performanceMetric) => performanceMetric.name}
+                                                        getOptionValue={(performanceMetric) => performanceMetric.id.toString()}
                                                         onChange={multiSelectChangeHandler}
                                                         placeholder="Select one or more performance metrics"/>
 

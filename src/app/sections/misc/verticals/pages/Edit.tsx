@@ -135,8 +135,8 @@ const VerticalEdit: React.FC = () => {
                                     <Select name="parent_id"
                                             options={verticals}
                                             value={form.parent}
-                                            getOptionLabel={(vertical) => vertical?.name}
-                                            getOptionValue={(vertical) => vertical?.id ? vertical?.id.toString() : ''}
+                                            getOptionLabel={(vertical) => vertical.name}
+                                            getOptionValue={(vertical) => vertical.id.toString()}
                                             onChange={selectChangeHandler}/>
 
                                     <div className="mt-1 text-danger">
