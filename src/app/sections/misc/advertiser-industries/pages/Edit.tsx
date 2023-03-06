@@ -66,9 +66,9 @@ const AdvertiserIndustryEdit: React.FC = () => {
                 // show generic error
                 setFormErrors([GenericErrorMessage]);
             } else {
-                // we got the updated permission so we're good
+                // we got the updated advertiser industries so we're good
                 krysApp.setAlert({
-                    message: new AlertMessageGenerator('advertiser industries', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    message: new AlertMessageGenerator('advertiser industry', Actions.EDIT, KrysToastType.SUCCESS).message,
                     type: KrysToastType.SUCCESS
                 })
                 navigate(`/misc/advertiser-industries`);

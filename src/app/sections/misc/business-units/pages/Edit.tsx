@@ -57,7 +57,7 @@ const BusinessUnitEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the permission's data by doing API call with form
+        // we need to update the business units data by doing API call with form
         updateBusinessUnit(form).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
@@ -68,7 +68,7 @@ const BusinessUnitEdit: React.FC = () => {
             } else {
                 // we got the updated permission so we're good
                 krysApp.setAlert({
-                    message: new AlertMessageGenerator('business units', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    message: new AlertMessageGenerator('business unit', Actions.EDIT, KrysToastType.SUCCESS).message,
                     type: KrysToastType.SUCCESS
                 })
 

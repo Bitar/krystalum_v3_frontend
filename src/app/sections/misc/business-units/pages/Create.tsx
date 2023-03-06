@@ -42,7 +42,7 @@ const BusinessUnitCreate: React.FC = () => {
     };
 
     const handleCreate = (e: any) => {
-        // send API request to create the permission
+        // send API request to create the business unit
         storeBusinessUnit(form).then(response => {
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
@@ -51,7 +51,7 @@ const BusinessUnitCreate: React.FC = () => {
                     // show generic error message
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    // it's permission for sure
+
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('business unit', Actions.CREATE, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS

@@ -33,7 +33,6 @@ const AdvertiserIndustryCreate: React.FC = () => {
         }
 
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_ADVERTISER_INDUSTRIES, PageTypes.CREATE))
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onChangeHandler = (e: any) => {
