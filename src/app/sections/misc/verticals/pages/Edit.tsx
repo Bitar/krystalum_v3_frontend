@@ -39,16 +39,16 @@ const VerticalEdit: React.FC = () => {
 
     useEffect(() => {
         if (id) {
-            // get the city we need to edit from the database
+            // get the vertical we need to edit from the database
             getVertical(parseInt(id)).then(response => {
                 if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the city to edit, so we need to redirect
+                    // we were not able to fetch the vertical to edit, so we need to redirect
                     // to error page
                     navigate('/error/404');
                 } else if (response === undefined) {
                     navigate('/error/400');
                 } else {
-                    // we were able to fetch current city to edit
+                    // we were able to fetch current vertical to edit
                     setVertical(response);
 
 
@@ -57,14 +57,14 @@ const VerticalEdit: React.FC = () => {
                 }
             });
 
-            // get the countries
+            // get the verticals
             getAllVerticals().then(response => {
                 if (axios.isAxiosError(response)) {
                     setFormErrors(extractErrors(response));
                 } else if (response === undefined) {
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    // if we were able to get the list of countries, then we fill our state with them
+                    // if we were able to get the list of verticals, then we fill our state with them
                     if (response.data) {
                         setVerticals(response.data);
                     }
@@ -88,7 +88,7 @@ const VerticalEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the city's data by doing API call with form
+        // we need to update the vertical's data by doing API call with form
         updateVertical(form).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
@@ -97,7 +97,7 @@ const VerticalEdit: React.FC = () => {
                 // show generic error
                 setFormErrors([GenericErrorMessage]);
             } else {
-                // we got the booking city so we're good
+                // we got the booking vertical so we're good
                 krysApp.setAlert({
                     message: new AlertMessageGenerator('vertical', Actions.EDIT, KrysToastType.SUCCESS).message,
                     type: KrysToastType.SUCCESS
@@ -123,7 +123,7 @@ const VerticalEdit: React.FC = () => {
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
                                     <Field className="form-control fs-6" type="text"
-                                           placeholder="Enter city name" name="name"/>
+                                           placeholder="Enter vertical name" name="name"/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="name" className="mt-2"/>
