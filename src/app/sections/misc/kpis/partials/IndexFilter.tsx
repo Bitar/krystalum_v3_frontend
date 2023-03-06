@@ -4,12 +4,16 @@ import {Col, Collapse, Row} from 'react-bootstrap';
 
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
 import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
-import {genericOnChangeHandler} from '../../../../helpers/form';
+import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
 import {initialQueryState} from '../../../../../_metronic/helpers';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
 import Select from 'react-select';
-import {createFilterQueryParam} from "../../../../helpers/requests";
+import {createFilterQueryParam, extractErrors} from "../../../../helpers/requests";
+import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
+import {getAllPerformanceMetrics} from '../../../../requests/misc/PerformanceMetric';
+import axios from 'axios';
+import FormErrors from '../../../../components/forms/FormErrors';
 
 interface Props {
     showFilter: boolean,
@@ -20,10 +24,31 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     const {updateState} = useQueryRequest();
 
     const [filters, setFilters] = useState<FilterFields>();
+    const [filterErrors, setFilterErrors] = useState<string[]>([]);
     const [reset, setReset] = useState<boolean>(false);
+    const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetric[]>([]);
+
+    useEffect(() => {
+        getAllPerformanceMetrics().then(response => {
+            if (axios.isAxiosError(response)) {
+                setFilterErrors(extractErrors(response));
+            } else if (response === undefined) {
+                setFilterErrors([GenericErrorMessage])
+            } else if (response.data) {
+                // if we were able to get the list of performance metrics, then we fill our state with them
+                setPerformanceMetrics(response.data);
+            }
+        });
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, filters, setFilters);
+    };
+
+    const multiSelectChangeHandler = (e: any) => {
+        genericMultiSelectOnChangeHandler(e, filters, setFilters, 'performance_metric_ids');
     };
 
     const handleFilter = () => {
@@ -54,6 +79,8 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
             <Row id='#kpis-list-filter'>
                 <Col>
                     <div className="card-rounded bg-primary bg-opacity-5 p-10 mb-15">
+                        <FormErrors errorMessages={filterErrors}/>
+
                         <Formik initialValues={defaultFilterFields} validationSchema={FilterSchema}
                                 onSubmit={handleFilter}
                                 enableReinitialize>
@@ -77,9 +104,8 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
 
                                                 <Select name="is_rate"
                                                         options={[{id: 1, name: 'Yes'}, {id: 0, name: 'No'}]}
-                                                        getOptionLabel={(option) => option?.name}
-                                                        getOptionValue={(option) => option?.id.toString()}
-                                                    // onChange={multiSelectChangeHandler}
+                                                        getOptionLabel={(option) => option.name}
+                                                        getOptionValue={(option) => option.id.toString()}
                                                         ref={selectRef}
                                                         placeholder='Filter by rate type'/>
 
@@ -93,9 +119,8 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
 
                                                 <Select name="is_conversion"
                                                         options={[{id: 1, name: 'Yes'}, {id: 0, name: 'No'}]}
-                                                        getOptionLabel={(option) => option?.name}
-                                                        getOptionValue={(option) => option?.id.toString()}
-                                                    // onChange={multiSelectChangeHandler}
+                                                        getOptionLabel={(option) => option.name}
+                                                        getOptionValue={(option) => option.id.toString()}
                                                         ref={selectRef}
                                                         placeholder='Filter by conversion type'/>
 
@@ -105,6 +130,22 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                             </Col>
                                         </Row>
 
+                                        <Row>
+                                            <Col md={4}>
+                                                <KrysFormLabel text="Performance Metrics" isRequired={false}/>
+
+                                                <Select isMulti name="performance_metric_ids"
+                                                        options={performanceMetrics}
+                                                        getOptionLabel={(performanceMetric) => performanceMetric?.name}
+                                                        getOptionValue={(performanceMetric) => performanceMetric?.id ? performanceMetric?.id.toString() : '0'}
+                                                        onChange={multiSelectChangeHandler}
+                                                        placeholder="Select one or more performance metrics"/>
+
+                                                <div className="mt-1 text-danger">
+                                                    <ErrorMessage name="performance_metric_ids" className="mt-2"/>
+                                                </div>
+                                            </Col>
+                                        </Row>
                                         <FilterFormFooter resetFilter={resetFilter}/>
                                     </Form>
                                 )

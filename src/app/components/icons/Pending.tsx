@@ -1,7 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-import {Link} from 'react-router-dom';
-import {KTSVG} from "../../../_metronic/helpers";
 
 type Props = {
     className?: string

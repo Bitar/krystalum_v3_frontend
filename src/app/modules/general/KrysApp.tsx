@@ -1,6 +1,6 @@
 import {createContext, Dispatch, FC, SetStateAction, useContext, useEffect, useState} from 'react'
 import {WithChildren} from '../../../_metronic/helpers';
-import toast, {Toaster, ToastIcon, ToastOptions} from 'react-hot-toast';
+import toast, {Toaster, ToastOptions} from 'react-hot-toast';
 import {KrysToastType} from '../../helpers/variables';
 import PendingIcon from "../../components/icons/Pending";
 

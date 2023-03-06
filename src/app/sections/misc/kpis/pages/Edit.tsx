@@ -4,7 +4,7 @@ import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
 import {extractErrors} from '../../../../helpers/requests';
-import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
+import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
@@ -13,18 +13,19 @@ import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHe
 import FormErrors from '../../../../components/forms/FormErrors';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import Select from 'react-select';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {defaultKpi, Kpi} from '../../../../models/misc/Kpi';
+import {Kpi} from '../../../../models/misc/Kpi';
 import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
 import {getAllPerformanceMetrics} from '../../../../requests/misc/PerformanceMetric';
 import {getKpi, updateKpi} from '../../../../requests/misc/Kpi';
 import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
 import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
+import MultiSelect from '../../../../components/forms/MultiSelect';
 
 const KpiEdit: React.FC = () => {
-    const [kpi, setKpi] = useState<Kpi>(defaultKpi);
+    const [kpi, setKpi] = useState<Kpi|null>(null);
     const [form, setForm] = useState<FormFields>(defaultFormFields)
+    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
     const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetric[]>([]);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -72,16 +73,17 @@ const KpiEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_KPIS, PageTypes.EDIT, kpi.name))
+        if(kpi) {
+            setIsResourceLoaded(true);
+
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_KPIS, PageTypes.EDIT, kpi.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [kpi]);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
-    };
-
-    const multiSelectChangeHandler = (e: any) => {
-        genericMultiSelectOnChangeHandler(e, form, setForm, 'performance_metric_ids');
     };
 
     const handleEdit = (e: any) => {
@@ -155,13 +157,7 @@ const KpiEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Corresponding metric" isRequired={true}/>
 
-                                    {kpi?.performanceMetrics?.length > 0 && <Select isMulti name="performance_metric_ids"
-                                             defaultValue={kpi?.performanceMetrics}
-                                             options={performanceMetrics}
-                                             getOptionLabel={(performanceMetric) => performanceMetric?.name}
-                                             getOptionValue={(performanceMetric) => performanceMetric?.id ? performanceMetric?.id.toString() : '0'}
-                                             onChange={multiSelectChangeHandler}
-                                             placeholder="Select one or more performance metrics"/>}
+                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={performanceMetrics} defaultValue={kpi?.performanceMetrics} form={form} setForm={setForm} name={'performance_metric_ids'} />
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="performance_metric_ids" className="mt-2"/>
