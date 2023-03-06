@@ -1,8 +1,8 @@
 import {Permission} from './Permission';
-import {ID, Response} from '../../../_metronic/helpers';
+import {Response} from '../../../_metronic/helpers';
 
 export type Role = {
-    id: ID,
+    id: number,
     name: string,
     permissions: Permission[]
 }

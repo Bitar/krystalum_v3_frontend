@@ -2,17 +2,14 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
 import {ErrorMessage, Field, Form, Formik, FormikProps} from 'formik';
-import Select from 'react-select';
 
 import {Role} from '../../../../models/iam/Role';
-import {defaultUser, User} from '../../../../models/iam/User';
+import {User} from '../../../../models/iam/User';
 import {getUser, updateUser} from '../../../../requests/iam/User';
 import {getAllRoles} from '../../../../requests/iam/Role';
 import {extractErrors} from '../../../../helpers/requests';
 import {
-    GenericErrorMessage,
-    genericHandleSingleFile,
-    genericMultiSelectOnChangeHandler,
+    GenericErrorMessage, genericHandleSingleFile,
     genericOnChangeHandler
 } from '../../../../helpers/form';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
@@ -26,12 +23,14 @@ import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {Sections} from "../../../../helpers/sections";
+import MultiSelect from '../../../../components/forms/MultiSelect';
 
 const UserEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
+    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false);
 
-    const [user, setUser] = useState<User>(defaultUser);
+    const [user, setUser] = useState<User|null>(null);
     const [roles, setRoles] = useState<Role[]>([]);
 
     const krysApp = useKrysApp();
@@ -79,19 +78,20 @@ const UserEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.IAM_USERS, PageTypes.EDIT, user.name))
+        // when we're here it means our user object is loaded from the API
+        if(user) {
+            setIsResourceLoaded(true);
+
+            krysApp.setPageTitle(generatePageTitle(Sections.IAM_USERS, PageTypes.EDIT, user.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
-
-    const multiSelectChangeHandler = (e: any) => {
-        genericMultiSelectOnChangeHandler(e, form, setForm, 'roles');
-    };
 
     const onChangeHandler = (e: any) => {
         // in case of multi select, the element doesn't have a name because
         // we get only a list of values from the select and not an element with target value and name
-        if (e.target.name !== '' && e.target.name !== 'image') {
-
+        if (e.target.name !== 'image') {
             genericOnChangeHandler(e, form, setForm);
         }
     };
@@ -159,8 +159,8 @@ const UserEdit: React.FC = () => {
                                     <KrysFormLabel text="Profile picture" isRequired={false}/>
 
                                     <div className="mb-3">
-                                        <img src={user.image} className="w-25"
-                                             alt={`${user.name} profile`}/>
+                                        <img src={user?.image} className="w-25"
+                                             alt={`${user?.name} profile`}/>
                                     </div>
 
                                     <Field className="form-control fs-6" type="file" name="image" value={undefined}
@@ -174,17 +174,7 @@ const UserEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Roles" isRequired={true}/>
 
-                                    {
-
-                                        user?.roles?.length > 0 &&
-
-                                        <Select isMulti name="roles" defaultValue={user.roles}
-                                                options={roles}
-                                                getOptionLabel={(role) => role?.name}
-                                                getOptionValue={(role) => role?.id ? role?.id.toString() : ''}
-                                                onChange={multiSelectChangeHandler}/>
-                                    }
-
+                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={roles} defaultValue={user?.roles} form={form} setForm={setForm} name={'roles'} />
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="roles" className="mt-2"/>

@@ -1,9 +1,8 @@
-import {ID} from '../../../../../_metronic/helpers';
 import * as Yup from 'yup';
 
 export interface FilterFields {
     name?: string,
-    permissions?: ID[]
+    permissions?: number[]
 }
 
 export const defaultFilterFields = {

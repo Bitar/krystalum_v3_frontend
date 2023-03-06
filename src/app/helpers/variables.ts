@@ -17,5 +17,6 @@ export enum PageTypes {
 export enum KrysToastType {
     SUCCESS = 'success',
     ERROR = 'error',
-    WARNING = 'warning'
+    WARNING = 'warning',
+    PENDING = 'pending',
 }
