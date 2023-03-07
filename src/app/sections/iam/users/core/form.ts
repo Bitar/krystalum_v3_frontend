@@ -1,4 +1,3 @@
-import {ID} from '../../../../../_metronic/helpers';
 import * as Yup from 'yup';
 import {SUPPORTED_IMAGE_FORMATS} from '../../../../helpers/form';
 
@@ -8,7 +7,7 @@ export interface FormFields {
     password_confirmation?: string,
     email: string,
     image?: File,
-    roles: ID[]
+    roles: number[]
 }
 
 export const defaultFormFields: FormFields = {

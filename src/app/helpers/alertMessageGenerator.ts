@@ -48,6 +48,9 @@ export const messages: { [alert: string]: AlertFunctionType } = {
         success: (module) => {
             return 'Success! Your exported file is ready to download.';
         },
+        pending: (module) => {
+            return 'Attention! The report will be sent to your email once it\'s ready.';
+        },
         error: (module) => {
             return GenericErrorMessage;
         },

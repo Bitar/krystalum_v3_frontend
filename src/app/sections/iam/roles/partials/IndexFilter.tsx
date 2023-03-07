@@ -110,8 +110,8 @@ const RoleIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
 
                                                 <Select isMulti name="permissions"
                                                          options={permissions}
-                                                         getOptionLabel={(permission) => permission?.name}
-                                                         getOptionValue={(permission) => permission?.id ? permission?.id.toString() : ''}
+                                                         getOptionLabel={(permission) => permission.name}
+                                                         getOptionValue={(permission) => permission.id.toString()}
                                                          onChange={multiSelectChangeHandler}
                                                          ref={selectRef}
                                                          placeholder='Filter by permission'/>
