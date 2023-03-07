@@ -14,14 +14,14 @@ import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {BookingType, defaultBookingType} from '../../../../models/misc/BookingType';
 import {getBookingType, updateBookingType} from '../../../../requests/misc/BookingType';
 import {BookingTypeSchema} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {defaultFormFields, FormFields} from "../../audiences/core/form";
 
 
 const BookingTypeEdit: React.FC = () => {
-    const [bookingType, setBookingType] = useState<BookingType>(defaultBookingType);
+    const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -42,7 +42,7 @@ const BookingTypeEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current booking type to edit
-                    setBookingType(response);
+                    setForm(response);
                 }
             });
         }
@@ -50,17 +50,17 @@ const BookingTypeEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_BOOKING_TYPES, PageTypes.EDIT, bookingType.name))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_BOOKING_TYPES, PageTypes.EDIT, form.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [bookingType]);
+    }, [form]);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, bookingType, setBookingType);
+        genericOnChangeHandler(e, form, setForm);
     };
 
-    const handleEdit = (e: any) => {
+    const handleEdit = () => {
         // we need to update the booking type's data by doing API call with form
-        updateBookingType(bookingType).then(response => {
+        updateBookingType(form).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
@@ -82,7 +82,7 @@ const BookingTypeEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={bookingType} validationSchema={BookingTypeSchema} onSubmit={handleEdit}
+                <Formik initialValues={form} validationSchema={BookingTypeSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         () => (

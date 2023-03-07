@@ -14,14 +14,13 @@ import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {OperatingSystem, defaultOperatingSystem} from '../../../../models/misc/OperatingSystem';
 import {getOperatingSystem, updateOperatingSystem} from '../../../../requests/misc/OperatingSystem';
 import {OperatingSystemSchema} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
-
+import {defaultFormFields, FormFields} from "../../audiences/core/form";
 
 const OperatingSystemEdit: React.FC = () => {
-    const [operatingSystem, setOperatingSystem] = useState<OperatingSystem>(defaultOperatingSystem);
+    const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -42,7 +41,7 @@ const OperatingSystemEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current operating system to edit
-                    setOperatingSystem(response);
+                    setForm(response);
                 }
             });
         }
@@ -50,17 +49,17 @@ const OperatingSystemEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_OPERATING_SYSTEMS, PageTypes.EDIT, operatingSystem.name))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_OPERATING_SYSTEMS, PageTypes.EDIT, form.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [operatingSystem]);
+    }, [form]);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, operatingSystem, setOperatingSystem);
+        genericOnChangeHandler(e, form, setForm);
     };
 
-    const handleEdit = (e: any) => {
+    const handleEdit = () => {
         // we need to update the operating system's data by doing API call with form
-        updateOperatingSystem(operatingSystem).then(response => {
+        updateOperatingSystem(form).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
@@ -82,7 +81,7 @@ const OperatingSystemEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={operatingSystem} validationSchema={OperatingSystemSchema} onSubmit={handleEdit}
+                <Formik initialValues={form} validationSchema={OperatingSystemSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         () => (

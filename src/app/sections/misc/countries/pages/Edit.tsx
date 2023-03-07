@@ -14,14 +14,14 @@ import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Country, defaultCountry} from '../../../../models/misc/Country';
 import {getCountry, updateCountry} from '../../../../requests/misc/Country';
 import {CountrySchema} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {defaultFormFields, FormFields} from "../../audiences/core/form";
 
 
 const CountryEdit: React.FC = () => {
-    const [country, setCountry] = useState<Country>(defaultCountry);
+    const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -42,8 +42,7 @@ const CountryEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current country to edit
-                    console.log(country)
-                    setCountry(response);
+                    setForm(response);
                 }
             });
         }
@@ -51,17 +50,17 @@ const CountryEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_COUNTRIES, PageTypes.EDIT, country.name))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_COUNTRIES, PageTypes.EDIT, form.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [country]);
+    }, [form]);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, country, setCountry);
+        genericOnChangeHandler(e, form, setForm);
     };
 
-    const handleEdit = (e: any) => {
+    const handleEdit = () => {
         // we need to update the country's data by doing API call with form
-        updateCountry(country).then(response => {
+        updateCountry(form).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
@@ -83,7 +82,7 @@ const CountryEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={country} validationSchema={CountrySchema} onSubmit={handleEdit}
+                <Formik initialValues={form} validationSchema={CountrySchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         () => (

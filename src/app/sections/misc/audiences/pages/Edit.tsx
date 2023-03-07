@@ -14,14 +14,13 @@ import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Audience, defaultAudience} from '../../../../models/misc/Audience';
 import {getAudience, updateAudience} from '../../../../requests/misc/Audience';
-import {AudienceSchema} from '../core/form';
+import {AudienceSchema, defaultFormFields, FormFields} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 
 const AudienceEdit: React.FC = () => {
-    const [audience, setAudience] = useState<Audience>(defaultAudience);
+    const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -42,7 +41,7 @@ const AudienceEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current audience to edit
-                    setAudience(response);
+                    setForm(response);
                 }
             });
         }
@@ -50,17 +49,17 @@ const AudienceEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_AUDIENCES, PageTypes.EDIT, audience.name))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_AUDIENCES, PageTypes.EDIT, form.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [audience]);
+    }, [form]);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, audience, setAudience);
+        genericOnChangeHandler(e, form, setForm);
     };
 
-    const handleEdit = (e: any) => {
+    const handleEdit = () => {
         // we need to update the audience's data by doing API call with form
-        updateAudience(audience).then(response => {
+        updateAudience(form).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
@@ -69,7 +68,10 @@ const AudienceEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the audience so we're good
-                krysApp.setAlert({message: new AlertMessageGenerator('audience', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('audience', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                })
                 navigate(`/misc/audiences`);
             }
         });
@@ -82,7 +84,7 @@ const AudienceEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={audience} validationSchema={AudienceSchema} onSubmit={handleEdit}
+                <Formik initialValues={form} validationSchema={AudienceSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         () => (

@@ -14,14 +14,14 @@ import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {BuyType, defaultBuyType} from '../../../../models/misc/BuyType';
 import {getBuyType, updateBuyType} from '../../../../requests/misc/BuyType';
 import {BuyTypeSchema} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {defaultFormFields, FormFields} from "../../audiences/core/form";
 
 
 const BuyTypeEdit: React.FC = () => {
-    const [buyType, setBuyType] = useState<BuyType>(defaultBuyType);
+    const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -42,7 +42,7 @@ const BuyTypeEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current buy type to edit
-                    setBuyType(response);
+                    setForm(response);
                 }
             });
         }
@@ -50,17 +50,17 @@ const BuyTypeEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUY_TYPES, PageTypes.EDIT, buyType.name))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUY_TYPES, PageTypes.EDIT, form.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [buyType]);
+    }, [form]);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, buyType, setBuyType);
+        genericOnChangeHandler(e, form, setForm);
     };
 
-    const handleEdit = (e: any) => {
+    const handleEdit = () => {
         // we need to update the buy type's data by doing API call with form
-        updateBuyType(buyType).then(response => {
+        updateBuyType(form).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
@@ -82,7 +82,7 @@ const BuyTypeEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={buyType} validationSchema={BuyTypeSchema} onSubmit={handleEdit}
+                <Formik initialValues={form} validationSchema={BuyTypeSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         () => (

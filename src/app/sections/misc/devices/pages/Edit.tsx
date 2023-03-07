@@ -14,14 +14,14 @@ import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Device, defaultDevice} from '../../../../models/misc/Device';
 import {getDevice, updateDevice} from '../../../../requests/misc/Device';
 import {DeviceSchema} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {defaultFormFields, FormFields} from "../../audiences/core/form";
 
 
 const DeviceEdit: React.FC = () => {
-    const [device, setDevice] = useState<Device>(defaultDevice);
+    const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -42,7 +42,7 @@ const DeviceEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current device to edit
-                    setDevice(response);
+                    setForm(response);
                 }
             });
         }
@@ -50,17 +50,17 @@ const DeviceEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_DEVICES, PageTypes.EDIT, device.name))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_DEVICES, PageTypes.EDIT, form.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [device]);
+    }, [form]);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, device, setDevice);
+        genericOnChangeHandler(e, form, setForm);
     };
 
-    const handleEdit = (e: any) => {
+    const handleEdit = () => {
         // we need to update the device's data by doing API call with form
-        updateDevice(device).then(response => {
+        updateDevice(form).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
@@ -82,7 +82,7 @@ const DeviceEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={device} validationSchema={DeviceSchema} onSubmit={handleEdit}
+                <Formik initialValues={form} validationSchema={DeviceSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         () => (

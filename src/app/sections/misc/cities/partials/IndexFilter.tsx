@@ -106,7 +106,7 @@ const CityIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                                 <Select isMulti name="countries"
                                                         options={countries}
                                                         getOptionLabel={(country) => country?.name}
-                                                        getOptionValue={(country) => country?.id ? country?.id.toString(): ''}
+                                                        getOptionValue={(country) => country?.id.toString()}
                                                         onChange={multiSelectChangeHandler}
                                                         ref={selectRef}
                                                         placeholder='Filter by country'/>

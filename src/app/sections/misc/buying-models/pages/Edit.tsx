@@ -14,14 +14,14 @@ import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {BuyingModel, defaultBuyingModel} from '../../../../models/misc/BuyingModel';
 import {getBuyingModel, updateBuyingModel} from '../../../../requests/misc/BuyingModel';
 import {BuyingModelSchema} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {defaultFormFields, FormFields} from "../../audiences/core/form";
 
 
 const BuyingModelEdit: React.FC = () => {
-    const [buyingModel, setBuyingModel] = useState<BuyingModel>(defaultBuyingModel);
+    const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -42,7 +42,7 @@ const BuyingModelEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current buying model to edit
-                    setBuyingModel(response);
+                    setForm(response);
                 }
             });
         }
@@ -50,17 +50,17 @@ const BuyingModelEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUYING_MODELS, PageTypes.EDIT, buyingModel.name))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUYING_MODELS, PageTypes.EDIT, form.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [buyingModel]);
+    }, [form]);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, buyingModel, setBuyingModel);
+        genericOnChangeHandler(e, form, setForm);
     };
 
-    const handleEdit = (e: any) => {
+    const handleEdit = () => {
         // we need to update the buying model's data by doing API call with form
-        updateBuyingModel(buyingModel).then(response => {
+        updateBuyingModel(form).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
@@ -82,7 +82,7 @@ const BuyingModelEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={buyingModel} validationSchema={BuyingModelSchema} onSubmit={handleEdit}
+                <Formik initialValues={form} validationSchema={BuyingModelSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         () => (

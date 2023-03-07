@@ -53,8 +53,6 @@ const CityEdit: React.FC = () => {
                     // we were able to fetch current city to edit
                     setCity(response);
 
-                    // const { country, ...currentCity } = response;
-
                     setForm({...response, country_id: response.country.id})
                 }
             });
@@ -136,7 +134,7 @@ const CityEdit: React.FC = () => {
                                             options={countries}
                                             value={form.country}
                                             getOptionLabel={(country) => country?.name}
-                                            getOptionValue={(country) => country?.id ? country?.id.toString() : ''}
+                                            getOptionValue={(country) => country?.id.toString()}
                                             onChange={selectChangeHandler}/>
 
                                     <div className="mt-1 text-danger">

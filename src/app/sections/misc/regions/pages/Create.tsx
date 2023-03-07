@@ -103,7 +103,10 @@ const RegionCreate: React.FC = () => {
                     // show generic error message
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    krysApp.setAlert({message: new AlertMessageGenerator('region', Actions.CREATE, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('region', Actions.CREATE, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
                     navigate(`/misc/regions`);
                 }
             }
@@ -155,7 +158,7 @@ const RegionCreate: React.FC = () => {
                                     <Select name="type"
                                             options={types}
                                             getOptionLabel={(type) => type?.name}
-                                            getOptionValue={(type) => type?.id ? type?.id.toString() : ''}
+                                            getOptionValue={(type) => type?.id.toString()}
                                             onChange={(e) => selectChangeHandler(e, 'type')}/>
 
                                     <div className="mt-1 text-danger">
@@ -165,6 +168,7 @@ const RegionCreate: React.FC = () => {
                                 {(showRegionOrCountry.showCountries || showRegionOrCountry.showBoth) &&
                                     <div className="mb-7">
                                         <KrysFormLabel text="Country"/>
+
 
                                         <Select isMulti name="countries"
                                                 options={countries}
@@ -182,7 +186,6 @@ const RegionCreate: React.FC = () => {
                                 {(showRegionOrCountry.showRegions || showRegionOrCountry.showBoth) &&
                                     <div className="mb-7">
                                         <KrysFormLabel text="Region"/>
-
                                         <Select isMulti name="regions"
                                                 options={regions}
                                                 getOptionLabel={(region) => region?.name}
