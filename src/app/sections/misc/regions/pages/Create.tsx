@@ -151,7 +151,7 @@ const RegionCreate: React.FC = () => {
                                     <Select name="relationType"
                                             options={relationTypes}
                                             getOptionLabel={(relationType) => relationType?.name}
-                                            getOptionValue={(relationType) => relationType?.id ? relationType?.id.toString() : ''}
+                                            getOptionValue={(relationType) => relationType?.id.toString()}
                                             onChange={(relationType) => selectChangeHandler(relationType, 'relationType')}/>
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="relationType" className="mt-2"/>
@@ -163,7 +163,7 @@ const RegionCreate: React.FC = () => {
                                     <Select name="type"
                                             options={types}
                                             getOptionLabel={(type) => type?.name}
-                                            getOptionValue={(type) => type?.id ? type?.id.toString() : ''}
+                                            getOptionValue={(type) => type?.id.toString()}
                                             onChange={(e) => selectChangeHandler(e, 'type')}/>
 
                                     <div className="mt-1 text-danger">
@@ -176,7 +176,7 @@ const RegionCreate: React.FC = () => {
                                     <Select name="country"
                                             options={countries}
                                             getOptionLabel={(country) => country?.name}
-                                            getOptionValue={(country) => country?.id ? country?.id.toString() : ''}
+                                            getOptionValue={(country) => country?.id.toString()}
                                             onChange={(country) => selectChangeHandler(country, 'country')}/>
 
                                     <div className="mt-1 text-danger">
@@ -189,7 +189,7 @@ const RegionCreate: React.FC = () => {
                                     <Select name="region"
                                             options={regions}
                                             getOptionLabel={(region) => region?.name}
-                                            getOptionValue={(region) => region?.id ? region?.id.toString() : ''}
+                                            getOptionValue={(region) => region?.id.toString()}
                                             onChange={(e) => selectChangeHandler(e, 'Region')}/>
 
                                     <div className="mt-1 text-danger">

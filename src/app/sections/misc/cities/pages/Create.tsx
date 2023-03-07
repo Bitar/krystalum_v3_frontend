@@ -107,7 +107,7 @@ const CityCreate: React.FC = () => {
                                     <Select name="country_id"
                                             options={countries}
                                             getOptionLabel={(country) => country?.name}
-                                            getOptionValue={(country) => country?.id ? country?.id.toString() : ''}
+                                            getOptionValue={(country) => country?.id.toString()}
                                             onChange={selectChangeHandler}/>
 
                                     <div className="mt-1 text-danger">
