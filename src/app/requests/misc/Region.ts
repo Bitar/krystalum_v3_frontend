@@ -26,8 +26,7 @@ export const getAllRegions = async (): Promise<RegionList | AxiosError | undefin
     });
 }
 export const exportRegions = async (query ?: String): Promise<ExportUrl | AxiosError | undefined> => {
-
-    let url = `${ENDPOINT}`;
+    let url = `${ENDPOINT}/export`;
 
     if (query) {
         url += `?${query}`;

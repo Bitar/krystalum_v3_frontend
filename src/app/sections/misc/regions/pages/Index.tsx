@@ -28,7 +28,6 @@ const RegionIndex: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-
     const [searchParams] = useSearchParams();
 
     const [exportQuery, setExportQuery] = useState<string>('');
