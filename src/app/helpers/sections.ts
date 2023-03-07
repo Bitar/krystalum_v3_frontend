@@ -15,5 +15,5 @@ export enum Sections {
     MISC_OPERATING_SYSTEMS = 'Operating Systems',
     MISC_GENDERS = 'Genders',
     MISC_CAMPAIGN_TYPES = 'Campaign Types',
-    MISC_REGIONS = 'REGIONS',
+    MISC_REGIONS = 'Regions',
 }

@@ -64,6 +64,8 @@ const RoleEdit: React.FC = () => {
 
                     const {permissions, ...currentRole} = response
 
+                    console.log(permissions);
+
                     setForm({...currentRole, permissions: response.permissions.map(permission => permission.id)});
                 }
             });

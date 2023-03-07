@@ -3,6 +3,10 @@ import {Response} from "../../../_metronic/helpers";
 export type Region = {
     id: number,
     name: string,
+    type: Type | null,
+    countries: any[],
+
+    regions: any[]
 };
 
 export type RegionPaginate = Response<Region[]>;
@@ -11,19 +15,8 @@ export type RegionList = {
     data: Region[]
 }
 
-export const defaultRegion: Region = {id: 0, name: ''};
+export const defaultRegion: Region = {id: 0, name: '', countries: [], regions: [], type: null};
 
-/*RelationTypes For Regions [Any of, None Of]*/
-
-export type RelationType = {
-    id: number,
-    name: string,
-};
-
-
-export type RelationTypeList = {
-    data: RelationType[]
-}
 
 /*Types For Regions ['Countries','Regions','Both']*/
 
