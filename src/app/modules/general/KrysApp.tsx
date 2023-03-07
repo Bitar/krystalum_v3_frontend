@@ -62,7 +62,7 @@ const KrysApp: FC<WithChildren> = ({children}) => {
         if (alert !== undefined) {
             const options: ToastOptions = {
                 id: `alert-${alert.type}`,
-                duration: 4000,
+                duration: 4000 ,
                 position: 'top-center',
                 style: {
                     border: '1px solid ' + (color as any)[alert.type],
