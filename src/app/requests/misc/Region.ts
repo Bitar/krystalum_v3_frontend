@@ -1,12 +1,17 @@
-import {Region, RegionList, RegionPaginate, RelationTypeList, TypeList} from "../../models/misc/Region"
+import {Region, RegionList, RegionPaginate, TypeList} from "../../models/misc/Region"
 import axios, {AxiosError, AxiosResponse} from "axios";
 import {createFormData, ExportUrl} from "../../helpers/requests";
-import {Simulate} from "react-dom/test-utils";
-import {CountryList} from "../../models/misc/Country";
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/regions`
 
+
+export const getRegion = async (id: number): Promise<Region | AxiosError | undefined> => {
+    return await axios.get(ENDPOINT + '/' + id)
+        .then(res => res.data.data).catch((error) => {
+            return error;
+        });
+}
 
 export const getRegions = (query ?: String): Promise<RegionPaginate> => {
     let url = `${ENDPOINT}`;
@@ -49,12 +54,6 @@ export const storeRegion = async (region: any): Promise<Region | AxiosError | un
 
             return error;
         });
-}
-
-export const getRelationTypes = async (): Promise<RelationTypeList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/relation-types').then((response: AxiosResponse<RelationTypeList>) => response.data).catch((error) => {
-        return error;
-    });
 }
 
 export const getTypes = async (): Promise<TypeList | AxiosError | undefined> => {

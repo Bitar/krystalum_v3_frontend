@@ -12,49 +12,37 @@ import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {Sections} from "../../../../helpers/sections";
 import {Actions, PageTypes} from "../../../../helpers/variables";
 import {
-    GenericErrorMessage,
-    genericMultiSelectOnChangeHandler,
+    GenericErrorMessage, genericMultiSelectOnChangeHandler,
     genericOnChangeHandler,
     genericSelectOnChangeHandler
 } from "../../../../helpers/form";
 import axios from "axios";
 import {extractErrors} from "../../../../helpers/requests";
 import {generateSuccessMessage} from "../../../../helpers/alerts";
-import {getAllRegions, getRegions, getRelationTypes, getTypes, storeRegion} from "../../../../requests/misc/Region";
+import {getAllRegions, getTypes, storeRegion} from "../../../../requests/misc/Region";
 import Select from "react-select";
 import {Country} from "../../../../models/misc/Country";
 import {getAllCountries} from "../../../../requests/misc/Country";
 import {Region} from "../../../../models/misc/Region";
 
+type ShowRegionOrCountry = {
+    [key: string]: boolean;
+}
 const RegionCreate: React.FC = () => {
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-    const [relationTypes, setRelationTypes] = useState<Array<any>>([]);
     const [types, setTypes] = useState<Array<any>>([]);
     const [countries, setCountries] = useState<Country[]>([]);
     const [regions, setRegions] = useState<Region[]>([]);
+    const [showRegionOrCountry, setShowRegionOrCountry] = useState<ShowRegionOrCountry>({});
 
     const navigate = useNavigate();
     const krysApp = useKrysApp();
 
+
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_REGIONS, PageTypes.CREATE))
-
-
-        getRelationTypes().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFormErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of relation types for regions, then we fill our state with them
-                if (response.data) {
-
-                    setRelationTypes(response.data);
-                }
-            }
-        });
 
         getTypes().then(response => {
             if (axios.isAxiosError(response)) {
@@ -62,9 +50,8 @@ const RegionCreate: React.FC = () => {
             } else if (response === undefined) {
                 setFormErrors([GenericErrorMessage])
             } else {
-                // if we were able to get the list of relation types for regions, then we fill our state with them
+                // if we were able to get the list of  types, then we fill our state with them
                 if (response.data) {
-
                     setTypes(response.data);
                 }
             }
@@ -123,6 +110,20 @@ const RegionCreate: React.FC = () => {
 
     const selectChangeHandler = (e: any, key: any) => {
         genericSelectOnChangeHandler(e, form, setForm, key);
+
+        if (key == 'type') {
+            setShowRegionOrCountry((prevShowState) => ({
+                ...prevShowState,
+                showRegions: false,
+                showCountries: false,
+                showBoth: false,
+                [`show${e.name}`]: true
+            }));
+        }
+    };
+
+    const multiSelectChangeHandler = (e: any, key: any) => {
+        genericMultiSelectOnChangeHandler(e, form, setForm, key);
     };
 
     return (
@@ -132,7 +133,7 @@ const RegionCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={RegionSchema} onSubmit={handleCreate}>
+                <Formik initialValues={form} validationSchema={RegionSchema} onSubmit={handleCreate} enableReinitialize>
                     {
                         (formik) => (
                             <Form onChange={onChangeHandler}>
@@ -144,18 +145,6 @@ const RegionCreate: React.FC = () => {
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="name" className="mt-2"/>
-                                    </div>
-                                </div>
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Relation Type" isRequired={true}/>
-
-                                    <Select name="relationType"
-                                            options={relationTypes}
-                                            getOptionLabel={(relationType) => relationType?.name}
-                                            getOptionValue={(relationType) => relationType?.id ? relationType?.id.toString() : ''}
-                                            onChange={(relationType) => selectChangeHandler(relationType, 'relationType')}/>
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="relationType" className="mt-2"/>
                                     </div>
                                 </div>
                                 <div className="mb-7">
@@ -171,32 +160,41 @@ const RegionCreate: React.FC = () => {
                                         <ErrorMessage name="type" className="mt-2"/>
                                     </div>
                                 </div>
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Country"/>
+                                {(showRegionOrCountry.showCountries || showRegionOrCountry.showBoth) &&
+                                    <div className="mb-7">
+                                        <KrysFormLabel text="Country"/>
 
-                                    <Select name="country"
-                                            options={countries}
-                                            getOptionLabel={(country) => country?.name}
-                                            getOptionValue={(country) => country?.id ? country?.id.toString() : ''}
-                                            onChange={(country) => selectChangeHandler(country, 'country')}/>
+                                        <Select isMulti name="countries"
+                                                options={countries}
+                                                getOptionLabel={(country) => country?.name}
+                                                getOptionValue={(country) => country?.id ? country?.id.toString() : '0'}
+                                                onChange={(e) => multiSelectChangeHandler(e, 'countries')}
+                                                placeholder="Select one or more countries"
+                                        />
 
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="country" className="mt-2"/>
+                                        <div className="mt-1 text-danger">
+                                            <ErrorMessage name="country" className="mt-2"/>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Region"/>
+                                }
+                                {(showRegionOrCountry.showRegions || showRegionOrCountry.showBoth) &&
+                                    <div className="mb-7">
+                                        <KrysFormLabel text="Region"/>
 
-                                    <Select name="region"
-                                            options={regions}
-                                            getOptionLabel={(region) => region?.name}
-                                            getOptionValue={(region) => region?.id ? region?.id.toString() : ''}
-                                            onChange={(e) => selectChangeHandler(e, 'Region')}/>
+                                        <Select isMulti name="regions"
+                                                options={regions}
+                                                getOptionLabel={(region) => region?.name}
+                                                getOptionValue={(region) => region?.id ? region?.id.toString() : '0'}
+                                                onChange={(e) => multiSelectChangeHandler(e, 'regions')}
+                                                placeholder="Select one or more regions"
+                                        />
 
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="region" className="mt-2"/>
+                                        <div className="mt-1 text-danger">
+                                            <ErrorMessage name="region" className="mt-2"/>
+                                        </div>
                                     </div>
-                                </div>
+                                }
+
                                 <KrysFormFooter cancelUrl={'/misc/regions'}/>
                             </Form>
                         )
