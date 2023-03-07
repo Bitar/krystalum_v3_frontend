@@ -14,14 +14,13 @@ import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Language, defaultLanguage} from '../../../../models/misc/Language';
 import {getLanguage, updateLanguage} from '../../../../requests/misc/Language';
 import {LanguageSchema} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
-
+import {defaultFormFields, FormFields} from "../../audiences/core/form";
 
 const LanguageEdit: React.FC = () => {
-    const [language, setLanguage] = useState<Language>(defaultLanguage);
+    const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -42,7 +41,7 @@ const LanguageEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current language to edit
-                    setLanguage(response);
+                    setForm(response);
                 }
             });
         }
@@ -50,17 +49,17 @@ const LanguageEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_LANGUAGES, PageTypes.EDIT, language.name))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_LANGUAGES, PageTypes.EDIT, form.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [language]);
+    }, [form]);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, language, setLanguage);
+        genericOnChangeHandler(e, form, setForm);
     };
 
-    const handleEdit = (e: any) => {
+    const handleEdit = () => {
         // we need to update the language's data by doing API call with form
-        updateLanguage(language).then(response => {
+        updateLanguage(form).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
@@ -82,7 +81,7 @@ const LanguageEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={language} validationSchema={LanguageSchema} onSubmit={handleEdit}
+                <Formik initialValues={form} validationSchema={LanguageSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         () => (

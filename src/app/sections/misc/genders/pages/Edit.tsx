@@ -14,14 +14,13 @@ import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Gender, defaultGender} from '../../../../models/misc/Gender';
 import {getGender, updateGender} from '../../../../requests/misc/Gender';
 import {GenderSchema} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
-
+import {defaultFormFields, FormFields} from "../../audiences/core/form";
 
 const GenderEdit: React.FC = () => {
-    const [gender, setGender] = useState<Gender>(defaultGender);
+    const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -42,7 +41,7 @@ const GenderEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current gender to edit
-                    setGender(response);
+                    setForm(response);
                 }
             });
         }
@@ -50,17 +49,17 @@ const GenderEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_GENDERS, PageTypes.EDIT, gender.name))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_GENDERS, PageTypes.EDIT, form.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [gender]);
+    }, [form]);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, gender, setGender);
+        genericOnChangeHandler(e, form, setForm);
     };
 
-    const handleEdit = (e: any) => {
+    const handleEdit = () => {
         // we need to update the gender's data by doing API call with form
-        updateGender(gender).then(response => {
+        updateGender(form).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
@@ -82,7 +81,7 @@ const GenderEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={gender} validationSchema={GenderSchema} onSubmit={handleEdit}
+                <Formik initialValues={form} validationSchema={GenderSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         () => (

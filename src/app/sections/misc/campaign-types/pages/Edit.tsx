@@ -14,14 +14,13 @@ import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {CampaignType, defaultCampaignType} from '../../../../models/misc/CampaignType';
 import {getCampaignType, updateCampaignType} from '../../../../requests/misc/CampaignType';
 import {CampaignTypeSchema} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
-
+import {defaultFormFields, FormFields} from "../../audiences/core/form";
 
 const CampaignTypeEdit: React.FC = () => {
-    const [campaignType, setCampaignType] = useState<CampaignType>(defaultCampaignType);
+    const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -42,7 +41,7 @@ const CampaignTypeEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current campaign type to edit
-                    setCampaignType(response);
+                    setForm(response);
                 }
             });
         }
@@ -50,17 +49,17 @@ const CampaignTypeEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_CAMPAIGN_TYPES, PageTypes.EDIT, campaignType.name))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_CAMPAIGN_TYPES, PageTypes.EDIT, form.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [campaignType]);
+    }, [form]);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, campaignType, setCampaignType);
+        genericOnChangeHandler(e, form, setForm);
     };
 
-    const handleEdit = (e: any) => {
+    const handleEdit = () => {
         // we need to update the campaign type's data by doing API call with form
-        updateCampaignType(campaignType).then(response => {
+        updateCampaignType(form).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
@@ -82,7 +81,7 @@ const CampaignTypeEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={campaignType} validationSchema={CampaignTypeSchema} onSubmit={handleEdit}
+                <Formik initialValues={form} validationSchema={CampaignTypeSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         () => (
