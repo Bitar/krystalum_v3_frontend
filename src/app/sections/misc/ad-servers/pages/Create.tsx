@@ -17,7 +17,6 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeAdServer} from '../../../../requests/misc/AdServer';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
-import {useAccessControl} from "../../../../modules/auth/AuthAccessControl";
 
 const AdServerCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);

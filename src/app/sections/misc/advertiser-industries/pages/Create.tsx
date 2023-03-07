@@ -17,7 +17,6 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeAdvertiserIndustry} from '../../../../requests/misc/AdvertiserIndustry';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
-import {useAccessControl} from "../../../../modules/auth/AuthAccessControl";
 
 const AdvertiserIndustryCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);

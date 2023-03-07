@@ -17,7 +17,6 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeVideoPlayer} from '../../../../requests/misc/VideoPlayer';
 import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
-import {useAccessControl} from "../../../../modules/auth/AuthAccessControl";
 
 
 const VideoPlayerCreate: React.FC = () => {

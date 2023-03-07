@@ -22,7 +22,6 @@ import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {getAllPerformanceMetrics} from "../../../../requests/misc/PerformanceMetric";
 import {PerformanceMetric} from "../../../../models/misc/PerformanceMetric";
 import Select from "react-select";
-import {useAccessControl} from "../../../../modules/auth/AuthAccessControl";
 
 
 const KpiCreate: React.FC = () => {
