@@ -1,7 +1,7 @@
-import {ID, Response} from '../../../_metronic/helpers';
+import {Response} from '../../../_metronic/helpers';
 
 export type CampaignType = {
-    id: ID,
+    id: number,
     name: string
 };
 

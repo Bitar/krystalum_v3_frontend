@@ -1,8 +1,8 @@
-import {ID, Response} from '../../../_metronic/helpers';
+import {Response} from '../../../_metronic/helpers';
 import {Country, defaultCountry} from './Country';
 
 export type City = {
-    id: ID,
+    id: number,
     name: string,
     country: Country
 };

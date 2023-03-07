@@ -1,7 +1,7 @@
-import {ID, Response} from '../../../_metronic/helpers';
+import {Response} from '../../../_metronic/helpers';
 
 export type BookingType = {
-    id: ID,
+    id: number,
     name: string,
     code: string
 };

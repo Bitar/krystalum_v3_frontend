@@ -1,7 +1,7 @@
-import {ID, Response} from "../../../_metronic/helpers";
+import {Response} from "../../../_metronic/helpers";
 
 export type Region = {
-    id: ID,
+    id: number,
     name: string,
 };
 
@@ -16,7 +16,7 @@ export const defaultRegion: Region = {id: 0, name: ''};
 /*RelationTypes For Regions [Any of, None Of]*/
 
 export type RelationType = {
-    id: ID,
+    id: number,
     name: string,
 };
 
@@ -28,7 +28,7 @@ export type RelationTypeList = {
 /*Types For Regions ['Countries','Regions','Both']*/
 
 export type Type = {
-    id: ID,
+    id: number,
     name: string,
 };
 
