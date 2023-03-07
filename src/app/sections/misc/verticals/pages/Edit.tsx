@@ -51,9 +51,7 @@ const VerticalEdit: React.FC = () => {
                     // we were able to fetch current vertical to edit
                     setVertical(response);
 
-
                     setForm({...response, parent_id: response?.parent?.id})
-
                 }
             });
 
@@ -101,7 +99,8 @@ const VerticalEdit: React.FC = () => {
                 krysApp.setAlert({
                     message: new AlertMessageGenerator('vertical', Actions.EDIT, KrysToastType.SUCCESS).message,
                     type: KrysToastType.SUCCESS
-                })
+                });
+
                 navigate(`/misc/verticals`);
             }
         });

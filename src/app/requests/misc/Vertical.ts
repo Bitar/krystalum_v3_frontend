@@ -57,6 +57,7 @@ export const storeVertical = async (vertical: any): Promise<Vertical | AxiosErro
 }
 
 export const updateVertical = async (vertical: any): Promise<Vertical | AxiosError | undefined> => {
+    console.log(vertical);
     let formData = createFormData(vertical);
 
     formData.append('_method', 'put');

@@ -67,7 +67,7 @@ const UserCreate: React.FC = () => {
         // in case of multi select, the element doesn't have a name because
         // we get only a list of values from the select and not an element with target value and name
 
-        if(e.target.name !== '' && e.target.name !== 'image') {
+        if(e.target.name !== 'image') {
             genericOnChangeHandler(e, form, setForm);
         }
     };

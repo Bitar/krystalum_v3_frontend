@@ -4,7 +4,12 @@ import {Col, Collapse, Row} from 'react-bootstrap';
 
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
 import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
-import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
+import {
+    GenericErrorMessage,
+    genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler,
+    genericSelectOnChangeHandler
+} from '../../../../helpers/form';
 import {initialQueryState} from '../../../../../_metronic/helpers';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
@@ -23,7 +28,7 @@ interface Props {
 const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     const {updateState} = useQueryRequest();
 
-    const [filters, setFilters] = useState<FilterFields>();
+    const [filters, setFilters] = useState<FilterFields>(defaultFilterFields);
     const [filterErrors, setFilterErrors] = useState<string[]>([]);
     const [reset, setReset] = useState<boolean>(false);
     const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetric[]>([]);
@@ -48,7 +53,7 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     };
 
     const multiSelectChangeHandler = (e: any) => {
-        genericMultiSelectOnChangeHandler(e, filters, setFilters, 'performance_metric_ids');
+        genericMultiSelectOnChangeHandler(e, filters, setFilters, 'metrics');
     };
 
     const handleFilter = () => {
@@ -62,7 +67,9 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
 
     useEffect(() => {
         handleFilter();
-        selectRef.current?.clearValue();
+        isConversionSelectRef.current?.clearValue();
+        isRateSelectRef.current?.clearValue();
+        metricsSelectRef.current?.clearValue();
         setReset(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reset]);
@@ -72,7 +79,9 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
         setReset(true);
     }
 
-    const selectRef = useRef<any>(null);
+    const isConversionSelectRef = useRef<any>(null);
+    const isRateSelectRef = useRef<any>(null);
+    const metricsSelectRef = useRef<any>(null);
 
     return (
         <Collapse in={showFilter}>
@@ -106,7 +115,9 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                                         options={[{id: 1, name: 'Yes'}, {id: 0, name: 'No'}]}
                                                         getOptionLabel={(option) => option.name}
                                                         getOptionValue={(option) => option.id.toString()}
-                                                        ref={selectRef}
+                                                        ref={isRateSelectRef}
+                                                        isClearable={true}
+                                                        onChange={(e) => genericSelectOnChangeHandler(e, filters, setFilters, 'is_rate')}
                                                         placeholder='Filter by rate type'/>
 
                                                 <div className="mt-1 text-danger">
@@ -121,7 +132,9 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                                         options={[{id: 1, name: 'Yes'}, {id: 0, name: 'No'}]}
                                                         getOptionLabel={(option) => option.name}
                                                         getOptionValue={(option) => option.id.toString()}
-                                                        ref={selectRef}
+                                                        ref={isConversionSelectRef}
+                                                        isClearable={true}
+                                                        onChange={(e) => genericSelectOnChangeHandler(e, filters, setFilters, 'is_conversion')}
                                                         placeholder='Filter by conversion type'/>
 
                                                 <div className="mt-1 text-danger">
@@ -134,15 +147,16 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                             <Col md={4}>
                                                 <KrysFormLabel text="Performance Metrics" isRequired={false}/>
 
-                                                <Select isMulti name="performance_metric_ids"
+                                                <Select isMulti name="metrics"
                                                         options={performanceMetrics}
                                                         getOptionLabel={(performanceMetric) => performanceMetric.name}
                                                         getOptionValue={(performanceMetric) => performanceMetric.id.toString()}
                                                         onChange={multiSelectChangeHandler}
+                                                        ref={metricsSelectRef}
                                                         placeholder="Select one or more performance metrics"/>
 
                                                 <div className="mt-1 text-danger">
-                                                    <ErrorMessage name="performance_metric_ids" className="mt-2"/>
+                                                    <ErrorMessage name="metrics" className="mt-2"/>
                                                 </div>
                                             </Col>
                                         </Row>

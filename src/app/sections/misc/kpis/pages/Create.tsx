@@ -56,9 +56,7 @@ const KpiCreate: React.FC = () => {
     }, []);
 
     const onChangeHandler = (e: any) => {
-        if (e.target.name !== '') {
-            genericOnChangeHandler(e, form, setForm);
-        }
+        genericOnChangeHandler(e, form, setForm);
     };
 
     const handleCreate = (e: any) => {
