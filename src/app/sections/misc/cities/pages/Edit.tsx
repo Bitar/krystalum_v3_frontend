@@ -53,8 +53,6 @@ const CityEdit: React.FC = () => {
                     // we were able to fetch current city to edit
                     setCity(response);
 
-                    // const { country, ...currentCity } = response;
-
                     setForm({...response, country_id: response.country.id})
                 }
             });
