@@ -25,13 +25,8 @@ const AdvertiserIndustryCreate: React.FC = () => {
 
     const navigate = useNavigate();
     const krysApp = useKrysApp();
-    const authAccessControl = useAccessControl();
 
     useEffect(() => {
-        if(!authAccessControl.userCan('manage-misc')) {
-            navigate('/error/403');
-        }
-
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_ADVERTISER_INDUSTRIES, PageTypes.CREATE))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

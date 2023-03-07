@@ -25,13 +25,8 @@ const PerformanceMetricCreate: React.FC = () => {
 
     const navigate = useNavigate();
     const krysApp = useKrysApp();
-    const authAccessControl = useAccessControl();
 
     useEffect(() => {
-        if (!authAccessControl.userCan('manage-misc')) {
-            navigate('/error/403');
-        }
-
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_PERFORMANCE_METRICS, PageTypes.CREATE))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

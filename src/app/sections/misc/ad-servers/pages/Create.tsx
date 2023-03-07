@@ -22,16 +22,11 @@ import {useAccessControl} from "../../../../modules/auth/AuthAccessControl";
 const AdServerCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-    const authAccessControl = useAccessControl();
 
     const navigate = useNavigate();
     const krysApp = useKrysApp();
 
     useEffect(() => {
-        if(!authAccessControl.userCan('manage-misc')) {
-            navigate('/error/403');
-        }
-
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_AD_SERVERS, PageTypes.CREATE))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
