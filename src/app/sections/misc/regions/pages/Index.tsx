@@ -46,7 +46,7 @@ const RegionIndex: React.FC = () => {
                         <KTCardHeader text="All Regions" icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportRegions),
                                           new FilterCardAction('regions-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/regions')]}/>
+                                          new CreateCardAction('/misc/regions', 'manage-misc')]}/>
 
                         <KTCardBody>
                             <RegionIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

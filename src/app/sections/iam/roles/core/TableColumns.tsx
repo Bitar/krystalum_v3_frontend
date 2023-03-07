@@ -6,6 +6,7 @@ import {QUERIES} from '../../../../../_metronic/helpers'
 import {Role} from '../../../../models/iam/Role';
 import {Permission} from '../../../../models/iam/Permission';
 import {truncateText} from '../../../../helpers/stringGenerator';
+import {Restricted} from '../../../../modules/auth/AuthAccessControl';
 
 const RolesColumns: ReadonlyArray<Column<Role>> = [
     {
@@ -20,19 +21,23 @@ const RolesColumns: ReadonlyArray<Column<Role>> = [
     },
     {
         Header: (props) => (
-            <CustomHeader tableProps={props} title='Actions' className='text-end min-w-100px' />
+            <Restricted to='manage-iam'>
+                <CustomHeader tableProps={props} title='Actions' className='text-end min-w-100px' />
+            </Restricted>
         ),
         id: 'actions',
         Cell: ({...props}) => (
-            <ActionsCell
-                id={props.data[props.row.index].id}
-                path={'iam/roles'}
-                queryKey={QUERIES.ROLES_LIST}
-                showView={false}
-                showEdit={true}
-                title='Delete Role'
-                text={`Are you sure you want to delete the role '${props.data[props.row.index].name}'?`}
-            />
+            <Restricted to='manage-iam'>
+                <ActionsCell
+                    id={props.data[props.row.index].id}
+                    path={'iam/roles'}
+                    queryKey={QUERIES.ROLES_LIST}
+                    showView={false}
+                    showEdit={true}
+                    title="Delete Role"
+                    text={`Are you sure you want to delete the role '${props.data[props.row.index].name}'?`}
+                />
+            </Restricted>
         ),
     },
 ]

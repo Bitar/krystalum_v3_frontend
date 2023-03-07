@@ -1,9 +1,10 @@
-import {ID, Response} from '../../../_metronic/helpers';
+import {Response} from '../../../_metronic/helpers';
+import {Country, defaultCountry} from './Country';
 
 export type City = {
-    id: ID,
+    id: number,
     name: string,
-    country: ID
+    country: Country
 };
 
 export type CityPaginate = Response<City[]>;
@@ -12,4 +13,4 @@ export type CityList = {
     data: City[]
 }
 
-export const defaultCity: City = {id: 0, name: '', country: 0};
+export const defaultCity: City = {id: 0, name: '', country: defaultCountry};

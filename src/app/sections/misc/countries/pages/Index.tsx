@@ -47,7 +47,7 @@ const CountryIndex = () => {
                         <KTCardHeader text='All Countries' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportCountries),
                                           new FilterCardAction('countries-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/countries')]}/>
+                                          new CreateCardAction('/misc/countries', 'manage-misc')]}/>
 
                         <KTCardBody>
                             <CountryIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

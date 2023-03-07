@@ -5,25 +5,30 @@ import {useNavigate, useParams} from 'react-router-dom';
 
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
+import {
+    GenericErrorMessage,
+    genericOnChangeHandler,
+    genericSingleSelectOnChangeHandler
+} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {Sections} from '../../../../helpers/sections';
 import {City, defaultCity} from '../../../../models/misc/City';
 import {getCity, updateCity} from '../../../../requests/misc/City';
 import Select from 'react-select';
 import {Country} from '../../../../models/misc/Country';
 import {getAllCountries} from '../../../../requests/misc/Country';
-import {CitySchema} from '../core/form';
+import {CitySchema, defaultFormFields, FormFields} from '../core/form';
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 const CityEdit: React.FC = () => {
     const [city, setCity] = useState<City>(defaultCity);
+    const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const [countries, setCountries] = useState<Country[]>([]);
@@ -47,6 +52,10 @@ const CityEdit: React.FC = () => {
                 } else {
                     // we were able to fetch current city to edit
                     setCity(response);
+
+                    // const { country, ...currentCity } = response;
+
+                    setForm({...response, country_id: response.country.id})
                 }
             });
 
@@ -73,16 +82,16 @@ const CityEdit: React.FC = () => {
     }, [city]);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, city, setCity);
+        genericOnChangeHandler(e, form, setForm);
     };
 
-    const multiSelectChangeHandler = (e: any) => {
-        genericMultiSelectOnChangeHandler(e, city, setCity, 'country');
+    const selectChangeHandler = (e: any) => {
+        genericSingleSelectOnChangeHandler(e, form, setForm, 'country_id', 'country');
     };
 
     const handleEdit = (e: any) => {
         // we need to update the city's data by doing API call with form
-        updateCity(city).then(response => {
+        updateCity(form).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
@@ -91,7 +100,7 @@ const CityEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the booking city so we're good
-                krysApp.setAlert({message: generateSuccessMessage('city', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({message: new AlertMessageGenerator('city', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
                 navigate(`/misc/cities`);
             }
         });
@@ -104,7 +113,7 @@ const CityEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={city} validationSchema={CitySchema} onSubmit={handleEdit}
+                <Formik initialValues={form} validationSchema={CitySchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         () => (
@@ -123,17 +132,17 @@ const CityEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Country" isRequired={true}/>
 
-                                    <Select name="country"
+                                    <Select name="country_id"
                                             options={countries}
+                                            value={form.country}
                                             getOptionLabel={(country) => country?.name}
                                             getOptionValue={(country) => country?.id ? country?.id.toString() : ''}
-                                            onChange={multiSelectChangeHandler}/>
+                                            onChange={selectChangeHandler}/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="country" className="mt-2"/>
+                                        <ErrorMessage name="country_id" className="mt-2"/>
                                     </div>
                                 </div>
-
                                 <KrysFormFooter cancelUrl={'/misc/cities'}/>
                             </Form>
                         )

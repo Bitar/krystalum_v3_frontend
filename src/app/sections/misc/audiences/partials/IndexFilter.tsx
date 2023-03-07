@@ -57,7 +57,7 @@ const AudienceIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                 onSubmit={handleFilter}
                                 enableReinitialize>
                             {
-                                (formik) => (
+                                () => (
                                     <Form onChange={onChangeHandler}>
                                         <Row>
                                             <Col md={4}>

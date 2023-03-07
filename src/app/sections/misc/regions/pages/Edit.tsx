@@ -10,21 +10,23 @@ import KrysFormFooter from "../../../../components/forms/KrysFormFooter";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {Sections} from "../../../../helpers/sections";
 import {Actions, PageTypes} from "../../../../helpers/variables";
-import {getAllRegions, getRegion, getRegions, getTypes} from "../../../../requests/misc/Region";
+import {getAllRegions, getRegion, getRegions, getTypes, updateRegion} from "../../../../requests/misc/Region";
 import axios from "axios";
 import {extractErrors} from "../../../../helpers/requests";
 import {
     GenericErrorMessage,
     genericMultiSelectOnChangeHandler,
     genericOnChangeHandler,
-    genericSelectOnChangeHandler
+    genericSelectOnChangeHandler, genericSelectV2OnChangeHandler
 } from "../../../../helpers/form";
 import {getAllCountries} from "../../../../requests/misc/Country";
 import {Country} from "../../../../models/misc/Country";
 import {Region} from "../../../../models/misc/Region";
 import {useNavigate, useParams} from "react-router-dom";
 import {useKrysApp} from "../../../../modules/general/KrysApp";
-
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {KrysToastType} from '../../../../helpers/variables';
+import MultiSelect from "../../../../components/forms/MultiSelect";
 
 type ShowRegionOrCountry = {
     [key: string]: boolean;
@@ -35,7 +37,9 @@ const RegionEdit: React.FC = () => {
     const [types, setTypes] = useState<Array<any>>([]);
     const [countries, setCountries] = useState<Country[]>([]);
     const [regions, setRegions] = useState<Region[]>([]);
+    const [region, setRegion] = useState<Region>();
     const [showRegionOrCountry, setShowRegionOrCountry] = useState<ShowRegionOrCountry>({});
+    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false);
 
     const navigate = useNavigate();
     const krysApp = useKrysApp();
@@ -93,30 +97,21 @@ const RegionEdit: React.FC = () => {
                 } else if (response === undefined) {
                     navigate('/error/400');
                 } else {
+                    // we were able to fetch current regions to edit
+                    setRegion(response);
 
-                    // we were able to fetch current permission to edit
+                    const {regions, countries, ...currentRegion} = response
 
+                    setShowRegionOrCountry((prevShowState) => ({
+                        ...prevShowState,
+                        [`show${response.type?.name}`]: true
+                    }));
 
-                    const {type, ...name} = response;
-
-                    console.log(type);
-                    console.log(name);
-                 //   setForm({response.name,response.type});
-
-                  /*  const {permissions, ...currentRole} = response
-
-                    setForm({...currentRole, permissions: response.permissions.map(permission => permission.id)});*/
-
-                   /* if(response.countries.length>0){
-                        if(response.regions.length>0){
-                            setTypes('3');
-                        }
-                        setTypes('2');
-                    }
-
-                    if(response.regions.length>0){
-                        setTypes("1");
-                    }*/
+                    setForm({
+                        ...currentRegion,
+                        regions: response.regions.map(region => region.id),
+                        countries: response.countries.map(country => country.id),
+                    });
                 }
             });
         }
@@ -124,16 +119,46 @@ const RegionEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_REGIONS, PageTypes.EDIT))
+        if (region) {
+            setIsResourceLoaded(true);
 
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_REGIONS, PageTypes.EDIT))
+        }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [region]);
 
-    }, []);
+    useEffect(() => {
+        if (form.canUpdate) {
+            updateRegionData()
+        }
 
-    const handleEdit = (e: any) => {
-        // we need to update the permission's data by doing API call with form
-     /*   updateRole(form).then(response => {
+    }, [form.canUpdate]);
+
+    const handleEdit = () => {
+        if (showRegionOrCountry.showRegions && !showRegionOrCountry.showBoth) {
+            const {countries, ...currentForm} = form
+
+            setForm({
+                ...currentForm,
+                countries: [],
+                canUpdate: true
+            });
+        } else if (showRegionOrCountry.showCountries && !showRegionOrCountry.showBoth) {
+            const {regions, ...currentForm} = form
+
+            setForm({
+                ...currentForm,
+                regions: [],
+                canUpdate: true
+            });
+        } else {
+            updateRegionData();
+        }
+    }
+
+    const updateRegionData = () => {
+        updateRegion(form).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
@@ -141,11 +166,14 @@ const RegionEdit: React.FC = () => {
                 // show generic error
                 setFormErrors([GenericErrorMessage]);
             } else {
-                // we got the updated permission so we're good
-                krysApp.setAlert({message: generateSuccessMessage('role', Actions.EDIT), type: 'success'})
-                navigate(`/iam/roles`);
+                // we update the region
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('region', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                })
+                navigate(`/misc/regions`);
             }
-        });*/
+        });
     }
 
     const onChangeHandler = (e: any) => {
@@ -153,7 +181,7 @@ const RegionEdit: React.FC = () => {
     };
 
     const selectChangeHandler = (e: any, key: any) => {
-        genericSelectOnChangeHandler(e, form, setForm, key);
+        genericSelectV2OnChangeHandler(e, form, setForm, key);
 
         if (key == 'type') {
             setShowRegionOrCountry((prevShowState) => ({
@@ -166,11 +194,7 @@ const RegionEdit: React.FC = () => {
         }
     };
 
-    const multiSelectChangeHandler = (e: any, key: any) => {
-        genericMultiSelectOnChangeHandler(e, form, setForm, key);
-    };
-
-    return(
+    return (
         <KTCard>
             <KTCardHeader text="Edit Region" icon="fa-regular fa-plus" icon_style="fs-3 text-success"/>
 
@@ -196,45 +220,40 @@ const RegionEdit: React.FC = () => {
 
                                     <Select name="type"
                                             options={types}
+                                            value={form.type}
                                             getOptionLabel={(type) => type?.name}
-                                            getOptionValue={(type) => type?.id ? type?.id.toString() : ''}
+                                            getOptionValue={(type) => type?.id.toString()}
                                             onChange={(e) => selectChangeHandler(e, 'type')}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="type" className="mt-2"/>
                                     </div>
                                 </div>
-                                {(showRegionOrCountry.showCountries || showRegionOrCountry.showBoth) &&
-                                    <div className="mb-7">
-                                        <KrysFormLabel text="Country"/>
 
-                                        <Select isMulti name="countries"
-                                                options={countries}
-                                                getOptionLabel={(country) => country?.name}
-                                                getOptionValue={(country) => country?.id ? country?.id.toString() : '0'}
-                                                onChange={(e) => multiSelectChangeHandler(e, 'countries')}
-                                                placeholder="Select one or more countries"
-                                        />
+                                {(showRegionOrCountry.showRegions || showRegionOrCountry.showBoth) &&
+                                    <div className="mb-7">
+                                        <KrysFormLabel text="Regions" isRequired={true}/>
+
+                                        <MultiSelect isResourceLoaded={isResourceLoaded} options={regions}
+                                                     defaultValue={region?.regions} form={form} setForm={setForm}
+                                                     name={'regions'}/>
 
                                         <div className="mt-1 text-danger">
-                                            <ErrorMessage name="country" className="mt-2"/>
+                                            <ErrorMessage name="regions" className="mt-2"/>
                                         </div>
                                     </div>
                                 }
-                                {(showRegionOrCountry.showRegions || showRegionOrCountry.showBoth) &&
-                                    <div className="mb-7">
-                                        <KrysFormLabel text="Region"/>
 
-                                        <Select isMulti name="regions"
-                                                options={regions}
-                                                getOptionLabel={(region) => region?.name}
-                                                getOptionValue={(region) => region?.id ? region?.id.toString() : '0'}
-                                                onChange={(e) => multiSelectChangeHandler(e, 'regions')}
-                                                placeholder="Select one or more regions"
-                                        />
+                                {(showRegionOrCountry.showCountries || showRegionOrCountry.showBoth) &&
+                                    <div className="mb-7">
+                                        <KrysFormLabel text="Countries" isRequired={true}/>
+
+                                        <MultiSelect isResourceLoaded={isResourceLoaded} options={countries}
+                                                     defaultValue={region?.countries} form={form} setForm={setForm}
+                                                     name={'countries'}/>
 
                                         <div className="mt-1 text-danger">
-                                            <ErrorMessage name="region" className="mt-2"/>
+                                            <ErrorMessage name="countries" className="mt-2"/>
                                         </div>
                                     </div>
                                 }

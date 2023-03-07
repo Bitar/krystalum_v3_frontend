@@ -6,7 +6,7 @@ export const genericOnChangeHandler = (e: any, form: any, setForm: React.Dispatc
     const name = e.target.name;
 
     // if the value was Array then the multi select handler would take care of it
-    if(!(value instanceof Array) && name !== 'image') {
+    if(name) {
         setForm({
             ...form,
             [name]: value
@@ -26,6 +26,19 @@ export const genericMultiSelectOnChangeHandler = (e: any, form: any, setForm: Re
 
 export const genericSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
     setForm({...form, [key]: e.id});
+};
+
+export const genericSelectV2OnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
+    setForm({...form, [key]: e});
+};
+
+
+export const genericSingleSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string, key2: string) => {
+    setForm({...form, [key]: e.id, [key2]: e});
+};
+
+export const genericSingleSelectV2OnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
+    setForm({...form, [key]: e});
 };
 
 export const SUPPORTED_IMAGE_FORMATS = [

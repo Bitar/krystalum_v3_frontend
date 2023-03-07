@@ -4,12 +4,15 @@ import {useNavigate} from 'react-router-dom';
 
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {defaultFormFields, FormFields, CitySchema} from '../core/form';
-import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
+import {
+    GenericErrorMessage,
+    genericOnChangeHandler,
+    genericSelectOnChangeHandler
+} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
@@ -20,6 +23,7 @@ import {storeCity} from '../../../../requests/misc/City';
 import Select from 'react-select';
 import {Country} from '../../../../models/misc/Country';
 import {getAllCountries} from '../../../../requests/misc/Country';
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 const CityCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -53,8 +57,8 @@ const CityCreate: React.FC = () => {
         genericOnChangeHandler(e, form, setForm);
     };
 
-    const multiSelectChangeHandler = (e: any) => {
-        genericMultiSelectOnChangeHandler(e, form, setForm, 'country');
+    const selectChangeHandler = (e: any) => {
+        genericSelectOnChangeHandler(e, form, setForm, 'country_id');
     };
 
     const handleCreate = (e: any) => {
@@ -68,7 +72,7 @@ const CityCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's city for sure
-                    krysApp.setAlert({message: generateSuccessMessage('city', Actions.CREATE), type: 'success'})
+                    krysApp.setAlert({message: new AlertMessageGenerator('city', Actions.CREATE, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
                     navigate(`/misc/cities`);
                 }
             }
@@ -82,7 +86,7 @@ const CityCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={CitySchema} onSubmit={handleCreate}>
+                <Formik initialValues={form} validationSchema={CitySchema} onSubmit={handleCreate} enableReinitialize>
                     {
                         () => (
                             <Form onChange={onChangeHandler}>
@@ -100,14 +104,14 @@ const CityCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Country" isRequired={true}/>
 
-                                    <Select name="country"
+                                    <Select name="country_id"
                                             options={countries}
                                             getOptionLabel={(country) => country?.name}
                                             getOptionValue={(country) => country?.id ? country?.id.toString() : ''}
-                                            onChange={multiSelectChangeHandler}/>
+                                            onChange={selectChangeHandler}/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="country" className="mt-2"/>
+                                        <ErrorMessage name="country_id" className="mt-2"/>
                                     </div>
                                 </div>
 

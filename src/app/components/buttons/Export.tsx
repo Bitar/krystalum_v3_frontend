@@ -4,8 +4,8 @@ import {Button} from 'react-bootstrap';
 import axios, {AxiosError} from 'axios';
 import {ExportUrl, extractErrors} from '../../helpers/requests';
 import {GenericErrorMessage} from '../../helpers/form';
-import {generateSuccessMessage} from '../../helpers/alerts';
-import {Actions} from '../../helpers/variables';
+import {AlertMessageGenerator} from '../../helpers/alertMessageGenerator';
+import {Actions, KrysToastType} from '../../helpers/variables';
 import {useKrysApp} from '../../modules/general/KrysApp';
 
 type Props = {
@@ -24,21 +24,27 @@ const ExportButton: React.FC<Props> = ({exportQuery, exportApiCall, className}) 
             exportApiCall(exportQuery).then(response => {
                     if (axios.isAxiosError(response)) {
                         // we need to show the errors
-                        krysApp.setAlert({message: extractErrors(response).join(' '), type: 'error'});
+                        krysApp.setAlert({message: extractErrors(response).join(' '), type: KrysToastType.ERROR});
                     } else if (response === undefined) {
                         // show generic error message
-                        krysApp.setAlert({message: GenericErrorMessage, type: 'error'});
+                        krysApp.setAlert({message: GenericErrorMessage, type: KrysToastType.ERROR});
                     } else {
                         // we need to check the status of the response
                         if(response.data.status === 'ready' && response.data.url !== undefined) {
-                            krysApp.setAlert({message: generateSuccessMessage('permission', Actions.EXPORT), type: 'success'})
+                            krysApp.setAlert({
+                                message: new AlertMessageGenerator('', Actions.EXPORT, KrysToastType.SUCCESS).message,
+                                type: KrysToastType.SUCCESS
+                            })
 
                             const link = document.createElement('a');
                             link.href = response.data.url;
 
                             link.click();
-                        } else if(response.data.status === 'in_progress') {
-                            // TODO mona to add message here for in progress export
+                        } else if(response.data.status === 'pending') {
+                            krysApp.setAlert({
+                                message: new AlertMessageGenerator('', Actions.EXPORT, KrysToastType.PENDING).message,
+                                type: KrysToastType.PENDING
+                            })
                         }
                     }
                 }

@@ -10,14 +10,14 @@ import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {Sections} from '../../../../helpers/sections';
 import {OperatingSystem, defaultOperatingSystem} from '../../../../models/misc/OperatingSystem';
 import {getOperatingSystem, updateOperatingSystem} from '../../../../requests/misc/OperatingSystem';
 import {OperatingSystemSchema} from '../core/form';
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 
 const OperatingSystemEdit: React.FC = () => {
@@ -69,7 +69,7 @@ const OperatingSystemEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the operating system so we're good
-                krysApp.setAlert({message: generateSuccessMessage('operating system', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({message: new AlertMessageGenerator('operating system', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
                 navigate(`/misc/operating-systems`);
             }
         });

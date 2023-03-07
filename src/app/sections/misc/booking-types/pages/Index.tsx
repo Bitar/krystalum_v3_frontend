@@ -48,7 +48,7 @@ const BookingTypeIndex = () => {
                         <KTCardHeader text='All Booking Types' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportBookingTypes),
                                           new FilterCardAction('booking-types-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/booking-types')]}/>
+                                          new CreateCardAction('/misc/booking-types', 'manage-misc')]}/>
 
                         <KTCardBody>
                             <BookingTypeIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

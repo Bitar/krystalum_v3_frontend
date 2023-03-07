@@ -1,18 +1,12 @@
-import {
-    FC,
-    useState,
-    useEffect,
-    createContext,
-    useContext,
-    Dispatch,
-    SetStateAction
-} from 'react'
+import {createContext, Dispatch, FC, SetStateAction, useContext, useEffect, useState} from 'react'
 import {WithChildren} from '../../../_metronic/helpers';
-import toast, {Toaster, ToastType} from 'react-hot-toast';
+import toast, {Toaster, ToastIcon, ToastOptions} from 'react-hot-toast';
+import {KrysToastType} from '../../helpers/variables';
+import PendingIcon from "../../components/icons/Pending";
 
-interface Alert {
+type Alert = {
     message: string;
-    type: ToastType;
+    type: KrysToastType;
 }
 
 type KrysContextProps = {
@@ -22,7 +16,7 @@ type KrysContextProps = {
     setPageTitle: Dispatch<SetStateAction<string>>,
 }
 
-const iniKrysContextPropsState = {
+const initKrysContextPropsState = {
     alert: undefined,
     setAlert: () => {
     },
@@ -31,7 +25,7 @@ const iniKrysContextPropsState = {
     },
 }
 
-const KrysContext = createContext<KrysContextProps>(iniKrysContextPropsState)
+const KrysContext = createContext<KrysContextProps>(initKrysContextPropsState)
 
 const useKrysApp = () => {
     return useContext(KrysContext)
@@ -43,7 +37,21 @@ const KrysApp: FC<WithChildren> = ({children}) => {
 
     const color = {
         'success': '#50cd89',
-        'error': '#f1416c'
+        'error': '#f1416c',
+        'pending': '#d5441c',
+        'warning': '#FFA800'
+    }
+
+    const type = {
+        'success': alert?.type,
+        'error': alert?.type,
+        'pending': 'success',
+        'warning': alert?.type
+    }
+
+    const icon = {
+        'pending': <PendingIcon/>,
+        'warning': '⚠️',
     }
 
     useEffect(() => {
@@ -52,16 +60,23 @@ const KrysApp: FC<WithChildren> = ({children}) => {
 
     useEffect(() => {
         if (alert !== undefined) {
-            (toast as any)[alert.type](alert.message, {
+            const options: ToastOptions = {
                 id: `alert-${alert.type}`,
-                duration: 4000,
+                duration: 4000 ,
                 position: 'top-center',
                 style: {
                     border: '1px solid ' + (color as any)[alert.type],
                     padding: '16px',
                     color: '#000000',
-                }
-            })
+                },
+                iconTheme: {
+                    primary: (color as any)[alert.type],
+                    secondary: '',
+                },
+                ...(alert.type in icon ? { icon: (icon as any)[alert.type] } : {}),
+            };
+
+            (toast as any)[(type as any)[alert.type]](alert.message, options)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [alert]);

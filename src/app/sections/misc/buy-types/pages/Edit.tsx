@@ -10,14 +10,14 @@ import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {Sections} from '../../../../helpers/sections';
 import {BuyType, defaultBuyType} from '../../../../models/misc/BuyType';
 import {getBuyType, updateBuyType} from '../../../../requests/misc/BuyType';
 import {BuyTypeSchema} from '../core/form';
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 
 const BuyTypeEdit: React.FC = () => {
@@ -69,7 +69,7 @@ const BuyTypeEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the updated buy type so we're good
-                krysApp.setAlert({message: generateSuccessMessage('buy type', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({message: new AlertMessageGenerator('buy type', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
                 navigate(`/misc/buy-types`);
             }
         });

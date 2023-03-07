@@ -52,9 +52,7 @@ const UserIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     const onChangeHandler = (e: any) => {
         // in case of multi select, the element doesn't have a name because
         // we get only a list of values from the select and not an element with target value and name
-        if(e.target.name !== '') {
-            genericOnChangeHandler(e, filters, setFilters);
-        }
+        genericOnChangeHandler(e, filters, setFilters);
     };
 
     const handleFilter = () => {
@@ -120,8 +118,8 @@ const UserIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
 
                                                 <Select isMulti name="roles"
                                                         options={roles}
-                                                        getOptionLabel={(role) => role?.name}
-                                                        getOptionValue={(role) => role?.id ? role?.id.toString(): ''}
+                                                        getOptionLabel={(role) => role.name}
+                                                        getOptionValue={(role) => role.id.toString()}
                                                         onChange={multiSelectChangeHandler}
                                                         ref={selectRef}
                                                         placeholder='Filter by role'/>

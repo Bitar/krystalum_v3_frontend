@@ -1,12 +1,12 @@
-import {ID, Response} from "../../../_metronic/helpers";
+import {Response} from "../../../_metronic/helpers";
 
 export type Region = {
-    id: ID,
+    id: number,
     name: string,
-    type:string,
-    countries:[],
+    type: Type | null,
+    countries: any[],
 
-    regions:[]
+    regions: any[]
 };
 
 export type RegionPaginate = Response<Region[]>;
@@ -15,11 +15,13 @@ export type RegionList = {
     data: Region[]
 }
 
-export const defaultRegion: Region = {id: 0, name: '',countries:[],regions:[],type:''};
+export const defaultRegion: Region = {id: 0, name: '', countries: [], regions: [], type: null};
+
+
 /*Types For Regions ['Countries','Regions','Both']*/
 
 export type Type = {
-    id: ID,
+    id: number,
     name: string,
 };
 

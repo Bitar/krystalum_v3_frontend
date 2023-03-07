@@ -1,9 +1,8 @@
 import * as Yup from 'yup';
-import {ID} from '../../../../../_metronic/helpers';
 
 export interface FormFields {
     name: string,
-    permissions: ID[]
+    permissions: number[]
 }
 
 export const defaultFormFields = {name: '', permissions: []};

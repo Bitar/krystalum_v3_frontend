@@ -34,23 +34,19 @@ const RoleRoutes: React.FC = () => {
             <Route
                 path='/create'
                 element={
-                    <>
-                        <SuspenseView>
-                            <PageTitle breadcrumbs={rolesBreadcrumbs} showPageTitle={false}>{'Create'}</PageTitle>
-                            <RoleCreate />
-                        </SuspenseView>
-                    </>
+                    <SuspenseView>
+                        <PageTitle breadcrumbs={rolesBreadcrumbs} showPageTitle={false}>{'Create'}</PageTitle>
+                        <RoleCreate/>
+                    </SuspenseView>
                 }
             />
             <Route
                 path='/:id/edit'
                 element={
-                    <>
-                        <SuspenseView>
-                            <PageTitle breadcrumbs={rolesBreadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
-                            <RoleEdit />
-                        </SuspenseView>
-                    </>
+                    <SuspenseView>
+                        <PageTitle breadcrumbs={rolesBreadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
+                        <RoleEdit/>
+                    </SuspenseView>
                 }
             />
         </Routes>

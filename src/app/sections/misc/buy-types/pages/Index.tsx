@@ -47,7 +47,7 @@ const BuyTypeIndex = () => {
                         <KTCardHeader text='All Buy Types' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, exportBuyTypes),
                                           new FilterCardAction('buy-types-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/buy-types')]}/>
+                                          new CreateCardAction('/misc/buy-types', 'manage-misc')]}/>
 
                         <KTCardBody>
                             <BuyTypeIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>

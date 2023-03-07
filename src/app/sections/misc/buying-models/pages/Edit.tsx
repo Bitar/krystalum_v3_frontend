@@ -10,14 +10,14 @@ import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {Sections} from '../../../../helpers/sections';
 import {BuyingModel, defaultBuyingModel} from '../../../../models/misc/BuyingModel';
 import {getBuyingModel, updateBuyingModel} from '../../../../requests/misc/BuyingModel';
 import {BuyingModelSchema} from '../core/form';
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 
 const BuyingModelEdit: React.FC = () => {
@@ -69,7 +69,7 @@ const BuyingModelEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the buying model so we're good
-                krysApp.setAlert({message: generateSuccessMessage('buying model', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({message: new AlertMessageGenerator('buying model', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
                 navigate(`/misc/buying-models`);
             }
         });
@@ -85,7 +85,7 @@ const BuyingModelEdit: React.FC = () => {
                 <Formik initialValues={buyingModel} validationSchema={BuyingModelSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
-                        (formik) => (
+                        () => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>

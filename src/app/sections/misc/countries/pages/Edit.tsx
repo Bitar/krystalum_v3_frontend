@@ -10,14 +10,14 @@ import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {Sections} from '../../../../helpers/sections';
 import {Country, defaultCountry} from '../../../../models/misc/Country';
 import {getCountry, updateCountry} from '../../../../requests/misc/Country';
 import {CountrySchema} from '../core/form';
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 
 const CountryEdit: React.FC = () => {
@@ -70,7 +70,7 @@ const CountryEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the booking country so we're good
-                krysApp.setAlert({message: generateSuccessMessage('country', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({message: new AlertMessageGenerator('country', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
                 navigate(`/misc/countries`);
             }
         });
@@ -86,7 +86,7 @@ const CountryEdit: React.FC = () => {
                 <Formik initialValues={country} validationSchema={CountrySchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
-                        (formik) => (
+                        () => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>

@@ -10,14 +10,14 @@ import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {generateSuccessMessage} from '../../../../helpers/alerts';
 import {Sections} from '../../../../helpers/sections';
 import {BookingType, defaultBookingType} from '../../../../models/misc/BookingType';
 import {getBookingType, updateBookingType} from '../../../../requests/misc/BookingType';
 import {BookingTypeSchema} from '../core/form';
+import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
 
 const BookingTypeEdit: React.FC = () => {
@@ -69,7 +69,7 @@ const BookingTypeEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the booking type so we're good
-                krysApp.setAlert({message: generateSuccessMessage('booking type', Actions.EDIT), type: 'success'})
+                krysApp.setAlert({message: new AlertMessageGenerator('booking type', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
                 navigate(`/misc/booking-types`);
             }
         });
