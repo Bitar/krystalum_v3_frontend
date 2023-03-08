@@ -14,6 +14,7 @@ export const QUERIES = {
     GENDERS_LIST: 'genders-list',
     CAMPAIGN_TYPES_LIST: 'campaign-types-list',
     REGIONS_LIST: 'regions-list',
+    FORMATS_LIST: 'formats-list',
     TECHNOLOGIES_LIST: 'technologies-list',
     AD_SERVERS_LIST: 'ad-servers-list',
     VIDEO_PLAYERS_LIST: 'video-players-list',

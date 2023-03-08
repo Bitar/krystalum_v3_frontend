@@ -16,6 +16,7 @@ const MiscModuleRoutes: React.FC = () => {
     const GenderRoutes = lazy(() => import('./GenderRoutes'));
     const CampaignTypeRoutes = lazy(() => import('./CampaignTypeRoutes'));
     const RegionRoutes = lazy(() => import('./RegionRoutes'));
+    const FormatRoutes = lazy(() => import('./FormatRoutes'));
     const AdServerRoutes = lazy(() => import('./AdServerRoutes'));
     const AdvertiserIndustryRoutes = lazy(() => import('./AdvertiserIndustryRoutes'));
     const BusinessUnitRoutes = lazy(() => import('./BusinessUnitRoutes'));
@@ -135,6 +136,16 @@ const MiscModuleRoutes: React.FC = () => {
                     </SuspenseView>
                 }
             ></Route>
+
+            <Route
+                path='formats/*'
+                element={
+                    <SuspenseView>
+                        <FormatRoutes/>
+                    </SuspenseView>
+                }
+            ></Route>
+
             <Route
                 path='technologies/*'
                 element={

@@ -16,6 +16,7 @@ export enum Sections {
     MISC_GENDERS = 'Genders',
     MISC_CAMPAIGN_TYPES = 'Campaign Types',
     MISC_REGIONS = 'Regions',
+    MISC_FORMATS = 'Formats',
     MISC_AD_SERVERS = 'Ad servers',
     MISC_VIDEO_PLAYERS = 'Video players',
     MISC_VERTICALS = 'Verticals',

@@ -1,8 +1,10 @@
 import {Response} from '../../../_metronic/helpers';
+import {PerformanceMetric} from "./PerformanceMetric";
 
 export type BuyingModel = {
     id: number,
-    name: string
+    name: string,
+    performanceMetrics: PerformanceMetric[]
 };
 
 export type BuyingModelPaginate = Response<BuyingModel[]>;
@@ -11,4 +13,4 @@ export type BuyingModelList = {
     data: BuyingModel[]
 }
 
-export const defaultBuyingModel: BuyingModel = {id: 0, name: ''};
+export const defaultBuyingModel: BuyingModel = {id: 0, name: '', performanceMetrics: []};

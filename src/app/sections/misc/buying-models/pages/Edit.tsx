@@ -15,14 +15,21 @@ import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {getBuyingModel, updateBuyingModel} from '../../../../requests/misc/BuyingModel';
-import {BuyingModelSchema} from '../core/form';
+import {BuyingModelSchema, defaultFormFields, FormFields} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
-import {defaultFormFields, FormFields} from "../../audiences/core/form";
+import {PerformanceMetric} from "../../../../models/misc/PerformanceMetric";
+import {getAllPerformanceMetrics} from "../../../../requests/misc/PerformanceMetric";
+import MultiSelect from "../../../../components/forms/MultiSelect";
+import {BuyingModel, defaultBuyingModel} from "../../../../models/misc/BuyingModel";
 
 
 const BuyingModelEdit: React.FC = () => {
+    const [buyingModel, setBuyingModel] = useState<BuyingModel>(defaultBuyingModel)
     const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
+    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
+
+    const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetric[]>([]);
 
     const krysApp = useKrysApp();
 
@@ -42,7 +49,27 @@ const BuyingModelEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current buying model to edit
-                    setForm(response);
+                    setBuyingModel(response);
+
+
+                    const {performanceMetrics, ...currentBuyingModel} = response
+
+                    setForm({
+                        ...currentBuyingModel,
+                        performance_metric_ids: response.performanceMetrics.map(metric => metric.id)
+                    });
+                }
+            });
+
+            // get the performance metrics, so we can edit the kpi's metrics
+            getAllPerformanceMetrics().then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else if (response.data) {
+                    // if we were able to get the list of performance metrics, then we fill our state with them
+                    setPerformanceMetrics(response.data);
                 }
             });
         }
@@ -50,9 +77,11 @@ const BuyingModelEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUYING_MODELS, PageTypes.EDIT, form.name))
+        setIsResourceLoaded(true);
+
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUYING_MODELS, PageTypes.EDIT, buyingModel.name))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [form]);
+    }, [buyingModel]);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
@@ -69,7 +98,10 @@ const BuyingModelEdit: React.FC = () => {
                 setFormErrors([GenericErrorMessage]);
             } else {
                 // we got the buying model so we're good
-                krysApp.setAlert({message: new AlertMessageGenerator('buying model', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('buying model', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                })
                 navigate(`/misc/buying-models`);
             }
         });
@@ -95,6 +127,18 @@ const BuyingModelEdit: React.FC = () => {
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="name" className="mt-2"/>
+                                    </div>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Corresponding metric" isRequired={true}/>
+
+                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={performanceMetrics}
+                                                 defaultValue={buyingModel?.performanceMetrics} form={form}
+                                                 setForm={setForm} name={'performance_metric_ids'}/>
+
+                                    <div className="mt-1 text-danger">
+                                        <ErrorMessage name="performance_metric_ids" className="mt-2"/>
                                     </div>
                                 </div>
 
