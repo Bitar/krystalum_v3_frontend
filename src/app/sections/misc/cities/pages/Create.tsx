@@ -108,7 +108,8 @@ const CityCreate: React.FC = () => {
                                             options={countries}
                                             getOptionLabel={(country) => country?.name}
                                             getOptionValue={(country) => country?.id.toString()}
-                                            onChange={selectChangeHandler}/>
+                                            onChange={selectChangeHandler}
+                                            isClearable={true}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="country" className="mt-2"/>
