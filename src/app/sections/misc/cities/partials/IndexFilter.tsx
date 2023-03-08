@@ -46,7 +46,7 @@ const CityIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     }, []);
 
     const multiSelectChangeHandler = (e: any) => {
-        genericMultiSelectOnChangeHandler(e, filters, setFilters, 'cities');
+        genericMultiSelectOnChangeHandler(e, filters, setFilters, 'countries');
     };
 
     const onChangeHandler = (e: any) => {

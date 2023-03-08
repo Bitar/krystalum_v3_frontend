@@ -36,7 +36,6 @@ const CountryIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
 
     useEffect(() => {
         handleFilter();
-        selectRef.current?.clearValue();
         setReset(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reset]);
@@ -45,8 +44,6 @@ const CountryIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
         setFilters(defaultFilterFields);
         setReset(true);
     }
-
-    const selectRef = useRef<any>(null);
 
     return (
         <Collapse in={showFilter}>
@@ -95,7 +92,7 @@ const CountryIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                             <Col md={4}>
                                                 <KrysFormLabel text="Phone code" isRequired={false}/>
 
-                                                <Field className="form-control fs-6" type="number"
+                                                <Field className="form-control fs-6" type="text"
                                                        placeholder="Filter by phone code" name="phone_code"/>
 
                                                 <div className="mt-1 text-danger">

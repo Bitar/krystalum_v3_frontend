@@ -4,10 +4,14 @@ import {ErrorMessage, Field, Form, Formik} from "formik";
 import KrysFormLabel from "../../../../components/forms/KrysFormLabel";
 import FilterFormFooter from "../../../../components/forms/FilterFormFooter";
 import {useQueryRequest} from "../../../../modules/table/QueryRequestProvider";
-import {genericOnChangeHandler} from "../../../../helpers/form";
-import {createFilterQueryParam} from "../../../../helpers/requests";
+import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from "../../../../helpers/form";
+import {createFilterQueryParam, extractErrors} from "../../../../helpers/requests";
 import {initialQueryState} from "../../../../../_metronic/helpers";
 import {defaultFilterFields, FilterFields, FilterSchema} from "../core/filterForm";
+import Select from "react-select";
+import {Country} from "../../../../models/misc/Country";
+import {getAllCountries} from "../../../../requests/misc/Country";
+import axios from "axios";
 
 interface Props {
     showFilter: boolean,
@@ -15,11 +19,33 @@ interface Props {
 }
 
 const RegionIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
-
     const {updateState} = useQueryRequest();
 
+    const [countries, setCountries] = useState<Country[]>([]);
+    const [filterErrors, setFilterErrors] = useState<string[]>([]);
     const [filters, setFilters] = useState<FilterFields>();
     const [reset, setReset] = useState<boolean>(false);
+
+    useEffect(() => {
+        // get the countries
+        getAllCountries().then(response => {
+            if (axios.isAxiosError(response)) {
+                setFilterErrors(extractErrors(response));
+            } else if (response === undefined) {
+                setFilterErrors([GenericErrorMessage])
+            } else {
+                // if we were able to get the list of countries, then we fill our state with them
+                if (response.data) {
+                    setCountries(response.data);
+                }
+            }
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const multiSelectChangeHandler = (e: any) => {
+        genericMultiSelectOnChangeHandler(e, filters, setFilters, 'countries');
+    };
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, filters, setFilters);
@@ -68,6 +94,22 @@ const RegionIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
 
                                                 <div className="mt-1 text-danger">
                                                     <ErrorMessage name="name" className="mt-2"/>
+                                                </div>
+                                            </Col>
+
+                                            <Col md={4}>
+                                                <KrysFormLabel text="Countries" isRequired={false}/>
+
+                                                <Select isMulti name="countries"
+                                                        options={countries}
+                                                        getOptionLabel={(country) => country?.name}
+                                                        getOptionValue={(country) => country?.id.toString()}
+                                                        onChange={multiSelectChangeHandler}
+                                                        ref={selectRef}
+                                                        placeholder='Filter by country'/>
+
+                                                <div className="mt-1 text-danger">
+                                                    <ErrorMessage name="countries" className="mt-2"/>
                                                 </div>
                                             </Col>
                                         </Row>
