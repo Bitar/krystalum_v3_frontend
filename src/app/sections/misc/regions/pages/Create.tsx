@@ -33,7 +33,6 @@ const RegionCreate: React.FC = () => {
     const navigate = useNavigate();
     const krysApp = useKrysApp();
 
-
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_REGIONS, PageTypes.CREATE))
 
@@ -51,7 +50,6 @@ const RegionCreate: React.FC = () => {
         });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-
     }, []);
 
     const onChangeHandler = (e: any) => {

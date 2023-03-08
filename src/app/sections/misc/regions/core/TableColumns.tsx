@@ -6,7 +6,6 @@ import {QUERIES} from '../../../../../_metronic/helpers'
 import {Region} from '../../../../models/misc/Region';
 import {Restricted} from "../../../../modules/auth/AuthAccessControl";
 import {truncateText} from "../../../../helpers/stringGenerator";
-import {Permission} from "../../../../models/iam/Permission";
 import {Country} from "../../../../models/misc/Country";
 
 const RegionsColumns: ReadonlyArray<Column<Region>> = [

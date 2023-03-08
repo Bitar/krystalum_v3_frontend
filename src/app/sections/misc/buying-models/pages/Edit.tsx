@@ -20,8 +20,7 @@ import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {PerformanceMetric} from "../../../../models/misc/PerformanceMetric";
 import {getAllPerformanceMetrics} from "../../../../requests/misc/PerformanceMetric";
 import MultiSelect from "../../../../components/forms/MultiSelect";
-import {BuyingModel, defaultBuyingModel} from "../../../../models/misc/BuyingModel";
-
+import {BuyingModel} from "../../../../models/misc/BuyingModel";
 
 const BuyingModelEdit: React.FC = () => {
     const [buyingModel, setBuyingModel] = useState<BuyingModel|null>(null)

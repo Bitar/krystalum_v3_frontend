@@ -1,5 +1,4 @@
 import {Response} from '../../../_metronic/helpers';
-import {PerformanceMetric} from "./PerformanceMetric";
 import {BuyingModel} from "./BuyingModel";
 
 export type Format = {
@@ -7,6 +6,7 @@ export type Format = {
     name: string,
     code: string,
     parent: Format | null,
+    has_buying_model: number,
     buyingModels: BuyingModel[]
 };
 
@@ -21,5 +21,6 @@ export const defaultFormat: Format = {
     name: '',
     code: '',
     parent: null,
+    has_buying_model: 0,
     buyingModels: []
 };

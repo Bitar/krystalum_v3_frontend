@@ -114,7 +114,7 @@ const FormatCreate: React.FC = () => {
                 <Formik initialValues={form} validationSchema={FormatSchema} onSubmit={handleCreate}
                         enableReinitialize>
                     {
-                        (formik) => (
+                        () => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
@@ -139,6 +139,19 @@ const FormatCreate: React.FC = () => {
                                 </div>
 
                                 <div className="mb-7">
+                                    <KrysFormLabel text="Does this format has buying model?" isRequired={true}/>
+
+                                    <KrysCheckbox name="has_buying_model" onChangeHandler={(e) => {
+                                        e.stopPropagation();
+                                        setForm({...form, has_buying_model: Number(!form.has_buying_model)});
+                                    }} defaultValue={Boolean(form.has_buying_model)}/>
+
+                                    <div className="mt-1 text-danger">
+                                        <ErrorMessage name="has_buying_model" className="mt-2"/>
+                                    </div>
+                                </div>
+
+                                {form.has_buying_model > 0 && <div className="mb-7">
                                     <KrysFormLabel text="Buying models" isRequired={false}/>
 
                                     <Select isMulti name="buying_model_ids"
@@ -152,6 +165,7 @@ const FormatCreate: React.FC = () => {
                                         <ErrorMessage name="buying_model_ids" className="mt-2"/>
                                     </div>
                                 </div>
+                                }
 
                                 <div className="mb-7">
                                     <KrysFormLabel text="Format Parent" isRequired={false}/>
@@ -165,7 +179,7 @@ const FormatCreate: React.FC = () => {
                                                 if (option.parent !== null) {
                                                     // this is a child
                                                     return (
-                                                        <div style={{ marginLeft: '1em' }}>
+                                                        <div style={{marginLeft: '1em'}}>
                                                             {option.name}
                                                         </div>
                                                     );

@@ -6,7 +6,7 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {
-    GenericErrorMessage, genericMultiSelectOnChangeHandler,
+    GenericErrorMessage,
     genericOnChangeHandler, genericSelectOnChangeHandler,
 } from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
@@ -20,14 +20,15 @@ import {Sections} from '../../../../helpers/sections';
 import Select from 'react-select';
 import {defaultFormFields, FormFields, FormatSchema} from '../core/form';
 import {getAllFormats, getFormat, updateFormat} from "../../../../requests/misc/Format";
-import {defaultFormat, Format} from "../../../../models/misc/Format";
+import {Format} from "../../../../models/misc/Format";
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {getAllBuyingModels} from "../../../../requests/misc/BuyingModel";
 import {BuyingModel} from "../../../../models/misc/BuyingModel";
 import MultiSelect from "../../../../components/forms/MultiSelect";
+import KrysCheckbox from "../../../../components/forms/KrysCheckbox";
 
 const FormatEdit: React.FC = () => {
-    const [format, setFormat] = useState<Format|null>(null);
+    const [format, setFormat] = useState<Format | null>(null);
     const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -57,7 +58,10 @@ const FormatEdit: React.FC = () => {
 
                     const {buyingModels, ...currentFormat} = response
 
-                    setForm({...currentFormat, buying_model_ids: response.buyingModels.map(buyingModel => buyingModel.id)});
+                    setForm({
+                        ...currentFormat,
+                        buying_model_ids: response.buyingModels.map(buyingModel => buyingModel.id)
+                    });
                 }
             });
 
@@ -92,7 +96,7 @@ const FormatEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        if(format) {
+        if (format) {
             setIsResourceLoaded(true);
 
             krysApp.setPageTitle(generatePageTitle(Sections.MISC_FORMATS, PageTypes.EDIT, format.name))
@@ -106,10 +110,6 @@ const FormatEdit: React.FC = () => {
 
     const selectChangeHandler = (e: any) => {
         genericSelectOnChangeHandler(e, form, setForm, 'parent');
-    };
-
-    const multiSelectChangeHandler = (e: any) => {
-        genericMultiSelectOnChangeHandler(e, form, setForm, 'buying_model_ids');
     };
 
     const handleEdit = (e: any) => {
@@ -167,6 +167,19 @@ const FormatEdit: React.FC = () => {
                                 </div>
 
                                 <div className="mb-7">
+                                    <KrysFormLabel text="Does this format has buying model?" isRequired={true}/>
+
+                                    <KrysCheckbox name="has_buying_model" onChangeHandler={(e) => {
+                                        e.stopPropagation();
+                                        setForm({...form, has_buying_model: Number(!form.has_buying_model)});
+                                    }} defaultValue={Boolean(form.has_buying_model)}/>
+
+                                    <div className="mt-1 text-danger">
+                                        <ErrorMessage name="has_buying_model" className="mt-2"/>
+                                    </div>
+                                </div>
+
+                                {form.has_buying_model > 0 && <div className="mb-7">
                                     <KrysFormLabel text="Buying models" isRequired={false}/>
 
                                     <MultiSelect isResourceLoaded={isResourceLoaded} options={buyingModels}
@@ -176,7 +189,7 @@ const FormatEdit: React.FC = () => {
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="buying_model_ids" className="mt-2"/>
                                     </div>
-                                </div>
+                                </div>}
 
                                 <div className="mb-7">
                                     <KrysFormLabel text="Format Parent" isRequired={false}/>

@@ -13,6 +13,7 @@ import Select from "react-select";
 import {PerformanceMetric} from "../../../../models/misc/PerformanceMetric";
 import {getAllPerformanceMetrics} from "../../../../requests/misc/PerformanceMetric";
 import axios from "axios";
+import FormErrors from "../../../../components/forms/FormErrors";
 
 interface Props {
     showFilter: boolean,
@@ -80,6 +81,8 @@ const BuyingModelIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) =
             <Row id='#biuying-models-list-filter'>
                 <Col>
                     <div className="card-rounded bg-primary bg-opacity-5 p-10 mb-15">
+                        <FormErrors errorMessages={filterErrors}/>
+
                         <Formik initialValues={defaultFilterFields} validationSchema={FilterSchema}
                                 onSubmit={handleFilter}
                                 enableReinitialize>

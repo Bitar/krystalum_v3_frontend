@@ -12,6 +12,7 @@ import Select from "react-select";
 import {Country} from "../../../../models/misc/Country";
 import {getAllCountries} from "../../../../requests/misc/Country";
 import axios from "axios";
+import FormErrors from "../../../../components/forms/FormErrors";
 
 interface Props {
     showFilter: boolean,
@@ -79,6 +80,8 @@ const RegionIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
             <Row id='#regions-list-filter'>
                 <Col>
                     <div className="card-rounded bg-primary bg-opacity-5 p-10 mb-15">
+                        <FormErrors errorMessages={filterErrors}/>
+
                         <Formik initialValues={defaultFilterFields} validationSchema={FilterSchema}
                                 onSubmit={handleFilter}
                                 enableReinitialize>
