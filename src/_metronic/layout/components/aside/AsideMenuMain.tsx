@@ -42,6 +42,7 @@ export function AsideMenuMain() {
                     <AsideMenuItem to='/misc/devices' title='Devices' hasBullet={true}/>
                     <AsideMenuItem to='/misc/kpis' title='KPIs' hasBullet={true}/>
                     <AsideMenuItem to='/misc/languages' title='Languages' hasBullet={true}/>
+                    <AsideMenuItem to='/misc/objectives' title='Objectives' hasBullet={true}/>
                     <AsideMenuItem to='/misc/operating-systems' title='Operating systems' hasBullet={true}/>
                     <AsideMenuItem to='/misc/performance-metrics' title='Performance metrics' hasBullet={true}/>
                     <AsideMenuItem to='/misc/regions' title='Regions' hasBullet={true}/>

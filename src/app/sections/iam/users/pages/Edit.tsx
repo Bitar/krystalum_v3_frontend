@@ -56,7 +56,7 @@ const UserEdit: React.FC = () => {
 
                     // was able to get the user we want to edit
                     // the form is the same as user but without the image
-                    setForm({...currentUser, roles: response.roles.map(role => role.id)});
+                    setForm({...currentUser, roles: response.roles.map((role: { id: any; }) => role.id)});
                 }
             });
 

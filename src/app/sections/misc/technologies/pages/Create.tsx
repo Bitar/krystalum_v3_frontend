@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
@@ -14,9 +15,9 @@ import {storeTechnology} from '../../../../requests/misc/Technology';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
+import {useAccessControl} from "../../../../modules/auth/AuthAccessControl";
 
 const TechnologyCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -35,7 +36,7 @@ const TechnologyCreate: React.FC = () => {
     };
 
     const handleCreate = (e: any) => {
-        // send API request to create the permission
+        // send API request to create the technology
         storeTechnology(form).then(response => {
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
@@ -44,7 +45,8 @@ const TechnologyCreate: React.FC = () => {
                     // show generic error message
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    // it's permission for sure
+                    // it's technology for sure
+
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('technology', Actions.CREATE, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS
@@ -77,7 +79,7 @@ const TechnologyCreate: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter cancelUrl={'/iam/technologies'}/>
+                                <KrysFormFooter cancelUrl={'/misc/technologies'}/>
                             </Form>
                         )
                     }

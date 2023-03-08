@@ -12,19 +12,19 @@ type Props = {
     model: any,
     isLoading: boolean
 }
+
 const KrysTable: React.FC<Props> = ({data, columns, model, isLoading}) => {
     const {getTableProps, getTableBodyProps, headers, rows, prepareRow} = useTable({
         columns,
         data,
-    })
+    });
 
     return (
         // className="border rounded px-5"
-        <div >
+        <div>
             <div className='table-responsive border rounded'>
-                <Table
-                    className='align-middle table-row-bordered fs-6 gy-5 gs-7 dataTable table-striped no-footer'
-                    {...getTableProps()}
+                <Table className='align-middle table-row-bordered fs-6 gy-5 gs-7 dataTable table-striped no-footer'
+                       {...getTableProps()}
                 >
                     <thead>
                     <tr className='text-start text-muted fw-bolder fs-7 text-uppercase gs-0'>

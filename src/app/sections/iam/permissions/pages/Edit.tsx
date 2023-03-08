@@ -31,14 +31,14 @@ const PermissionEdit: React.FC = () => {
     let {id} = useParams();
 
     useEffect(() => {
-        if(id) {
+        if (id) {
             // get the permission we need to edit from the database
             getPermission(parseInt(id)).then(response => {
-                if(axios.isAxiosError(response)) {
+                if (axios.isAxiosError(response)) {
                     // we were not able to fetch the permission to edit so we need to redirect
                     // to error page
                     navigate('/error/404');
-                } else if(response === undefined) {
+                } else if (response === undefined) {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current permission to edit
@@ -65,10 +65,10 @@ const PermissionEdit: React.FC = () => {
     const handleEdit = (e: any) => {
         // we need to update the permission's data by doing API call with form
         updatePermission(permission).then(response => {
-            if(axios.isAxiosError(response)) {
+            if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));
-            } else if(response === undefined) {
+            } else if (response === undefined) {
                 // show generic error
                 setFormErrors([GenericErrorMessage]);
             } else {
@@ -86,12 +86,13 @@ const PermissionEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={permission} validationSchema={EditPermissionSchema} onSubmit={handleEdit} enableReinitialize>
+                <Formik initialValues={permission} validationSchema={EditPermissionSchema} onSubmit={handleEdit}
+                        enableReinitialize>
                     {
                         (formik) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Name" isRequired={true} />
+                                    <KrysFormLabel text="Name" isRequired={true}/>
 
                                     <Field className="form-control fs-6" type="text"
                                            placeholder="Enter permission name" name="name"/>

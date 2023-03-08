@@ -6,7 +6,7 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/iam/permissions`
 
 export const getAllPermissions = async (): Promise<PermissionList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<PermissionList>) => response.data).catch((error) => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<PermissionList>) => response.data).catch((error) => {
         return error;
     });
 }

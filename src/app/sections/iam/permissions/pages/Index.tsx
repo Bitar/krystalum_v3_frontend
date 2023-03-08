@@ -43,7 +43,6 @@ const PermissionIndex = () => {
 
                         <KTCardBody>
                             <PermissionIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
-
                             <PermissionTable/>
                         </KTCardBody>
                     </KTCard>

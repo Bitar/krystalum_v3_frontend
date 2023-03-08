@@ -11,6 +11,10 @@ export type User = {
     roles: Role[]
 }
 
+export type UserList = {
+    data: User[]
+}
+
 export type UserPaginate = Response<User[]>;
 
 export const defaultUser: User = {id: 0, name: "", email: "", roles: []};

@@ -5,7 +5,6 @@ export const genericOnChangeHandler = (e: any, form: any, setForm: React.Dispatc
     const value = e.target.value;
     const name = e.target.name;
 
-    // if the value was Array then the multi select handler would take care of it
     if(name) {
         setForm({
             ...form,
@@ -17,7 +16,7 @@ export const genericOnChangeHandler = (e: any, form: any, setForm: React.Dispatc
 export const GenericErrorMessage: string = 'Oops! Something went wrong. Try again later.';
 
 export const genericMultiSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
-    if(e.length > 0) {
+    if (e.length > 0) {
         setForm({...form, [key]: e.map((entity: any) => entity.id)});
     } else {
         setForm({...form, [key]: []});
@@ -25,20 +24,27 @@ export const genericMultiSelectOnChangeHandler = (e: any, form: any, setForm: Re
 };
 
 export const genericSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
-    setForm({...form, [key]: e.id});
-};
+    if(e) {
+        setForm({...form, [key]: e.id});
+    } else {
+        // this happens when we're trying to unselect an option
+        // we need to remove the [key] property from the form and set the new value as form
+        const {[key]: _, ...newForm} = form
 
-export const genericSelectV2OnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
-    setForm({...form, [key]: e});
+        setForm(newForm);
+    }
 };
-
 
 export const genericSingleSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string, key2: string) => {
-    setForm({...form, [key]: e.id, [key2]: e});
-};
+    if(e) {
+        setForm({...form, [key]: e.id, [key2]: e});
+    } else {
+        // this happens when we're trying to unselect an option
+        // we need to remove the [key] and [key2] properties from the form and set the new value as form
+        const {[key]: _, [key2]: __, ...newForm} = form
 
-export const genericSingleSelectV2OnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
-    setForm({...form, [key]: e});
+        setForm(newForm);
+    }
 };
 
 export const SUPPORTED_IMAGE_FORMATS = [
