@@ -5,7 +5,7 @@ import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
 import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {QUERIES} from '../../../../../_metronic/helpers'
 import {BusinessUnit} from '../../../../models/misc/BusinessUnit';
-import {Restricted, useAccessControl} from '../../../../modules/auth/AuthAccessControl';
+import {Restricted} from '../../../../modules/auth/AuthAccessControl';
 
 const BusinessUnitsColumns: ReadonlyArray<Column<BusinessUnit>> = [
     {

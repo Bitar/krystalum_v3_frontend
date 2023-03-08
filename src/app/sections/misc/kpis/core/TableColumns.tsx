@@ -8,7 +8,7 @@ import {Kpi} from '../../../../models/misc/Kpi';
 import {BadgeCell} from '../../../../modules/table/columns/BadgeCell';
 import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
 import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
-import {Restricted, useAccessControl} from '../../../../modules/auth/AuthAccessControl';
+import {Restricted} from '../../../../modules/auth/AuthAccessControl';
 
 const KpisColumns: ReadonlyArray<Column<Kpi>> = [
     {

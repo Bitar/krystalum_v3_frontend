@@ -5,7 +5,7 @@ import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
 import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {QUERIES} from '../../../../../_metronic/helpers'
 import {VideoPlayer} from '../../../../models/misc/VideoPlayer';
-import {Restricted, useAccessControl} from '../../../../modules/auth/AuthAccessControl';
+import {Restricted} from '../../../../modules/auth/AuthAccessControl';
 
 const VideoPlayersColumns: ReadonlyArray<Column<VideoPlayer>> = [
     {
