@@ -1,17 +1,13 @@
 import * as Yup from 'yup';
-import {Type} from "../../../../models/misc/Region";
 
 export interface FormFields {
     name: string,
-    type: Type | null,
-    regions: any[],
     countries: any[]
-    canUpdate?: boolean
 }
 
-export const defaultFormFields = {name: '', type: null, regions: [], countries: [], canUpdate: false};
+export const defaultFormFields = {name: '', countries: []};
 
 export const RegionSchema = Yup.object().shape({
     name: Yup.string().required(),
-    type: Yup.object().required(),
+    countries: Yup.array().of(Yup.number()).required().min(1, 'You must select at least one country.'),
 });

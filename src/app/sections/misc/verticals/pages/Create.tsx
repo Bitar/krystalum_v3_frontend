@@ -48,7 +48,7 @@ const VerticalCreate: React.FC = () => {
     }, []);
 
     const selectChangeHandler = (e: any) => {
-        genericSelectOnChangeHandler(e, form, setForm, 'parent_id');
+        genericSelectOnChangeHandler(e, form, setForm, 'parent');
     };
 
     const onChangeHandler = (e: any) => {
@@ -104,7 +104,7 @@ const VerticalCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Vertical Parent" isRequired={false}/>
 
-                                    <Select name="parent_id"
+                                    <Select name="parent"
                                             options={verticals}
                                             getOptionLabel={(vertical) => vertical.name}
                                             getOptionValue={(vertical) => vertical.id.toString()}
@@ -129,7 +129,7 @@ const VerticalCreate: React.FC = () => {
                                             isClearable={true}/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="parent_id" className="mt-2"/>
+                                        <ErrorMessage name="parent" className="mt-2"/>
                                     </div>
                                 </div>
 

@@ -1,4 +1,4 @@
-import {Region, RegionList, RegionPaginate, TypeList} from "../../models/misc/Region"
+import {Region, RegionPaginate} from "../../models/misc/Region"
 import axios, {AxiosError, AxiosResponse} from "axios";
 import {createFormData, ExportUrl} from "../../helpers/requests";
 
@@ -25,11 +25,6 @@ export const getRegions = (query ?: String): Promise<RegionPaginate> => {
     });
 }
 
-export const getAllRegions = async (): Promise<RegionList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<RegionList>) => response.data).catch((error) => {
-        return error;
-    });
-}
 export const exportRegions = async (query ?: String): Promise<ExportUrl | AxiosError | undefined> => {
     let url = `${ENDPOINT}/export`;
 
@@ -55,15 +50,10 @@ export const storeRegion = async (region: any): Promise<Region | AxiosError | un
         });
 }
 
-export const getTypes = async (): Promise<TypeList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/types').then((response: AxiosResponse<TypeList>) => response.data).catch((error) => {
-        return error;
-    });
-}
 
 export const updateRegion = async (region: any): Promise<Region | AxiosError | undefined> => {
     let formData = createFormData(region);
-console.log(formData);
+    console.log(formData);
     formData.append('_method', 'put');
 
     return await axios.post(ENDPOINT + '/' + region.id, formData).then(res => res.data.data).catch((error) => {

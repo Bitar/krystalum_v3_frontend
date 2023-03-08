@@ -7,7 +7,7 @@ import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {
     GenericErrorMessage,
-    genericOnChangeHandler,
+    genericOnChangeHandler, genericSelectOnChangeHandler,
     // genericSingleSelectOnChangeHandler
 } from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
@@ -51,7 +51,7 @@ const VerticalEdit: React.FC = () => {
                     // we were able to fetch current vertical to edit
                     setVertical(response);
 
-                    setForm({...response, parent_id: response?.parent?.id})
+                    setForm({...response})
                 }
             });
 
@@ -82,7 +82,7 @@ const VerticalEdit: React.FC = () => {
     };
 
     const selectChangeHandler = (e: any) => {
-        // genericSingleSelectOnChangeHandler(e, form, setForm, 'parent_id', 'parent');
+        genericSelectOnChangeHandler(e, form, setForm, 'parent');
     };
 
     const handleEdit = (e: any) => {
@@ -131,7 +131,7 @@ const VerticalEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Vertical Parent" isRequired={false}/>
 
-                                    <Select name="parent_id"
+                                    <Select name="parent"
                                             options={verticals}
                                             value={form.parent}
                                             getOptionLabel={(vertical) => vertical.name}
@@ -157,7 +157,7 @@ const VerticalEdit: React.FC = () => {
                                             isClearable={true}/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="parent_id" className="mt-2"/>
+                                        <ErrorMessage name="parent" className="mt-2"/>
                                     </div>
                                 </div>
                                 <KrysFormFooter cancelUrl={'/misc/verticals'}/>
