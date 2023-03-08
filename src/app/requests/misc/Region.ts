@@ -1,4 +1,4 @@
-import {Region, RegionList, RegionPaginate} from "../../models/misc/Region"
+import {Region, RegionPaginate} from "../../models/misc/Region"
 import axios, {AxiosError, AxiosResponse} from "axios";
 import {createFormData, ExportUrl} from "../../helpers/requests";
 

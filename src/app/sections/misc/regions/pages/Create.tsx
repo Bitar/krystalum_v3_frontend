@@ -114,7 +114,7 @@ const RegionCreate: React.FC = () => {
                                     />
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="country" className="mt-2"/>
+                                        <ErrorMessage name="countries" className="mt-2"/>
                                     </div>
                                 </div>
 
