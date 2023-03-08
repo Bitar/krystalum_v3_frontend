@@ -14,7 +14,7 @@ export const defaultFormFields = {name: '', code: '', has_buying_model: 0, buyin
 export const FormatSchema = Yup.object().shape({
     name: Yup.string().required(),
     code: Yup.string().required(),
-    parent: Yup.object().notRequired(),
+    parent: Yup.object().notRequired().nullable(),
     has_buying_model: Yup.number().required(),
     buying_model_ids: Yup.array().notRequired()
 });

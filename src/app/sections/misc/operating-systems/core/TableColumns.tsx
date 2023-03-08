@@ -28,7 +28,7 @@ const OperatingSystemsColumns: ReadonlyArray<Column<OperatingSystem>> = [
                     showView={false}
                     showEdit={true}
                     title="Delete Booking Type"
-                    text={`Are you sure you want to delete the booking type '${props.data[props.row.index].name}'?`}
+                    text={`Are you sure you want to delete the operating system '${props.data[props.row.index].name}'?`}
                 />
             </Restricted>
         ),

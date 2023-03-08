@@ -159,7 +159,7 @@ const FormatEdit: React.FC = () => {
                                     <KrysFormLabel text="Code" isRequired={true}/>
 
                                     <Field className="form-control fs-6" type="text"
-                                           placeholder="Enter format code" name="name"/>
+                                           placeholder="Enter format code" name="code"/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="code" className="mt-2"/>
@@ -194,7 +194,7 @@ const FormatEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Format Parent" isRequired={false}/>
 
-                                    <Select name="parent_id"
+                                    <Select name="parent"
                                             options={formats}
                                             value={form.parent}
                                             getOptionLabel={(format) => format.name}
@@ -220,7 +220,7 @@ const FormatEdit: React.FC = () => {
                                             isClearable={true}/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="parent_id" className="mt-2"/>
+                                        <ErrorMessage name="parent" className="mt-2"/>
                                     </div>
                                 </div>
                                 <KrysFormFooter cancelUrl={'/misc/formats'}/>
