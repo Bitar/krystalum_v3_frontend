@@ -24,7 +24,7 @@ import {BuyingModel, defaultBuyingModel} from "../../../../models/misc/BuyingMod
 
 
 const BuyingModelEdit: React.FC = () => {
-    const [buyingModel, setBuyingModel] = useState<BuyingModel>(defaultBuyingModel)
+    const [buyingModel, setBuyingModel] = useState<BuyingModel|null>(null)
     const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
@@ -77,9 +77,11 @@ const BuyingModelEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        setIsResourceLoaded(true);
+        if(buyingModel) {
+            setIsResourceLoaded(true);
 
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUYING_MODELS, PageTypes.EDIT, buyingModel.name))
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUYING_MODELS, PageTypes.EDIT, buyingModel.name))
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [buyingModel]);
 

@@ -27,7 +27,7 @@ import {BuyingModel} from "../../../../models/misc/BuyingModel";
 import MultiSelect from "../../../../components/forms/MultiSelect";
 
 const FormatEdit: React.FC = () => {
-    const [format, setFormat] = useState<Format>(defaultFormat);
+    const [format, setFormat] = useState<Format|null>(null);
     const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -92,9 +92,11 @@ const FormatEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        setIsResourceLoaded(true);
+        if(format) {
+            setIsResourceLoaded(true);
 
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_FORMATS, PageTypes.EDIT, format.name))
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_FORMATS, PageTypes.EDIT, format.name))
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [format]);
 

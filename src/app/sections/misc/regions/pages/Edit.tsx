@@ -26,10 +26,10 @@ import {KrysToastType} from '../../../../helpers/variables';
 import MultiSelect from "../../../../components/forms/MultiSelect";
 
 const RegionEdit: React.FC = () => {
+    const [region, setRegion] = useState<Region|null>(null);
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [countries, setCountries] = useState<Country[]>([]);
-    const [region, setRegion] = useState<Region>();
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false);
 
     const navigate = useNavigate();
