@@ -79,8 +79,8 @@ const RegionEdit: React.FC = () => {
     useEffect(() => {
         if (region) {
             setIsResourceLoaded(true);
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_REGIONS, PageTypes.EDIT, form.name))
 
-            krysApp.setPageTitle(generatePageTitle(Sections.MISC_REGIONS, PageTypes.EDIT))
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

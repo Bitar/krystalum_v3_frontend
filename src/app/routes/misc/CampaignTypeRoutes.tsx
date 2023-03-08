@@ -9,7 +9,7 @@ import CampaignTypeEdit from '../../sections/misc/campaign-types/pages/Edit';
 
 const breadcrumbs: Array<PageLink> = [
     {
-        title: Sections.MISC_BOOKING_TYPES,
+        title: Sections.MISC_CAMPAIGN_TYPES,
         path: '/misc/campaign-types/',
         isSeparator: false,
         isActive: false,
