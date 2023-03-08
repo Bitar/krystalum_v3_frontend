@@ -120,7 +120,7 @@ const RegionEdit: React.FC = () => {
 
                 <Formik initialValues={form} validationSchema={RegionSchema} onSubmit={handleEdit} enableReinitialize>
                     {
-                        (formik) => (
+                        () => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
@@ -133,7 +133,7 @@ const RegionEdit: React.FC = () => {
                                     </div>
                                 </div>
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Countries" isRequired={true}/>
+                                    <KrysFormLabel text="Countries" isRequired={false}/>
 
                                     <MultiSelect isResourceLoaded={isResourceLoaded} options={countries}
                                                  defaultValue={region?.countries} form={form} setForm={setForm}
