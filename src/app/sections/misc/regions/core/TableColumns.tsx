@@ -5,12 +5,20 @@ import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {QUERIES} from '../../../../../_metronic/helpers'
 import {Region} from '../../../../models/misc/Region';
 import {Restricted} from "../../../../modules/auth/AuthAccessControl";
+import {truncateText} from "../../../../helpers/stringGenerator";
+import {Permission} from "../../../../models/iam/Permission";
+import {Country} from "../../../../models/misc/Country";
 
 const RegionsColumns: ReadonlyArray<Column<Region>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title='Name' className='min-w-125px'/>,
         id: 'name',
         Cell: ({...props}) => <TextCell text={props.data[props.row.index].name}/>,
+    },
+    {
+        Header: (props) => <CustomHeader tableProps={props} title='Countries' className='min-w-125px' />,
+        id: 'countries',
+        Cell: ({...props}) => <TextCell text={truncateText(props.data[props.row.index].countries.map((country: Country) => country.name).join(", "))} />,
     },
     {
         Header: (props) => (
