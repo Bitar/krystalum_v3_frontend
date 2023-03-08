@@ -2,14 +2,14 @@ import * as Yup from 'yup';
 
 export interface FilterFields {
     name?: string,
-    country?: number,
+    countries?: number[],
 }
 
 export const defaultFilterFields = {
-    name: '', country: 0
+    name: '', countries: []
 }
 
 export const FilterSchema = Yup.object().shape({
     name: Yup.string().notRequired(),
-    country: Yup.number().notRequired(),
+    countries: Yup.array().of(Yup.number()).notRequired()
 });

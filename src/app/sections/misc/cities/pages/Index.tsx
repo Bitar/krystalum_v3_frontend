@@ -51,7 +51,6 @@ const CityIndex = () => {
 
                         <KTCardBody>
                             <CityIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
-
                             <CityTable/>
                         </KTCardBody>
                     </KTCard>
