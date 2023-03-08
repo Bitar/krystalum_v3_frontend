@@ -52,6 +52,7 @@ export function AsideMenuMain() {
                     <AsideMenuItem to='/misc/technologies' title='Technologies' hasBullet={true}/>
                     <AsideMenuItem to='/misc/verticals' title='Verticals' hasBullet={true}/>
                     <AsideMenuItem to='/misc/video-players' title='Video players' hasBullet={true}/>
+                    <AsideMenuItem to='/misc/website-pages' title='Website Pages' hasBullet={true}/>
                 </AsideMenuItemWithSub>
             </Restricted>
         </>

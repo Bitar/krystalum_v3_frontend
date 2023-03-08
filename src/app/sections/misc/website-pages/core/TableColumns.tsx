@@ -4,10 +4,10 @@ import {TextCell} from '../../../../modules/table/columns/TextCell'
 import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
 import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {QUERIES} from '../../../../../_metronic/helpers'
-import {BusinessUnit} from '../../../../models/misc/BusinessUnit';
-import {Restricted, useAccessControl} from '../../../../modules/auth/AuthAccessControl';
+import {Restricted} from '../../../../modules/auth/AuthAccessControl';
+import {WebsitePage} from '../../../../models/misc/WebsitePage';
 
-const BusinessUnitsColumns: ReadonlyArray<Column<BusinessUnit>> = [
+const WebsitePagesColumns: ReadonlyArray<Column<WebsitePage>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title='Name' className='min-w-125px'/>,
         id: 'name',
@@ -24,17 +24,17 @@ const BusinessUnitsColumns: ReadonlyArray<Column<BusinessUnit>> = [
             <Restricted to={'manage-misc'}>
                 <ActionsCell
                     id={props.data[props.row.index].id}
-                    path={'misc/business-units'}
-                    queryKey={QUERIES.BUSINESS_UNITS_LIST}
+                    path={'misc/website-pages'}
+                    queryKey={QUERIES.WEBSITE_PAGES_LIST}
                     showView={false}
                     showEdit={true}
                     showDelete={true}
-                    title="Delete Business Unit"
-                    text={`Are you sure you want to delete the business unit '${props.data[props.row.index].name}'?`}
+                    title="Delete Website Page"
+                    text={`Are you sure you want to delete the website page '${props.data[props.row.index].name}'?`}
                 />
             </Restricted>
         ),
     },
 ]
 
-export {BusinessUnitsColumns}
+export {WebsitePagesColumns}
