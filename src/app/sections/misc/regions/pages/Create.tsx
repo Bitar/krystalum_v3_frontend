@@ -15,29 +15,21 @@ import {
     GenericErrorMessage,
     genericMultiSelectOnChangeHandler,
     genericOnChangeHandler,
-    genericSelectOnChangeHandler,
-    genericSingleSelectOnChangeHandler, genericSingleSelectV2OnChangeHandler
+    genericSingleSelectV2OnChangeHandler
 } from "../../../../helpers/form";
 import axios from "axios";
 import {extractErrors} from "../../../../helpers/requests";
-import {getAllRegions, getTypes, storeRegion} from "../../../../requests/misc/Region";
+import {storeRegion} from "../../../../requests/misc/Region";
 import Select from "react-select";
 import {Country} from "../../../../models/misc/Country";
 import {getAllCountries} from "../../../../requests/misc/Country";
-import {Region} from "../../../../models/misc/Region";
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 
-type ShowRegionOrCountry = {
-    [key: string]: boolean;
-}
 const RegionCreate: React.FC = () => {
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-    const [types, setTypes] = useState<Array<any>>([]);
     const [countries, setCountries] = useState<Country[]>([]);
-    const [regions, setRegions] = useState<Region[]>([]);
-    const [showRegionOrCountry, setShowRegionOrCountry] = useState<ShowRegionOrCountry>({});
 
     const navigate = useNavigate();
     const krysApp = useKrysApp();
@@ -45,19 +37,6 @@ const RegionCreate: React.FC = () => {
 
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_REGIONS, PageTypes.CREATE))
-
-        getTypes().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFormErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of  types, then we fill our state with them
-                if (response.data) {
-                    setTypes(response.data);
-                }
-            }
-        });
 
         getAllCountries().then(response => {
             if (axios.isAxiosError(response)) {
@@ -68,19 +47,6 @@ const RegionCreate: React.FC = () => {
                 // if we were able to get the list of countries, then we fill our state with them
                 if (response.data) {
                     setCountries(response.data);
-                }
-            }
-        });
-
-        getAllRegions().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFormErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of countries, then we fill our state with them
-                if (response.data) {
-                    setRegions(response.data);
                 }
             }
         });
@@ -113,19 +79,6 @@ const RegionCreate: React.FC = () => {
         );
     };
 
-    const selectChangeHandler = (e: any, key: any) => {
-        genericSingleSelectV2OnChangeHandler(e, form, setForm, key);
-
-        if (key == 'type') {
-            setShowRegionOrCountry((prevShowState) => ({
-                ...prevShowState,
-                showRegions: false,
-                showCountries: false,
-                showBoth: false,
-                [`show${e.name}`]: true
-            }));
-        }
-    };
 
     const multiSelectChangeHandler = (e: any, key: any) => {
         genericMultiSelectOnChangeHandler(e, form, setForm, key);
@@ -153,52 +106,19 @@ const RegionCreate: React.FC = () => {
                                     </div>
                                 </div>
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Type" isRequired={true}/>
-
-                                    <Select name="type"
-                                            options={types}
-                                            getOptionLabel={(type) => type?.name}
-                                            getOptionValue={(type) => type?.id.toString()}
-                                            onChange={(e) => selectChangeHandler(e, 'type')}/>
+                                    <KrysFormLabel text="Country"/>
+                                    <Select isMulti name="countries"
+                                            options={countries}
+                                            getOptionLabel={(country) => country?.name}
+                                            getOptionValue={(country) => country?.id ? country?.id.toString() : '0'}
+                                            onChange={(e) => multiSelectChangeHandler(e, 'countries')}
+                                            placeholder="Select one or more countries"
+                                    />
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="type" className="mt-2"/>
+                                        <ErrorMessage name="country" className="mt-2"/>
                                     </div>
                                 </div>
-                                {(showRegionOrCountry.showCountries || showRegionOrCountry.showBoth) &&
-                                    <div className="mb-7">
-                                        <KrysFormLabel text="Country"/>
-
-
-                                        <Select isMulti name="countries"
-                                                options={countries}
-                                                getOptionLabel={(country) => country?.name}
-                                                getOptionValue={(country) => country?.id ? country?.id.toString() : '0'}
-                                                onChange={(e) => multiSelectChangeHandler(e, 'countries')}
-                                                placeholder="Select one or more countries"
-                                        />
-
-                                        <div className="mt-1 text-danger">
-                                            <ErrorMessage name="country" className="mt-2"/>
-                                        </div>
-                                    </div>
-                                }
-                                {(showRegionOrCountry.showRegions || showRegionOrCountry.showBoth) &&
-                                    <div className="mb-7">
-                                        <KrysFormLabel text="Region"/>
-                                        <Select isMulti name="regions"
-                                                options={regions}
-                                                getOptionLabel={(region) => region?.name}
-                                                getOptionValue={(region) => region?.id ? region?.id.toString() : '0'}
-                                                onChange={(e) => multiSelectChangeHandler(e, 'regions')}
-                                                placeholder="Select one or more regions"
-                                        />
-
-                                        <div className="mt-1 text-danger">
-                                            <ErrorMessage name="region" className="mt-2"/>
-                                        </div>
-                                    </div>
-                                }
 
                                 <KrysFormFooter cancelUrl={'/misc/regions'}/>
                             </Form>

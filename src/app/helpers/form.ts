@@ -35,6 +35,13 @@ export const genericSelectOnChangeHandler = (e: any, form: any, setForm: React.D
     }
 };
 
+export const genericSingleSelectV2OnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
+    setForm({...form, [key]: e});
+};
+
+export const genericSelectV2OnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
+    setForm({...form, [key]: e});
+};
 export const genericSingleSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string, key2: string) => {
     if(e) {
         setForm({...form, [key]: e.id, [key2]: e});
