@@ -8,7 +8,7 @@ import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHe
 import {
     GenericErrorMessage,
     genericOnChangeHandler,
-    genericSingleSelectOnChangeHandler
+    // genericSingleSelectOnChangeHandler
 } from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
@@ -82,7 +82,7 @@ const VerticalEdit: React.FC = () => {
     };
 
     const selectChangeHandler = (e: any) => {
-        genericSingleSelectOnChangeHandler(e, form, setForm, 'parent_id', 'parent');
+        // genericSingleSelectOnChangeHandler(e, form, setForm, 'parent_id', 'parent');
     };
 
     const handleEdit = (e: any) => {

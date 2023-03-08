@@ -15,7 +15,7 @@ import axios from "axios";
 import {extractErrors} from "../../../../helpers/requests";
 import {
     GenericErrorMessage,
-    genericOnChangeHandler, genericSelectV2OnChangeHandler
+    genericOnChangeHandler,
 } from "../../../../helpers/form";
 import {getAllCountries} from "../../../../requests/misc/Country";
 import {Country} from "../../../../models/misc/Country";
@@ -179,7 +179,7 @@ const RegionEdit: React.FC = () => {
     };
 
     const selectChangeHandler = (e: any, key: any) => {
-        genericSelectV2OnChangeHandler(e, form, setForm, key);
+        // genericSelectV2OnChangeHandler(e, form, setForm, key);
 
         if (key == 'type') {
             setShowRegionOrCountry((prevShowState) => ({

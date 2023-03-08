@@ -16,7 +16,8 @@ import {
     genericMultiSelectOnChangeHandler,
     genericOnChangeHandler,
     genericSelectOnChangeHandler,
-    genericSingleSelectOnChangeHandler, genericSingleSelectV2OnChangeHandler
+    // genericSingleSelectOnChangeHandler,
+    // genericSingleSelectV2OnChangeHandler
 } from "../../../../helpers/form";
 import axios from "axios";
 import {extractErrors} from "../../../../helpers/requests";
@@ -114,7 +115,7 @@ const RegionCreate: React.FC = () => {
     };
 
     const selectChangeHandler = (e: any, key: any) => {
-        genericSingleSelectV2OnChangeHandler(e, form, setForm, key);
+        // genericSingleSelectV2OnChangeHandler(e, form, setForm, key);
 
         if (key == 'type') {
             setShowRegionOrCountry((prevShowState) => ({

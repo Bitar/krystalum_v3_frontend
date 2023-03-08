@@ -23,7 +23,6 @@ import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {Sections} from "../../../../helpers/sections";
-import {useAccessControl} from '../../../../modules/auth/AuthAccessControl';
 
 const UserCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);

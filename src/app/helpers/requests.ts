@@ -25,7 +25,7 @@ export const createFormData = (form: any) => {
                 formData.append(`${key}[]`, form[key][item])
             }
         } else if (form[key] instanceof Object) {
-            formData.append(`${key}`, form[key].id)
+            formData.append(`${key}_id`, form[key].id)
         } else {
             formData.append(key, form[key])
         }
