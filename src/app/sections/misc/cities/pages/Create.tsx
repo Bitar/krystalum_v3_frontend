@@ -58,7 +58,7 @@ const CityCreate: React.FC = () => {
     };
 
     const selectChangeHandler = (e: any) => {
-        genericSelectOnChangeHandler(e, form, setForm, 'country_id');
+        genericSelectOnChangeHandler(e, form, setForm, 'country');
     };
 
     const handleCreate = (e: any) => {
@@ -104,14 +104,14 @@ const CityCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Country" isRequired={true}/>
 
-                                    <Select name="country_id"
+                                    <Select name="country"
                                             options={countries}
                                             getOptionLabel={(country) => country?.name}
                                             getOptionValue={(country) => country?.id.toString()}
                                             onChange={selectChangeHandler}/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="country_id" className="mt-2"/>
+                                        <ErrorMessage name="country" className="mt-2"/>
                                     </div>
                                 </div>
 

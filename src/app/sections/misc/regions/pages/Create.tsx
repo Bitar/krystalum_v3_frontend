@@ -15,7 +15,6 @@ import {
     GenericErrorMessage,
     genericMultiSelectOnChangeHandler,
     genericOnChangeHandler,
-    genericSingleSelectV2OnChangeHandler
 } from "../../../../helpers/form";
 import axios from "axios";
 import {extractErrors} from "../../../../helpers/requests";
@@ -78,7 +77,6 @@ const RegionCreate: React.FC = () => {
             }
         );
     };
-
 
     const multiSelectChangeHandler = (e: any, key: any) => {
         genericMultiSelectOnChangeHandler(e, form, setForm, key);

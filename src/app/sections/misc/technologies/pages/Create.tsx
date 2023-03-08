@@ -17,7 +17,6 @@ import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {useAccessControl} from "../../../../modules/auth/AuthAccessControl";
 
 const TechnologyCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
