@@ -20,7 +20,6 @@ import {exportBookingTypes, getBookingTypes} from '../../../../requests/misc/Boo
 import BookingTypeIndexFilter from '../partials/IndexFilter';
 import {BookingTypesColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
-import {exportAudiences} from '../../../../requests/misc/Audience';
 
 const BookingTypeIndex = () => {
     const krysApp = useKrysApp();

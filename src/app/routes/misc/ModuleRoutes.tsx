@@ -1,8 +1,6 @@
 import React, {lazy} from 'react';
 import {Route, Routes} from 'react-router-dom';
 import {SuspenseView} from '../../components/misc/SuspenseView';
-import LanguageRoutes from './LanguageRoutes';
-import CampaignTypeRoutes from './CampaignTypeRoutes';
 
 const MiscModuleRoutes: React.FC = () => {
     const TechnologyRoutes = lazy(() => import('./TechnologyRoutes'));

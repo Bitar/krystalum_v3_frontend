@@ -17,7 +17,6 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeAudience} from '../../../../requests/misc/Audience';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
-import {useAccessControl} from "../../../../modules/auth/AuthAccessControl";
 
 const AudienceCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);

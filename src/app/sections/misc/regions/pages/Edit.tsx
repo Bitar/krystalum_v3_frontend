@@ -10,14 +10,12 @@ import KrysFormFooter from "../../../../components/forms/KrysFormFooter";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {Sections} from "../../../../helpers/sections";
 import {Actions, PageTypes} from "../../../../helpers/variables";
-import {getAllRegions, getRegion, getRegions, getTypes, updateRegion} from "../../../../requests/misc/Region";
+import {getAllRegions, getRegion, getTypes, updateRegion} from "../../../../requests/misc/Region";
 import axios from "axios";
 import {extractErrors} from "../../../../helpers/requests";
 import {
     GenericErrorMessage,
-    genericMultiSelectOnChangeHandler,
-    genericOnChangeHandler,
-    genericSelectOnChangeHandler, genericSelectV2OnChangeHandler
+    genericOnChangeHandler, genericSelectV2OnChangeHandler
 } from "../../../../helpers/form";
 import {getAllCountries} from "../../../../requests/misc/Country";
 import {Country} from "../../../../models/misc/Country";
