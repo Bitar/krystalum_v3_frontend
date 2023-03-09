@@ -46,9 +46,13 @@ export const createFilterQueryParam = (query: any) => {
     for (const key in query) {
         const value = query[key];
 
-        queryArray.push(`filter[${key}]=${value}`);
+        if (value instanceof Object) {
+            queryArray.push(`filter[${key}]=${value.id}`);
+        } else {
+            queryArray.push(`filter[${key}]=${value}`);
+        }
     }
-
+    console.log(queryArray.join('&'))
     return queryArray.join('&');
 }
 

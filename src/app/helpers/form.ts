@@ -23,9 +23,13 @@ export const genericMultiSelectOnChangeHandler = (e: any, form: any, setForm: Re
     }
 };
 
-export const genericSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
+export const genericSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string, isFilter=false) => {
     if(e) {
-        setForm({...form, [key]: e});
+        if (isFilter) {
+            setForm({...form, [key]: e.id});
+        } else {
+            setForm({...form, [key]: e});
+        }
     } else {
         // this happens when we're trying to unselect an option
         // we need to remove the [key] property from the form and set the new value as form

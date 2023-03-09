@@ -94,7 +94,7 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                 onSubmit={handleFilter}
                                 enableReinitialize>
                             {
-                                (formik) => (
+                                () => (
                                     <Form onChange={onChangeHandler}>
                                         <Row>
                                             <Col md={4}>
@@ -117,7 +117,7 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                                         getOptionValue={(option) => option.id.toString()}
                                                         ref={isRateSelectRef}
                                                         isClearable={true}
-                                                        onChange={(e) => genericSelectOnChangeHandler(e, filters, setFilters, 'is_rate')}
+                                                        onChange={(e) => genericSelectOnChangeHandler(e, filters, setFilters, 'is_rate', true)}
                                                         placeholder='Filter by rate type'/>
 
                                                 <div className="mt-1 text-danger">
@@ -134,7 +134,7 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                                         getOptionValue={(option) => option.id.toString()}
                                                         ref={isConversionSelectRef}
                                                         isClearable={true}
-                                                        onChange={(e) => genericSelectOnChangeHandler(e, filters, setFilters, 'is_conversion')}
+                                                        onChange={(e) => genericSelectOnChangeHandler(e, filters, setFilters, 'is_conversion', true)}
                                                         placeholder='Filter by conversion type'/>
 
                                                 <div className="mt-1 text-danger">
