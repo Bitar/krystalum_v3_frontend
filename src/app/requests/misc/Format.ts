@@ -1,10 +1,11 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
 
-import {createFormData, ExportUrl} from '../../helpers/requests';
+import {createFormData} from '../../helpers/requests';
 import {Format, FormatList, FormatPaginate} from '../../models/misc/Format';
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/formats`
+export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
 export const getAllFormats = async (): Promise<FormatList | AxiosError | undefined> => {
     return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<FormatList>) => response.data).catch((error) => {
@@ -21,18 +22,6 @@ export const getFormats = (query?: String): Promise<FormatPaginate> => {
     }
 
     return axios.get(url).then((response: AxiosResponse<FormatPaginate>) => response.data).catch((error) => {
-        return error;
-    });
-}
-
-export const exportFormats = async (query?: String): Promise<ExportUrl | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/export`;
-
-    if (query) {
-        url += `?${query}`;
-    }
-
-    return axios.get(url).then((response: AxiosResponse) => response.data).catch((error) => {
         return error;
     });
 }

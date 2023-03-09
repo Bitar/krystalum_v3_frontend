@@ -16,7 +16,7 @@ import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHe
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {exportBookingTypes, getBookingTypes} from '../../../../requests/misc/BookingType';
+import {EXPORT_ENDPOINT, getBookingTypes} from '../../../../requests/misc/BookingType';
 import BookingTypeIndexFilter from '../partials/IndexFilter';
 import {BookingTypesColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
@@ -45,7 +45,7 @@ const BookingTypeIndex = () => {
 
                     <KTCard>
                         <KTCardHeader text='All Booking Types' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportBookingTypes),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('booking-types-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/booking-types', 'manage-misc')]}/>
 

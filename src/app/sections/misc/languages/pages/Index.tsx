@@ -16,7 +16,7 @@ import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHe
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {exportLanguages, getLanguages} from '../../../../requests/misc/Language';
+import {EXPORT_ENDPOINT, getLanguages} from '../../../../requests/misc/Language';
 import LanguageIndexFilter from '../partials/IndexFilter';
 import {LanguagesColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
@@ -44,7 +44,7 @@ const LanguageIndex = () => {
 
                     <KTCard>
                         <KTCardHeader text='All Languages' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportLanguages),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('languages-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/languages', 'manage-misc')]}/>
 

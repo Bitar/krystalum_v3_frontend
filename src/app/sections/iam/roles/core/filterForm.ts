@@ -5,10 +5,7 @@ export interface FilterFields {
     permissions?: number[]
 }
 
-export const defaultFilterFields = {
-    name: '',
-    permissions: []
-}
+export const defaultFilterFields = {}
 
 export const FilterSchema = Yup.object().shape({
     name: Yup.string().notRequired(),

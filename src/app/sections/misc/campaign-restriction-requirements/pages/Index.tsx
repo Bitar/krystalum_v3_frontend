@@ -17,7 +17,7 @@ import {CampaignRestrictionRequirementsColumns} from '../core/TableColumns';
 import CampaignRestrictionRequirementIndexFilter from '../partials/IndexFilter';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
 import {
-    exportCampaignRestrictionRequirements,
+    EXPORT_ENDPOINT,
     getCampaignRestrictionRequirements
 } from '../../../../requests/misc/CampaignRestrictionRequirement';
 
@@ -39,7 +39,7 @@ const CampaignRestrictionRequirementIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Campaign Restriction Requirements' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportCampaignRestrictionRequirements),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('campaign-restriction-requirements-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/campaign-restriction-requirements', 'manage-misc')]}/>
 

@@ -1,7 +1,5 @@
 import {Actions} from '../../helpers/variables';
 import React from 'react';
-import {ExportUrl} from '../../helpers/requests';
-import {AxiosError} from 'axios';
 import CreateButton from '../buttons/Create';
 import EditButton from '../buttons/Edit';
 import FilterButton from '../buttons/Filter';
@@ -82,18 +80,18 @@ export class FilterCardAction extends CardAction {
 
 export class ExportCardAction extends CardAction {
     exportQuery: string;
-    exportApiCall: (query?: string) => Promise<ExportUrl | AxiosError | undefined>;
+    exportEndpoint: string;
 
-    constructor(exportQuery: string, exportApiCall: (query?: string) => Promise<ExportUrl | AxiosError | undefined>) {
+    constructor(exportQuery: string, exportEndpoint: string) {
         super(Actions.EXPORT);
 
         this.exportQuery = exportQuery;
-        this.exportApiCall = exportApiCall;
+        this.exportEndpoint = exportEndpoint;
     }
 
     getHtmlComponent(index?: number): JSX.Element {
         return (<ExportButton exportQuery={this.exportQuery}
-                              exportApiCall={this.exportApiCall} key={index}
+                              exportEndpoint={this.exportEndpoint} key={index}
                               className='ms-2'/>)
     }
 }

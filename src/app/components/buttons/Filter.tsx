@@ -3,9 +3,9 @@ import clsx from 'clsx';
 import {Button} from 'react-bootstrap';
 
 type Props = {
-    target?: string,
-    showFilter?: boolean,
-    setShowFilter?: React.Dispatch<React.SetStateAction<boolean>>,
+    target: string,
+    showFilter: boolean,
+    setShowFilter: React.Dispatch<React.SetStateAction<boolean>>,
     className?: string
 }
 

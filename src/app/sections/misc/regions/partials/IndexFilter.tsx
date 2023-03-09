@@ -24,7 +24,7 @@ const RegionIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
 
     const [countries, setCountries] = useState<Country[]>([]);
     const [filterErrors, setFilterErrors] = useState<string[]>([]);
-    const [filters, setFilters] = useState<FilterFields>();
+    const [filters, setFilters] = useState<FilterFields>(defaultFilterFields);
     const [reset, setReset] = useState<boolean>(false);
 
     useEffect(() => {

@@ -6,11 +6,7 @@ export interface FilterFields {
     roles?: number[]
 }
 
-export const defaultFilterFields = {
-    name: '',
-    email: '',
-    roles: []
-}
+export const defaultFilterFields = {}
 
 export const FilterSchema = Yup.object().shape({
     name: Yup.string().notRequired(),

@@ -14,7 +14,7 @@ import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import KrysTable from '../../../../components/tables/KrysTable';
 import {TechnologiesColumns} from '../core/TableColumns';
-import {exportTechnologies, getTechnologies} from '../../../../requests/misc/Technology';
+import {EXPORT_ENDPOINT, getTechnologies} from '../../../../requests/misc/Technology';
 import TechnologyIndexFilter from '../partials/IndexFilter';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
 
@@ -36,7 +36,7 @@ const TechnologyIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Technologies' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportTechnologies),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('technologies-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/technologies', 'manage-misc')]}/>
 

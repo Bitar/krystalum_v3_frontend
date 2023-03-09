@@ -14,7 +14,7 @@ import {QueryRequestProvider} from '../../../../modules/table/QueryRequestProvid
 import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {exportKpis, getKpis} from '../../../../requests/misc/Kpi';
+import {EXPORT_ENDPOINT, getKpis} from '../../../../requests/misc/Kpi';
 import KpiIndexFilter from '../partials/IndexFilter';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 
@@ -35,7 +35,7 @@ const KpiIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All KPIs' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportKpis),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('kpis-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/kpis', 'manage-misc')]}/>
 

@@ -1,10 +1,11 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
 
-import {createFormData, ExportUrl} from '../../helpers/requests';
+import {createFormData} from '../../helpers/requests';
 import {Objective, ObjectiveList, ObjectivePaginate} from '../../models/misc/Objective';
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/objectives`
+export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
 export const getAllObjectives = async (): Promise<ObjectiveList | AxiosError | undefined> => {
     return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<ObjectiveList>) => response.data).catch((error) => {
@@ -20,18 +21,6 @@ export const getObjectives = (query?: String): Promise<ObjectivePaginate> => {
     }
 
     return axios.get(url).then((response: AxiosResponse<ObjectivePaginate>) => response.data).catch((error) => {
-        return error;
-    });
-}
-
-export const exportObjectives = async (query?: String): Promise<ExportUrl | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/export`;
-
-    if (query) {
-        url += `?${query}`;
-    }
-
-    return axios.get(url).then((response: AxiosResponse) => response.data).catch((error) => {
         return error;
     });
 }

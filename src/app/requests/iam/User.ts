@@ -1,10 +1,11 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
-import {createFormData, ExportUrl} from '../../helpers/requests';
+import {createFormData} from '../../helpers/requests';
 import {User, UserList, UserPaginate} from '../../models/iam/User';
 
 
-const API_URL = process.env.REACT_APP_API_URL
-const ENDPOINT = `${API_URL}/iam/users`
+const API_URL = process.env.REACT_APP_API_URL;
+const ENDPOINT = `${API_URL}/iam/users`;
+export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
 export const getAllUsers = async (): Promise<UserList | AxiosError | undefined> => {
     return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<UserList>) => response.data).catch((error) => {
@@ -20,18 +21,6 @@ export const getUsers = (query?: String): Promise<UserPaginate> => {
     }
 
     return axios.get(url).then((response: AxiosResponse<UserPaginate>) => response.data)
-}
-
-export const exportUsers = async (query?: String): Promise<ExportUrl | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/export`;
-
-    if (query) {
-        url += `?${query}`;
-    }
-
-    return axios.get(url).then((response: AxiosResponse) => response.data).catch((error) => {
-        return error;
-    });
 }
 
 export const getUser = async (id: number): Promise<User | AxiosError | undefined> => {

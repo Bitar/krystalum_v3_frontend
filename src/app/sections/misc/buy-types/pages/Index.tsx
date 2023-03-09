@@ -16,7 +16,7 @@ import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHe
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {exportBuyTypes, getBuyTypes} from '../../../../requests/misc/BuyType';
+import {EXPORT_ENDPOINT, getBuyTypes} from '../../../../requests/misc/BuyType';
 import {BuyTypesColumns} from '../core/TableColumns';
 import BuyTypeIndexFilter from '../partials/IndexFilter';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
@@ -45,7 +45,7 @@ const BuyTypeIndex = () => {
 
                     <KTCard>
                         <KTCardHeader text='All Buy Types' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportBuyTypes),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('buy-types-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/buy-types', 'manage-misc')]}/>
 

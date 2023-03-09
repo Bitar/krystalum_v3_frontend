@@ -16,7 +16,7 @@ import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHe
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {exportCities, getCities} from '../../../../requests/misc/City';
+import {EXPORT_ENDPOINT, getCities} from '../../../../requests/misc/City';
 import {CitiesColumns} from '../core/TableColumns';
 import CityIndexFilter from '../partials/IndexFilter';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
@@ -45,7 +45,7 @@ const CityIndex = () => {
 
                     <KTCard>
                         <KTCardHeader text='All Cities' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportCities),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('cities-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/cities', 'manage-misc')]}/>
 

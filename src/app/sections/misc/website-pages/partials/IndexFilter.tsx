@@ -18,7 +18,7 @@ interface Props {
 const WebsitePageIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     const {updateState} = useQueryRequest();
 
-    const [filters, setFilters] = useState<FilterFields>();
+    const [filters, setFilters] = useState<FilterFields>(defaultFilterFields);
     const [reset, setReset] = useState<boolean>(false);
 
     const onChangeHandler = (e: any) => {

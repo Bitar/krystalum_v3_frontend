@@ -11,7 +11,7 @@ import {KTCardHeader} from "../../../../../_metronic/helpers/components/KTCardHe
 import {PageTypes} from "../../../../helpers/variables";
 import KrysTable from "../../../../components/tables/KrysTable";
 import {FormatsColumns} from "../core/TableColumns";
-import {exportFormats, getFormats} from "../../../../requests/misc/Format";
+import {EXPORT_ENDPOINT, getFormats} from "../../../../requests/misc/Format";
 import FormatIndexFilter from "../partials/IndexFilter";
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
@@ -35,7 +35,7 @@ const FormatIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Formats' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportFormats),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('formats-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/formats', 'manage-misc')
                                       ]}/>

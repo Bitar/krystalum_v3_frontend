@@ -14,10 +14,9 @@ import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import KrysTable from '../../../../components/tables/KrysTable';
 import {PerformanceMetricsColumns} from '../core/TableColumns';
-import {exportPerformanceMetrics, getPerformanceMetrics} from '../../../../requests/misc/PerformanceMetric';
+import {EXPORT_ENDPOINT, getPerformanceMetrics} from '../../../../requests/misc/PerformanceMetric';
 import PerformanceMetricIndexFilter from '../partials/IndexFilter';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
-
 
 const PerformanceMetricIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -38,7 +37,7 @@ const PerformanceMetricIndex: React.FC = () => {
                         <KTCardHeader text='All Performance Metrics' icon="fa-regular fa-list"
                                       icon_style="fs-3 text-primary"
 
-                                      actions={[new ExportCardAction(exportQuery, exportPerformanceMetrics),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('performance-metrics-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/performance-metrics', 'manage-misc')]}/>
 

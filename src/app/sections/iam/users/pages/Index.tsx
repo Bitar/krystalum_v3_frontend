@@ -7,7 +7,7 @@ import {
     useQueryResponseData,
     useQueryResponseLoading,
 } from '../../../../modules/table/QueryResponseProvider'
-import {exportUsers, getUsers} from '../../../../requests/iam/User'
+import {EXPORT_ENDPOINT, getUsers} from '../../../../requests/iam/User'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import {TableColumns} from '../core/TableColumns'
 import KrysTable from '../../../../components/tables/KrysTable';
@@ -36,7 +36,7 @@ const UserIndex = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Users' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportUsers),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('users-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/iam/users', 'manage-iam')
                                       ]}/>

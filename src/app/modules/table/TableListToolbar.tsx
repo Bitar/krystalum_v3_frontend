@@ -27,12 +27,12 @@ const TableListToolbar: FC<React.PropsWithChildren<Props>> = ({name, url, showAd
       {/*  </button>*/}
       {/*}*/}
 
-      {showAdd && (
-          <CreateButton url={url}/>
-        // <Link to={url + '/create'} className='btn-icon btn btn-primary'>
-        //   <i className={clsx('fa fs-2', 'fa-plus')}></i>
-        // </Link>
-      )}
+      {/*{showAdd && (*/}
+      {/*    // <CreateButton url={url}/>*/}
+      {/*  // <Link to={url + '/create'} className='btn-icon btn btn-primary'>*/}
+      {/*  //   <i className={clsx('fa fs-2', 'fa-plus')}></i>*/}
+      {/*  // </Link>*/}
+      {/*)}*/}
     </div>
   )
 }

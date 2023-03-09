@@ -16,7 +16,7 @@ import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHe
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {exportGenders, getGenders} from '../../../../requests/misc/Gender';
+import {EXPORT_ENDPOINT, getGenders} from '../../../../requests/misc/Gender';
 import GenderIndexFilter from '../partials/IndexFilter';
 import {GendersColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
@@ -45,7 +45,7 @@ const GenderIndex = () => {
 
                     <KTCard>
                         <KTCardHeader text='All Genders' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportGenders),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('genders-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/genders', 'manage-misc')]}/>
 

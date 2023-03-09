@@ -16,7 +16,7 @@ import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHe
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {exportCampaignTypes, getCampaignTypes} from '../../../../requests/misc/CampaignType';
+import {EXPORT_ENDPOINT, getCampaignTypes} from '../../../../requests/misc/CampaignType';
 import CampaignTypeIndexFilter from '../partials/IndexFilter';
 import {CampaignTypesColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
@@ -45,7 +45,7 @@ const CampaignTypeIndex = () => {
 
                     <KTCard>
                         <KTCardHeader text='All Campaign Types' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportCampaignTypes),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('campaign-types-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/campaign-types', 'manage-misc')]}/>
 

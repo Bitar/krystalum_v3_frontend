@@ -13,7 +13,7 @@ import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import KrysTable from '../../../../components/tables/KrysTable';
-import {exportAdvertiserIndustries, getAdvertiserIndustries} from '../../../../requests/misc/AdvertiserIndustry';
+import {EXPORT_ENDPOINT, getAdvertiserIndustries} from '../../../../requests/misc/AdvertiserIndustry';
 import AdvertiserIndustryIndexFilter from '../partials/IndexFilter';
 import {AdvertiserIndustriesColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
@@ -38,7 +38,7 @@ const AdvertiserIndustryIndex: React.FC = () => {
                     <KTCard>
                         <KTCardHeader text='All Advertiser Industries' icon="fa-regular fa-list"
                                       icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportAdvertiserIndustries),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('advertiser-industries-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/advertiser-industries', 'manage-misc')]}/>
 

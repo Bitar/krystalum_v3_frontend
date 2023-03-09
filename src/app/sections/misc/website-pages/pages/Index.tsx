@@ -16,8 +16,7 @@ import KrysTable from '../../../../components/tables/KrysTable';
 import {WebsitePagesColumns} from '../core/TableColumns';
 import WebsitePageIndexFilter from '../partials/IndexFilter';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
-import {exportWebsitePages, getWebsitePages} from '../../../../requests/misc/WebsitePage';
-
+import {EXPORT_ENDPOINT, getWebsitePages} from '../../../../requests/misc/WebsitePage';
 
 const WebsitePageIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -36,7 +35,7 @@ const WebsitePageIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Website Pages' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportWebsitePages),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('website-pages-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/website-pages', 'manage-misc')]}/>
 

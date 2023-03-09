@@ -8,7 +8,7 @@ import {
     useQueryResponseLoading,
 } from '../../../../modules/table/QueryResponseProvider'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
-import {exportPermissions, getPermissions} from '../../../../requests/iam/Permission';
+import {EXPORT_ENDPOINT, getPermissions} from '../../../../requests/iam/Permission';
 import {PermissionsColumns} from '../core/TableColumns';
 import KrysTable from '../../../../components/tables/KrysTable';
 import {PageTypes} from '../../../../helpers/variables';
@@ -37,7 +37,7 @@ const PermissionIndex = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Permissions' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportPermissions),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('permissions-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/iam/permissions', 'manage-iam')]}/>
 

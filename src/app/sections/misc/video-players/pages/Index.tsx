@@ -14,10 +14,9 @@ import {QueryRequestProvider} from '../../../../modules/table/QueryRequestProvid
 import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {exportVideoPlayers, getVideoPlayers} from '../../../../requests/misc/VideoPlayer';
+import {EXPORT_ENDPOINT, getVideoPlayers} from '../../../../requests/misc/VideoPlayer';
 import VideoPlayerIndexFilter from '../partials/IndexFilter';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
-
 
 const VideoPlayerIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -37,7 +36,7 @@ const VideoPlayerIndex: React.FC = () => {
                     <KTCard>
                         <KTCardHeader text='All Video Players' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
 
-                                      actions={[new ExportCardAction(exportQuery, exportVideoPlayers),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('video-players-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/video-players', 'manage-misc')]}/>
                         <KTCardBody>

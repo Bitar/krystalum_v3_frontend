@@ -7,9 +7,7 @@ export interface FilterFields {
     phone_code?: string
 }
 
-export const defaultFilterFields = {
-    name: '', code: '', currency: '', phone_code: ''
-}
+export const defaultFilterFields = {}
 
 export const FilterSchema = Yup.object().shape({
     name: Yup.string().notRequired(),

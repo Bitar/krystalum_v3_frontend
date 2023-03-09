@@ -13,7 +13,7 @@ import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import KrysTable from '../../../../components/tables/KrysTable';
-import {exportAdServers, getAdServers} from '../../../../requests/misc/AdServer';
+import {EXPORT_ENDPOINT, getAdServers} from '../../../../requests/misc/AdServer';
 import AdServerIndexFilter from '../partials/IndexFilter';
 import {AdServersColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
@@ -37,7 +37,7 @@ const AdServerIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Ad Servers' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportAdServers),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('ad-servers-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/ad-servers', 'manage-misc')]}/>
 

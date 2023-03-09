@@ -1,9 +1,10 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
-import {createFormData, ExportUrl} from '../../helpers/requests';
+import {createFormData} from '../../helpers/requests';
 import {City, CityList, CityPaginate} from '../../models/misc/City';
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/cities`
+export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
 export const getAllCities = async (): Promise<CityList | AxiosError | undefined> => {
     return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<CityList>) => response.data).catch((error) => {
@@ -19,18 +20,6 @@ export const getCities = (query?: String): Promise<CityPaginate> => {
     }
 
     return axios.get(url).then((response: AxiosResponse<CityPaginate>) => response.data).catch((error) => {
-        return error;
-    });
-}
-
-export const exportCities = async (query?: String): Promise<ExportUrl | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/export`;
-
-    if (query) {
-        url += `?${query}`;
-    }
-
-    return axios.get(url).then((response: AxiosResponse) => response.data).catch((error) => {
         return error;
     });
 }

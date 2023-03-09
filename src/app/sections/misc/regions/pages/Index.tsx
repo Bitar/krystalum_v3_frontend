@@ -11,7 +11,7 @@ import {
     useQueryResponseData,
     useQueryResponseLoading
 } from "../../../../modules/table/QueryResponseProvider";
-import {exportRegions, getRegions} from "../../../../requests/misc/Region";
+import {EXPORT_ENDPOINT, getRegions} from "../../../../requests/misc/Region";
 import {ListViewProvider} from "../../../../modules/table/ListViewProvider";
 import FormSuccess from "../../../../components/forms/FormSuccess";
 import {KTCardHeader} from "../../../../../_metronic/helpers/components/KTCardHeader";
@@ -43,7 +43,7 @@ const RegionIndex: React.FC = () => {
                     }
                     <KTCard>
                         <KTCardHeader text="All Regions" icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportRegions),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('regions-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/regions', 'manage-misc')]}/>
 

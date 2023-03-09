@@ -23,7 +23,7 @@ interface Props {
 const BuyingModelIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     const {updateState} = useQueryRequest();
 
-    const [filters, setFilters] = useState<FilterFields>();
+    const [filters, setFilters] = useState<FilterFields>(defaultFilterFields);
     const [filterErrors, setFilterErrors] = useState<string[]>([]);
     const [reset, setReset] = useState<boolean>(false);
     const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetric[]>([]);

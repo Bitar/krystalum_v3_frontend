@@ -25,7 +25,7 @@ const RoleIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
 
     const [permissions, setPermissions] = useState<Permission[]>([]);
     const [filterErrors, setFilterErrors] = useState<string[]>([]);
-    const [filters, setFilters] = useState<FilterFields>();
+    const [filters, setFilters] = useState<FilterFields>(defaultFilterFields);
     const [reset, setReset] = useState<boolean>(false);
 
     useEffect(() => {

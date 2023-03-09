@@ -13,7 +13,7 @@ import {QueryRequestProvider} from '../../../../modules/table/QueryRequestProvid
 import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {exportBusinessUnits, getBusinessUnits} from '../../../../requests/misc/BusinessUnit';
+import {EXPORT_ENDPOINT, getBusinessUnits} from '../../../../requests/misc/BusinessUnit';
 import BusinessUnitIndexFilter from '../partials/IndexFilter';
 import {BusinessUnitsColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
@@ -36,7 +36,7 @@ const BusinessUnitIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Business Units' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportBusinessUnits),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('business-units-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/business-units', 'manage-misc')]}/>
 

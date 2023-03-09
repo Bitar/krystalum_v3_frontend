@@ -5,9 +5,7 @@ export interface FilterFields {
 
 }
 
-export const defaultFilterFields = {
-    name: ''
-}
+export const defaultFilterFields = {}
 
 export const FilterSchema = Yup.object().shape({
     name: Yup.string().notRequired(),

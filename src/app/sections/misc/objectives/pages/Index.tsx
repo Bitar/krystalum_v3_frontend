@@ -16,7 +16,7 @@ import {ListViewProvider} from '../../../../modules/table/ListViewProvider';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import ObjectiveIndexFilter from '../partials/IndexFilter';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
-import {exportObjectives, getObjectives} from '../../../../requests/misc/Objective';
+import {EXPORT_ENDPOINT, getObjectives} from '../../../../requests/misc/Objective';
 
 
 const ObjectiveIndex: React.FC = () => {
@@ -37,7 +37,7 @@ const ObjectiveIndex: React.FC = () => {
                     <KTCard>
                         <KTCardHeader text='All Objectives' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
 
-                                      actions={[new ExportCardAction(exportQuery, exportObjectives),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('objectives-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/objectives', 'manage-misc')]}/>
                         <KTCardBody>

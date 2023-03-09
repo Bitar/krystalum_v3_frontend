@@ -20,7 +20,7 @@ const PermissionIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) =>
 
     // const [filters, setFilters] = useState<FilterFields>();
     const [reset, setReset] = useState<boolean>(false);
-    const [filters, setFilters] = useState<FilterFields>();
+    const [filters, setFilters] = useState<FilterFields>(defaultFilterFields);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, filters, setFilters);

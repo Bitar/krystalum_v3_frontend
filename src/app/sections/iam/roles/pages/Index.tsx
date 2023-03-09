@@ -10,7 +10,7 @@ import {
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import {RolesColumns} from '../core/TableColumns';
 import KrysTable from '../../../../components/tables/KrysTable';
-import {exportRoles, getRoles} from '../../../../requests/iam/Role';
+import {EXPORT_ENDPOINT, getRoles} from '../../../../requests/iam/Role';
 import {PageTypes} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import RoleIndexFilter from '../partials/IndexFilter';
@@ -36,7 +36,7 @@ const RoleIndex = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Roles' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportRoles),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('roles-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/iam/roles', 'manage-iam')
                                       ]}/>

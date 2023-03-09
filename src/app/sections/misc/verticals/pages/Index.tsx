@@ -11,7 +11,7 @@ import {KTCardHeader} from "../../../../../_metronic/helpers/components/KTCardHe
 import {PageTypes} from "../../../../helpers/variables";
 import KrysTable from "../../../../components/tables/KrysTable";
 import {VerticalsColumns} from "../core/TableColumns";
-import {exportVerticals, getVerticals} from "../../../../requests/misc/Vertical";
+import {EXPORT_ENDPOINT, getVerticals} from "../../../../requests/misc/Vertical";
 import VerticalIndexFilter from "../partials/IndexFilter";
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
@@ -35,7 +35,7 @@ const VerticalIndex: React.FC = () => {
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Verticals' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportVerticals),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('verticals-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/verticals','manage-misc')
                                       ]}/>

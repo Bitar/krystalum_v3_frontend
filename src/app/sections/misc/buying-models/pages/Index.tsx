@@ -16,7 +16,7 @@ import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHe
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {exportBuyingModels, getBuyingModels} from '../../../../requests/misc/BuyingModel';
+import {EXPORT_ENDPOINT, getBuyingModels} from '../../../../requests/misc/BuyingModel';
 import BuyingModelIndexFilter from '../partials/IndexFilter';
 import {BuyingModelsColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
@@ -45,7 +45,7 @@ const BuyingModelIndex = () => {
 
                     <KTCard>
                         <KTCardHeader text='All Buying Models' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, exportBuyingModels),
+                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('buying-models-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/misc/buying-models', 'manage-misc')]}/>
 
