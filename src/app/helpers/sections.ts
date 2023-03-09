@@ -24,5 +24,7 @@ export enum Sections {
     MISC_BUSINESS_UNITS = 'Business units',
     MISC_KPIS = 'KPIs',
     MISC_PERFORMANCE_METRICS = 'Performance metrics',
-    MISC_OBJECTIVES = 'Objectives'
+    MISC_OBJECTIVES = 'Objectives',
+    MISC_WEBSITE_PAGES = 'Website pages',
+    MISC_CAMPAIGN_RESTRICTION_REQUIREMENTS = 'Campaign restriction requirements'
 }

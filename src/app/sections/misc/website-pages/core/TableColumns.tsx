@@ -4,10 +4,10 @@ import {TextCell} from '../../../../modules/table/columns/TextCell'
 import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
 import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {QUERIES} from '../../../../../_metronic/helpers'
-import {Technology} from '../../../../models/misc/Technology';
-import {Restricted, useAccessControl} from '../../../../modules/auth/AuthAccessControl';
+import {Restricted} from '../../../../modules/auth/AuthAccessControl';
+import {WebsitePage} from '../../../../models/misc/WebsitePage';
 
-const TechnologiesColumns: ReadonlyArray<Column<Technology>> = [
+const WebsitePagesColumns: ReadonlyArray<Column<WebsitePage>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title='Name' className='min-w-125px'/>,
         id: 'name',
@@ -24,17 +24,17 @@ const TechnologiesColumns: ReadonlyArray<Column<Technology>> = [
             <Restricted to={'manage-misc'}>
                 <ActionsCell
                     id={props.data[props.row.index].id}
-                    path={'misc/technologies'}
-                    queryKey={QUERIES.TECHNOLOGIES_LIST}
+                    path={'misc/website-pages'}
+                    queryKey={QUERIES.WEBSITE_PAGES_LIST}
                     showView={false}
                     showEdit={true}
                     showDelete={true}
-                    title="Delete Technology"
-                    text={`Are you sure you want to delete the technology '${props.data[props.row.index].name}'?`}
+                    title="Delete Website Page"
+                    text={`Are you sure you want to delete the website page '${props.data[props.row.index].name}'?`}
                 />
             </Restricted>
         ),
     },
 ]
 
-export {TechnologiesColumns}
+export {WebsitePagesColumns}

@@ -23,5 +23,7 @@ export const QUERIES = {
     BUSINESS_UNITS_LIST: 'business-units-list',
     KPIS_LIST: 'kpis-list',
     PERFORMANCE_METRICS_LIST: 'performance-metrics-list',
-    OBJECTIVES_LIST: 'objectives-list'
+    OBJECTIVES_LIST: 'objectives-list',
+    WEBSITE_PAGES_LIST: 'website-pages-list',
+    CAMPAIGN_RESTRICTION_REQUIREMENTS_LIST: 'campaign-restriction-requirements-list'
 }

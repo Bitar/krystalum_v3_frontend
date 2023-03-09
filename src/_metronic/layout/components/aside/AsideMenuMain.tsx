@@ -38,6 +38,7 @@ export function AsideMenuMain() {
                     <AsideMenuItem to='/misc/business-units' title='Business Units' hasBullet={true}/>
                     <AsideMenuItem to='/misc/buying-models' title='Buying models' hasBullet={true}/>
                     <AsideMenuItem to='/misc/buy-types' title='Buy types' hasBullet={true}/>
+                    <AsideMenuItem to='/misc/campaign-restriction-requirements' title='Campaign Restriction Requirements' hasBullet={true}/>
                     <AsideMenuItem to='/misc/campaign-types' title='Campaign Types' hasBullet={true}/>
                     <AsideMenuItem to='/misc/cities' title='Cities' hasBullet={true}/>
                     <AsideMenuItem to='/misc/countries' title='Countries' hasBullet={true}/>
@@ -53,6 +54,7 @@ export function AsideMenuMain() {
                     <AsideMenuItem to='/misc/technologies' title='Technologies' hasBullet={true}/>
                     <AsideMenuItem to='/misc/verticals' title='Verticals' hasBullet={true}/>
                     <AsideMenuItem to='/misc/video-players' title='Video players' hasBullet={true}/>
+                    <AsideMenuItem to='/misc/website-pages' title='Website Pages' hasBullet={true}/>
                 </AsideMenuItemWithSub>
             </Restricted>
         </>

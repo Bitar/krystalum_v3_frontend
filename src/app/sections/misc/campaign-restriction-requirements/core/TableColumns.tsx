@@ -4,10 +4,10 @@ import {TextCell} from '../../../../modules/table/columns/TextCell'
 import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
 import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {QUERIES} from '../../../../../_metronic/helpers'
-import {Technology} from '../../../../models/misc/Technology';
-import {Restricted, useAccessControl} from '../../../../modules/auth/AuthAccessControl';
+import {Restricted} from '../../../../modules/auth/AuthAccessControl';
+import {CampaignRestrictionRequirement} from '../../../../models/misc/CampaignRestrictionRequirement';
 
-const TechnologiesColumns: ReadonlyArray<Column<Technology>> = [
+const CampaignRestrictionRequirementsColumns: ReadonlyArray<Column<CampaignRestrictionRequirement>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title='Name' className='min-w-125px'/>,
         id: 'name',
@@ -24,17 +24,17 @@ const TechnologiesColumns: ReadonlyArray<Column<Technology>> = [
             <Restricted to={'manage-misc'}>
                 <ActionsCell
                     id={props.data[props.row.index].id}
-                    path={'misc/technologies'}
-                    queryKey={QUERIES.TECHNOLOGIES_LIST}
+                    path={'misc/campaign-restriction-requirements'}
+                    queryKey={QUERIES.CAMPAIGN_RESTRICTION_REQUIREMENTS_LIST}
                     showView={false}
                     showEdit={true}
                     showDelete={true}
-                    title="Delete Technology"
-                    text={`Are you sure you want to delete the technology '${props.data[props.row.index].name}'?`}
+                    title="Delete Campaign Restriction Requirement"
+                    text={`Are you sure you want to delete the campaign restriction requirement '${props.data[props.row.index].name}'?`}
                 />
             </Restricted>
         ),
     },
 ]
 
-export {TechnologiesColumns}
+export {CampaignRestrictionRequirementsColumns}
