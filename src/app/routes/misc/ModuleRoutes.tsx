@@ -26,6 +26,7 @@ const MiscModuleRoutes: React.FC = () => {
     const VerticalRoutes = lazy(() => import('./VerticalRoutes'));
     const VideoPlayerRoutes = lazy(() => import('./VideoPlayerRoutes'));
     const WebsitePageRoutes = lazy(() => import('./WebsitePageRoutes'));
+    const TierRoutes = lazy(() => import('./TierRoutes'));
     const CampaignRestrictionRequirementRoutes = lazy(() => import('./CampaignRestrictionRequirementRoutes'));
 
     return (
@@ -234,6 +235,15 @@ const MiscModuleRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <WebsitePageRoutes/>
+                    </SuspenseView>
+                }
+            ></Route>
+
+            <Route
+                path='tiers/*'
+                element={
+                    <SuspenseView>
+                        <TierRoutes/>
                     </SuspenseView>
                 }
             ></Route>

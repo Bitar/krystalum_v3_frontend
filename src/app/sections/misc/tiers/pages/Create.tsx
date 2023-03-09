@@ -7,18 +7,18 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {defaultFormFields, FormFields, TechnologySchema} from '../core/form';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
-import {storeTechnology} from '../../../../requests/misc/Technology';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
+import {defaultFormFields, FormFields, TierSchema} from '../core/form';
+import {storeTier} from '../../../../requests/misc/Tier';
 
-const TechnologyCreate: React.FC = () => {
+const TierCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -26,7 +26,7 @@ const TechnologyCreate: React.FC = () => {
     const krysApp = useKrysApp();
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_TECHNOLOGIES, PageTypes.CREATE))
+        krysApp.setPageTitle(generatePageTitle(Sections.MISC_TIERS, PageTypes.CREATE))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -35,8 +35,8 @@ const TechnologyCreate: React.FC = () => {
     };
 
     const handleCreate = (e: any) => {
-        // send API request to create the technology
-        storeTechnology(form).then(response => {
+        // send API request to create the tier
+        storeTier(form).then(response => {
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
                     setFormErrors(extractErrors(response));
@@ -44,14 +44,13 @@ const TechnologyCreate: React.FC = () => {
                     // show generic error message
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    // it's technology for sure
+                    // it's tier for sure
 
                     krysApp.setAlert({
-                        message: new AlertMessageGenerator('technology', Actions.CREATE, KrysToastType.SUCCESS).message,
+                        message: new AlertMessageGenerator('tier', Actions.CREATE, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS
-                    });
-
-                    navigate(`/misc/technologies`);
+                    })
+                    navigate(`/misc/tiers`);
                 }
             }
         );
@@ -59,12 +58,12 @@ const TechnologyCreate: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New Technology" icon="fa-regular fa-plus" icon_style="fs-3 text-success"/>
+            <KTCardHeader text="Create New Tier" icon="fa-regular fa-plus" icon_style="fs-3 text-success"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={TechnologySchema} onSubmit={handleCreate} enableReinitialize>
+                <Formik initialValues={form} validationSchema={TierSchema} onSubmit={handleCreate} enableReinitialize>
                     {
                         () => (
                             <Form onChange={onChangeHandler}>
@@ -72,14 +71,25 @@ const TechnologyCreate: React.FC = () => {
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
                                     <Field className="form-control fs-6" type="text"
-                                           placeholder="Enter technology name" name="name"/>
+                                           placeholder="Enter tier name" name="name"/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="name" className="mt-2"/>
                                     </div>
                                 </div>
 
-                                <KrysFormFooter cancelUrl={'/misc/technologies'}/>
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Order" isRequired={true}/>
+
+                                    <Field className="form-control fs-6" type="number"
+                                           placeholder="Enter tier order" name="order"/>
+
+                                    <div className="mt-1 text-danger">
+                                        <ErrorMessage name="order" className="mt-2"/>
+                                    </div>
+                                </div>
+
+                                <KrysFormFooter cancelUrl={'/misc/tiers'}/>
                             </Form>
                         )
                     }
@@ -89,4 +99,4 @@ const TechnologyCreate: React.FC = () => {
     )
 }
 
-export default TechnologyCreate;
+export default TierCreate;

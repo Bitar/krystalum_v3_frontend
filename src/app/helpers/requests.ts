@@ -41,7 +41,7 @@ export const deleteObject = async (link: string): Promise<void> => {
 }
 
 export const exportObjects = async (endpoint: String, query?: String): Promise<ExportUrl | AxiosError | undefined> => {
-    let url = `${endpoint}/export`;
+    let url = `${endpoint}`;
 
     if (query) {
         url += `?${query}`;
