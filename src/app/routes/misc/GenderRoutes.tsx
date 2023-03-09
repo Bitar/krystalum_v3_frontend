@@ -9,7 +9,7 @@ import GenderEdit from '../../sections/misc/genders/pages/Edit';
 
 const breadcrumbs: Array<PageLink> = [
     {
-        title: Sections.MISC_AUDIENCES,
+        title: Sections.MISC_GENDERS,
         path: '/misc/genders/',
         isSeparator: false,
         isActive: false,

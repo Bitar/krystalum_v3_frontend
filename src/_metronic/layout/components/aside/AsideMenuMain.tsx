@@ -43,6 +43,7 @@ export function AsideMenuMain() {
                     <AsideMenuItem to='/misc/countries' title='Countries' hasBullet={true}/>
                     <AsideMenuItem to='/misc/devices' title='Devices' hasBullet={true}/>
                     <AsideMenuItem to='/misc/formats' title='Formats' hasBullet={true}/>
+                    <AsideMenuItem to='/misc/genders' title='Genders' hasBullet={true}/>
                     <AsideMenuItem to='/misc/kpis' title='KPIs' hasBullet={true}/>
                     <AsideMenuItem to='/misc/languages' title='Languages' hasBullet={true}/>
                     <AsideMenuItem to='/misc/objectives' title='Objectives' hasBullet={true}/>
