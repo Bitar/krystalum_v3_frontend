@@ -7,12 +7,7 @@ export interface FilterFields {
     metrics?: number[]
 }
 
-export const defaultFilterFields = {
-    name: '',
-    is_rate: undefined,
-    is_conversion: undefined,
-    metrics: []
-}
+export const defaultFilterFields = {}
 
 export const FilterSchema = Yup.object().shape({
     name: Yup.string().notRequired(),
