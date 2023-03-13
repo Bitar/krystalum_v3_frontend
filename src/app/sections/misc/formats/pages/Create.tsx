@@ -27,6 +27,7 @@ import KrysCheckbox from "../../../../components/forms/KrysCheckbox";
 import {BuyingModel} from "../../../../models/misc/BuyingModel";
 import {getAllBuyingModels} from "../../../../requests/misc/BuyingModel";
 import {filterData} from '../../../../helpers/dataManipulation';
+import {indentOptions} from '../../../../components/forms/IndexOptions';
 
 
 const FormatCreate: React.FC = () => {
@@ -175,23 +176,7 @@ const FormatCreate: React.FC = () => {
                                             getOptionLabel={(format) => format.name}
                                             getOptionValue={(format) => format.id.toString()}
                                             onChange={selectChangeHandler}
-                                            formatOptionLabel={(option) => {
-                                                if (option.parent !== null) {
-                                                    // this is a child
-                                                    return (
-                                                        <div style={{marginLeft: '1em'}}>
-                                                            {option.name}
-                                                        </div>
-                                                    );
-                                                } else {
-                                                    // this is a parent
-                                                    return (
-                                                        <div>
-                                                            {option.name}
-                                                        </div>
-                                                    );
-                                                }
-                                            }}
+                                            formatOptionLabel={indentOptions}
                                             isClearable={true}/>
 
                                     <div className="mt-1 text-danger">
