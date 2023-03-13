@@ -26,6 +26,7 @@ import {getAllBuyingModels} from "../../../../requests/misc/BuyingModel";
 import {BuyingModel} from "../../../../models/misc/BuyingModel";
 import MultiSelect from "../../../../components/forms/MultiSelect";
 import KrysCheckbox from "../../../../components/forms/KrysCheckbox";
+import {filterData} from '../../../../helpers/dataManipulation';
 
 const FormatEdit: React.FC = () => {
     const [format, setFormat] = useState<Format | null>(null);
@@ -74,7 +75,7 @@ const FormatEdit: React.FC = () => {
                 } else {
                     // if we were able to get the list of formats, then we fill our state with them
                     if (response.data) {
-                        setFormats(response.data);
+                        setFormats(filterData(response.data, 'name', 'All Formats'));
                     }
                 }
             });
