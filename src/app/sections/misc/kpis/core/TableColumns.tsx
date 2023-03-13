@@ -35,7 +35,7 @@ const KpisColumns: ReadonlyArray<Column<Kpi>> = [
         id: 'performance-metrics',
         Cell: ({...props}) => <BadgesCell
             texts={props.data[props.row.index].performanceMetrics.map((metric: PerformanceMetric) => metric.name)}
-            color='light-info' align='left'/>,
+            color='light-info' align='left' asColumn={true}/>,
     },
     {
         Header: (props) => (

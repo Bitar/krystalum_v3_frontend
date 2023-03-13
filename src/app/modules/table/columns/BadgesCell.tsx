@@ -1,13 +1,15 @@
 import React, {FC} from 'react'
+import clsx from 'clsx';
 
 type Props = {
     texts: string[]
     color: string
 
-    align?: 'left' | 'center' | 'right'
+    align?: 'left' | 'center' | 'right',
+    asColumn?: boolean
 }
 
-const BadgesCell: FC<React.PropsWithChildren<Props>> = ({texts, color, align}) => {
+const BadgesCell: FC<React.PropsWithChildren<Props>> = ({texts, color, align, asColumn = false}) => {
     let alignClass = 'align-items-center justify-content-around'
 
     if (align === 'left') {
@@ -18,7 +20,7 @@ const BadgesCell: FC<React.PropsWithChildren<Props>> = ({texts, color, align}) =
 
     return (
         <div className={`d-flex ${alignClass}`}>
-            <div className='d-flex'>
+            <div className={clsx('d-flex', asColumn ? 'flex-column' : '')}>
                 {texts.map((text, index) => (
                     <span key={index} className={'badge badge-' + color}>{text}</span>
                 ))}
