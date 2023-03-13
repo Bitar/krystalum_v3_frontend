@@ -18,6 +18,7 @@ import {getAllVerticals, storeVertical} from '../../../../requests/misc/Vertical
 import Select from "react-select";
 import {Vertical} from "../../../../models/misc/Vertical";
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {indentOptions} from '../../../../components/forms/IndexOptions';
 
 
 const VerticalCreate: React.FC = () => {
@@ -109,23 +110,7 @@ const VerticalCreate: React.FC = () => {
                                             getOptionLabel={(vertical) => vertical.name}
                                             getOptionValue={(vertical) => vertical.id.toString()}
                                             onChange={selectChangeHandler}
-                                            formatOptionLabel={(option) => {
-                                                if (option.parent !== null) {
-                                                    // this is a child
-                                                    return (
-                                                        <div style={{ marginLeft: '1em' }}>
-                                                            {option.name}
-                                                        </div>
-                                                    );
-                                                } else {
-                                                    // this is a parent
-                                                    return (
-                                                        <div>
-                                                            {option.name}
-                                                        </div>
-                                                    );
-                                                }
-                                            }}
+                                            formatOptionLabel={indentOptions}
                                             isClearable={true}/>
 
                                     <div className="mt-1 text-danger">
