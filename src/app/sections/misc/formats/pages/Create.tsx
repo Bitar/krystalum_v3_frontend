@@ -26,6 +26,7 @@ import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import KrysCheckbox from "../../../../components/forms/KrysCheckbox";
 import {BuyingModel} from "../../../../models/misc/BuyingModel";
 import {getAllBuyingModels} from "../../../../requests/misc/BuyingModel";
+import {filterData} from '../../../../helpers/dataManipulation';
 
 
 const FormatCreate: React.FC = () => {
@@ -49,7 +50,7 @@ const FormatCreate: React.FC = () => {
             } else {
                 // if we were able to get the list of formats, then we fill our state with them
                 if (response.data) {
-                    setFormats(response.data);
+                    setFormats(filterData(response.data, 'name', 'All Formats'));
                 }
             }
         });

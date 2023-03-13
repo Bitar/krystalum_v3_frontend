@@ -6,6 +6,9 @@ import {ActionsCell} from '../../../../modules/table/columns/ActionsCell';
 import {QUERIES} from '../../../../../_metronic/helpers';
 import {Format} from '../../../../models/misc/Format';
 import {Restricted} from '../../../../modules/auth/AuthAccessControl';
+import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
+import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
+import {BuyingModel} from '../../../../models/misc/BuyingModel';
 
 const FormatsColumns: ReadonlyArray<Column<Format>> = [
     {
@@ -19,9 +22,16 @@ const FormatsColumns: ReadonlyArray<Column<Format>> = [
         Cell: ({...props}) => <TextCell text={props.data[props.row.index].code}/>,
     },
     {
-        Header: (props) => <CustomHeader tableProps={props} title='parent' className='min-w-125px'/>,
+        Header: (props) => <CustomHeader tableProps={props} title='Parent' className='min-w-125px'/>,
         id: 'parent',
         Cell: ({...props}) => <TextCell text={props.data[props.row.index].parent?.name}/>,
+    },
+    {
+        Header: (props) => <CustomHeader tableProps={props} title='Buying Models' className='min-w-150px'/>,
+        id: 'buyingModels',
+        Cell: ({...props}) => <BadgesCell
+            texts={props.data[props.row.index].buyingModels.map((buyingModel: BuyingModel) => buyingModel.name)}
+            color='light-info' align='left'/>,
     },
     {
         Header: (props) => (
