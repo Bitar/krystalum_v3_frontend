@@ -24,10 +24,10 @@ const OperatingSystemsColumns: ReadonlyArray<Column<OperatingSystem>> = [
                 <ActionsCell
                     id={props.data[props.row.index].id}
                     path={'misc/operating-systems'}
-                    queryKey={QUERIES.BOOKING_TYPE_LIST}
+                    queryKey={QUERIES.OPERATING_SYSTEMS_LIST}
                     showView={false}
                     showEdit={true}
-                    title="Delete Booking Type"
+                    title="Delete Operating System"
                     text={`Are you sure you want to delete the operating system '${props.data[props.row.index].name}'?`}
                 />
             </Restricted>

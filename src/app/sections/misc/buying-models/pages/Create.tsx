@@ -96,7 +96,7 @@ const BuyingModelCreate: React.FC = () => {
                                 </div>
 
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Corresponding metric" isRequired={true}/>
+                                    <KrysFormLabel text="Corresponding metrics" isRequired={true}/>
 
                                     <Select isMulti name="performance_metric_ids"
                                             options={performanceMetrics}

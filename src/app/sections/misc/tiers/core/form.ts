@@ -2,10 +2,10 @@ import * as Yup from 'yup';
 
 export interface FormFields {
     name: string,
-    order: number
+    order: number|string
 }
 
-export const defaultFormFields = {name: '', order: 0};
+export const defaultFormFields = {name: '', order: ''};
 
 export const TierSchema = Yup.object().shape({
     name: Yup.string().required(),

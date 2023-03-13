@@ -61,8 +61,6 @@ const KpiEdit: React.FC = () => {
                     // we were able to fetch current kpi to edit
                     setKpi(response);
 
-                    console.log(response);
-
                     const {performanceMetrics, ...currentKpi} = response
 
                     setForm({...currentKpi, performance_metric_ids: response.performanceMetrics.map(metric => metric.id)});

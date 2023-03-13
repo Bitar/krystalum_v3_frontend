@@ -14,6 +14,7 @@ import axios from 'axios';
 import {createFilterQueryParam, extractErrors} from '../../../../helpers/requests';
 import {Country} from '../../../../models/misc/Country';
 import FormErrors from '../../../../components/forms/FormErrors';
+import {removeAllCountriesOption} from '../../../../helpers/general';
 
 interface Props {
     showFilter: boolean,
@@ -38,7 +39,7 @@ const CityIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
             } else {
                 // if we were able to get the list of countries, then we fill our state with them
                 if (response.data) {
-                    setCountries(response.data);
+                    setCountries(removeAllCountriesOption(response.data));
                 }
             }
         });

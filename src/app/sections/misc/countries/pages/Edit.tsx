@@ -17,7 +17,7 @@ import {Sections} from '../../../../helpers/sections';
 import {getCountry, updateCountry} from '../../../../requests/misc/Country';
 import {CountrySchema} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
-import {defaultFormFields, FormFields} from "../../audiences/core/form";
+import {defaultFormFields, FormFields} from "../core/form";
 
 
 const CountryEdit: React.FC = () => {

@@ -132,7 +132,7 @@ const BuyingModelEdit: React.FC = () => {
                                 </div>
 
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Corresponding metric" isRequired={true}/>
+                                    <KrysFormLabel text="Corresponding metrics" isRequired={true}/>
 
                                     <MultiSelect isResourceLoaded={isResourceLoaded} options={performanceMetrics}
                                                  defaultValue={buyingModel?.performanceMetrics} form={form}

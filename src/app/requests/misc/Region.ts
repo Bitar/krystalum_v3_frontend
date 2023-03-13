@@ -40,7 +40,7 @@ export const storeRegion = async (region: any): Promise<Region | AxiosError | un
 
 export const updateRegion = async (region: any): Promise<Region | AxiosError | undefined> => {
     let formData = createFormData(region);
-    console.log(formData);
+
     formData.append('_method', 'put');
 
     return await axios.post(ENDPOINT + '/' + region.id, formData).then(res => res.data.data).catch((error) => {

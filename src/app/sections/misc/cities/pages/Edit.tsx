@@ -24,6 +24,7 @@ import {Country} from '../../../../models/misc/Country';
 import {getAllCountries} from '../../../../requests/misc/Country';
 import {CitySchema, defaultFormFields, FormFields} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {removeAllCountriesOption} from '../../../../helpers/general';
 
 const CityEdit: React.FC = () => {
     const [city, setCity] = useState<City>(defaultCity);
@@ -65,7 +66,7 @@ const CityEdit: React.FC = () => {
                 } else {
                     // if we were able to get the list of countries, then we fill our state with them
                     if (response.data) {
-                        setCountries(response.data);
+                        setCountries(removeAllCountriesOption(response.data));
                     }
                 }
             });
@@ -137,8 +138,7 @@ const CityEdit: React.FC = () => {
                                             value={form.country}
                                             getOptionLabel={(country) => country?.name}
                                             getOptionValue={(country) => country?.id.toString()}
-                                            onChange={selectChangeHandler}
-                                            isClearable={true}/>
+                                            onChange={selectChangeHandler}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="country" className="mt-2"/>

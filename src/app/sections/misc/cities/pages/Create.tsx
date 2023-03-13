@@ -24,6 +24,7 @@ import Select from 'react-select';
 import {Country} from '../../../../models/misc/Country';
 import {getAllCountries} from '../../../../requests/misc/Country';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {removeAllCountriesOption} from '../../../../helpers/general';
 
 const CityCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -46,7 +47,9 @@ const CityCreate: React.FC = () => {
             } else {
                 // if we were able to get the list of countries, then we fill our state with them
                 if (response.data) {
-                    setCountries(response.data);
+                    setCountries(removeAllCountriesOption(response.data));
+
+                    setForm({...form, country: response.data[0]});
                 }
             }
         });
@@ -108,8 +111,8 @@ const CityCreate: React.FC = () => {
                                             options={countries}
                                             getOptionLabel={(country) => country?.name}
                                             getOptionValue={(country) => country?.id.toString()}
-                                            onChange={selectChangeHandler}
-                                            isClearable={true}/>
+                                            value={form.country} // make the default value as the first country
+                                            onChange={selectChangeHandler}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="country" className="mt-2"/>

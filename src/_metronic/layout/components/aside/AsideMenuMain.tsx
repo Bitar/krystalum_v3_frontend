@@ -36,8 +36,8 @@ export function AsideMenuMain() {
                     <AsideMenuItem to='/misc/audiences' title='Audiences' hasBullet={true}/>
                     <AsideMenuItem to='/misc/booking-types' title='Booking types' hasBullet={true}/>
                     <AsideMenuItem to='/misc/business-units' title='Business Units' hasBullet={true}/>
-                    <AsideMenuItem to='/misc/buying-models' title='Buying models' hasBullet={true}/>
                     <AsideMenuItem to='/misc/buy-types' title='Buy types' hasBullet={true}/>
+                    <AsideMenuItem to='/misc/buying-models' title='Buying models' hasBullet={true}/>
                     <AsideMenuItem to='/misc/campaign-restriction-requirements' title='Campaign Restriction Requirements' hasBullet={true}/>
                     <AsideMenuItem to='/misc/campaign-types' title='Campaign Types' hasBullet={true}/>
                     <AsideMenuItem to='/misc/cities' title='Cities' hasBullet={true}/>

@@ -17,7 +17,7 @@ import {Sections} from '../../../../helpers/sections';
 import {getBookingType, updateBookingType} from '../../../../requests/misc/BookingType';
 import {BookingTypeSchema} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
-import {defaultFormFields, FormFields} from "../../audiences/core/form";
+import {defaultFormFields, FormFields} from "../core/form";
 
 
 const BookingTypeEdit: React.FC = () => {

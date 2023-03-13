@@ -30,7 +30,7 @@ const UserEdit: React.FC = () => {
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false);
 
-    const [user, setUser] = useState<User|null>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [roles, setRoles] = useState<Role[]>([]);
 
     const krysApp = useKrysApp();
@@ -79,7 +79,7 @@ const UserEdit: React.FC = () => {
 
     useEffect(() => {
         // when we're here it means our user object is loaded from the API
-        if(user) {
+        if (user) {
             setIsResourceLoaded(true);
 
             krysApp.setPageTitle(generatePageTitle(Sections.IAM_USERS, PageTypes.EDIT, user.name))
@@ -114,7 +114,8 @@ const UserEdit: React.FC = () => {
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('role', Actions.EDIT, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS
-                    })
+                    });
+
                     navigate(`/iam/users`);
                 }
             }
@@ -159,8 +160,10 @@ const UserEdit: React.FC = () => {
                                     <KrysFormLabel text="Profile picture" isRequired={false}/>
 
                                     <div className="mb-3">
-                                        <img src={user?.image} className="w-25"
-                                             alt={`${user?.name} profile`}/>
+                                        {
+                                            user?.image && <img src={user?.image} className="w-25"
+                                                                alt={`${user?.name} profile`}/>
+                                        }
                                     </div>
 
                                     <Field className="form-control fs-6" type="file" name="image" value={undefined}
@@ -174,7 +177,9 @@ const UserEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Roles" isRequired={true}/>
 
-                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={roles} defaultValue={user?.roles} form={form} setForm={setForm} name={'roles'} />
+                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={roles}
+                                                 defaultValue={user?.roles} form={form} setForm={setForm}
+                                                 name={'roles'}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="roles" className="mt-2"/>

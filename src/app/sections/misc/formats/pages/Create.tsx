@@ -92,7 +92,6 @@ const FormatCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // it's format for sure
-
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('format', Actions.CREATE, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS
