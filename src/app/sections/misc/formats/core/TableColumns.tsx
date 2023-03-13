@@ -7,7 +7,6 @@ import {QUERIES} from '../../../../../_metronic/helpers';
 import {Format} from '../../../../models/misc/Format';
 import {Restricted} from '../../../../modules/auth/AuthAccessControl';
 import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
-import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
 import {BuyingModel} from '../../../../models/misc/BuyingModel';
 
 const FormatsColumns: ReadonlyArray<Column<Format>> = [

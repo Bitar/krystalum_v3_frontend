@@ -18,7 +18,7 @@ const BadgesCell: FC<React.PropsWithChildren<Props>> = ({texts, color, align}) =
 
     return (
         <div className={`d-flex ${alignClass}`}>
-            <div className='d-flex flex-column'>
+            <div className='d-flex'>
                 {texts.map((text, index) => (
                     <span key={index} className={'badge badge-' + color}>{text}</span>
                 ))}

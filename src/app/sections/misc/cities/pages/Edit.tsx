@@ -24,7 +24,7 @@ import {Country} from '../../../../models/misc/Country';
 import {getAllCountries} from '../../../../requests/misc/Country';
 import {CitySchema, defaultFormFields, FormFields} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
-import {removeAllCountriesOption} from '../../../../helpers/general';
+import {filterData} from '../../../../helpers/dataManipulation';
 
 const CityEdit: React.FC = () => {
     const [city, setCity] = useState<City>(defaultCity);
@@ -66,7 +66,7 @@ const CityEdit: React.FC = () => {
                 } else {
                     // if we were able to get the list of countries, then we fill our state with them
                     if (response.data) {
-                        setCountries(removeAllCountriesOption(response.data));
+                        setCountries(filterData(response.data, 'name', 'All Countries'));
                     }
                 }
             });
