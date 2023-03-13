@@ -1,7 +1,9 @@
 export const QUERIES = {
+    // IAM
     USERS_LIST: 'users-list',
     ROLES_LIST: 'roles-list',
     PERMISSIONS_LIST: 'permissions-list',
+    // MISC
     BUY_TYPE_LIST: 'buy-types-list',
     BOOKING_TYPE_LIST: 'booking-types-list',
     COUNTRY_LIST: 'countries-list',
@@ -26,5 +28,8 @@ export const QUERIES = {
     OBJECTIVES_LIST: 'objectives-list',
     WEBSITE_PAGES_LIST: 'website-pages-list',
     TIERS_LIST: 'tiers-list',
-    CAMPAIGN_RESTRICTION_REQUIREMENTS_LIST: 'campaign-restriction-requirements-list'
+    CAMPAIGN_RESTRICTION_REQUIREMENTS_LIST: 'campaign-restriction-requirements-list',
+    // DEMAND
+    TRADING_DESKS_LIST: 'trading-desks-list',
+    HOLDING_GROUPS_LIST: 'holding-groups-list'
 }

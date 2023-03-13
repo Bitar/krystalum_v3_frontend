@@ -5,6 +5,7 @@ import {DashboardWrapper} from './home/DashboardWrapper'
 // import {lazy} from 'react'
 import IamModuleRoutes from './iam/ModuleRoutes';
 import MiscModuleRoutes from './misc/ModuleRoutes';
+import DemandModuleRoutes from './demand/ModuleRoutes';
 
 export const PrivateRoutes = () => {
     return (
@@ -18,6 +19,9 @@ export const PrivateRoutes = () => {
 
                 {/* IAM section */}
                 <Route path='iam/*' element={<IamModuleRoutes/>}/>
+
+                {/* Demand section */}
+                <Route path='demand/*' element={<DemandModuleRoutes/>}/>
 
                 {/* Miscellaneous section */}
                 <Route path='misc/*' element={<MiscModuleRoutes/>}/>

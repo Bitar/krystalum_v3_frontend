@@ -1,4 +1,4 @@
-import {Region, RegionPaginate} from "../../models/misc/Region"
+import {Region, RegionList, RegionPaginate} from "../../models/misc/Region"
 import axios, {AxiosError, AxiosResponse} from "axios";
 import {createFormData} from "../../helpers/requests";
 
@@ -11,6 +11,12 @@ export const getRegion = async (id: number): Promise<Region | AxiosError | undef
         .then(res => res.data.data).catch((error) => {
             return error;
         });
+}
+
+export const getAllRegions = async (): Promise<RegionList | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<RegionList>) => response.data).catch((error) => {
+        return error;
+    });
 }
 
 export const getRegions = (query ?: String): Promise<RegionPaginate> => {

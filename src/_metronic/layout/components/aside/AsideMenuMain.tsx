@@ -29,6 +29,16 @@ export function AsideMenuMain() {
                 </AsideMenuItemWithSub>
             </Restricted>
 
+            <Restricted to='view-demand'>
+                <AsideMenuItemWithSub to='/demand' title='Demand' icon='/media/icons/duotune/abstract/abs021.svg'>
+                    <AsideMenuItem to='/demand/campaigns' title='Campaigns' hasBullet={true}/>
+                    <AsideMenuItem to='/demand/advertisers' title='Advertisers' hasBullet={true}/>
+                    <AsideMenuItem to='/demand/agencies' title='Agencies' hasBullet={true}/>
+                    <AsideMenuItem to='/demand/holding-groups' title='Holding groups' hasBullet={true}/>
+                    <AsideMenuItem to='/demand/trading-desks' title='Trading desks' hasBullet={true}/>
+                </AsideMenuItemWithSub>
+            </Restricted>
+
             <Restricted to='view-misc'>
                 <AsideMenuItemWithSub to='/misc' title='Miscellaneous' icon='/media/icons/duotune/general/gen022.svg'>
                     <AsideMenuItem to='/misc/ad-servers' title='Ad servers' hasBullet={true}/>
