@@ -14,8 +14,6 @@ export const defaultFormFields = {name: '', code: '', currency: '', phone_code: 
 export const CountrySchema = Yup.object().shape({
     name: Yup.string().required(),
     code: Yup.string().required(),
-    currency: Yup.string().required().matches(/^[A-Z]{3}$/, 'Currency should be all capital and three letters only'),
-    phone_code: Yup.number().required()
-        .positive('phone code must be positive')
-        .notOneOf([0], 'phone code must not be zero')
+    currency: Yup.string().required(),
+    phone_code: Yup.number().min(0, 'phone code must be greater than or equal to 0').required(),
 });
