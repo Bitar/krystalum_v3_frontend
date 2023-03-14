@@ -16,5 +16,8 @@ export const FormatSchema = Yup.object().shape({
     code: Yup.string().required(),
     parent: Yup.object().notRequired().nullable(),
     has_buying_model: Yup.number().required(),
-    buying_model_ids: Yup.array().notRequired()
+    buying_model_ids: Yup.array().when('has_buying_model', {
+        is: 1,
+        then: Yup.array().of(Yup.number()).required().min(1, 'You must select at least one buying model.')
+    })
 });
