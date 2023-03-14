@@ -27,7 +27,7 @@ import {BuyingModel} from "../../../../models/misc/BuyingModel";
 import MultiSelect from "../../../../components/forms/MultiSelect";
 import KrysCheckbox from "../../../../components/forms/KrysCheckbox";
 import {filterData} from '../../../../helpers/dataManipulation';
-import {indentOptions} from '../../../../components/forms/IndexOptions';
+import {indentOptions} from '../../../../components/forms/IndentOptions';
 
 const FormatEdit: React.FC = () => {
     const [format, setFormat] = useState<Format | null>(null);

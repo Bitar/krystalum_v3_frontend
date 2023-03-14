@@ -27,7 +27,7 @@ import KrysCheckbox from "../../../../components/forms/KrysCheckbox";
 import {BuyingModel} from "../../../../models/misc/BuyingModel";
 import {getAllBuyingModels} from "../../../../requests/misc/BuyingModel";
 import {filterData} from '../../../../helpers/dataManipulation';
-import {indentOptions} from '../../../../components/forms/IndexOptions';
+import {indentOptions} from '../../../../components/forms/IndentOptions';
 
 
 const FormatCreate: React.FC = () => {
