@@ -5,7 +5,7 @@ export interface FilterFields {
     metrics?: number[]
 }
 
-export const defaultFilterFields = {name: ''}
+export const defaultFilterFields = {name: '', metrics: []}
 
 export const FilterSchema = Yup.object().shape({
     name: Yup.string().notRequired(),

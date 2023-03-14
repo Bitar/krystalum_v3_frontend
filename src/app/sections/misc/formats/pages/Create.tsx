@@ -153,7 +153,7 @@ const FormatCreate: React.FC = () => {
                                 </div>
 
                                 {form.has_buying_model > 0 && <div className="mb-7">
-                                    <KrysFormLabel text="Buying models" isRequired={false}/>
+                                    <KrysFormLabel text="Buying models" isRequired={true}/>
 
                                     <Select isMulti name="buying_model_ids"
                                             options={buyingModels}
