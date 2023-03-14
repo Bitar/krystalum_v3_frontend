@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import {array} from 'yup';
 
 export interface FilterFields {
     name?: string,
