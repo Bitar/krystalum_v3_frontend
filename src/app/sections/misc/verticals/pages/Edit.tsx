@@ -23,7 +23,7 @@ import {defaultFormFields, FormFields, VerticalSchema} from '../core/form';
 import {getAllVerticals, getVertical, updateVertical} from "../../../../requests/misc/Vertical";
 import {defaultVertical, Vertical} from "../../../../models/misc/Vertical";
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
-import {indentOptions} from '../../../../components/forms/IndexOptions';
+import {indentOptions} from '../../../../components/forms/IndentOptions';
 
 const VerticalEdit: React.FC = () => {
     const [vertical, setVertical] = useState<Vertical>(defaultVertical);
