@@ -27,5 +27,6 @@ export enum Sections {
     MISC_OBJECTIVES = 'Objectives',
     MISC_WEBSITE_PAGES = 'Website pages',
     MISC_TIERS = 'Tiers',
-    MISC_CAMPAIGN_RESTRICTION_REQUIREMENTS = 'Campaign restriction requirements'
+    MISC_CAMPAIGN_RESTRICTION_REQUIREMENTS = 'Campaign restriction requirements',
+    SUPPLY_PUBLISHERS = 'Publishers',
 }

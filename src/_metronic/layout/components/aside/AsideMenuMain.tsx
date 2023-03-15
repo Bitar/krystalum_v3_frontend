@@ -58,6 +58,13 @@ export function AsideMenuMain() {
                     <AsideMenuItem to='/misc/website-pages' title='Website Pages' hasBullet={true}/>
                 </AsideMenuItemWithSub>
             </Restricted>
+
+            <Restricted to='view-supply'>
+                <AsideMenuItemWithSub to='/supply' title='Supply' icon='/media/icons/duotune/technology/teh008.svg'>
+                    <AsideMenuItem to='/supply/publishers' title='Publishers' hasBullet={true}/>
+                    <AsideMenuItem to='/supply/publications' title='Publications' hasBullet={true}/>
+                </AsideMenuItemWithSub>
+            </Restricted>
         </>
     )
 }

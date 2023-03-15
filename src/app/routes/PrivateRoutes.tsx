@@ -5,6 +5,7 @@ import {DashboardWrapper} from './home/DashboardWrapper'
 // import {lazy} from 'react'
 import IamModuleRoutes from './iam/ModuleRoutes';
 import MiscModuleRoutes from './misc/ModuleRoutes';
+import SupplyModuleRoutes from './supply/ModuleRoutes';
 
 export const PrivateRoutes = () => {
     return (
@@ -21,6 +22,9 @@ export const PrivateRoutes = () => {
 
                 {/* Miscellaneous section */}
                 <Route path='misc/*' element={<MiscModuleRoutes/>}/>
+
+                {/* Supply section */}
+                <Route path='supply/*' element={<SupplyModuleRoutes/>}/>
 
                 {/* Page Not Found */}
                 <Route path='*' element={<Navigate to='/error/404'/>}/>
