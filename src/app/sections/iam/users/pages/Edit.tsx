@@ -112,7 +112,7 @@ const UserEdit: React.FC = () => {
                 } else {
                     // we were able to store the user
                     krysApp.setAlert({
-                        message: new AlertMessageGenerator('role', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        message: new AlertMessageGenerator('user', Actions.EDIT, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS
                     });
 
