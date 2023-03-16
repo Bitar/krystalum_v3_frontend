@@ -3,9 +3,12 @@ import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import Select from 'react-select';
+import {InputGroup} from 'react-bootstrap';
 
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
+
+// import DatePicker from 'react-datepicker';
 
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
@@ -21,8 +24,8 @@ import {storePublisher} from '../../../../requests/supply/Publisher';
 import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
 import {Tier} from '../../../../models/misc/Tier';
 import {getAllTiers} from '../../../../requests/misc/Tier';
-import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
 import KrysRadioButton from '../../../../components/forms/KrysRadioButton';
+import {COMMITMENT, REVENUE_SHARE} from '../../../../models/supply/Publisher';
 
 const PublisherCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -123,6 +126,7 @@ const PublisherCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Integration date" isRequired={false}/>
 
+                                    {/*<DatePicker showIcon selected={form.integration_date} />*/}
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="integration_date" className="mt-2"/>
@@ -132,31 +136,49 @@ const PublisherCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Commitment type" isRequired={true}/>
 
-                                    <KrysRadioButton name="commitment_type" label={"Revenue Share"} onChangeHandler={(e) => {
-                                        e.stopPropagation();
-                                        setForm({...form});
-                                    }} defaultValue={false}/>
+                                    <KrysRadioButton name="revenue_type" label={"Revenue Share"}
+                                                     onChangeHandler={(e) => {
+                                                         e.stopPropagation();
+                                                         setForm({...form, revenue_type: REVENUE_SHARE});
+                                                     }} defaultValue={form.revenue_type == REVENUE_SHARE}/>
 
-                                    <KrysRadioButton name="commitment_type" label={"Amount Commitment"} onChangeHandler={(e) => {
-                                        e.stopPropagation();
-                                        setForm({...form});
-                                    }} defaultValue={false}/>
+                                    <KrysRadioButton name="revenue_type" label={"Amount Commitment"}
+                                                     onChangeHandler={(e) => {
+                                                         e.stopPropagation();
+                                                         setForm({...form, revenue_type: COMMITMENT});
+                                                     }} defaultValue={form.revenue_type == COMMITMENT}/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="commitment_type" className="mt-2"/>
+                                        <ErrorMessage name="revenue_type" className="mt-2"/>
                                     </div>
                                 </div>
 
-                                {/*<div className="mb-7">*/}
-                                {/*    <KrysFormLabel text="Email address" isRequired={false}/>*/}
+                                {form.revenue_type == REVENUE_SHARE && <div className="mb-7">
+                                    <KrysFormLabel text="Revenue share" isRequired={true}/>
 
-                                {/*    <Field className="form-control fs-6" type="email"*/}
-                                {/*           placeholder="Enter contact email address" name="email"/>*/}
+                                    <InputGroup className="mb-3">
+                                        <InputGroup.Text id="basic-addon1">%</InputGroup.Text>
+                                        <Field className="form-control fs-6" type="number"
+                                               placeholder="Enter publisher revenue share (default 50%)" name="revenue_share"/>
+                                    </InputGroup>
 
-                                {/*    <div className="mt-1 text-danger">*/}
-                                {/*        <ErrorMessage name="email" className="mt-2"/>*/}
-                                {/*    </div>*/}
-                                {/*</div>*/}
+                                    <div className="mt-1 text-danger">
+                                        <ErrorMessage name="revenue_share" className="mt-2"/>
+                                    </div>
+                                </div>
+                                }
+
+                                {form.revenue_type == COMMITMENT && <div className="mb-7">
+                                    <KrysFormLabel text="Commitment" isRequired={true}/>
+
+                                    <Field className="form-control fs-6" type="text"
+                                           placeholder="Enter publisher commitment amount" name="commitment"/>
+
+                                    <div className="mt-1 text-danger">
+                                        <ErrorMessage name="commitment" className="mt-2"/>
+                                    </div>
+                                </div>
+                                }
 
                                 <KrysFormFooter cancelUrl={'/supply/publishers'}/>
                             </Form>

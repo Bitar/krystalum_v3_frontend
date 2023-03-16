@@ -60,7 +60,8 @@ export function AsideMenuMain() {
             </Restricted>
 
             <Restricted to='view-supply'>
-                <AsideMenuItemWithSub to='/supply' title='Supply' icon='/media/icons/duotune/technology/teh008.svg'>
+                <AsideMenuItemWithSub to='/supply' title='Supply' icon='/media/icons/duotune/communication/com001.svg'>
+                {/*<AsideMenuItemWithSub to='/supply' title='Supply' icon='/media/icons/duotune/technology/teh008.svg'>*/}
                     <AsideMenuItem to='/supply/publishers' title='Publishers' hasBullet={true}/>
                     <AsideMenuItem to='/supply/publications' title='Publications' hasBullet={true}/>
                 </AsideMenuItemWithSub>
