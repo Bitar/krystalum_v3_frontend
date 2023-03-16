@@ -1,14 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {createRef, forwardRef, useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import Select from 'react-select';
 import {InputGroup} from 'react-bootstrap';
+import ReactDatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-
-// import DatePicker from 'react-datepicker';
 
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
@@ -92,7 +92,8 @@ const PublisherCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={PublisherSchema} onSubmit={handleCreate}>
+                <Formik initialValues={form} validationSchema={PublisherSchema} onSubmit={handleCreate}
+                        enableReinitialize>
                     {
                         () => (
                             <Form onChange={onChangeHandler}>
@@ -116,7 +117,8 @@ const PublisherCreate: React.FC = () => {
                                             getOptionValue={(tier) => tier?.id.toString()}
                                             onChange={(e) => {
                                                 selectChangeHandler(e, 'tier')
-                                            }}/>
+                                            }}
+                                            placeholder="Select a tier"/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="tier" className="mt-2"/>
@@ -126,7 +128,13 @@ const PublisherCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Integration date" isRequired={false}/>
 
-                                    {/*<DatePicker showIcon selected={form.integration_date} />*/}
+
+                                    <ReactDatePicker name="integration_date"
+                                                     dateFormat="yyyy-MM-dd"
+                                                     selected={form.integration_date}
+                                                     onChange={(date) => setForm({...form, integration_date: date})}
+                                                     customInput={<input className="form-control fs-6" type="text" placeholder="Enter publisher integration date"/>}
+                                    />
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="integration_date" className="mt-2"/>
@@ -140,26 +148,27 @@ const PublisherCreate: React.FC = () => {
                                                      onChangeHandler={(e) => {
                                                          e.stopPropagation();
                                                          setForm({...form, revenue_type: REVENUE_SHARE});
-                                                     }} defaultValue={form.revenue_type == REVENUE_SHARE}/>
+                                                     }} defaultValue={form.revenue_type === REVENUE_SHARE}/>
 
                                     <KrysRadioButton name="revenue_type" label={"Amount Commitment"}
                                                      onChangeHandler={(e) => {
                                                          e.stopPropagation();
                                                          setForm({...form, revenue_type: COMMITMENT});
-                                                     }} defaultValue={form.revenue_type == COMMITMENT}/>
+                                                     }} defaultValue={form.revenue_type === COMMITMENT}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="revenue_type" className="mt-2"/>
                                     </div>
                                 </div>
 
-                                {form.revenue_type == REVENUE_SHARE && <div className="mb-7">
+                                {form.revenue_type === REVENUE_SHARE && <div className="mb-7">
                                     <KrysFormLabel text="Revenue share" isRequired={true}/>
 
                                     <InputGroup className="mb-3">
                                         <InputGroup.Text id="basic-addon1">%</InputGroup.Text>
                                         <Field className="form-control fs-6" type="number"
-                                               placeholder="Enter publisher revenue share (default 50%)" name="revenue_share"/>
+                                               placeholder="Enter publisher revenue share (default 50%)"
+                                               name="revenue_share"/>
                                     </InputGroup>
 
                                     <div className="mt-1 text-danger">
@@ -168,7 +177,7 @@ const PublisherCreate: React.FC = () => {
                                 </div>
                                 }
 
-                                {form.revenue_type == COMMITMENT && <div className="mb-7">
+                                {form.revenue_type === COMMITMENT && <div className="mb-7">
                                     <KrysFormLabel text="Commitment" isRequired={true}/>
 
                                     <Field className="form-control fs-6" type="text"

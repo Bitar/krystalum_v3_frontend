@@ -1,5 +1,4 @@
 import React from 'react'
-import KrysFormLabel from './KrysFormLabel';
 
 interface Props {
     name: string,

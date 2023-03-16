@@ -13,6 +13,7 @@ import Select from 'react-select';
 import axios from 'axios';
 import {getAllBuyingModels} from '../../../../requests/misc/BuyingModel';
 import {BuyingModel} from '../../../../models/misc/BuyingModel';
+import FormErrors from "../../../../components/forms/FormErrors";
 
 interface Props {
     showFilter: boolean,
@@ -78,6 +79,8 @@ const FormatIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
             <Row id='#formats-list-filter'>
                 <Col>
                     <div className="card-rounded bg-primary bg-opacity-5 p-10 mb-15">
+                        <FormErrors errorMessages={filterErrors}/>
+
                         <Formik initialValues={defaultFilterFields} validationSchema={FilterSchema}
                                 onSubmit={handleFilter}
                                 enableReinitialize>
