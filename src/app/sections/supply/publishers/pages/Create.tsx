@@ -26,12 +26,16 @@ import {Tier} from '../../../../models/misc/Tier';
 import {getAllTiers} from '../../../../requests/misc/Tier';
 import KrysRadioButton from '../../../../components/forms/KrysRadioButton';
 import {COMMITMENT, REVENUE_SHARE} from '../../../../models/supply/Publisher';
+import {Country} from "../../../../models/misc/Country";
+import {getAllCountries} from "../../../../requests/misc/Country";
+import {filterData} from "../../../../helpers/dataManipulation";
 
 const PublisherCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const [tiers, setTiers] = useState<Tier[]>([]);
+    const [countries, setCountries] = useState<Country[]>([]);
 
     const navigate = useNavigate();
     const krysApp = useKrysApp();
@@ -49,6 +53,20 @@ const PublisherCreate: React.FC = () => {
                 // if we were able to get the list of tiers, then we fill our state with them
                 if (response.data) {
                     setTiers(response.data);
+                }
+            }
+        });
+
+        // get the countries
+        getAllCountries().then(response => {
+            if (axios.isAxiosError(response)) {
+                setFormErrors(extractErrors(response));
+            } else if (response === undefined) {
+                setFormErrors([GenericErrorMessage])
+            } else {
+                // if we were able to get the list of countries, then we fill our state with them
+                if (response.data) {
+                    setCountries(filterData(response.data, 'name', 'All Countries'));
                 }
             }
         });
@@ -188,6 +206,47 @@ const PublisherCreate: React.FC = () => {
                                     </div>
                                 </div>
                                 }
+
+                                <div className="separator border-2 my-10"></div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Email address" isRequired={false}/>
+
+                                    <Field className="form-control fs-6" type="email"
+                                           placeholder="Enter email address" name="email"/>
+
+                                    <div className="mt-1 text-danger">
+                                        <ErrorMessage name="email" className="mt-2"/>
+                                    </div>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="HQ address" isRequired={false}/>
+
+                                    <Field className="form-control fs-6" type="text"
+                                           placeholder="Enter publisher hq address" name="hq_address"/>
+
+                                    <div className="mt-1 text-danger">
+                                        <ErrorMessage name="hq_address" className="mt-2"/>
+                                    </div>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="HQ country" isRequired={false}/>
+
+                                    <Select name="hq_country"
+                                            options={countries}
+                                            getOptionLabel={(country) => country?.name}
+                                            getOptionValue={(country) => country?.id.toString()}
+                                            onChange={(e) => {
+                                                selectChangeHandler(e, 'country')
+                                            }}
+                                            placeholder="Select a hq country"/>
+
+                                    <div className="mt-1 text-danger">
+                                        <ErrorMessage name="hq_country" className="mt-2"/>
+                                    </div>
+                                </div>
 
                                 <KrysFormFooter cancelUrl={'/supply/publishers'}/>
                             </Form>

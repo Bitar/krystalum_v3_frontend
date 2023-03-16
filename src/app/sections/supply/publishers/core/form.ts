@@ -5,7 +5,7 @@ import {COMMITMENT, REVENUE_SHARE} from "../../../../models/supply/Publisher";
 export interface FormFields {
     name: string,
     tier: Tier | null,
-    integration_date: Date|null,
+    integration_date: Date | null,
     revenue_type: number,
     revenue_share: string | number | null,
     commitment: string | null
@@ -22,6 +22,7 @@ export const defaultFormFields = {
 
 export const PublisherSchema = Yup.object().shape({
     name: Yup.string().required(),
+    tier: Yup.object().notRequired().nullable(),
     revenue_type: Yup.number().min(1, 'revenue type is required').required(),
     revenue_share: Yup.number().when('revenue_type', {
         is: REVENUE_SHARE,
@@ -30,5 +31,8 @@ export const PublisherSchema = Yup.object().shape({
     commitment: Yup.string().when('revenue_type', {
         is: COMMITMENT,
         then: Yup.string().required(),
-    })
+    }),
+    email: Yup.string().notRequired().email(),
+    hq_address: Yup.string().notRequired(),
+    hq_country: Yup.object().notRequired().nullable(),
 });
