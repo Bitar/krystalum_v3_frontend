@@ -142,7 +142,7 @@ const PublisherCreate: React.FC = () => {
                                 </div>
 
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Commitment type" isRequired={true}/>
+                                    <KrysFormLabel text="Revenue type" isRequired={true}/>
 
                                     <KrysRadioButton name="revenue_type" label={"Revenue Share"}
                                                      onChangeHandler={(e) => {
