@@ -37,7 +37,6 @@ const AdServerIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
 
     useEffect(() => {
         handleFilter();
-        selectRef.current?.clearValue();
         setReset(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reset]);
@@ -46,8 +45,6 @@ const AdServerIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
         setFilters(defaultFilterFields);
         setReset(true);
     }
-
-    const selectRef = useRef<any>(null);
 
     return (
         <Collapse in={showFilter}>
