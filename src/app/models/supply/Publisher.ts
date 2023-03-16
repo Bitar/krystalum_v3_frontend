@@ -1,5 +1,6 @@
 import {Response} from '../../../_metronic/helpers';
 import {Tier} from '../misc/Tier';
+import {Country} from "../misc/Country";
 
 export type Publisher = {
     id: number,
@@ -8,8 +9,16 @@ export type Publisher = {
     integration_date: string,
     revenue_type: number,
     revenue_share: number | null,
-    commitment: string | null
+    commitment: string | null,
+    info: PublisherInfo | null
 };
+
+export type PublisherInfo = {
+    id: number,
+    email: string | null,
+    hq_address: string | null,
+    hq_country: Country | null
+}
 
 export type PublisherPaginate = Response<Publisher[]>;
 
@@ -24,7 +33,8 @@ export const defaultPublisher: Publisher = {
     integration_date: '',
     revenue_type: 0,
     revenue_share: null,
-    commitment: ''
+    commitment: '',
+    info: null
 };
 
 export const REVENUE_SHARE = 1;
