@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import {Tier} from '../../../../models/misc/Tier';
 import {COMMITMENT, REVENUE_SHARE} from "../../../../models/supply/Publisher";
+import {Country} from "../../../../models/misc/Country";
 
 export interface FormFields {
     name: string,
@@ -8,7 +9,10 @@ export interface FormFields {
     integration_date: Date | null,
     revenue_type: number,
     revenue_share: string | number | null,
-    commitment: string | null
+    commitment: string | null,
+    email: string | null,
+    hq_address: string | null,
+    hq_country: Country | null
 }
 
 export const defaultFormFields = {
@@ -17,7 +21,10 @@ export const defaultFormFields = {
     integration_date: null,
     revenue_type: 0,
     revenue_share: '',
-    commitment: ''
+    commitment: '',
+    email: '',
+    hq_address: '',
+    hq_country: null
 };
 
 export const PublisherSchema = Yup.object().shape({
