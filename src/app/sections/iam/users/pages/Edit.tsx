@@ -1,42 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
-import {ErrorMessage, Field, Form, Formik, FormikProps} from 'formik';
-
-import {Role} from '../../../../models/iam/Role';
 import {User} from '../../../../models/iam/User';
-import {getUser, updateUser} from '../../../../requests/iam/User';
-import {getAllRoles} from '../../../../requests/iam/Role';
-import {extractErrors} from '../../../../helpers/requests';
-import {
-    GenericErrorMessage, genericHandleSingleFile,
-    genericOnChangeHandler
-} from '../../../../helpers/form';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
+import {getUser} from '../../../../requests/iam/User';
+import {PageTypes} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {defaultFormFields, EditUserSchema, FormFields} from '../core/form';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {Sections} from "../../../../helpers/sections";
-import MultiSelect from '../../../../components/forms/MultiSelect';
+import {Nav, Tab} from 'react-bootstrap';
+import EditProfile from './edit/EditProfile';
+import ChangePassword from './edit/ChangePassword';
 
 const UserEdit: React.FC = () => {
-    const [form, setForm] = useState<FormFields>(defaultFormFields);
-    const [formErrors, setFormErrors] = useState<string[]>([]);
-    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false);
-
     const [user, setUser] = useState<User | null>(null);
-    const [roles, setRoles] = useState<Role[]>([]);
-
-    const krysApp = useKrysApp();
 
     let {id} = useParams();
+
     const navigate = useNavigate();
+    const krysApp = useKrysApp();
 
     useEffect(() => {
         if (id) {
@@ -51,26 +34,6 @@ const UserEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     setUser(response);
-
-                    const {image, roles, ...currentUser} = response
-
-                    // was able to get the user we want to edit
-                    // the form is the same as user but without the image
-                    setForm({...currentUser, roles: response.roles.map((role: { id: any; }) => role.id)});
-                }
-            });
-
-            // get the roles so we can edit the user's roles
-            getAllRoles().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of roles, then we fill our state with them
-                    if (response.data) {
-                        setRoles(response.data);
-                    }
                 }
             });
         }
@@ -80,120 +43,70 @@ const UserEdit: React.FC = () => {
     useEffect(() => {
         // when we're here it means our user object is loaded from the API
         if (user) {
-            setIsResourceLoaded(true);
-
             krysApp.setPageTitle(generatePageTitle(Sections.IAM_USERS, PageTypes.EDIT, user.name))
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
-    const onChangeHandler = (e: any) => {
-        // in case of multi select, the element doesn't have a name because
-        // we get only a list of values from the select and not an element with target value and name
-        if (e.target.name !== 'image') {
-            genericOnChangeHandler(e, form, setForm);
+    const settingsNav = [
+        {
+            title: 'Update profile',
+            description: 'Update user\'s profile',
+            icon: 'fa-duotone fa-user'
+        },
+        {
+            title: 'Change password',
+            description: 'Modify your login details',
+            icon: 'fa-duotone fa-gears'
         }
-    };
-
-    const handleFile = (e: any, formik: FormikProps<any>) => {
-        genericHandleSingleFile(e, formik, form, setForm, 'image');
-    };
-
-    const handleEdit = (e: any) => {
-        // send API request to create the user
-        updateUser(form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // we were able to store the user
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('user', Actions.EDIT, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    });
-
-                    navigate(`/iam/users`);
-                }
-            }
-        );
-    };
+    ]
 
     return (
-        <KTCard>
+        <KTCard className='mb-5'>
             <KTCardHeader text="Edit User" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
 
             <KTCardBody>
-                <FormErrors errorMessages={formErrors}/>
+                <Tab.Container defaultActiveKey='settingsNav-0'>
+                    <div className='row'>
+                        <div className='col-lg-4 col-xl-3'>
+                            <Nav variant='pills' className='flex-column settings-nav'>
+                                {settingsNav.map((settings, index) => (
+                                    <Nav.Item key={`settings-nav-${index}`} className='mb-5'>
+                                        <Nav.Link className='settings-nav-item' eventKey={`settingsNav-${index}`}>
+                                            <div className='settings-nav-icon w-25px h-25px bg-transparent'>
+                                                <i className={`${settings.icon}`}></i>
+                                            </div>
+                                            <div className='settings-nav-label'>
+                                                <span
+                                                    className='settings-nav-title text-gray-800'>{settings.title}</span>
+                                                <span
+                                                    className='settings-nav-desc text-gray-500'>{settings.description}</span>
+                                            </div>
+                                        </Nav.Link>
+                                    </Nav.Item>
+                                ))}
+                            </Nav>
+                        </div>
+                        <div className='col-lg-8 col-xl-9'>
+                            <Tab.Content>
+                                {
+                                    <>
+                                        <Tab.Pane eventKey='settingsNav-0'>
+                                            <EditProfile user={user}/>
+                                        </Tab.Pane>
 
-                <Formik initialValues={form} validationSchema={EditUserSchema} onSubmit={handleEdit}
-                        enableReinitialize>
-                    {
-                        (formik) => (
-                            <Form onChange={onChangeHandler}>
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Name" isRequired={true}/>
-
-                                    <Field className="form-control fs-6" type="text"
-                                           placeholder="Enter full name" name="name"/>
-
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="name" className="mt-2"/>
-                                    </div>
-                                </div>
-
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Email address" isRequired={true}/>
-
-                                    <Field className="form-control fs-6" type="email"
-                                           placeholder="Enter email address" name="email"/>
-
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="email" className="mt-2"/>
-                                    </div>
-                                </div>
-
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Profile picture" isRequired={false}/>
-
-                                    <div className="mb-3">
-                                        {
-                                            user?.image && <img src={user?.image} className="w-25"
-                                                                alt={`${user?.name} profile`}/>
-                                        }
-                                    </div>
-
-                                    <Field className="form-control fs-6" type="file" name="image" value={undefined}
-                                           onChange={(e: any) => handleFile(e, formik)}/>
-
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="image" className="mt-2"/>
-                                    </div>
-                                </div>
-
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Roles" isRequired={true}/>
-
-                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={roles}
-                                                 defaultValue={user?.roles} form={form} setForm={setForm}
-                                                 name={'roles'}/>
-
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="roles" className="mt-2"/>
-                                    </div>
-                                </div>
-
-                                <KrysFormFooter cancelUrl={'/iam/users'}/>
-                            </Form>
-                        )
-                    }
-                </Formik>
+                                        <Tab.Pane eventKey='settingsNav-1'>
+                                            <ChangePassword user={user}/>
+                                        </Tab.Pane>
+                                    </>
+                                }
+                            </Tab.Content>
+                        </div>
+                    </div>
+                </Tab.Container>
             </KTCardBody>
-        </KTCard>
-    );
+        </KTCard>)
 };
 
 export default UserEdit;
