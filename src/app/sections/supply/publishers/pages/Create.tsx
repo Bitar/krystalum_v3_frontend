@@ -106,7 +106,7 @@ const PublisherCreate: React.FC = () => {
                         type: KrysToastType.SUCCESS
                     })
 
-                    // navigate(`/supply/publishers`);
+                    navigate(`/supply/publishers`);
                 }
             }
         );
