@@ -55,7 +55,7 @@ export const genericHandleSingleFile = (e: any, formik: FormikProps<any>, form: 
 
 export const genericDateOnChangeHandler = (date: Date | null, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
     if (date) {
-        const formattedDate = date.toISOString().substring(0, 10);
+        const formattedDate = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
 
         setForm({...form, [key]: formattedDate});
     }

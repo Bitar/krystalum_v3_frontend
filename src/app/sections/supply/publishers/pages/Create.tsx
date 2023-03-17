@@ -145,7 +145,9 @@ const PublisherCreate: React.FC = () => {
                                             onChange={(e) => {
                                                 selectChangeHandler(e, 'tier')
                                             }}
-                                            placeholder="Select a tier"/>
+                                            placeholder="Select a tier"
+                                            isClearable={true}/>
+
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="tier" className="mt-2"/>
@@ -248,13 +250,15 @@ const PublisherCreate: React.FC = () => {
                                     <KrysFormLabel text="HQ country" isRequired={false}/>
 
                                     <Select name="hq_country"
+                                            menuPlacement={'top'}
                                             options={countries}
                                             getOptionLabel={(country) => country?.name}
                                             getOptionValue={(country) => country?.id.toString()}
                                             onChange={(e) => {
                                                 selectChangeHandler(e, 'hq_country')
                                             }}
-                                            placeholder="Select a hq country"/>
+                                            placeholder="Select a hq country"
+                                            isClearable={true}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="hq_country" className="mt-2"/>

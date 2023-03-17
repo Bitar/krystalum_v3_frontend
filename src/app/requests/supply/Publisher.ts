@@ -38,8 +38,6 @@ export const storePublisher = async (publisher: any): Promise<Publisher | AxiosE
     return await axios.post(ENDPOINT + '/', formData)
         .then(res => res.data.data)
         .catch((error) => {
-            error = error as AxiosError;
-
             return error;
         });
 }
