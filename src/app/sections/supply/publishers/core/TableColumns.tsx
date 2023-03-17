@@ -7,7 +7,6 @@ import {QUERIES} from '../../../../../_metronic/helpers'
 import {Publisher} from '../../../../models/supply/Publisher';
 import {Restricted} from '../../../../modules/auth/AuthAccessControl';
 import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
-import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
 
 const PublishersColumns: ReadonlyArray<Column<Publisher>> = [
     {

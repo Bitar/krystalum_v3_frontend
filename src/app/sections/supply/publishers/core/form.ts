@@ -22,6 +22,8 @@ export const defaultFormFields = {
     revenue_type: 0,
     revenue_share: '',
     commitment: '',
+    email: '',
+    hq_address: ''
 };
 
 export const PublisherSchema = Yup.object().shape({

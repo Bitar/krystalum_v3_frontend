@@ -1,0 +1,39 @@
+.krys-datepicker {
+  .rs-picker-toggle {
+    &:hover, &:active, &:focus {
+      border-color: var(--bs-gray-300) !important;
+      box-shadow: none !important;
+    }
+
+    &.rs-picker-toggle-active {
+      border-color: var(--bs-gray-300) !important;
+      box-shadow: none !important;
+    }
+
+    .rs-stack {
+      .rs-stack-item {
+        .rs-picker-toggle-value {
+          color: var(--bs-gray-700);
+        }
+      }
+    }
+  }
+}
+
+.rs-picker-date-menu {
+  &.rs-picker-menu {
+    .rs-calendar {
+      .rs-calendar-table-cell-selected {
+        .rs-calendar-table-cell-content {
+          background-color: $krys !important;
+        }
+      }
+    }
+  }
+}
+
+// this class is the dropdown menu of the react select, I need to give it high z-index inorder to overlap on any
+// input under it
+.css-1nmdiq5-menu {
+  z-index: 99999999 !important;
+}

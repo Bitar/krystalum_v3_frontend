@@ -156,6 +156,7 @@ const PublisherCreate: React.FC = () => {
                                     <KrysFormLabel text="Integration date" isRequired={false}/>
 
                                     <DatePicker name="integration_date"
+                                                className="krys-datepicker"
                                                 oneTap={true}
                                                 block
                                                 isoWeek
