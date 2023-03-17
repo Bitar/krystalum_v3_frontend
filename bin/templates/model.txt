@@ -1,0 +1,13 @@
+import {Response} from '../../../_metronic/helpers';
+
+export type {{MODULE_NAME}} = {
+    id: number
+};
+
+export type {{MODULE_NAME}}Paginate = Response<{{MODULE_NAME}}[]>;
+
+export type {{MODULE_NAME}}List = {
+    data: {{MODULE_NAME}}[]
+}
+
+export const default{{MODULE_NAME}}: {{MODULE_NAME}} = {id: 0};

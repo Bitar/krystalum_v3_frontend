@@ -6,7 +6,7 @@ export interface FilterFields {
     trading_desks?: number[]
 }
 
-export const defaultFilterFields = {name: '', regions: [], tradingDesks: []}
+export const defaultFilterFields = {name: ''}
 
 export const FilterSchema = Yup.object().shape({
     name: Yup.string().notRequired(),

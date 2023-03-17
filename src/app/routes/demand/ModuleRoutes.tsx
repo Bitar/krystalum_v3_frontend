@@ -4,6 +4,7 @@ import {SuspenseView} from '../../components/misc/SuspenseView';
 
 const DemandModuleRoutes: React.FC = () => {
     const TradingDeskRoutes = lazy(() => import('./TradingDeskRoutes'));
+    const HoldingGroupRoutes = lazy(() => import('./HoldingGroupRoutes'));
 
     return (
         <Routes>
@@ -13,6 +14,15 @@ const DemandModuleRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <TradingDeskRoutes/>
+                    </SuspenseView>
+                }
+            ></Route>
+
+            <Route
+                path='holding-groups/*'
+                element={
+                    <SuspenseView>
+                        <HoldingGroupRoutes/>
                     </SuspenseView>
                 }
             ></Route>

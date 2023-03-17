@@ -1,17 +1,17 @@
 import * as Yup from 'yup';
-import {defaultRegion, Region} from '../../../../models/misc/Region';
+import {Region} from '../../../../models/misc/Region';
 import {TradingDesk} from '../../../../models/demand/TradingDesk';
 
 export interface FormFields {
     name: string,
-    region: Region,
-    tradingDesk?: TradingDesk | null
+    region: Region | null,
+    trading_desk?: TradingDesk
 }
 
-export const defaultFormFields = {name: '', region: defaultRegion, tradingDesk: null};
+export const defaultFormFields = {name: '', region: null};
 
 export const HoldingGroupSchema = Yup.object().shape({
     name: Yup.string().required(),
     region: Yup.object().required(),
-    tradingDesk: Yup.object().notRequired()
+    trading_desk: Yup.object().notRequired()
 });

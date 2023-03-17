@@ -34,7 +34,7 @@ const DefaultTitle: FC = () => {
               key={`${item.path}${index}`}
             >
               {!item.isSeparator ? (
-                <Link className='text-muted text-hover-primary' to={item.path}>
+                <Link className='text-muted text-hover-krys' to={item.path}>
                   {item.title}
                 </Link>
               ) : (

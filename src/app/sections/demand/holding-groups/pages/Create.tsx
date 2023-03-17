@@ -45,10 +45,13 @@ const HoldingGroupCreate: React.FC = () => {
             } else {
                 // if we were able to get the list of roles, then we fill our state with them
                 if (response.data) {
-                    setRegions(filterData(response.data, 'name', 'All Regions'));
+                    let allRegions = filterData(response.data, 'name', 'All Regions');
+                    allRegions = filterData(allRegions, 'name', 'Rest of the world')
+
+                    setRegions(allRegions);
 
                     // since the region is required, we set the first region as the default region
-                    setForm({...form, region: response.data[1]});
+                    setForm({...form, region: allRegions[0]});
                 }
             }
         });
@@ -125,6 +128,7 @@ const HoldingGroupCreate: React.FC = () => {
                                             options={regions}
                                             getOptionLabel={(region) => region.name}
                                             getOptionValue={(region) => region.id.toString()}
+                                            value={form.region} // make the default value as the first region
                                             onChange={(e) => genericSelectOnChangeHandler(e, form, setForm, 'region')}/>
 
                                     <div className="mt-1 text-danger">
@@ -135,15 +139,15 @@ const HoldingGroupCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Trading desk" isRequired={false}/>
 
-                                    <Select name="tradingDesk"
+                                    <Select name="trading_desk"
                                             options={tradingDesks}
                                             getOptionLabel={(tradingDesk) => tradingDesk.name}
                                             getOptionValue={(tradingDesk) => tradingDesk.id.toString()}
-                                            onChange={(e) => genericSelectOnChangeHandler(e, form, setForm, 'tradingDesk')}
+                                            onChange={(e) => genericSelectOnChangeHandler(e, form, setForm, 'trading_desk')}
                                             isClearable={true}/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="tradingDesk" className="mt-2"/>
+                                        <ErrorMessage name="trading_desk" className="mt-2"/>
                                     </div>
                                 </div>
 

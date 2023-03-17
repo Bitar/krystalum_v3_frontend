@@ -42,7 +42,11 @@ const HoldingGroupFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
             } else {
                 // if we were able to get the list of roles, then we fill our state with them
                 if (response.data) {
-                    setRegions(filterData(response.data, 'name', 'All Regions'));
+                    let allRegions = filterData(response.data, 'name', 'All Regions');
+
+                    allRegions = filterData(allRegions, 'name', 'Rest of the world');
+
+                    setRegions(allRegions);
                 }
             }
         });
@@ -77,7 +81,8 @@ const HoldingGroupFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
 
     useEffect(() => {
         handleFilter();
-        selectRef.current?.clearValue();
+        regionsSelectRef.current?.clearValue();
+        tradingDesksSelectRef.current?.clearValue();
         setReset(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reset]);
@@ -87,7 +92,8 @@ const HoldingGroupFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
         setReset(true);
     }
 
-    const selectRef = useRef<any>(null);
+    const regionsSelectRef = useRef<any>(null);
+    const tradingDesksSelectRef = useRef<any>(null);
 
     return (
         <Collapse in={showFilter}>
@@ -122,7 +128,7 @@ const HoldingGroupFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                                         getOptionLabel={(region) => region.name}
                                                         getOptionValue={(region) => region.id.toString()}
                                                         onChange={(e) => genericMultiSelectOnChangeHandler(e, filters, setFilters, 'regions')}
-                                                        ref={selectRef}
+                                                        ref={regionsSelectRef}
                                                         placeholder='Filter by region'/>
 
                                                 <div className="mt-1 text-danger">
@@ -138,7 +144,7 @@ const HoldingGroupFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                                         getOptionLabel={(tradingDesk) => tradingDesk.name}
                                                         getOptionValue={(tradingDesk) => tradingDesk.id.toString()}
                                                         onChange={(e) => genericMultiSelectOnChangeHandler(e, filters, setFilters, 'trading_desks')}
-                                                        ref={selectRef}
+                                                        ref={tradingDesksSelectRef}
                                                         placeholder='Filter by trading desk'/>
 
                                                 <div className="mt-1 text-danger">

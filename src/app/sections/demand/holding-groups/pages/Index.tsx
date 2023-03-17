@@ -16,14 +16,14 @@ import KrysTable from '../../../../components/tables/KrysTable';
 import {HoldingGroupsColumns} from '../core/TableColumns';
 import HoldingGroupFilter from '../partials/IndexFilter';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from "../../../../components/misc/CardAction";
-import {EXPORT_ENDPOINT, getTradingDesks} from '../../../../requests/demand/TradingDesk';
+import {EXPORT_ENDPOINT, getHoldingGroups} from '../../../../requests/demand/HoldingGroup';
 
 
-const TradingDeskIndex: React.FC = () => {
+const HoldingGroupIndex: React.FC = () => {
     const krysApp = useKrysApp();
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.DEMAND_TRADING_DESKS, PageTypes.INDEX))
+        krysApp.setPageTitle(generatePageTitle(Sections.DEMAND_HOLDING_GROUPS, PageTypes.INDEX))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -32,18 +32,18 @@ const TradingDeskIndex: React.FC = () => {
 
     return (
         <QueryRequestProvider>
-            <QueryResponseProvider id={QUERIES.TRADING_DESKS_LIST} requestFunction={getTradingDesks}>
+            <QueryResponseProvider id={QUERIES.HOLDING_GROUPS_LIST} requestFunction={getHoldingGroups}>
                 <ListViewProvider>
                     <KTCard>
-                        <KTCardHeader text='All Trading Desks' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
+                        <KTCardHeader text='All Holding Groups' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
-                                          new FilterCardAction('trading-desks-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/demand/trading-desks', 'manage-demand')]}/>
+                                          new FilterCardAction('holding-groups-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/demand/holding-groups', 'manage-demand')]}/>
 
                         <KTCardBody>
                             <HoldingGroupFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
-                            <TradingDeskTable/>
+                            <HoldingGroupTable/>
                         </KTCardBody>
                     </KTCard>
                 </ListViewProvider>
@@ -52,16 +52,16 @@ const TradingDeskIndex: React.FC = () => {
     )
 }
 
-const TradingDeskTable = () => {
-    const tradingDesks = useQueryResponseData();
+const HoldingGroupTable = () => {
+    const holdingGroups = useQueryResponseData();
     const isLoading = useQueryResponseLoading();
-    const data = useMemo(() => tradingDesks, [tradingDesks]);
+    const data = useMemo(() => holdingGroups, [holdingGroups]);
     const columns = useMemo(() => HoldingGroupsColumns, []);
 
     return (
-        <KrysTable data={data} columns={columns} model={tradingDesks.length > 0 ? tradingDesks[0] : null}
+        <KrysTable data={data} columns={columns} model={holdingGroups.length > 0 ? holdingGroups[0] : null}
                    isLoading={isLoading}/>
     )
 }
 
-export default TradingDeskIndex;
+export default HoldingGroupIndex;
