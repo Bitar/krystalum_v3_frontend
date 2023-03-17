@@ -21,12 +21,14 @@ export const createFormData = (form: any) => {
 
     for (const key in form) {
         if (form[key] instanceof Array) {
-            if(form[key].length > 0) {
+            if (form[key].length > 0) {
                 for (const item in form[key]) {
                     formData.append(`${key}[]`, form[key][item]);
                 }
             }
         } else if (form[key] instanceof File) {
+            formData.append(key, form[key]);
+        } else if (form[key] instanceof Date) {
             formData.append(key, form[key]);
         } else if (form[key] instanceof Object) {
             formData.append(`${key}_id`, form[key].id);

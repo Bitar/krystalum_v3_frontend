@@ -4,8 +4,8 @@ import {useNavigate} from 'react-router-dom';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import Select from 'react-select';
 import {InputGroup} from 'react-bootstrap';
-import ReactDatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import {DatePicker} from 'rsuite';
+import 'rsuite/dist/rsuite.min.css';
 
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
@@ -15,7 +15,12 @@ import {Sections} from '../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {PublisherSchema, defaultFormFields, FormFields} from '../core/form';
-import {GenericErrorMessage, genericOnChangeHandler, genericSelectOnChangeHandler} from '../../../../helpers/form';
+import {
+    genericDateOnChangeHandler,
+    GenericErrorMessage,
+    genericOnChangeHandler,
+    genericSelectOnChangeHandler
+} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
@@ -26,9 +31,9 @@ import {Tier} from '../../../../models/misc/Tier';
 import {getAllTiers} from '../../../../requests/misc/Tier';
 import KrysRadioButton from '../../../../components/forms/KrysRadioButton';
 import {COMMITMENT, REVENUE_SHARE} from '../../../../models/supply/Publisher';
-import {Country} from "../../../../models/misc/Country";
-import {getAllCountries} from "../../../../requests/misc/Country";
-import {filterData} from "../../../../helpers/dataManipulation";
+import {Country} from '../../../../models/misc/Country';
+import {getAllCountries} from '../../../../requests/misc/Country';
+import {filterData} from '../../../../helpers/dataManipulation';
 
 const PublisherCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -81,6 +86,10 @@ const PublisherCreate: React.FC = () => {
         genericSelectOnChangeHandler(e, form, setForm, key);
     };
 
+    const dateChangeHandler = (date: Date | null, key: string) => {
+        genericDateOnChangeHandler(date, form, setForm, key);
+    };
+
     const handleCreate = (e: any) => {
         // send API request to create the publisher
         storePublisher(form).then(response => {
@@ -97,7 +106,7 @@ const PublisherCreate: React.FC = () => {
                         type: KrysToastType.SUCCESS
                     })
 
-                    navigate(`/supply/publishers`);
+                    // navigate(`/supply/publishers`);
                 }
             }
         );
@@ -146,12 +155,13 @@ const PublisherCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Integration date" isRequired={false}/>
 
-
-                                    <ReactDatePicker name="integration_date"
-                                                     dateFormat="yyyy-MM-dd"
-                                                     selected={form.integration_date}
-                                                     onChange={(date) => setForm({...form, integration_date: date})}
-                                                     customInput={<input className="form-control fs-6" type="text" placeholder="Enter publisher integration date"/>}
+                                    <DatePicker name="integration_date"
+                                                oneTap={true}
+                                                block
+                                                isoWeek
+                                                preventOverflow={false}
+                                                placeholder="Select publisher integration date"
+                                                onChange={(date) => dateChangeHandler(date, 'integration_date')}
                                     />
 
                                     <div className="mt-1 text-danger">
@@ -162,13 +172,13 @@ const PublisherCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Revenue type" isRequired={true}/>
 
-                                    <KrysRadioButton name="revenue_type" label={"Revenue Share"}
+                                    <KrysRadioButton name="revenue_type" label={'Revenue Share'}
                                                      onChangeHandler={(e) => {
                                                          e.stopPropagation();
                                                          setForm({...form, revenue_type: REVENUE_SHARE});
                                                      }} defaultValue={form.revenue_type === REVENUE_SHARE}/>
 
-                                    <KrysRadioButton name="revenue_type" label={"Amount Commitment"}
+                                    <KrysRadioButton name="revenue_type" label={'Amount Commitment'}
                                                      onChangeHandler={(e) => {
                                                          e.stopPropagation();
                                                          setForm({...form, revenue_type: COMMITMENT});
@@ -179,32 +189,34 @@ const PublisherCreate: React.FC = () => {
                                     </div>
                                 </div>
 
-                                {form.revenue_type === REVENUE_SHARE && <div className="mb-7">
-                                    <KrysFormLabel text="Revenue share" isRequired={true}/>
+                                {form.revenue_type === REVENUE_SHARE &&
+                                    <div className="mb-7">
+                                        <KrysFormLabel text="Revenue share" isRequired={true}/>
 
-                                    <InputGroup className="mb-3">
-                                        <InputGroup.Text id="basic-addon1">%</InputGroup.Text>
-                                        <Field className="form-control fs-6" type="number"
-                                               placeholder="Enter publisher revenue share (default 50%)"
-                                               name="revenue_share"/>
-                                    </InputGroup>
+                                        <InputGroup className="mb-3">
+                                            <Field className="form-control fs-6" type="number"
+                                                   placeholder="Enter publisher revenue share"
+                                                   name="revenue_share"/>
+                                            <InputGroup.Text id="basic-addon1">%</InputGroup.Text>
+                                        </InputGroup>
 
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="revenue_share" className="mt-2"/>
+                                        <div className="mt-1 text-danger">
+                                            <ErrorMessage name="revenue_share" className="mt-2"/>
+                                        </div>
                                     </div>
-                                </div>
                                 }
 
-                                {form.revenue_type === COMMITMENT && <div className="mb-7">
-                                    <KrysFormLabel text="Commitment" isRequired={true}/>
+                                {form.revenue_type === COMMITMENT &&
+                                    <div className="mb-7">
+                                        <KrysFormLabel text="Commitment" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
-                                           placeholder="Enter publisher commitment amount" name="commitment"/>
+                                        <Field className="form-control fs-6" type="text"
+                                               placeholder="Enter publisher commitment amount" name="commitment"/>
 
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="commitment" className="mt-2"/>
+                                        <div className="mt-1 text-danger">
+                                            <ErrorMessage name="commitment" className="mt-2"/>
+                                        </div>
                                     </div>
-                                </div>
                                 }
 
                                 <div className="separator border-2 my-10"></div>
@@ -213,7 +225,7 @@ const PublisherCreate: React.FC = () => {
                                     <KrysFormLabel text="Email address" isRequired={false}/>
 
                                     <Field className="form-control fs-6" type="email"
-                                           placeholder="Enter email address" name="email"/>
+                                           placeholder="Enter publisher email address" name="email"/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="email" className="mt-2"/>
@@ -239,7 +251,7 @@ const PublisherCreate: React.FC = () => {
                                             getOptionLabel={(country) => country?.name}
                                             getOptionValue={(country) => country?.id.toString()}
                                             onChange={(e) => {
-                                                selectChangeHandler(e, 'country')
+                                                selectChangeHandler(e, 'hq_country')
                                             }}
                                             placeholder="Select a hq country"/>
 

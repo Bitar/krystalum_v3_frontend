@@ -6,17 +6,39 @@ import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {QUERIES} from '../../../../../_metronic/helpers'
 import {Publisher} from '../../../../models/supply/Publisher';
 import {Restricted} from '../../../../modules/auth/AuthAccessControl';
+import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
+import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
 
 const PublishersColumns: ReadonlyArray<Column<Publisher>> = [
     {
-        Header: (props) => <CustomHeader tableProps={props} title='Name' className='min-w-125px'/>,
+        Header: (props) => <CustomHeader tableProps={props} title="Name" className="min-w-125px"/>,
         id: 'name',
         Cell: ({...props}) => <TextCell text={props.data[props.row.index].name}/>,
     },
     {
+        Header: (props) => <CustomHeader tableProps={props} title="Tier" className="min-w-125px"/>,
+        id: 'tier',
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].tier?.name}/>,
+    },
+    {
+        Header: (props) => <CustomHeader tableProps={props} title="Publications" className="min-w-125px"/>,
+        id: 'publications',
+        Cell: ({...props}) => <BadgesCell texts={[]} color="light-info" align="left"/>,
+    },
+    {
+        Header: (props) => <CustomHeader tableProps={props} title="Account Manager" className="min-w-125px"/>,
+        id: 'accountManager',
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].accountManager?.name}/>,
+    },
+    {
+        Header: (props) => <CustomHeader tableProps={props} title="Country" className="min-w-125px"/>,
+        id: 'country',
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].info?.hq_country?.name}/>,
+    },
+    {
         Header: (props) => (
-            <Restricted to='manage-supply'>
-                <CustomHeader tableProps={props} title='Actions' className='text-end min-w-100px'/>
+            <Restricted to="manage-supply">
+                <CustomHeader tableProps={props} title="Actions" className="text-end min-w-100px"/>
             </Restricted>
         ),
         id: 'actions',

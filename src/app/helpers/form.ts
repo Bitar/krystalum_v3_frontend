@@ -5,7 +5,7 @@ export const genericOnChangeHandler = (e: any, form: any, setForm: React.Dispatc
     const value = e.target.value;
     const name = e.target.name;
 
-    if(name) {
+    if (name) {
         setForm({
             ...form,
             [name]: value
@@ -23,8 +23,8 @@ export const genericMultiSelectOnChangeHandler = (e: any, form: any, setForm: Re
     }
 };
 
-export const genericSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string, isFilter=false) => {
-    if(e) {
+export const genericSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string, isFilter = false) => {
+    if (e) {
         if (isFilter) {
             setForm({...form, [key]: e.id});
         } else {
@@ -40,10 +40,10 @@ export const genericSelectOnChangeHandler = (e: any, form: any, setForm: React.D
 };
 
 export const SUPPORTED_IMAGE_FORMATS = [
-    "image/jpg",
-    "image/jpeg",
-    "image/gif",
-    "image/png"
+    'image/jpg',
+    'image/jpeg',
+    'image/gif',
+    'image/png'
 ];
 export const genericHandleSingleFile = (e: any, formik: FormikProps<any>, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
     let file = e.target.files[0];
@@ -51,4 +51,12 @@ export const genericHandleSingleFile = (e: any, formik: FormikProps<any>, form: 
     setForm({...form, [key]: file});
 
     formik.setFieldValue(key, file);
+};
+
+export const genericDateOnChangeHandler = (date: Date | null, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
+    if (date) {
+        const formattedDate = date.toISOString().substring(0, 10);
+
+        setForm({...form, [key]: formattedDate});
+    }
 };
