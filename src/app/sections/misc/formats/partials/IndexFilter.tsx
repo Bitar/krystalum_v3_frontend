@@ -13,7 +13,7 @@ import Select from 'react-select';
 import axios from 'axios';
 import {getAllBuyingModels} from '../../../../requests/misc/BuyingModel';
 import {BuyingModel} from '../../../../models/misc/BuyingModel';
-import FormErrors from "../../../../components/forms/FormErrors";
+import FormErrors from '../../../../components/forms/FormErrors';
 
 interface Props {
     showFilter: boolean,

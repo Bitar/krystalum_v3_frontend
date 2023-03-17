@@ -36,7 +36,6 @@ const PerformanceMetricIndexFilter: React.FC<Props> = ({showFilter, setExportQue
 
     useEffect(() => {
         handleFilter();
-        selectRef.current?.clearValue();
         setReset(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reset]);
@@ -45,8 +44,6 @@ const PerformanceMetricIndexFilter: React.FC<Props> = ({showFilter, setExportQue
         setFilters(defaultFilterFields);
         setReset(true);
     }
-
-    const selectRef = useRef<any>(null);
 
     return (
         <Collapse in={showFilter}>

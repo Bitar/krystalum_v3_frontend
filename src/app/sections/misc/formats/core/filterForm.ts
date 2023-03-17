@@ -1,6 +1,5 @@
 import * as Yup from 'yup';
 
-
 export interface FilterFields {
     name?: string,
     code?: string,

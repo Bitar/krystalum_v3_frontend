@@ -182,7 +182,7 @@ const FormatEdit: React.FC = () => {
                                 </div>
 
                                 {form.has_buying_model > 0 && <div className="mb-7">
-                                    <KrysFormLabel text="Buying models" isRequired={false}/>
+                                    <KrysFormLabel text="Buying models" isRequired={true}/>
 
                                     <MultiSelect isResourceLoaded={isResourceLoaded} options={buyingModels}
                                                  defaultValue={format?.buyingModels} form={form} setForm={setForm}

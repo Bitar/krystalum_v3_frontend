@@ -81,7 +81,7 @@ const UserCreate: React.FC = () => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     // we were able to store the user
-                    krysApp.setAlert({message: new AlertMessageGenerator('role', Actions.CREATE, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+                    krysApp.setAlert({message: new AlertMessageGenerator('user', Actions.CREATE, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
                     navigate(`/iam/users`);
                 }
             }

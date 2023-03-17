@@ -62,7 +62,6 @@ const BuyingModelIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) =
 
     useEffect(() => {
         handleFilter();
-        selectRef.current?.clearValue();
         metricsSelectRef.current?.clearValue();
         setReset(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,7 +72,6 @@ const BuyingModelIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) =
         setReset(true);
     }
 
-    const selectRef = useRef<any>(null);
     const metricsSelectRef = useRef<any>(null);
 
     return (

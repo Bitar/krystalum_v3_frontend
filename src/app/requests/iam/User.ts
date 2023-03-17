@@ -47,3 +47,13 @@ export const storeUser = async (user: any): Promise<User | AxiosError | undefine
         return error;
     });
 }
+
+export const changePassword = async (user: any, form: any): Promise<User | AxiosError | undefined> => {
+    let formData = createFormData(form);
+
+    formData.append('_method', 'put');
+
+    return await axios.post(ENDPOINT + '/' + user.id + '/password', formData).then(res => res.data).catch((error) => {
+        return error;
+    });
+}

@@ -36,7 +36,6 @@ const CampaignRestrictionRequirementIndexFilter: React.FC<Props> = ({showFilter,
 
     useEffect(() => {
         handleFilter();
-        selectRef.current?.clearValue();
         setReset(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reset]);
@@ -45,8 +44,6 @@ const CampaignRestrictionRequirementIndexFilter: React.FC<Props> = ({showFilter,
         setFilters(defaultFilterFields);
         setReset(true);
     }
-
-    const selectRef = useRef<any>(null);
 
     return (
         <Collapse in={showFilter}>
