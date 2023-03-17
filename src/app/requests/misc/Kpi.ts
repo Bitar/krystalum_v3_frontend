@@ -38,8 +38,6 @@ export const storeKpi = async (kpi: any): Promise<Kpi | AxiosError | undefined> 
     return await axios.post(ENDPOINT + '/', formData)
         .then(res => res.data.data)
         .catch((error) => {
-            error = error as AxiosError;
-
             return error;
         });
 }

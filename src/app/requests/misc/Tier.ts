@@ -37,8 +37,6 @@ export const storeTier = async (tier: any): Promise<Tier | AxiosError | undefine
     return await axios.post(ENDPOINT + '/', formData)
         .then(res => res.data.data)
         .catch((error) => {
-            error = error as AxiosError;
-
             return error;
         });
 }
