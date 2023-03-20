@@ -37,8 +37,6 @@ export const storeTechnology = async (technology: any): Promise<Technology | Axi
     return await axios.post(ENDPOINT + '/', formData)
         .then(res => res.data.data)
         .catch((error) => {
-            error = error as AxiosError;
-
             return error;
         });
 }

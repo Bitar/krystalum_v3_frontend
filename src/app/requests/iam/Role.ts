@@ -30,20 +30,20 @@ export const getRole = async (id: number): Promise<Role | AxiosError | undefined
         });
 }
 
+export const storeRole = async (role: any): Promise<Role | AxiosError | undefined> => {
+    let formData = createFormData(role);
+
+    return await axios.post(ENDPOINT + '/', formData).then(res => res.data.data).catch((error) => {
+        return error;
+    });
+}
+
 export const updateRole = async (role: any): Promise<Role | AxiosError | undefined> => {
     let formData = createFormData(role);
 
     formData.append('_method', 'put');
 
     return await axios.post(ENDPOINT + '/' + role.id, formData).then(res => res.data.data).catch((error) => {
-        return error;
-    });
-}
-
-export const storeRole = async (role: any): Promise<Role | AxiosError | undefined> => {
-    let formData = createFormData(role);
-
-    return await axios.post(ENDPOINT + '/', formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

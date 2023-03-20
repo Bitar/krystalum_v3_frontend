@@ -1,7 +1,6 @@
 import React from 'react'
 import {FormLabel} from 'react-bootstrap';
-
-import FormFieldRequired from './FormFieldRequired';
+import clsx from 'clsx';
 
 type Props = {
     text: string,
@@ -11,7 +10,7 @@ type Props = {
 const KrysFormLabel: React.FC<Props> = ({text, isRequired = false}) => {
     return (
         <div>
-            <FormLabel className="fs-6 fw-semibold form-label mt-3">{text}</FormLabel> { isRequired ? <FormFieldRequired/> : <></> }
+            <FormLabel className={clsx("fs-6 fw-semibold form-label mt-3", {'required': isRequired})}>{text}</FormLabel>
         </div>
     );
 }
