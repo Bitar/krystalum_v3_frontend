@@ -38,8 +38,6 @@ export const storeObjective = async (objective: any): Promise<Objective | AxiosE
     return await axios.post(ENDPOINT + '/', formData)
         .then(res => res.data.data)
         .catch((error) => {
-            error = error as AxiosError;
-
             return error;
         });
 }

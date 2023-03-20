@@ -42,8 +42,6 @@ export const storeCampaignRestrictionRequirement = async (campaignRestrictionReq
     return await axios.post(ENDPOINT + '/', formData)
         .then(res => res.data.data)
         .catch((error) => {
-            error = error as AxiosError;
-
             return error;
         });
 }

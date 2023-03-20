@@ -37,8 +37,6 @@ export const storeDevice = async (device: any): Promise<Device | AxiosError | un
     return await axios.post(ENDPOINT + '/', formData)
         .then(res => res.data.data)
         .catch((error) => {
-            error = error as AxiosError;
-
             return error;
         });
 }

@@ -37,8 +37,6 @@ export const storeCountry = async (country: any): Promise<Country | AxiosError |
     return await axios.post(ENDPOINT + '/', formData)
         .then(res => res.data.data)
         .catch((error) => {
-            error = error as AxiosError;
-
             return error;
         });
 }
