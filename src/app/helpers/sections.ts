@@ -33,5 +33,6 @@ export enum Sections {
     MISC_CAMPAIGN_RESTRICTION_REQUIREMENTS = 'Campaign restriction requirements',
     // DEMAND
     DEMAND_TRADING_DESKS = 'Trading desks',
-    DEMAND_HOLDING_GROUPS = 'Holding groups'
+    DEMAND_HOLDING_GROUPS = 'Holding groups',
+    DEMAND_AGENCIES = 'Agencies'
 }

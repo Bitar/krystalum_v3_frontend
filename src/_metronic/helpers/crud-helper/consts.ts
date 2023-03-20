@@ -31,5 +31,6 @@ export const QUERIES = {
     CAMPAIGN_RESTRICTION_REQUIREMENTS_LIST: 'campaign-restriction-requirements-list',
     // DEMAND
     TRADING_DESKS_LIST: 'trading-desks-list',
-    HOLDING_GROUPS_LIST: 'holding-groups-list'
+    HOLDING_GROUPS_LIST: 'holding-groups-list',
+    AGENCIES_LIST: 'agencies-list'
 }
