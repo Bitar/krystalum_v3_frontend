@@ -5,7 +5,7 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import Select from 'react-select';
 import {InputGroup} from 'react-bootstrap';
 import {DatePicker} from 'rsuite';
-// import 'rsuite/dist/rsuite.min.css';
+import 'rsuite/dist/rsuite.min.css';
 
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
