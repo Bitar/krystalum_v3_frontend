@@ -27,6 +27,7 @@ import {getAllHoldingGroups} from '../../../../requests/demand/HoldingGroup';
 import {Region} from '../../../../models/misc/Region';
 import {HoldingGroup} from '../../../../models/demand/HoldingGroup';
 import SingleSelect from '../../../../components/forms/SingleSelect';
+import clsx from 'clsx';
 
 const AgencyEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -40,6 +41,8 @@ const AgencyEdit: React.FC = () => {
     const [hasHoldingGroup, setHasHoldingGroup] = useState<boolean>(false);
 
     const [agency, setAgency] = useState<Agency | null>(null);
+
+    const [clearRegion, setClearRegion] = useState<boolean>(false);
 
     const krysApp = useKrysApp();
 
@@ -133,9 +136,20 @@ const AgencyEdit: React.FC = () => {
             // it means that we have a value for the holding group
             // we need to set has holding group to true
             setHasHoldingGroup(true);
+
+            // we need to unset the value for region_id because from the backend we will set
+            // the region_id the same as the holding group
+            setClearRegion(true);
+
+            // clear it from the form object too
+            const {region_id, ...newForm} = form
+
+            setForm(newForm);
         } else {
             // he cleared the holding group value so we need to set has holding group to false
             setHasHoldingGroup(false);
+
+            setClearRegion(false);
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -189,7 +203,7 @@ const AgencyEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Holding group" isRequired={false}/>
 
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={holdingGroups} defaultValue={agency?.holdingGroup} form={form} setForm={setForm} name='holding_group_id' isClearable={true}/>
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={holdingGroups} defaultValue={agency?.holdingGroup} form={form} setForm={setForm} name='holding_group_id' isClearable={true} />
 
                                     <div className="mt-1 text-danger">
                                         <div className="mt-2">
@@ -198,20 +212,18 @@ const AgencyEdit: React.FC = () => {
                                     </div>
                                 </div>
 
-                                {
-                                    !hasHoldingGroup && <div className="mb-7">
-                                        <KrysFormLabel text="Region" isRequired={!hasHoldingGroup}/>
+                                <div className={clsx("mb-7", hasHoldingGroup ? 'd-none' : 'd-block')}>
+                                    <KrysFormLabel text="Region" isRequired={!hasHoldingGroup}/>
 
-                                        {/*the region ID default value is only set if the agency doesn't have a holding group*/}
-                                        <SingleSelect isResourceLoaded={isResourceLoaded} options={regions} defaultValue={!agency?.holdingGroup && agency?.region} form={form} setForm={setForm} name='region_id' />
+                                    {/*the region ID default value is only set if the agency doesn't have a holding group*/}
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={regions} defaultValue={!agency?.holdingGroup ? agency?.region : null} form={form} setForm={setForm} name='region_id' doClear={clearRegion} />
 
-                                        <div className="mt-1 text-danger">
-                                            <div className="mt-2">
-                                                {errors?.region_id ? errors?.region_id : null}
-                                            </div>
+                                    <div className="mt-1 text-danger">
+                                        <div className="mt-2">
+                                            {errors?.region_id ? errors?.region_id : null}
                                         </div>
                                     </div>
-                                }
+                                </div>
 
                                 <KrysFormFooter cancelUrl={'/demand/agencies'}/>
                             </Form>
