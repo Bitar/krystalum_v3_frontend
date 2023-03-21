@@ -34,5 +34,6 @@ export enum Sections {
     // DEMAND
     DEMAND_TRADING_DESKS = 'Trading desks',
     DEMAND_HOLDING_GROUPS = 'Holding groups',
-    DEMAND_AGENCIES = 'Agencies'
+    DEMAND_AGENCIES = 'Agencies',
+    DEMAND_ADVERTISERS = 'Advertisers'
 }

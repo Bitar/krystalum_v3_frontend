@@ -1,5 +1,10 @@
 import {Response} from '../../../_metronic/helpers';
 
+export type CountryCondensed = {
+    id: number,
+    name: string
+};
+
 export type Country = {
     id: number,
     name: string,

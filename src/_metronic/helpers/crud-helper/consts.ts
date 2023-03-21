@@ -32,5 +32,6 @@ export const QUERIES = {
     // DEMAND
     TRADING_DESKS_LIST: 'trading-desks-list',
     HOLDING_GROUPS_LIST: 'holding-groups-list',
-    AGENCIES_LIST: 'agencies-list'
+    AGENCIES_LIST: 'agencies-list',
+    ADVERTISERS_LIST: 'advertisers-list'
 }
