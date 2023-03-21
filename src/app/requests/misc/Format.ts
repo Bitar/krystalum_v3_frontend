@@ -39,8 +39,6 @@ export const storeFormat = async (format: any): Promise<Format | AxiosError | un
     return await axios.post(ENDPOINT + '/', formData)
         .then(res => res.data.data)
         .catch((error) => {
-            error = error as AxiosError;
-
             return error;
         });
 }

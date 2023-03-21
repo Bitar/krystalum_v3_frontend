@@ -49,8 +49,6 @@ export const storePermission = async (permission: any): Promise<Permission | Axi
     return await axios.post(ENDPOINT + '/', formData)
         .then(res => res.data.data)
         .catch((error) => {
-            error = error as AxiosError;
-
             return error;
         });
 }

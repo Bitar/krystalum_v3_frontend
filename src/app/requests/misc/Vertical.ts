@@ -39,8 +39,6 @@ export const storeVertical = async (vertical: any): Promise<Vertical | AxiosErro
     return await axios.post(ENDPOINT + '/', formData)
         .then(res => res.data.data)
         .catch((error) => {
-            error = error as AxiosError;
-
             return error;
         });
 }

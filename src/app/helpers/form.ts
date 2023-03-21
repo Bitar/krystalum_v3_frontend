@@ -39,6 +39,18 @@ export const genericSelectOnChangeHandler = (e: any, form: any, setForm: React.D
     }
 };
 
+export const genericSingleSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
+    if(e) {
+        setForm({...form, [key]: e.id})
+    } else {
+        // this happens when we're trying to unselect an option
+        // we need to remove the [key] property from the form and set the new value as form
+        const {[key]: _, ...newForm} = form
+
+        setForm(newForm);
+    }
+}
+
 export const SUPPORTED_IMAGE_FORMATS = [
     'image/jpg',
     'image/jpeg',
