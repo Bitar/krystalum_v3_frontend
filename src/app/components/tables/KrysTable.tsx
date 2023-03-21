@@ -22,8 +22,8 @@ const KrysTable: React.FC<Props> = ({data, columns, model, isLoading}) => {
     return (
         // className="border rounded px-5"
         <div>
-            <div className='table-responsive border rounded'>
-                <Table className='align-middle table-row-bordered fs-6 gy-5 gs-7 dataTable table-striped no-footer'
+            <div className='table-responsive rounded'>
+                <Table className='align-middle fs-6 gy-5 gs-7 dataTable no-footer'
                        {...getTableProps()}
                 >
                     <thead>

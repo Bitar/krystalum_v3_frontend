@@ -1,82 +1,88 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
 import Select from 'react-select';
-import {InputGroup} from 'react-bootstrap';
 import {DatePicker} from 'rsuite';
-// import 'rsuite/dist/rsuite.min.css';
+import {ErrorMessage, Field, Form, Formik} from 'formik';
+import {InputGroup} from 'react-bootstrap';
+import axios from 'axios';
 
-import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {PublisherSchema, defaultFormFields, FormFields} from '../core/form';
+import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
+import {useKrysApp} from '../../../../../modules/general/KrysApp';
+import {extractErrors} from '../../../../../helpers/requests';
 import {
     genericDateOnChangeHandler,
     GenericErrorMessage,
     genericOnChangeHandler,
     genericSelectOnChangeHandler
-} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
-import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {storePublisher} from '../../../../requests/supply/Publisher';
-import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
-import {Tier} from '../../../../models/misc/Tier';
-import {getAllTiers} from '../../../../requests/misc/Tier';
-import KrysRadioButton from '../../../../components/forms/KrysRadioButton';
-import {COMMITMENT, REVENUE_SHARE} from '../../../../models/supply/Publisher';
-import {Country} from '../../../../models/misc/Country';
-import {getAllCountries} from '../../../../requests/misc/Country';
-import {filterData} from '../../../../helpers/dataManipulation';
+} from '../../../../../helpers/form';
+import {Actions, KrysToastType} from '../../../../../helpers/variables';
+import {AlertMessageGenerator} from '../../../../../helpers/alertMessageGenerator';
+import FormErrors from '../../../../../components/forms/FormErrors';
+import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers';
+import {COMMITMENT, Publisher, REVENUE_SHARE} from '../../../../../models/supply/Publisher';
+import {defaultFormFields, FormFields, PublisherSchema} from '../../core/form';
+import {updatePublisher} from '../../../../../requests/supply/Publisher';
+import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
+import KrysRadioButton from '../../../../../components/forms/KrysRadioButton';
+import {getAllTiers} from '../../../../../requests/misc/Tier';
+import {getAllCountries} from '../../../../../requests/misc/Country';
+import {filterData} from '../../../../../helpers/dataManipulation';
+import {Tier} from '../../../../../models/misc/Tier';
+import {Country} from '../../../../../models/misc/Country';
 
-const PublisherCreate: React.FC = () => {
+interface Props {
+    publisher: Publisher | null
+}
+
+const BasicInformation: React.FC<Props> = ({publisher}) => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const [tiers, setTiers] = useState<Tier[]>([]);
     const [countries, setCountries] = useState<Country[]>([]);
 
-    const navigate = useNavigate();
     const krysApp = useKrysApp();
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLISHERS, PageTypes.CREATE))
+        if (publisher) {
+            const {info, accountManager, ...currentPublisher} = publisher
+            console.log(publisher)
+            setForm({
+                ...currentPublisher,
+                email: info?.email,
+                hq_address: info?.hq_address,
+                hq_country: info?.hq_country
+            });
 
-        // get the tiers
-        getAllTiers().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFormErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of tiers, then we fill our state with them
-                if (response.data) {
-                    setTiers(response.data);
+            // get the tiers
+            getAllTiers().then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    // if we were able to get the list of tiers, then we fill our state with them
+                    if (response.data) {
+                        setTiers(response.data);
+                    }
                 }
-            }
-        });
+            });
 
-        // get the countries
-        getAllCountries().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFormErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of countries, then we fill our state with them
-                if (response.data) {
-                    setCountries(filterData(response.data, 'name', 'All Countries'));
+            // get the countries
+            getAllCountries().then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    // if we were able to get the list of countries, then we fill our state with them
+                    if (response.data) {
+                        setCountries(filterData(response.data, 'name', 'All Countries'));
+                    }
                 }
-            }
-        });
+            });
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [publisher]);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
@@ -87,13 +93,13 @@ const PublisherCreate: React.FC = () => {
     };
 
     const dateChangeHandler = (date: Date | null, key: string) => {
-        console.log(date)
         genericDateOnChangeHandler(date, form, setForm, key);
     };
 
-    const handleCreate = (e: any) => {
+    const handleEdit = () => {
+        console.log(form)
         // send API request to create the publisher
-        storePublisher(form).then(response => {
+        updatePublisher(form).then(response => {
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
                     setFormErrors(extractErrors(response));
@@ -101,26 +107,22 @@ const PublisherCreate: React.FC = () => {
                     // show generic error message
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    // it's publisher for sure
+                    // we were able to store the publisher
                     krysApp.setAlert({
-                        message: new AlertMessageGenerator('publisher', Actions.CREATE, KrysToastType.SUCCESS).message,
+                        message: new AlertMessageGenerator('publisher', Actions.EDIT, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS
-                    })
-
-                    navigate(`/supply/publishers`);
+                    });
                 }
             }
         );
     };
 
     return (
-        <KTCard>
-            <KTCardHeader text="Create New Publisher" icon="fa-regular fa-plus" icon_style="fs-3 text-success"/>
-
+        <KTCard className="card-bordered border-1">
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={PublisherSchema} onSubmit={handleCreate}
+                <Formik initialValues={form} validationSchema={PublisherSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     <Form onChange={onChangeHandler}>
                         <div className="mb-7">
@@ -138,6 +140,7 @@ const PublisherCreate: React.FC = () => {
                             <KrysFormLabel text="Tier" isRequired={false}/>
 
                             <Select name="tier"
+                                    value={form.tier}
                                     options={tiers}
                                     getOptionLabel={(tier) => tier?.name}
                                     getOptionValue={(tier) => tier?.id.toString()}
@@ -146,7 +149,6 @@ const PublisherCreate: React.FC = () => {
                                     }}
                                     placeholder="Select a tier"
                                     isClearable={true}/>
-
 
                             <div className="mt-1 text-danger">
                                 <ErrorMessage name="tier" className="mt-2"/>
@@ -157,6 +159,7 @@ const PublisherCreate: React.FC = () => {
                             <KrysFormLabel text="Integration date" isRequired={false}/>
 
                             <DatePicker name="integration_date"
+                                        value={(form.integration_date ? new Date(form.integration_date) : null)}
                                         className="krys-datepicker"
                                         oneTap={true}
                                         block
@@ -249,6 +252,7 @@ const PublisherCreate: React.FC = () => {
                             <KrysFormLabel text="HQ country" isRequired={false}/>
 
                             <Select name="hq_country"
+                                    value={form.hq_country}
                                     menuPlacement={'top'}
                                     options={countries}
                                     getOptionLabel={(country) => country?.name}
@@ -269,7 +273,7 @@ const PublisherCreate: React.FC = () => {
                 </Formik>
             </KTCardBody>
         </KTCard>
-    )
+    );
 }
 
-export default PublisherCreate;
+export default BasicInformation;

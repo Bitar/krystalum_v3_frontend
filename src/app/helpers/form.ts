@@ -58,5 +58,7 @@ export const genericDateOnChangeHandler = (date: Date | null, form: any, setForm
         const formattedDate = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
 
         setForm({...form, [key]: formattedDate});
+    } else {
+        setForm({...form, [key]: date});
     }
 };

@@ -5,7 +5,7 @@ import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections';
 import PublisherIndex from '../../sections/supply/publishers/pages/Index';
 import PublisherCreate from '../../sections/supply/publishers/pages/Create';
-// import PublisherEdit from '../../sections/supply/publishers/pages/Edit';
+import PublisherEdit from '../../sections/supply/publishers/pages/Edit';
 
 const breadcrumbs: Array<PageLink> = [
     {
@@ -45,7 +45,7 @@ const PublisherRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
-                        {/*<PublisherEdit/>*/}
+                        <PublisherEdit/>
                     </SuspenseView>
                 }
             />

@@ -6,7 +6,7 @@ export type Publisher = {
     id: number,
     name: string,
     tier: Tier | null,
-    integration_date: string,
+    integration_date: Date | null,
     revenue_type: number,
     revenue_share: number | null,
     commitment: string | null,
@@ -26,17 +26,34 @@ export type PublisherAccountManager = {
     name: string
 };
 
+export type ContactType = {
+    id: number,
+    name: string
+};
+
 export type PublisherPaginate = Response<Publisher[]>;
 
 export type PublisherList = {
     data: Publisher[]
 }
 
+export type PublisherContact = {
+    id: number,
+    type: ContactType,
+    detail: string
+};
+
+export type ContactTypeList = {
+    data: ContactType[]
+}
+
+export type PublisherContactPaginate = Response<PublisherContact[]>;
+
 export const defaultPublisher: Publisher = {
     id: 0,
     name: '',
     tier: null,
-    integration_date: '',
+    integration_date: null,
     revenue_type: 0,
     revenue_share: null,
     commitment: '',
