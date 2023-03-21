@@ -17,7 +17,7 @@ const PublisherOverview: React.FC<Props> = ({publisher}) => {
                         <div className="d-flex justify-content-between align-items-start flex-wrap mb-2">
                             <div className="d-flex flex-column">
                                 <div className="d-flex align-items-center mb-2">
-                                    <h2 className="text-gray-800 fs-2 fw-bolder me-1">{publisher?.name}</h2>
+                                    <h2 className="text-gray-800 fs-2 fw-bolder me-1 mb-0">{publisher?.name}</h2>
                                     <KTSVG
                                         path="/media/icons/duotune/general/gen026.svg"
                                         className="svg-icon-2 svg-icon-primary align-top me-1"

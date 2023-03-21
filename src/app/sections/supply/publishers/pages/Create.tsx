@@ -5,7 +5,6 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import Select from 'react-select';
 import {InputGroup} from 'react-bootstrap';
 import {DatePicker} from 'rsuite';
-import 'rsuite/dist/rsuite.min.css';
 
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
@@ -87,7 +86,6 @@ const PublisherCreate: React.FC = () => {
     };
 
     const dateChangeHandler = (date: Date | null, key: string) => {
-        console.log(date)
         genericDateOnChangeHandler(date, form, setForm, key);
     };
 

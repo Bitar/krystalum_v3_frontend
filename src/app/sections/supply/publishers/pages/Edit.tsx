@@ -14,7 +14,6 @@ import {Publisher} from '../../../../models/supply/Publisher';
 import {getPublisher} from '../../../../requests/supply/Publisher';
 import BasicInformation from './edit/BasicInformation';
 import PublisherOverview from '../partials/Overview';
-import Contact from './edit/Contact';
 import PublisherContact from './edit/Contact';
 
 const PublisherEdit: React.FC = () => {
