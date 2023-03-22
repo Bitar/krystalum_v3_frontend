@@ -9,8 +9,7 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {
-    finalGenericSelectOnChangeHandler,
-    GenericErrorMessage, genericOnChangeHandler
+    GenericErrorMessage, genericOnChangeHandler, genericSingleSelectOnChangeHandler
 } from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
@@ -84,7 +83,7 @@ const AgencyCreate: React.FC = () => {
     };
 
     const holdingGroupOnChangeHandler = (e: any) => {
-        finalGenericSelectOnChangeHandler(e, form, setForm, 'holding_group_id');
+        genericSingleSelectOnChangeHandler(e, form, setForm, 'holding_group_id');
 
         // make the region optional IF the holding group now has a set value
         if (e) {
@@ -166,7 +165,7 @@ const AgencyCreate: React.FC = () => {
                                                 options={regions}
                                                 getOptionLabel={(region) => region.name}
                                                 getOptionValue={(region) => region.id.toString()}
-                                                onChange={(e) => finalGenericSelectOnChangeHandler(e, form, setForm, 'region_id')}
+                                                onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'region_id')}
                                                 isClearable={false}/>
 
                                         <div className="mt-1 text-danger">

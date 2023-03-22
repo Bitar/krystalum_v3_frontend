@@ -17,6 +17,14 @@ export const getAdvertisers = (query?: String): Promise<AdvertiserPaginate> => {
 
     if (query) {
         url += `?${query}`;
+
+        if(query.charAt(query.length - 1) === '&') {
+            url += 'include[]=info';
+        } else {
+            url += '&include[]=info';
+        }
+    } else {
+        url += '?include[]=info'
     }
 
     return axios.get(url).then((response: AxiosResponse<AdvertiserPaginate>) => response.data).catch((error) => {
@@ -55,12 +63,12 @@ export const storeAdvertiser = async (advertiser: any): Promise<Advertiser | Axi
         });
 }
 
-export const updateAdvertiser = async (advertiser: any): Promise<Advertiser | AxiosError | undefined> => {
+export const updateAdvertiser = async (id: number, advertiser: any): Promise<Advertiser | AxiosError | undefined> => {
     let formData = createFormData(advertiser);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + advertiser.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

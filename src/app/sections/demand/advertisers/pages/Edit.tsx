@@ -90,17 +90,13 @@ const AdvertiserEdit: React.FC = () => {
                         </div>
                         <div className='col-lg-8 col-xl-9'>
                             <Tab.Content>
-                                {
-                                    <>
-                                        <Tab.Pane eventKey='settingsNav-0'>
-                                            <AdvertiserInfoEdit advertiser={advertiser}/>
-                                        </Tab.Pane>
+                                <Tab.Pane eventKey='settingsNav-0'>
+                                    <AdvertiserInfoEdit advertiser={advertiser}/>
+                                </Tab.Pane>
 
-                                        <Tab.Pane eventKey='settingsNav-1'>
-                                            <AdvertiserContactEdit advertiser={advertiser}/>
-                                        </Tab.Pane>
-                                    </>
-                                }
+                                <Tab.Pane eventKey='settingsNav-1'>
+                                    <AdvertiserContactEdit advertiser={advertiser}/>
+                                </Tab.Pane>
                             </Tab.Content>
                         </div>
                     </div>
