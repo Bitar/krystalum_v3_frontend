@@ -6,6 +6,7 @@ const DemandModuleRoutes: React.FC = () => {
     const TradingDeskRoutes = lazy(() => import('./TradingDeskRoutes'));
     const HoldingGroupRoutes = lazy(() => import('./HoldingGroupRoutes'));
     const AgencyRoutes = lazy(() => import('./AgencyRoutes'));
+    const AdvertiserRoutes = lazy(() => import('./AdvertiserRoutes'));
 
     return (
         <Routes>
@@ -33,6 +34,15 @@ const DemandModuleRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <AgencyRoutes/>
+                    </SuspenseView>
+                }
+            ></Route>
+
+            <Route
+                path='advertisers/*'
+                element={
+                    <SuspenseView>
+                        <AdvertiserRoutes/>
                     </SuspenseView>
                 }
             ></Route>

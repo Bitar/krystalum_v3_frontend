@@ -16,14 +16,17 @@ import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {defaultFormFields, AdvertiserSchema, FormFields} from '../core/form';
+import {
+    UpdateAdvertiserSchema,
+    UpdateInfoFormFields, defaultUpdateInfoFormFields
+} from '../core/form';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {Sections} from "../../../../helpers/sections";
 
 const AdvertiserEdit: React.FC = () => {
-    const [form, setForm] = useState<FormFields>(defaultFormFields);
+    const [form, setForm] = useState<UpdateInfoFormFields>(defaultUpdateInfoFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const [advertiser, setAdvertiser] = useState<Advertiser | null>(null);
@@ -45,8 +48,7 @@ const AdvertiserEdit: React.FC = () => {
                     // unknown error occurred
                     navigate('/error/400');
                 } else {
-                    // ... add code to set the API response to form object or manipulate it
-                    // before you update the form object
+                    setAdvertiser(response);
                 }
             });
 
@@ -58,7 +60,7 @@ const AdvertiserEdit: React.FC = () => {
     useEffect(() => {
         // when we're here it means our advertiser object is loaded from the API
         if (advertiser) {
-            krysApp.setPageTitle(generatePageTitle(Sections.TODO, PageTypes.EDIT, advertiser.name))
+            krysApp.setPageTitle(generatePageTitle(Sections.DEMAND_ADVERTISERS, PageTypes.EDIT, advertiser.name))
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -68,8 +70,7 @@ const AdvertiserEdit: React.FC = () => {
         // in case of multi select, the element doesn't have a name because
         // we get only a list of values from the select and not an element with target value and name
 
-        // TODO update the code here if you want some fields to not be handled by default onchange handler
-        if (e.target.name !== 'image') {
+        if (e.target.name !== 'trade_license') {
             genericOnChangeHandler(e, form, setForm);
         }
     };
@@ -90,7 +91,7 @@ const AdvertiserEdit: React.FC = () => {
                         type: KrysToastType.SUCCESS
                     });
 
-                    navigate(`TODO`);
+                    navigate(`/demand/advertisers`);
                 }
             }
         );
@@ -103,7 +104,7 @@ const AdvertiserEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={AdvertiserSchema} onSubmit={handleEdit}
+                <Formik initialValues={form} validationSchema={UpdateAdvertiserSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         (formik) => (
@@ -119,7 +120,7 @@ const AdvertiserEdit: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <KrysFormFooter cancelUrl={'TODO'}/>
+                                <KrysFormFooter cancelUrl={'/demand/advertisers'}/>
                             </Form>
                         )
                     }

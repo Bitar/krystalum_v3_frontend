@@ -97,9 +97,7 @@ const AdvertiserIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) =>
                                                     <ErrorMessage name="name" className="mt-2"/>
                                                 </div>
                                             </Col>
-                                        </Row>
 
-                                        <Row>
                                             <Col md={4}>
                                                 <KrysFormLabel text="Country" isRequired={false}/>
 

@@ -9,7 +9,6 @@ import {
 } from '../../../../modules/table/QueryResponseProvider'
 import {EXPORT_ENDPOINT, getAdvertisers} from '../../../../requests/demand/Advertiser'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
-import {AdvertisersColumns} from '../core/TableColumn'
 import KrysTable from '../../../../components/tables/KrysTable';
 import {PageTypes} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
@@ -18,12 +17,13 @@ import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {Sections} from "../../../../helpers/sections";
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import {AdvertisersColumns} from '../core/TableColumn';
 
 const AdvertiserIndex = () => {
     const krysApp = useKrysApp();
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.TODO, PageTypes.INDEX))
+        krysApp.setPageTitle(generatePageTitle(Sections.DEMAND_ADVERTISERS, PageTypes.INDEX))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -32,13 +32,13 @@ const AdvertiserIndex = () => {
 
     return (
         <QueryRequestProvider>
-            <QueryResponseProvider id={QUERIES.TODO} requestFunction={getAdvertisers}>
+            <QueryResponseProvider id={QUERIES.ADVERTISERS_LIST} requestFunction={getAdvertisers}>
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text='All Advertisers' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
                                       actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
-                                          new FilterCardAction('TODO-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('TODO', 'TODO')
+                                          new FilterCardAction('advertisers-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/demand/advertisers', 'manage-demand')
                                       ]}/>
                         <KTCardBody>
                             <AdvertiserIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
@@ -53,13 +53,14 @@ const AdvertiserIndex = () => {
 }
 
 const AdvertiserTable = () => {
-    const objects = useQueryResponseData();
+    const advertisers = useQueryResponseData();
     const isLoading = useQueryResponseLoading();
-    const data = useMemo(() => data, [data]);
-    const columns = useMemo(() => TableColumns, []);
+    const data = useMemo(() => advertisers, [advertisers]);
+    const columns = useMemo(() => AdvertisersColumns, []);
 
     return (
-        <KrysTable data={data} columns={columns} model={objects.length > 0 ? objects[0] : null} isLoading={isLoading}/>
+        <KrysTable data={data} columns={columns} model={advertisers.length > 0 ? advertisers[0] : null}
+                   isLoading={isLoading}/>
     )
 }
 
