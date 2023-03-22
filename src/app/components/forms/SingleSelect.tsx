@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {finalGenericSelectOnChangeHandler} from '../../helpers/form';
+import {genericSingleSelectOnChangeHandler} from '../../helpers/form';
 import Select from 'react-select';
 
 interface Props {
@@ -35,7 +35,7 @@ const SingleSelect: React.FC<Props> = ({
     }, [doClear]);
 
     const singleSelectChangeHandler = (e: any) => {
-        finalGenericSelectOnChangeHandler(e, form, setForm, name);
+        genericSingleSelectOnChangeHandler(e, form, setForm, name);
     };
 
     return (
