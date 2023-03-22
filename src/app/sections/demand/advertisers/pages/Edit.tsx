@@ -1,45 +1,30 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-
-import {Advertiser} from '../../../../models/demand/Advertiser';
-import {getAdvertiser, updateAdvertiser} from '../../../../requests/demand/Advertiser';
-import {extractErrors} from '../../../../helpers/requests';
-import {
-    GenericErrorMessage,
-    genericOnChangeHandler
-} from '../../../../helpers/form';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import axios from 'axios';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {Sections} from '../../../../helpers/sections';
+import {PageTypes} from '../../../../helpers/variables';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {
-    UpdateAdvertiserSchema,
-    UpdateInfoFormFields, defaultUpdateInfoFormFields
-} from '../core/form';
-import {useKrysApp} from "../../../../modules/general/KrysApp";
-import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
-import {Sections} from "../../../../helpers/sections";
+import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import {Nav, Tab} from 'react-bootstrap';
+import {Advertiser} from '../../../../models/demand/Advertiser';
+import {getAdvertiser} from '../../../../requests/demand/Advertiser';
+import AdvertiserInfoEdit from './edit/Info';
+import AdvertiserContactEdit from './edit/Contact';
 
 const AdvertiserEdit: React.FC = () => {
-    const [form, setForm] = useState<UpdateInfoFormFields>(defaultUpdateInfoFormFields);
-    const [formErrors, setFormErrors] = useState<string[]>([]);
-
     const [advertiser, setAdvertiser] = useState<Advertiser | null>(null);
 
-    const krysApp = useKrysApp();
-
     let {id} = useParams();
+
     const navigate = useNavigate();
+    const krysApp = useKrysApp();
 
     useEffect(() => {
         if (id) {
             // get the advertiser we need to edit from the database
-            getAdvertiser(parseInt(id)).then(response => {
+            getAdvertiser(parseInt(id), ['info']).then(response => {
                 if (axios.isAxiosError(response)) {
                     // we were not able to fetch the advertiser to edit so we need to redirect
                     // to error page
@@ -51,8 +36,6 @@ const AdvertiserEdit: React.FC = () => {
                     setAdvertiser(response);
                 }
             });
-
-            // ... get any API data you may need to fill the form
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
@@ -66,68 +49,64 @@ const AdvertiserEdit: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [advertiser]);
 
-    const onChangeHandler = (e: any) => {
-        // in case of multi select, the element doesn't have a name because
-        // we get only a list of values from the select and not an element with target value and name
-
-        if (e.target.name !== 'trade_license') {
-            genericOnChangeHandler(e, form, setForm);
+    const settingsNav = [
+        {
+            title: 'Basic information',
+            description: "Update the advertiser's details",
+            icon: 'fa-duotone fa-gears'
+        },
+        {
+            title: 'Contact details',
+            description: 'Enter the contact details to reach the advertiser',
+            icon: 'fa-duotone fa-address-book'
         }
-    };
-
-    const handleEdit = (e: any) => {
-        // send API request to create the advertiser
-        updateAdvertiser(form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // we were able to store the advertiser
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('advertiser', Actions.EDIT, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    });
-
-                    navigate(`/demand/advertisers`);
-                }
-            }
-        );
-    };
+    ]
 
     return (
-        <KTCard>
-            <KTCardHeader text="Edit Advertiser" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
+        <KTCard className='mb-5'>
+            <KTCardHeader text="Edit Advetiser" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
 
             <KTCardBody>
-                <FormErrors errorMessages={formErrors}/>
+                <Tab.Container defaultActiveKey='settingsNav-0'>
+                    <div className='row'>
+                        <div className='col-lg-4 col-xl-3'>
+                            <Nav variant='pills' className='flex-column settings-nav'>
+                                {settingsNav.map((settings, index) => (
+                                    <Nav.Item key={`settings-nav-${index}`} className='mb-5'>
+                                        <Nav.Link className='settings-nav-item' eventKey={`settingsNav-${index}`}>
+                                            <div className='settings-nav-icon w-25px h-25px bg-transparent'>
+                                                <i className={`${settings.icon}`}></i>
+                                            </div>
+                                            <div className='settings-nav-label'>
+                                                <span
+                                                    className='settings-nav-title text-gray-800'>{settings.title}</span>
+                                                <span
+                                                    className='settings-nav-desc text-gray-500'>{settings.description}</span>
+                                            </div>
+                                        </Nav.Link>
+                                    </Nav.Item>
+                                ))}
+                            </Nav>
+                        </div>
+                        <div className='col-lg-8 col-xl-9'>
+                            <Tab.Content>
+                                {
+                                    <>
+                                        <Tab.Pane eventKey='settingsNav-0'>
+                                            <AdvertiserInfoEdit advertiser={advertiser}/>
+                                        </Tab.Pane>
 
-                <Formik initialValues={form} validationSchema={UpdateAdvertiserSchema} onSubmit={handleEdit}
-                        enableReinitialize>
-                    {
-                        (formik) => (
-                            <Form onChange={onChangeHandler}>
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Name" isRequired={true}/>
-
-                                    <Field className="form-control fs-6" type="text"
-                                           placeholder="Enter full name" name="name"/>
-
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="name" className="mt-2"/>
-                                    </div>
-                                </div>
-
-                                <KrysFormFooter cancelUrl={'/demand/advertisers'}/>
-                            </Form>
-                        )
-                    }
-                </Formik>
+                                        <Tab.Pane eventKey='settingsNav-1'>
+                                            <AdvertiserContactEdit advertiser={advertiser}/>
+                                        </Tab.Pane>
+                                    </>
+                                }
+                            </Tab.Content>
+                        </div>
+                    </div>
+                </Tab.Container>
             </KTCardBody>
-        </KTCard>
-    );
+        </KTCard>)
 };
 
 export default AdvertiserEdit;

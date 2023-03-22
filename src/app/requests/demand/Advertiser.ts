@@ -24,8 +24,20 @@ export const getAdvertisers = (query?: String): Promise<AdvertiserPaginate> => {
     });
 }
 
-export const getAdvertiser = async (id: number): Promise<Advertiser | AxiosError | undefined> => {
-    return await axios.get(ENDPOINT + '/' + id)
+export const getAdvertiser = async (id: number, includes?: string[]): Promise<Advertiser | AxiosError | undefined> => {
+    let query = '';
+
+    if (includes) {
+        let includeParts: string [] = [];
+
+        includes.forEach((value) => {
+            includeParts.push(`include[]=${value}`);
+        })
+
+        query = '?' + includeParts.join('&');
+    }
+
+    return await axios.get(ENDPOINT + '/' + id + query)
         .then(res => res.data.data).catch((error) => {
             return error;
         });
