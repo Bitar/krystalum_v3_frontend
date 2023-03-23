@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import {Advertiser} from '../../../../models/demand/Advertiser';
 
 export interface CreateFormFields {
     name: string
@@ -27,3 +28,22 @@ export const UpdateAdvertiserSchema = Yup.object().shape({
     industry_id: Yup.number().notRequired(),
     trade_license: Yup.mixed().notRequired()
 });
+
+export function fillEditForm(advertiser: Advertiser): UpdateInfoFormFields {
+    let advertiserForm: UpdateInfoFormFields = {name: advertiser.name};
+
+    if (advertiser.info) {
+        advertiserForm.hq_address = advertiser.info.address;
+        advertiserForm.hq_country_id = advertiser.info.country.id;
+
+        if (advertiser.info.industry) {
+            advertiserForm.industry_id = advertiser.info.industry.id;
+        }
+
+        advertiserForm.trade_license = undefined;
+    } else {
+        advertiserForm.hq_address = '';
+    }
+
+    return advertiserForm;
+}

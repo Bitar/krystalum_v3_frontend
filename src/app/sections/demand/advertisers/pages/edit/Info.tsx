@@ -3,7 +3,7 @@ import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import {ErrorMessage, Field, Form, Formik, FormikProps} from 'formik';
 import {Advertiser} from '../../../../../models/demand/Advertiser';
-import {defaultUpdateInfoFormFields, UpdateAdvertiserSchema, UpdateInfoFormFields} from '../../core/form';
+import {defaultUpdateInfoFormFields, fillEditForm, UpdateAdvertiserSchema, UpdateInfoFormFields} from '../../core/form';
 import {useKrysApp} from '../../../../../modules/general/KrysApp';
 import {
     GenericErrorMessage, genericHandleSingleFile,
@@ -27,6 +27,7 @@ import {Country} from '../../../../../models/misc/Country';
 import {AdvertiserIndustry} from '../../../../../models/misc/AdvertiserIndustry';
 import {getAllAdvertiserIndustries} from '../../../../../requests/misc/AdvertiserIndustry';
 import SingleSelect from '../../../../../components/forms/SingleSelect';
+import {downloadOnClick} from '../../../../../helpers/general';
 
 interface Props {
     advertiser: Advertiser | null
@@ -81,18 +82,7 @@ const AdvertiserInfoEdit: React.FC<Props> = ({advertiser}) => {
             setIsResourceLoaded(true);
 
             // we set the Edit Info Form based on the advertiser data
-            let advertiserForm: UpdateInfoFormFields = {name: advertiser.name};
-
-            if (advertiser.info) {
-                advertiserForm.hq_address = advertiser.info?.address;
-                advertiserForm.hq_country_id = advertiser.info?.country.id;
-
-                if (advertiser.info.industry) {
-                    advertiserForm.industry_id = advertiser.info?.industry?.id;
-                }
-            }
-
-            setForm(advertiserForm);
+            setForm(fillEditForm(advertiser))
         }
     }, [advertiser]);
 
@@ -199,9 +189,8 @@ const AdvertiserInfoEdit: React.FC<Props> = ({advertiser}) => {
                                     {
                                         advertiser?.info?.tradeLicensePath &&
 
-                                        // TODO create a component that on click downloads href file
                                         <a href={advertiser?.info?.tradeLicensePath}
-                                           target="_blank"
+                                           onClick={() => downloadOnClick(advertiser?.info?.tradeLicensePath)}
                                            className="d-flex align-items-center text-muted text-hover-krys py-1 mt-3"
                                            style={{wordBreak: "break-word"}}>
                                             <i className="fa-solid fa-download text-warning me-2"></i> <span className="pt-1">Download
