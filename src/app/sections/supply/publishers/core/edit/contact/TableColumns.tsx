@@ -1,17 +1,17 @@
 import {Column} from 'react-table'
-import {PublisherContact} from '../../../../../models/supply/Publisher';
 import React from 'react';
-import {CustomHeader} from '../../../../../modules/table/columns/CustomHeader';
-import {TextCell} from '../../../../../modules/table/columns/TextCell';
-import {Restricted} from '../../../../../modules/auth/AuthAccessControl';
-import {ActionsCell} from '../../../../../modules/table/columns/ActionsCell';
-import {QUERIES} from '../../../../../../_metronic/helpers';
+import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
+import {TextCell} from '../../../../../../modules/table/columns/TextCell';
+import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
+import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
+import {QUERIES} from '../../../../../../../_metronic/helpers';
+import {PublisherContact} from '../../../../../../models/supply/publisher/PublisherContact';
 
 const PublisherContactsColumns: ReadonlyArray<Column<PublisherContact>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Contact type" className="min-w-125px"/>,
         id: 'type',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].type}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].type?.name}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Contact detail" className="min-w-125px"/>,
@@ -29,13 +29,13 @@ const PublisherContactsColumns: ReadonlyArray<Column<PublisherContact>> = [
             <Restricted to={'manage-supply'}>
                 <ActionsCell
                     id={props.data[props.row.index].id}
-                    path={'supply/publishers'}
+                    path={`supply/publishers/contacts}`}
                     queryKey={QUERIES.PUBLISHER_CONTACTS_LIST}
                     showView={false}
-                    showEdit={true}
+                    showEdit={false}
                     showDelete={true}
                     title="Delete Publisher Contact"
-                    text={`Are you sure you want to delete the publisher contact '${props.data[props.row.index].type}'?`}
+                    text={`Are you sure you want to delete the publisher contact '${props.data[props.row.index].type.name}'?`}
                 />
             </Restricted>
         ),

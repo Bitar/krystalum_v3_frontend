@@ -4,7 +4,7 @@ import {TextCell} from '../../../../modules/table/columns/TextCell'
 import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
 import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {QUERIES} from '../../../../../_metronic/helpers'
-import {Publisher} from '../../../../models/supply/Publisher';
+import {Publisher} from '../../../../models/supply/publisher/Publisher';
 import {Restricted} from '../../../../modules/auth/AuthAccessControl';
 import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
 

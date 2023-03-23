@@ -1,40 +1,32 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../_metronic/helpers';
 
 import FormErrors from '../../../../../components/forms/FormErrors';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../helpers/form';
+import {
+    GenericErrorMessage,
+    genericOnChangeHandler,
+    genericSingleSelectOnChangeHandler
+} from '../../../../../helpers/form';
 import {extractErrors} from '../../../../../helpers/requests';
 import {AlertMessageGenerator} from '../../../../../helpers/alertMessageGenerator';
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
 import {useKrysApp} from '../../../../../modules/general/KrysApp';
-import {useAuth} from '../../../../../modules/auth';
-import {Publisher} from '../../../../../models/supply/Publisher';
-import {ContactSchema, defaultFormFields, FormFields, PublisherSchema} from '../../core/form';
-import {
-    EXPORT_ENDPOINT,
-    getPublisherContacts,
-    getPublishers,
-    storePublisherContact
-} from '../../../../../requests/supply/Publisher';
+import {Publisher} from '../../../../../models/supply/publisher/Publisher';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
+import {PublisherContactsColumns} from '../../core/edit/contact/TableColumns';
+import {ContactSchema, defaultFormFields, FormFields} from '../../core/edit/contact/form';
 import {
-    QueryResponseProvider,
-    useQueryResponseData,
-    useQueryResponseLoading
-} from '../../../../../modules/table/QueryResponseProvider';
-import {ListViewProvider} from '../../../../../modules/table/ListViewProvider';
-import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
-import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../../components/misc/CardAction';
-import PublisherIndexFilter from '../../partials/IndexFilter';
-import {QueryRequestProvider} from '../../../../../modules/table/QueryRequestProvider';
-import {PublishersColumns} from '../../core/TableColumns';
-import KrysTable from '../../../../../components/tables/KrysTable';
-import {PublisherContactsColumns} from '../../core/edit/ContactTableColumns';
+    getContactTypes,
+    getPublisherContacts,
+    storePublisherContact
+} from '../../../../../requests/supply/publisher/PublisherContact';
+import {ContactType} from '../../../../../models/supply/publisher/PublisherContact';
+import KrysIndex from '../../partials/KrysIndex';
 
 interface Props {
     publisher: Publisher | null
@@ -44,14 +36,38 @@ const PublisherContact: React.FC<Props> = ({publisher}) => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
+    const [contactTypes, setContactTypes] = useState<ContactType[]>([]);
+
     const krysApp = useKrysApp();
-    const {logout} = useAuth()
+
+    useEffect(() => {
+        if (publisher) {
+            // get the contact types
+            getContactTypes(publisher).then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    // if we were able to get the list of contact types, then we fill our state with them
+                    if (response.data) {
+                        setContactTypes(response.data);
+                    }
+                }
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [publisher]);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
     };
 
-    const handleStoreContact = (e: any) => {
+    const selectChangeHandler = (e: any, key: string) => {
+        genericSingleSelectOnChangeHandler(e, form, setForm, key);
+    };
+
+    const handleCreate = (e: any) => {
         // send API request to create the publisher contact
         storePublisherContact(publisher, form).then(response => {
                 if (axios.isAxiosError(response)) {
@@ -76,21 +92,20 @@ const PublisherContact: React.FC<Props> = ({publisher}) => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={ContactSchema} onSubmit={handleStoreContact}
+                <Formik initialValues={form} validationSchema={ContactSchema} onSubmit={handleCreate}
                         enableReinitialize>
                     <Form onChange={onChangeHandler}>
                         <div className="mb-7">
                             <KrysFormLabel text="Contact type" isRequired={true}/>
 
                             <Select name="type"
-                                // options={types}
-                                // getOptionLabel={(type) => type?.name}
-                                // getOptionValue={(type) => type?.id.toString()}
-                                // onChange={(e) => {
-                                //     selectChangeHandler(e, 'tier')
-                                // }}
-                                    placeholder="Select contact type"
-                                    isClearable={true}/>
+                                    options={contactTypes}
+                                    getOptionLabel={(contactType) => contactType.name}
+                                    getOptionValue={(contactType) => contactType.id.toString()}
+                                    onChange={(e) => {
+                                        selectChangeHandler(e, 'type')
+                                    }}
+                                    placeholder="Select a contact type"/>
 
                             <div className="mt-1 text-danger">
                                 <ErrorMessage name="type" className="mt-2"/>
@@ -101,10 +116,10 @@ const PublisherContact: React.FC<Props> = ({publisher}) => {
                             <KrysFormLabel text="Contact detail" isRequired={true}/>
 
                             <Field className="form-control fs-6" type="text"
-                                   placeholder="Enter contact detail (address, email address or phone)" name="name"/>
+                                   placeholder="Enter contact detail (address, email address or phone)" name="detail"/>
 
                             <div className="mt-1 text-danger">
-                                <ErrorMessage name="name" className="mt-2"/>
+                                <ErrorMessage name="detail" className="mt-2"/>
                             </div>
                         </div>
 
@@ -114,27 +129,10 @@ const PublisherContact: React.FC<Props> = ({publisher}) => {
 
                 <div className="separator separator-dashed my-10"></div>
 
-                <QueryRequestProvider>
-                    <QueryResponseProvider id={QUERIES.PUBLISHER_CONTACTS_LIST} requestFunction={getPublisherContacts}>
-                        <ListViewProvider>
-                            <PublisherTable/>
-                        </ListViewProvider>
-                    </QueryResponseProvider>
-                </QueryRequestProvider>
+                <KrysIndex queryId={QUERIES.PUBLISHER_CONTACTS_LIST} requestFunction={() => getPublisherContacts(publisher)} columnsArray={PublisherContactsColumns} table={'borderless'} cardBodyClassNames={'p-0'}></KrysIndex>
             </KTCardBody>
         </KTCard>
     );
 }
 
-const PublisherTable = () => {
-    const publisherContacts = useQueryResponseData();
-    const isLoading = useQueryResponseLoading();
-    const data = useMemo(() => publisherContacts, [publisherContacts]);
-    const columns = useMemo(() => PublisherContactsColumns, []);
-
-    return (
-        <KrysTable data={data} columns={columns} model={publisherContacts.length > 0 ? publisherContacts[0] : null}
-                   isLoading={isLoading}/>
-    )
-}
 export default PublisherContact;

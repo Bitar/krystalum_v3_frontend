@@ -1,6 +1,7 @@
-import {Response} from '../../../_metronic/helpers';
-import {Tier} from '../misc/Tier';
-import {Country} from '../misc/Country';
+import {Response} from '../../../../_metronic/helpers';
+import {Tier} from '../../misc/Tier';
+import {Country} from '../../misc/Country';
+import {PublisherAccountManager} from '../publisher/PublisherAccountManager';
 
 export type Publisher = {
     id: number,
@@ -21,33 +22,11 @@ export type PublisherInfo = {
     hq_country: Country | null
 };
 
-export type PublisherAccountManager = {
-    id: number,
-    name: string
-};
-
-export type ContactType = {
-    id: number,
-    name: string
-};
-
 export type PublisherPaginate = Response<Publisher[]>;
 
 export type PublisherList = {
     data: Publisher[]
 }
-
-export type PublisherContact = {
-    id: number,
-    type: ContactType,
-    detail: string
-};
-
-export type ContactTypeList = {
-    data: ContactType[]
-}
-
-export type PublisherContactPaginate = Response<PublisherContact[]>;
 
 export const defaultPublisher: Publisher = {
     id: 0,

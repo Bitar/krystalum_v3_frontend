@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Publisher} from '../../../../models/supply/Publisher';
+import {Publisher} from '../../../../models/supply/publisher/Publisher';
 import {KTCard, KTCardBody, KTSVG} from '../../../../../_metronic/helpers';
 import {formatDateToMonthDayYear} from '../../../../helpers/dateFormatter';
 

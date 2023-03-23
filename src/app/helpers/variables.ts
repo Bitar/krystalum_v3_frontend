@@ -1,3 +1,6 @@
+import KrysTable from '../components/tables/KrysTable';
+import KrysBorderlessTable from '../components/tables/KrysBorderlessTable';
+
 export enum Actions {
     CREATE = 1,
     EDIT,

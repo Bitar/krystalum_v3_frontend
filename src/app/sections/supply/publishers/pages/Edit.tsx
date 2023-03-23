@@ -10,11 +10,14 @@ import {PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {Publisher} from '../../../../models/supply/Publisher';
-import {getPublisher} from '../../../../requests/supply/Publisher';
+import {Publisher} from '../../../../models/supply/publisher/Publisher';
+import {getPublisher} from '../../../../requests/supply/publisher/Publisher';
 import BasicInformation from './edit/BasicInformation';
 import PublisherOverview from '../partials/Overview';
 import PublisherContact from './edit/Contact';
+import PublisherPayment from './edit/Payment';
+import PublisherPublication from './edit/Publication';
+import PublisherAccountManager from './edit/AccountManager';
 
 const PublisherEdit: React.FC = () => {
     const [publisher, setPublisher] = useState<Publisher | null>(null);
@@ -111,17 +114,25 @@ const PublisherEdit: React.FC = () => {
                             </div>
                             <div className="col-lg-8 col-xl-9">
                                 <Tab.Content>
-                                    {
-                                        <>
-                                            <Tab.Pane eventKey="settingsNav-0">
-                                                <BasicInformation publisher={publisher}/>
-                                            </Tab.Pane>
+                                    <Tab.Pane eventKey="settingsNav-0">
+                                        <BasicInformation publisher={publisher}/>
+                                    </Tab.Pane>
 
-                                            <Tab.Pane eventKey="settingsNav-1">
-                                                <PublisherContact publisher={publisher}/>
-                                            </Tab.Pane>
-                                        </>
-                                    }
+                                    <Tab.Pane eventKey="settingsNav-1">
+                                        <PublisherContact publisher={publisher}/>
+                                    </Tab.Pane>
+
+                                    <Tab.Pane eventKey="settingsNav-2">
+                                        <PublisherPayment publisher={publisher}/>
+                                    </Tab.Pane>
+
+                                    <Tab.Pane eventKey="settingsNav-3">
+                                        <PublisherPublication publisher={publisher}/>
+                                    </Tab.Pane>
+
+                                    <Tab.Pane eventKey="settingsNav-4">
+                                        <PublisherAccountManager publisher={publisher}/>
+                                    </Tab.Pane>
                                 </Tab.Content>
                             </div>
                         </div>

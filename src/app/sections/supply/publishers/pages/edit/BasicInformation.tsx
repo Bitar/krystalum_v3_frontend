@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import Select from 'react-select';
 import {DatePicker} from 'rsuite';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import {InputGroup} from 'react-bootstrap';
@@ -11,16 +10,15 @@ import {extractErrors} from '../../../../../helpers/requests';
 import {
     genericDateOnChangeHandler,
     GenericErrorMessage,
-    genericOnChangeHandler,
-    genericSelectOnChangeHandler
+    genericOnChangeHandler
 } from '../../../../../helpers/form';
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
 import {AlertMessageGenerator} from '../../../../../helpers/alertMessageGenerator';
 import FormErrors from '../../../../../components/forms/FormErrors';
 import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers';
-import {COMMITMENT, Publisher, REVENUE_SHARE} from '../../../../../models/supply/Publisher';
+import {COMMITMENT, Publisher, REVENUE_SHARE} from '../../../../../models/supply/publisher/Publisher';
 import {defaultFormFields, FormFields, PublisherSchema} from '../../core/form';
-import {updatePublisher} from '../../../../../requests/supply/Publisher';
+import {updatePublisher} from '../../../../../requests/supply/publisher/Publisher';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysRadioButton from '../../../../../components/forms/KrysRadioButton';
 import {getAllTiers} from '../../../../../requests/misc/Tier';
@@ -28,6 +26,7 @@ import {getAllCountries} from '../../../../../requests/misc/Country';
 import {filterData} from '../../../../../helpers/dataManipulation';
 import {Tier} from '../../../../../models/misc/Tier';
 import {Country} from '../../../../../models/misc/Country';
+import SingleSelect from '../../../../../components/forms/SingleSelect';
 
 interface Props {
     publisher: Publisher | null
@@ -37,6 +36,8 @@ const BasicInformation: React.FC<Props> = ({publisher}) => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
+    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
+
     const [tiers, setTiers] = useState<Tier[]>([]);
     const [countries, setCountries] = useState<Country[]>([]);
 
@@ -44,13 +45,18 @@ const BasicInformation: React.FC<Props> = ({publisher}) => {
 
     useEffect(() => {
         if (publisher) {
+            setIsResourceLoaded(true);
+
             const {info, accountManager, ...currentPublisher} = publisher
-            console.log(publisher)
+
             setForm({
                 ...currentPublisher,
-                email: info?.email,
-                hq_address: info?.hq_address,
-                hq_country: info?.hq_country
+                revenue_share: currentPublisher.revenue_share || '', // if revenue_share is null, then put it string, I need to put it like this as
+                // I am getting warning in console that controlled input should be '' or undefined and not null
+                commitment: currentPublisher.commitment || '',  // same as revenue_share
+                email: info?.email || '', // same as revenue_share
+                hq_address: info?.hq_address || '', // same as revenue_share
+                hq_country_id: info?.hq_country?.id
             });
 
             // get the tiers
@@ -88,16 +94,11 @@ const BasicInformation: React.FC<Props> = ({publisher}) => {
         genericOnChangeHandler(e, form, setForm);
     };
 
-    const selectChangeHandler = (e: any, key: string) => {
-        genericSelectOnChangeHandler(e, form, setForm, key);
-    };
-
     const dateChangeHandler = (date: Date | null, key: string) => {
         genericDateOnChangeHandler(date, form, setForm, key);
     };
 
     const handleEdit = () => {
-        console.log(form)
         // send API request to create the publisher
         updatePublisher(form).then(response => {
                 if (axios.isAxiosError(response)) {
@@ -139,19 +140,14 @@ const BasicInformation: React.FC<Props> = ({publisher}) => {
                         <div className="mb-7">
                             <KrysFormLabel text="Tier" isRequired={false}/>
 
-                            <Select name="tier"
-                                    value={form.tier}
-                                    options={tiers}
-                                    getOptionLabel={(tier) => tier?.name}
-                                    getOptionValue={(tier) => tier?.id.toString()}
-                                    onChange={(e) => {
-                                        selectChangeHandler(e, 'tier')
-                                    }}
-                                    placeholder="Select a tier"
-                                    isClearable={true}/>
+                            <SingleSelect isResourceLoaded={isResourceLoaded}
+                                          options={tiers}
+                                          defaultValue={publisher?.tier}
+                                          form={form} setForm={setForm}
+                                          name="tier_id" isClearable={true} />
 
                             <div className="mt-1 text-danger">
-                                <ErrorMessage name="tier" className="mt-2"/>
+                                <ErrorMessage name="tier_id" className="mt-2"/>
                             </div>
                         </div>
 
@@ -194,7 +190,8 @@ const BasicInformation: React.FC<Props> = ({publisher}) => {
                             </div>
                         </div>
 
-                        {form.revenue_type === REVENUE_SHARE &&
+                        {
+                            form.revenue_type === REVENUE_SHARE &&
                             <div className="mb-7">
                                 <KrysFormLabel text="Revenue share" isRequired={true}/>
 
@@ -211,7 +208,8 @@ const BasicInformation: React.FC<Props> = ({publisher}) => {
                             </div>
                         }
 
-                        {form.revenue_type === COMMITMENT &&
+                        {
+                            form.revenue_type === COMMITMENT &&
                             <div className="mb-7">
                                 <KrysFormLabel text="Commitment" isRequired={true}/>
 
@@ -251,20 +249,14 @@ const BasicInformation: React.FC<Props> = ({publisher}) => {
                         <div className="mb-7">
                             <KrysFormLabel text="HQ country" isRequired={false}/>
 
-                            <Select name="hq_country"
-                                    value={form.hq_country}
-                                    menuPlacement={'top'}
-                                    options={countries}
-                                    getOptionLabel={(country) => country?.name}
-                                    getOptionValue={(country) => country?.id.toString()}
-                                    onChange={(e) => {
-                                        selectChangeHandler(e, 'hq_country')
-                                    }}
-                                    placeholder="Select a hq country"
-                                    isClearable={true}/>
+                            <SingleSelect isResourceLoaded={isResourceLoaded}
+                                          options={countries}
+                                          defaultValue={publisher?.info?.hq_country}
+                                          form={form} setForm={setForm}
+                                          name="hq_country_id" isClearable={true} />
 
                             <div className="mt-1 text-danger">
-                                <ErrorMessage name="hq_country" className="mt-2"/>
+                                <ErrorMessage name="hq_country_id" className="mt-2"/>
                             </div>
                         </div>
 

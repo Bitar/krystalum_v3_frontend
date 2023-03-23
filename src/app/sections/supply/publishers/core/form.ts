@@ -1,11 +1,11 @@
 import * as Yup from 'yup';
 import {Tier} from '../../../../models/misc/Tier';
-import {COMMITMENT, REVENUE_SHARE} from '../../../../models/supply/Publisher';
+import {COMMITMENT, REVENUE_SHARE} from '../../../../models/supply/publisher/Publisher';
 import {Country} from '../../../../models/misc/Country';
 
 export interface FormFields {
     name: string,
-    tier?: Tier | null,
+    tier_id?: number | null,
     integration_date?: Date | null,
     revenue_type: number,
     revenue_share?: number | string | null, // kept the string type here because we don't want to see revenue_share 0 as default
@@ -14,7 +14,7 @@ export interface FormFields {
     commitment?: string | null,
     email?: string | null,
     hq_address?: string | null,
-    hq_country?: Country | null
+    hq_country_id?: number | null
 }
 
 export const defaultFormFields = {
@@ -28,7 +28,7 @@ export const defaultFormFields = {
 
 export const PublisherSchema = Yup.object().shape({
     name: Yup.string().required(),
-    tier: Yup.object().notRequired().nullable(),
+    tier_id: Yup.number().notRequired(),
     revenue_type: Yup.number().min(1, 'revenue type is required').required(),
     revenue_share: Yup.number().nullable().when('revenue_type', {
         is: REVENUE_SHARE,
@@ -39,11 +39,6 @@ export const PublisherSchema = Yup.object().shape({
         then: Yup.string().required(),
     }),
     email: Yup.string().notRequired().email(),
-    hq_address: Yup.string().notRequired(),
-    hq_country: Yup.object().notRequired().nullable(),
-});
-
-export const ContactSchema = Yup.object().shape({
-    type: Yup.number().min(1, 'revenue type is required').required(),
-    detail: Yup.string().required(),
+    // hq_address: Yup.string().notRequired().nullable(),
+    hq_country_id: Yup.number().notRequired(),
 });

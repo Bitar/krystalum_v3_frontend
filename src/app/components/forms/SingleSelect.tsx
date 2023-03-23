@@ -25,6 +25,8 @@ const SingleSelect: React.FC<Props> = ({
         genericSingleSelectOnChangeHandler(e, form, setForm, name);
     };
 
+    const namePlaceHolder = name.replace(/_id/g, "").replace(/_/g, " ");
+
     return (
         <>
             {
@@ -32,7 +34,7 @@ const SingleSelect: React.FC<Props> = ({
                                              options={options}
                                              getOptionLabel={(instance) => instance.name}
                                              getOptionValue={(instance) => instance.id.toString()}
-                                             placeholder={`Select ${name}`}
+                                             placeholder={`Select ${namePlaceHolder}`}
                                              isClearable={isClearable}
                                              onChange={singleSelectChangeHandler}/>
             }
@@ -42,7 +44,7 @@ const SingleSelect: React.FC<Props> = ({
                                             options={options}
                                             getOptionLabel={(instance) => instance.name}
                                             getOptionValue={(instance) => instance.id.toString()}
-                                            placeholder={`Select ${name}`}
+                                            placeholder={`Select ${namePlaceHolder}`}
                                             isClearable={isClearable}
                                             onChange={singleSelectChangeHandler}/>
             }

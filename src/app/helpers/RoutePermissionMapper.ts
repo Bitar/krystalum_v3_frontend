@@ -22,5 +22,11 @@ export class RoutePermissionMapper {
 
         this.regexMap.set(/^\/misc\/[a-z-]+\/\d+\/edit\/?$/, 'manage-misc');
 
+        // Supply Module
+        this.regexMap.set(/^\/supply\/[a-z-]+\/?$/, 'view-supply');
+
+        this.regexMap.set(/^\/supply\/[a-z-]+\/create\/?$/, 'manage-supply');
+
+        this.regexMap.set(/^\/supply\/[a-z-]+\/\d+\/edit\/?$/, 'manage-supply');
     }
 }

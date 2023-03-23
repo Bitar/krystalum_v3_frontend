@@ -1,13 +1,7 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
 
-import {createFormData} from '../../helpers/requests';
-import {
-    ContactTypeList,
-    Publisher,
-    PublisherContact, PublisherContactPaginate,
-    PublisherList,
-    PublisherPaginate
-} from '../../models/supply/Publisher';
+import {createFormData} from '../../../helpers/requests';
+import {Publisher, PublisherList, PublisherPaginate} from '../../../models/supply/publisher/Publisher';
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publishers`
@@ -60,28 +54,3 @@ export const updatePublisher = async (publisher: any): Promise<Publisher | Axios
     });
 }
 
-export const getContactTypes = async (): Promise<ContactTypeList | AxiosError | undefined> => {
-    return axios.get(CONTACT_ENDPOINT + '/types').then((response: AxiosResponse<ContactTypeList>) => response.data).catch((error) => {
-        return error;
-    });
-}
-
-export const getPublisherContacts = (query?: String): Promise<PublisherContactPaginate> => {
-    let url = `${ENDPOINT}`;
-
-    if (query) {
-        url += `?${query}`;
-    }
-
-    return axios.get(url).then((response: AxiosResponse<PublisherPaginate>) => response.data).catch((error) => {
-        return error;
-    });
-}
-
-export const storePublisherContact = async (publisher: any, form: any): Promise<Publisher | AxiosError | undefined> => {
-    let formData = createFormData(form);
-
-    return await axios.post(ENDPOINT + '/' + publisher.id + '/contact', formData).then(res => res.data).catch((error) => {
-        return error;
-    });
-}

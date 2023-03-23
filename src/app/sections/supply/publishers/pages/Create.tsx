@@ -18,18 +18,18 @@ import {
     genericDateOnChangeHandler,
     GenericErrorMessage,
     genericOnChangeHandler,
-    genericSelectOnChangeHandler
+    genericSingleSelectOnChangeHandler
 } from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {storePublisher} from '../../../../requests/supply/Publisher';
+import {storePublisher} from '../../../../requests/supply/publisher/Publisher';
 import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
 import {Tier} from '../../../../models/misc/Tier';
 import {getAllTiers} from '../../../../requests/misc/Tier';
 import KrysRadioButton from '../../../../components/forms/KrysRadioButton';
-import {COMMITMENT, REVENUE_SHARE} from '../../../../models/supply/Publisher';
+import {COMMITMENT, REVENUE_SHARE} from '../../../../models/supply/publisher/Publisher';
 import {Country} from '../../../../models/misc/Country';
 import {getAllCountries} from '../../../../requests/misc/Country';
 import {filterData} from '../../../../helpers/dataManipulation';
@@ -82,7 +82,7 @@ const PublisherCreate: React.FC = () => {
     };
 
     const selectChangeHandler = (e: any, key: string) => {
-        genericSelectOnChangeHandler(e, form, setForm, key);
+        genericSingleSelectOnChangeHandler(e, form, setForm, key);
     };
 
     const dateChangeHandler = (date: Date | null, key: string) => {
@@ -135,19 +135,17 @@ const PublisherCreate: React.FC = () => {
                         <div className="mb-7">
                             <KrysFormLabel text="Tier" isRequired={false}/>
 
-                            <Select name="tier"
+                            <Select name="tier_id"
                                     options={tiers}
-                                    getOptionLabel={(tier) => tier?.name}
-                                    getOptionValue={(tier) => tier?.id.toString()}
+                                    getOptionLabel={(tier) => tier.name}
+                                    getOptionValue={(tier) => tier.id.toString()}
                                     onChange={(e) => {
-                                        selectChangeHandler(e, 'tier')
+                                        selectChangeHandler(e, 'tier_id')
                                     }}
-                                    placeholder="Select a tier"
-                                    isClearable={true}/>
-
+                                    placeholder="Select a tier"/>
 
                             <div className="mt-1 text-danger">
-                                <ErrorMessage name="tier" className="mt-2"/>
+                                <ErrorMessage name="tier_id" className="mt-2"/>
                             </div>
                         </div>
 
@@ -246,19 +244,19 @@ const PublisherCreate: React.FC = () => {
                         <div className="mb-7">
                             <KrysFormLabel text="HQ country" isRequired={false}/>
 
-                            <Select name="hq_country"
+                            <Select name="hq_country_id"
                                     menuPlacement={'top'}
                                     options={countries}
                                     getOptionLabel={(country) => country?.name}
                                     getOptionValue={(country) => country?.id.toString()}
                                     onChange={(e) => {
-                                        selectChangeHandler(e, 'hq_country')
+                                        selectChangeHandler(e, 'hq_country_id')
                                     }}
                                     placeholder="Select a hq country"
                                     isClearable={true}/>
 
                             <div className="mt-1 text-danger">
-                                <ErrorMessage name="hq_country" className="mt-2"/>
+                                <ErrorMessage name="hq_country_id" className="mt-2"/>
                             </div>
                         </div>
 
