@@ -18,10 +18,13 @@ import {getDevice, updateDevice} from '../../../../requests/misc/Device';
 import {DeviceSchema} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {defaultFormFields, FormFields} from "../../audiences/core/form";
+import {Device} from '../../../../models/misc/Device';
 
 
 const DeviceEdit: React.FC = () => {
-    const [form, setForm] = useState<FormFields>(defaultFormFields)
+    const [device, setDevice] = useState<Device|null>(null);
+
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -42,6 +45,7 @@ const DeviceEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current device to edit
+                    setDevice(response);
                     setForm(response);
                 }
             });
@@ -50,7 +54,10 @@ const DeviceEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_DEVICES, PageTypes.EDIT, form.name))
+        if(device) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_DEVICES, PageTypes.EDIT, device.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -59,20 +66,22 @@ const DeviceEdit: React.FC = () => {
     };
 
     const handleEdit = () => {
-        // we need to update the device's data by doing API call with form
-        updateDevice(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the device so we're good
-                krysApp.setAlert({message: new AlertMessageGenerator('device', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                navigate(`/misc/devices`);
-            }
-        });
+        if(device) {
+            // we need to update the device's data by doing API call with form
+            updateDevice(device.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the device so we're good
+                    krysApp.setAlert({message: new AlertMessageGenerator('device', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+                    navigate(`/misc/devices`);
+                }
+            });
+        }
     }
 
     return (

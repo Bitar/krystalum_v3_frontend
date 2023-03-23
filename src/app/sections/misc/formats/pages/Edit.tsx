@@ -31,6 +31,7 @@ import {indentOptions} from '../../../../components/forms/IndentOptions';
 
 const FormatEdit: React.FC = () => {
     const [format, setFormat] = useState<Format | null>(null);
+
     const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -115,24 +116,26 @@ const FormatEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the format's data by doing API call with form
-        updateFormat(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the booking format so we're good
-                krysApp.setAlert({
-                    message: new AlertMessageGenerator('format', Actions.EDIT, KrysToastType.SUCCESS).message,
-                    type: KrysToastType.SUCCESS
-                });
+        if(format) {
+            // we need to update the format's data by doing API call with form
+            updateFormat(format.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the booking format so we're good
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('format', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    });
 
-                navigate(`/misc/formats`);
-            }
-        });
+                    navigate(`/misc/formats`);
+                }
+            });
+        }
     }
 
     return (

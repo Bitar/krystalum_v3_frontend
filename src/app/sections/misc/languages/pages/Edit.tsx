@@ -18,9 +18,12 @@ import {getLanguage, updateLanguage} from '../../../../requests/misc/Language';
 import {LanguageSchema} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {defaultFormFields, FormFields} from "../../audiences/core/form";
+import {Language} from '../../../../models/misc/Language';
 
 const LanguageEdit: React.FC = () => {
-    const [form, setForm] = useState<FormFields>(defaultFormFields)
+    const [language, setLanguage] = useState<Language|null>(null);
+
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -41,6 +44,7 @@ const LanguageEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current language to edit
+                    setLanguage(response);
                     setForm(response);
                 }
             });
@@ -49,7 +53,10 @@ const LanguageEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_LANGUAGES, PageTypes.EDIT, form.name))
+        if(language) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_LANGUAGES, PageTypes.EDIT, language.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -58,20 +65,22 @@ const LanguageEdit: React.FC = () => {
     };
 
     const handleEdit = () => {
-        // we need to update the language's data by doing API call with form
-        updateLanguage(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the language so we're good
-                krysApp.setAlert({message: new AlertMessageGenerator('language', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                navigate(`/misc/languages`);
-            }
-        });
+        if(language) {
+            // we need to update the language's data by doing API call with form
+            updateLanguage(language.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the language so we're good
+                    krysApp.setAlert({message: new AlertMessageGenerator('language', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+                    navigate(`/misc/languages`);
+                }
+            });
+        }
     }
 
     return (

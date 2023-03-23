@@ -41,12 +41,12 @@ export const storeCity = async (city: any): Promise<City | AxiosError | undefine
         });
 }
 
-export const updateCity = async (city: any): Promise<City | AxiosError | undefined> => {
+export const updateCity = async (id: number, city: any): Promise<City | AxiosError | undefined> => {
     let formData = createFormData(city);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + city.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

@@ -88,20 +88,22 @@ const RoleEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the permission's data by doing API call with form
-        updateRole(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the updated permission so we're good
-                krysApp.setAlert({message: new AlertMessageGenerator('role', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                navigate(`/iam/roles`);
-            }
-        });
+        if(role) {
+            // we need to update the permission's data by doing API call with form
+            updateRole(role.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the updated permission so we're good
+                    krysApp.setAlert({message: new AlertMessageGenerator('role', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+                    navigate(`/iam/roles`);
+                }
+            });
+        }
     }
 
     return (

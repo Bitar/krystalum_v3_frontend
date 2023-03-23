@@ -30,12 +30,12 @@ export const getUser = async (id: number): Promise<User | AxiosError | undefined
         });
 }
 
-export const updateUser = async (user: any): Promise<User | AxiosError | undefined> => {
+export const updateUser = async (id: number, user: any): Promise<User | AxiosError | undefined> => {
     let formData = createFormData(user);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + user.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

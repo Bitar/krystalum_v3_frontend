@@ -18,9 +18,12 @@ import {getOperatingSystem, updateOperatingSystem} from '../../../../requests/mi
 import {OperatingSystemSchema} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {defaultFormFields, FormFields} from "../../audiences/core/form";
+import {OperatingSystem} from '../../../../models/misc/OperatingSystem';
 
 const OperatingSystemEdit: React.FC = () => {
-    const [form, setForm] = useState<FormFields>(defaultFormFields)
+    const [operatingSystem, setOperatingSystem] = useState<OperatingSystem|null>(null);
+
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -41,6 +44,7 @@ const OperatingSystemEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current operating system to edit
+                    setOperatingSystem(response);
                     setForm(response);
                 }
             });
@@ -49,7 +53,10 @@ const OperatingSystemEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_OPERATING_SYSTEMS, PageTypes.EDIT, form.name))
+        if(operatingSystem) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_OPERATING_SYSTEMS, PageTypes.EDIT, operatingSystem.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -58,20 +65,22 @@ const OperatingSystemEdit: React.FC = () => {
     };
 
     const handleEdit = () => {
-        // we need to update the operating system's data by doing API call with form
-        updateOperatingSystem(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the operating system so we're good
-                krysApp.setAlert({message: new AlertMessageGenerator('operating system', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                navigate(`/misc/operating-systems`);
-            }
-        });
+        if(operatingSystem) {
+            // we need to update the operating system's data by doing API call with form
+            updateOperatingSystem(operatingSystem.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the operating system so we're good
+                    krysApp.setAlert({message: new AlertMessageGenerator('operating system', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+                    navigate(`/misc/operating-systems`);
+                }
+            });
+        }
     }
 
     return (

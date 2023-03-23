@@ -36,12 +36,12 @@ export const storeRegion = async (region: any): Promise<Region | AxiosError | un
 }
 
 
-export const updateRegion = async (region: any): Promise<Region | AxiosError | undefined> => {
+export const updateRegion = async (id: number, region: any): Promise<Region | AxiosError | undefined> => {
     let formData = createFormData(region);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + region.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

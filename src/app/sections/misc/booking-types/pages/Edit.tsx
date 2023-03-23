@@ -18,10 +18,13 @@ import {getBookingType, updateBookingType} from '../../../../requests/misc/Booki
 import {BookingTypeSchema} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {defaultFormFields, FormFields} from "../core/form";
+import {BookingType} from '../../../../models/misc/BookingType';
 
 
 const BookingTypeEdit: React.FC = () => {
-    const [form, setForm] = useState<FormFields>(defaultFormFields)
+    const [bookingType, setBookingType] = useState<BookingType|null>(null);
+
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -42,6 +45,7 @@ const BookingTypeEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current booking type to edit
+                    setBookingType(response);
                     setForm(response);
                 }
             });
@@ -50,7 +54,10 @@ const BookingTypeEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_BOOKING_TYPES, PageTypes.EDIT, form.name))
+        if(bookingType) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_BOOKING_TYPES, PageTypes.EDIT, bookingType.name));
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -59,20 +66,22 @@ const BookingTypeEdit: React.FC = () => {
     };
 
     const handleEdit = () => {
-        // we need to update the booking type's data by doing API call with form
-        updateBookingType(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the booking type so we're good
-                krysApp.setAlert({message: new AlertMessageGenerator('booking type', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                navigate(`/misc/booking-types`);
-            }
-        });
+        if(bookingType) {
+            // we need to update the booking type's data by doing API call with form
+            updateBookingType(bookingType.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the booking type so we're good
+                    krysApp.setAlert({message: new AlertMessageGenerator('booking type', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+                    navigate(`/misc/booking-types`);
+                }
+            });
+        }
     }
 
     return (

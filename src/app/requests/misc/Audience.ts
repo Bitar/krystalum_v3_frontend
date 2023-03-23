@@ -41,12 +41,12 @@ export const storeAudience = async (audience: any): Promise<Audience | AxiosErro
         });
 }
 
-export const updateAudience = async (audience: any): Promise<Audience | AxiosError | undefined> => {
+export const updateAudience = async (id: number, audience: any): Promise<Audience | AxiosError | undefined> => {
     let formData = createFormData(audience);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + audience.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

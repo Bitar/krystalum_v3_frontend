@@ -17,9 +17,12 @@ import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, FormFields, WebsitePageSchema} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {getWebsitePage, updateWebsitePage} from '../../../../requests/misc/WebsitePage';
+import {WebsitePage} from '../../../../models/misc/WebsitePage';
 
 
 const WebsitePageEdit: React.FC = () => {
+    const [websitePage, setWebsitePage] = useState<WebsitePage | null>(null);
+
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -41,6 +44,7 @@ const WebsitePageEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current website page to edit
+                    setWebsitePage(response);
                     setForm(response);
                 }
             });
@@ -49,7 +53,10 @@ const WebsitePageEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_WEBSITE_PAGES, PageTypes.EDIT, form.name))
+        if (websitePage) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_WEBSITE_PAGES, PageTypes.EDIT, websitePage.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -58,24 +65,26 @@ const WebsitePageEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the website page's data by doing API call with form
-        updateWebsitePage(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the updated website page so we're good
-                krysApp.setAlert({
-                    message: new AlertMessageGenerator('website page', Actions.EDIT, KrysToastType.SUCCESS).message,
-                    type: KrysToastType.SUCCESS
-                });
+        if (websitePage) {
+            // we need to update the website page's data by doing API call with form
+            updateWebsitePage(websitePage.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the updated website page so we're good
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('website page', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    });
 
-                navigate(`/misc/website-pages`);
-            }
-        });
+                    navigate(`/misc/website-pages`);
+                }
+            });
+        }
     }
 
     return (

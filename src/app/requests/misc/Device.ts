@@ -41,12 +41,12 @@ export const storeDevice = async (device: any): Promise<Device | AxiosError | un
         });
 }
 
-export const updateDevice = async (device: any): Promise<Device | AxiosError | undefined> => {
+export const updateDevice = async (id: number, device: any): Promise<Device | AxiosError | undefined> => {
     let formData = createFormData(device);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + device.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

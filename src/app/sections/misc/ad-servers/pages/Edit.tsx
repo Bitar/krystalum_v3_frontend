@@ -17,9 +17,12 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {getAdServer, updateAdServer} from '../../../../requests/misc/AdServer';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AdServer} from '../../../../models/misc/AdServer';
 
 
 const AdServerEdit: React.FC = () => {
+    const [adServer, setAdServer] = useState<AdServer|null>(null);
+
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -41,6 +44,7 @@ const AdServerEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current ad server to edit
+                    setAdServer(response);
                     setForm(response);
                 }
             });
@@ -49,7 +53,10 @@ const AdServerEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_AD_SERVERS, PageTypes.EDIT, form.name))
+        if(adServer) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_AD_SERVERS, PageTypes.EDIT, adServer.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -58,25 +65,27 @@ const AdServerEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the ad server's data by doing API call with form
-        updateAdServer(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the updated ad server so we're good
+        if(adServer) {
+            // we need to update the ad server's data by doing API call with form
+            updateAdServer(adServer.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the updated ad server so we're good
 
-                krysApp.setAlert({
-                    message: new AlertMessageGenerator('ad server', Actions.EDIT, KrysToastType.SUCCESS).message,
-                    type: KrysToastType.SUCCESS
-                })
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('ad server', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
 
-                navigate(`/misc/ad-servers`);
-            }
-        });
+                    navigate(`/misc/ad-servers`);
+                }
+            });
+        }
     }
 
     return (
