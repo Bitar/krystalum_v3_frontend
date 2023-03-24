@@ -10,5 +10,3 @@ export type AdvertiserIndustryPaginate = Response<AdvertiserIndustry[]>;
 export type AdvertiserIndustryList = {
     data: AdvertiserIndustry[]
 }
-
-export const defaultAdvertiserIndustry: AdvertiserIndustry = {id: 0, name: ""};

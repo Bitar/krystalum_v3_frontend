@@ -10,5 +10,3 @@ export type AdServerPaginate = Response<AdServer[]>;
 export type AdServerList = {
     data: AdServer[]
 }
-
-export const defaultAdServer: AdServer = {id: 0, name: ""};

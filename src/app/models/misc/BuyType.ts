@@ -11,5 +11,3 @@ export type BuyTypePaginate = Response<BuyType[]>;
 export type BuyTypeList = {
     data: BuyType[]
 }
-
-export const defaultBuyType: BuyType = {id: 0, name: '', code: ''};

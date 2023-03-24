@@ -14,11 +14,3 @@ export type KpiPaginate = Response<Kpi[]>;
 export type KpiList = {
     data: Kpi[]
 }
-
-export const defaultKpi: Kpi = {
-    id: 0,
-    name: "",
-    is_rate: 1,
-    is_conversion: 0,
-    performanceMetrics: []
-};
