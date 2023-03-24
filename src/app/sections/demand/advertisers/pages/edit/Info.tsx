@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {ErrorMessage, Field, Form, Formik, FormikProps} from 'formik';
-import {defaultUpdateInfoFormFields, fillEditForm, UpdateAdvertiserSchema, UpdateInfoFormFields} from '../../core/form';
 import {useKrysApp} from '../../../../../modules/general/KrysApp';
 import {
     GenericErrorMessage, genericHandleSingleFile,
@@ -26,11 +25,17 @@ import SingleSelect from '../../../../../components/forms/SingleSelect';
 import {downloadOnClick} from '../../../../../helpers/general';
 import {useAdvertiser} from '../../core/AdvertiserContext';
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
+import {
+    AdvertiserInfoFormFields,
+    AdvertiserInfoSchema,
+    defaultAdvertiserInfoFormFields,
+    fillEditForm
+} from '../../core/edit/info/form';
 
 const AdvertiserInfoEdit: React.FC = () => {
     const {advertiser, setAdvertiser} = useAdvertiser();
 
-    const [form, setForm] = useState<UpdateInfoFormFields>(defaultUpdateInfoFormFields);
+    const [form, setForm] = useState<AdvertiserInfoFormFields>(defaultAdvertiserInfoFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
@@ -129,7 +134,7 @@ const AdvertiserInfoEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={UpdateAdvertiserSchema} onSubmit={handleEdit}
+                <Formik initialValues={form} validationSchema={AdvertiserInfoSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         (formik) => (

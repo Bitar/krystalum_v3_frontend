@@ -6,6 +6,7 @@ import {Sections} from '../../helpers/sections';
 import AdvertiserIndex from '../../sections/demand/advertisers/pages/Index';
 import AdvertiserCreate from '../../sections/demand/advertisers/pages/Create';
 import AdvertiserEdit from '../../sections/demand/advertisers/pages/Edit';
+import AdvertiserContactEdit from '../../sections/demand/advertisers/pages/edit/contacts/Edit';
 
 const breadcrumbs: Array<PageLink> = [
     {

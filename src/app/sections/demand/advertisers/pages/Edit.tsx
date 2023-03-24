@@ -11,7 +11,7 @@ import {Nav, Tab} from 'react-bootstrap';
 import {Advertiser} from '../../../../models/demand/Advertiser';
 import {getAdvertiser} from '../../../../requests/demand/Advertiser';
 import AdvertiserInfoEdit from './edit/Info';
-import AdvertiserContactEdit from './edit/Contact';
+import AdvertiserContactCreate from './edit/contacts/Create';
 import {AdvertiserContext} from '../core/AdvertiserContext';
 
 const AdvertiserEdit: React.FC = () => {
@@ -101,7 +101,7 @@ const AdvertiserEdit: React.FC = () => {
                                     </Tab.Pane>
 
                                     <Tab.Pane eventKey='settingsNav-1'>
-                                        <AdvertiserContactEdit />
+                                        <AdvertiserContactCreate />
                                     </Tab.Pane>
                                 </Tab.Content>
                             </AdvertiserContext.Provider>

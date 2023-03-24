@@ -1,29 +1,30 @@
 import React, {useState} from 'react';
-import {KTCard, KTCardBody, QUERIES} from '../../../../../../_metronic/helpers';
-import FormErrors from '../../../../../components/forms/FormErrors';
+import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
+import FormErrors from '../../../../../../components/forms/FormErrors';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
-import {
-    defaultUpdateContactsFormFields, UpdateContactsFormFields,
-    UpdateContactsSchema
-} from '../../core/form';
-import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../helpers/form';
-import {useAdvertiser} from '../../core/AdvertiserContext';
+import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
+import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
+import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
+import {useAdvertiser} from '../../../core/AdvertiserContext';
 import axios from 'axios';
-import {extractErrors} from '../../../../../helpers/requests';
-import {AlertMessageGenerator} from '../../../../../helpers/alertMessageGenerator';
-import {Actions, KrysToastType} from '../../../../../helpers/variables';
-import {getAdvertiserContacts, storeAdvertiserContact} from '../../../../../requests/demand/AdvertiserContact';
-import {useKrysApp} from '../../../../../modules/general/KrysApp';
-import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
-import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';
-import {AdvertiserContactsColumns} from '../../core/edit/contacts/TableColumns';
+import {extractErrors} from '../../../../../../helpers/requests';
+import {AlertMessageGenerator} from '../../../../../../helpers/alertMessageGenerator';
+import {Actions, KrysToastType} from '../../../../../../helpers/variables';
+import {getAdvertiserContacts, storeAdvertiserContact} from '../../../../../../requests/demand/AdvertiserContact';
+import {useKrysApp} from '../../../../../../modules/general/KrysApp';
+import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
+import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
+import {AdvertiserContactsColumns} from '../../../core/edit/contacts/TableColumns';
+import {
+    AdvertiserContactsFormFields,
+    AdvertiserContactsSchema,
+    defaultAdvertiserContactsFormFields
+} from '../../../core/edit/contacts/form';
 
-const AdvertiserContactEdit: React.FC = () => {
+const AdvertiserContactCreate: React.FC = () => {
     const {advertiser} = useAdvertiser();
 
-    const [form, setForm] = useState<UpdateContactsFormFields>(defaultUpdateContactsFormFields);
+    const [form, setForm] = useState<AdvertiserContactsFormFields>(defaultAdvertiserContactsFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
@@ -59,7 +60,7 @@ const AdvertiserContactEdit: React.FC = () => {
                         setRefreshTable(true);
 
                         // we need to clear the form data
-                        setForm(defaultUpdateContactsFormFields);
+                        setForm(defaultAdvertiserContactsFormFields);
                     }
                 }
             );
@@ -73,7 +74,7 @@ const AdvertiserContactEdit: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={UpdateContactsSchema} onSubmit={handleCreate}
+                <Formik initialValues={form} validationSchema={AdvertiserContactsSchema} onSubmit={handleCreate}
                         enableReinitialize>
                     {
                         (formik) => (
@@ -135,4 +136,4 @@ const AdvertiserContactEdit: React.FC = () => {
     );
 };
 
-export default AdvertiserContactEdit;
+export default AdvertiserContactCreate;

@@ -14,14 +14,14 @@ import {
 import {extractErrors} from '../../../../helpers/requests';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {storeAdvertiser} from '../../../../requests/demand/Advertiser';
-import {CreateAdvertiserSchema, CreateFormFields, defaultCreateFormFields} from '../core/form';
+import {AdvertiserSchema, AdvertiserFormFields, defaultAdvertiserFormFields} from '../core/form';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {Sections} from "../../../../helpers/sections";
 
 const AdvertiserCreate: React.FC = () => {
-    const [form, setForm] = useState<CreateFormFields>(defaultCreateFormFields);
+    const [form, setForm] = useState<AdvertiserFormFields>(defaultAdvertiserFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -70,7 +70,7 @@ const AdvertiserCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={CreateAdvertiserSchema} onSubmit={handleCreate}
+                <Formik initialValues={form} validationSchema={AdvertiserSchema} onSubmit={handleCreate}
                         enableReinitialize>
                     {
                         (formik) => (
