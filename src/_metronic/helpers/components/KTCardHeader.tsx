@@ -5,7 +5,7 @@ import {
     CardAction,
 } from '../../../app/components/misc/CardAction';
 
-type Props = {
+export type KTCardHeaderProps = {
     className?: string
     text: string
     id?: string
@@ -18,7 +18,7 @@ type Props = {
     icon_style?: string
 }
 
-const KTCardHeader: FC<Props> = ({
+const KTCardHeader: FC<KTCardHeaderProps> = ({
                                      className,
                                      text,
                                      id,
