@@ -9,13 +9,14 @@ import {
     useQueryResponseLoading
 } from '../../modules/table/QueryResponseProvider';
 import {ListViewProvider} from '../../modules/table/ListViewProvider';
+import KrysTableSearchFilter from './KrysTableSearchFilter';
 
 type Props = {
     queryId: string,
     requestFunction: (id: number, query?: string) => Promise<any>,
     requestId: string | number,
     columnsArray: readonly Column<any>[],
-    SearchFilterComponent: React.FC
+    slug: string
 }
 
 type TableProps = {
@@ -27,7 +28,7 @@ const KrysInnerTable: React.FC<Props> = ({
                                              requestFunction,
                                              requestId,
                                              columnsArray,
-                                             SearchFilterComponent
+                                             slug
                                          }) => {
 
     return (
@@ -35,7 +36,7 @@ const KrysInnerTable: React.FC<Props> = ({
             <QueryResponseProvider id={queryId}
                                    requestFunction={requestFunction} requestId={requestId}>
                 <ListViewProvider>
-                    <SearchFilterComponent/>
+                    <KrysTableSearchFilter slug={slug}/>
                     <InnerTable columnsArray={columnsArray}/>
                 </ListViewProvider>
             </QueryResponseProvider>
