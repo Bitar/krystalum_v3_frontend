@@ -27,6 +27,8 @@ const MultiSelect: React.FC<Props> = ({isResourceLoaded, options, defaultValue, 
         genericMultiSelectOnChangeHandler(e, form, setForm, name);
     };
 
+    const namePlaceHolder = name.replace(/_id/g, "").replace(/_/g, " ");
+
     return (
         <>
             {
@@ -34,7 +36,7 @@ const MultiSelect: React.FC<Props> = ({isResourceLoaded, options, defaultValue, 
                                              options={options}
                                              getOptionLabel={(instance) => instance.name}
                                              getOptionValue={(instance) => instance.id.toString()}
-                                             placeholder={`Select one or more ${name}`}
+                                             placeholder={`Select one or more ${namePlaceHolder}(s)`}
                                              ref={selectRef}
                                              onChange={multiSelectChangeHandler}/>
             }
@@ -44,7 +46,7 @@ const MultiSelect: React.FC<Props> = ({isResourceLoaded, options, defaultValue, 
                                             options={options}
                                             getOptionLabel={(instance) => instance.name}
                                             getOptionValue={(instance) => instance.id.toString()}
-                                            placeholder={`Select one or more ${name}`}
+                                            placeholder={`Select one or more ${namePlaceHolder}(s)`}
                                             ref={selectRef}
                                             onChange={multiSelectChangeHandler}/>
             }
