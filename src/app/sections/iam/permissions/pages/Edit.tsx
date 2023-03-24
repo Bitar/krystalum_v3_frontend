@@ -64,7 +64,7 @@ const PermissionEdit: React.FC = () => {
 
     const handleEdit = (e: any) => {
         // we need to update the permission's data by doing API call with form
-        updatePermission(permission).then(response => {
+        updatePermission(permission.id, permission).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));

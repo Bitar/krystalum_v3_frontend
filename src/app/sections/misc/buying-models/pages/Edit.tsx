@@ -89,23 +89,25 @@ const BuyingModelEdit: React.FC = () => {
     };
 
     const handleEdit = () => {
-        // we need to update the buying model's data by doing API call with form
-        updateBuyingModel(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the buying model so we're good
-                krysApp.setAlert({
-                    message: new AlertMessageGenerator('buying model', Actions.EDIT, KrysToastType.SUCCESS).message,
-                    type: KrysToastType.SUCCESS
-                })
-                navigate(`/misc/buying-models`);
-            }
-        });
+        if(buyingModel) {
+            // we need to update the buying model's data by doing API call with form
+            updateBuyingModel(buyingModel.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the buying model so we're good
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('buying model', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
+                    navigate(`/misc/buying-models`);
+                }
+            });
+        }
     }
 
     return (

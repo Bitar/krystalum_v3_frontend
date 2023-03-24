@@ -9,7 +9,7 @@ import KrysFormFooter from "../../../../components/forms/KrysFormFooter";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {Sections} from "../../../../helpers/sections";
 import {Actions, PageTypes} from "../../../../helpers/variables";
-import {getRegion,updateRegion} from "../../../../requests/misc/Region";
+import {getRegion, updateRegion} from "../../../../requests/misc/Region";
 import axios from "axios";
 import {extractErrors} from "../../../../helpers/requests";
 import {
@@ -26,7 +26,7 @@ import {KrysToastType} from '../../../../helpers/variables';
 import MultiSelect from "../../../../components/forms/MultiSelect";
 
 const RegionEdit: React.FC = () => {
-    const [region, setRegion] = useState<Region|null>(null);
+    const [region, setRegion] = useState<Region | null>(null);
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [countries, setCountries] = useState<Country[]>([]);
@@ -79,8 +79,8 @@ const RegionEdit: React.FC = () => {
     useEffect(() => {
         if (region) {
             setIsResourceLoaded(true);
-            krysApp.setPageTitle(generatePageTitle(Sections.MISC_REGIONS, PageTypes.EDIT, form.name))
 
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_REGIONS, PageTypes.EDIT, region.name))
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -88,22 +88,24 @@ const RegionEdit: React.FC = () => {
 
 
     const handleEdit = () => {
-        updateRegion(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we update the region
-                krysApp.setAlert({
-                    message: new AlertMessageGenerator('region', Actions.EDIT, KrysToastType.SUCCESS).message,
-                    type: KrysToastType.SUCCESS
-                })
-                navigate(`/misc/regions`);
-            }
-        });
+        if (region) {
+            updateRegion(region.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we update the region
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('region', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
+                    navigate(`/misc/regions`);
+                }
+            });
+        }
     }
 
 

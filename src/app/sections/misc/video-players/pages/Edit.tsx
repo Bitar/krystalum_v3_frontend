@@ -16,9 +16,12 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {getVideoPlayer, updateVideoPlayer} from '../../../../requests/misc/VideoPlayer';
 import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
+import {VideoPlayer} from '../../../../models/misc/VideoPlayer';
 
 
 const VideoPlayerEdit: React.FC = () => {
+    const [videoPlayer, setVideoPlayer] = useState<VideoPlayer|null>(null);
+
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -40,6 +43,7 @@ const VideoPlayerEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current video player to edit
+                    setVideoPlayer(response);
                     setForm(response);
                 }
             });
@@ -48,7 +52,10 @@ const VideoPlayerEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_VIDEO_PLAYERS, PageTypes.EDIT, form.name))
+        if(videoPlayer) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_VIDEO_PLAYERS, PageTypes.EDIT, videoPlayer.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -57,24 +64,26 @@ const VideoPlayerEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the video player's data by doing API call with form
-        updateVideoPlayer(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the updated video player so we're good
-                krysApp.setAlert({
-                    message: new AlertMessageGenerator('video player', Actions.EDIT, KrysToastType.SUCCESS).message,
-                    type: KrysToastType.SUCCESS
-                })
+        if(videoPlayer) {
+            // we need to update the video player's data by doing API call with form
+            updateVideoPlayer(videoPlayer.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the updated video player so we're good
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('video player', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
 
-                navigate(`/misc/video-players`);
-            }
-        });
+                    navigate(`/misc/video-players`);
+                }
+            });
+        }
     }
 
     return (

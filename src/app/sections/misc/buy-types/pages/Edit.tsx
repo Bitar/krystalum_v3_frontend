@@ -18,10 +18,13 @@ import {getBuyType, updateBuyType} from '../../../../requests/misc/BuyType';
 import {BuyTypeSchema} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {defaultFormFields, FormFields} from "../../audiences/core/form";
+import {BuyType} from '../../../../models/misc/BuyType';
 
 
 const BuyTypeEdit: React.FC = () => {
-    const [form, setForm] = useState<FormFields>(defaultFormFields)
+    const [buyType, setBuyType] = useState<BuyType|null>(null);
+
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -42,6 +45,7 @@ const BuyTypeEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current buy type to edit
+                    setBuyType(response);
                     setForm(response);
                 }
             });
@@ -50,7 +54,10 @@ const BuyTypeEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUY_TYPES, PageTypes.EDIT, form.name))
+        if(buyType) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUY_TYPES, PageTypes.EDIT, buyType.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -59,20 +66,22 @@ const BuyTypeEdit: React.FC = () => {
     };
 
     const handleEdit = () => {
-        // we need to update the buy type's data by doing API call with form
-        updateBuyType(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the updated buy type so we're good
-                krysApp.setAlert({message: new AlertMessageGenerator('buy type', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                navigate(`/misc/buy-types`);
-            }
-        });
+        if(buyType) {
+            // we need to update the buy type's data by doing API call with form
+            updateBuyType(buyType.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the updated buy type so we're good
+                    krysApp.setAlert({message: new AlertMessageGenerator('buy type', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+                    navigate(`/misc/buy-types`);
+                }
+            });
+        }
     }
 
     return (

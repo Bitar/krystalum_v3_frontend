@@ -11,5 +11,3 @@ export type TierPaginate = Response<Tier[]>;
 export type TierList = {
     data: Tier[]
 }
-
-export const defaultTier: Tier = {id: 0, name: "", order: 0};

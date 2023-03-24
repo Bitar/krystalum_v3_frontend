@@ -13,5 +13,3 @@ export type RegionList = {
     data: Region[]
 }
 
-export const defaultRegion: Region = {id: 0, name: '', countries: []};
-

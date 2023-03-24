@@ -10,5 +10,3 @@ export type OperatingSystemPaginate = Response<OperatingSystem[]>;
 export type OperatingSystemList = {
     data: OperatingSystem[]
 }
-
-export const defaultOperatingSystem: OperatingSystem = {id: 0, name: ''};

@@ -41,12 +41,12 @@ export const storeTier = async (tier: any): Promise<Tier | AxiosError | undefine
         });
 }
 
-export const updateTier = async (tier: any): Promise<Tier | AxiosError | undefined> => {
+export const updateTier = async (id: number, tier: any): Promise<Tier | AxiosError | undefined> => {
     let formData = createFormData(tier);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + tier.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

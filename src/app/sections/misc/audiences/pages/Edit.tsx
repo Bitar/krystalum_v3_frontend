@@ -17,9 +17,12 @@ import {Sections} from '../../../../helpers/sections';
 import {getAudience, updateAudience} from '../../../../requests/misc/Audience';
 import {AudienceSchema, defaultFormFields, FormFields} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {Audience} from '../../../../models/misc/Audience';
 
 
 const AudienceEdit: React.FC = () => {
+    const [audience, setAudience] = useState<Audience|null>(null)
+
     const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -41,6 +44,8 @@ const AudienceEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current audience to edit
+                    setAudience(response);
+
                     setForm(response);
                 }
             });
@@ -49,7 +54,10 @@ const AudienceEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_AUDIENCES, PageTypes.EDIT, form.name))
+        if(audience) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_AUDIENCES, PageTypes.EDIT, audience.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -58,23 +66,25 @@ const AudienceEdit: React.FC = () => {
     };
 
     const handleEdit = () => {
-        // we need to update the audience's data by doing API call with form
-        updateAudience(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the audience so we're good
-                krysApp.setAlert({
-                    message: new AlertMessageGenerator('audience', Actions.EDIT, KrysToastType.SUCCESS).message,
-                    type: KrysToastType.SUCCESS
-                })
-                navigate(`/misc/audiences`);
-            }
-        });
+        if(audience) {
+            // we need to update the audience's data by doing API call with form
+            updateAudience(audience.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the audience so we're good
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('audience', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
+                    navigate(`/misc/audiences`);
+                }
+            });
+        }
     }
 
     return (

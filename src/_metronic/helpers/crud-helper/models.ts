@@ -18,6 +18,10 @@ export type FilterState = {
   filter?: unknown
 }
 
+export type IncludeState = {
+  include?: string[]
+}
+
 export type SearchState = {
   search?: string
 }
@@ -34,7 +38,7 @@ export type Response<T> = {
   }
 }
 
-export type QueryState = PaginationState & SortState & FilterState & SearchState
+export type QueryState = PaginationState & SortState & FilterState & SearchState & IncludeState
 
 export type QueryRequestContextProps = {
   state: QueryState

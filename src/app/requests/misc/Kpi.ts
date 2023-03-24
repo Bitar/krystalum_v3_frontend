@@ -42,12 +42,12 @@ export const storeKpi = async (kpi: any): Promise<Kpi | AxiosError | undefined> 
         });
 }
 
-export const updateKpi = async (kpi: any): Promise<Kpi | AxiosError | undefined> => {
+export const updateKpi = async (id:number, kpi: any): Promise<Kpi | AxiosError | undefined> => {
     let formData = createFormData(kpi);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + kpi.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

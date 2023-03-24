@@ -38,12 +38,12 @@ export const storeRole = async (role: any): Promise<Role | AxiosError | undefine
     });
 }
 
-export const updateRole = async (role: any): Promise<Role | AxiosError | undefined> => {
+export const updateRole = async (id: number, role: any): Promise<Role | AxiosError | undefined> => {
     let formData = createFormData(role);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + role.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }
