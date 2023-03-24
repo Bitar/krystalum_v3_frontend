@@ -31,7 +31,7 @@ const BuyingModelsColumns: ReadonlyArray<Column<BuyingModel>> = [
                 <ActionsCell
                     id={props.data[props.row.index].id}
                     path={'misc/buying-models'}
-                    queryKey={QUERIES.BUYING_MODEL_LIST}
+                    queryKey={QUERIES.BUYING_MODELS_LIST}
                     showView={false}
                     showEdit={true}
                     title="Delete Buying Model"

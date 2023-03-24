@@ -1,29 +1,22 @@
-import React, {useEffect, useMemo, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
-import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers'
-import {QueryRequestProvider} from '../../../../modules/table/QueryRequestProvider'
-import {
-    QueryResponseProvider,
-    useQueryResponseData,
-    useQueryResponseLoading,
-} from '../../../../modules/table/QueryResponseProvider'
+import {QUERIES} from '../../../../../_metronic/helpers'
 import {EXPORT_ENDPOINT, getUsers} from '../../../../requests/iam/User'
-import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
 import {TableColumns} from '../core/TableColumns'
-import KrysTable from '../../../../components/tables/KrysTable';
 import {PageTypes} from '../../../../helpers/variables';
-import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import UserIndexFilter from '../partials/IndexFilter';
-import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {useKrysApp} from "../../../../modules/general/KrysApp";
-import {Sections} from "../../../../helpers/sections";
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {Sections} from '../../../../helpers/sections';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import KrysIndex from '../../../../components/tables/KrysIndex';
 
 const UserIndex = () => {
     const krysApp = useKrysApp();
 
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.IAM_USERS, PageTypes.INDEX))
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -31,35 +24,22 @@ const UserIndex = () => {
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
-        <QueryRequestProvider>
-            <QueryResponseProvider id={QUERIES.USERS_LIST} requestFunction={getUsers}>
-                <ListViewProvider>
-                    <KTCard>
-                        <KTCardHeader text='All Users' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
-                                          new FilterCardAction('users-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/iam/users', 'manage-iam')
-                                      ]}/>
-                        <KTCardBody>
-                            <UserIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
-
-                            <UserTable/>
-                        </KTCardBody>
-                    </KTCard>
-                </ListViewProvider>
-            </QueryResponseProvider>
-        </QueryRequestProvider>
-    )
-}
-
-const UserTable = () => {
-    const users = useQueryResponseData();
-    const isLoading = useQueryResponseLoading();
-    const data = useMemo(() => users, [users]);
-    const columns = useMemo(() => TableColumns, []);
-
-    return (
-        <KrysTable data={data} columns={columns} model={users.length > 0 ? users[0] : null} isLoading={isLoading}/>
+        <KrysIndex queryId={QUERIES.USERS_LIST}
+                   requestFunction={getUsers}
+                   columnsArray={TableColumns}
+                   cardHeader={
+                       {
+                           text: 'All Users',
+                           icon: 'fa-regular fa-list',
+                           icon_style: 'fs-3 text-primary',
+                           actions: [new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
+                               new FilterCardAction('users-list-filter', showFilter, setShowFilter),
+                               new CreateCardAction('/iam/users', 'manage-iam')],
+                       }}
+                   showFilter={showFilter}
+                   setExportQuery={setExportQuery}
+                   FilterComponent={UserIndexFilter}
+        />
     )
 }
 

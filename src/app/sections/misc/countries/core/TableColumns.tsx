@@ -39,7 +39,7 @@ const CountriesColumns: ReadonlyArray<Column<Country>> = [
                 <ActionsCell
                     id={props.data[props.row.index].id}
                     path={'misc/countries'}
-                    queryKey={QUERIES.COUNTRY_LIST}
+                    queryKey={QUERIES.COUNTRIES_LIST}
                     showView={false}
                     showEdit={true}
                     title="Delete Country"

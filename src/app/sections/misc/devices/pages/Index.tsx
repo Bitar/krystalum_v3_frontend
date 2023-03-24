@@ -1,18 +1,7 @@
-import {useSearchParams} from 'react-router-dom';
-import {useEffect, useMemo, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
-import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers'
-import {QueryRequestProvider} from '../../../../modules/table/QueryRequestProvider'
-import {
-    QueryResponseProvider,
-    useQueryResponseData,
-    useQueryResponseLoading,
-} from '../../../../modules/table/QueryResponseProvider'
-import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
-import KrysTable from '../../../../components/tables/KrysTable';
+import {QUERIES} from '../../../../../_metronic/helpers'
 import {PageTypes} from '../../../../helpers/variables';
-import FormSuccess from '../../../../components/forms/FormSuccess';
-import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
@@ -20,55 +9,37 @@ import {EXPORT_ENDPOINT, getDevices} from '../../../../requests/misc/Device';
 import DeviceIndexFilter from '../partials/IndexFilter';
 import {DevicesColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import KrysIndex from '../../../../components/tables/KrysIndex';
 
 const DeviceIndex = () => {
     const krysApp = useKrysApp();
 
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_DEVICES, PageTypes.INDEX))
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    const [searchParams] = useSearchParams();
 
     const [exportQuery, setExportQuery] = useState<string>('');
     const [showFilter, setShowFilter] = useState<boolean>(false);
 
     return (
-        <QueryRequestProvider>
-            <QueryResponseProvider id={QUERIES.DEVICES_LIST} requestFunction={getDevices}>
-                <ListViewProvider>
-                    {
-                        searchParams.has('success') ?
-                            <FormSuccess type={searchParams.get('success')} model='device'/> : <></>
-                    }
-
-                    <KTCard>
-                        <KTCardHeader text='All Devices' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
-                                      actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
-                                          new FilterCardAction('devices-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/misc/devices', 'manage-misc')]}/>
-
-                        <KTCardBody>
-                            <DeviceIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
-
-                            <DeviceTable/>
-                        </KTCardBody>
-                    </KTCard>
-                </ListViewProvider>
-            </QueryResponseProvider>
-        </QueryRequestProvider>
-    )
-}
-
-const DeviceTable = () => {
-    const devices = useQueryResponseData();
-    const isLoading = useQueryResponseLoading();
-    const data = useMemo(() => devices, [devices]);
-    const columns = useMemo(() => DevicesColumns, []);
-
-    return (
-        <KrysTable data={data} columns={columns} model={devices.length > 0 ? devices[0] : null} isLoading={isLoading}/>
+        <KrysIndex queryId={QUERIES.DEVICES_LIST}
+                   requestFunction={getDevices}
+                   columnsArray={DevicesColumns}
+                   cardHeader={
+                       {
+                           text: 'All Devices',
+                           icon: 'fa-regular fa-list',
+                           icon_style: 'fs-3 text-primary',
+                           actions: [new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
+                               new FilterCardAction('devices-list-filter', showFilter, setShowFilter),
+                               new CreateCardAction('/misc/devices', 'manage-misc')],
+                       }}
+                   showFilter={showFilter}
+                   setExportQuery={setExportQuery}
+                   FilterComponent={DeviceIndexFilter}
+        />
     )
 }
 
