@@ -19,17 +19,20 @@ import {useKrysApp} from '../../../../../modules/general/KrysApp';
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
 import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';
 import {AdvertiserContactsColumns} from '../../core/edit/contacts/TableColumns';
-import KrysTableSearchFilter from '../../../../../components/tables/KrysTableSearchFilter';
 
 const AdvertiserContactEdit: React.FC = () => {
     const {advertiser} = useAdvertiser();
 
     const [form, setForm] = useState<UpdateContactsFormFields>(defaultUpdateContactsFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
+    const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
     const krysApp = useKrysApp();
 
     const onChangeHandler = (e: any) => {
+        // as long as we are updating the create form, we should set the table refresh to false
+        setRefreshTable(false);
+
         // in case of multi select, the element doesn't have a name because
         // we get only a list of values from the select and not an element with target value and name
         genericOnChangeHandler(e, form, setForm);
@@ -52,7 +55,8 @@ const AdvertiserContactEdit: React.FC = () => {
                             type: KrysToastType.SUCCESS
                         });
 
-                        // TODO we need to refresh the table
+                        // now that we have a new record successfully we need to refresh the table
+                        setRefreshTable(true);
 
                         // we need to clear the form data
                         setForm(defaultUpdateContactsFormFields);
@@ -118,6 +122,7 @@ const AdvertiserContactEdit: React.FC = () => {
 
                 {
                     advertiser ? <KrysInnerTable
+                        doRefetch={refreshTable}
                         slug="advertiser-contacts"
                         queryId={QUERIES.ADVERTISER_CONTACTS_LIST}
                         requestFunction={getAdvertiserContacts}

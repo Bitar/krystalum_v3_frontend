@@ -38,6 +38,7 @@ const AdvertiserEdit: React.FC = () => {
                 }
             });
         }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 

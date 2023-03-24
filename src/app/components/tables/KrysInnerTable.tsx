@@ -10,13 +10,15 @@ import {
 } from '../../modules/table/QueryResponseProvider';
 import {ListViewProvider} from '../../modules/table/ListViewProvider';
 import KrysTableSearchFilter from './KrysTableSearchFilter';
+import TableRefetch from './TableRefetch';
 
 type Props = {
     queryId: string,
     requestFunction: (id: number, query?: string) => Promise<any>,
     requestId: string | number,
     columnsArray: readonly Column<any>[],
-    slug: string
+    slug: string,
+    doRefetch: boolean
 }
 
 type TableProps = {
@@ -28,15 +30,19 @@ const KrysInnerTable: React.FC<Props> = ({
                                              requestFunction,
                                              requestId,
                                              columnsArray,
-                                             slug
+                                             slug,
+                                             doRefetch
                                          }) => {
 
     return (
         <QueryRequestProvider>
             <QueryResponseProvider id={queryId}
                                    requestFunction={requestFunction} requestId={requestId}>
+
+                <TableRefetch doRefetch={doRefetch}/>
+
                 <ListViewProvider>
-                    <KrysTableSearchFilter slug={slug} />
+                    <KrysTableSearchFilter slug={slug}/>
                     <InnerTable columnsArray={columnsArray}/>
                 </ListViewProvider>
             </QueryResponseProvider>
@@ -48,7 +54,9 @@ const InnerTable = ({columnsArray}: TableProps) => {
     const modelData = useQueryResponseData();
     const isLoading = useQueryResponseLoading();
     const data = useMemo(() => modelData, [modelData]);
-    const columns = useMemo(() => columnsArray, []);
+    const columns = useMemo(() => columnsArray,
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        []);
 
     return (
         <KrysBorderlessTable data={data} columns={columns} model={modelData.length > 0 ? modelData[0] : null}
