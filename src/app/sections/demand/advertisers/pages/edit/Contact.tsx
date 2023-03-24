@@ -19,6 +19,7 @@ import {useKrysApp} from '../../../../../modules/general/KrysApp';
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
 import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';
 import {AdvertiserContactsColumns} from '../../core/edit/contacts/TableColumns';
+import KrysTableSearchFilter from '../../../../../components/tables/KrysTableSearchFilter';
 
 const AdvertiserContactEdit: React.FC = () => {
     const {advertiser} = useAdvertiser();
@@ -117,7 +118,7 @@ const AdvertiserContactEdit: React.FC = () => {
 
                 {
                     advertiser ? <KrysInnerTable
-                        // SearchFilterComponent={SearchFilter}
+                        slug="advertiser-contacts"
                         queryId={QUERIES.ADVERTISER_CONTACTS_LIST}
                         requestFunction={getAdvertiserContacts}
                         requestId={advertiser.id} columnsArray={AdvertiserContactsColumns}
