@@ -1,14 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
 import {ErrorMessage, Field, Form, Formik, FormikProps} from 'formik';
-import {Advertiser} from '../../../../../models/demand/Advertiser';
 import {defaultUpdateInfoFormFields, fillEditForm, UpdateAdvertiserSchema, UpdateInfoFormFields} from '../../core/form';
 import {useKrysApp} from '../../../../../modules/general/KrysApp';
 import {
     GenericErrorMessage, genericHandleSingleFile,
-    genericOnChangeHandler,
-    genericSingleSelectOnChangeHandler
+    genericOnChangeHandler
 } from '../../../../../helpers/form';
 import {updateAdvertiser} from '../../../../../requests/demand/Advertiser';
 import {extractErrors} from '../../../../../helpers/requests';
@@ -18,7 +15,6 @@ import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers';
 import FormErrors from '../../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
-import Select from 'react-select';
 import {generatePageTitle} from '../../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../../helpers/sections';
 import {filterData} from '../../../../../helpers/dataManipulation';
@@ -28,12 +24,12 @@ import {AdvertiserIndustry} from '../../../../../models/misc/AdvertiserIndustry'
 import {getAllAdvertiserIndustries} from '../../../../../requests/misc/AdvertiserIndustry';
 import SingleSelect from '../../../../../components/forms/SingleSelect';
 import {downloadOnClick} from '../../../../../helpers/general';
+import {useAdvertiser} from '../../core/AdvertiserContext';
+import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
 
-interface Props {
-    advertiser: Advertiser | null
-}
+const AdvertiserInfoEdit: React.FC = () => {
+    const {advertiser, setAdvertiser} = useAdvertiser();
 
-const AdvertiserInfoEdit: React.FC<Props> = ({advertiser}) => {
     const [form, setForm] = useState<UpdateInfoFormFields>(defaultUpdateInfoFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
@@ -42,8 +38,6 @@ const AdvertiserInfoEdit: React.FC<Props> = ({advertiser}) => {
     const [industries, setIndustries] = useState<AdvertiserIndustry[]>([]);
 
     const krysApp = useKrysApp();
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.DEMAND_ADVERTISERS, PageTypes.EDIT));
@@ -82,7 +76,7 @@ const AdvertiserInfoEdit: React.FC<Props> = ({advertiser}) => {
             setIsResourceLoaded(true);
 
             // we set the Edit Info Form based on the advertiser data
-            setForm(fillEditForm(advertiser))
+            setForm(fillEditForm(advertiser));
         }
     }, [advertiser]);
 
@@ -116,7 +110,12 @@ const AdvertiserInfoEdit: React.FC<Props> = ({advertiser}) => {
                             type: KrysToastType.SUCCESS
                         });
 
-                        // navigate(`/demand/advertisers`);
+                        // when we're done with the update, all the fields stay the same but we need to reset
+                        // the form to the new advertiser
+                        setForm(fillEditForm(advertiser));
+
+                        // we update the advertiser in the context
+                        setAdvertiser(response);
                     }
                 }
             );
@@ -125,6 +124,8 @@ const AdvertiserInfoEdit: React.FC<Props> = ({advertiser}) => {
 
     return (
         <KTCard className='card-bordered border-1'>
+            <KTCardHeader text='Update Basic Information' />
+
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 

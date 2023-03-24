@@ -9,6 +9,12 @@ export type AdvertiserContact = {
     contact_info: string
 }
 
+export type AdvertiserContactPaginate = Response<AdvertiserContact[]>;
+
+export type AdvertiserContactList = {
+    data: AdvertiserContact[]
+}
+
 export type AdvertiserInfo = {
     id: number,
     address: string,
@@ -29,5 +35,3 @@ export type AdvertiserPaginate = Response<Advertiser[]>;
 export type AdvertiserList = {
     data: Advertiser[]
 }
-
-// export const defaultAdvertiser: Advertiser = {id: 0, name: '', info: null};

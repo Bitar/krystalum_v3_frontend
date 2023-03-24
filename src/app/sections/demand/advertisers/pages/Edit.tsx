@@ -12,6 +12,7 @@ import {Advertiser} from '../../../../models/demand/Advertiser';
 import {getAdvertiser} from '../../../../requests/demand/Advertiser';
 import AdvertiserInfoEdit from './edit/Info';
 import AdvertiserContactEdit from './edit/Contact';
+import {AdvertiserContext} from '../core/AdvertiserContext';
 
 const AdvertiserEdit: React.FC = () => {
     const [advertiser, setAdvertiser] = useState<Advertiser | null>(null);
@@ -64,7 +65,7 @@ const AdvertiserEdit: React.FC = () => {
 
     return (
         <KTCard className='mb-5'>
-            <KTCardHeader text="Edit Advetiser" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
+            <KTCardHeader text="Edit Advertiser" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
 
             <KTCardBody>
                 <Tab.Container defaultActiveKey='settingsNav-0'>
@@ -89,15 +90,20 @@ const AdvertiserEdit: React.FC = () => {
                             </Nav>
                         </div>
                         <div className='col-lg-8 col-xl-9'>
-                            <Tab.Content>
-                                <Tab.Pane eventKey='settingsNav-0'>
-                                    <AdvertiserInfoEdit advertiser={advertiser}/>
-                                </Tab.Pane>
+                            <AdvertiserContext.Provider value={{
+                                advertiser: advertiser,
+                                setAdvertiser: setAdvertiser
+                            }}>
+                                <Tab.Content>
+                                    <Tab.Pane eventKey='settingsNav-0'>
+                                        <AdvertiserInfoEdit />
+                                    </Tab.Pane>
 
-                                <Tab.Pane eventKey='settingsNav-1'>
-                                    <AdvertiserContactEdit advertiser={advertiser}/>
-                                </Tab.Pane>
-                            </Tab.Content>
+                                    <Tab.Pane eventKey='settingsNav-1'>
+                                        <AdvertiserContactEdit />
+                                    </Tab.Pane>
+                                </Tab.Content>
+                            </AdvertiserContext.Provider>
                         </div>
                     </div>
                 </Tab.Container>
