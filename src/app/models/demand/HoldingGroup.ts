@@ -1,5 +1,5 @@
 import {Response} from '../../../_metronic/helpers';
-import {defaultRegion, Region} from '../misc/Region';
+import {Region} from '../misc/Region';
 import {TradingDesk} from './TradingDesk';
 
 export type HoldingGroup = {
@@ -14,5 +14,3 @@ export type HoldingGroupPaginate = Response<HoldingGroup[]>;
 export type HoldingGroupList = {
     data: HoldingGroup[]
 }
-
-export const defaultHoldingGroup: HoldingGroup = {id: 0, name: "", region: defaultRegion, tradingDesk: null};

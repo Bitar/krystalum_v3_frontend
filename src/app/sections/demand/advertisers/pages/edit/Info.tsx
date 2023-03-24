@@ -187,10 +187,10 @@ const AdvertiserInfoEdit: React.FC<Props> = ({advertiser}) => {
                                            onChange={(e: any) => handleFile(e, formik)}/>
 
                                     {
-                                        advertiser?.info?.tradeLicensePath &&
+                                        advertiser?.info?.trade_license_path &&
 
-                                        <a href={advertiser?.info?.tradeLicensePath}
-                                           onClick={() => downloadOnClick(advertiser?.info?.tradeLicensePath)}
+                                        <a href={advertiser?.info?.trade_license_path}
+                                           onClick={() => downloadOnClick(advertiser?.info?.trade_license_path)}
                                            className="d-flex align-items-center text-muted text-hover-krys py-1 mt-3"
                                            style={{wordBreak: "break-word"}}>
                                             <i className="fa-solid fa-download text-warning me-2"></i> <span className="pt-1">Download

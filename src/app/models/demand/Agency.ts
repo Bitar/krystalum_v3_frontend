@@ -1,5 +1,5 @@
 import {Response} from '../../../_metronic/helpers';
-import {defaultRegion, Region} from '../misc/Region';
+import {Region} from '../misc/Region';
 import {HoldingGroup} from './HoldingGroup';
 
 export type Agency = {
@@ -9,10 +9,9 @@ export type Agency = {
     holdingGroup: HoldingGroup | null
 };
 
+
 export type AgencyPaginate = Response<Agency[]>;
 
 export type AgencyList = {
     data: Agency[]
 }
-
-export const defaultAgency: Agency = {id: 0, name: '', region: defaultRegion, holdingGroup: null};
