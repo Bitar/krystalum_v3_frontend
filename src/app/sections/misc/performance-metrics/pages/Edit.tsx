@@ -16,9 +16,12 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {getPerformanceMetric, updatePerformanceMetric} from '../../../../requests/misc/PerformanceMetric';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
 
 
 const PerformanceMetricEdit: React.FC = () => {
+    const [performanceMetric, setPerformanceMetric] = useState<PerformanceMetric|null>(null);
+
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -40,6 +43,7 @@ const PerformanceMetricEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current performance metric to edit
+                    setPerformanceMetric(response);
                     setForm(response);
                 }
             });
@@ -48,7 +52,10 @@ const PerformanceMetricEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_PERFORMANCE_METRICS, PageTypes.EDIT, form.name))
+        if(performanceMetric) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_PERFORMANCE_METRICS, PageTypes.EDIT, performanceMetric.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -57,21 +64,23 @@ const PerformanceMetricEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the performance metrics data by doing API call with form
-        updatePerformanceMetric(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the updated performance metric so we're good
-                krysApp.setAlert({message: new AlertMessageGenerator('performance metric', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+        if(performanceMetric) {
+            // we need to update the performance metrics data by doing API call with form
+            updatePerformanceMetric(performanceMetric.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the updated performance metric so we're good
+                    krysApp.setAlert({message: new AlertMessageGenerator('performance metric', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
 
-                navigate(`/misc/performance-metrics`);
-            }
-        });
+                    navigate(`/misc/performance-metrics`);
+                }
+            });
+        }
     }
 
     return (

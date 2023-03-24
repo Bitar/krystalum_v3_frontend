@@ -41,12 +41,12 @@ export const storeWebsitePage = async (websitePage: any): Promise<WebsitePage | 
         });
 }
 
-export const updateWebsitePage = async (websitePage: any): Promise<WebsitePage | AxiosError | undefined> => {
+export const updateWebsitePage = async (id: number, websitePage: any): Promise<WebsitePage | AxiosError | undefined> => {
     let formData = createFormData(websitePage);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + websitePage.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

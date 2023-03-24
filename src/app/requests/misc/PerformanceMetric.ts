@@ -42,12 +42,12 @@ export const storePerformanceMetric = async (performanceMetric: any): Promise<Pe
         });
 }
 
-export const updatePerformanceMetric = async (performanceMetric: any): Promise<PerformanceMetric | AxiosError | undefined> => {
+export const updatePerformanceMetric = async (id: number, performanceMetric: any): Promise<PerformanceMetric | AxiosError | undefined> => {
     let formData = createFormData(performanceMetric);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + performanceMetric.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

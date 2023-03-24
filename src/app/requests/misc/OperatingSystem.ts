@@ -41,12 +41,12 @@ export const storeOperatingSystem = async (operatingSystem: any): Promise<Operat
         });
 }
 
-export const updateOperatingSystem = async (operatingSystem: any): Promise<OperatingSystem | AxiosError | undefined> => {
+export const updateOperatingSystem = async (id: number, operatingSystem: any): Promise<OperatingSystem | AxiosError | undefined> => {
     let formData = createFormData(operatingSystem);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + operatingSystem.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

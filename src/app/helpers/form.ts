@@ -5,7 +5,7 @@ export const genericOnChangeHandler = (e: any, form: any, setForm: React.Dispatc
     const value = e.target.value;
     const name = e.target.name;
 
-    if(name) {
+    if (name) {
         setForm({
             ...form,
             [name]: value
@@ -23,8 +23,8 @@ export const genericMultiSelectOnChangeHandler = (e: any, form: any, setForm: Re
     }
 };
 
-export const genericSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string, isFilter=false) => {
-    if(e) {
+export const genericSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string, isFilter = false) => {
+    if (e) {
         if (isFilter) {
             setForm({...form, [key]: e.id});
         } else {
@@ -40,7 +40,7 @@ export const genericSelectOnChangeHandler = (e: any, form: any, setForm: React.D
 };
 
 export const genericSingleSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
-    if(e) {
+    if (e) {
         setForm({...form, [key]: e.id})
     } else {
         // this happens when we're trying to unselect an option
@@ -52,10 +52,10 @@ export const genericSingleSelectOnChangeHandler = (e: any, form: any, setForm: R
 }
 
 export const SUPPORTED_IMAGE_FORMATS = [
-    "image/jpg",
-    "image/jpeg",
-    "image/gif",
-    "image/png"
+    'image/jpg',
+    'image/jpeg',
+    'image/gif',
+    'image/png'
 ];
 export const genericHandleSingleFile = (e: any, formik: FormikProps<any>, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
     let file = e.target.files[0];
@@ -63,4 +63,15 @@ export const genericHandleSingleFile = (e: any, formik: FormikProps<any>, form: 
     setForm({...form, [key]: file});
 
     formik.setFieldValue(key, file);
+};
+
+export const genericDateOnChangeHandler = (date: Date | null, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
+    if (date) {
+        const formattedDate = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+
+        setForm({...form, [key]: formattedDate});
+    } else {
+        // in case the user removed the date then we should reset it (date will be null)
+        setForm({...form, [key]: date});
+    }
 };

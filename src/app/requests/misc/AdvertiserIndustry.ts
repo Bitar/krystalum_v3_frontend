@@ -46,12 +46,12 @@ export const storeAdvertiserIndustry = async (advertiserIndustry: any): Promise<
         });
 }
 
-export const updateAdvertiserIndustry = async (advertiserIndustry: any): Promise<AdvertiserIndustry | AxiosError | undefined> => {
+export const updateAdvertiserIndustry = async (id: number, advertiserIndustry: any): Promise<AdvertiserIndustry | AxiosError | undefined> => {
     let formData = createFormData(advertiserIndustry);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + advertiserIndustry.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

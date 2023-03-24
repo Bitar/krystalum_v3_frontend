@@ -24,18 +24,6 @@ export const getPermissions = (query?: String): Promise<PermissionPaginate> => {
     });
 }
 
-// export const exportPermissions = async (query?: String): Promise<ExportUrl | AxiosError | undefined> => {
-//     let url = `${ENDPOINT}/export`;
-//
-//     if (query) {
-//         url += `?${query}`;
-//     }
-//
-//     return axios.get(url).then((response: AxiosResponse) => response.data).catch((error) => {
-//         return error;
-//     });
-// }
-
 export const getPermission = async (id: number): Promise<Permission | AxiosError | undefined> => {
     return await axios.get(ENDPOINT + '/' + id)
         .then(res => res.data.data).catch((error) => {
@@ -53,12 +41,12 @@ export const storePermission = async (permission: any): Promise<Permission | Axi
         });
 }
 
-export const updatePermission = async (permission: any): Promise<Permission | AxiosError | undefined> => {
+export const updatePermission = async (id: number, permission: any): Promise<Permission | AxiosError | undefined> => {
     let formData = createFormData(permission);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + permission.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

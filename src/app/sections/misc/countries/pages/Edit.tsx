@@ -18,10 +18,13 @@ import {getCountry, updateCountry} from '../../../../requests/misc/Country';
 import {CountrySchema} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {defaultFormFields, FormFields} from "../core/form";
+import {Country} from '../../../../models/misc/Country';
 
 
 const CountryEdit: React.FC = () => {
-    const [form, setForm] = useState<FormFields>(defaultFormFields)
+    const [country, setCountry] = useState<Country|null>(null);
+
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -42,6 +45,7 @@ const CountryEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current country to edit
+                    setCountry(response);
                     setForm(response);
                 }
             });
@@ -50,7 +54,10 @@ const CountryEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_COUNTRIES, PageTypes.EDIT, form.name))
+        if(country) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_COUNTRIES, PageTypes.EDIT, country.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -59,20 +66,22 @@ const CountryEdit: React.FC = () => {
     };
 
     const handleEdit = () => {
-        // we need to update the country's data by doing API call with form
-        updateCountry(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the booking country so we're good
-                krysApp.setAlert({message: new AlertMessageGenerator('country', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                navigate(`/misc/countries`);
-            }
-        });
+        if(country) {
+            // we need to update the country's data by doing API call with form
+            updateCountry(country.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the booking country so we're good
+                    krysApp.setAlert({message: new AlertMessageGenerator('country', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+                    navigate(`/misc/countries`);
+                }
+            });
+        }
     }
 
     return (

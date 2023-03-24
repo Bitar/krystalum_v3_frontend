@@ -43,12 +43,12 @@ export const storeVertical = async (vertical: any): Promise<Vertical | AxiosErro
         });
 }
 
-export const updateVertical = async (vertical: any): Promise<Vertical | AxiosError | undefined> => {
+export const updateVertical = async (id: number, vertical: any): Promise<Vertical | AxiosError | undefined> => {
     let formData = createFormData(vertical);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + vertical.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

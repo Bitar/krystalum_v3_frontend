@@ -10,5 +10,3 @@ export type TechnologyPaginate = Response<Technology[]>;
 export type TechnologyList = {
     data: Technology[]
 }
-
-export const defaultTechnology: Technology = {id: 0, name: ""};

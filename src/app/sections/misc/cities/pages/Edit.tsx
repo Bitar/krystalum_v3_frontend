@@ -17,7 +17,7 @@ import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import {City, defaultCity} from '../../../../models/misc/City';
+import {City} from '../../../../models/misc/City';
 import {getCity, updateCity} from '../../../../requests/misc/City';
 import Select from 'react-select';
 import {Country} from '../../../../models/misc/Country';
@@ -27,7 +27,8 @@ import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {filterData} from '../../../../helpers/dataManipulation';
 
 const CityEdit: React.FC = () => {
-    const [city, setCity] = useState<City>(defaultCity);
+    const [city, setCity] = useState<City|null>(null);
+
     const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -75,7 +76,10 @@ const CityEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_CITIES, PageTypes.EDIT, city.name))
+        if(city) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_CITIES, PageTypes.EDIT, city.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [city]);
 
@@ -88,23 +92,25 @@ const CityEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the city's data by doing API call with form
-        updateCity(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the booking city so we're good
-                krysApp.setAlert({
-                    message: new AlertMessageGenerator('city', Actions.EDIT, KrysToastType.SUCCESS).message,
-                    type: KrysToastType.SUCCESS
-                })
-                navigate(`/misc/cities`);
-            }
-        });
+        if(city) {
+            // we need to update the city's data by doing API call with form
+            updateCity(city.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the booking city so we're good
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('city', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
+                    navigate(`/misc/cities`);
+                }
+            });
+        }
     }
 
     return (

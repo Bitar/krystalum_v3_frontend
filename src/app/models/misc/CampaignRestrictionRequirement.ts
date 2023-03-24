@@ -10,5 +10,3 @@ export type CampaignRestrictionRequirementPaginate = Response<CampaignRestrictio
 export type CampaignRestrictionRequirementList = {
     data: CampaignRestrictionRequirement[]
 }
-
-export const defaultCampaignRestrictionRequirement: CampaignRestrictionRequirement = {id: 0, name: ""};

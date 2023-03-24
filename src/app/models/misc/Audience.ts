@@ -10,5 +10,3 @@ export type AudiencePaginate = Response<Audience[]>;
 export type AudienceList = {
     data: Audience[]
 }
-
-export const defaultAudience: Audience = {id: 0, name: ''};

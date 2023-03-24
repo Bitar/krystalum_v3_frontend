@@ -10,5 +10,3 @@ export type CampaignTypePaginate = Response<CampaignType[]>;
 export type CampaignTypeList = {
     data: CampaignType[]
 }
-
-export const defaultCampaignType: CampaignType = {id: 0, name: ''};

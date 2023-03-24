@@ -42,12 +42,12 @@ export const storeObjective = async (objective: any): Promise<Objective | AxiosE
         });
 }
 
-export const updateObjective = async (objective: any): Promise<Objective | AxiosError | undefined> => {
+export const updateObjective = async (id: number, objective: any): Promise<Objective | AxiosError | undefined> => {
     let formData = createFormData(objective);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + objective.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

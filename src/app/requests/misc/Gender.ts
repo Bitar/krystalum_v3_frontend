@@ -41,12 +41,12 @@ export const storeGender = async (gender: any): Promise<Gender | AxiosError | un
         });
 }
 
-export const updateGender = async (gender: any): Promise<Gender | AxiosError | undefined> => {
+export const updateGender = async (id: number, gender: any): Promise<Gender | AxiosError | undefined> => {
     let formData = createFormData(gender);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + gender.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

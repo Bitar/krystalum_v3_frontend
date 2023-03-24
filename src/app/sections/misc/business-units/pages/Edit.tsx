@@ -16,9 +16,12 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {getBusinessUnit, updateBusinessUnit} from '../../../../requests/misc/BusinessUnit';
 import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {BusinessUnit} from '../../../../models/misc/BusinessUnit';
 
 
 const BusinessUnitEdit: React.FC = () => {
+    const [businessUnit, setBusinessUnit] = useState<BusinessUnit | null>(null);
+
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -40,6 +43,7 @@ const BusinessUnitEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current business unit to edit
+                    setBusinessUnit(response);
                     setForm(response);
                 }
             });
@@ -48,7 +52,10 @@ const BusinessUnitEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUSINESS_UNITS, PageTypes.EDIT, form.name))
+        if (businessUnit) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUSINESS_UNITS, PageTypes.EDIT, businessUnit.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -57,24 +64,26 @@ const BusinessUnitEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the business units data by doing API call with form
-        updateBusinessUnit(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the updated business unit so we're good
-                krysApp.setAlert({
-                    message: new AlertMessageGenerator('business unit', Actions.EDIT, KrysToastType.SUCCESS).message,
-                    type: KrysToastType.SUCCESS
-                })
+        if (businessUnit) {
+            // we need to update the business units data by doing API call with form
+            updateBusinessUnit(businessUnit.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the updated business unit so we're good
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('business unit', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
 
-                navigate(`/misc/business-units`);
-            }
-        });
+                    navigate(`/misc/business-units`);
+                }
+            });
+        }
     }
 
     return (

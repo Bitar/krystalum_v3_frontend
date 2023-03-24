@@ -20,9 +20,12 @@ import {
     getCampaignRestrictionRequirement,
     updateCampaignRestrictionRequirement
 } from '../../../../requests/misc/CampaignRestrictionRequirement';
+import {CampaignRestrictionRequirement} from '../../../../models/misc/CampaignRestrictionRequirement';
 
 
 const CampaignRestrictionRequirementEdit: React.FC = () => {
+    const [campaignRestriction, setCampaignRestriction] = useState<CampaignRestrictionRequirement | null>(null);
+
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -44,6 +47,7 @@ const CampaignRestrictionRequirementEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current campaign restriction requirement to edit
+                    setCampaignRestriction(response);
                     setForm(response);
                 }
             });
@@ -52,7 +56,10 @@ const CampaignRestrictionRequirementEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_CAMPAIGN_RESTRICTION_REQUIREMENTS, PageTypes.EDIT, form.name))
+        if(campaignRestriction) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_CAMPAIGN_RESTRICTION_REQUIREMENTS, PageTypes.EDIT, campaignRestriction.name));
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -61,34 +68,38 @@ const CampaignRestrictionRequirementEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the campaign restriction requirement's data by doing API call with form
-        updateCampaignRestrictionRequirement(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the updated campaign restriction requirement so we're good
-                krysApp.setAlert({
-                    message: new AlertMessageGenerator('campaign restriction requirement', Actions.EDIT, KrysToastType.SUCCESS).message,
-                    type: KrysToastType.SUCCESS
-                });
+        if (campaignRestriction) {
+            // we need to update the campaign restriction requirement's data by doing API call with form
+            updateCampaignRestrictionRequirement(campaignRestriction.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the updated campaign restriction requirement so we're good
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('campaign restriction requirement', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    });
 
-                navigate(`/misc/campaign-restriction-requirements`);
-            }
-        });
+                    navigate(`/misc/campaign-restriction-requirements`);
+                }
+            });
+        }
     }
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Campaign Restriction Requirement" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
+            <KTCardHeader text="Edit Campaign Restriction Requirement" icon="fa-solid fa-pencil"
+                          icon_style="fs-3 text-warning"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={CampaignRestrictionRequirementSchema} onSubmit={handleEdit}
+                <Formik initialValues={form} validationSchema={CampaignRestrictionRequirementSchema}
+                        onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         (formik) => (
