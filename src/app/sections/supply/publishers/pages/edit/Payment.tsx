@@ -18,7 +18,7 @@ import {Publisher} from '../../../../../models/supply/publisher/Publisher';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
-import KrysIndex from '../../partials/KrysIndex';
+import KrysIndex from '../../../../../components/tables/KrysIndex';
 import {defaultFormFields, FormFields, PaymentSchema} from '../../core/edit/payment/form';
 import {getPublisherPayments, storePublisherPayment} from '../../../../../requests/supply/publisher/PublisherPayment';
 import {PublisherPaymentsColumns} from '../../core/edit/payment/TableColumns';
@@ -138,11 +138,11 @@ const PublisherPayment: React.FC<Props> = ({publisher}) => {
 
                 <div className="separator separator-dashed my-10"></div>
 
-                <KrysIndex queryId={QUERIES.PUBLISHER_PAYMENTS_LIST}
-                           requestFunction={getPublisherPayments}
-                           columnsArray={PublisherPaymentsColumns}
-                           table={'borderless'}
-                           cardBodyClassNames={'p-0'}></KrysIndex>
+                {/*<KrysIndex queryId={QUERIES.PUBLISHER_PAYMENTS_LIST}*/}
+                {/*           requestFunction={() => getPublisherPayments(publisher)}*/}
+                {/*           columnsArray={PublisherPaymentsColumns}*/}
+                {/*           table={'borderless'}*/}
+                {/*           cardBodyClassNames={'p-0'}></KrysIndex>*/}
             </KTCardBody>
         </KTCard>
     );

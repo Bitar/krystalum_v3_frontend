@@ -113,6 +113,8 @@ const BasicInformation: React.FC<Props> = ({publisher}) => {
                         message: new AlertMessageGenerator('publisher', Actions.EDIT, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS
                     });
+
+                    setFormErrors([]);
                 }
             }
         );

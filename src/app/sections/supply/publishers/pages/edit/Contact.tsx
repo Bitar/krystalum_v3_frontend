@@ -26,7 +26,11 @@ import {
     storePublisherContact
 } from '../../../../../requests/supply/publisher/PublisherContact';
 import {ContactType} from '../../../../../models/supply/publisher/PublisherContact';
-import KrysIndex from '../../partials/KrysIndex';
+import {
+    useQueryResponse
+} from '../../../../../modules/table/QueryResponseProvider';
+import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';
+import SearchFilter from '../../partials/SearchFilter';
 
 interface Props {
     publisher: Publisher | null
@@ -39,6 +43,7 @@ const PublisherContact: React.FC<Props> = ({publisher}) => {
     const [contactTypes, setContactTypes] = useState<ContactType[]>([]);
 
     const krysApp = useKrysApp();
+    const {refetch} = useQueryResponse()
 
     useEffect(() => {
         if (publisher) {
@@ -58,6 +63,7 @@ const PublisherContact: React.FC<Props> = ({publisher}) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [publisher]);
+
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
@@ -82,6 +88,8 @@ const PublisherContact: React.FC<Props> = ({publisher}) => {
                         message: new AlertMessageGenerator('publisher contact details', Actions.CREATE, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS
                     });
+
+                    refetch();
                 }
             }
         );
@@ -129,7 +137,15 @@ const PublisherContact: React.FC<Props> = ({publisher}) => {
 
                 <div className="separator separator-dashed my-10"></div>
 
-                <KrysIndex queryId={QUERIES.PUBLISHER_CONTACTS_LIST} requestFunction={() => getPublisherContacts(publisher)} columnsArray={PublisherContactsColumns} table={'borderless'} cardBodyClassNames={'p-0'}></KrysIndex>
+                {
+                    publisher &&
+                    <KrysInnerTable
+                        SearchFilterComponent={SearchFilter}
+                        queryId={QUERIES.PUBLISHER_CONTACTS_LIST}
+                                    requestFunction={getPublisherContacts}
+                                    requestId={publisher.id} columnsArray={PublisherContactsColumns}
+                    ></KrysInnerTable>
+                }
             </KTCardBody>
         </KTCard>
     );

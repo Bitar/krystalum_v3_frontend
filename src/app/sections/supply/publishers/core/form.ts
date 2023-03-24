@@ -39,6 +39,6 @@ export const PublisherSchema = Yup.object().shape({
         then: Yup.string().required(),
     }),
     email: Yup.string().notRequired().email(),
-    // hq_address: Yup.string().notRequired().nullable(),
+    hq_address: Yup.string().notRequired(),
     hq_country_id: Yup.number().notRequired(),
 });

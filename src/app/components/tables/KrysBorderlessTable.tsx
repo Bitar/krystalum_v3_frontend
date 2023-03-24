@@ -20,14 +20,13 @@ const KrysTable: React.FC<Props> = ({data, columns, model, isLoading}) => {
     });
 
     return (
-        // className="border rounded px-5"
         <div>
             <div className='table-responsive rounded'>
                 <Table className='align-middle fs-6 gy-5 gs-7 dataTable no-footer'
                        {...getTableProps()}
                 >
                     <thead>
-                    <tr className='text-start text-muted fw-bolder fs-7 text-uppercase gs-0 bg-light'>
+                    <tr className='text-start text-muted fw-bolder fs-8 text-uppercase gs-0 bg-light'>
                         {headers.map((column: ColumnInstance<typeof model>) => (
                             <CustomHeaderColumn key={column.id} column={column}/>
                         ))}

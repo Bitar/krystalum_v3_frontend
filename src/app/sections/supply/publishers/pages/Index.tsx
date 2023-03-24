@@ -7,7 +7,8 @@ import {QUERIES} from '../../../../../_metronic/helpers';
 import {EXPORT_ENDPOINT, getPublishers} from '../../../../requests/supply/publisher/Publisher';
 import {PublishersColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
-import KrysIndex from '../partials/KrysIndex';
+import KrysIndex from '../../../../components/tables/KrysIndex';
+import PublisherIndexFilter from '../partials/IndexFilter';
 
 
 const PublisherIndex: React.FC = () => {
@@ -24,7 +25,7 @@ const PublisherIndex: React.FC = () => {
 
     return (
         <KrysIndex queryId={QUERIES.PUBLISHERS_LIST}
-                   requestFunction={()=>getPublishers('include[]=info&include[]=tier')}
+                   requestFunction={getPublishers}
                    columnsArray={PublishersColumns}
                    cardHeader={
                        {
@@ -37,7 +38,7 @@ const PublisherIndex: React.FC = () => {
                        }}
                    showFilter={showFilter}
                    setExportQuery={setExportQuery}
-                   table={'default'}
+                   FilterComponent={PublisherIndexFilter}
         ></KrysIndex>
     )
 }

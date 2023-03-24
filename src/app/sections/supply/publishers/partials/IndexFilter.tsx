@@ -4,11 +4,19 @@ import {Col, Collapse, Row} from 'react-bootstrap';
 
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
 import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
-import {genericOnChangeHandler} from '../../../../helpers/form';
+import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
 import {initialQueryState} from '../../../../../_metronic/helpers';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
-import {createFilterQueryParam} from "../../../../helpers/requests";
+import {createFilterQueryParam, extractErrors} from '../../../../helpers/requests';
+import Select from 'react-select';
+import {Country} from '../../../../models/misc/Country';
+import {Tier} from '../../../../models/misc/Tier';
+import {getAllCountries} from '../../../../requests/misc/Country';
+import axios from 'axios';
+import {filterData} from '../../../../helpers/dataManipulation';
+import {getAllTiers} from '../../../../requests/misc/Tier';
+import FormErrors from '../../../../components/forms/FormErrors';
 
 interface Props {
     showFilter: boolean,
@@ -18,9 +26,47 @@ interface Props {
 const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     const {updateState} = useQueryRequest();
 
+    const [tiers, setTiers] = useState<Tier[]>([]);
+    const [countries, setCountries] = useState<Country[]>([]);
+
+    const [filterErrors, setFilterErrors] = useState<string[]>([]);
     const [filters, setFilters] = useState<FilterFields>(defaultFilterFields);
     const [reset, setReset] = useState<boolean>(false);
 
+    useEffect(() => {
+        // get the tiers
+        getAllTiers().then(response => {
+            if (axios.isAxiosError(response)) {
+                setFilterErrors(extractErrors(response));
+            } else if (response === undefined) {
+                setFilterErrors([GenericErrorMessage])
+            } else {
+                // if we were able to get the list of tiers, then we fill our state with them
+                if (response.data) {
+                    setTiers(response.data);
+                }
+            }
+        });
+
+        // get the countries
+        getAllCountries().then(response => {
+            if (axios.isAxiosError(response)) {
+                setFilterErrors(extractErrors(response));
+            } else if (response === undefined) {
+                setFilterErrors([GenericErrorMessage])
+            } else {
+                // if we were able to get the list of countries, then we fill our state with them
+                if (response.data) {
+                    setCountries(filterData(response.data, 'name', 'All Countries'));
+                }
+            }
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const multiSelectChangeHandler = (e: any, key: string) => {
+        genericMultiSelectOnChangeHandler(e, filters, setFilters, key);
+    };
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, filters, setFilters);
@@ -37,7 +83,8 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
 
     useEffect(() => {
         handleFilter();
-        selectRef.current?.clearValue();
+        tiersSelectRef.current?.clearValue();
+        countriesSelectRef.current?.clearValue();
         setReset(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reset]);
@@ -47,36 +94,67 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
         setReset(true);
     }
 
-    const selectRef = useRef<any>(null);
+    const tiersSelectRef = useRef<any>(null);
+    const countriesSelectRef = useRef<any>(null);
 
     return (
         <Collapse in={showFilter}>
-            <Row id='#publishers-list-filter'>
+            <Row id="#publishers-list-filter">
                 <Col>
                     <div className="card card-rounded bg-primary bg-opacity-5 p-10 mb-15">
+                        <FormErrors errorMessages={filterErrors}/>
+
                         <Formik initialValues={defaultFilterFields} validationSchema={FilterSchema}
                                 onSubmit={handleFilter}
                                 enableReinitialize>
-                            {
-                                (formik) => (
-                                    <Form onChange={onChangeHandler}>
-                                        <Row>
-                                            <Col md={4}>
-                                                <KrysFormLabel text="Name" isRequired={false}/>
+                            <Form onChange={onChangeHandler}>
+                                <Row>
+                                    <Col md={4}>
+                                        <KrysFormLabel text="Name" isRequired={false}/>
 
-                                                <Field className="form-control fs-6" type="text"
-                                                       placeholder="Filter by name" name="name"/>
+                                        <Field className="form-control fs-6" type="text"
+                                               placeholder="Filter by name" name="name"/>
 
-                                                <div className="mt-1 text-danger">
-                                                    <ErrorMessage name="name" className="mt-2"/>
-                                                </div>
-                                            </Col>
-                                        </Row>
+                                        <div className="mt-1 text-danger">
+                                            <ErrorMessage name="name" className="mt-2"/>
+                                        </div>
+                                    </Col>
 
-                                        <FilterFormFooter resetFilter={resetFilter} />
-                                    </Form>
-                                )
-                            }
+                                    <Col md={4}>
+                                        <KrysFormLabel text="Tiers" isRequired={false}/>
+
+                                        <Select isMulti name="tiers"
+                                                options={tiers}
+                                                getOptionLabel={(tier) => tier?.name}
+                                                getOptionValue={(tier) => tier?.id.toString()}
+                                                onChange={(e) => multiSelectChangeHandler(e, 'tiers')}
+                                                ref={tiersSelectRef}
+                                                placeholder="Filter by tier"/>
+
+                                        <div className="mt-1 text-danger">
+                                            <ErrorMessage name="tiers" className="mt-2"/>
+                                        </div>
+                                    </Col>
+
+                                    <Col md={4}>
+                                        <KrysFormLabel text="Countries" isRequired={false}/>
+
+                                        <Select isMulti name="countries"
+                                                options={countries}
+                                                getOptionLabel={(country) => country?.name}
+                                                getOptionValue={(country) => country?.id.toString()}
+                                                onChange={(e) => multiSelectChangeHandler(e, 'countries')}
+                                                ref={countriesSelectRef}
+                                                placeholder="Filter by country"/>
+
+                                        <div className="mt-1 text-danger">
+                                            <ErrorMessage name="countries" className="mt-2"/>
+                                        </div>
+                                    </Col>
+                                </Row>
+
+                                <FilterFormFooter resetFilter={resetFilter}/>
+                            </Form>
                         </Formik>
                     </div>
                 </Col>

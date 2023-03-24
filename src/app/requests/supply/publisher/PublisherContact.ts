@@ -17,14 +17,14 @@ export const getContactTypes = async (publisher: Publisher|null): Promise<Contac
         return error;
     });
 }
-export const getPublisherContacts = (publisher: Publisher|null, query?: String): Promise<PublisherContactPaginate> => {
-    let url = `${ENDPOINT}${publisher?.id}`;
+export const getPublisherContacts = (publisherId: number, query?: String): Promise<PublisherContactPaginate> => {
+    let url = `${ENDPOINT}${publisherId}${CONTACTS_ENDPOINT}`;
 
     if (query) {
         url += `?${query}`;
     }
 
-    return axios.get(url + CONTACTS_ENDPOINT).then((response: AxiosResponse<PublisherContactPaginate>) => response.data).catch((error) => {
+    return axios.get(url).then((response: AxiosResponse<PublisherContactPaginate>) => response.data).catch((error) => {
         return error;
     });
 }

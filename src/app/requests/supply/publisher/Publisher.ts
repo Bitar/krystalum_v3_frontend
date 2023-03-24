@@ -5,7 +5,8 @@ import {Publisher, PublisherList, PublisherPaginate} from '../../../models/suppl
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publishers`
-const CONTACT_ENDPOINT = `${API_URL}/supply/publishers/contacts`
+
+const relations = 'include[]=tier&include[]=info&include[]=accountManager'
 
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
@@ -20,6 +21,13 @@ export const getPublishers = (query?: String): Promise<PublisherPaginate> => {
 
     if (query) {
         url += `?${query}`;
+        if (query.charAt(query.length - 1) === '&') {
+            url += relations;
+        } else {
+            url += `&${relations}`;
+        }
+    } else {
+        url += `?${relations}`
     }
 
     return axios.get(url).then((response: AxiosResponse<PublisherPaginate>) => response.data).catch((error) => {
@@ -28,7 +36,7 @@ export const getPublishers = (query?: String): Promise<PublisherPaginate> => {
 }
 
 export const getPublisher = async (id: number): Promise<Publisher | AxiosError | undefined> => {
-    return await axios.get(ENDPOINT + '/' + id + '?include[]=info&include[]=tier')
+    return await axios.get(`${ENDPOINT}/${id}?${relations}`)
         .then(res => res.data.data).catch((error) => {
             return error;
         });

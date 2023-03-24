@@ -28,17 +28,5 @@ export type PublisherList = {
     data: Publisher[]
 }
 
-export const defaultPublisher: Publisher = {
-    id: 0,
-    name: '',
-    tier: null,
-    integration_date: null,
-    revenue_type: 0,
-    revenue_share: null,
-    commitment: '',
-    info: null,
-    accountManager: null
-};
-
 export const REVENUE_SHARE = 1;
 export const COMMITMENT = 2;
