@@ -21,7 +21,7 @@ import Select from 'react-select';
 import {defaultFormFields, FormFields, VerticalSchema} from '../core/form';
 import {getAllVerticals, getVertical, updateVertical} from "../../../../requests/misc/Vertical";
 import {Vertical} from "../../../../models/misc/Vertical";
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {indentOptions} from '../../../../components/forms/IndentOptions';
 
 const VerticalEdit: React.FC = () => {

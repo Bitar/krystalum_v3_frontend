@@ -10,7 +10,7 @@ import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {defaultFormFields, FormFields, TechnologySchema} from '../core/form';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
-import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
+import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 import {storeTechnology} from '../../../../requests/misc/Technology';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';

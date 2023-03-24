@@ -16,7 +16,7 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeOperatingSystem} from '../../../../requests/misc/OperatingSystem';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 
 const OperatingSystemCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);

@@ -22,7 +22,7 @@ import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {getAllFormats, storeFormat} from '../../../../requests/misc/Format';
 import Select from "react-select";
 import {Format} from "../../../../models/misc/Format";
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import KrysCheckbox from "../../../../components/forms/KrysCheckbox";
 import {BuyingModel} from "../../../../models/misc/BuyingModel";
 import {getAllBuyingModels} from "../../../../requests/misc/BuyingModel";

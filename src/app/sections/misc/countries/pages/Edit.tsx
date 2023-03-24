@@ -16,7 +16,7 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {getCountry, updateCountry} from '../../../../requests/misc/Country';
 import {CountrySchema} from '../core/form';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {defaultFormFields, FormFields} from "../core/form";
 import {Country} from '../../../../models/misc/Country';
 

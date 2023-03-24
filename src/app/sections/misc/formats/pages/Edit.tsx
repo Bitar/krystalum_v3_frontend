@@ -21,7 +21,7 @@ import Select from 'react-select';
 import {defaultFormFields, FormFields, FormatSchema} from '../core/form';
 import {getAllFormats, getFormat, updateFormat} from "../../../../requests/misc/Format";
 import {Format} from "../../../../models/misc/Format";
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {getAllBuyingModels} from "../../../../requests/misc/BuyingModel";
 import {BuyingModel} from "../../../../models/misc/BuyingModel";
 import MultiSelect from "../../../../components/forms/MultiSelect";

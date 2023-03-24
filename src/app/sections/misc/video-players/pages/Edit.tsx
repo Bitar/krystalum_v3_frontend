@@ -15,7 +15,7 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {getVideoPlayer, updateVideoPlayer} from '../../../../requests/misc/VideoPlayer';
-import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
+import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 import {VideoPlayer} from '../../../../models/misc/VideoPlayer';
 
 

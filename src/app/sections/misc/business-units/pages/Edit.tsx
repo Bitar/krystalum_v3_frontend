@@ -15,7 +15,7 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {getBusinessUnit, updateBusinessUnit} from '../../../../requests/misc/BusinessUnit';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {BusinessUnit} from '../../../../models/misc/BusinessUnit';
 
 

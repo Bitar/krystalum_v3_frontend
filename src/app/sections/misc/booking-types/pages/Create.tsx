@@ -16,7 +16,7 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeBookingType} from '../../../../requests/misc/BookingType';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 
 const BookingTypeCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);

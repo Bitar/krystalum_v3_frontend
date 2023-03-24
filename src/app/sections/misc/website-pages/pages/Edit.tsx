@@ -15,7 +15,7 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, FormFields, WebsitePageSchema} from '../core/form';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {getWebsitePage, updateWebsitePage} from '../../../../requests/misc/WebsitePage';
 import {WebsitePage} from '../../../../models/misc/WebsitePage';
 

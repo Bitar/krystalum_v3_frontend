@@ -16,7 +16,7 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeBuyingModel} from '../../../../requests/misc/BuyingModel';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import Select from "react-select";
 import {PerformanceMetric} from "../../../../models/misc/PerformanceMetric";
 import {getAllPerformanceMetrics} from "../../../../requests/misc/PerformanceMetric";

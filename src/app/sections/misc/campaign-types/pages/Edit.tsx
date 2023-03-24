@@ -16,7 +16,7 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {getCampaignType, updateCampaignType} from '../../../../requests/misc/CampaignType';
 import {CampaignTypeSchema} from '../core/form';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {defaultFormFields, FormFields} from "../../audiences/core/form";
 import {CampaignType} from '../../../../models/misc/CampaignType';
 

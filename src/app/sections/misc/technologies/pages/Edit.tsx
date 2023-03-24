@@ -16,7 +16,7 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, FormFields, TechnologySchema} from '../core/form';
 import {getTechnology, updateTechnology} from '../../../../requests/misc/Technology';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {Technology} from '../../../../models/misc/Technology';
 
 
