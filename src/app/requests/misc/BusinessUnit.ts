@@ -42,12 +42,12 @@ export const storeBusinessUnit = async (businessUnit: any): Promise<BusinessUnit
         });
 }
 
-export const updateBusinessUnit = async (businessUnit: any): Promise<BusinessUnit | AxiosError | undefined> => {
+export const updateBusinessUnit = async (id: number, businessUnit: any): Promise<BusinessUnit | AxiosError | undefined> => {
     let formData = createFormData(businessUnit);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + businessUnit.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

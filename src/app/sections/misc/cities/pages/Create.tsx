@@ -23,7 +23,7 @@ import {storeCity} from '../../../../requests/misc/City';
 import Select from 'react-select';
 import {Country} from '../../../../models/misc/Country';
 import {getAllCountries} from '../../../../requests/misc/Country';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {filterData} from '../../../../helpers/dataManipulation';
 
 const CityCreate: React.FC = () => {

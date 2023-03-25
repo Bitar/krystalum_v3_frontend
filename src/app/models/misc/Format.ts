@@ -15,12 +15,3 @@ export type FormatPaginate = Response<Format[]>;
 export type FormatList = {
     data: Format[]
 }
-
-export const defaultFormat: Format = {
-    id: 0,
-    name: '',
-    code: '',
-    parent: null,
-    has_buying_model: 0,
-    buyingModels: []
-};

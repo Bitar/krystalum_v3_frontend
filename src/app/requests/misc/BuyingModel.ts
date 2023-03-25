@@ -41,12 +41,12 @@ export const storeBuyingModel = async (buyingModel: any): Promise<BuyingModel | 
         });
 }
 
-export const updateBuyingModel = async (buyingModel: any): Promise<BuyingModel | AxiosError | undefined> => {
+export const updateBuyingModel = async (id: number, buyingModel: any): Promise<BuyingModel | AxiosError | undefined> => {
     let formData = createFormData(buyingModel);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + buyingModel.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

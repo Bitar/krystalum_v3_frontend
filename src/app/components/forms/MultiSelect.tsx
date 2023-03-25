@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import Select from 'react-select';
 import {genericMultiSelectOnChangeHandler} from '../../helpers/form';
 
@@ -9,12 +9,25 @@ interface Props {
     form: any;
     setForm: React.Dispatch<React.SetStateAction<any>>;
     name: string;
+    doClear?: boolean;
 }
 
-const MultiSelect: React.FC<Props> = ({isResourceLoaded, options, defaultValue, form, setForm, name}) => {
+const MultiSelect: React.FC<Props> = ({isResourceLoaded, options, defaultValue, form, setForm, name, doClear = false}) => {
+    const selectRef = useRef<any>(null);
+
+    useEffect(() => {
+        if(doClear) {
+            selectRef.current?.clearValue();
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [doClear]);
+
     const multiSelectChangeHandler = (e: any) => {
         genericMultiSelectOnChangeHandler(e, form, setForm, name);
     };
+
+    const namePlaceHolder = name.replace(/_id/g, "").replace(/_/g, " ");
 
     return (
         <>
@@ -23,7 +36,8 @@ const MultiSelect: React.FC<Props> = ({isResourceLoaded, options, defaultValue, 
                                              options={options}
                                              getOptionLabel={(instance) => instance.name}
                                              getOptionValue={(instance) => instance.id.toString()}
-                                             placeholder={`Select one or more ${name}`}
+                                             placeholder={`Select one or more ${namePlaceHolder}(s)`}
+                                             ref={selectRef}
                                              onChange={multiSelectChangeHandler}/>
             }
 
@@ -32,7 +46,8 @@ const MultiSelect: React.FC<Props> = ({isResourceLoaded, options, defaultValue, 
                                             options={options}
                                             getOptionLabel={(instance) => instance.name}
                                             getOptionValue={(instance) => instance.id.toString()}
-                                            placeholder={`Select one or more ${name}`}
+                                            placeholder={`Select one or more ${namePlaceHolder}(s)`}
+                                            ref={selectRef}
                                             onChange={multiSelectChangeHandler}/>
             }
         </>

@@ -18,7 +18,7 @@ import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {Sections} from "../../../../helpers/sections";
 import MultiSelect from '../../../../components/forms/MultiSelect';
 
@@ -88,20 +88,22 @@ const RoleEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the permission's data by doing API call with form
-        updateRole(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the updated permission so we're good
-                krysApp.setAlert({message: new AlertMessageGenerator('role', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                navigate(`/iam/roles`);
-            }
-        });
+        if(role) {
+            // we need to update the permission's data by doing API call with form
+            updateRole(role.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the updated permission so we're good
+                    krysApp.setAlert({message: new AlertMessageGenerator('role', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+                    navigate(`/iam/roles`);
+                }
+            });
+        }
     }
 
     return (

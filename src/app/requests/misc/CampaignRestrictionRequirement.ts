@@ -46,12 +46,12 @@ export const storeCampaignRestrictionRequirement = async (campaignRestrictionReq
         });
 }
 
-export const updateCampaignRestrictionRequirement = async (campaignRestrictionRequirement: any): Promise<CampaignRestrictionRequirement | AxiosError | undefined> => {
+export const updateCampaignRestrictionRequirement = async (id: number, campaignRestrictionRequirement: any): Promise<CampaignRestrictionRequirement | AxiosError | undefined> => {
     let formData = createFormData(campaignRestrictionRequirement);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + campaignRestrictionRequirement.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

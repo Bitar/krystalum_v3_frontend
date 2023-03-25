@@ -22,7 +22,7 @@ import {storeRegion} from "../../../../requests/misc/Region";
 import Select from "react-select";
 import {Country} from "../../../../models/misc/Country";
 import {getAllCountries} from "../../../../requests/misc/Country";
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 
 const RegionCreate: React.FC = () => {
 

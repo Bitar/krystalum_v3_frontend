@@ -16,11 +16,14 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {getGender, updateGender} from '../../../../requests/misc/Gender';
 import {GenderSchema} from '../core/form';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {defaultFormFields, FormFields} from "../../audiences/core/form";
+import {Gender} from '../../../../models/misc/Gender';
 
 const GenderEdit: React.FC = () => {
-    const [form, setForm] = useState<FormFields>(defaultFormFields)
+    const [gender, setGender] = useState<Gender|null>(null);
+
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -41,6 +44,7 @@ const GenderEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current gender to edit
+                    setGender(response);
                     setForm(response);
                 }
             });
@@ -49,7 +53,10 @@ const GenderEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_GENDERS, PageTypes.EDIT, form.name))
+        if(gender) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_GENDERS, PageTypes.EDIT, gender.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -58,20 +65,22 @@ const GenderEdit: React.FC = () => {
     };
 
     const handleEdit = () => {
-        // we need to update the gender's data by doing API call with form
-        updateGender(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the gender so we're good
-                krysApp.setAlert({message: new AlertMessageGenerator('gender', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                navigate(`/misc/genders`);
-            }
-        });
+        if(gender) {
+            // we need to update the gender's data by doing API call with form
+            updateGender(gender.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the gender so we're good
+                    krysApp.setAlert({message: new AlertMessageGenerator('gender', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+                    navigate(`/misc/genders`);
+                }
+            });
+        }
     }
 
     return (

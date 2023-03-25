@@ -11,5 +11,3 @@ export type BookingTypePaginate = Response<BookingType[]>;
 export type BookingTypeList = {
     data: BookingType[]
 }
-
-export const defaultBookingType: BookingType = {id: 0, name: '', code: ''};

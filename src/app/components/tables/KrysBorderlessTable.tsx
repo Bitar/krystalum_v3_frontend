@@ -13,7 +13,7 @@ type Props = {
     isLoading: boolean
 }
 
-const KrysTable: React.FC<Props> = ({data, columns, model, isLoading}) => {
+const KrysBorderlessTable: React.FC<Props> = ({data, columns, model, isLoading}) => {
     const {getTableProps, getTableBodyProps, headers, rows, prepareRow} = useTable({
         columns,
         data,
@@ -56,4 +56,4 @@ const KrysTable: React.FC<Props> = ({data, columns, model, isLoading}) => {
     );
 }
 
-export default KrysTable;
+export default KrysBorderlessTable;

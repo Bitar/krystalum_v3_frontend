@@ -41,12 +41,12 @@ export const storeBookingType = async (bookingType: any): Promise<BookingType | 
         });
 }
 
-export const updateBookingType = async (bookingType: any): Promise<BookingType | AxiosError | undefined> => {
+export const updateBookingType = async (id: number, bookingType: any): Promise<BookingType | AxiosError | undefined> => {
     let formData = createFormData(bookingType);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + bookingType.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

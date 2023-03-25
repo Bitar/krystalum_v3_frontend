@@ -16,9 +16,12 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {getAdvertiserIndustry, updateAdvertiserIndustry} from '../../../../requests/misc/AdvertiserIndustry';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {AdvertiserIndustry} from '../../../../models/misc/AdvertiserIndustry';
 
 const AdvertiserIndustryEdit: React.FC = () => {
+    const [advertiserIndustry, setAdvertiserIndustry] = useState<AdvertiserIndustry|null>(null);
+
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -39,6 +42,8 @@ const AdvertiserIndustryEdit: React.FC = () => {
                 } else if (response === undefined) {
                     navigate('/error/400');
                 } else {
+                    setAdvertiserIndustry(response);
+
                     // we were able to fetch current advertiser industry to edit
                     setForm(response);
                 }
@@ -48,7 +53,10 @@ const AdvertiserIndustryEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_ADVERTISER_INDUSTRIES, PageTypes.EDIT, form.name))
+        if(advertiserIndustry) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_ADVERTISER_INDUSTRIES, PageTypes.EDIT, advertiserIndustry.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -57,23 +65,25 @@ const AdvertiserIndustryEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the advertiser industry's data by doing API call with form
-        updateAdvertiserIndustry(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the updated advertiser industries so we're good
-                krysApp.setAlert({
-                    message: new AlertMessageGenerator('advertiser industry', Actions.EDIT, KrysToastType.SUCCESS).message,
-                    type: KrysToastType.SUCCESS
-                })
-                navigate(`/misc/advertiser-industries`);
-            }
-        });
+        if(advertiserIndustry) {
+            // we need to update the advertiser industry's data by doing API call with form
+            updateAdvertiserIndustry(advertiserIndustry.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the updated advertiser industries so we're good
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('advertiser industry', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
+                    navigate(`/misc/advertiser-industries`);
+                }
+            });
+        }
     }
 
     return (

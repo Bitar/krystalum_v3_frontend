@@ -15,10 +15,13 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, FormFields, TierSchema} from '../core/form';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {getTier, updateTier} from '../../../../requests/misc/Tier';
+import {Tier} from '../../../../models/misc/Tier';
 
 const TierEdit: React.FC = () => {
+    const [tier, setTier] = useState<Tier | null>(null);
+
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -40,6 +43,7 @@ const TierEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current tier to edit
+                    setTier(response);
                     setForm(response);
                 }
             });
@@ -48,7 +52,10 @@ const TierEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_TIERS, PageTypes.EDIT, form.name))
+        if (tier) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_TIERS, PageTypes.EDIT, tier.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -57,24 +64,26 @@ const TierEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the tier's data by doing API call with form
-        updateTier(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the updated tier so we're good
-                krysApp.setAlert({
-                    message: new AlertMessageGenerator('tier', Actions.EDIT, KrysToastType.SUCCESS).message,
-                    type: KrysToastType.SUCCESS
-                })
+        if (tier) {
+            // we need to update the tier's data by doing API call with form
+            updateTier(tier.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the updated tier so we're good
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('tier', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
 
-                navigate(`/misc/tiers`);
-            }
-        });
+                    navigate(`/misc/tiers`);
+                }
+            });
+        }
     }
 
     return (

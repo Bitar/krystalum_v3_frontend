@@ -7,8 +7,7 @@ import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {
     GenericErrorMessage,
-    genericOnChangeHandler, genericSelectOnChangeHandler,
-    // genericSingleSelectOnChangeHandler
+    genericOnChangeHandler, genericSelectOnChangeHandler
 } from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
@@ -21,12 +20,13 @@ import {Sections} from '../../../../helpers/sections';
 import Select from 'react-select';
 import {defaultFormFields, FormFields, VerticalSchema} from '../core/form';
 import {getAllVerticals, getVertical, updateVertical} from "../../../../requests/misc/Vertical";
-import {defaultVertical, Vertical} from "../../../../models/misc/Vertical";
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {Vertical} from "../../../../models/misc/Vertical";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {indentOptions} from '../../../../components/forms/IndentOptions';
 
 const VerticalEdit: React.FC = () => {
-    const [vertical, setVertical] = useState<Vertical>(defaultVertical);
+    const [vertical, setVertical] = useState<Vertical|null>(null);
+
     const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -74,7 +74,10 @@ const VerticalEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_VERTICALS, PageTypes.EDIT, vertical.name))
+        if(vertical) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_VERTICALS, PageTypes.EDIT, vertical.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [vertical]);
 
@@ -87,24 +90,26 @@ const VerticalEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the vertical's data by doing API call with form
-        updateVertical(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the booking vertical so we're good
-                krysApp.setAlert({
-                    message: new AlertMessageGenerator('vertical', Actions.EDIT, KrysToastType.SUCCESS).message,
-                    type: KrysToastType.SUCCESS
-                });
+        if(vertical) {
+            // we need to update the vertical's data by doing API call with form
+            updateVertical(vertical.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the booking vertical so we're good
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('vertical', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    });
 
-                navigate(`/misc/verticals`);
-            }
-        });
+                    navigate(`/misc/verticals`);
+                }
+            });
+        }
     }
 
     return (

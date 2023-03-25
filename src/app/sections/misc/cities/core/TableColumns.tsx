@@ -29,7 +29,7 @@ const CitiesColumns: ReadonlyArray<Column<City>> = [
                 <ActionsCell
                     id={props.data[props.row.index].id}
                     path={'misc/cities'}
-                    queryKey={QUERIES.CITY_LIST}
+                    queryKey={QUERIES.CITIES_LIST}
                     showView={false}
                     showEdit={true}
                     title="Delete City"

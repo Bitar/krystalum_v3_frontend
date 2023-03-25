@@ -18,7 +18,7 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeKpi} from '../../../../requests/misc/Kpi';
 import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {getAllPerformanceMetrics} from "../../../../requests/misc/PerformanceMetric";
 import {PerformanceMetric} from "../../../../models/misc/PerformanceMetric";
 import Select from "react-select";

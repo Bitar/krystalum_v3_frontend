@@ -42,12 +42,12 @@ export const storeAdServer = async (adServer: any): Promise<AdServer | AxiosErro
         });
 }
 
-export const updateAdServer = async (adServer: any): Promise<AdServer | AxiosError | undefined> => {
+export const updateAdServer = async (id: number, adServer: any): Promise<AdServer | AxiosError | undefined> => {
     let formData = createFormData(adServer);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + adServer.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

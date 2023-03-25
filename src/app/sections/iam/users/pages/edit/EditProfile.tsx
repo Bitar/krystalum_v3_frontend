@@ -13,7 +13,7 @@ import {getAllRoles} from '../../../../../requests/iam/Role';
 import {extractErrors} from '../../../../../helpers/requests';
 import {GenericErrorMessage, genericHandleSingleFile, genericOnChangeHandler} from '../../../../../helpers/form';
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
-import {AlertMessageGenerator} from '../../../../../helpers/alertMessageGenerator';
+import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
 import FormErrors from '../../../../../components/forms/FormErrors';
 import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers';
 
@@ -70,23 +70,25 @@ const EditProfile: React.FC<Props> = ({user}) => {
     };
 
     const handleEdit = (e: any) => {
-        // send API request to create the user
-        updateUser(form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // we were able to store the user
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('user', Actions.EDIT, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    });
+        if(user) {
+            // send API request to create the user
+            updateUser(user.id, form).then(response => {
+                    if (axios.isAxiosError(response)) {
+                        // we need to show the errors
+                        setFormErrors(extractErrors(response));
+                    } else if (response === undefined) {
+                        // show generic error message
+                        setFormErrors([GenericErrorMessage])
+                    } else {
+                        // we were able to store the user
+                        krysApp.setAlert({
+                            message: new AlertMessageGenerator('user', Actions.EDIT, KrysToastType.SUCCESS).message,
+                            type: KrysToastType.SUCCESS
+                        });
+                    }
                 }
-            }
-        );
+            );
+        }
     };
 
     return (

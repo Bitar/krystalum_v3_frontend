@@ -49,8 +49,7 @@ const KrysIndex: React.FC<Props> = ({
 
                         <KTCardBody>
                             <FilterComponent showFilter={showFilter} setExportQuery={setExportQuery}/>
-
-                            <KrysIndexTable columnsArray={columnsArray}/>
+                            <IndexTable columnsArray={columnsArray}/>
                         </KTCardBody>
                     </KTCard>
                 </ListViewProvider>
@@ -59,7 +58,7 @@ const KrysIndex: React.FC<Props> = ({
     )
 }
 
-const KrysIndexTable = ({columnsArray}: TableProps) => {
+const IndexTable = ({columnsArray}: TableProps) => {
     const modelData = useQueryResponseData();
     const isLoading = useQueryResponseLoading();
     const data = useMemo(() => modelData, [modelData]);

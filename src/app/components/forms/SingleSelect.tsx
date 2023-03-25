@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {genericSingleSelectOnChangeHandler} from '../../helpers/form';
 import Select from 'react-select';
 
@@ -10,6 +10,7 @@ interface Props {
     setForm: React.Dispatch<React.SetStateAction<any>>;
     name: string;
     isClearable?: boolean;
+    doClear?: boolean;
 }
 
 const SingleSelect: React.FC<Props> = ({
@@ -19,8 +20,20 @@ const SingleSelect: React.FC<Props> = ({
                                            form,
                                            setForm,
                                            name,
-                                           isClearable = false
+                                           isClearable = false,
+                                           doClear = false
                                        }) => {
+
+    const selectRef = useRef<any>(null);
+
+    useEffect(() => {
+        if(doClear) {
+            selectRef.current?.clearValue();
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [doClear]);
+
     const singleSelectChangeHandler = (e: any) => {
         genericSingleSelectOnChangeHandler(e, form, setForm, name);
     };
@@ -36,6 +49,7 @@ const SingleSelect: React.FC<Props> = ({
                                              getOptionValue={(instance) => instance.id.toString()}
                                              placeholder={`Select ${namePlaceHolder}`}
                                              isClearable={isClearable}
+                                             ref={selectRef}
                                              onChange={singleSelectChangeHandler}/>
             }
 
@@ -46,6 +60,7 @@ const SingleSelect: React.FC<Props> = ({
                                             getOptionValue={(instance) => instance.id.toString()}
                                             placeholder={`Select ${namePlaceHolder}`}
                                             isClearable={isClearable}
+                                            ref={selectRef}
                                             onChange={singleSelectChangeHandler}/>
             }
         </>

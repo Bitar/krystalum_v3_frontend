@@ -16,11 +16,14 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {getCampaignType, updateCampaignType} from '../../../../requests/misc/CampaignType';
 import {CampaignTypeSchema} from '../core/form';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {defaultFormFields, FormFields} from "../../audiences/core/form";
+import {CampaignType} from '../../../../models/misc/CampaignType';
 
 const CampaignTypeEdit: React.FC = () => {
-    const [form, setForm] = useState<FormFields>(defaultFormFields)
+    const [campaignType, setCampaignType] = useState<CampaignType|null>(null);
+
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -41,6 +44,7 @@ const CampaignTypeEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current campaign type to edit
+                    setCampaignType(response);
                     setForm(response);
                 }
             });
@@ -49,7 +53,10 @@ const CampaignTypeEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_CAMPAIGN_TYPES, PageTypes.EDIT, form.name))
+        if(campaignType) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_CAMPAIGN_TYPES, PageTypes.EDIT, campaignType.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -58,20 +65,22 @@ const CampaignTypeEdit: React.FC = () => {
     };
 
     const handleEdit = () => {
-        // we need to update the campaign type's data by doing API call with form
-        updateCampaignType(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the campaign type so we're good
-                krysApp.setAlert({message: new AlertMessageGenerator('campaign type', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                navigate(`/misc/campaign-types`);
-            }
-        });
+        if(campaignType) {
+            // we need to update the campaign type's data by doing API call with form
+            updateCampaignType(campaignType.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the campaign type so we're good
+                    krysApp.setAlert({message: new AlertMessageGenerator('campaign type', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+                    navigate(`/misc/campaign-types`);
+                }
+            });
+        }
     }
 
     return (

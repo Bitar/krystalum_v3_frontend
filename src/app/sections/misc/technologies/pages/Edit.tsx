@@ -16,10 +16,13 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, FormFields, TechnologySchema} from '../core/form';
 import {getTechnology, updateTechnology} from '../../../../requests/misc/Technology';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {Technology} from '../../../../models/misc/Technology';
 
 
 const TechnologyEdit: React.FC = () => {
+    const [technology, setTechnology] = useState<Technology|null>(null);
+
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -41,6 +44,7 @@ const TechnologyEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current technology to edit
+                    setTechnology(response);
                     setForm(response);
                 }
             });
@@ -49,7 +53,10 @@ const TechnologyEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_TECHNOLOGIES, PageTypes.EDIT, form.name))
+        if(technology) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_TECHNOLOGIES, PageTypes.EDIT, technology.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -58,24 +65,26 @@ const TechnologyEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the technology's data by doing API call with form
-        updateTechnology(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the updated technology so we're good
-                krysApp.setAlert({
-                    message: new AlertMessageGenerator('technology', Actions.EDIT, KrysToastType.SUCCESS).message,
-                    type: KrysToastType.SUCCESS
-                })
+        if(technology) {
+            // we need to update the technology's data by doing API call with form
+            updateTechnology(technology.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the updated technology so we're good
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('technology', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
 
-                navigate(`/misc/technologies`);
-            }
-        });
+                    navigate(`/misc/technologies`);
+                }
+            });
+        }
     }
 
     return (

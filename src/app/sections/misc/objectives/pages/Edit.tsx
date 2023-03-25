@@ -16,10 +16,13 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {getObjective, updateObjective} from '../../../../requests/misc/Objective';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {Objective} from '../../../../models/misc/Objective';
 
 
 const ObjectiveEdit: React.FC = () => {
+    const [objective, setObjective] = useState<Objective|null>(null);
+
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -41,6 +44,7 @@ const ObjectiveEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current objective to edit
+                    setObjective(response);
                     setForm(response);
                 }
             });
@@ -49,7 +53,10 @@ const ObjectiveEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.MISC_OBJECTIVES, PageTypes.EDIT, form.name))
+        if(objective) {
+            krysApp.setPageTitle(generatePageTitle(Sections.MISC_OBJECTIVES, PageTypes.EDIT, objective.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form]);
 
@@ -58,25 +65,27 @@ const ObjectiveEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the objective's data by doing API call with form
-        updateObjective(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the updated objective so we're good
+        if(objective) {
+            // we need to update the objective's data by doing API call with form
+            updateObjective(objective.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the updated objective so we're good
 
-                krysApp.setAlert({
-                    message: new AlertMessageGenerator('objectives', Actions.EDIT, KrysToastType.SUCCESS).message,
-                    type: KrysToastType.SUCCESS
-                });
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('objectives', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    });
 
-                navigate(`/misc/objectives`);
-            }
-        });
+                    navigate(`/misc/objectives`);
+                }
+            });
+        }
     }
 
     return (

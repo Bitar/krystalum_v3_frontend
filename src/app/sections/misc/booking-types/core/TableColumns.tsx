@@ -29,7 +29,7 @@ const BookingTypesColumns: ReadonlyArray<Column<BookingType>> = [
                 <ActionsCell
                     id={props.data[props.row.index].id}
                     path={'misc/booking-types'}
-                    queryKey={QUERIES.BOOKING_TYPE_LIST}
+                    queryKey={QUERIES.BOOKING_TYPES_LIST}
                     showView={false}
                     showEdit={true}
                     title="Delete Booking Type"

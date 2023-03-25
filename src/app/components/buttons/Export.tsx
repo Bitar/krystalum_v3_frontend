@@ -5,7 +5,7 @@ import {Button} from 'react-bootstrap';
 import axios from 'axios';
 import {exportObjects, extractErrors} from '../../helpers/requests';
 import {GenericErrorMessage} from '../../helpers/form';
-import {AlertMessageGenerator} from '../../helpers/alertMessageGenerator';
+import {AlertMessageGenerator} from '../../helpers/AlertMessageGenerator';
 import {Actions, KrysToastType} from '../../helpers/variables';
 import {useKrysApp} from '../../modules/general/KrysApp';
 

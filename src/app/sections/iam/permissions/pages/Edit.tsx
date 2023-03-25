@@ -16,7 +16,7 @@ import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {Sections} from "../../../../helpers/sections";
 
 
@@ -64,7 +64,7 @@ const PermissionEdit: React.FC = () => {
 
     const handleEdit = (e: any) => {
         // we need to update the permission's data by doing API call with form
-        updatePermission(permission).then(response => {
+        updatePermission(permission.id, permission).then(response => {
             if (axios.isAxiosError(response)) {
                 // show errors
                 setFormErrors(extractErrors(response));

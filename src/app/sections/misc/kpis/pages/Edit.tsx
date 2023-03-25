@@ -19,11 +19,12 @@ import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
 import {getAllPerformanceMetrics} from '../../../../requests/misc/PerformanceMetric';
 import {getKpi, updateKpi} from '../../../../requests/misc/Kpi';
 import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
-import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
+import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 import MultiSelect from '../../../../components/forms/MultiSelect';
 
 const KpiEdit: React.FC = () => {
     const [kpi, setKpi] = useState<Kpi|null>(null);
+
     const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
@@ -85,21 +86,23 @@ const KpiEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the kpi's data by doing API call with form
-        updateKpi(form).then(response => {
-            if(axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if(response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the updated kpi so we're good
-                krysApp.setAlert({message: new AlertMessageGenerator('kpi', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS});
+        if(kpi) {
+            // we need to update the kpi's data by doing API call with form
+            updateKpi(kpi.id, form).then(response => {
+                if(axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if(response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the updated kpi so we're good
+                    krysApp.setAlert({message: new AlertMessageGenerator('kpi', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS});
 
-                navigate(`/misc/kpis`);
-            }
-        });
+                    navigate(`/misc/kpis`);
+                }
+            });
+        }
     }
 
     return (

@@ -42,12 +42,12 @@ export const storeVideoPlayer = async (videoPlayer: any): Promise<VideoPlayer | 
         });
 }
 
-export const updateVideoPlayer = async (videoPlayer: any): Promise<VideoPlayer | AxiosError | undefined> => {
+export const updateVideoPlayer = async (id: number, videoPlayer: any): Promise<VideoPlayer | AxiosError | undefined> => {
     let formData = createFormData(videoPlayer);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + videoPlayer.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

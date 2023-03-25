@@ -40,7 +40,7 @@ export const genericSelectOnChangeHandler = (e: any, form: any, setForm: React.D
 };
 
 export const genericSingleSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
-    if(e) {
+    if (e) {
         setForm({...form, [key]: e.id})
     } else {
         // this happens when we're trying to unselect an option
@@ -71,6 +71,7 @@ export const genericDateOnChangeHandler = (date: Date | null, form: any, setForm
 
         setForm({...form, [key]: formattedDate});
     } else {
+        // in case the user removed the date then we should reset it (date will be null)
         setForm({...form, [key]: date});
     }
 };

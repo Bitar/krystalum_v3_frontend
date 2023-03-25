@@ -41,12 +41,12 @@ export const storeLanguage = async (language: any): Promise<Language | AxiosErro
         });
 }
 
-export const updateLanguage = async (language: any): Promise<Language | AxiosError | undefined> => {
+export const updateLanguage = async (id:number, language: any): Promise<Language | AxiosError | undefined> => {
     let formData = createFormData(language);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + language.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

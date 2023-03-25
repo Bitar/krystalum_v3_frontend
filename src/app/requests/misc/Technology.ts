@@ -41,12 +41,12 @@ export const storeTechnology = async (technology: any): Promise<Technology | Axi
         });
 }
 
-export const updateTechnology = async (technology: any): Promise<Technology | AxiosError | undefined> => {
+export const updateTechnology = async (id: number, technology: any): Promise<Technology | AxiosError | undefined> => {
     let formData = createFormData(technology);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + technology.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

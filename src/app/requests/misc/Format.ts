@@ -43,12 +43,12 @@ export const storeFormat = async (format: any): Promise<Format | AxiosError | un
         });
 }
 
-export const updateFormat = async (format: any): Promise<Format | AxiosError | undefined> => {
+export const updateFormat = async (id: number, format: any): Promise<Format | AxiosError | undefined> => {
     let formData = createFormData(format);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + format.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }
