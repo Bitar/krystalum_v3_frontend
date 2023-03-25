@@ -3,6 +3,7 @@ import React from 'react';
 import {Publisher} from '../../../../models/supply/publisher/Publisher';
 import {KTCard, KTCardBody, KTSVG} from '../../../../../_metronic/helpers';
 import {formatDateToMonthDayYear} from '../../../../helpers/dateFormatter';
+import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 
 interface Props {
     publisher: Publisher | null
@@ -27,34 +28,49 @@ const PublisherOverview: React.FC<Props> = ({publisher}) => {
                                 <div className="d-flex flex-wrap fs-6 mb-4 pe-2">
                                     {
                                         publisher?.info?.email &&
-                                        <a href={`mailto:${publisher?.info?.email}`}
-                                           className="d-flex align-items-center text-gray-400 text-hover-krys me-5 mb-2"
-                                           data-toggle="tooltip" data-placement="top" title="Tooltip on top">
-                                            <KTSVG
-                                                path="/media/icons/duotune/communication/com002.svg"
-                                                className="svg-icon-4 me-1"
-                                            />{publisher?.info?.email}
-                                        </a>
+                                        <OverlayTrigger
+                                            placement="top"
+                                            overlay={<Tooltip>Email address</Tooltip>}
+                                        >
+                                            <a href={`mailto:${publisher?.info?.email}`}
+                                               className="d-flex align-items-center text-gray-400 text-hover-krys me-5 mb-2"
+                                               data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+                                                <KTSVG
+                                                    path="/media/icons/duotune/communication/com002.svg"
+                                                    className="svg-icon-4 me-1"
+                                                />{publisher?.info?.email}
+                                            </a>
+                                        </OverlayTrigger>
                                     }
 
                                     {
                                         publisher?.info?.hq_country &&
-                                        <div
-                                            className="d-flex align-items-center text-gray-400 me-5 mb-2">
-                                            <KTSVG
-                                                path="/media/icons/duotune/maps/map008.svg"
-                                                className="svg-icon-4 me-1"
-                                            />{publisher?.info?.hq_country?.name}</div>
+                                        <OverlayTrigger
+                                            placement="top"
+                                            overlay={<Tooltip>HQ country</Tooltip>}
+                                        >
+                                            <div
+                                                className="d-flex align-items-center text-gray-400 me-5 mb-2">
+                                                <KTSVG
+                                                    path="/media/icons/duotune/maps/map008.svg"
+                                                    className="svg-icon-4 me-1"
+                                                />{publisher?.info?.hq_country?.name}</div>
+                                        </OverlayTrigger>
                                     }
 
                                     {
                                         publisher?.integration_date &&
-                                        <div
-                                            className="d-flex align-items-center text-gray-400 me-5 mb-2">
-                                            <KTSVG
-                                                path="/media/icons/duotune/general/gen014.svg"
-                                                className="svg-icon-4 me-1"
-                                            />{formatDateToMonthDayYear(publisher?.integration_date)}</div>
+                                        <OverlayTrigger
+                                            placement="top"
+                                            overlay={<Tooltip>Integration date</Tooltip>}
+                                        >
+                                            <div
+                                                className="d-flex align-items-center text-gray-400 me-5 mb-2">
+                                                <KTSVG
+                                                    path="/media/icons/duotune/general/gen014.svg"
+                                                    className="svg-icon-4 me-1"
+                                                />{formatDateToMonthDayYear(publisher?.integration_date)}</div>
+                                        </OverlayTrigger>
                                     }
                                 </div>
 
