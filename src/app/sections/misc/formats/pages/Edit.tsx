@@ -77,7 +77,7 @@ const FormatEdit: React.FC = () => {
                 } else {
                     // if we were able to get the list of formats, then we fill our state with them
                     if (response.data) {
-                        setFormats(filterData(response.data, 'name', 'All Formats'));
+                        setFormats(filterData(response.data, 'name', ['All Formats']));
                     }
                 }
             });
