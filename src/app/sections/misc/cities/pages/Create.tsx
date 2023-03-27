@@ -23,7 +23,7 @@ import {storeCity} from '../../../../requests/misc/City';
 import Select from 'react-select';
 import {Country} from '../../../../models/misc/Country';
 import {getAllCountries} from '../../../../requests/misc/Country';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {filterData} from '../../../../helpers/dataManipulation';
 
 const CityCreate: React.FC = () => {
@@ -47,7 +47,7 @@ const CityCreate: React.FC = () => {
             } else {
                 // if we were able to get the list of countries, then we fill our state with them
                 if (response.data) {
-                    setCountries(filterData(response.data, 'name', 'All Countries'));
+                    setCountries(filterData(response.data, 'name', ['All Countries']));
 
                     setForm({...form, country: response.data[1]});
                 }

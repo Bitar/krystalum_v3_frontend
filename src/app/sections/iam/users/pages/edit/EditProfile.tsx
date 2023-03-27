@@ -13,7 +13,7 @@ import {getAllRoles} from '../../../../../requests/iam/Role';
 import {extractErrors} from '../../../../../helpers/requests';
 import {GenericErrorMessage, genericHandleSingleFile, genericOnChangeHandler} from '../../../../../helpers/form';
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
-import {AlertMessageGenerator} from '../../../../../helpers/alertMessageGenerator';
+import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
 import FormErrors from '../../../../../components/forms/FormErrors';
 import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers';
 

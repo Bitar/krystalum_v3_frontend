@@ -16,7 +16,7 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {getLanguage, updateLanguage} from '../../../../requests/misc/Language';
 import {LanguageSchema} from '../core/form';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {defaultFormFields, FormFields} from "../../audiences/core/form";
 import {Language} from '../../../../models/misc/Language';
 

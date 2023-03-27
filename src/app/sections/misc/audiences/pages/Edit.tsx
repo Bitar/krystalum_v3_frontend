@@ -16,7 +16,7 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {getAudience, updateAudience} from '../../../../requests/misc/Audience';
 import {AudienceSchema, defaultFormFields, FormFields} from '../core/form';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {Audience} from '../../../../models/misc/Audience';
 
 

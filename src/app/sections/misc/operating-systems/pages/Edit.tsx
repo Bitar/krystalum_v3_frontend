@@ -16,7 +16,7 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {getOperatingSystem, updateOperatingSystem} from '../../../../requests/misc/OperatingSystem';
 import {OperatingSystemSchema} from '../core/form';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {defaultFormFields, FormFields} from "../../audiences/core/form";
 import {OperatingSystem} from '../../../../models/misc/OperatingSystem';
 

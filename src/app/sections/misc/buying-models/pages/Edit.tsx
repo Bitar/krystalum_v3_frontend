@@ -16,7 +16,7 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {getBuyingModel, updateBuyingModel} from '../../../../requests/misc/BuyingModel';
 import {BuyingModelSchema, defaultFormFields, FormFields} from '../core/form';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {PerformanceMetric} from "../../../../models/misc/PerformanceMetric";
 import {getAllPerformanceMetrics} from "../../../../requests/misc/PerformanceMetric";
 import MultiSelect from "../../../../components/forms/MultiSelect";

@@ -21,7 +21,7 @@ import Select from 'react-select';
 import {defaultFormFields, FormFields, FormatSchema} from '../core/form';
 import {getAllFormats, getFormat, updateFormat} from "../../../../requests/misc/Format";
 import {Format} from "../../../../models/misc/Format";
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {getAllBuyingModels} from "../../../../requests/misc/BuyingModel";
 import {BuyingModel} from "../../../../models/misc/BuyingModel";
 import MultiSelect from "../../../../components/forms/MultiSelect";
@@ -77,7 +77,7 @@ const FormatEdit: React.FC = () => {
                 } else {
                     // if we were able to get the list of formats, then we fill our state with them
                     if (response.data) {
-                        setFormats(filterData(response.data, 'name', 'All Formats'));
+                        setFormats(filterData(response.data, 'name', ['All Formats']));
                     }
                 }
             });

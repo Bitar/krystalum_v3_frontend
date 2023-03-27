@@ -21,7 +21,7 @@ import {Country} from "../../../../models/misc/Country";
 import {Region} from "../../../../models/misc/Region";
 import {useNavigate, useParams} from "react-router-dom";
 import {useKrysApp} from "../../../../modules/general/KrysApp";
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {KrysToastType} from '../../../../helpers/variables';
 import MultiSelect from "../../../../components/forms/MultiSelect";
 

@@ -17,7 +17,7 @@ import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {getAllVerticals, storeVertical} from '../../../../requests/misc/Vertical';
 import Select from "react-select";
 import {Vertical} from "../../../../models/misc/Vertical";
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {indentOptions} from '../../../../components/forms/IndentOptions';
 
 

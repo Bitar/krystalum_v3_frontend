@@ -19,7 +19,7 @@ import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
 import {getAllPerformanceMetrics} from '../../../../requests/misc/PerformanceMetric';
 import {getKpi, updateKpi} from '../../../../requests/misc/Kpi';
 import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
-import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
+import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 import MultiSelect from '../../../../components/forms/MultiSelect';
 
 const KpiEdit: React.FC = () => {

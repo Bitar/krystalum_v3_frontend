@@ -18,7 +18,7 @@ import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {
     AlertMessageGenerator
-} from "../../../../helpers/alertMessageGenerator";
+} from "../../../../helpers/AlertMessageGenerator";
 import {Sections} from "../../../../helpers/sections";
 
 
