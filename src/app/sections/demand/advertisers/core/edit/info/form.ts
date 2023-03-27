@@ -6,7 +6,7 @@ export interface AdvertiserInfoFormFields {
     hq_address?: string, // some advertisers don't have an info row
     hq_country_id?: number, // some advertisers don't have an info row
     industry_id?: number, // whether an advertiser has an info row or not, this field is optional
-    trade_license?: File // whether an advertiser has an info row or not, this field is optional
+    trade_license?: File // whether an advertiser has an info row or not, this field is optional,
 }
 
 export const defaultAdvertiserInfoFormFields = {name: '', hq_address: '', hq_country_id: 0};

@@ -1,13 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
+import clsx from 'clsx';
+import Swal from 'sweetalert2';
 import {ErrorMessage, Field, Form, Formik, FormikProps} from 'formik';
+
 import {useKrysApp} from '../../../../../modules/general/KrysApp';
 import {
     GenericErrorMessage, genericHandleSingleFile,
     genericOnChangeHandler
 } from '../../../../../helpers/form';
 import {updateAdvertiser} from '../../../../../requests/demand/Advertiser';
-import {extractErrors} from '../../../../../helpers/requests';
+import {deleteObject, extractErrors} from '../../../../../helpers/requests';
 import {Actions, KrysToastType, PageTypes} from '../../../../../helpers/variables';
 import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers';
 import FormErrors from '../../../../../components/forms/FormErrors';
@@ -31,6 +34,7 @@ import {
     fillEditForm
 } from '../../core/edit/info/form';
 import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
+
 
 const AdvertiserInfoEdit: React.FC = () => {
     const {advertiser, setAdvertiser} = useAdvertiser();
@@ -119,6 +123,9 @@ const AdvertiserInfoEdit: React.FC = () => {
                         // the form to the new advertiser
                         setForm(fillEditForm(advertiser));
 
+                        // remove the selected file from the input field
+                        tradeLicenseFileInputRef.current.value = '';
+
                         // we update the advertiser in the context
                         setAdvertiser(response);
                     }
@@ -127,9 +134,64 @@ const AdvertiserInfoEdit: React.FC = () => {
         }
     };
 
+    const deleteTradeLicense = async (e: any) => {
+        e.preventDefault();
+
+        if (advertiser) {
+            const {isConfirmed} = await Swal.fire({
+                title: 'Delete Trade License',
+                text: 'Are you sure you want to delete existing trade license?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Confirm Delete',
+                confirmButtonColor: "#DB4437",
+                cancelButtonText: 'Dismiss',
+                reverseButtons: true
+            });
+
+            if (isConfirmed) {
+                deleteObject(`demand/advertisers/${advertiser.id}/trade-license`)
+                    .then((response: any) => {
+                        // update the form with the new advertiser object that's without trade license
+                        setForm(fillEditForm(response.data.data));
+                        // update the advertiser object to be without form
+                        setAdvertiser(response.data.data);
+                    })
+                    .catch((error) => {
+                    if (axios.isAxiosError(error)) {
+                        const errorMessages = extractErrors(error).map((errorMessage) => `<li>${errorMessage}</li>`)
+
+                        // we need to show the error
+                        Swal.fire(
+                            'Something Wrong Happened',
+                            "<p>" + errorMessages.join() + "</p>",
+                            "error"
+                        );
+                    } else if (error === undefined) {
+                        // we need to show a generic error
+                        Swal.fire(
+                            'Something Wrong Happened',
+                            "<p>Could not complete your request. Please try again later.</p>",
+                            "error"
+                        );
+                    }
+                }).finally(() => {
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('advertiser', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    });
+
+                    tradeLicenseFileInputRef.current.value = '';
+                });
+            }
+        }
+    }
+
+    const tradeLicenseFileInputRef = useRef<any>(null);
+
     return (
         <KTCard className='card-bordered border-1'>
-            <KTCardHeader text='Update Basic Information' />
+            <KTCardHeader text='Update Basic Information'/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -164,7 +226,9 @@ const AdvertiserInfoEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="HQ Country" isRequired={true}/>
 
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={countries} defaultValue={advertiser?.info?.country} form={form} setForm={setForm} name='hq_country_id' />
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={countries}
+                                                  defaultValue={advertiser?.info?.country} form={form} setForm={setForm}
+                                                  name='hq_country_id'/>
 
                                     <div className="mt-1 text-danger">
                                         <div className="mt-2">
@@ -176,7 +240,9 @@ const AdvertiserInfoEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Industry" isRequired={false}/>
 
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={industries} defaultValue={advertiser?.info?.industry} form={form} setForm={setForm} name='industry_id' isClearable={true} />
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={industries}
+                                                  defaultValue={advertiser?.info?.industry} form={form}
+                                                  setForm={setForm} name='industry_id' isClearable={true}/>
 
                                     <div className="mt-1 text-danger">
                                         <div className="mt-2">
@@ -189,19 +255,27 @@ const AdvertiserInfoEdit: React.FC = () => {
                                     <KrysFormLabel text="Trade license" isRequired={false}/>
 
                                     <Field className="form-control fs-6" type="file" name="trade_license"
+                                           innerRef={tradeLicenseFileInputRef}
                                            value={undefined}
                                            onChange={(e: any) => handleFile(e, formik)}/>
 
                                     {
                                         advertiser?.info?.trade_license_path &&
 
-                                        <a href={advertiser?.info?.trade_license_path}
-                                           onClick={() => downloadOnClick(advertiser?.info?.trade_license_path)}
-                                           className="d-flex align-items-center text-muted text-hover-krys py-1 mt-3"
-                                           style={{wordBreak: "break-word"}}>
-                                            <i className="fa-solid fa-download text-warning me-2"></i> <span className="pt-1">Download
+                                        <div className='d-flex'>
+                                            <a href={advertiser?.info?.trade_license_path}
+                                               onClick={() => downloadOnClick(advertiser?.info?.trade_license_path)}
+                                               className="align-items-center text-muted text-hover-krys py-1 mt-3"
+                                               style={{wordBreak: "break-word"}}>
+                                                <i className="fa-solid fa-download text-warning me-2"></i> <span
+                                                className="pt-1">Download
                                             trade license </span>
-                                        </a>
+                                            </a>
+                                            <button className='btn btn-icon align-items-center'
+                                                    onClick={async (e) => deleteTradeLicense(e)}>
+                                                <i className={clsx('fa-light fs-3 text-danger', 'fa-xmark')}></i>
+                                            </button>
+                                        </div>
                                     }
 
                                     <div className="mt-1 text-danger">
