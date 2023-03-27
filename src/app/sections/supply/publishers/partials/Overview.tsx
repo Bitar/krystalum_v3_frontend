@@ -1,15 +1,13 @@
 import React from 'react';
 
-import {Publisher} from '../../../../models/supply/publisher/Publisher';
 import {KTCard, KTCardBody, KTSVG} from '../../../../../_metronic/helpers';
 import {formatDateToMonthDayYear} from '../../../../helpers/dateFormatter';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+import {usePublisher} from '../core/PublisherContext';
 
-interface Props {
-    publisher: Publisher | null
-}
+const PublisherOverview: React.FC = () => {
+    const {publisher} = usePublisher();
 
-const PublisherOverview: React.FC<Props> = ({publisher}) => {
     return (
         <KTCard className="mb-5">
             <KTCardBody>

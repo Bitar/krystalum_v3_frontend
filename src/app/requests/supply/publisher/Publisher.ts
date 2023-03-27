@@ -52,12 +52,12 @@ export const storePublisher = async (publisher: any): Promise<Publisher | AxiosE
         });
 }
 
-export const updatePublisher = async (publisher: any): Promise<Publisher | AxiosError | undefined> => {
+export const updatePublisher = async (id: number, publisher: any): Promise<Publisher | AxiosError | undefined> => {
     let formData = createFormData(publisher);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + publisher.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

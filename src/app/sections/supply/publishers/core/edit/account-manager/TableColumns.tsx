@@ -8,6 +8,8 @@ import {TextCell} from '../../../../../../modules/table/columns/TextCell';
 import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {PublisherAccountManager} from '../../../../../../models/supply/publisher/PublisherAccountManager';
+import {usePublisher} from '../../PublisherContext';
+import {formatDateToMonthDayYear} from '../../../../../../helpers/dateFormatter';
 
 const PublisherAccountManagersColumns: ReadonlyArray<Column<PublisherAccountManager>> = [
     {
@@ -23,7 +25,7 @@ const PublisherAccountManagersColumns: ReadonlyArray<Column<PublisherAccountMana
     {
         Header: (props) => <CustomHeader tableProps={props} title="Assignment date" className="min-w-125px"/>,
         id: 'assignment_date',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].assignment_date}/>,
+        Cell: ({...props}) => <TextCell text={formatDateToMonthDayYear(props.data[props.row.index].assignment_date)}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Status" className="min-w-125px"/>,
@@ -37,20 +39,25 @@ const PublisherAccountManagersColumns: ReadonlyArray<Column<PublisherAccountMana
             </Restricted>
         ),
         id: 'actions',
-        Cell: ({...props}) => (
-            <Restricted to={'manage-supply'}>
-                <ActionsCell
-                    id={props.data[props.row.index].id}
-                    path={'supply/publishers/account-managers'}
-                    queryKey={QUERIES.PUBLISHER_ACCOUNT_MANAGERS_LIST}
-                    showView={false}
-                    showEdit={false}
-                    showDelete={true}
-                    title="Delete Publisher Account Manager"
-                    text={`Are you sure you want to delete the publisher account manager '${props.data[props.row.index].user.name}'?`}
-                />
-            </Restricted>
-        ),
+        Cell: ({...props}) => {
+            const {publisher, setRefetchOptions} = usePublisher();
+
+            return (
+                <Restricted to={'manage-supply'}>
+                    <ActionsCell
+                        id={props.data[props.row.index].id}
+                        path={`supply/publishers/${publisher?.id}/account-managers`}
+                        queryKey={QUERIES.PUBLISHER_ACCOUNT_MANAGERS_LIST}
+                        showView={false}
+                        showEdit={false}
+                        showDelete={true}
+                        title="Delete Publisher Account Manager"
+                        text={`Are you sure you want to delete the publisher account manager '${props.data[props.row.index].user.name}'?`}
+                        callBackFn={() => setRefetchOptions(true)}
+                    />
+                </Restricted>
+            )
+        },
     },
 ]
 

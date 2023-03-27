@@ -18,9 +18,11 @@ import PublisherContact from './edit/Contact';
 import PublisherPayment from './edit/Payment';
 import PublisherPublication from './edit/Publication';
 import PublisherAccountManager from './edit/AccountManager';
+import {PublisherContext} from '../core/PublisherContext';
 
 const PublisherEdit: React.FC = () => {
     const [publisher, setPublisher] = useState<Publisher | null>(null);
+    const [refetchOptions, setRefetchOptions] = useState<boolean>(false);
 
     let {id} = useParams();
 
@@ -84,8 +86,9 @@ const PublisherEdit: React.FC = () => {
     ]
 
     return (
-        <>
-            <PublisherOverview publisher={publisher}></PublisherOverview>
+        <PublisherContext.Provider
+            value={{publisher, setPublisher, refetchOptions, setRefetchOptions}}>
+            <PublisherOverview></PublisherOverview>
 
             <KTCard className="mb-5">
                 <KTCardHeader text="Edit Publisher"/>
@@ -115,23 +118,23 @@ const PublisherEdit: React.FC = () => {
                             <div className="col-lg-8 col-xl-9">
                                 <Tab.Content>
                                     <Tab.Pane eventKey="settingsNav-0">
-                                        <BasicInformation publisher={publisher}/>
+                                        <BasicInformation/>
                                     </Tab.Pane>
 
                                     <Tab.Pane eventKey="settingsNav-1">
-                                        <PublisherContact publisher={publisher}/>
+                                        <PublisherContact/>
                                     </Tab.Pane>
 
                                     <Tab.Pane eventKey="settingsNav-2">
-                                        <PublisherPayment publisher={publisher}/>
+                                        <PublisherPayment/>
                                     </Tab.Pane>
 
                                     <Tab.Pane eventKey="settingsNav-3">
-                                        <PublisherPublication publisher={publisher}/>
+                                        <PublisherPublication/>
                                     </Tab.Pane>
 
                                     <Tab.Pane eventKey="settingsNav-4">
-                                        <PublisherAccountManager publisher={publisher}/>
+                                        <PublisherAccountManager/>
                                     </Tab.Pane>
                                 </Tab.Content>
                             </div>
@@ -139,7 +142,7 @@ const PublisherEdit: React.FC = () => {
                     </Tab.Container>
                 </KTCardBody>
             </KTCard>
-        </>
+        </PublisherContext.Provider>
     )
 };
 

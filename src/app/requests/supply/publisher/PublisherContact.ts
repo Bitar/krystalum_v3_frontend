@@ -9,16 +9,19 @@ import {
 import {Publisher} from '../../../models/supply/publisher/Publisher';
 
 const API_URL = process.env.REACT_APP_API_URL
-const ENDPOINT = `${API_URL}/supply/publishers/`
-const CONTACTS_ENDPOINT = '/contacts'
+const ENDPOINT = `${API_URL}/supply/publishers`
+const CONTACTS_ENDPOINT = 'contacts'
 
-export const getContactTypes = async (publisher: Publisher|null): Promise<ContactTypeList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + publisher?.id + CONTACTS_ENDPOINT + '/types').then((response: AxiosResponse<ContactTypeList>) => response.data).catch((error) => {
+export const getContactTypes = async (publisher: Publisher): Promise<ContactTypeList | AxiosError | undefined> => {
+    let url = `${ENDPOINT}/${publisher.id}/${CONTACTS_ENDPOINT}/types`;
+
+    return axios.get(url).then((response: AxiosResponse<ContactTypeList>) => response.data).catch((error) => {
         return error;
     });
 }
+
 export const getPublisherContacts = (publisherId: number, query?: String): Promise<PublisherContactPaginate> => {
-    let url = `${ENDPOINT}${publisherId}${CONTACTS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publisherId}/${CONTACTS_ENDPOINT}`;
 
     if (query) {
         url += `?${query}`;
@@ -28,10 +31,13 @@ export const getPublisherContacts = (publisherId: number, query?: String): Promi
         return error;
     });
 }
-export const storePublisherContact = async (publisher: Publisher|null, form: any): Promise<PublisherContact | AxiosError | undefined> => {
+
+export const storePublisherContact = async (publisher: Publisher, form: any): Promise<PublisherContact | AxiosError | undefined> => {
+    let url = `${ENDPOINT}/${publisher.id}/${CONTACTS_ENDPOINT}`;
+
     let formData = createFormData(form);
 
-    return await axios.post(ENDPOINT + publisher?.id + CONTACTS_ENDPOINT, formData).then(res => res.data).catch((error) => {
+    return await axios.post(url, formData).then(res => res.data).catch((error) => {
         return error;
     });
 }

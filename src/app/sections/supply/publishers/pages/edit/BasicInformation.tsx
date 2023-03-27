@@ -13,11 +13,11 @@ import {
     genericOnChangeHandler
 } from '../../../../../helpers/form';
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
-import {AlertMessageGenerator} from '../../../../../helpers/alertMessageGenerator';
+import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
 import FormErrors from '../../../../../components/forms/FormErrors';
 import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers';
-import {COMMITMENT, Publisher, REVENUE_SHARE} from '../../../../../models/supply/publisher/Publisher';
-import {defaultFormFields, FormFields, PublisherSchema} from '../../core/form';
+import {COMMITMENT, REVENUE_SHARE} from '../../../../../models/supply/publisher/Publisher';
+import {defaultFormFields, fillEditForm, FormFields, PublisherSchema} from '../../core/form';
 import {updatePublisher} from '../../../../../requests/supply/publisher/Publisher';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysRadioButton from '../../../../../components/forms/KrysRadioButton';
@@ -27,12 +27,12 @@ import {filterData} from '../../../../../helpers/dataManipulation';
 import {Tier} from '../../../../../models/misc/Tier';
 import {Country} from '../../../../../models/misc/Country';
 import SingleSelect from '../../../../../components/forms/SingleSelect';
+import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
+import {usePublisher} from '../../core/PublisherContext';
 
-interface Props {
-    publisher: Publisher | null
-}
+const BasicInformation: React.FC = () => {
+    const {publisher, setPublisher} = usePublisher();
 
-const BasicInformation: React.FC<Props> = ({publisher}) => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -47,17 +47,7 @@ const BasicInformation: React.FC<Props> = ({publisher}) => {
         if (publisher) {
             setIsResourceLoaded(true);
 
-            const {info, accountManager, ...currentPublisher} = publisher
-
-            setForm({
-                ...currentPublisher,
-                revenue_share: currentPublisher.revenue_share || '', // if revenue_share is null, then put it string, I need to put it like this as
-                // I am getting warning in console that controlled input should be '' or undefined and not null
-                commitment: currentPublisher.commitment || '',  // same as revenue_share
-                email: info?.email || '', // same as revenue_share
-                hq_address: info?.hq_address || '', // same as revenue_share
-                hq_country_id: info?.hq_country?.id
-            });
+            setForm(fillEditForm(publisher));
 
             // get the tiers
             getAllTiers().then(response => {
@@ -99,29 +89,36 @@ const BasicInformation: React.FC<Props> = ({publisher}) => {
     };
 
     const handleEdit = () => {
-        // send API request to create the publisher
-        updatePublisher(form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // we were able to store the publisher
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('publisher', Actions.EDIT, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    });
+        if (publisher) {
+            // send API request to create the publisher
+            updatePublisher(publisher.id, form).then(response => {
+                    if (axios.isAxiosError(response)) {
+                        // we need to show the errors
+                        setFormErrors(extractErrors(response));
+                    } else if (response === undefined) {
+                        // show generic error message
+                        setFormErrors([GenericErrorMessage])
+                    } else {
+                        // we were able to store the publisher
+                        krysApp.setAlert({
+                            message: new AlertMessageGenerator('publisher', Actions.EDIT, KrysToastType.SUCCESS).message,
+                            type: KrysToastType.SUCCESS
+                        });
 
-                    setFormErrors([]);
+                        // set the updated publisher so that the overview will be updated
+                        setPublisher(response)
+
+                        setFormErrors([]);
+                    }
                 }
-            }
-        );
+            );
+        }
     };
 
     return (
         <KTCard className="card-bordered border-1">
+            <KTCardHeader text="Update Basic Information"/>
+
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
@@ -146,7 +143,7 @@ const BasicInformation: React.FC<Props> = ({publisher}) => {
                                           options={tiers}
                                           defaultValue={publisher?.tier}
                                           form={form} setForm={setForm}
-                                          name="tier_id" isClearable={true} />
+                                          name="tier_id" isClearable={true}/>
 
                             <div className="mt-1 text-danger">
                                 <ErrorMessage name="tier_id" className="mt-2"/>
@@ -255,7 +252,7 @@ const BasicInformation: React.FC<Props> = ({publisher}) => {
                                           options={countries}
                                           defaultValue={publisher?.info?.hq_country}
                                           form={form} setForm={setForm}
-                                          name="hq_country_id" isClearable={true} />
+                                          name="hq_country_id" isClearable={true}/>
 
                             <div className="mt-1 text-danger">
                                 <ErrorMessage name="hq_country_id" className="mt-2"/>

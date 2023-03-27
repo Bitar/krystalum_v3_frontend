@@ -6,6 +6,7 @@ import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {QUERIES} from '../../../../../../../_metronic/helpers';
 import {PublisherPayment} from '../../../../../../models/supply/publisher/PublisherPayment';
+import {usePublisher} from '../../PublisherContext';
 
 const PublisherPaymentsColumns: ReadonlyArray<Column<PublisherPayment>> = [
     {
@@ -45,20 +46,24 @@ const PublisherPaymentsColumns: ReadonlyArray<Column<PublisherPayment>> = [
             </Restricted>
         ),
         id: 'actions',
-        Cell: ({...props}) => (
-            <Restricted to={'manage-supply'}>
-                <ActionsCell
-                    id={props.data[props.row.index].id}
-                    path={'supply/publishers/payments'}
-                    queryKey={QUERIES.PUBLISHER_PAYMENTS_LIST}
-                    showView={false}
-                    showEdit={false}
-                    showDelete={true}
-                    title="Delete Publisher Payment"
-                    text={`Are you sure you want to delete the publisher payment of beneficiary '${props.data[props.row.index].beneficiary}'?`}
-                />
-            </Restricted>
-        ),
+        Cell: ({...props}) => {
+            const {publisher} = usePublisher();
+
+            return (
+                <Restricted to={'manage-supply'}>
+                    <ActionsCell
+                        id={props.data[props.row.index].id}
+                        path={`supply/publishers/${publisher?.id}/payments`}
+                        queryKey={QUERIES.PUBLISHER_PAYMENTS_LIST}
+                        showView={false}
+                        showEdit={false}
+                        showDelete={true}
+                        title="Delete Publisher Payment"
+                        text={`Are you sure you want to delete the publisher payment of beneficiary '${props.data[props.row.index].beneficiary}'?`}
+                    />
+                </Restricted>
+            )
+        }
     },
 ]
 

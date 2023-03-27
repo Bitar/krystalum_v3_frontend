@@ -25,7 +25,7 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storePublisher} from '../../../../requests/supply/publisher/Publisher';
-import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
+import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 import {Tier} from '../../../../models/misc/Tier';
 import {getAllTiers} from '../../../../requests/misc/Tier';
 import KrysRadioButton from '../../../../components/forms/KrysRadioButton';

@@ -6,6 +6,7 @@ import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {QUERIES} from '../../../../../../../_metronic/helpers';
 import {PublisherContact} from '../../../../../../models/supply/publisher/PublisherContact';
+import {usePublisher} from '../../PublisherContext';
 
 const PublisherContactsColumns: ReadonlyArray<Column<PublisherContact>> = [
     {
@@ -25,20 +26,25 @@ const PublisherContactsColumns: ReadonlyArray<Column<PublisherContact>> = [
             </Restricted>
         ),
         id: 'actions',
-        Cell: ({...props}) => (
-            <Restricted to={'manage-supply'}>
-                <ActionsCell
-                    id={props.data[props.row.index].id}
-                    path={`supply/publishers/contacts}`}
-                    queryKey={QUERIES.PUBLISHER_CONTACTS_LIST}
-                    showView={false}
-                    showEdit={false}
-                    showDelete={true}
-                    title="Delete Publisher Contact"
-                    text={`Are you sure you want to delete the publisher contact '${props.data[props.row.index].type.name}'?`}
-                />
-            </Restricted>
-        ),
+        Cell: ({...props}) => {
+            const {publisher, setRefetchOptions} = usePublisher();
+
+            return (
+                <Restricted to={'manage-supply'}>
+                    <ActionsCell
+                        id={props.data[props.row.index].id}
+                        path={`supply/publishers/${publisher?.id}/contacts`}
+                        queryKey={QUERIES.PUBLISHER_CONTACTS_LIST}
+                        showView={false}
+                        showEdit={false}
+                        showDelete={true}
+                        title="Delete Publisher Contact"
+                        text={`Are you sure you want to delete the publisher contact '${props.data[props.row.index].type.name}'?`}
+                        callBackFn={() => setRefetchOptions(true)}
+                    />
+                </Restricted>
+            )
+        }
     },
 ]
 

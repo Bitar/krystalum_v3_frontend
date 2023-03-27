@@ -17,6 +17,8 @@ import axios from 'axios';
 import {filterData} from '../../../../helpers/dataManipulation';
 import {getAllTiers} from '../../../../requests/misc/Tier';
 import FormErrors from '../../../../components/forms/FormErrors';
+import {Region} from '../../../../models/misc/Region';
+import {User} from '../../../../models/iam/User';
 
 interface Props {
     showFilter: boolean,
@@ -26,14 +28,44 @@ interface Props {
 const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     const {updateState} = useQueryRequest();
 
-    const [tiers, setTiers] = useState<Tier[]>([]);
     const [countries, setCountries] = useState<Country[]>([]);
+    const [regions, setRegions] = useState<Region[]>([]);
+    const [tiers, setTiers] = useState<Tier[]>([]);
+    const [accountManagers, setAccountManagers] = useState<User[]>([]);
 
     const [filterErrors, setFilterErrors] = useState<string[]>([]);
     const [filters, setFilters] = useState<FilterFields>(defaultFilterFields);
     const [reset, setReset] = useState<boolean>(false);
 
     useEffect(() => {
+        // get the countries
+        getAllCountries().then(response => {
+            if (axios.isAxiosError(response)) {
+                setFilterErrors(extractErrors(response));
+            } else if (response === undefined) {
+                setFilterErrors([GenericErrorMessage])
+            } else {
+                // if we were able to get the list of countries, then we fill our state with them
+                if (response.data) {
+                    setCountries(filterData(response.data, 'name', 'All Countries'));
+                }
+            }
+        });
+
+        // get the regions
+        getAllCountries().then(response => {
+            if (axios.isAxiosError(response)) {
+                setFilterErrors(extractErrors(response));
+            } else if (response === undefined) {
+                setFilterErrors([GenericErrorMessage])
+            } else {
+                // if we were able to get the list of countries, then we fill our state with them
+                if (response.data) {
+                    setCountries(filterData(response.data, 'name', 'All Countries'));
+                }
+            }
+        });
+
         // get the tiers
         getAllTiers().then(response => {
             if (axios.isAxiosError(response)) {
@@ -48,19 +80,6 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
             }
         });
 
-        // get the countries
-        getAllCountries().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of countries, then we fill our state with them
-                if (response.data) {
-                    setCountries(filterData(response.data, 'name', 'All Countries'));
-                }
-            }
-        });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -121,6 +140,38 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                     </Col>
 
                                     <Col md={4}>
+                                        <KrysFormLabel text="HQ Countries" isRequired={false}/>
+
+                                        <Select isMulti name="countries"
+                                                options={countries}
+                                                getOptionLabel={(country) => country?.name}
+                                                getOptionValue={(country) => country?.id.toString()}
+                                                onChange={(e) => multiSelectChangeHandler(e, 'countries')}
+                                                ref={countriesSelectRef}
+                                                placeholder="Filter by country"/>
+
+                                        <div className="mt-1 text-danger">
+                                            <ErrorMessage name="countries" className="mt-2"/>
+                                        </div>
+                                    </Col>
+
+                                    <Col md={4}>
+                                        <KrysFormLabel text="HQ Regions" isRequired={false}/>
+
+                                        <Select isMulti name="regions"
+                                                options={regions}
+                                                getOptionLabel={(region) => region?.name}
+                                                getOptionValue={(region) => region?.id.toString()}
+                                                onChange={(e) => multiSelectChangeHandler(e, 'regions')}
+                                                ref={countriesSelectRef}
+                                                placeholder="Filter by region"/>
+
+                                        <div className="mt-1 text-danger">
+                                            <ErrorMessage name="regions" className="mt-2"/>
+                                        </div>
+                                    </Col>
+
+                                    <Col md={4}>
                                         <KrysFormLabel text="Tiers" isRequired={false}/>
 
                                         <Select isMulti name="tiers"
@@ -137,18 +188,26 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                     </Col>
 
                                     <Col md={4}>
-                                        <KrysFormLabel text="Countries" isRequired={false}/>
-
-                                        <Select isMulti name="countries"
-                                                options={countries}
-                                                getOptionLabel={(country) => country?.name}
-                                                getOptionValue={(country) => country?.id.toString()}
-                                                onChange={(e) => multiSelectChangeHandler(e, 'countries')}
-                                                ref={countriesSelectRef}
-                                                placeholder="Filter by country"/>
+                                        <KrysFormLabel text="Integration Date" isRequired={false}/>
 
                                         <div className="mt-1 text-danger">
-                                            <ErrorMessage name="countries" className="mt-2"/>
+                                            <ErrorMessage name="integration_date" className="mt-2"/>
+                                        </div>
+                                    </Col>
+
+                                    <Col md={4}>
+                                        <KrysFormLabel text="Account Managers" isRequired={false}/>
+
+                                        <Select isMulti name="account_managers"
+                                                options={accountManagers}
+                                                getOptionLabel={(accountManager) => accountManager?.name}
+                                                getOptionValue={(accountManager) => accountManager?.id.toString()}
+                                                onChange={(e) => multiSelectChangeHandler(e, 'account_managers')}
+                                                ref={tiersSelectRef}
+                                                placeholder="Filter by account manager"/>
+
+                                        <div className="mt-1 text-danger">
+                                            <ErrorMessage name="account_managers" className="mt-2"/>
                                         </div>
                                     </Col>
                                 </Row>

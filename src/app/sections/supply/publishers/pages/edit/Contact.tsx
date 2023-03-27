@@ -11,10 +11,9 @@ import {
     genericSingleSelectOnChangeHandler
 } from '../../../../../helpers/form';
 import {extractErrors} from '../../../../../helpers/requests';
-import {AlertMessageGenerator} from '../../../../../helpers/alertMessageGenerator';
+import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
 import {useKrysApp} from '../../../../../modules/general/KrysApp';
-import {Publisher} from '../../../../../models/supply/publisher/Publisher';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
@@ -26,27 +25,27 @@ import {
     storePublisherContact
 } from '../../../../../requests/supply/publisher/PublisherContact';
 import {ContactType} from '../../../../../models/supply/publisher/PublisherContact';
-import {
-    useQueryResponse
-} from '../../../../../modules/table/QueryResponseProvider';
 import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';
-import SearchFilter from '../../partials/SearchFilter';
+import {usePublisher} from '../../core/PublisherContext';
+import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
 
-interface Props {
-    publisher: Publisher | null
-}
 
-const PublisherContact: React.FC<Props> = ({publisher}) => {
+const PublisherContact: React.FC = () => {
+    const {publisher, refetchOptions, setRefetchOptions} = usePublisher();
+
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const [contactTypes, setContactTypes] = useState<ContactType[]>([]);
 
+    const [refreshTable, setRefreshTable] = useState<boolean>(false);
+
     const krysApp = useKrysApp();
-    const {refetch} = useQueryResponse()
 
     useEffect(() => {
         if (publisher) {
+            setRefetchOptions(false);
+
             // get the contact types
             getContactTypes(publisher).then(response => {
                 if (axios.isAxiosError(response)) {
@@ -61,11 +60,15 @@ const PublisherContact: React.FC<Props> = ({publisher}) => {
                 }
             });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [publisher]);
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [publisher, refetchOptions]); // I added the refetchOptions here in order to update the contact
+    // types dropdown when a new publisher contact type is stored or deleted
 
     const onChangeHandler = (e: any) => {
+        // as long as we are updating the create form, we should set the table refresh to false
+        setRefreshTable(false);
+
         genericOnChangeHandler(e, form, setForm);
     };
 
@@ -73,30 +76,41 @@ const PublisherContact: React.FC<Props> = ({publisher}) => {
         genericSingleSelectOnChangeHandler(e, form, setForm, key);
     };
 
-    const handleCreate = (e: any) => {
-        // send API request to create the publisher contact
-        storePublisherContact(publisher, form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // we were able to store the publisher contact
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('publisher contact details', Actions.CREATE, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    });
+    const handleCreate = () => {
+        if (publisher) {
+            // send API request to create the publisher contact
+            storePublisherContact(publisher, form).then(response => {
+                    if (axios.isAxiosError(response)) {
+                        // we need to show the errors
+                        setFormErrors(extractErrors(response));
+                    } else if (response === undefined) {
+                        // show generic error message
+                        setFormErrors([GenericErrorMessage])
+                    } else {
+                        // we were able to store the publisher contact
+                        krysApp.setAlert({
+                            message: new AlertMessageGenerator('publisher contact details', Actions.CREATE, KrysToastType.SUCCESS).message,
+                            type: KrysToastType.SUCCESS
+                        });
 
-                    refetch();
+                        // now that we have a new record successfully we need to refresh the table
+                        setRefreshTable(true);
+
+                        // now that we have a new record successfully we need to refresh the contact types dropdown
+                        setRefetchOptions(true);
+
+                        // we need to clear the form data
+                        setForm(defaultFormFields);
+                    }
                 }
-            }
-        );
+            );
+        }
     };
 
     return (
         <KTCard className="card-bordered border-1">
+            <KTCardHeader text="Add New Contact"/>
+
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
@@ -113,7 +127,8 @@ const PublisherContact: React.FC<Props> = ({publisher}) => {
                                     onChange={(e) => {
                                         selectChangeHandler(e, 'type')
                                     }}
-                                    placeholder="Select a contact type"/>
+                                    placeholder="Select a contact type"
+                                    isClearable={true}/>
 
                             <div className="mt-1 text-danger">
                                 <ErrorMessage name="type" className="mt-2"/>
@@ -140,10 +155,12 @@ const PublisherContact: React.FC<Props> = ({publisher}) => {
                 {
                     publisher &&
                     <KrysInnerTable
-                        SearchFilterComponent={SearchFilter}
+                        doRefetch={refreshTable}
+                        slug="publisher-contacts"
                         queryId={QUERIES.PUBLISHER_CONTACTS_LIST}
-                                    requestFunction={getPublisherContacts}
-                                    requestId={publisher.id} columnsArray={PublisherContactsColumns}
+                        requestFunction={getPublisherContacts}
+                        requestId={publisher.id}
+                        columnsArray={PublisherContactsColumns}
                     ></KrysInnerTable>
                 }
             </KTCardBody>

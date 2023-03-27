@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import {Tier} from '../../../../models/misc/Tier';
-import {COMMITMENT, REVENUE_SHARE} from '../../../../models/supply/publisher/Publisher';
+import {COMMITMENT, Publisher, REVENUE_SHARE} from '../../../../models/supply/publisher/Publisher';
 import {Country} from '../../../../models/misc/Country';
 
 export interface FormFields {
@@ -42,3 +42,16 @@ export const PublisherSchema = Yup.object().shape({
     hq_address: Yup.string().notRequired(),
     hq_country_id: Yup.number().notRequired(),
 });
+
+export function fillEditForm(publisher: Publisher) {
+    const form: FormFields = {
+        ...publisher,
+        revenue_share: publisher.revenue_share?.toString() || '',
+        commitment: publisher.commitment || '',
+        email: publisher.info?.email || '',
+        hq_address: publisher.info?.hq_address || '',
+        hq_country_id: publisher.info?.hq_country?.id,
+    };
+
+    return form;
+}
