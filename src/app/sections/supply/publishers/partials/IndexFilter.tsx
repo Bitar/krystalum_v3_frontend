@@ -19,6 +19,7 @@ import {getAllTiers} from '../../../../requests/misc/Tier';
 import FormErrors from '../../../../components/forms/FormErrors';
 import {Region} from '../../../../models/misc/Region';
 import {User} from '../../../../models/iam/User';
+import {getAllRegions} from '../../../../requests/misc/Region';
 
 interface Props {
     showFilter: boolean,
@@ -53,15 +54,15 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
         });
 
         // get the regions
-        getAllCountries().then(response => {
+        getAllRegions().then(response => {
             if (axios.isAxiosError(response)) {
                 setFilterErrors(extractErrors(response));
             } else if (response === undefined) {
                 setFilterErrors([GenericErrorMessage])
             } else {
-                // if we were able to get the list of countries, then we fill our state with them
+                // if we were able to get the list of regions, then we fill our state with them
                 if (response.data) {
-                    setCountries(filterData(response.data, 'name', 'All Countries'));
+                    setRegions(filterData(response.data, 'name', 'All Regions'));
                 }
             }
         });
