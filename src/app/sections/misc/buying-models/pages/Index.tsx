@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
 import {QUERIES} from '../../../../../_metronic/helpers'
 import {PageTypes} from '../../../../helpers/variables';

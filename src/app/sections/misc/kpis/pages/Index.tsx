@@ -5,7 +5,7 @@ import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {PageTypes} from '../../../../helpers/variables';
-import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
+import {QUERIES} from '../../../../../_metronic/helpers';
 import {EXPORT_ENDPOINT, getKpis} from '../../../../requests/misc/Kpi';
 import KpiIndexFilter from '../partials/IndexFilter';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
