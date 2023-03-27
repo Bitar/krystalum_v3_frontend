@@ -42,11 +42,7 @@ const HoldingGroupFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
             } else {
                 // if we were able to get the list of roles, then we fill our state with them
                 if (response.data) {
-                    let allRegions = filterData(response.data, 'name', 'All Regions');
-
-                    allRegions = filterData(allRegions, 'name', 'Rest of the world');
-
-                    setRegions(allRegions);
+                    setRegions(filterData(response.data, 'name', ['All Regions', 'Rest of the world']));
                 }
             }
         });

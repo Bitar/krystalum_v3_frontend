@@ -10,7 +10,6 @@ import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {defaultFormFields, FormFields, HoldingGroupSchema} from '../core/form';
 import {GenericErrorMessage, genericOnChangeHandler, genericSelectOnChangeHandler} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
-import {AlertMessageGenerator} from '../../../../helpers/alertMessageGenerator';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
@@ -23,6 +22,7 @@ import {getAllTradingDesks} from '../../../../requests/demand/TradingDesk';
 import {Region} from '../../../../models/misc/Region';
 import {TradingDesk} from '../../../../models/demand/TradingDesk';
 import Select from 'react-select';
+import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 
 const HoldingGroupCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -45,13 +45,10 @@ const HoldingGroupCreate: React.FC = () => {
             } else {
                 // if we were able to get the list of roles, then we fill our state with them
                 if (response.data) {
-                    let allRegions = filterData(response.data, 'name', 'All Regions');
-                    allRegions = filterData(allRegions, 'name', 'Rest of the world')
+                    setRegions(filterData(response.data, 'name', ['All Regions', 'Rest of the world']));
 
-                    setRegions(allRegions);
-
-                    // since the region is required, we set the first region as the default region
-                    setForm({...form, region: allRegions[0]});
+                    // since the region is required, we set the region to the most likely which is GCC
+                    setForm({...form, region: response.data.filter((region) => region.id === 3)[0]});
                 }
             }
         });

@@ -19,7 +19,6 @@ import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, AgencySchema, FormFields} from '../core/form';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {Sections} from "../../../../helpers/sections";
 import {getAllRegions} from '../../../../requests/misc/Region';
 import {filterData} from '../../../../helpers/dataManipulation';
@@ -28,6 +27,7 @@ import {Region} from '../../../../models/misc/Region';
 import {HoldingGroup} from '../../../../models/demand/HoldingGroup';
 import SingleSelect from '../../../../components/forms/SingleSelect';
 import clsx from 'clsx';
+import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 
 const AgencyEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -73,11 +73,7 @@ const AgencyEdit: React.FC = () => {
                 } else {
                     // if we were able to get the list of regions, then we fill our state with them
                     if (response.data) {
-                        let allRegions = filterData(response.data, 'name', 'All Regions');
-
-                        allRegions = filterData(allRegions, 'name', 'Rest of the world');
-
-                        setRegions(allRegions);
+                        setRegions(filterData(response.data, 'name', ['All Regions', 'Rest of the world']));
                     }
                 }
             });

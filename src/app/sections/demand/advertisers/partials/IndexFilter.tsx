@@ -39,7 +39,7 @@ const AdvertiserIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) =>
             } else {
                 // if we were able to get the list of roles, then we fill our state with them
                 if (response.data) {
-                    setCountries(filterData(response.data, 'name', 'All Countries'));
+                    setCountries(filterData(response.data, 'name', ['All Countries']));
                 }
             }
         });

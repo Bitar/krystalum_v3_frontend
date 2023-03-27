@@ -17,7 +17,7 @@ import {storeAdvertiser} from '../../../../requests/demand/Advertiser';
 import {AdvertiserSchema, AdvertiserFormFields, defaultAdvertiserFormFields} from '../core/form';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
+import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 import {Sections} from "../../../../helpers/sections";
 
 const AdvertiserCreate: React.FC = () => {

@@ -8,7 +8,6 @@ import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../hel
 import {useAdvertiser} from '../../../core/AdvertiserContext';
 import axios from 'axios';
 import {extractErrors} from '../../../../../../helpers/requests';
-import {AlertMessageGenerator} from '../../../../../../helpers/alertMessageGenerator';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
 import {getAdvertiserContacts, storeAdvertiserContact} from '../../../../../../requests/demand/AdvertiserContact';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
@@ -20,6 +19,7 @@ import {
     AdvertiserContactsSchema,
     defaultAdvertiserContactsFormFields
 } from '../../../core/edit/contacts/form';
+import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 
 const AdvertiserContactCreate: React.FC = () => {
     const {advertiser} = useAdvertiser();

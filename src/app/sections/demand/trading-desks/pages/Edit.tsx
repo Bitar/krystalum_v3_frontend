@@ -15,8 +15,8 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, FormFields, TradingDeskSchema} from '../core/form';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {getTradingDesk, updateTradingDesk} from '../../../../requests/demand/TradingDesk';
+import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 
 
 const TradingDeskEdit: React.FC = () => {

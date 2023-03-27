@@ -8,7 +8,6 @@ import {
 } from '../../../../../helpers/form';
 import {updateAdvertiser} from '../../../../../requests/demand/Advertiser';
 import {extractErrors} from '../../../../../helpers/requests';
-import {AlertMessageGenerator} from '../../../../../helpers/alertMessageGenerator';
 import {Actions, KrysToastType, PageTypes} from '../../../../../helpers/variables';
 import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers';
 import FormErrors from '../../../../../components/forms/FormErrors';
@@ -31,6 +30,7 @@ import {
     defaultAdvertiserInfoFormFields,
     fillEditForm
 } from '../../core/edit/info/form';
+import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
 
 const AdvertiserInfoEdit: React.FC = () => {
     const {advertiser, setAdvertiser} = useAdvertiser();
@@ -55,7 +55,7 @@ const AdvertiserInfoEdit: React.FC = () => {
             } else {
                 // if we were able to get the list of regions, then we fill our state with them
                 if (response.data) {
-                    setCountries(filterData(response.data, 'name', 'All Countries'));
+                    setCountries(filterData(response.data, 'name', ['All Countries']));
                 }
             }
         });

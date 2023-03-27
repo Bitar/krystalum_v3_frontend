@@ -21,7 +21,7 @@ import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
 import {getAdvertiserContact, updateAdvertiserContact} from '../../../../../../requests/demand/AdvertiserContact';
 import {extractErrors} from '../../../../../../helpers/requests';
-import {AlertMessageGenerator} from '../../../../../../helpers/alertMessageGenerator';
+import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 
 const AdvertiserContactEdit: React.FC = () => {
     const {advertiser} = useAdvertiser();

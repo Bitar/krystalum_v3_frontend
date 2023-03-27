@@ -15,7 +15,6 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, FormFields, HoldingGroupSchema} from '../core/form';
-import {AlertMessageGenerator} from "../../../../helpers/alertMessageGenerator";
 import {getHoldingGroup, updateHoldingGroup} from '../../../../requests/demand/HoldingGroup';
 import {getAllRegions} from '../../../../requests/misc/Region';
 import {filterData} from '../../../../helpers/dataManipulation';
@@ -23,6 +22,7 @@ import {getAllTradingDesks} from '../../../../requests/demand/TradingDesk';
 import {Region} from '../../../../models/misc/Region';
 import {TradingDesk} from '../../../../models/demand/TradingDesk';
 import Select from 'react-select';
+import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 
 
 const HoldingGroupEdit: React.FC = () => {
@@ -71,10 +71,7 @@ const HoldingGroupEdit: React.FC = () => {
                 } else {
                     // if we were able to get the list of roles, then we fill our state with them
                     if (response.data) {
-                        let allRegions = filterData(response.data, 'name', 'All Regions');
-                        allRegions = filterData(allRegions, 'name', 'Rest of the world')
-
-                        setRegions(allRegions);
+                        setRegions(filterData(response.data, 'name', ['All Regions', 'Rest of the world']));
                     }
                 }
             });
