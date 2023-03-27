@@ -3,7 +3,7 @@ import {AdvertiserContact} from '../../../../../../models/demand/Advertiser';
 import {
     AdvertiserContactsFormFields,
     AdvertiserContactsSchema,
-    defaultAdvertiserContactsFormFields
+    defaultAdvertiserContactsFormFields, fillEditForm
 } from '../../../core/edit/contacts/form';
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
@@ -11,21 +11,20 @@ import FormErrors from '../../../../../../components/forms/FormErrors';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
-import {genericOnChangeHandler} from '../../../../../../helpers/form';
-import {PageTypes} from '../../../../../../helpers/variables';
+import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
+import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../../../helpers/sections';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
 import {useAdvertiser} from '../../../core/AdvertiserContext';
-import {useParams} from 'react-router-dom';
-import {getPermission} from '../../../../../../requests/iam/Permission';
+import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
-import {getAdvertiserContact} from '../../../../../../requests/demand/AdvertiserContact';
+import {getAdvertiserContact, updateAdvertiserContact} from '../../../../../../requests/demand/AdvertiserContact';
+import {extractErrors} from '../../../../../../helpers/requests';
+import {AlertMessageGenerator} from '../../../../../../helpers/alertMessageGenerator';
 
 const AdvertiserContactEdit: React.FC = () => {
     const {advertiser} = useAdvertiser();
-
-    console.log(advertiser);
 
     const [advertiserContact, setAdvertiserContact] = useState<AdvertiserContact | null>(null);
 
@@ -33,28 +32,32 @@ const AdvertiserContactEdit: React.FC = () => {
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
+    const navigate = useNavigate();
 
     // get the advertiser and advertiser contact id
-    let {id, cid} = useParams();
+    let {cid} = useParams();
 
     useEffect(() => {
-        if (id && cid) {
-            // get the permission we need to edit from the database
-            // getAdvertiserContact(parseInt(id)).then(response => {
-            //     if (axios.isAxiosError(response)) {
-            //         // we were not able to fetch the permission to edit so we need to redirect
-            //         // to error page
-            //         navigate('/error/404');
-            //     } else if (response === undefined) {
-            //         navigate('/error/400');
-            //     } else {
-            //         // we were able to fetch current permission to edit
-            //         setPermission(response);
-            //     }
-            // });
+        if (advertiser && cid) {
+            // get the advertiser contact we need to edit from the database
+            getAdvertiserContact(advertiser, parseInt(cid)).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // we were not able to fetch the advertiser contact to edit so we need to redirect
+                    // to error page
+                    navigate('/error/404');
+                } else if (response === undefined) {
+                    navigate('/error/400');
+                } else {
+                    // we were able to fetch current advertiser contact to edit
+                    setAdvertiserContact(response);
+
+                    // we also set the form to be the advertiser's contact details
+                    setForm(fillEditForm(response));
+                }
+            });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id, cid]);
+    }, [cid]);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
@@ -69,20 +72,23 @@ const AdvertiserContactEdit: React.FC = () => {
     }, [advertiserContact]);
 
     const handleEdit = (e: any) => {
-        // we need to update the permission's data by doing API call with form
-        // updatePermission(permission.id, permission).then(response => {
-        //     if (axios.isAxiosError(response)) {
-        //         // show errors
-        //         setFormErrors(extractErrors(response));
-        //     } else if (response === undefined) {
-        //         // show generic error
-        //         setFormErrors([GenericErrorMessage]);
-        //     } else {
-        //         // we got the updated permission so we're good
-        //         krysApp.setAlert({message: new AlertMessageGenerator('permission', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-        //         navigate(`/iam/permissions`);
-        //     }
-        // });
+        if(advertiser && advertiserContact) {
+            // we need to update the contact's data by doing API call with form
+            updateAdvertiserContact(advertiser, advertiserContact.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the updated advertiser contact so we're good
+                    krysApp.setAlert({message: new AlertMessageGenerator('advertiser contact', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+
+                    navigate(`/demand/advertisers/${advertiser.id}/edit`);
+                }
+            });
+        }
     }
 
     return (

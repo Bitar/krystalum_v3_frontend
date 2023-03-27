@@ -5,8 +5,7 @@ import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections';
 import AdvertiserIndex from '../../sections/demand/advertisers/pages/Index';
 import AdvertiserCreate from '../../sections/demand/advertisers/pages/Create';
-import AdvertiserEdit from '../../sections/demand/advertisers/pages/Edit';
-import AdvertiserContactEdit from '../../sections/demand/advertisers/pages/edit/contacts/Edit';
+import AdvertiserEditRoutes from './AdvertiserEditRoutes';
 
 const breadcrumbs: Array<PageLink> = [
     {
@@ -42,11 +41,11 @@ const AdvertiserRoutes: React.FC = () => {
                 }
             />
             <Route
-                path='/:id/edit'
+                path='/:id/*'
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
-                        <AdvertiserEdit/>
+                        <AdvertiserEditRoutes/>
                     </SuspenseView>
                 }
             />

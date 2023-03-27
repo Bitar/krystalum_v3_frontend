@@ -1,46 +1,19 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import React, {useEffect} from 'react';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
-import axios from 'axios';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {PageTypes} from '../../../../helpers/variables';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {Nav, Tab} from 'react-bootstrap';
-import {Advertiser} from '../../../../models/demand/Advertiser';
-import {getAdvertiser} from '../../../../requests/demand/Advertiser';
 import AdvertiserInfoEdit from './edit/Info';
 import AdvertiserContactCreate from './edit/contacts/Create';
-import {AdvertiserContext} from '../core/AdvertiserContext';
+import {useAdvertiser} from '../core/AdvertiserContext';
 
 const AdvertiserEdit: React.FC = () => {
-    const [advertiser, setAdvertiser] = useState<Advertiser | null>(null);
+    const {advertiser} = useAdvertiser();
 
-    let {id} = useParams();
-
-    const navigate = useNavigate();
     const krysApp = useKrysApp();
-
-    useEffect(() => {
-        if (id) {
-            // get the advertiser we need to edit from the database
-            getAdvertiser(parseInt(id), ['info']).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the advertiser to edit so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    // unknown error occurred
-                    navigate('/error/400');
-                } else {
-                    setAdvertiser(response);
-                }
-            });
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id]);
 
     useEffect(() => {
         // when we're here it means our advertiser object is loaded from the API
@@ -91,20 +64,15 @@ const AdvertiserEdit: React.FC = () => {
                             </Nav>
                         </div>
                         <div className='col-lg-8 col-xl-9'>
-                            <AdvertiserContext.Provider value={{
-                                advertiser: advertiser,
-                                setAdvertiser: setAdvertiser
-                            }}>
-                                <Tab.Content>
-                                    <Tab.Pane eventKey='settingsNav-0'>
-                                        <AdvertiserInfoEdit />
-                                    </Tab.Pane>
+                            <Tab.Content>
+                                <Tab.Pane eventKey='settingsNav-0'>
+                                    <AdvertiserInfoEdit />
+                                </Tab.Pane>
 
-                                    <Tab.Pane eventKey='settingsNav-1'>
-                                        <AdvertiserContactCreate />
-                                    </Tab.Pane>
-                                </Tab.Content>
-                            </AdvertiserContext.Provider>
+                                <Tab.Pane eventKey='settingsNav-1'>
+                                    <AdvertiserContactCreate />
+                                </Tab.Pane>
+                            </Tab.Content>
                         </div>
                     </div>
                 </Tab.Container>
