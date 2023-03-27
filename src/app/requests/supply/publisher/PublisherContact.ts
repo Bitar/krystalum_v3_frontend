@@ -13,7 +13,7 @@ const ENDPOINT = `${API_URL}/supply/publishers`
 const CONTACTS_ENDPOINT = 'contacts'
 
 export const getContactTypes = async (publisher: Publisher): Promise<ContactTypeList | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publisher.id}/${CONTACTS_ENDPOINT}/types`;
+    let url = `${ENDPOINT}/${CONTACTS_ENDPOINT}/types/${publisher.id}`;
 
     return axios.get(url).then((response: AxiosResponse<ContactTypeList>) => response.data).catch((error) => {
         return error;

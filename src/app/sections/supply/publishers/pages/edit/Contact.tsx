@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 
@@ -39,6 +39,8 @@ const PublisherContact: React.FC = () => {
     const [contactTypes, setContactTypes] = useState<ContactType[]>([]);
 
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
+
+    const contactTypesSelectRef = useRef<any>(null);
 
     const krysApp = useKrysApp();
 
@@ -99,6 +101,9 @@ const PublisherContact: React.FC = () => {
                         // now that we have a new record successfully we need to refresh the contact types dropdown
                         setRefetchOptions(true);
 
+                        // clear the selected values from dropdown
+                        contactTypesSelectRef.current?.clearValue();
+
                         // we need to clear the form data
                         setForm(defaultFormFields);
                     }
@@ -128,7 +133,8 @@ const PublisherContact: React.FC = () => {
                                         selectChangeHandler(e, 'type')
                                     }}
                                     placeholder="Select a contact type"
-                                    isClearable={true}/>
+                                    isClearable={true}
+                                    ref={contactTypesSelectRef}/>
 
                             <div className="mt-1 text-danger">
                                 <ErrorMessage name="type" className="mt-2"/>

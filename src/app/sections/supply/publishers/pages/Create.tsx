@@ -70,7 +70,7 @@ const PublisherCreate: React.FC = () => {
             } else {
                 // if we were able to get the list of countries, then we fill our state with them
                 if (response.data) {
-                    setCountries(filterData(response.data, 'name', 'All Countries'));
+                    setCountries(filterData(response.data, 'name', ['All Countries']));
                 }
             }
         });

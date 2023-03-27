@@ -4,7 +4,12 @@ import {Col, Collapse, Row} from 'react-bootstrap';
 
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
 import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
-import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
+import {
+    genericDateOnChangeHandler, genericDateRangeOnChangeHandler,
+    GenericErrorMessage,
+    genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler
+} from '../../../../helpers/form';
 import {initialQueryState} from '../../../../../_metronic/helpers';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
@@ -20,6 +25,9 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import {Region} from '../../../../models/misc/Region';
 import {User} from '../../../../models/iam/User';
 import {getAllRegions} from '../../../../requests/misc/Region';
+import {DateRangePicker} from 'rsuite';
+import {DateRange} from 'rsuite/DateRangePicker';
+import {getAccountManagers} from '../../../../requests/supply/publisher/PublisherAccountManager';
 
 interface Props {
     showFilter: boolean,
@@ -48,7 +56,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
             } else {
                 // if we were able to get the list of countries, then we fill our state with them
                 if (response.data) {
-                    setCountries(filterData(response.data, 'name', 'All Countries'));
+                    setCountries(filterData(response.data, 'name', ['All Countries']));
                 }
             }
         });
@@ -62,7 +70,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
             } else {
                 // if we were able to get the list of regions, then we fill our state with them
                 if (response.data) {
-                    setRegions(filterData(response.data, 'name', 'All Regions'));
+                    setRegions(filterData(response.data, 'name', ['All Regions', 'Rest of the world']));
                 }
             }
         });
@@ -81,11 +89,29 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
             }
         });
 
+        // get the account managers
+        getAccountManagers().then(response => {
+            if (axios.isAxiosError(response)) {
+                setFilterErrors(extractErrors(response));
+            } else if (response === undefined) {
+                setFilterErrors([GenericErrorMessage])
+            } else {
+                // if we were able to get the list of account managers, then we fill our state with them
+                if (response.data) {
+                    setAccountManagers(response.data);
+                }
+            }
+        });
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const multiSelectChangeHandler = (e: any, key: string) => {
         genericMultiSelectOnChangeHandler(e, filters, setFilters, key);
+    };
+
+    const dateChangeHandler = (date: DateRange | null, key: string) => {
+        genericDateRangeOnChangeHandler(date, filters, setFilters, key);
     };
 
     const onChangeHandler = (e: any) => {
@@ -106,6 +132,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
         tiersSelectRef.current?.clearValue();
         countriesSelectRef.current?.clearValue();
         setReset(false);
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reset]);
 
@@ -171,7 +198,8 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                             <ErrorMessage name="regions" className="mt-2"/>
                                         </div>
                                     </Col>
-
+                                </Row>
+                                <Row>
                                     <Col md={4}>
                                         <KrysFormLabel text="Tiers" isRequired={false}/>
 
@@ -191,8 +219,16 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                     <Col md={4}>
                                         <KrysFormLabel text="Integration Date" isRequired={false}/>
 
+                                        <DateRangePicker name="starts_between"
+                                                         placeholder="Select integration date range"
+                                                         className="krys-daterangepicker"
+                                                         block
+                                                         isoWeek
+                                                         onChange={(date) => dateChangeHandler(date, 'starts_between')}
+                                        />
+
                                         <div className="mt-1 text-danger">
-                                            <ErrorMessage name="integration_date" className="mt-2"/>
+                                            <ErrorMessage name="starts_between" className="mt-2"/>
                                         </div>
                                     </Col>
 

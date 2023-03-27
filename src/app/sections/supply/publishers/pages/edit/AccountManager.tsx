@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 
@@ -39,6 +39,8 @@ const PublisherAccountManager: React.FC = () => {
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
     const [accountManagers, setAccountManagers] = useState<User[]>([]);
+
+    const accountManagersSelectRef = useRef<any>(null);
 
     const krysApp = useKrysApp();
 
@@ -99,6 +101,9 @@ const PublisherAccountManager: React.FC = () => {
                         // now that we have a new record successfully we need to refresh the contact types dropdown
                         setRefetchOptions(true);
 
+                        // clear the selected values from dropdown
+                        accountManagersSelectRef.current?.clearValue();
+
                         // we need to clear the form data
                         setForm(defaultFormFields);
                     }
@@ -128,7 +133,8 @@ const PublisherAccountManager: React.FC = () => {
                                         selectChangeHandler(e, 'user_id')
                                     }}
                                     placeholder="Select an account manager"
-                                    isClearable={true}/>
+                                    isClearable={true}
+                                    ref={accountManagersSelectRef}/>
 
                             <div className="mt-1 text-danger">
                                 <ErrorMessage name="user_id" className="mt-2"/>
