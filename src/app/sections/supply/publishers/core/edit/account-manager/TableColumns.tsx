@@ -15,17 +15,17 @@ const PublisherAccountManagersColumns: ReadonlyArray<Column<PublisherAccountMana
     {
         Header: (props) => <CustomHeader tableProps={props} title="Name" className="min-w-125px"/>,
         id: 'name',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].user.name}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].user?.name}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Email" className="min-w-125px"/>,
         id: 'email',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].user.email}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].user?.email}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Assignment date" className="min-w-125px"/>,
         id: 'assignment_date',
-        Cell: ({...props}) => <TextCell text={formatDateToMonthDayYear(props.data[props.row.index].assignment_date)}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].user ? formatDateToMonthDayYear(props.data[props.row.index].assignment_date) : ''}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Status" className="min-w-125px"/>,
@@ -43,6 +43,7 @@ const PublisherAccountManagersColumns: ReadonlyArray<Column<PublisherAccountMana
             const {publisher, setRefetchOptions} = usePublisher();
 
             return (
+                props.data[props.row.index].user ?
                 <Restricted to={'manage-supply'}>
                     <ActionsCell
                         id={props.data[props.row.index].id}
@@ -52,10 +53,10 @@ const PublisherAccountManagersColumns: ReadonlyArray<Column<PublisherAccountMana
                         showEdit={false}
                         showDelete={true}
                         title="Delete Publisher Account Manager"
-                        text={`Are you sure you want to delete the publisher account manager '${props.data[props.row.index].user.name}'?`}
+                        text={`Are you sure you want to delete the publisher account manager '${props.data[props.row.index].user?.name}'?`}
                         callBackFn={() => setRefetchOptions(true)}
                     />
-                </Restricted>
+                </Restricted> : <></>
             )
         },
     },

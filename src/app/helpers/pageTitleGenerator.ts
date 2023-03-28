@@ -17,6 +17,8 @@ export const generatePageTitle = (module: string, type: string, name?: string) =
             return report(module, name);
         case PageTypes.ERROR:
             return error(module)
+        case PageTypes.ARCHIVED:
+            return archived(module)
         default:
             return index(module)
     }
@@ -44,4 +46,8 @@ const report = (module: string, name: string | undefined) => {
 
 const error = (module: string) => {
     return `Error ${module} ${SEPARATOR} ${APP_NAME}`
+}
+
+const archived = (module: string) => {
+    return `Archived ${module} ${SEPARATOR} ${APP_NAME}`
 }

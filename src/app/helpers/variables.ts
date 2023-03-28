@@ -14,7 +14,8 @@ export enum PageTypes {
     EDIT = 'edit',
     SHOW = 'show',
     REPORT = 'report',
-    ERROR = 'error'
+    ERROR = 'error',
+    ARCHIVED = 'archived',
 }
 
 export enum KrysToastType {

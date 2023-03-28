@@ -35,6 +35,25 @@ export const getPublishers = (query?: String): Promise<PublisherPaginate> => {
     });
 }
 
+export const getArchivedPublishers = (query?: String): Promise<PublisherPaginate> => {
+    let url = `${ENDPOINT}/archived`;
+
+    if (query) {
+        url += `?${query}`;
+        if (query.charAt(query.length - 1) === '&') {
+            url += relations;
+        } else {
+            url += `&${relations}`;
+        }
+    } else {
+        url += `?${relations}`
+    }
+
+    return axios.get(url).then((response: AxiosResponse<PublisherPaginate>) => response.data).catch((error) => {
+        return error;
+    });
+}
+
 export const getPublisher = async (id: number): Promise<Publisher | AxiosError | undefined> => {
     return await axios.get(`${ENDPOINT}/${id}?${relations}`)
         .then(res => res.data.data).catch((error) => {

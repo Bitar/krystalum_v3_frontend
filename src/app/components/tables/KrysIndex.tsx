@@ -20,7 +20,7 @@ type Props = {
     cardHeader: KTCardHeaderProps,
     showFilter: boolean,
     setExportQuery: React.Dispatch<React.SetStateAction<string>>,
-    FilterComponent: React.FC<{showFilter: boolean, setExportQuery: React.Dispatch<React.SetStateAction<string>>}>
+    FilterComponent?: React.FC<{ showFilter: boolean, setExportQuery: React.Dispatch<React.SetStateAction<string>> }>
 }
 
 type TableProps = {
@@ -48,7 +48,11 @@ const KrysIndex: React.FC<Props> = ({
                                       actions={cardHeader.actions}/>
 
                         <KTCardBody>
-                            <FilterComponent showFilter={showFilter} setExportQuery={setExportQuery}/>
+                            {
+                                FilterComponent ?
+                                    <FilterComponent showFilter={showFilter} setExportQuery={setExportQuery}/>
+                                    : <></>
+                            }
                             <IndexTable columnsArray={columnsArray}/>
                         </KTCardBody>
                     </KTCard>

@@ -22,12 +22,13 @@ const PublishersColumns: ReadonlyArray<Column<Publisher>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Publications" className="min-w-125px"/>,
         id: 'publications',
-        Cell: ({...props}) => <BadgesCell texts={[]} color="light-info" align="left"/>,
+        Cell: ({...props}) => <BadgesCell texts={['TODO']} color="light-info" align="left"/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Account Manager" className="min-w-125px"/>,
         id: 'accountManager',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].accountManager?.name}/>,
+        Cell: ({...props}) => <TextCell
+            text={(props.data[props.row.index].accountManager?.user ? props.data[props.row.index].accountManager?.user?.name : '-')}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Country" className="min-w-125px"/>,

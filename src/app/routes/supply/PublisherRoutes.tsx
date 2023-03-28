@@ -6,6 +6,7 @@ import {Sections} from '../../helpers/sections';
 import PublisherIndex from '../../sections/supply/publishers/pages/Index';
 import PublisherCreate from '../../sections/supply/publishers/pages/Create';
 import PublisherEdit from '../../sections/supply/publishers/pages/Edit';
+import PublisherArchived from '../../sections/supply/publishers/pages/Archived';
 
 const breadcrumbs: Array<PageLink> = [
     {
@@ -46,6 +47,15 @@ const PublisherRoutes: React.FC = () => {
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
                         <PublisherEdit/>
+                    </SuspenseView>
+                }
+            />
+            <Route
+                path='/archived'
+                element={
+                    <SuspenseView>
+                        <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Archived'}</PageTitle>
+                        <PublisherArchived/>
                     </SuspenseView>
                 }
             />

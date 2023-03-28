@@ -28,6 +28,7 @@ export const QUERIES = {
     TIERS_LIST: 'tiers-list',
     CAMPAIGN_RESTRICTION_REQUIREMENTS_LIST: 'campaign-restriction-requirements-list',
     PUBLISHERS_LIST: 'publishers-list',
+    PUBLISHERS_ARCHIVED_LIST: 'publishers-archived-list',
     PUBLISHER_CONTACTS_LIST: 'publisher-contacts-list',
     PUBLISHER_PAYMENTS_LIST: 'publisher-payments-list',
     PUBLISHER_ACCOUNT_MANAGERS_LIST: 'publisher-account-managers-list',

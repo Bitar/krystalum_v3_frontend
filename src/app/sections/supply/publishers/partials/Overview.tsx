@@ -32,7 +32,7 @@ const PublisherOverview: React.FC = () => {
                                         >
                                             <a href={`mailto:${publisher?.info?.email}`}
                                                className="d-flex align-items-center text-gray-400 text-hover-krys me-5 mb-2"
-                                               data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+                                               data-toggle="tooltip" data-placement="top">
                                                 <KTSVG
                                                     path="/media/icons/duotune/communication/com002.svg"
                                                     className="svg-icon-4 me-1"

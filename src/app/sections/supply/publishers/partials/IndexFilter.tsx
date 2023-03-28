@@ -192,7 +192,8 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                                 getOptionValue={(region) => region?.id.toString()}
                                                 onChange={(e) => multiSelectChangeHandler(e, 'regions')}
                                                 ref={countriesSelectRef}
-                                                placeholder="Filter by region"/>
+                                                placeholder="Filter by region"
+                                                isDisabled={(filters?.countries && filters?.countries.length > 0 ? true : false)}/>
 
                                         <div className="mt-1 text-danger">
                                             <ErrorMessage name="regions" className="mt-2"/>
@@ -221,7 +222,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
 
                                         <DateRangePicker name="starts_between"
                                                          placeholder="Select integration date range"
-                                                         className="krys-daterangepicker"
+                                                         className="krys-datepicker krys-daterangepicker"
                                                          block
                                                          isoWeek
                                                          onChange={(date) => dateChangeHandler(date, 'starts_between')}
