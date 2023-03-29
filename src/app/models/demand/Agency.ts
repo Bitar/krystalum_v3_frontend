@@ -9,6 +9,11 @@ export type Agency = {
     holdingGroup: HoldingGroup | null
 };
 
+export type AgencyCondensed = {
+    id: number,
+    name: string,
+    parent: AgencyCondensed | null
+};
 
 export type AgencyPaginate = Response<Agency[]>;
 

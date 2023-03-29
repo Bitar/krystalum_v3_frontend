@@ -80,7 +80,7 @@ const TradingDeskEdit: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Trading Desk" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
+            <KTCardHeader text="Edit Trading Desk" />
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

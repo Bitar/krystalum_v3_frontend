@@ -175,7 +175,7 @@ const AgencyEdit: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Agency" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
+            <KTCardHeader text="Edit Agency" />
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

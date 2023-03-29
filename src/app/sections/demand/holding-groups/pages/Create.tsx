@@ -8,7 +8,11 @@ import {Sections} from '../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {defaultFormFields, FormFields, HoldingGroupSchema} from '../core/form';
-import {GenericErrorMessage, genericOnChangeHandler, genericSelectOnChangeHandler} from '../../../../helpers/form';
+import {
+    GenericErrorMessage,
+    genericOnChangeHandler,
+    genericSingleSelectOnChangeHandler
+} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
@@ -97,7 +101,7 @@ const HoldingGroupCreate: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New Holding Group" icon="fa-regular fa-plus" icon_style="fs-3 text-success"/>
+            <KTCardHeader text="Create New Holding Group" />
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -126,7 +130,7 @@ const HoldingGroupCreate: React.FC = () => {
                                             getOptionLabel={(region) => region.name}
                                             getOptionValue={(region) => region.id.toString()}
                                             value={form.region} // make the default value as the first region
-                                            onChange={(e) => genericSelectOnChangeHandler(e, form, setForm, 'region')}/>
+                                            onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'region')}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="region" className="mt-2"/>
@@ -140,7 +144,7 @@ const HoldingGroupCreate: React.FC = () => {
                                             options={tradingDesks}
                                             getOptionLabel={(tradingDesk) => tradingDesk.name}
                                             getOptionValue={(tradingDesk) => tradingDesk.id.toString()}
-                                            onChange={(e) => genericSelectOnChangeHandler(e, form, setForm, 'trading_desk')}
+                                            onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'trading_desk')}
                                             isClearable={true}/>
 
                                     <div className="mt-1 text-danger">

@@ -35,7 +35,7 @@ const TradingDeskIndex: React.FC = () => {
             <QueryResponseProvider id={QUERIES.TRADING_DESKS_LIST} requestFunction={getTradingDesks}>
                 <ListViewProvider>
                     <KTCard>
-                        <KTCardHeader text='All Trading Desks' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
+                        <KTCardHeader text='All Trading Desks'
                                       actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('trading-desks-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/demand/trading-desks', 'manage-demand')]}/>

@@ -65,7 +65,7 @@ const AdvertiserCreate: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New Advertiser" icon="fa-regular fa-plus" icon_style="fs-3 text-success"/>
+            <KTCardHeader text="Create New Advertiser" />
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

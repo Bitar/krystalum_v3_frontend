@@ -7,23 +7,23 @@ import {
     useQueryResponseData,
     useQueryResponseLoading,
 } from '../../../../modules/table/QueryResponseProvider'
-import {EXPORT_ENDPOINT, getAgencies} from '../../../../requests/demand/Agency'
+import {EXPORT_ENDPOINT, getCampaigns} from '../../../../requests/demand/Campaign'
 import {ListViewProvider} from '../../../../modules/table/ListViewProvider'
-import {AgenciesColumns} from '../core/TableColumn'
+import {CampaignsColumns} from '../core/TableColumn'
 import KrysTable from '../../../../components/tables/KrysTable';
 import {PageTypes} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import AgencyIndexFilter from '../partials/IndexFilter';
+import CampaignIndexFilter from '../partials/IndexFilter';
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {Sections} from "../../../../helpers/sections";
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 
-const AgencyIndex = () => {
+const CampaignIndex = () => {
     const krysApp = useKrysApp();
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.DEMAND_AGENCIES, PageTypes.INDEX))
+        krysApp.setPageTitle(generatePageTitle(Sections.DEMAND_CAMPAIGNS, PageTypes.INDEX))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -32,18 +32,18 @@ const AgencyIndex = () => {
 
     return (
         <QueryRequestProvider>
-            <QueryResponseProvider id={QUERIES.AGENCIES_LIST} requestFunction={getAgencies}>
+            <QueryResponseProvider id={QUERIES.CAMPAIGNS_LIST} requestFunction={getCampaigns}>
                 <ListViewProvider>
                     <KTCard>
-                        <KTCardHeader text='All Agencies'
+                        <KTCardHeader text='All Campaigns'
                                       actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
-                                          new FilterCardAction('agencies-list-filter', showFilter, setShowFilter),
-                                          new CreateCardAction('/demand/agencies', 'manage-demand')
+                                          new FilterCardAction('TODO-list-filter', showFilter, setShowFilter),
+                                          new CreateCardAction('/demand/campaigns', 'manage-demand')
                                       ]}/>
                         <KTCardBody>
-                            <AgencyIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
+                            {/*<CampaignIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>*/}
 
-                            <AgencyTable/>
+                            <CampaignTable/>
                         </KTCardBody>
                     </KTCard>
                 </ListViewProvider>
@@ -52,15 +52,16 @@ const AgencyIndex = () => {
     )
 }
 
-const AgencyTable = () => {
-    const agencies = useQueryResponseData();
+const CampaignTable = () => {
+    const campaigns = useQueryResponseData();
     const isLoading = useQueryResponseLoading();
-    const data = useMemo(() => agencies, [agencies]);
-    const columns = useMemo(() => AgenciesColumns, []);
+    const data = useMemo(() => campaigns, [campaigns]);
+    const columns = useMemo(() => CampaignsColumns, []);
 
     return (
-        <KrysTable data={data} columns={columns} model={agencies.length > 0 ? agencies[0] : null} isLoading={isLoading}/>
+        <KrysTable data={data} columns={columns} model={campaigns.length > 0 ? campaigns[0] : null}
+                   isLoading={isLoading}/>
     )
 }
 
-export default AgencyIndex;
+export default CampaignIndex;

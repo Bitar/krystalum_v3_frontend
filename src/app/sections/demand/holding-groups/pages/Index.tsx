@@ -35,7 +35,7 @@ const HoldingGroupIndex: React.FC = () => {
             <QueryResponseProvider id={QUERIES.HOLDING_GROUPS_LIST} requestFunction={getHoldingGroups}>
                 <ListViewProvider>
                     <KTCard>
-                        <KTCardHeader text='All Holding Groups' icon="fa-regular fa-list" icon_style="fs-3 text-primary"
+                        <KTCardHeader text='All Holding Groups'
                                       actions={[new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                           new FilterCardAction('holding-groups-list-filter', showFilter, setShowFilter),
                                           new CreateCardAction('/demand/holding-groups', 'manage-demand')]}/>

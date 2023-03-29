@@ -34,5 +34,6 @@ export const QUERIES = {
     HOLDING_GROUPS_LIST: 'holding-groups-list',
     AGENCIES_LIST: 'agencies-list',
     ADVERTISERS_LIST: 'advertisers-list',
-    ADVERTISER_CONTACTS_LIST: 'advertiser-contacts-list'
+    ADVERTISER_CONTACTS_LIST: 'advertiser-contacts-list',
+    CAMPAIGNS_LIST: 'campaigns-list'
 }

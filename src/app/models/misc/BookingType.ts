@@ -6,6 +6,11 @@ export type BookingType = {
     code: string
 };
 
+export type BookingTypeCondensed = {
+    id: number,
+    name: string
+}
+
 export type BookingTypePaginate = Response<BookingType[]>;
 
 export type BookingTypeList = {

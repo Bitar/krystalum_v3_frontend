@@ -7,6 +7,11 @@ export type Region = {
 
 };
 
+export type RegionCondensed = {
+    id: number,
+    name: string
+};
+
 export type RegionPaginate = Response<Region[]>;
 
 export type RegionList = {

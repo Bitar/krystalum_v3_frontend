@@ -36,5 +36,6 @@ export enum Sections {
     DEMAND_HOLDING_GROUPS = 'Holding groups',
     DEMAND_AGENCIES = 'Agencies',
     DEMAND_ADVERTISERS = 'Advertisers',
-    DEMAND_ADVERTISER_CONTACT = 'Advertiser contacts'
+    DEMAND_ADVERTISER_CONTACT = 'Advertiser contacts',
+    DEMAND_CAMPAIGNS = 'Campaigns'
 }

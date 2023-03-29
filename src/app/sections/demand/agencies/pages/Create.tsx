@@ -115,7 +115,7 @@ const AgencyCreate: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New Agency" icon="fa-regular fa-plus" icon_style="fs-3 text-success"/>
+            <KTCardHeader text="Create New Agency" />
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

@@ -11,6 +11,11 @@ export type User = {
     roles: Role[]
 }
 
+export type UserCondensed = {
+    id: number,
+    name: string
+};
+
 export type UserList = {
     data: User[]
 }

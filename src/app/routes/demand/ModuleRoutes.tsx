@@ -1,6 +1,7 @@
 import React, {lazy} from 'react';
 import {Route, Routes} from 'react-router-dom';
 import {SuspenseView} from '../../components/misc/SuspenseView';
+import CampaignRoutes from './CampaignRoutes';
 
 const DemandModuleRoutes: React.FC = () => {
     const TradingDeskRoutes = lazy(() => import('./TradingDeskRoutes'));
@@ -43,6 +44,15 @@ const DemandModuleRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <AdvertiserRoutes/>
+                    </SuspenseView>
+                }
+            ></Route>
+
+            <Route
+                path='campaigns/*'
+                element={
+                    <SuspenseView>
+                        <CampaignRoutes/>
                     </SuspenseView>
                 }
             ></Route>

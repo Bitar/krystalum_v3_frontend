@@ -39,7 +39,7 @@ const AdvertiserEdit: React.FC = () => {
 
     return (
         <KTCard className='mb-5'>
-            <KTCardHeader text="Edit Advertiser" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
+            <KTCardHeader text="Edit Advertiser" />
 
             <KTCardBody>
                 <Tab.Container defaultActiveKey='settingsNav-0'>
