@@ -92,7 +92,7 @@ const PublisherOverview: React.FC = () => {
                                                     path="/media/icons/duotune/finance/fin008.svg"
                                                     className="svg-icon-1 svg-icon-success me-2"
                                                 />
-                                                <div className="fs-2 fw-bolder">{publisher?.revenue_share}%</div>
+                                                <div className="fs-5 fw-bold">{publisher?.revenue_share}%</div>
                                             </div>
                                             <div className="fw-bold fs-6 text-gray-400">Revenue share</div>
                                         </div>
@@ -105,9 +105,9 @@ const PublisherOverview: React.FC = () => {
                                             <div className="d-flex align-items-center">
                                                 <KTSVG
                                                     path="/media/icons/duotune/finance/fin006.svg"
-                                                    className="svg-icon-1 me-2"
+                                                    className="svg-icon-1 svg-icon-success me-2"
                                                 />
-                                                <div className="fs-2 fw-bolder">{publisher?.commitment}</div>
+                                                <div className="fs-5 fw-bold">{publisher?.commitment}</div>
                                             </div>
                                             <div className="fw-bold fs-6 text-gray-400">Commitment</div>
                                         </div>
@@ -122,7 +122,7 @@ const PublisherOverview: React.FC = () => {
                                                     path="/media/icons/duotune/abstract/abs024.svg"
                                                     className="svg-icon-1 svg-icon-warning me-2"
                                                 />
-                                                <div className="fs-2 fw-bolder">{publisher?.tier.name}</div>
+                                                <div className="fs-5 fw-bold">{publisher?.tier.name}</div>
                                             </div>
                                             <div className="fw-bold fs-6 text-gray-400">Tier</div>
                                         </div>
