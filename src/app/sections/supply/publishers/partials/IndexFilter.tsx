@@ -110,7 +110,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
         genericMultiSelectOnChangeHandler(e, filters, setFilters, key);
     };
 
-    const dateChangeHandler = (date: DateRange | null, key: string) => {
+    const dateRangeChangeHandler = (date: DateRange | null, key: string) => {
         genericDateRangeOnChangeHandler(date, filters, setFilters, key);
     };
 
@@ -226,7 +226,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                                          className="krys-datepicker krys-daterangepicker"
                                                          block
                                                          isoWeek
-                                                         onChange={(date) => dateChangeHandler(date, 'starts_between')}
+                                                         onChange={(date) => dateRangeChangeHandler(date, 'starts_between')}
                                         />
 
                                         <div className="mt-1 text-danger">
