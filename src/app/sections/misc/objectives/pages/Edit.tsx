@@ -90,7 +90,7 @@ const ObjectiveEdit: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Objective" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
+            <KTCardHeader text="Edit Objective" />
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -103,7 +103,7 @@ const ObjectiveEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter objective name" name="name"/>
 
                                     <div className="mt-1 text-danger">

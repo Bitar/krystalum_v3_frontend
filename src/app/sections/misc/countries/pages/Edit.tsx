@@ -86,7 +86,7 @@ const CountryEdit: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Country" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
+            <KTCardHeader text="Edit Country" />
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -99,7 +99,7 @@ const CountryEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter country name" name="name"/>
 
                                     <div className="mt-1 text-danger">
@@ -110,7 +110,7 @@ const CountryEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Code" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter country code" name="code"/>
 
                                     <div className="mt-1 text-danger">
@@ -121,7 +121,7 @@ const CountryEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Currency" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter country currency" name="currency"/>
 
                                     <div className="mt-1 text-danger">
@@ -132,7 +132,7 @@ const CountryEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Phone code" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="number"
+                                    <Field className="form-control fs-base" type="number"
                                            placeholder="Enter country phone code" name="phone_code"/>
 
                                     <div className="mt-1 text-danger">

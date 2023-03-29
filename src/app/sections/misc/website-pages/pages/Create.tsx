@@ -59,7 +59,7 @@ const WebsitePageCreate: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New Website Page" icon="fa-regular fa-plus" icon_style="fs-3 text-success"/>
+            <KTCardHeader text="Create New Website Page" />
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -71,7 +71,7 @@ const WebsitePageCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter website page name" name="name"/>
 
                                     <div className="mt-1 text-danger">

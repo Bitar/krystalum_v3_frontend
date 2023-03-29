@@ -30,8 +30,6 @@ const PermissionIndex = () => {
                    cardHeader={
                        {
                            text: 'All Permissions',
-                           icon: 'fa-regular fa-list',
-                           icon_style: 'fs-3 text-primary',
                            actions: [new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                new FilterCardAction('permissions-list-filter', showFilter, setShowFilter),
                                new CreateCardAction('/iam/permissions', 'manage-iam')],

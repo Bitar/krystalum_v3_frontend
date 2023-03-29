@@ -89,7 +89,7 @@ const WebsitePageEdit: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Website Page" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
+            <KTCardHeader text="Edit Website Page" />
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -102,7 +102,7 @@ const WebsitePageEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter website page name" name="name"/>
 
                                     <div className="mt-1 text-danger">

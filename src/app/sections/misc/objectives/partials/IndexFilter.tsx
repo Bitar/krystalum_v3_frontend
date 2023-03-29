@@ -60,7 +60,7 @@ const ObjectiveIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                             <Col md={4}>
                                                 <KrysFormLabel text="Name" isRequired={false}/>
 
-                                                <Field className="form-control fs-6" type="text"
+                                                <Field className="form-control fs-base" type="text"
                                                        placeholder="Filter by name" name="name"/>
 
                                                 <div className="mt-1 text-danger">

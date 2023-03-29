@@ -31,8 +31,7 @@ const TechnologyIndex: React.FC = () => {
                    cardHeader={
                        {
                            text: 'All Technologies',
-                           icon: 'fa-regular fa-list',
-                           icon_style: 'fs-3 text-primary',
+
                            actions: [new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                new FilterCardAction('technologies-list-filter', showFilter, setShowFilter),
                                new CreateCardAction('/misc/technologies', 'manage-misc')],

@@ -85,7 +85,7 @@ const LanguageEdit: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Language" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
+            <KTCardHeader text="Edit Language" />
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -98,7 +98,7 @@ const LanguageEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter language name" name="name"/>
 
                                     <div className="mt-1 text-danger">
