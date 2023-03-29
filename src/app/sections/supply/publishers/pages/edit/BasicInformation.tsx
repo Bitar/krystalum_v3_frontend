@@ -38,6 +38,11 @@ const BasicInformation: React.FC = () => {
 
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
+    // this will be used to check if the publisher is being updated
+    // if it is true and useEffect, then I don't want to refill the form
+    // if it is false,
+    const [isOverviewReloaded, setIsOverviewReloaded] = useState<boolean>(false)
+
     const [tiers, setTiers] = useState<Tier[]>([]);
     const [countries, setCountries] = useState<Country[]>([]);
 
@@ -47,7 +52,8 @@ const BasicInformation: React.FC = () => {
         if (publisher) {
             setIsResourceLoaded(true);
 
-            setForm(fillEditForm(publisher));
+            // update the form with publisher field just on page reload
+            if (!isOverviewReloaded) setForm(fillEditForm(publisher));
 
             // get the tiers
             getAllTiers().then(response => {
@@ -104,6 +110,8 @@ const BasicInformation: React.FC = () => {
                             message: new AlertMessageGenerator('publisher', Actions.EDIT, KrysToastType.SUCCESS).message,
                             type: KrysToastType.SUCCESS
                         });
+
+                        setIsOverviewReloaded(true);
 
                         // set the updated publisher so that the overview will be updated
                         setPublisher(response)
