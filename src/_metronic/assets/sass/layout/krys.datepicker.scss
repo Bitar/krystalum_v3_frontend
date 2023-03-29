@@ -61,21 +61,21 @@
             color: $krys !important;
           }
         }
+      }
 
-        .rs-calendar-table-cell-selected {
-          .rs-calendar-table-cell-content {
-            background-color: $krys !important;
+      .rs-calendar-table-cell-selected {
+        .rs-calendar-table-cell-content {
+          background-color: $krys !important;
 
-            &:hover {
-              background-color: $krys-light !important;
-            }
+          &:hover {
+            background-color: $krys-light !important;
           }
         }
+      }
 
-        .rs-calendar-table-cell-in-range {
-          &:before {
-            background-color: rgba(250, 100, 82, 0.12) !important;
-          }
+      .rs-calendar-table-cell-in-range {
+        &:before {
+          background-color: rgba(250, 100, 82, 0.12) !important;
         }
       }
     }

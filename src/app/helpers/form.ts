@@ -1,5 +1,6 @@
 import React from 'react';
 import {FormikProps} from 'formik';
+import {DateRange} from 'rsuite/DateRangePicker';
 
 export const genericOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>) => {
     const value = e.target.value;
@@ -73,5 +74,23 @@ export const genericDateOnChangeHandler = (date: Date | null, form: any, setForm
     } else {
         // in case the user removed the date then we should reset it (date will be null)
         setForm({...form, [key]: date});
+    }
+};
+
+export const genericDateRangeOnChangeHandler = (dateRange: DateRange | null, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
+    if (dateRange) {
+        const startDate = dateRange[0];
+        const endDate = dateRange[1];
+
+        const formattedStartDate = startDate.getFullYear() + '-' + startDate.getMonth() + '-' + startDate.getDate();
+        const formattedEndDate = endDate.getFullYear() + '-' + endDate.getMonth() + '-' + endDate.getDate();
+
+        // we should use comma separator as this is the separator used in the backend to parse the date range
+        const dateRangeString = formattedStartDate + ',' + formattedEndDate;
+
+        setForm({...form, [key]: dateRangeString});
+    } else {
+        // in case the user removed the dateRange then we should reset it (dateRange will be null)
+        setForm({...form, [key]: dateRange});
     }
 };
