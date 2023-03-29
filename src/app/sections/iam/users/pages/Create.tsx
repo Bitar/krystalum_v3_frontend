@@ -90,7 +90,7 @@ const UserCreate: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New User" icon="fa-regular fa-plus" icon_style="fs-3 text-success"/>
+            <KTCardHeader text="Create New User" />
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -103,7 +103,7 @@ const UserCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter full name" name="name"/>
 
                                     <div className="mt-1 text-danger">
@@ -114,7 +114,7 @@ const UserCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Email address" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="email"
+                                    <Field className="form-control fs-base" type="email"
                                            placeholder="Enter email address" name="email"/>
 
                                     <div className="mt-1 text-danger">
@@ -125,7 +125,7 @@ const UserCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Password" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="password" value={undefined}
+                                    <Field className="form-control fs-base" type="password" value={undefined}
                                            placeholder="Enter user password" name="password"/>
 
                                     <div className="mt-1 text-danger">
@@ -136,7 +136,7 @@ const UserCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Confirm password" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="password" value={undefined}
+                                    <Field className="form-control fs-base" type="password" value={undefined}
                                            placeholder="Confirm user password" name="password_confirmation"/>
 
                                     <div className="mt-1 text-danger">
@@ -147,7 +147,7 @@ const UserCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Profile picture" isRequired={false}/>
 
-                                    <Field className="form-control fs-6" type="file" name="image" value={undefined}
+                                    <Field className="form-control fs-base" type="file" name="image" value={undefined}
                                            onChange={(e: any) => handleFile(e, formik)}/>
 
                                     <div className="mt-1 text-danger">

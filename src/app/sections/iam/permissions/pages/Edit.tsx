@@ -81,7 +81,7 @@ const PermissionEdit: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Permission" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
+            <KTCardHeader text="Edit Permission" />
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -94,7 +94,7 @@ const PermissionEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter permission name" name="name"/>
 
                                     <div className="mt-1 text-danger">

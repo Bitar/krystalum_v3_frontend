@@ -31,8 +31,6 @@ const AdServerIndex: React.FC = () => {
                    cardHeader={
                        {
                            text: 'All Ad Servers',
-                           icon: 'fa-regular fa-list',
-                           icon_style: 'fs-3 text-primary',
                            actions: [new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                new FilterCardAction('ad-servers-list-filter', showFilter, setShowFilter),
                                new CreateCardAction('/misc/ad-servers', 'manage-misc')],

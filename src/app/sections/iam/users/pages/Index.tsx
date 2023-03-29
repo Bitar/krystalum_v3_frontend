@@ -30,8 +30,6 @@ const UserIndex = () => {
                    cardHeader={
                        {
                            text: 'All Users',
-                           icon: 'fa-regular fa-list',
-                           icon_style: 'fs-3 text-primary',
                            actions: [new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                new FilterCardAction('users-list-filter', showFilter, setShowFilter),
                                new CreateCardAction('/iam/users', 'manage-iam')],

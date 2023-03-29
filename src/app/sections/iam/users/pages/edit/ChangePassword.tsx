@@ -69,7 +69,7 @@ const ChangePassword: React.FC<Props> = ({user}) => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="New password" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="password"
+                                    <Field className="form-control fs-base" type="password"
                                            placeholder="Enter your new password" name="password"/>
 
                                     <div className="mt-1 text-danger">
@@ -80,7 +80,7 @@ const ChangePassword: React.FC<Props> = ({user}) => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Confirm new password" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="password"
+                                    <Field className="form-control fs-base" type="password"
                                            placeholder="Confirm your new password" name="password_confirmation"/>
 
                                     <div className="mt-1 text-danger">

@@ -104,7 +104,7 @@ const EditProfile: React.FC<Props> = ({user}) => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter full name" name="name"/>
 
                                     <div className="mt-1 text-danger">
@@ -115,7 +115,7 @@ const EditProfile: React.FC<Props> = ({user}) => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Email address" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="email"
+                                    <Field className="form-control fs-base" type="email"
                                            placeholder="Enter email address" name="email"/>
 
                                     <div className="mt-1 text-danger">
@@ -133,7 +133,7 @@ const EditProfile: React.FC<Props> = ({user}) => {
                                         }
                                     </div>
 
-                                    <Field className="form-control fs-6" type="file" name="image" value={undefined}
+                                    <Field className="form-control fs-base" type="file" name="image" value={undefined}
                                            onChange={(e: any) => handleFile(e, formik)}/>
 
                                     <div className="mt-1 text-danger">

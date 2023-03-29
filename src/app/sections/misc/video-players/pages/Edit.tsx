@@ -88,7 +88,7 @@ const VideoPlayerEdit: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Video Player" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
+            <KTCardHeader text="Edit Video Player" />
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -101,7 +101,7 @@ const VideoPlayerEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter video player name" name="name"/>
 
                                     <div className="mt-1 text-danger">

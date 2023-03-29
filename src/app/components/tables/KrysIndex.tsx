@@ -20,7 +20,7 @@ type Props = {
     cardHeader: KTCardHeaderProps,
     showFilter: boolean,
     setExportQuery: React.Dispatch<React.SetStateAction<string>>,
-    FilterComponent: React.FC<{showFilter: boolean, setExportQuery: React.Dispatch<React.SetStateAction<string>>}>
+    FilterComponent: React.FC<{ showFilter: boolean, setExportQuery: React.Dispatch<React.SetStateAction<string>> }>
 }
 
 type TableProps = {
@@ -43,8 +43,8 @@ const KrysIndex: React.FC<Props> = ({
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text={cardHeader.text}
-                                      icon={cardHeader.icon}
-                                      icon_style={cardHeader.icon_style}
+                                      icon={cardHeader.icon ? cardHeader.icon : ''}
+                                      icon_style={cardHeader.icon_style ? cardHeader.icon_style: ''}
                                       actions={cardHeader.actions}/>
 
                         <KTCardBody>

@@ -86,7 +86,7 @@ const BuyTypeEdit: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Buy Type" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
+            <KTCardHeader text="Edit Buy Type" />
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -99,7 +99,7 @@ const BuyTypeEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter buy type name" name="name"/>
 
                                     <div className="mt-1 text-danger">
@@ -110,7 +110,7 @@ const BuyTypeEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Code" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter buy type code" name="code"/>
 
                                     <div className="mt-1 text-danger">

@@ -30,8 +30,7 @@ const KpiIndex: React.FC = () => {
                    cardHeader={
                        {
                            text: 'All KPIs',
-                           icon: 'fa-regular fa-list',
-                           icon_style: 'fs-3 text-primary',
+
                            actions: [new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                new FilterCardAction('kpis-list-filter', showFilter, setShowFilter),
                                new CreateCardAction('/misc/kpis', 'manage-misc')],
