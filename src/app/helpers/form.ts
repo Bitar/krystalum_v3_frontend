@@ -82,8 +82,8 @@ export const genericDateRangeOnChangeHandler = (dateRange: DateRange | null, for
         const startDate = dateRange[0];
         const endDate = dateRange[1];
 
-        const formattedStartDate = startDate.getFullYear() + '-' + startDate.getMonth() + '-' + startDate.getDate();
-        const formattedEndDate = endDate.getFullYear() + '-' + endDate.getMonth() + '-' + endDate.getDate();
+        const formattedStartDate = startDate.getFullYear() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getDate();
+        const formattedEndDate = endDate.getFullYear() + '-' + (endDate.getMonth() + 1) + '-' + endDate.getDate();
 
         // we should use comma separator as this is the separator used in the backend to parse the date range
         const dateRangeString = formattedStartDate + ',' + formattedEndDate;
