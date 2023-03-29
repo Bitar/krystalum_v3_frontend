@@ -131,6 +131,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
         handleFilter();
         tiersSelectRef.current?.clearValue();
         countriesSelectRef.current?.clearValue();
+
         setReset(false);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -193,7 +194,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                                 onChange={(e) => multiSelectChangeHandler(e, 'regions')}
                                                 ref={countriesSelectRef}
                                                 placeholder="Filter by region"
-                                                isDisabled={(filters?.countries && filters?.countries.length > 0 ? true : false)}/>
+                                                isDisabled={(!!(filters?.countries && filters?.countries.length > 0))}/>
 
                                         <div className="mt-1 text-danger">
                                             <ErrorMessage name="regions" className="mt-2"/>

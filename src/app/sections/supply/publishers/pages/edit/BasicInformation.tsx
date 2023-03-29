@@ -106,7 +106,6 @@ const BasicInformation: React.FC = () => {
                         });
 
                         // set the updated publisher so that the overview will be updated
-                        console.log(response)
                         setPublisher(response)
 
                         setFormErrors([]);

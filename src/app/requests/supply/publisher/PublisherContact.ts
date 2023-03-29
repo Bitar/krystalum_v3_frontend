@@ -12,8 +12,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publishers`
 const CONTACTS_ENDPOINT = 'contacts'
 
-export const getContactTypes = async (publisher: Publisher): Promise<ContactTypeList | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${CONTACTS_ENDPOINT}/types/${publisher.id}`;
+export const getContactTypes = async (): Promise<ContactTypeList | AxiosError | undefined> => {
+    let url = `${ENDPOINT}/${CONTACTS_ENDPOINT}/types`;
 
     return axios.get(url).then((response: AxiosResponse<ContactTypeList>) => response.data).catch((error) => {
         return error;

@@ -6,7 +6,7 @@ import {Publisher, PublisherList, PublisherPaginate} from '../../../models/suppl
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publishers`
 
-const relations = 'include[]=tier&include[]=info&include[]=accountManager'
+const relations = 'include[]=tier&include[]=info'
 
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 

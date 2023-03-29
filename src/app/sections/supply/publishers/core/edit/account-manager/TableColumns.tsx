@@ -10,6 +10,7 @@ import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {PublisherAccountManager} from '../../../../../../models/supply/publisher/PublisherAccountManager';
 import {usePublisher} from '../../PublisherContext';
 import {formatDateToMonthDayYear} from '../../../../../../helpers/dateFormatter';
+import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
 
 const PublisherAccountManagersColumns: ReadonlyArray<Column<PublisherAccountManager>> = [
     {
@@ -25,12 +26,15 @@ const PublisherAccountManagersColumns: ReadonlyArray<Column<PublisherAccountMana
     {
         Header: (props) => <CustomHeader tableProps={props} title="Assignment date" className="min-w-125px"/>,
         id: 'assignment_date',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].user ? formatDateToMonthDayYear(props.data[props.row.index].assignment_date) : ''}/>,
+        Cell: ({...props}) => <TextCell
+            text={props.data[props.row.index].user ? formatDateToMonthDayYear(props.data[props.row.index].assignment_date) : ''}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Status" className="min-w-125px"/>,
         id: 'status',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].status}/>,
+        Cell: ({...props}) => <BadgeCell status={props.data[props.row.index].status ? 'Active' : 'Inactive'}
+                                         color={props.data[props.row.index].status ? 'light-success' : 'light-danger'}
+                                         align="left"/>,
     },
     {
         Header: (props) => (
@@ -44,19 +48,19 @@ const PublisherAccountManagersColumns: ReadonlyArray<Column<PublisherAccountMana
 
             return (
                 props.data[props.row.index].user ?
-                <Restricted to={'manage-supply'}>
-                    <ActionsCell
-                        id={props.data[props.row.index].id}
-                        path={`supply/publishers/${publisher?.id}/account-managers`}
-                        queryKey={QUERIES.PUBLISHER_ACCOUNT_MANAGERS_LIST}
-                        showView={false}
-                        showEdit={false}
-                        showDelete={true}
-                        title="Delete Publisher Account Manager"
-                        text={`Are you sure you want to delete the publisher account manager '${props.data[props.row.index].user?.name}'?`}
-                        callBackFn={() => setRefetchOptions(true)}
-                    />
-                </Restricted> : <></>
+                    <Restricted to={'manage-supply'}>
+                        <ActionsCell
+                            id={props.data[props.row.index].id}
+                            path={`supply/publishers/${publisher?.id}/account-managers`}
+                            queryKey={QUERIES.PUBLISHER_ACCOUNT_MANAGERS_LIST}
+                            showView={false}
+                            showEdit={false}
+                            showDelete={props.data[props.row.index].status ? true : false}
+                            title="Delete Publisher Account Manager"
+                            text={`Are you sure you want to delete the publisher account manager '${props.data[props.row.index].user?.name}'?`}
+                            callBackFn={() => setRefetchOptions(true)}
+                        />
+                    </Restricted> : <></>
             )
         },
     },

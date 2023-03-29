@@ -61,6 +61,9 @@ const PublisherPayment: React.FC = () => {
 
                         // we need to clear the form data
                         setForm(defaultFormFields);
+
+                        // we need to clear the form data
+                        setFormErrors([]);
                     }
                 }
             );

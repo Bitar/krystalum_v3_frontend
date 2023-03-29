@@ -49,7 +49,7 @@ const PublisherContact: React.FC = () => {
             setRefetchOptions(false);
 
             // get the contact types
-            getContactTypes(publisher).then(response => {
+            getContactTypes().then(response => {
                 if (axios.isAxiosError(response)) {
                     setFormErrors(extractErrors(response));
                 } else if (response === undefined) {
@@ -106,6 +106,9 @@ const PublisherContact: React.FC = () => {
 
                         // we need to clear the form data
                         setForm(defaultFormFields);
+
+                        // we need to clear the form data
+                        setFormErrors([]);
                     }
                 }
             );

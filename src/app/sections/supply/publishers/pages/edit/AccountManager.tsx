@@ -78,7 +78,7 @@ const PublisherAccountManager: React.FC = () => {
         genericOnChangeHandler(e, form, setForm);
     };
 
-    const handleCreate = (e: any) => {
+    const handleCreate = () => {
         if (publisher) {
             // send API request to create the publisher account manager
             storePublisherAccountManager(publisher, form).then(response => {
@@ -106,6 +106,9 @@ const PublisherAccountManager: React.FC = () => {
 
                         // we need to clear the form data
                         setForm(defaultFormFields);
+
+                        // we need to clear the form data
+                        setFormErrors([]);
                     }
                 }
             );

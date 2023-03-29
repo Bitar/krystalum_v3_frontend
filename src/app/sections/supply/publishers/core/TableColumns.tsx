@@ -28,7 +28,7 @@ const PublishersColumns: ReadonlyArray<Column<Publisher>> = [
         Header: (props) => <CustomHeader tableProps={props} title="Account Manager" className="min-w-125px"/>,
         id: 'accountManager',
         Cell: ({...props}) => <TextCell
-            text={(props.data[props.row.index].accountManager?.user ? props.data[props.row.index].accountManager?.user?.name : '-')}/>,
+            text={(props.data[props.row.index].accountManager ? props.data[props.row.index].accountManager?.name : '-')}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Country" className="min-w-125px"/>,
