@@ -43,8 +43,6 @@ const KrysIndex: React.FC<Props> = ({
                 <ListViewProvider>
                     <KTCard>
                         <KTCardHeader text={cardHeader.text}
-                                      icon={cardHeader.icon ? cardHeader.icon : ''}
-                                      icon_style={cardHeader.icon_style ? cardHeader.icon_style : ''}
                                       actions={cardHeader.actions}/>
 
                         <KTCardBody>

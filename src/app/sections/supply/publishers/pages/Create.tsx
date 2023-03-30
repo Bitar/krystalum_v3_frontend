@@ -113,7 +113,7 @@ const PublisherCreate: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New Publisher" icon="fa-regular fa-plus" icon_style="fs-3 text-success"/>
+            <KTCardHeader text="Create New Publisher"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -124,7 +124,7 @@ const PublisherCreate: React.FC = () => {
                         <div className="mb-7">
                             <KrysFormLabel text="Name" isRequired={true}/>
 
-                            <Field className="form-control fs-6" type="text"
+                            <Field className="form-control fs-base" type="text"
                                    placeholder="Enter publisher name" name="name"/>
 
                             <div className="mt-1 text-danger">
@@ -192,7 +192,7 @@ const PublisherCreate: React.FC = () => {
                                 <KrysFormLabel text="Revenue share" isRequired={true}/>
 
                                 <InputGroup className="mb-3">
-                                    <Field className="form-control fs-6" type="number"
+                                    <Field className="form-control fs-base" type="number"
                                            placeholder="Enter publisher revenue share"
                                            name="revenue_share"/>
                                     <InputGroup.Text id="basic-addon1">%</InputGroup.Text>
@@ -208,7 +208,7 @@ const PublisherCreate: React.FC = () => {
                             <div className="mb-7">
                                 <KrysFormLabel text="Commitment" isRequired={true}/>
 
-                                <Field className="form-control fs-6" type="text"
+                                <Field className="form-control fs-base" type="text"
                                        placeholder="Enter publisher commitment amount" name="commitment"/>
 
                                 <div className="mt-1 text-danger">
@@ -222,7 +222,7 @@ const PublisherCreate: React.FC = () => {
                         <div className="mb-7">
                             <KrysFormLabel text="Email address" isRequired={false}/>
 
-                            <Field className="form-control fs-6" type="email"
+                            <Field className="form-control fs-base" type="email"
                                    placeholder="Enter publisher email address" name="email"/>
 
                             <div className="mt-1 text-danger">
@@ -233,7 +233,7 @@ const PublisherCreate: React.FC = () => {
                         <div className="mb-7">
                             <KrysFormLabel text="HQ address" isRequired={false}/>
 
-                            <Field className="form-control fs-6" type="text"
+                            <Field className="form-control fs-base" type="text"
                                    placeholder="Enter publisher hq address" name="hq_address"/>
 
                             <div className="mt-1 text-danger">

@@ -1,16 +1,16 @@
 import * as Yup from 'yup';
 
 export interface FormFields {
-    type: number,
+    type: string,
     detail: string
 }
 
 export const defaultFormFields = {
-    type: 0,
+    type: '',
     detail: ''
 };
 
 export const ContactSchema = Yup.object().shape({
-    type: Yup.number().min(1, 'contact type is required').required(),
+    type: Yup.string().required(),
     detail: Yup.string().required(),
 });

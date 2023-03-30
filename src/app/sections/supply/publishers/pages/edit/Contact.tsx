@@ -20,7 +20,6 @@ import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
 import {PublisherContactsColumns} from '../../core/edit/contact/TableColumns';
 import {ContactSchema, defaultFormFields, FormFields} from '../../core/edit/contact/form';
 import {
-    getContactTypes,
     getPublisherContacts,
     storePublisherContact
 } from '../../../../../requests/supply/publisher/PublisherContact';
@@ -28,10 +27,11 @@ import {ContactType} from '../../../../../models/supply/publisher/PublisherConta
 import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';
 import {usePublisher} from '../../core/PublisherContext';
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
+import {getContactTypes} from '../../../../../requests/supply/Options';
 
 
 const PublisherContact: React.FC = () => {
-    const {publisher, refetchOptions, setRefetchOptions} = usePublisher();
+    const {publisher} = usePublisher();
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -46,8 +46,6 @@ const PublisherContact: React.FC = () => {
 
     useEffect(() => {
         if (publisher) {
-            setRefetchOptions(false);
-
             // get the contact types
             getContactTypes().then(response => {
                 if (axios.isAxiosError(response)) {
@@ -64,8 +62,7 @@ const PublisherContact: React.FC = () => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [publisher, refetchOptions]); // I added the refetchOptions here in order to update the contact
-    // types dropdown when a new publisher contact type is stored or deleted
+    }, [publisher]);
 
     const onChangeHandler = (e: any) => {
         // as long as we are updating the create form, we should set the table refresh to false
@@ -97,9 +94,6 @@ const PublisherContact: React.FC = () => {
 
                         // now that we have a new record successfully we need to refresh the table
                         setRefreshTable(true);
-
-                        // now that we have a new record successfully we need to refresh the contact types dropdown
-                        setRefetchOptions(true);
 
                         // clear the selected values from dropdown
                         contactTypesSelectRef.current?.clearValue();
@@ -147,7 +141,7 @@ const PublisherContact: React.FC = () => {
                         <div className="mb-7">
                             <KrysFormLabel text="Contact detail" isRequired={true}/>
 
-                            <Field className="form-control fs-6" type="text"
+                            <Field className="form-control fs-base" type="text"
                                    placeholder="Enter contact detail (address, email address or phone)" name="detail"/>
 
                             <div className="mt-1 text-danger">

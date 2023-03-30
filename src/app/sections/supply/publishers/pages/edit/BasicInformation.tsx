@@ -38,11 +38,6 @@ const BasicInformation: React.FC = () => {
 
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
-    // this will be used to check if the publisher is being updated
-    // if it is true and useEffect, then I don't want to refill the form
-    // if it is false,
-    const [isOverviewReloaded, setIsOverviewReloaded] = useState<boolean>(false)
-
     const [tiers, setTiers] = useState<Tier[]>([]);
     const [countries, setCountries] = useState<Country[]>([]);
 
@@ -52,8 +47,7 @@ const BasicInformation: React.FC = () => {
         if (publisher) {
             setIsResourceLoaded(true);
 
-            // update the form with publisher field just on page reload
-            if (!isOverviewReloaded) setForm(fillEditForm(publisher));
+            setForm(fillEditForm(publisher));
 
             // get the tiers
             getAllTiers().then(response => {
@@ -111,8 +105,6 @@ const BasicInformation: React.FC = () => {
                             type: KrysToastType.SUCCESS
                         });
 
-                        setIsOverviewReloaded(true);
-
                         // set the updated publisher so that the overview will be updated
                         setPublisher(response)
 
@@ -136,7 +128,7 @@ const BasicInformation: React.FC = () => {
                         <div className="mb-7">
                             <KrysFormLabel text="Name" isRequired={true}/>
 
-                            <Field className="form-control fs-6" type="text"
+                            <Field className="form-control fs-base" type="text"
                                    placeholder="Enter publisher name" name="name"/>
 
                             <div className="mt-1 text-danger">
@@ -203,7 +195,7 @@ const BasicInformation: React.FC = () => {
                                 <KrysFormLabel text="Revenue share" isRequired={true}/>
 
                                 <InputGroup className="mb-3">
-                                    <Field className="form-control fs-6" type="number"
+                                    <Field className="form-control fs-base" type="number"
                                            placeholder="Enter publisher revenue share"
                                            name="revenue_share"/>
                                     <InputGroup.Text id="basic-addon1">%</InputGroup.Text>
@@ -220,7 +212,7 @@ const BasicInformation: React.FC = () => {
                             <div className="mb-7">
                                 <KrysFormLabel text="Commitment" isRequired={true}/>
 
-                                <Field className="form-control fs-6" type="text"
+                                <Field className="form-control fs-base" type="text"
                                        placeholder="Enter publisher commitment amount" name="commitment"/>
 
                                 <div className="mt-1 text-danger">
@@ -234,7 +226,7 @@ const BasicInformation: React.FC = () => {
                         <div className="mb-7">
                             <KrysFormLabel text="Email address" isRequired={false}/>
 
-                            <Field className="form-control fs-6" type="email"
+                            <Field className="form-control fs-base" type="email"
                                    placeholder="Enter publisher email address" name="email"/>
 
                             <div className="mt-1 text-danger">
@@ -245,7 +237,7 @@ const BasicInformation: React.FC = () => {
                         <div className="mb-7">
                             <KrysFormLabel text="HQ address" isRequired={false}/>
 
-                            <Field className="form-control fs-6" type="text"
+                            <Field className="form-control fs-base" type="text"
                                    placeholder="Enter publisher hq address" name="hq_address"/>
 
                             <div className="mt-1 text-danger">

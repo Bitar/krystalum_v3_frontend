@@ -3,7 +3,8 @@ import {User} from '../../iam/User';
 
 export type PublisherAccountManager = {
     id: number,
-    user: User,
+    name: string,
+    email: string,
     assignment_date: Date,
     status: number
 };

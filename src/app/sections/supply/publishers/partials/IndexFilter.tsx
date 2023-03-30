@@ -5,7 +5,7 @@ import {Col, Collapse, Row} from 'react-bootstrap';
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
 import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
 import {
-    genericDateOnChangeHandler, genericDateRangeOnChangeHandler,
+    genericDateRangeOnChangeHandler,
     GenericErrorMessage,
     genericMultiSelectOnChangeHandler,
     genericOnChangeHandler
@@ -27,7 +27,7 @@ import {User} from '../../../../models/iam/User';
 import {getAllRegions} from '../../../../requests/misc/Region';
 import {DateRangePicker} from 'rsuite';
 import {DateRange} from 'rsuite/DateRangePicker';
-import {getAccountManagers} from '../../../../requests/supply/publisher/PublisherAccountManager';
+import {getAccountManagers} from '../../../../requests/supply/Options';
 
 interface Props {
     showFilter: boolean,
@@ -107,7 +107,11 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
     }, []);
 
     const multiSelectChangeHandler = (e: any, key: string) => {
-        genericMultiSelectOnChangeHandler(e, filters, setFilters, key);
+        if (key === 'countries_ids') {
+            setFilters({...filters, countries_ids: e.map((entity: any) => entity.id), regions_ids: []})
+        } else {
+            genericMultiSelectOnChangeHandler(e, filters, setFilters, key);
+        }
     };
 
     const dateRangeChangeHandler = (date: DateRange | null, key: string) => {
@@ -129,13 +133,22 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
 
     useEffect(() => {
         handleFilter();
+
         tiersSelectRef.current?.clearValue();
         countriesSelectRef.current?.clearValue();
+        regionsSelectRef.current?.clearValue();
+        accountManagersSelectRef.current?.clearValue();
 
         setReset(false);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reset]);
+
+    useEffect(() => {
+        // we also need to clear the values of the regions select fields
+        // when the country select changes
+        regionsSelectRef.current?.clearValue();
+    }, [filters.countries_ids]);
 
     const resetFilter = () => {
         setFilters(defaultFilterFields);
@@ -144,6 +157,9 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
 
     const tiersSelectRef = useRef<any>(null);
     const countriesSelectRef = useRef<any>(null);
+    const regionsSelectRef = useRef<any>(null);
+    const accountManagersSelectRef = useRef<any>(null);
+    const startsBetweenDateRef = useRef<any>(null);
 
     return (
         <Collapse in={showFilter}>
@@ -160,7 +176,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                     <Col md={4}>
                                         <KrysFormLabel text="Name" isRequired={false}/>
 
-                                        <Field className="form-control fs-6" type="text"
+                                        <Field className="form-control fs-base" type="text"
                                                placeholder="Filter by name" name="name"/>
 
                                         <div className="mt-1 text-danger">
@@ -192,7 +208,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                                 getOptionLabel={(region) => region?.name}
                                                 getOptionValue={(region) => region?.id.toString()}
                                                 onChange={(e) => multiSelectChangeHandler(e, 'regions_ids')}
-                                                ref={countriesSelectRef}
+                                                ref={regionsSelectRef}
                                                 placeholder="Filter by region"
                                                 isDisabled={(!!(filters?.countries_ids && filters?.countries_ids.length > 0))}/>
 
@@ -227,6 +243,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                                          block
                                                          isoWeek
                                                          onChange={(date) => dateRangeChangeHandler(date, 'starts_between')}
+                                                         ref={startsBetweenDateRef}
                                         />
 
                                         <div className="mt-1 text-danger">
@@ -242,7 +259,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                                 getOptionLabel={(accountManager) => accountManager?.name}
                                                 getOptionValue={(accountManager) => accountManager?.id.toString()}
                                                 onChange={(e) => multiSelectChangeHandler(e, 'account_managers_ids')}
-                                                ref={tiersSelectRef}
+                                                ref={accountManagersSelectRef}
                                                 placeholder="Filter by account manager"/>
 
                                         <div className="mt-1 text-danger">

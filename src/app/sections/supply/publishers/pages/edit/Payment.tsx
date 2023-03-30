@@ -83,7 +83,7 @@ const PublisherPayment: React.FC = () => {
                         <div className="mb-7">
                             <KrysFormLabel text="Beneficiary" isRequired={true}/>
 
-                            <Field className="form-control fs-6" type="text"
+                            <Field className="form-control fs-base" type="text"
                                    placeholder="Enter the beneficiary" name="beneficiary"/>
 
                             <div className="mt-1 text-danger">
@@ -94,7 +94,7 @@ const PublisherPayment: React.FC = () => {
                         <div className="mb-7">
                             <KrysFormLabel text="Account number" isRequired={true}/>
 
-                            <Field className="form-control fs-6" type="text"
+                            <Field className="form-control fs-base" type="text"
                                    placeholder="Enter the account number" name="account_number"/>
 
                             <div className="mt-1 text-danger">
@@ -105,7 +105,7 @@ const PublisherPayment: React.FC = () => {
                         <div className="mb-7">
                             <KrysFormLabel text="Swift code" isRequired={true}/>
 
-                            <Field className="form-control fs-6" type="text"
+                            <Field className="form-control fs-base" type="text"
                                    placeholder="Enter the swift code" name="swift_code"/>
 
                             <div className="mt-1 text-danger">
@@ -116,7 +116,7 @@ const PublisherPayment: React.FC = () => {
                         <div className="mb-7">
                             <KrysFormLabel text="IBAN" isRequired={false}/>
 
-                            <Field className="form-control fs-6" type="text"
+                            <Field className="form-control fs-base" type="text"
                                    placeholder="Enter the iban" name="iban"/>
 
                             <div className="mt-1 text-danger">
@@ -127,7 +127,7 @@ const PublisherPayment: React.FC = () => {
                         <div className="mb-7">
                             <KrysFormLabel text="Bank name" isRequired={true}/>
 
-                            <Field className="form-control fs-6" type="text"
+                            <Field className="form-control fs-base" type="text"
                                    placeholder="Enter the bank name" name="bank_name"/>
 
                             <div className="mt-1 text-danger">
@@ -139,7 +139,7 @@ const PublisherPayment: React.FC = () => {
                         <div className="mb-7">
                             <KrysFormLabel text="Bank address" isRequired={false}/>
 
-                            <Field className="form-control fs-6" type="text"
+                            <Field className="form-control fs-base" type="text"
                                    placeholder="Enter the bank address" name="bank_address"/>
 
                             <div className="mt-1 text-danger">

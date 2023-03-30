@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
 export interface FormFields {
-    user_id: string
+    user_id: number
 }
 
 export const defaultFormFields = {

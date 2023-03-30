@@ -13,7 +13,9 @@ export const defaultFormFields = {
     beneficiary: '',
     account_number: '',
     swift_code: '',
+    iban: '',
     bank_name: '',
+    bank_address: ''
 };
 
 export const PaymentSchema = Yup.object().shape({

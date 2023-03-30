@@ -87,7 +87,7 @@ const PublisherEdit: React.FC = () => {
 
     return (
         <PublisherContext.Provider
-            value={{publisher, setPublisher, refetchOptions, setRefetchOptions}}>
+            value={{publisher, setPublisher}}>
             <PublisherOverview></PublisherOverview>
 
             <KTCard className="mb-5">

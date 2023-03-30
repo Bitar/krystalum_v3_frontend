@@ -1,13 +1,11 @@
 import * as Yup from 'yup';
-import {Tier} from '../../../../models/misc/Tier';
 import {COMMITMENT, Publisher, REVENUE_SHARE} from '../../../../models/supply/publisher/Publisher';
-import {Country} from '../../../../models/misc/Country';
 
 export interface FormFields {
     name: string,
     tier_id?: number | null,
     integration_date?: Date | null,
-    revenue_type: number,
+    revenue_type: string,
     revenue_share?: number | string | null, // kept the string type here because we don't want to see revenue_share 0 as default
     // value in the form. However, we kept the revenue_share validation to be number to make sure that the string entered
     // is a valid number.
@@ -19,7 +17,7 @@ export interface FormFields {
 
 export const defaultFormFields = {
     name: '',
-    revenue_type: 0,
+    revenue_type: '',
     revenue_share: '',
     commitment: '',
     email: '',
@@ -29,7 +27,7 @@ export const defaultFormFields = {
 export const PublisherSchema = Yup.object().shape({
     name: Yup.string().required(),
     tier_id: Yup.number().notRequired(),
-    revenue_type: Yup.number().min(1, 'revenue type is required').required(),
+    revenue_type: Yup.string().required(),
     revenue_share: Yup.number().nullable().when('revenue_type', {
         is: REVENUE_SHARE,
         then: Yup.number().min(1, 'revenue share must be greater than 0').max(100, 'revenue share must be less than or equal to 100').required(),

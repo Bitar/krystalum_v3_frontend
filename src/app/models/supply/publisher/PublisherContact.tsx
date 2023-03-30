@@ -11,7 +11,7 @@ export type ContactTypeList = {
 
 export type PublisherContact = {
     id: number,
-    type: ContactType,
+    type: string,
     detail: string
 };
 

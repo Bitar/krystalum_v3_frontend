@@ -17,9 +17,8 @@ import {useKrysApp} from '../../../../../modules/general/KrysApp';
 import {ErrorMessage, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
-import {defaultFormFields, FormFields} from '../../core/edit/payment/form';
+import {defaultFormFields, FormFields} from '../../core/edit/account-manager/form';
 import {
-    getAccountManagers,
     getPublisherAccountManagers,
     storePublisherAccountManager
 } from '../../../../../requests/supply/publisher/PublisherAccountManager';
@@ -29,9 +28,10 @@ import {usePublisher} from '../../core/PublisherContext';
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
 import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';
 import {PublisherAccountManagersColumns} from '../../core/edit/account-manager/TableColumns';
+import {getAccountManagers} from '../../../../../requests/supply/Options';
 
 const PublisherAccountManager: React.FC = () => {
-    const {publisher, refetchOptions, setRefetchOptions} = usePublisher();
+    const {publisher} = usePublisher();
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -46,8 +46,6 @@ const PublisherAccountManager: React.FC = () => {
 
     useEffect(() => {
         if (publisher) {
-            setRefetchOptions(false);
-
             // get the users (account managers)
             getAccountManagers(publisher).then(response => {
                 if (axios.isAxiosError(response)) {
@@ -64,8 +62,7 @@ const PublisherAccountManager: React.FC = () => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [publisher, refetchOptions]); // I added the refetchOptions here in order to update the contact
-    // types dropdown when a new publisher contact type is stored or deleted
+    }, [publisher]);
 
     const selectChangeHandler = (e: any, key: string) => {
         genericSingleSelectOnChangeHandler(e, form, setForm, key);
@@ -98,8 +95,8 @@ const PublisherAccountManager: React.FC = () => {
                         // now that we have a new record successfully we need to refresh the table
                         setRefreshTable(true);
 
-                        // now that we have a new record successfully we need to refresh the contact types dropdown
-                        setRefetchOptions(true);
+                        // refresh the dropdown options to remove the added user
+                        setAccountManagers(accountManagers.filter((user) => user.id !== form.user_id));
 
                         // clear the selected values from dropdown
                         accountManagersSelectRef.current?.clearValue();

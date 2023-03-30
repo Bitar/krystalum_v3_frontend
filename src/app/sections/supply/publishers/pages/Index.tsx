@@ -9,6 +9,8 @@ import {PublishersColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 import KrysIndex from '../../../../components/tables/KrysIndex';
 import PublisherIndexFilter from '../partials/IndexFilter';
+import {Link} from 'react-router-dom';
+import clsx from 'clsx';
 
 
 const PublisherIndex: React.FC = () => {
@@ -59,8 +61,10 @@ const PublisherIndex: React.FC = () => {
                                     <p className="text-white mb-5">Browse through the list of publishers that don't have
                                         publications that are currently receiving inventory</p>
                                     <div className="m-0">
-                                        <a href={'/supply/publishers/archived'} className="btn btn-danger fw-semibold px-6 py-3">Go to Archived
-                                            Publishers</a>
+                                        <Link to={`/supply/publishers/archived`}
+                                              className="btn btn-danger fw-semibold px-6 py-3">
+                                            Go to Archived Publishers
+                                        </Link>
                                     </div>
                                 </div>
                             </div>

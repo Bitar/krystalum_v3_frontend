@@ -12,7 +12,7 @@ const PublisherContactsColumns: ReadonlyArray<Column<PublisherContact>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Contact type" className="min-w-125px"/>,
         id: 'type',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].type?.name}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].type}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Contact detail" className="min-w-125px"/>,
@@ -27,7 +27,7 @@ const PublisherContactsColumns: ReadonlyArray<Column<PublisherContact>> = [
         ),
         id: 'actions',
         Cell: ({...props}) => {
-            const {publisher, setRefetchOptions} = usePublisher();
+            const {publisher} = usePublisher();
 
             return (
                 <Restricted to={'manage-supply'}>
@@ -40,7 +40,6 @@ const PublisherContactsColumns: ReadonlyArray<Column<PublisherContact>> = [
                         showDelete={true}
                         title="Delete Publisher Contact"
                         text={`Are you sure you want to delete the publisher contact '${props.data[props.row.index].type.name}'?`}
-                        callBackFn={() => setRefetchOptions(true)}
                     />
                 </Restricted>
             )

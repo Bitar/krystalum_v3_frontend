@@ -8,7 +8,7 @@ export type Publisher = {
     name: string,
     tier: Tier | null,
     integration_date: Date | null,
-    revenue_type: number,
+    revenue_type: string,
     revenue_share: number | null,
     commitment: string | null,
     info: PublisherInfo | null,
@@ -28,5 +28,5 @@ export type PublisherList = {
     data: Publisher[]
 }
 
-export const REVENUE_SHARE = 1;
-export const COMMITMENT = 2;
+export const REVENUE_SHARE ='revenue_share';
+export const COMMITMENT = 'commitment';
