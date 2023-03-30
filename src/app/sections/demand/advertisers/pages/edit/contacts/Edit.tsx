@@ -106,7 +106,7 @@ const AdvertiserContactEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Contact person name" isRequired={false}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter full name of contact person" name="contact_name"/>
 
                                     <div className="mt-1 text-danger">
@@ -117,7 +117,7 @@ const AdvertiserContactEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Agency name" isRequired={false}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter agency name" name="agency_name"/>
 
                                     <div className="mt-1 text-danger">
@@ -128,7 +128,7 @@ const AdvertiserContactEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Contact information" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="E.g. email address, phone number, physical address"
                                            name="contact_info"/>
 

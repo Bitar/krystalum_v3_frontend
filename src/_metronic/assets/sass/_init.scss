@@ -13,28 +13,6 @@
 @import './core/components/variables';
 @import './core/components/variables-dark';
 
-<<<<<<< HEAD
-.css-13cymwt-control:hover, .css-t3ipsp-control:hover {
-  border-color: var(--bs-gray-300) !important;
-  box-shadow: none !important;
-}
-
-.css-13cymwt-control, .css-t3ipsp-control {
-  border-color: var(--bs-gray-300) !important;
-  box-shadow: none !important;
-  font-weight: 500;
-}
-
-.css-13cymwt-control, .css-t3ipsp-control {
-  padding-top: 2px !important;
-  padding-bottom: 3px !important;
-}
-
-.css-1jqq78o-placeholder {
-  color: var(--bs-gray-500) !important;
-  font-size: 1rem;
-}
-
 // Bootstrap initialization
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';

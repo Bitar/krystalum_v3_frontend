@@ -204,7 +204,7 @@ const AdvertiserInfoEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter full name" name="name"/>
 
                                     <div className="mt-1 text-danger">
@@ -215,7 +215,7 @@ const AdvertiserInfoEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="HQ Address" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter HQ full address" name="hq_address"/>
 
                                     <div className="mt-1 text-danger">
@@ -254,7 +254,7 @@ const AdvertiserInfoEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Trade license" isRequired={false}/>
 
-                                    <Field className="form-control fs-6" type="file" name="trade_license"
+                                    <Field className="form-control fs-base" type="file" name="trade_license"
                                            innerRef={tradeLicenseFileInputRef}
                                            value={undefined}
                                            onChange={(e: any) => handleFile(e, formik)}/>

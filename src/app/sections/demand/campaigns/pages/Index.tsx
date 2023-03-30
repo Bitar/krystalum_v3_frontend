@@ -41,7 +41,7 @@ const CampaignIndex = () => {
                                           new CreateCardAction('/demand/campaigns', 'manage-demand')
                                       ]}/>
                         <KTCardBody>
-                            {/*<CampaignIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>*/}
+                            <CampaignIndexFilter showFilter={showFilter} setExportQuery={setExportQuery}/>
 
                             <CampaignTable/>
                         </KTCardBody>

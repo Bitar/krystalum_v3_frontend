@@ -59,6 +59,7 @@
           color: $krys;
         }
       }
+
       //.settings-nav-label {
       //  .settings-nav-title {
       //    //color: white;
@@ -68,6 +69,7 @@
   }
 }
 
+// custom css for the React Select so that it looks like other input fields
 .css-13cymwt-control:hover, .css-t3ipsp-control:hover {
   border-color: var(--bs-gray-300) !important;
   box-shadow: none !important;
@@ -87,4 +89,31 @@
 .css-1jqq78o-placeholder {
   color: var(--bs-gray-500) !important;
   font-size: 1.075rem;
+}
+
+// custom css for the react tags input
+.rti--container {
+  border-color: var(--bs-gray-300) !important;
+  box-shadow: none !important;
+
+  .rti--input {
+    width: 100%;
+    color: var(--bs-gray-700) !important;
+    font-size: 1.075rem;
+    padding-top: 3px !important;
+    padding-bottom: 4px !important;
+
+    &::placeholder {
+      color: var(--bs-gray-500) !important;
+      font-size: 1.075rem;
+    }
+  }
+
+  .rti--tag {
+    max-width: 100%;
+
+    .span {
+      word-wrap: break-word;
+    }
+  }
 }

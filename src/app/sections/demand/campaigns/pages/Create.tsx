@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
@@ -10,20 +9,15 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {
     GenericErrorMessage,
-    genericMultiSelectOnChangeHandler,
     genericOnChangeHandler,
-    genericSelectOnChangeHandler,
     genericSingleSelectOnChangeHandler
 } from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {storeCampaign} from '../../../../requests/demand/Campaign';
-// import {CampaignSchema, defaultFormFields, FormFields} from '../core/form';
+import {PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {Sections} from "../../../../helpers/sections";
-import {CampaignSchema, defaultFormFields, FormFields} from '../core/form';
-import {getAllTradingDesks} from '../../../../requests/demand/TradingDesk';
+import {defaultFormFields, FormFields, getCampaignSchema} from '../core/form';
 import {getAllBookingTypes} from '../../../../requests/misc/BookingType';
 import {BookingType} from '../../../../models/misc/BookingType';
 import Select from 'react-select';
@@ -45,8 +39,15 @@ import {Region} from '../../../../models/misc/Region';
 import {getAllObjectives} from '../../../../requests/misc/Objective';
 import {Objective} from '../../../../models/misc/Objective';
 import CreatableSelect from 'react-select/creatable';
+import {useAuth} from '../../../../modules/auth';
+import {User} from '../../../../models/iam/User';
+import {getAllUsers} from '../../../../requests/iam/User';
+import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
+import AsyncSelect from 'react-select/async';
 
 const CampaignCreate: React.FC = () => {
+    const {currentUser, hasAnyRoles} = useAuth();
+
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -60,11 +61,11 @@ const CampaignCreate: React.FC = () => {
     const [agencies, setAgencies] = useState<Agency[]>([]);
     const [regions, setRegions] = useState<Region[]>([]);
     const [objectives, setObjectives] = useState<Objective[]>([]);
+    const [demandUsers, setDemandUsers] = useState<User[]>([]);
+    const [allUsers, setAllUsers] = useState<User[]>([]);
 
     const krysApp = useKrysApp();
-    // // we use this to navigate to the index page after the new campaign is saved
-    // const navigate = useNavigate();
-    //
+
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.DEMAND_CAMPAIGNS, PageTypes.CREATE));
 
@@ -121,7 +122,7 @@ const CampaignCreate: React.FC = () => {
         });
 
         // get all advertisers
-        getAllAdvertisers().then(response => {
+        getAllAdvertisers('filter[per_page]=30').then(response => {
             if (axios.isAxiosError(response)) {
                 setFormErrors(extractErrors(response));
             } else if (response === undefined) {
@@ -172,21 +173,58 @@ const CampaignCreate: React.FC = () => {
             }
         });
 
+        // get all the demand users
+        getAllUsers('filter[roles][]=11&filter[roles][]=10').then(response => {
+            if (axios.isAxiosError(response)) {
+                setFormErrors(extractErrors(response));
+            } else if (response === undefined) {
+                setFormErrors([GenericErrorMessage])
+            } else {
+                if (response.data) {
+                    setDemandUsers(response.data);
+                }
+            }
+        });
+
+        // get all users regardless of role
+        getAllUsers('filter[user_type]=internal').then(response => {
+            if (axios.isAxiosError(response)) {
+                setFormErrors(extractErrors(response));
+            } else if (response === undefined) {
+                setFormErrors([GenericErrorMessage])
+            } else {
+                if (response.data) {
+                    setAllUsers(response.data);
+                }
+            }
+        });
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    //
-    // const multiSelectChangeHandler = (e: any) => {
-    //     genericMultiSelectOnChangeHandler(e, form, setForm, 'TODO');
-    // };
-    //
+
+    const creatableSelectChangeHandler = (e: any) => {
+        let newObjectives: string [] = [];
+        let selectedObjectives: number[] = [];
+
+        e.forEach((option: any) => {
+            if (isNaN(parseInt(option.value))) {
+                // this is a new option
+                newObjectives.push(option.value);
+            } else {
+                // this is a selected option
+                selectedObjectives.push(parseInt(option.value));
+            }
+
+            setForm({...form, objectives_ids: selectedObjectives, objectives: newObjectives});
+        });
+    }
+
     const onChangeHandler = (e: any) => {
         // in case of multi select, the element doesn't have a name because
         // we get only a list of values from the select and not an element with target value and name
 
         // add here any fields you don't want the default handler to handle
-        // if (e.target.name !== 'advertiser_type') {
         genericOnChangeHandler(e, form, setForm);
-        // }
     };
 
     const onAdvertiserTypeChangeHandler = (e: any) => {
@@ -205,6 +243,7 @@ const CampaignCreate: React.FC = () => {
     }, [form.advertiser_type]);
 
     const handleCreate = (e: any) => {
+        console.log(form);
         // send API request to create the campaign
         // storeCampaign(form).then(response => {
         //         if (axios.isAxiosError(response)) {
@@ -222,28 +261,26 @@ const CampaignCreate: React.FC = () => {
         // );
     };
 
-    const agenciesSelectRef = useRef<any>(null);
-    const regionsSelectRef = useRef<any>(null);
-
-
-    // const handleCreateObjective = (inputValue: any) => {
-    //     const newOption = {
-    //         id: inputValue.toLowerCase(),
-    //         name: inputValue,
-    //     };
-    //
-    //     console.log(inputValue);
-    //
-    //     console.log(form.objectives_ids);
-    //     // setSelectedOption(newOption);
-    // };
-
-    interface Option {
-        value: string,
-        label: string
+    const loadAdvertiserOptions = (inputValue: string) => {
+        return new Promise<Advertiser[]>((resolve) => {
+            setTimeout(() => {
+                getAllAdvertisers(`filter[search]=${inputValue}`).then(response => {
+                    if (axios.isAxiosError(response)) {
+                        setFormErrors(extractErrors(response));
+                    } else if (response === undefined) {
+                        setFormErrors([GenericErrorMessage])
+                    } else {
+                        if (response.data) {
+                            resolve(response.data);
+                        }
+                    }
+                });
+            }, 1000);
+        });
     }
 
-    const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
+    const agenciesSelectRef = useRef<any>(null);
+    const regionsSelectRef = useRef<any>(null);
 
     return (
         <KTCard>
@@ -252,7 +289,9 @@ const CampaignCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={CampaignSchema} onSubmit={handleCreate}
+                <Formik initialValues={form}
+                        validationSchema={getCampaignSchema(hasAnyRoles(currentUser, ['Demand', 'Head of Demand']))}
+                        onSubmit={handleCreate}
                         enableReinitialize>
                     {
                         (formik) => (
@@ -367,13 +406,12 @@ const CampaignCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Advertiser" isRequired={true}/>
 
-                                    {/* TODO make it type ahead? (search with api call)*/}
-                                    <Select name="advertiser_id"
-                                            options={advertisers}
-                                            getOptionLabel={(advertiser) => advertiser.name}
-                                            getOptionValue={(advertiser) => advertiser.id.toString()}
-                                            placeholder='Choose advertiser'
-                                            onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'advertiser_id')}/>
+                                    <AsyncSelect placeholder='Choose advertiser'
+                                                 defaultOptions={advertisers}
+                                                 getOptionLabel={(advertiser) => advertiser.name}
+                                                 getOptionValue={(advertiser) => advertiser.id.toString()}
+                                                 onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'advertiser_id')}
+                                                 loadOptions={loadAdvertiserOptions}/>
 
                                     <div className="mt-3 text-danger">
                                         {formik.errors?.advertiser_id ? formik.errors?.advertiser_id : null}
@@ -422,66 +460,95 @@ const CampaignCreate: React.FC = () => {
                                 <div className='separator separator-dashed my-10'></div>
 
                                 <div className='mb-4'>
-                                    <span className='fs-5 text-gray-700 d-flex fw-medium'>Objectives</span>
+                                    <span className='fs-5 text-gray-700 d-flex fw-medium'>Campaign objectives</span>
                                     <span
-                                        className='text-muted'>Define the campaign's objectives by choosing from listing or typing in your own</span>
+                                        className='text-muted'>Define the campaign's objectives by choosing from the list or typing in your own</span>
                                 </div>
 
                                 <div className="mb-7">
                                     <KrysFormLabel text="Objectives" isRequired={false}/>
-
-                                    {/*<CreatableSelect isMulti name="objectives_ids"*/}
-                                    {/*                 options={objectives}*/}
-                                    {/*                 getOptionLabel={(objective) => objective.name}*/}
-                                    {/*                 getOptionValue={(objective) => objective.id?.toString()}*/}
-                                    {/*    // onChange={(e) => genericMultiSelectOnChangeHandler(e, form, setForm, 'objectives_ids')}*/}
-                                    {/*                 onChange={(e) => console.log(e)}*/}
-                                    {/*    // placeholder="Select or type one or more objectives"*/}
-                                    {/*    // onCreateOption={handleCreateObjective}*/}
-                                    {/*    // formatCreateLabel={(inputValue) => `Create new objective "${inputValue}"`}*/}
-                                    {/*/>*/}
 
                                     <CreatableSelect isMulti name="objectives_ids"
                                                      options={objectives.map((objective) => ({
                                                          value: objective.id.toString(),
                                                          label: objective.name,
                                                      }))}
-                                                     // getOptionLabel={(objective) => objective.name}
-                                                     // getOptionValue={(objective) => objective.id?.toString()}
-                                                     // onCreateOption={(newOptionValue) => {
-                                                     //     const newOption = {
-                                                     //         value: Math.random().toString(36).substr(2, 9), // generate a random ID
-                                                     //         label: newOptionValue
-                                                     //     };
-                                                     //
-                                                     //     setSelectedOptions([...selectedOptions, newOption]);
-                                                     // }}
-                                                     // isValidNewOption={(inputValue, selectedOptions) =>
-                                                     //     !selectedOptions.some((option) => option.label === inputValue)
-                                                     // }
-                                                     onChange={(e) => {
-                                                         let newObjectives : string [] = [];
-                                                         let selectedObjectives : number[] = [];
-
-                                                         e.forEach((option) => {
-                                                             if(isNaN(parseInt(option.value))) {
-                                                                 // this is a new option
-                                                                 newObjectives.push(option.value);
-                                                             } else {
-                                                                 // this is a selected option
-                                                                 selectedObjectives.push(parseInt(option.value));
-                                                             }
-
-                                                             setForm({...form, objectives_ids: selectedObjectives, objectives: newObjectives});
-                                                         });
-                                                     }
-                                                     }
+                                                     onChange={creatableSelectChangeHandler}
                                     />
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="objectives_ids" className="mt-2"/>
                                     </div>
                                 </div>
+
+                                {/*if the user is not sales, then we need to add the user section*/}
+                                {
+                                    hasAnyRoles(currentUser, ['Demand', 'Head of Demand']) &&
+                                    <>
+                                        <div className='separator separator-dashed my-10'></div>
+                                        <div className='mb-4'>
+                                                <span
+                                                    className='fs-5 text-gray-700 d-flex fw-medium'>Assign owner</span>
+                                            <span
+                                                className='text-muted'>Choose a sales user or any other user in MMPWW to be the owner of this campaign.</span>
+                                        </div>
+
+                                        {/*we include a checkbox so the user can choose which type of user he wants the owner to be*/}
+                                        <div className="mb-7">
+                                            <KrysFormLabel text="Is the owner part of demand?" isRequired={true}/>
+
+                                            <KrysCheckbox name="is_owner_demand"
+                                                          onChangeHandler={(e) => {
+                                                              e.stopPropagation();
+                                                              setForm({
+                                                                  ...form,
+                                                                  is_owner_demand: Number(!form.is_owner_demand)
+                                                              });
+                                                          }}
+                                                          defaultValue={Boolean(form.is_owner_demand)}/>
+
+                                            <div className="mt-1 text-danger">
+                                                <ErrorMessage name="is_owner_demand" className="mt-2"/>
+                                            </div>
+                                        </div>
+
+                                        {
+                                            Boolean(form.is_owner_demand) &&
+                                            <div className="mb-7">
+                                                <KrysFormLabel text="Demand users" isRequired={true}/>
+
+                                                <Select name="user_id"
+                                                        options={demandUsers}
+                                                        getOptionLabel={(user) => user.name}
+                                                        getOptionValue={(user) => user.id.toString()}
+                                                        placeholder='Choose owner'
+                                                        onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'user_id')}/>
+
+                                                <div className="mt-3 text-danger">
+                                                    {formik.errors?.user_id ? formik.errors?.user_id : null}
+                                                </div>
+                                            </div>
+                                        }
+
+                                        {
+                                            !Boolean(form.is_owner_demand) &&
+                                            <div className="mb-7">
+                                                <KrysFormLabel text="All users" isRequired={true}/>
+
+                                                <Select name="user_id"
+                                                        options={allUsers}
+                                                        getOptionLabel={(user) => user.name}
+                                                        getOptionValue={(user) => user.id.toString()}
+                                                        placeholder='Choose owner'
+                                                        onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'user_id')}/>
+
+                                                <div className="mt-3 text-danger">
+                                                    {formik.errors?.user_id ? formik.errors?.user_id : null}
+                                                </div>
+                                            </div>
+                                        }
+                                    </>
+                                }
 
                                 <KrysFormFooter cancelUrl={'/demand/campaigns'}/>
                             </Form>

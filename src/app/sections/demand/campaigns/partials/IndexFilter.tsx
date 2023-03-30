@@ -4,11 +4,16 @@ import {Col, Collapse, Row} from 'react-bootstrap';
 
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
 import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
-import {genericOnChangeHandler} from '../../../../helpers/form';
+import {
+    genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler,
+    genericSingleSelectOnChangeHandler
+} from '../../../../helpers/form';
 import {initialQueryState} from '../../../../../_metronic/helpers';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
 import {createFilterQueryParam} from '../../../../helpers/requests';
+import {TagsInput} from 'react-tag-input-component';
 
 interface Props {
     showFilter: boolean,
@@ -22,7 +27,9 @@ const CampaignIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     const [filters, setFilters] = useState<FilterFields>(defaultFilterFields);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, filters, setFilters);
+        if(e.target.name !== 'unique_identifiers') {
+            genericOnChangeHandler(e, filters, setFilters);
+        }
     };
 
     const handleFilter = () => {
@@ -60,13 +67,40 @@ const CampaignIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                             <Col md={4}>
                                                 <KrysFormLabel text="Name" isRequired={false}/>
 
-                                                <Field className="form-control fs-6" type="text"
-                                                       placeholder="Filter by name" name="name"/>
+                                                <Field className="form-control fs-base" type="text"
+                                                       placeholder="Filter by campaign name" name="name"/>
 
                                                 <div className="mt-1 text-danger">
                                                     <ErrorMessage name="name" className="mt-2"/>
                                                 </div>
                                             </Col>
+
+                                            <Col md={4}>
+                                                <KrysFormLabel text="Unique identifier(s)" isRequired={false}/>
+
+                                                <TagsInput
+                                                    value={filters.unique_identifiers}
+                                                    onChange={(e) => setFilters({...filters, unique_identifiers: e})}
+                                                    name="unique_identifiers"
+                                                    placeHolder="Filter by unique identifier(s)"
+                                                />
+
+                                                <div className="mt-1 text-danger">
+                                                    <ErrorMessage name="unique_identifiers" className="mt-2"/>
+                                                </div>
+                                            </Col>
+
+                                            {/*<Col md={4}>*/}
+                                            {/*    <KrysFormLabel text="Agency(ies)" isRequired={false}/>*/}
+
+                                                {/*<AsyncSelect cacheOptions*/}
+                                                {/*             placeholder='Choose agency(ies)'*/}
+                                                {/*             defaultOptions={advertisers}*/}
+                                                {/*             getOptionLabel={(agency) => agency.name}*/}
+                                                {/*             getOptionValue={(agency) => agency.id.toString()}*/}
+                                                {/*             onChange={(e) => genericMultiSelectOnChangeHandler(e, filters, setFilters, 'agencies_ids')}*/}
+                                                {/*             loadOptions={loadAdvertiserOptions}/>*/}
+                                            {/*</Col>*/}
                                         </Row>
 
                                         <FilterFormFooter resetFilter={resetFilter}/>

@@ -6,8 +6,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/demand/advertisers`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllAdvertisers = async (): Promise<AdvertiserList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<AdvertiserList>) => response.data).catch((error) => {
+export const getAllAdvertisers = async (query?: string): Promise<AdvertiserList | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name' + (query ? '&' + query : '')).then((response: AxiosResponse<AdvertiserList>) => response.data).catch((error) => {
         return error;
     });
 }
@@ -18,7 +18,7 @@ export const getAdvertisers = (query?: String): Promise<AdvertiserPaginate> => {
     if (query) {
         url += `?${query}`;
 
-        if(query.charAt(query.length - 1) === '&') {
+        if (query.charAt(query.length - 1) === '&') {
             url += 'include[]=info';
         } else {
             url += '&include[]=info';

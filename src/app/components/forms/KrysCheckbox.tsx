@@ -10,7 +10,7 @@ interface Props {
 const KrysCheckbox: React.FC<Props> = ({name, onChangeHandler, defaultValue, bgColor = 'success'}) => {
     return (
         <div className={`form-check form-check-${bgColor} form-switch form-check-custom form-check-solid`}>
-            <input className="form-check-input" type="checkbox" name={name} onChange={onChangeHandler} checked={defaultValue}/>
+            <input className="form-check-input h-20px w-30px" type="checkbox" name={name} onChange={onChangeHandler} checked={defaultValue}/>
         </div>
     );
 }

@@ -114,7 +114,7 @@ const HoldingGroupCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter holding group name" name="name"/>
 
                                     <div className="mt-1 text-danger">
