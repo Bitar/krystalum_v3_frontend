@@ -1,39 +1,43 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import Select from 'react-select';
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 
-import {KTCard, KTCardBody, QUERIES} from '../../../../../../_metronic/helpers';
+import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 
-import FormErrors from '../../../../../components/forms/FormErrors';
+import {usePublisher} from '../../../core/PublisherContext';
+import {
+    defaultPublisherContactFormFields,
+    PublisherContactFormFields,
+    PublisherContactSchema
+} from '../../../core/edit/contacts/form';
+import {ContactType} from '../../../../../../models/supply/publisher/PublisherContact';
+import {useKrysApp} from '../../../../../../modules/general/KrysApp';
+import {getContactTypes} from '../../../../../../requests/supply/Options';
+import {extractErrors} from '../../../../../../helpers/requests';
 import {
     GenericErrorMessage,
     genericOnChangeHandler,
     genericSingleSelectOnChangeHandler
-} from '../../../../../helpers/form';
-import {extractErrors} from '../../../../../helpers/requests';
-import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
-import {Actions, KrysToastType} from '../../../../../helpers/variables';
-import {useKrysApp} from '../../../../../modules/general/KrysApp';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
-import {PublisherContactsColumns} from '../../core/edit/contact/TableColumns';
-import {ContactSchema, defaultFormFields, FormFields} from '../../core/edit/contact/form';
+} from '../../../../../../helpers/form';
 import {
     getPublisherContacts,
     storePublisherContact
-} from '../../../../../requests/supply/publisher/PublisherContact';
-import {ContactType} from '../../../../../models/supply/publisher/PublisherContact';
-import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';
-import {usePublisher} from '../../core/PublisherContext';
-import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
-import {getContactTypes} from '../../../../../requests/supply/Options';
+} from '../../../../../../requests/supply/publisher/PublisherContact';
+import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
+import {Actions, KrysToastType} from '../../../../../../helpers/variables';
+import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
+import FormErrors from '../../../../../../components/forms/FormErrors';
+import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
+import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
+import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
+import {PublisherContactsColumns} from '../../../core/edit/contacts/TableColumns';
 
 
-const PublisherContact: React.FC = () => {
+const PublisherContactCreate: React.FC = () => {
     const {publisher} = usePublisher();
 
-    const [form, setForm] = useState<FormFields>(defaultFormFields);
+    const [form, setForm] = useState<PublisherContactFormFields>(defaultPublisherContactFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const [contactTypes, setContactTypes] = useState<ContactType[]>([]);
@@ -46,14 +50,14 @@ const PublisherContact: React.FC = () => {
 
     useEffect(() => {
         if (publisher) {
-            // get the contact types
+            // get the contacts types
             getContactTypes().then(response => {
                 if (axios.isAxiosError(response)) {
                     setFormErrors(extractErrors(response));
                 } else if (response === undefined) {
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    // if we were able to get the list of contact types, then we fill our state with them
+                    // if we were able to get the list of contacts types, then we fill our state with them
                     if (response.data) {
                         setContactTypes(response.data);
                     }
@@ -77,7 +81,7 @@ const PublisherContact: React.FC = () => {
 
     const handleCreate = () => {
         if (publisher) {
-            // send API request to create the publisher contact
+            // send API request to create the publisher contacts
             storePublisherContact(publisher, form).then(response => {
                     if (axios.isAxiosError(response)) {
                         // we need to show the errors
@@ -86,9 +90,9 @@ const PublisherContact: React.FC = () => {
                         // show generic error message
                         setFormErrors([GenericErrorMessage])
                     } else {
-                        // we were able to store the publisher contact
+                        // we were able to store the publisher contacts
                         krysApp.setAlert({
-                            message: new AlertMessageGenerator('publisher contact details', Actions.CREATE, KrysToastType.SUCCESS).message,
+                            message: new AlertMessageGenerator('publisher contacts details', Actions.CREATE, KrysToastType.SUCCESS).message,
                             type: KrysToastType.SUCCESS
                         });
 
@@ -99,7 +103,7 @@ const PublisherContact: React.FC = () => {
                         contactTypesSelectRef.current?.clearValue();
 
                         // we need to clear the form data
-                        setForm(defaultFormFields);
+                        setForm(defaultPublisherContactFormFields);
 
                         // we need to clear the form data
                         setFormErrors([]);
@@ -116,7 +120,7 @@ const PublisherContact: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={ContactSchema} onSubmit={handleCreate}
+                <Formik initialValues={form} validationSchema={PublisherContactSchema} onSubmit={handleCreate}
                         enableReinitialize>
                     <Form onChange={onChangeHandler}>
                         <div className="mb-7">
@@ -171,4 +175,4 @@ const PublisherContact: React.FC = () => {
     );
 }
 
-export default PublisherContact;
+export default PublisherContactCreate;

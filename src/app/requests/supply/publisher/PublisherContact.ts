@@ -20,12 +20,34 @@ export const getPublisherContacts = (publisherId: number, query?: String): Promi
     });
 }
 
+
+export const getPublisherContact = async (publisher: Publisher, id: number): Promise<PublisherContact | AxiosError | undefined> => {
+    let url = `${ENDPOINT}/${publisher.id}/${CONTACTS_ENDPOINT}`;
+
+    return await axios.get(url + '/' + id)
+        .then(res => res.data.data).catch((error) => {
+            return error;
+        });
+}
+
 export const storePublisherContact = async (publisher: Publisher, form: any): Promise<PublisherContact | AxiosError | undefined> => {
     let url = `${ENDPOINT}/${publisher.id}/${CONTACTS_ENDPOINT}`;
 
     let formData = createFormData(form);
 
     return await axios.post(url, formData).then(res => res.data).catch((error) => {
+        return error;
+    });
+}
+
+export const updatePublisherContact = async (publisher: Publisher, id: number, publisherContact: any): Promise<PublisherContact | AxiosError | undefined> => {
+    let url = `${ENDPOINT}/${publisher.id}/${CONTACTS_ENDPOINT}`;
+
+    let formData = createFormData(publisherContact);
+
+    formData.append('_method', 'put');
+
+    return await axios.post(url + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

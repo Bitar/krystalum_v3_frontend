@@ -1,7 +1,7 @@
 import {Response} from '../../../../_metronic/helpers';
 
 export type ContactType = {
-    id: number,
+    id: string,
     name: string
 };
 
@@ -11,7 +11,7 @@ export type ContactTypeList = {
 
 export type PublisherContact = {
     id: number,
-    type: string,
+    contactType: ContactType,
     detail: string
 };
 

@@ -29,4 +29,6 @@ export enum Sections {
     MISC_TIERS = 'Tiers',
     MISC_CAMPAIGN_RESTRICTION_REQUIREMENTS = 'Campaign restriction requirements',
     SUPPLY_PUBLISHERS = 'Publishers',
+    SUPPLY_PUBLISHER_CONTACTS = 'Publisher contacts',
+    SUPPLY_PUBLISHER_PAYMENTS = 'Publisher payments',
 }

@@ -14,15 +14,14 @@ import {Publisher} from '../../../../models/supply/publisher/Publisher';
 import {getPublisher} from '../../../../requests/supply/publisher/Publisher';
 import BasicInformation from './edit/BasicInformation';
 import PublisherOverview from '../partials/Overview';
-import PublisherContact from './edit/Contact';
-import PublisherPayment from './edit/Payment';
 import PublisherPublication from './edit/Publication';
 import PublisherAccountManager from './edit/AccountManager';
 import {PublisherContext} from '../core/PublisherContext';
+import PublisherContactCreate from './edit/contacts/Create';
+import PublisherPaymentCreate from './edit/payments/Create';
 
 const PublisherEdit: React.FC = () => {
     const [publisher, setPublisher] = useState<Publisher | null>(null);
-    const [refetchOptions, setRefetchOptions] = useState<boolean>(false);
 
     let {id} = useParams();
 
@@ -65,7 +64,7 @@ const PublisherEdit: React.FC = () => {
         },
         {
             title: 'Contact details',
-            description: 'Enter the contact\'s details',
+            description: 'Enter the contacts\'s details',
             icon: 'fa-duotone fa-phone'
         },
         {
@@ -80,7 +79,7 @@ const PublisherEdit: React.FC = () => {
         },
         {
             title: 'Account managers',
-            description: 'Point of contact',
+            description: 'Point of contacts',
             icon: 'fa-duotone fa-user-tie'
         }
     ]
@@ -122,11 +121,11 @@ const PublisherEdit: React.FC = () => {
                                     </Tab.Pane>
 
                                     <Tab.Pane eventKey="settingsNav-1">
-                                        <PublisherContact/>
+                                        <PublisherContactCreate/>
                                     </Tab.Pane>
 
                                     <Tab.Pane eventKey="settingsNav-2">
-                                        <PublisherPayment/>
+                                        <PublisherPaymentCreate/>
                                     </Tab.Pane>
 
                                     <Tab.Pane eventKey="settingsNav-3">

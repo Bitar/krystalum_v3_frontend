@@ -12,7 +12,7 @@ const PublisherContactsColumns: ReadonlyArray<Column<PublisherContact>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Contact type" className="min-w-125px"/>,
         id: 'type',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].type}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].contactType.name}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Contact detail" className="min-w-125px"/>,
@@ -36,10 +36,10 @@ const PublisherContactsColumns: ReadonlyArray<Column<PublisherContact>> = [
                         path={`supply/publishers/${publisher?.id}/contacts`}
                         queryKey={QUERIES.PUBLISHER_CONTACTS_LIST}
                         showView={false}
-                        showEdit={false}
+                        showEdit={true}
                         showDelete={true}
                         title="Delete Publisher Contact"
-                        text={`Are you sure you want to delete the publisher contact '${props.data[props.row.index].type.name}'?`}
+                        text={`Are you sure you want to delete the publisher contact '${props.data[props.row.index].contactType.name}'?`}
                     />
                 </Restricted>
             )

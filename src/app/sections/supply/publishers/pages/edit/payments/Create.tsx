@@ -1,36 +1,52 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 
-import {KTCard, KTCardBody, QUERIES} from '../../../../../../_metronic/helpers';
+import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 
-import FormErrors from '../../../../../components/forms/FormErrors';
+import {usePublisher} from '../../../core/PublisherContext';
+import {useKrysApp} from '../../../../../../modules/general/KrysApp';
+import {extractErrors} from '../../../../../../helpers/requests';
 import {
     GenericErrorMessage,
     genericOnChangeHandler
-} from '../../../../../helpers/form';
-import {extractErrors} from '../../../../../helpers/requests';
-import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
-import {Actions, KrysToastType} from '../../../../../helpers/variables';
-import {useKrysApp} from '../../../../../modules/general/KrysApp';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
-import {defaultFormFields, FormFields, PaymentSchema} from '../../core/edit/payment/form';
-import {getPublisherPayments, storePublisherPayment} from '../../../../../requests/supply/publisher/PublisherPayment';
-import {usePublisher} from '../../core/PublisherContext';
-import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
-import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';
-import {PublisherPaymentsColumns} from '../../core/edit/payment/TableColumns';
+} from '../../../../../../helpers/form';
+import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
+import {Actions, KrysToastType} from '../../../../../../helpers/variables';
+import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
+import FormErrors from '../../../../../../components/forms/FormErrors';
+import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
+import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
+import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
+import {
+    defaultPublisherPaymentFormFields,
+    PublisherPaymentFormFields,
+    PublisherPaymentSchema
+} from '../../../core/edit/payments/form';
+import {
+    getPublisherPayments,
+    storePublisherPayment
+} from '../../../../../../requests/supply/publisher/PublisherPayment';
+import {PublisherPaymentsColumns} from '../../../core/edit/payments/TableColumns';
 
-const PublisherPayment: React.FC = () => {
+
+const PublisherPaymentCreate: React.FC = () => {
     const {publisher} = usePublisher();
 
-    const [form, setForm] = useState<FormFields>(defaultFormFields);
+    const [form, setForm] = useState<PublisherPaymentFormFields>(defaultPublisherPaymentFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
     const krysApp = useKrysApp();
+
+    useEffect(() => {
+        if (publisher) {
+
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [publisher]);
 
     const onChangeHandler = (e: any) => {
         // as long as we are updating the create form, we should set the table refresh to false
@@ -39,9 +55,9 @@ const PublisherPayment: React.FC = () => {
         genericOnChangeHandler(e, form, setForm);
     };
 
-    const handleCreate = (e: any) => {
+    const handleCreate = () => {
         if (publisher) {
-            // send API request to create the publisher payment
+            // send API request to create the publisher payments
             storePublisherPayment(publisher, form).then(response => {
                     if (axios.isAxiosError(response)) {
                         // we need to show the errors
@@ -50,9 +66,9 @@ const PublisherPayment: React.FC = () => {
                         // show generic error message
                         setFormErrors([GenericErrorMessage])
                     } else {
-                        // we were able to store the publisher payment
+                        // we were able to store the publisher payments
                         krysApp.setAlert({
-                            message: new AlertMessageGenerator('publisher payment details', Actions.CREATE, KrysToastType.SUCCESS).message,
+                            message: new AlertMessageGenerator('publisher payments details', Actions.CREATE, KrysToastType.SUCCESS).message,
                             type: KrysToastType.SUCCESS
                         });
 
@@ -60,7 +76,7 @@ const PublisherPayment: React.FC = () => {
                         setRefreshTable(true);
 
                         // we need to clear the form data
-                        setForm(defaultFormFields);
+                        setForm(defaultPublisherPaymentFormFields);
 
                         // we need to clear the form data
                         setFormErrors([]);
@@ -77,7 +93,7 @@ const PublisherPayment: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={PaymentSchema} onSubmit={handleCreate}
+                <Formik initialValues={form} validationSchema={PublisherPaymentSchema} onSubmit={handleCreate}
                         enableReinitialize>
                     <Form onChange={onChangeHandler}>
                         <div className="mb-7">
@@ -169,4 +185,4 @@ const PublisherPayment: React.FC = () => {
     );
 }
 
-export default PublisherPayment;
+export default PublisherPaymentCreate;

@@ -1,15 +1,15 @@
 import * as Yup from 'yup';
 
-export interface FormFields {
+export interface PublisherPaymentFormFields {
     beneficiary: string,
     account_number: string,
     swift_code: string,
-    iban?: string,
+    iban?: string | null,
     bank_name: string,
-    bank_address?: string
+    bank_address?: string | null
 }
 
-export const defaultFormFields = {
+export const defaultPublisherPaymentFormFields = {
     beneficiary: '',
     account_number: '',
     swift_code: '',
@@ -18,7 +18,7 @@ export const defaultFormFields = {
     bank_address: ''
 };
 
-export const PaymentSchema = Yup.object().shape({
+export const PublisherPaymentSchema = Yup.object().shape({
     beneficiary: Yup.string().required(),
     account_number: Yup.string().required(),
     swift_code: Yup.string().required(),

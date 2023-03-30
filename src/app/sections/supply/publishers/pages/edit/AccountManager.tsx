@@ -17,23 +17,23 @@ import {useKrysApp} from '../../../../../modules/general/KrysApp';
 import {ErrorMessage, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
-import {defaultFormFields, FormFields} from '../../core/edit/account-manager/form';
+import {defaultPublisherAccountManagerFormFields, PublisherAccountManagerFormFields} from '../../core/edit/account-managers/form';
 import {
     getPublisherAccountManagers,
     storePublisherAccountManager
 } from '../../../../../requests/supply/publisher/PublisherAccountManager';
-import {AccountManagerSchema} from '../../core/edit/account-manager/form';
+import {PublisherAccountManagerSchema} from '../../core/edit/account-managers/form';
 import {User} from '../../../../../models/iam/User';
 import {usePublisher} from '../../core/PublisherContext';
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
 import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';
-import {PublisherAccountManagersColumns} from '../../core/edit/account-manager/TableColumns';
+import {PublisherAccountManagersColumns} from '../../core/edit/account-managers/TableColumns';
 import {getAccountManagers} from '../../../../../requests/supply/Options';
 
 const PublisherAccountManager: React.FC = () => {
     const {publisher} = usePublisher();
 
-    const [form, setForm] = useState<FormFields>(defaultFormFields);
+    const [form, setForm] = useState<PublisherAccountManagerFormFields>(defaultPublisherAccountManagerFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
@@ -102,7 +102,7 @@ const PublisherAccountManager: React.FC = () => {
                         accountManagersSelectRef.current?.clearValue();
 
                         // we need to clear the form data
-                        setForm(defaultFormFields);
+                        setForm(defaultPublisherAccountManagerFormFields);
 
                         // we need to clear the form data
                         setFormErrors([]);
@@ -119,7 +119,7 @@ const PublisherAccountManager: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={AccountManagerSchema} onSubmit={handleCreate}
+                <Formik initialValues={form} validationSchema={PublisherAccountManagerSchema} onSubmit={handleCreate}
                         enableReinitialize>
                     <Form onChange={onChangeHandler}>
                         <div className="mb-7">
