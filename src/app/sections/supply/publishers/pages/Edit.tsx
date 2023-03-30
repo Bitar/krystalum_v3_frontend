@@ -60,12 +60,12 @@ const PublisherEdit: React.FC = () => {
         {
             title: 'Basic information',
             description: 'Update the publisher\'s details',
-            icon: 'fa-duotone fa-cog'
+            icon: 'fa-duotone fa-gears'
         },
         {
             title: 'Contact details',
             description: 'Enter the contacts\'s details',
-            icon: 'fa-duotone fa-phone'
+            icon: 'fa-duotone fa-address-book'
         },
         {
             title: 'Payment details',
@@ -85,9 +85,8 @@ const PublisherEdit: React.FC = () => {
     ]
 
     return (
-        <PublisherContext.Provider
-            value={{publisher, setPublisher}}>
-            <PublisherOverview></PublisherOverview>
+        <>
+            <PublisherOverview/>
 
             <KTCard className="mb-5">
                 <KTCardHeader text="Edit Publisher"/>
@@ -141,7 +140,7 @@ const PublisherEdit: React.FC = () => {
                     </Tab.Container>
                 </KTCardBody>
             </KTCard>
-        </PublisherContext.Provider>
+        </>
     )
 };
 
