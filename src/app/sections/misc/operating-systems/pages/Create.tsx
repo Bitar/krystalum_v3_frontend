@@ -54,7 +54,7 @@ const OperatingSystemCreate: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New Operating System" icon="fa-regular fa-plus" icon_style="fs-3 text-success"/>
+            <KTCardHeader text="Create New Operating System" />
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -66,7 +66,7 @@ const OperatingSystemCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true} />
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter operating system name" name="name"/>
 
                                     <div className="mt-1 text-danger">

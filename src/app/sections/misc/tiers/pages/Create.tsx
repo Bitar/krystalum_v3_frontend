@@ -58,7 +58,7 @@ const TierCreate: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New Tier" icon="fa-regular fa-plus" icon_style="fs-3 text-success"/>
+            <KTCardHeader text="Create New Tier" />
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -70,7 +70,7 @@ const TierCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter tier name" name="name"/>
 
                                     <div className="mt-1 text-danger">
@@ -81,7 +81,7 @@ const TierCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Order" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="number"
+                                    <Field className="form-control fs-base" type="number"
                                            placeholder="Enter tier order" name="order"/>
 
                                     <div className="mt-1 text-danger">

@@ -30,8 +30,7 @@ const CountryIndex = () => {
                    cardHeader={
                        {
                            text: 'All Countries',
-                           icon: 'fa-regular fa-list',
-                           icon_style: 'fs-3 text-primary',
+
                            actions: [new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                new FilterCardAction('countries-list-filter', showFilter, setShowFilter),
                                new CreateCardAction('/misc/countries', 'manage-misc')],

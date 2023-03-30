@@ -33,8 +33,7 @@ const CampaignRestrictionRequirementIndex: React.FC = () => {
                    cardHeader={
                        {
                            text: 'All Campaign Restriction Requirements',
-                           icon: 'fa-regular fa-list',
-                           icon_style: 'fs-3 text-primary',
+
                            actions: [new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                new FilterCardAction('campaign-restriction-requirements-list-filter', showFilter, setShowFilter),
                                new CreateCardAction('/misc/campaign-restriction-requirements', 'manage-misc')],

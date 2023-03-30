@@ -30,8 +30,7 @@ const PerformanceMetricIndex: React.FC = () => {
                    cardHeader={
                        {
                            text: 'All Performance Metrics',
-                           icon: 'fa-regular fa-list',
-                           icon_style: 'fs-3 text-primary',
+
                            actions: [new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                new FilterCardAction('performance-metrics-list-filter', showFilter, setShowFilter),
                                new CreateCardAction('/misc/performance-metrics', 'manage-misc')],

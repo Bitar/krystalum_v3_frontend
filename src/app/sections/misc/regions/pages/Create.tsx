@@ -82,7 +82,7 @@ const RegionCreate: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New Region" icon="fa-regular fa-plus" icon_style="fs-3 text-success"/>
+            <KTCardHeader text="Create New Region" />
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -94,7 +94,7 @@ const RegionCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter Region name" name="name"/>
 
                                     <div className="mt-1 text-danger">

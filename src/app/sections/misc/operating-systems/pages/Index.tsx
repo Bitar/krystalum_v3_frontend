@@ -30,8 +30,7 @@ const OperatingSystemIndex = () => {
                    cardHeader={
                        {
                            text: 'All Operating Systems',
-                           icon: 'fa-regular fa-list',
-                           icon_style: 'fs-3 text-primary',
+
                            actions: [new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                new FilterCardAction('operating-systems-list-filter', showFilter, setShowFilter),
                                new CreateCardAction('/misc/operating-systems', 'manage-misc')],

@@ -107,7 +107,7 @@ const KpiEdit: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Kpi" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
+            <KTCardHeader text="Edit Kpi" />
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -119,7 +119,7 @@ const KpiEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter KPI name" name="name"/>
 
                                     <div className="mt-1 text-danger">

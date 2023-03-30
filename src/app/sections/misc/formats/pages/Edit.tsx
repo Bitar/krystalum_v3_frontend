@@ -152,7 +152,7 @@ const FormatEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter format name" name="name"/>
 
                                     <div className="mt-1 text-danger">
@@ -163,7 +163,7 @@ const FormatEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Code" isRequired={true}/>
 
-                                    <Field className="form-control fs-6" type="text"
+                                    <Field className="form-control fs-base" type="text"
                                            placeholder="Enter format code" name="code"/>
 
                                     <div className="mt-1 text-danger">
