@@ -17,7 +17,10 @@ import {useKrysApp} from '../../../../../modules/general/KrysApp';
 import {ErrorMessage, Form, Formik} from 'formik';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
-import {defaultPublisherAccountManagerFormFields, PublisherAccountManagerFormFields} from '../../core/edit/account-managers/form';
+import {
+    defaultPublisherAccountManagerFormFields,
+    PublisherAccountManagerFormFields
+} from '../../core/edit/account-managers/form';
 import {
     getPublisherAccountManagers,
     storePublisherAccountManager
@@ -28,34 +31,34 @@ import {usePublisher} from '../../core/PublisherContext';
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
 import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';
 import {PublisherAccountManagersColumns} from '../../core/edit/account-managers/TableColumns';
-import {getAccountManagers} from '../../../../../requests/supply/Options';
+import {getAllUsers} from '../../../../../requests/iam/User';
 
 const PublisherAccountManager: React.FC = () => {
     const {publisher} = usePublisher();
+    const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublisherAccountManagerFormFields>(defaultPublisherAccountManagerFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
+    const [allAccountManagers, setAllAccountManagers] = useState<User[]>([]);
     const [accountManagers, setAccountManagers] = useState<User[]>([]);
 
     const accountManagersSelectRef = useRef<any>(null);
 
-    const krysApp = useKrysApp();
-
     useEffect(() => {
         if (publisher) {
-            // get the users (account managers)
-            getAccountManagers(publisher).then(response => {
+            // get all the account manager users
+            getAllUsers('filter[roles][]=12&filter[roles][]=5').then(response => {
                 if (axios.isAxiosError(response)) {
                     setFormErrors(extractErrors(response));
                 } else if (response === undefined) {
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    // if we were able to get the list of s (account managers), then we fill our state with them
                     if (response.data) {
-                        setAccountManagers(response.data);
+                        setAllAccountManagers(response.data);
+                        setAccountManagers(response.data.filter((user) => user.id !== publisher.accountManager?.id));
                     }
                 }
             });
@@ -96,7 +99,7 @@ const PublisherAccountManager: React.FC = () => {
                         setRefreshTable(true);
 
                         // refresh the dropdown options to remove the added user
-                        setAccountManagers(accountManagers.filter((user) => user.id !== form.user_id));
+                        setAccountManagers(allAccountManagers.filter((user) => user.id !== response.id));
 
                         // clear the selected values from dropdown
                         accountManagersSelectRef.current?.clearValue();

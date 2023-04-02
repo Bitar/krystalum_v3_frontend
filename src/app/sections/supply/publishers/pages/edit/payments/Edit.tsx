@@ -25,15 +25,16 @@ import {
 } from '../../../../../../requests/supply/publisher/PublisherPayment';
 import {PublisherPayment} from '../../../../../../models/supply/publisher/PublisherPayment';
 import {
-    defaultPublisherPaymentFormFields,
+    defaultPublisherPaymentFormFields, fillEditForm,
     PublisherPaymentFormFields,
     PublisherPaymentSchema
 } from '../../../core/edit/payments/form';
-import {getPublisher} from '../../../../../../requests/supply/publisher/Publisher';
 
 
 const PublisherPaymentEdit: React.FC = () => {
-    const {publisher, setPublisher} = usePublisher();
+    const {publisher} = usePublisher();
+    // get the publisher and publisher payments id
+    const {cid} = useParams();
 
     const [publisherPayment, setPublisherPayment] = useState<PublisherPayment | null>(null);
     const [form, setForm] = useState<PublisherPaymentFormFields>(defaultPublisherPaymentFormFields);
@@ -41,29 +42,6 @@ const PublisherPaymentEdit: React.FC = () => {
 
     const krysApp = useKrysApp();
     const navigate = useNavigate();
-
-    // get the publisher and publisher payments id
-    let {id, cid} = useParams();
-
-    useEffect(() => {
-        if (!publisher && id) {
-            // get the publisher we need to edit from the database
-            getPublisher(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the publisher to edit so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    // unknown error occurred
-                    navigate('/error/400');
-                } else {
-                    setPublisher(response);
-                }
-            });
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cid]);
 
     useEffect(() => {
         if (publisher && cid) {
@@ -80,13 +58,13 @@ const PublisherPaymentEdit: React.FC = () => {
                     setPublisherPayment(response);
 
                     // we also set the form to be the publisher's payments details
-                    setForm(response);
+                    setForm(fillEditForm(response));
                 }
             });
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [publisher]);
+    }, [publisher, cid]);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);

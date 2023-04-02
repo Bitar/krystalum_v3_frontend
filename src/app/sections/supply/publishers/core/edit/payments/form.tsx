@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import {PublisherPayment} from '../../../../../../models/supply/publisher/PublisherPayment';
 
 export interface PublisherPaymentFormFields {
     beneficiary: string,
@@ -26,3 +27,13 @@ export const PublisherPaymentSchema = Yup.object().shape({
     bank_name: Yup.string().required(),
     bank_address: Yup.string().notRequired(),
 });
+
+export function fillEditForm(publisherPayment: PublisherPayment) {
+    const form: PublisherPaymentFormFields = {
+        ...publisherPayment,
+        iban: publisherPayment.iban || '',
+        bank_address: publisherPayment.bank_address || ''
+    };
+
+    return form;
+}

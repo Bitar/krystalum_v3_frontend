@@ -31,11 +31,14 @@ import FormErrors from '../../../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import SingleSelect from '../../../../../../components/forms/SingleSelect';
-import {getPublisher} from '../../../../../../requests/supply/publisher/Publisher';
-
 
 const PublisherContactEdit: React.FC = () => {
-    const {publisher, setPublisher} = usePublisher();
+    const {publisher} = usePublisher();
+    // get the publisher and publisher contacts id
+    const {cid} = useParams();
+
+    const krysApp = useKrysApp();
+    const navigate = useNavigate();
 
     const [publisherContact, setPublisherContact] = useState<PublisherContact | null>(null);
     const [form, setForm] = useState<PublisherContactFormFields>(defaultPublisherContactFormFields);
@@ -44,32 +47,6 @@ const PublisherContactEdit: React.FC = () => {
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
     const [contactTypes, setContactTypes] = useState<ContactType[]>([]);
-
-    const krysApp = useKrysApp();
-    const navigate = useNavigate();
-
-    // get the publisher and publisher contacts id
-    let {id, cid} = useParams();
-
-    useEffect(() => {
-        if (!publisher && id) {
-            // get the publisher we need to edit from the database
-            getPublisher(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the publisher to edit so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    // unknown error occurred
-                    navigate('/error/400');
-                } else {
-                    setPublisher(response);
-                }
-            });
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cid]);
 
     useEffect(() => {
         if (publisher && cid) {
@@ -108,11 +85,7 @@ const PublisherContactEdit: React.FC = () => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [publisher]);
-
-    const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, form, setForm);
-    };
+    }, [publisher, cid]);
 
     useEffect(() => {
         if (publisherContact) {
@@ -124,9 +97,13 @@ const PublisherContactEdit: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [publisherContact]);
 
+    const onChangeHandler = (e: any) => {
+        genericOnChangeHandler(e, form, setForm);
+    };
+
     const handleEdit = () => {
         if (publisher && publisherContact) {
-            // we need to update the contacts's data by doing API call with form
+            // we need to update the contact's data by doing API call with form
             updatePublisherContact(publisher, publisherContact.id, form).then(response => {
                 if (axios.isAxiosError(response)) {
                     // show errors

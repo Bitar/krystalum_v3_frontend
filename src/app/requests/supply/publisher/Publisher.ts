@@ -8,6 +8,8 @@ const ENDPOINT = `${API_URL}/supply/publishers`
 
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
+export const INCLUDES = 'include[]=tier&include[]=info&include[]=accountManager';
+
 export const getAllPublishers = async (): Promise<PublisherList | AxiosError | undefined> => {
     return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<PublisherList>) => response.data).catch((error) => {
         return error;
@@ -19,7 +21,16 @@ export const getPublishers = (query?: String): Promise<PublisherPaginate> => {
 
     if (query) {
         url += `?${query}`;
+
+        if (query.charAt(query.length - 1) === '&') {
+            url += `${INCLUDES}`;
+        } else {
+            url += `&${INCLUDES}`;
+        }
+    } else {
+        url += `?${INCLUDES}`
     }
+
 
     return axios.get(url).then((response: AxiosResponse<PublisherPaginate>) => response.data).catch((error) => {
         return error;
@@ -39,7 +50,7 @@ export const getArchivedPublishers = (query?: String): Promise<PublisherPaginate
 }
 
 export const getPublisher = async (id: number): Promise<Publisher | AxiosError | undefined> => {
-    return await axios.get(`${ENDPOINT}/${id}}`)
+    return await axios.get(`${ENDPOINT}/${id}?${INCLUDES}`)
         .then(res => res.data.data).catch((error) => {
             return error;
         });
@@ -56,6 +67,7 @@ export const storePublisher = async (publisher: any): Promise<Publisher | AxiosE
 }
 
 export const updatePublisher = async (id: number, publisher: any): Promise<Publisher | AxiosError | undefined> => {
+    console.log(publisher)
     let formData = createFormData(publisher);
 
     formData.append('_method', 'put');

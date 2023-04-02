@@ -21,9 +21,9 @@ const PublisherIndex: React.FC = () => {
 
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLISHERS, PageTypes.INDEX))
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
 
     return (
         <>

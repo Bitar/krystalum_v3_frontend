@@ -12,23 +12,23 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {Publisher} from '../../../../models/supply/publisher/Publisher';
 import {getPublisher} from '../../../../requests/supply/publisher/Publisher';
-import BasicInformation from './edit/BasicInformation';
+import BasicInformationEdit from './edit/BasicInformation';
 import PublisherOverview from '../partials/Overview';
 import PublisherPublication from './edit/Publication';
 import PublisherAccountManager from './edit/AccountManager';
-import {PublisherContext} from '../core/PublisherContext';
 import PublisherContactCreate from './edit/contacts/Create';
 import PublisherPaymentCreate from './edit/payments/Create';
 
 const PublisherEdit: React.FC = () => {
-    const [publisher, setPublisher] = useState<Publisher | null>(null);
-
     let {id} = useParams();
 
     const navigate = useNavigate();
     const krysApp = useKrysApp();
 
+    const [publisher, setPublisher] = useState<Publisher | null>(null);
+
     useEffect(() => {
+        console.log(id)
         if (id) {
             // get the publisher we need to edit from the database
             getPublisher(parseInt(id)).then(response => {
@@ -44,6 +44,7 @@ const PublisherEdit: React.FC = () => {
                 }
             });
         }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
@@ -116,7 +117,7 @@ const PublisherEdit: React.FC = () => {
                             <div className="col-lg-8 col-xl-9">
                                 <Tab.Content>
                                     <Tab.Pane eventKey="settingsNav-0">
-                                        <BasicInformation/>
+                                        <BasicInformationEdit/>
                                     </Tab.Pane>
 
                                     <Tab.Pane eventKey="settingsNav-1">

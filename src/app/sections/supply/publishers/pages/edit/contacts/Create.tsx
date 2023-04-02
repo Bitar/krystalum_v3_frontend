@@ -36,6 +36,7 @@ import {PublisherContactsColumns} from '../../../core/edit/contacts/TableColumns
 
 const PublisherContactCreate: React.FC = () => {
     const {publisher} = usePublisher();
+    const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublisherContactFormFields>(defaultPublisherContactFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -45,8 +46,6 @@ const PublisherContactCreate: React.FC = () => {
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
     const contactTypesSelectRef = useRef<any>(null);
-
-    const krysApp = useKrysApp();
 
     useEffect(() => {
         if (publisher) {

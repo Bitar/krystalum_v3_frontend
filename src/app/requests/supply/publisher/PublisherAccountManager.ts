@@ -28,7 +28,7 @@ export const storePublisherAccountManager = async (publisher: Publisher, form: a
 
     let formData = createFormData(form);
 
-    return await axios.post(url, formData).then(res => res.data).catch((error) => {
+    return await axios.post(url, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

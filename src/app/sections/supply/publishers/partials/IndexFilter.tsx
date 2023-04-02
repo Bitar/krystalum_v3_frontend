@@ -27,7 +27,7 @@ import {User} from '../../../../models/iam/User';
 import {getAllRegions} from '../../../../requests/misc/Region';
 import {DateRangePicker} from 'rsuite';
 import {DateRange} from 'rsuite/DateRangePicker';
-import {getAccountManagers} from '../../../../requests/supply/Options';
+import {getAllUsers} from '../../../../requests/iam/User';
 
 interface Props {
     showFilter: boolean,
@@ -89,14 +89,13 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
             }
         });
 
-        // get the account managers
-        getAccountManagers().then(response => {
+        // get all the account manager users
+        getAllUsers('filter[roles][]=12&filter[roles][]=5').then(response => {
             if (axios.isAxiosError(response)) {
                 setFilterErrors(extractErrors(response));
             } else if (response === undefined) {
                 setFilterErrors([GenericErrorMessage])
             } else {
-                // if we were able to get the list of account managers, then we fill our state with them
                 if (response.data) {
                     setAccountManagers(response.data);
                 }

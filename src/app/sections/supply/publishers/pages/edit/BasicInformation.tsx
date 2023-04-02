@@ -30,18 +30,17 @@ import SingleSelect from '../../../../../components/forms/SingleSelect';
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
 import {usePublisher} from '../../core/PublisherContext';
 
-const BasicInformation: React.FC = () => {
+const BasicInformationEdit: React.FC = () => {
     const {publisher, setPublisher} = usePublisher();
+    const krysApp = useKrysApp();
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
-    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
+    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false);
 
     const [tiers, setTiers] = useState<Tier[]>([]);
     const [countries, setCountries] = useState<Country[]>([]);
-
-    const krysApp = useKrysApp();
 
     useEffect(() => {
         if (publisher) {
@@ -77,6 +76,7 @@ const BasicInformation: React.FC = () => {
                 }
             });
         }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [publisher]);
 
@@ -89,8 +89,9 @@ const BasicInformation: React.FC = () => {
     };
 
     const handleEdit = () => {
+        console.log(form)
         if (publisher) {
-            // send API request to create the publisher
+            // send API request to update the publisher
             updatePublisher(publisher.id, form).then(response => {
                     if (axios.isAxiosError(response)) {
                         // we need to show the errors
@@ -104,7 +105,7 @@ const BasicInformation: React.FC = () => {
                             message: new AlertMessageGenerator('publisher', Actions.EDIT, KrysToastType.SUCCESS).message,
                             type: KrysToastType.SUCCESS
                         });
-
+                        console.log(response)
                         // set the updated publisher so that the overview will be updated
                         setPublisher(response)
 
@@ -175,13 +176,13 @@ const BasicInformation: React.FC = () => {
                             <KrysRadioButton name="revenue_type" label={'Revenue Share'}
                                              onChangeHandler={(e) => {
                                                  e.stopPropagation();
-                                                 setForm({...form, revenue_type: REVENUE_SHARE});
+                                                 setForm({...form, revenue_type: REVENUE_SHARE, commitment: publisher?.commitment || ''});
                                              }} defaultValue={form.revenue_type === REVENUE_SHARE}/>
 
                             <KrysRadioButton name="revenue_type" label={'Amount Commitment'}
                                              onChangeHandler={(e) => {
                                                  e.stopPropagation();
-                                                 setForm({...form, revenue_type: COMMITMENT});
+                                                 setForm({...form, revenue_type: COMMITMENT, revenue_share: publisher?.revenue_share || ''});
                                              }} defaultValue={form.revenue_type === COMMITMENT}/>
 
                             <div className="mt-1 text-danger">
@@ -267,4 +268,4 @@ const BasicInformation: React.FC = () => {
     );
 }
 
-export default BasicInformation;
+export default BasicInformationEdit;

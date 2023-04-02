@@ -35,14 +35,13 @@ import {getAllCountries} from '../../../../requests/misc/Country';
 import {filterData} from '../../../../helpers/dataManipulation';
 
 const PublisherCreate: React.FC = () => {
-    const [form, setForm] = useState<FormFields>(defaultFormFields);
-    const [formErrors, setFormErrors] = useState<string[]>([]);
-
-    const [tiers, setTiers] = useState<Tier[]>([]);
-    const [countries, setCountries] = useState<Country[]>([]);
-
     const navigate = useNavigate();
     const krysApp = useKrysApp();
+
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
+    const [formErrors, setFormErrors] = useState<string[]>([]);
+    const [tiers, setTiers] = useState<Tier[]>([]);
+    const [countries, setCountries] = useState<Country[]>([]);
 
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLISHERS, PageTypes.CREATE))
@@ -74,6 +73,7 @@ const PublisherCreate: React.FC = () => {
                 }
             }
         });
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -89,7 +89,7 @@ const PublisherCreate: React.FC = () => {
         genericDateOnChangeHandler(date, form, setForm, key);
     };
 
-    const handleCreate = (e: any) => {
+    const handleCreate = () => {
         // send API request to create the publisher
         storePublisher(form).then(response => {
                 if (axios.isAxiosError(response)) {
@@ -173,13 +173,13 @@ const PublisherCreate: React.FC = () => {
                             <KrysRadioButton name="revenue_type" label={'Revenue Share'}
                                              onChangeHandler={(e) => {
                                                  e.stopPropagation();
-                                                 setForm({...form, revenue_type: REVENUE_SHARE});
+                                                 setForm({...form, revenue_type: REVENUE_SHARE, commitment: ''});
                                              }} defaultValue={form.revenue_type === REVENUE_SHARE}/>
 
                             <KrysRadioButton name="revenue_type" label={'Amount Commitment'}
                                              onChangeHandler={(e) => {
                                                  e.stopPropagation();
-                                                 setForm({...form, revenue_type: COMMITMENT});
+                                                 setForm({...form, revenue_type: COMMITMENT, revenue_share: ''});
                                              }} defaultValue={form.revenue_type === COMMITMENT}/>
 
                             <div className="mt-1 text-danger">

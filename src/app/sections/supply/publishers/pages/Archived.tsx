@@ -20,6 +20,7 @@ const PublisherArchived: React.FC = () => {
 
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLISHERS, PageTypes.ARCHIVED))
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
