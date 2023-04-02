@@ -89,7 +89,6 @@ const BasicInformationEdit: React.FC = () => {
     };
 
     const handleEdit = () => {
-        console.log(form)
         if (publisher) {
             // send API request to update the publisher
             updatePublisher(publisher.id, form).then(response => {
@@ -105,7 +104,7 @@ const BasicInformationEdit: React.FC = () => {
                             message: new AlertMessageGenerator('publisher', Actions.EDIT, KrysToastType.SUCCESS).message,
                             type: KrysToastType.SUCCESS
                         });
-                        console.log(response)
+
                         // set the updated publisher so that the overview will be updated
                         setPublisher(response)
 

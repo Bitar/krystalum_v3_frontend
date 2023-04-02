@@ -20,7 +20,6 @@ const PublisherEditRoutes: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(id)
         if (id) {
             // get the publisher we need to edit from the database
             getPublisher(parseInt(id)).then(response => {

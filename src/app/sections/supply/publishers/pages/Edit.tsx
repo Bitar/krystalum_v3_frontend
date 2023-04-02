@@ -28,7 +28,6 @@ const PublisherEdit: React.FC = () => {
     const [publisher, setPublisher] = useState<Publisher | null>(null);
 
     useEffect(() => {
-        console.log(id)
         if (id) {
             // get the publisher we need to edit from the database
             getPublisher(parseInt(id)).then(response => {

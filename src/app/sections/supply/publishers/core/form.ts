@@ -42,13 +42,15 @@ export const PublisherSchema = Yup.object().shape({
 });
 
 export function fillEditForm(publisher: Publisher) {
+    const {tier, info, accountManager, ...currentPublisher} = publisher
+
     const form: FormFields = {
-        ...publisher,
+        ...currentPublisher,
         revenue_share: publisher.revenue_share?.toString() || '',
         commitment: publisher.commitment || '',
-        email: publisher.info?.email || '',
-        hq_address: publisher.info?.hq_address || '',
-        hq_country_id: publisher.info?.hq_country?.id,
+        email: info?.email || '',
+        hq_address: info?.hq_address || '',
+        hq_country_id: info?.hq_country?.id,
     };
 
     return form;

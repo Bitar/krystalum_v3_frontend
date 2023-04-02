@@ -67,7 +67,6 @@ export const storePublisher = async (publisher: any): Promise<Publisher | AxiosE
 }
 
 export const updatePublisher = async (id: number, publisher: any): Promise<Publisher | AxiosError | undefined> => {
-    console.log(publisher)
     let formData = createFormData(publisher);
 
     formData.append('_method', 'put');
