@@ -31,4 +31,5 @@ export enum Sections {
     SUPPLY_PUBLISHERS = 'Publishers',
     SUPPLY_PUBLISHER_CONTACTS = 'Publisher contacts',
     SUPPLY_PUBLISHER_PAYMENTS = 'Publisher payments',
+    SUPPLY_PUBLICATIONS = 'Publications',
 }

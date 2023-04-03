@@ -4,11 +4,10 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {PageTypes} from '../../../../helpers/variables';
 import {QUERIES} from '../../../../../_metronic/helpers';
-import {EXPORT_ENDPOINT, getArchivedPublishers, getPublishers} from '../../../../requests/supply/publisher/Publisher';
+import {EXPORT_ENDPOINT, getArchivedPublishers} from '../../../../requests/supply/publisher/Publisher';
 import {PublishersColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 import KrysIndex from '../../../../components/tables/KrysIndex';
-import IndexFilter from '../partials/IndexFilter';
 import PublisherIndexFilter from '../partials/IndexFilter';
 
 
@@ -27,6 +26,7 @@ const PublisherArchived: React.FC = () => {
 
     return (
         <>
+            TODO
             <KrysIndex queryId={QUERIES.PUBLISHERS_ARCHIVED_LIST}
                        requestFunction={getArchivedPublishers}
                        columnsArray={PublishersColumns}

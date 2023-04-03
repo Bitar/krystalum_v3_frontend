@@ -16,7 +16,6 @@ import {Actions, KrysToastType} from '../../../../../helpers/variables';
 import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
 import FormErrors from '../../../../../components/forms/FormErrors';
 import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers';
-import {COMMITMENT, REVENUE_SHARE} from '../../../../../models/supply/publisher/Publisher';
 import {defaultFormFields, fillEditForm, FormFields, PublisherSchema} from '../../core/form';
 import {updatePublisher} from '../../../../../requests/supply/publisher/Publisher';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
@@ -29,6 +28,7 @@ import {Country} from '../../../../../models/misc/Country';
 import SingleSelect from '../../../../../components/forms/SingleSelect';
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
 import {usePublisher} from '../../core/PublisherContext';
+import {REVENUE_TYPE} from '../../../../../models/supply/Options';
 
 const BasicInformationEdit: React.FC = () => {
     const {publisher, setPublisher} = usePublisher();
@@ -175,14 +175,14 @@ const BasicInformationEdit: React.FC = () => {
                             <KrysRadioButton name="revenue_type" label={'Revenue Share'}
                                              onChangeHandler={(e) => {
                                                  e.stopPropagation();
-                                                 setForm({...form, revenue_type: REVENUE_SHARE, commitment: publisher?.commitment || ''});
-                                             }} defaultValue={form.revenue_type === REVENUE_SHARE}/>
+                                                 setForm({...form, revenue_type: REVENUE_TYPE.REVENUE_SHARE, commitment: publisher?.commitment || ''});
+                                             }} defaultValue={form.revenue_type === REVENUE_TYPE.REVENUE_SHARE}/>
 
                             <KrysRadioButton name="revenue_type" label={'Amount Commitment'}
                                              onChangeHandler={(e) => {
                                                  e.stopPropagation();
-                                                 setForm({...form, revenue_type: COMMITMENT, revenue_share: publisher?.revenue_share || ''});
-                                             }} defaultValue={form.revenue_type === COMMITMENT}/>
+                                                 setForm({...form, revenue_type: REVENUE_TYPE.COMMITMENT, revenue_share: publisher?.revenue_share || ''});
+                                             }} defaultValue={form.revenue_type === REVENUE_TYPE.COMMITMENT}/>
 
                             <div className="mt-1 text-danger">
                                 <ErrorMessage name="revenue_type" className="mt-2"/>
@@ -190,7 +190,7 @@ const BasicInformationEdit: React.FC = () => {
                         </div>
 
                         {
-                            form.revenue_type === REVENUE_SHARE &&
+                            form.revenue_type === REVENUE_TYPE.REVENUE_SHARE &&
                             <div className="mb-7">
                                 <KrysFormLabel text="Revenue share" isRequired={true}/>
 
@@ -208,7 +208,7 @@ const BasicInformationEdit: React.FC = () => {
                         }
 
                         {
-                            form.revenue_type === COMMITMENT &&
+                            form.revenue_type === REVENUE_TYPE.COMMITMENT &&
                             <div className="mb-7">
                                 <KrysFormLabel text="Commitment" isRequired={true}/>
 

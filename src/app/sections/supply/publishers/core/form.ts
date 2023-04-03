@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
-import {COMMITMENT, Publisher, REVENUE_SHARE} from '../../../../models/supply/publisher/Publisher';
+import {Publisher} from '../../../../models/supply/publisher/Publisher';
+import {REVENUE_TYPE} from '../../../../models/supply/Options';
 
 export interface FormFields {
     name: string,
@@ -29,11 +30,11 @@ export const PublisherSchema = Yup.object().shape({
     tier_id: Yup.number().notRequired(),
     revenue_type: Yup.string().required(),
     revenue_share: Yup.number().nullable().when('revenue_type', {
-        is: REVENUE_SHARE,
+        is: REVENUE_TYPE.REVENUE_SHARE,
         then: Yup.number().min(1, 'revenue share must be greater than 0').max(100, 'revenue share must be less than or equal to 100').required(),
     }),
     commitment: Yup.string().nullable().when('revenue_type', {
-        is: COMMITMENT,
+        is:  REVENUE_TYPE.COMMITMENT,
         then: Yup.string().required(),
     }),
     email: Yup.string().notRequired().email(),

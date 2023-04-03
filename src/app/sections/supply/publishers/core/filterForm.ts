@@ -5,7 +5,7 @@ export interface FilterFields {
     countries_ids?: number[],
     regions_ids?: number[],
     tiers_ids?: number[],
-    starts_between?: string,
+    integration_date_range?: string,
     account_managers_ids?: number[]
 
 }
@@ -17,6 +17,6 @@ export const FilterSchema = Yup.object().shape({
     countries_ids: Yup.array().of(Yup.number()).notRequired(),
     regions_ids: Yup.array().of(Yup.number()).notRequired(),
     tiers_ids: Yup.array().of(Yup.number()).notRequired(),
-    starts_between: Yup.string().notRequired(),
+    integration_date_range: Yup.string().notRequired(),
     account_managers_ids: Yup.array().of(Yup.number()).notRequired(),
 });

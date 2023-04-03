@@ -29,10 +29,10 @@ import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 import {Tier} from '../../../../models/misc/Tier';
 import {getAllTiers} from '../../../../requests/misc/Tier';
 import KrysRadioButton from '../../../../components/forms/KrysRadioButton';
-import {COMMITMENT, REVENUE_SHARE} from '../../../../models/supply/publisher/Publisher';
 import {Country} from '../../../../models/misc/Country';
 import {getAllCountries} from '../../../../requests/misc/Country';
 import {filterData} from '../../../../helpers/dataManipulation';
+import {REVENUE_TYPE} from '../../../../models/supply/Options';
 
 const PublisherCreate: React.FC = () => {
     const navigate = useNavigate();
@@ -121,6 +121,11 @@ const PublisherCreate: React.FC = () => {
                 <Formik initialValues={form} validationSchema={PublisherSchema} onSubmit={handleCreate}
                         enableReinitialize>
                     <Form onChange={onChangeHandler}>
+                        <div className='mb-4'>
+                            <span className='fs-5 text-gray-700 d-flex fw-medium'>General information</span>
+                            <span className='text-muted'>Enter basic information about the publisher</span>
+                        </div>
+
                         <div className="mb-7">
                             <KrysFormLabel text="Name" isRequired={true}/>
 
@@ -173,21 +178,21 @@ const PublisherCreate: React.FC = () => {
                             <KrysRadioButton name="revenue_type" label={'Revenue Share'}
                                              onChangeHandler={(e) => {
                                                  e.stopPropagation();
-                                                 setForm({...form, revenue_type: REVENUE_SHARE, commitment: ''});
-                                             }} defaultValue={form.revenue_type === REVENUE_SHARE}/>
+                                                 setForm({...form, revenue_type: REVENUE_TYPE.REVENUE_SHARE, commitment: ''});
+                                             }} defaultValue={form.revenue_type === REVENUE_TYPE.REVENUE_SHARE}/>
 
                             <KrysRadioButton name="revenue_type" label={'Amount Commitment'}
                                              onChangeHandler={(e) => {
                                                  e.stopPropagation();
-                                                 setForm({...form, revenue_type: COMMITMENT, revenue_share: ''});
-                                             }} defaultValue={form.revenue_type === COMMITMENT}/>
+                                                 setForm({...form, revenue_type: REVENUE_TYPE.COMMITMENT, revenue_share: ''});
+                                             }} defaultValue={form.revenue_type === REVENUE_TYPE.COMMITMENT}/>
 
                             <div className="mt-1 text-danger">
                                 <ErrorMessage name="revenue_type" className="mt-2"/>
                             </div>
                         </div>
 
-                        {form.revenue_type === REVENUE_SHARE &&
+                        {form.revenue_type === REVENUE_TYPE.REVENUE_SHARE &&
                             <div className="mb-7">
                                 <KrysFormLabel text="Revenue share" isRequired={true}/>
 
@@ -204,7 +209,7 @@ const PublisherCreate: React.FC = () => {
                             </div>
                         }
 
-                        {form.revenue_type === COMMITMENT &&
+                        {form.revenue_type === REVENUE_TYPE.COMMITMENT &&
                             <div className="mb-7">
                                 <KrysFormLabel text="Commitment" isRequired={true}/>
 
@@ -218,6 +223,13 @@ const PublisherCreate: React.FC = () => {
                         }
 
                         <div className="separator border-2 my-10"></div>
+
+                        <div className='mb-4'>
+                            <span className='fs-5 text-gray-700 d-flex fw-medium'>Minor details</span>
+                            <span
+                                className='text-muted'>Enter minor details about the publisher to stay connected and
+                                understand your publishers' location</span>
+                        </div>
 
                         <div className="mb-7">
                             <KrysFormLabel text="Email address" isRequired={false}/>

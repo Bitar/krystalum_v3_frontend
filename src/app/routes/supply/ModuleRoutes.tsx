@@ -4,6 +4,7 @@ import {SuspenseView} from '../../components/misc/SuspenseView';
 
 const SupplyModuleRoutes: React.FC = () => {
     const PublisherRoutes = lazy(() => import('./PublisherRoutes'));
+    const PublicationRoutes = lazy(() => import('./PublicationRoutes'));
 
     return (
         <Routes>
@@ -13,6 +14,15 @@ const SupplyModuleRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PublisherRoutes/>
+                    </SuspenseView>
+                }
+            ></Route>
+
+            <Route
+                path='publications/*'
+                element={
+                    <SuspenseView>
+                        <PublicationRoutes/>
                     </SuspenseView>
                 }
             ></Route>

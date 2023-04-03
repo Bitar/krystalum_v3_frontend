@@ -158,7 +158,6 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
     const countriesSelectRef = useRef<any>(null);
     const regionsSelectRef = useRef<any>(null);
     const accountManagersSelectRef = useRef<any>(null);
-    const startsBetweenDateRef = useRef<any>(null);
 
     return (
         <Collapse in={showFilter}>
@@ -184,7 +183,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                     </Col>
 
                                     <Col md={4}>
-                                        <KrysFormLabel text="HQ Countries" isRequired={false}/>
+                                        <KrysFormLabel text="HQ Country(ies)" isRequired={false}/>
 
                                         <Select isMulti name="countries_ids"
                                                 options={countries}
@@ -192,7 +191,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                                 getOptionValue={(country) => country?.id.toString()}
                                                 onChange={(e) => multiSelectChangeHandler(e, 'countries_ids')}
                                                 ref={countriesSelectRef}
-                                                placeholder="Filter by country"/>
+                                                placeholder="Filter by country(ies)"/>
 
                                         <div className="mt-1 text-danger">
                                             <ErrorMessage name="countries_ids" className="mt-2"/>
@@ -200,7 +199,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                     </Col>
 
                                     <Col md={4}>
-                                        <KrysFormLabel text="HQ Regions" isRequired={false}/>
+                                        <KrysFormLabel text="HQ Region(s)" isRequired={false}/>
 
                                         <Select isMulti name="regions_ids"
                                                 options={regions}
@@ -208,7 +207,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                                 getOptionValue={(region) => region?.id.toString()}
                                                 onChange={(e) => multiSelectChangeHandler(e, 'regions_ids')}
                                                 ref={regionsSelectRef}
-                                                placeholder="Filter by region"
+                                                placeholder="Filter by region(s)"
                                                 isDisabled={(!!(filters?.countries_ids && filters?.countries_ids.length > 0))}/>
 
                                         <div className="mt-1 text-danger">
@@ -218,7 +217,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                 </Row>
                                 <Row>
                                     <Col md={4}>
-                                        <KrysFormLabel text="Tiers" isRequired={false}/>
+                                        <KrysFormLabel text="Tier(s)" isRequired={false}/>
 
                                         <Select isMulti name="tiers_ids"
                                                 options={tiers}
@@ -226,7 +225,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                                 getOptionValue={(tier) => tier?.id.toString()}
                                                 onChange={(e) => multiSelectChangeHandler(e, 'tiers_ids')}
                                                 ref={tiersSelectRef}
-                                                placeholder="Filter by tier"/>
+                                                placeholder="Filter by tier(s)"/>
 
                                         <div className="mt-1 text-danger">
                                             <ErrorMessage name="tiers_ids" className="mt-2"/>
@@ -236,22 +235,21 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                     <Col md={4}>
                                         <KrysFormLabel text="Integration Date" isRequired={false}/>
 
-                                        <DateRangePicker name="starts_between"
-                                                         placeholder="Select integration date range"
+                                        <DateRangePicker name="integration_date_range"
+                                                         placeholder="Filter by integration date range"
                                                          className="krys-datepicker krys-daterangepicker"
                                                          block
                                                          isoWeek
-                                                         onChange={(date) => dateRangeChangeHandler(date, 'starts_between')}
-                                                         ref={startsBetweenDateRef}
+                                                         onChange={(date) => dateRangeChangeHandler(date, 'integration_date_range')}
                                         />
 
                                         <div className="mt-1 text-danger">
-                                            <ErrorMessage name="starts_between" className="mt-2"/>
+                                            <ErrorMessage name="integration_date_range" className="mt-2"/>
                                         </div>
                                     </Col>
 
                                     <Col md={4}>
-                                        <KrysFormLabel text="Account Managers" isRequired={false}/>
+                                        <KrysFormLabel text="Account Manager(s)" isRequired={false}/>
 
                                         <Select isMulti name="account_managers_ids"
                                                 options={accountManagers}
@@ -259,7 +257,7 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                                                 getOptionValue={(accountManager) => accountManager?.id.toString()}
                                                 onChange={(e) => multiSelectChangeHandler(e, 'account_managers_ids')}
                                                 ref={accountManagersSelectRef}
-                                                placeholder="Filter by account manager"/>
+                                                placeholder="Filter by account manager(s)"/>
 
                                         <div className="mt-1 text-danger">
                                             <ErrorMessage name="account_managers_ids" className="mt-2"/>

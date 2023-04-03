@@ -24,7 +24,7 @@ const PublisherEditRoutes: React.FC = () => {
             // get the publisher we need to edit from the database
             getPublisher(parseInt(id)).then(response => {
                 if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the advertiser to edit, so we need to redirect
+                    // we were not able to fetch the publisher to edit, so we need to redirect
                     // to error page
                     navigate('/error/404');
                 } else if (response === undefined) {
