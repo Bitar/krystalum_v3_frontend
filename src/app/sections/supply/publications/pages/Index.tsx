@@ -52,7 +52,9 @@ const PublicationIndex: React.FC = () => {
                                 style={{
                                     backgroundColor: 'rgb(102, 50, 89)',
                                     backgroundPosition: 'right center',
-                                    backgroundImage: 'url("/media/svg/misc/taieri.svg")'
+                                    backgroundImage: 'url("/media/illustrations/sigma-1/5.png")'
+                                    // backgroundImage: 'url("/media/svg/misc/hot-air-balloon.svg")'
+                                    // backgroundImage: 'url("/media/svg/misc/taieri.svg")'
                                 }}>
                                 <div className="card-body d-flex flex-column justify-content-between">
                                     <h2 className="text-white fw-bold mb-1">Archived Publications</h2>
