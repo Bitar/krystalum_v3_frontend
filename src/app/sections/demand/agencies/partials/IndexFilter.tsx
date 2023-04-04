@@ -93,7 +93,7 @@ const AgencyIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
 
     return (
         <Collapse in={showFilter}>
-            <Row id='#roles-list-filter'>
+            <Row id='#agencies-list-filter'>
                 <Col>
                     <div className="card-rounded bg-primary bg-opacity-5 p-10 mb-15">
                         <FormErrors errorMessages={filterErrors}/>
