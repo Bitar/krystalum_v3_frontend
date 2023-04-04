@@ -9,8 +9,7 @@ import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {defaultFormFields, FormFields, CitySchema} from '../core/form';
 import {
     GenericErrorMessage,
-    genericOnChangeHandler,
-    genericSelectOnChangeHandler
+    genericOnChangeHandler, genericSingleSelectOnChangeHandler
 } from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
@@ -48,8 +47,6 @@ const CityCreate: React.FC = () => {
                 // if we were able to get the list of countries, then we fill our state with them
                 if (response.data) {
                     setCountries(filterData(response.data, 'name', ['All Countries']));
-
-                    setForm({...form, country: response.data[1]});
                 }
             }
         });
@@ -58,10 +55,6 @@ const CityCreate: React.FC = () => {
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
-    };
-
-    const selectChangeHandler = (e: any) => {
-        genericSelectOnChangeHandler(e, form, setForm, 'country');
     };
 
     const handleCreate = (e: any) => {
@@ -91,7 +84,7 @@ const CityCreate: React.FC = () => {
 
                 <Formik initialValues={form} validationSchema={CitySchema} onSubmit={handleCreate} enableReinitialize>
                     {
-                        () => (
+                        ({errors}) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
@@ -107,15 +100,14 @@ const CityCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Country" isRequired={true}/>
 
-                                    <Select name="country"
+                                    <Select name="country_id"
                                             options={countries}
                                             getOptionLabel={(country) => country?.name}
                                             getOptionValue={(country) => country?.id.toString()}
-                                            value={form.country} // make the default value as the first country
-                                            onChange={selectChangeHandler}/>
+                                            onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'country_id')}/>
 
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="country" className="mt-2"/>
+                                    <div className="mt-3 text-danger">
+                                        {errors?.country_id ? errors?.country_id : null}
                                     </div>
                                 </div>
 

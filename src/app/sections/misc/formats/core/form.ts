@@ -1,10 +1,9 @@
 import * as Yup from 'yup';
-import {Format} from '../../../../models/misc/Format';
 
 export interface FormFields {
     name: string,
     code: string,
-    parent?: Format | null,
+    parent_id?: number,
     has_buying_model: number,
     buying_model_ids: number[]
 }
@@ -14,7 +13,7 @@ export const defaultFormFields = {name: '', code: '', has_buying_model: 0, buyin
 export const FormatSchema = Yup.object().shape({
     name: Yup.string().required(),
     code: Yup.string().required(),
-    parent: Yup.object().notRequired().nullable(),
+    parent_id: Yup.number().notRequired(),
     has_buying_model: Yup.number().required(),
     buying_model_ids: Yup.array().when('has_buying_model', {
         is: 1,

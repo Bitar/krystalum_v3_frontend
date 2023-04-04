@@ -7,7 +7,7 @@ import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {
     GenericErrorMessage,
-    genericOnChangeHandler, genericSelectOnChangeHandler,
+    genericOnChangeHandler,
 } from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
@@ -19,15 +19,16 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {City} from '../../../../models/misc/City';
 import {getCity, updateCity} from '../../../../requests/misc/City';
-import Select from 'react-select';
 import {Country} from '../../../../models/misc/Country';
 import {getAllCountries} from '../../../../requests/misc/Country';
 import {CitySchema, defaultFormFields, FormFields} from '../core/form';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {filterData} from '../../../../helpers/dataManipulation';
+import SingleSelect from '../../../../components/forms/SingleSelect';
 
 const CityEdit: React.FC = () => {
     const [city, setCity] = useState<City|null>(null);
+    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
     const [form, setForm] = useState<FormFields>(defaultFormFields)
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -54,7 +55,9 @@ const CityEdit: React.FC = () => {
                     // we were able to fetch current city to edit
                     setCity(response);
 
-                    setForm({...response})
+                    const {country, ...currentCity} = response;
+
+                    setForm({...currentCity, country_id: country.id});
                 }
             });
 
@@ -78,6 +81,8 @@ const CityEdit: React.FC = () => {
     useEffect(() => {
         if(city) {
             krysApp.setPageTitle(generatePageTitle(Sections.MISC_CITIES, PageTypes.EDIT, city.name))
+
+            setIsResourceLoaded(true);
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -85,10 +90,6 @@ const CityEdit: React.FC = () => {
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
-    };
-
-    const selectChangeHandler = (e: any) => {
-        genericSelectOnChangeHandler(e, form, setForm, 'country');
     };
 
     const handleEdit = (e: any) => {
@@ -123,7 +124,7 @@ const CityEdit: React.FC = () => {
                 <Formik initialValues={form} validationSchema={CitySchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
-                        () => (
+                        ({errors}) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
@@ -139,15 +140,10 @@ const CityEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Country" isRequired={true}/>
 
-                                    <Select name="country"
-                                            options={countries}
-                                            value={form.country}
-                                            getOptionLabel={(country) => country?.name}
-                                            getOptionValue={(country) => country?.id.toString()}
-                                            onChange={selectChangeHandler}/>
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={countries} defaultValue={city?.country} form={form} setForm={setForm} name='country_id' />
 
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="country" className="mt-2"/>
+                                    <div className="mt-3 text-danger">
+                                        {errors?.country_id ? errors?.country_id : null}
                                     </div>
                                 </div>
                                 <KrysFormFooter cancelUrl={'/misc/cities'}/>
