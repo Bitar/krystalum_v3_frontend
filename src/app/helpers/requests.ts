@@ -1,4 +1,7 @@
 import axios, {AxiosError, AxiosResponse} from 'axios';
+import {Agency} from '../models/demand/Agency';
+import {getAllAgencies} from '../requests/demand/Agency';
+import {GenericErrorMessage} from './form';
 
 export const extractErrors = (error: any) => {
     if (error.response && error.response.data && error.response.data.errors) {
@@ -21,7 +24,7 @@ export const createFormData = (form: any) => {
 
     for (const key in form) {
         if (form[key] instanceof Array) {
-            if(form[key].length > 0) {
+            if (form[key].length > 0) {
                 for (const item in form[key]) {
                     formData.append(`${key}[]`, form[key][item]);
                 }
@@ -83,4 +86,22 @@ export type ExportUrl = {
         status: string,
         url?: string
     }
+}
+
+export const asyncSelectLoadOptions = (inputValue: string, apiCall: any, setFormErrors: React.Dispatch<React.SetStateAction<string[]>>) => {
+    return new Promise<any[]>((resolve) => {
+        setTimeout(() => {
+            apiCall(`filter[search]=${inputValue}`).then((response: any) => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    if (response.data) {
+                        resolve(response.data);
+                    }
+                }
+            });
+        }, 1000);
+    });
 }

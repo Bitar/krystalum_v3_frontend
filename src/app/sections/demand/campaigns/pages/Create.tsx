@@ -12,7 +12,7 @@ import {
     genericOnChangeHandler,
     genericSingleSelectOnChangeHandler
 } from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
+import {asyncSelectLoadOptions, extractErrors} from '../../../../helpers/requests';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
@@ -274,24 +274,6 @@ const CampaignCreate: React.FC = () => {
         );
     };
 
-    const loadAdvertiserOptions = (inputValue: string) => {
-        return new Promise<Advertiser[]>((resolve) => {
-            setTimeout(() => {
-                getAllAdvertisers(`filter[search]=${inputValue}`).then(response => {
-                    if (axios.isAxiosError(response)) {
-                        setFormErrors(extractErrors(response));
-                    } else if (response === undefined) {
-                        setFormErrors([GenericErrorMessage])
-                    } else {
-                        if (response.data) {
-                            resolve(response.data);
-                        }
-                    }
-                });
-            }, 1000);
-        });
-    }
-
     const agenciesSelectRef = useRef<any>(null);
     const regionsSelectRef = useRef<any>(null);
 
@@ -424,7 +406,8 @@ const CampaignCreate: React.FC = () => {
                                                  getOptionLabel={(advertiser) => advertiser.name}
                                                  getOptionValue={(advertiser) => advertiser.id.toString()}
                                                  onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'advertiser_id')}
-                                                 loadOptions={loadAdvertiserOptions}/>
+                                                 loadOptions={inputValue => asyncSelectLoadOptions(inputValue, getAllAdvertisers, setFormErrors)}
+                                    />
 
                                     <div className="mt-3 text-danger">
                                         {formik.errors?.advertiser_id ? formik.errors?.advertiser_id : null}
