@@ -1,14 +1,13 @@
 import * as Yup from 'yup';
-import {Vertical} from "../../../../models/misc/Vertical";
 
 export interface FormFields {
     name: string,
-    parent?: Vertical | null
+    parent_id?: number
 }
 
 export const defaultFormFields = {name: ''};
 
 export const VerticalSchema = Yup.object().shape({
     name: Yup.string().required(),
-    parent: Yup.object().notRequired().nullable()
+    parent_id: Yup.number().notRequired()
 });

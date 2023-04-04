@@ -7,7 +7,7 @@ import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {
     GenericErrorMessage,
-    genericOnChangeHandler, genericSelectOnChangeHandler,
+    genericOnChangeHandler
 } from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
@@ -17,7 +17,6 @@ import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-import Select from 'react-select';
 import {defaultFormFields, FormFields, FormatSchema} from '../core/form';
 import {getAllFormats, getFormat, updateFormat} from "../../../../requests/misc/Format";
 import {Format} from "../../../../models/misc/Format";
@@ -27,7 +26,7 @@ import {BuyingModel} from "../../../../models/misc/BuyingModel";
 import MultiSelect from "../../../../components/forms/MultiSelect";
 import KrysCheckbox from "../../../../components/forms/KrysCheckbox";
 import {filterData} from '../../../../helpers/dataManipulation';
-import {indentOptions} from '../../../../components/forms/IndentOptions';
+import SingleSelect from '../../../../components/forms/SingleSelect';
 
 const FormatEdit: React.FC = () => {
     const [format, setFormat] = useState<Format | null>(null);
@@ -59,12 +58,20 @@ const FormatEdit: React.FC = () => {
                     // we were able to fetch current format to edit
                     setFormat(response);
 
-                    const {buyingModels, ...currentFormat} = response
+                    const {buyingModels, parent, ...currentFormat} = response
 
-                    setForm({
-                        ...currentFormat,
-                        buying_model_ids: response.buyingModels.map(buyingModel => buyingModel.id)
-                    });
+                    if(parent) {
+                        setForm({
+                            ...currentFormat,
+                            buying_model_ids: response.buyingModels.map(buyingModel => buyingModel.id),
+                            parent_id: parent.id
+                        });
+                    } else {
+                        setForm({
+                            ...currentFormat,
+                            buying_model_ids: response.buyingModels.map(buyingModel => buyingModel.id)
+                        });
+                    }
                 }
             });
 
@@ -111,10 +118,6 @@ const FormatEdit: React.FC = () => {
         genericOnChangeHandler(e, form, setForm);
     };
 
-    const selectChangeHandler = (e: any) => {
-        genericSelectOnChangeHandler(e, form, setForm, 'parent');
-    };
-
     const handleEdit = (e: any) => {
         if(format) {
             // we need to update the format's data by doing API call with form
@@ -147,7 +150,7 @@ const FormatEdit: React.FC = () => {
                 <Formik initialValues={form} validationSchema={FormatSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
-                        () => (
+                        ({errors}) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
@@ -199,17 +202,10 @@ const FormatEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Format Parent" isRequired={false}/>
 
-                                    <Select name="parent"
-                                            options={formats}
-                                            value={form.parent}
-                                            getOptionLabel={(format) => format.name}
-                                            getOptionValue={(format) => format.id.toString()}
-                                            onChange={selectChangeHandler}
-                                            formatOptionLabel={indentOptions}
-                                            isClearable={true}/>
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={formats} defaultValue={format?.parent} form={form} setForm={setForm} name='parent_id' showHierarchy={true}/>
 
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="parent" className="mt-2"/>
+                                    <div className="mt-3 text-danger">
+                                        {errors?.parent_id ? errors?.parent_id : null}
                                     </div>
                                 </div>
                                 <KrysFormFooter cancelUrl={'/misc/formats'}/>

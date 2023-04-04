@@ -7,8 +7,7 @@ import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterFor
 import {
     GenericErrorMessage,
     genericMultiSelectOnChangeHandler,
-    genericOnChangeHandler,
-    genericSelectOnChangeHandler
+    genericOnChangeHandler, genericSingleSelectOnChangeHandler
 } from '../../../../helpers/form';
 import {initialQueryState} from '../../../../../_metronic/helpers';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
@@ -117,7 +116,7 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                                         getOptionValue={(option) => option.id.toString()}
                                                         ref={isRateSelectRef}
                                                         isClearable={true}
-                                                        onChange={(e) => genericSelectOnChangeHandler(e, filters, setFilters, 'is_rate', true)}
+                                                        onChange={(e) => genericSingleSelectOnChangeHandler(e, filters, setFilters, 'is_rate')}
                                                         placeholder='Filter by rate type'/>
 
                                                 <div className="mt-1 text-danger">
@@ -134,7 +133,7 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                                         getOptionValue={(option) => option.id.toString()}
                                                         ref={isConversionSelectRef}
                                                         isClearable={true}
-                                                        onChange={(e) => genericSelectOnChangeHandler(e, filters, setFilters, 'is_conversion', true)}
+                                                        onChange={(e) => genericSingleSelectOnChangeHandler(e, filters, setFilters, 'is_conversion')}
                                                         placeholder='Filter by conversion type'/>
 
                                                 <div className="mt-1 text-danger">
