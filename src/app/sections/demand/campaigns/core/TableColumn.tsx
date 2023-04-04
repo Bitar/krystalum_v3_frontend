@@ -57,7 +57,7 @@ const CampaignsColumns: ReadonlyArray<Column<Campaign>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title='Owner' className='min-w-125px' />,
         id: 'owner',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].activeOwner?.name} />,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].owner?.name} />,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title='Date created' className='min-w-125px' />,

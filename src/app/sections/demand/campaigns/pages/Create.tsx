@@ -13,7 +13,7 @@ import {
     genericSingleSelectOnChangeHandler
 } from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
-import {PageTypes} from '../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {Sections} from "../../../../helpers/sections";
@@ -44,6 +44,9 @@ import {User} from '../../../../models/iam/User';
 import {getAllUsers} from '../../../../requests/iam/User';
 import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
 import AsyncSelect from 'react-select/async';
+import {storeCampaign} from '../../../../requests/demand/Campaign';
+import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
+import {useNavigate} from 'react-router-dom';
 
 const CampaignCreate: React.FC = () => {
     const {currentUser, hasAnyRoles} = useAuth();
@@ -65,6 +68,7 @@ const CampaignCreate: React.FC = () => {
     const [allUsers, setAllUsers] = useState<User[]>([]);
 
     const krysApp = useKrysApp();
+    const navigate = useNavigate();
 
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.DEMAND_CAMPAIGNS, PageTypes.CREATE));
@@ -231,8 +235,13 @@ const CampaignCreate: React.FC = () => {
         // 1) we need to update the form with new advertiser type
         // 2) we need to clear all fields after changing advertiser type so that the user
         // can start fresh with his selection of advertiser linking fields
+
+        // setForm({...form, advertiser_type: e.id, region_id: undefined, agency_id: undefined});
+
         // TODO add publisher_id
-        setForm({...form, advertiser_type: e.id, region_id: undefined, agency_id: undefined});
+        const {region_id, agency_id, ...newForm} = form;
+
+        setForm({...newForm, advertiser_type: e.id});
     };
 
     useEffect(() => {
@@ -243,22 +252,26 @@ const CampaignCreate: React.FC = () => {
     }, [form.advertiser_type]);
 
     const handleCreate = (e: any) => {
-        console.log(form);
         // send API request to create the campaign
-        // storeCampaign(form).then(response => {
-        //         if (axios.isAxiosError(response)) {
-        //             // we need to show the errors
-        //             setFormErrors(extractErrors(response));
-        //         } else if (response === undefined) {
-        //             // show generic error message
-        //             setFormErrors([GenericErrorMessage])
-        //         } else {
-        //             // we were able to store the campaign
-        //             krysApp.setAlert({message: new AlertMessageGenerator('TODO', Actions.CREATE, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-        //             navigate(`TODO`);
-        //         }
-        //     }
-        // );
+        storeCampaign(form).then(response => {
+                console.log(response);
+                if (axios.isAxiosError(response)) {
+                    // we need to show the errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error message
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    // we were able to store the campaign
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('campaign', Actions.CREATE, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
+
+                    navigate(`/demand/campaigns`);
+                }
+            }
+        );
     };
 
     const loadAdvertiserOptions = (inputValue: string) => {

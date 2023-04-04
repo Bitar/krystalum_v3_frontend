@@ -16,13 +16,12 @@ export type Campaign = {
     buyType: BuyType | null, // this might be null in case of BO
     seat_id: string | null, // this might be null in case of BO
     revenueCountry: CountryCondensed,
-    advertiser_type: 1 | 2 | 3,
+    advertiser_type: string,
     advertiser: Advertiser, // the advertiser is always set
     agency: AgencyCondensed | null, // could be null in case advertiser is not with agency
     region: RegionCondensed,
-    activeOwner: UserCondensed | null, // if owners get deleted then the campaign might be left without any owners,
     created_at: Date,
-    owners?: UserCondensed[] | null,
+    owner: UserCondensed | null,
     objectives?: Objective[] | null
 
     // TODO add publisher
