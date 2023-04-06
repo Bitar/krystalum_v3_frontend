@@ -122,7 +122,7 @@ const PublisherCreate: React.FC = () => {
                         enableReinitialize>
                     <Form onChange={onChangeHandler}>
                         <div className='mb-4'>
-                            <span className='fs-5 text-gray-700 d-flex fw-medium'>General information</span>
+                            <span className='fs-5 text-gray-700 d-flex fw-medium'>General Information</span>
                             <span className='text-muted'>Enter basic information about the publisher</span>
                         </div>
 
@@ -225,9 +225,9 @@ const PublisherCreate: React.FC = () => {
                         <div className="separator border-2 my-10"></div>
 
                         <div className='mb-4'>
-                            <span className='fs-5 text-gray-700 d-flex fw-medium'>Minor details</span>
+                            <span className='fs-5 text-gray-700 d-flex fw-medium'>HQ Information</span>
                             <span
-                                className='text-muted'>Enter minor details about the publisher to stay connected and
+                                className='text-muted'>Enter the hq details about the publisher to stay connected and
                                 understand your publishers' location</span>
                         </div>
 

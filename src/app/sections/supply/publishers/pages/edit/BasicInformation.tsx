@@ -125,6 +125,11 @@ const BasicInformationEdit: React.FC = () => {
                 <Formik initialValues={form} validationSchema={PublisherSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     <Form onChange={onChangeHandler}>
+                        <div className='mb-4'>
+                            <span className='fs-5 text-gray-700 d-flex fw-medium'>General Information</span>
+                            <span className='text-muted'>Enter basic information about the publisher</span>
+                        </div>
+
                         <div className="mb-7">
                             <KrysFormLabel text="Name" isRequired={true}/>
 
@@ -222,6 +227,13 @@ const BasicInformationEdit: React.FC = () => {
                         }
 
                         <div className="separator border-2 my-10"></div>
+
+                        <div className='mb-4'>
+                            <span className='fs-5 text-gray-700 d-flex fw-medium'>HQ Information</span>
+                            <span
+                                className='text-muted'>Enter the hq details about the publisher to stay connected and
+                                understand your publishers' location</span>
+                        </div>
 
                         <div className="mb-7">
                             <KrysFormLabel text="Email address" isRequired={false}/>

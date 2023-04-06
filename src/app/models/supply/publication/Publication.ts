@@ -9,12 +9,12 @@ export type Publication = {
     publisher: PublisherCondensed,
     live_date: Date,
     is_archived: boolean, // i.e. not sending inventory
-    is_deal_pmp: boolean, // If 1 => deal based, else if 0 => tag based
+    is_deal_pmp: boolean, // if 1 => deal based, else if 0 => tag based
     revenue_type: string,
     revenue_share: number | null,
     commitment: string | null,
-    has_hi10: boolean, // If 1, then both 'hi10_to_display' and 'hi10_to_video' should be set to 0.
-    // If 0, then 'hi10_to_display' should be set to 1 and 'hi10_to_video' should be set to 0 by default,
+    has_hi10: boolean, // if 1, then both 'hi10_to_display' and 'hi10_to_video' should be set to 0 /
+    // if 0, then 'hi10_to_display' should be set to 1 and 'hi10_to_video' should be set to 0 by default,
     // unless the user specifies otherwise.
     hi10_to_display: boolean,
     hi10_to_video: boolean,
