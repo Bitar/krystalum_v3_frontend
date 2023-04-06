@@ -1,6 +1,7 @@
 import React, {useEffect, useRef} from 'react';
 import {genericSingleSelectOnChangeHandler} from '../../helpers/form';
 import Select from 'react-select';
+import {indentOptions} from './IndentOptions';
 
 interface Props {
     isResourceLoaded: boolean;
@@ -9,6 +10,7 @@ interface Props {
     form: any;
     setForm: React.Dispatch<React.SetStateAction<any>>;
     name: string;
+    showHierarchy?: boolean;
     isClearable?: boolean;
     doClear?: boolean;
 }
@@ -20,6 +22,7 @@ const SingleSelect: React.FC<Props> = ({
                                            form,
                                            setForm,
                                            name,
+                                           showHierarchy = false,
                                            isClearable = false,
                                            doClear = false
                                        }) => {
@@ -27,7 +30,7 @@ const SingleSelect: React.FC<Props> = ({
     const selectRef = useRef<any>(null);
 
     useEffect(() => {
-        if(doClear) {
+        if (doClear) {
             selectRef.current?.clearValue();
         }
 
@@ -50,6 +53,7 @@ const SingleSelect: React.FC<Props> = ({
                                              placeholder={`Select ${namePlaceHolder}`}
                                              isClearable={isClearable}
                                              ref={selectRef}
+                                             formatOptionLabel={showHierarchy ? indentOptions : undefined}
                                              onChange={singleSelectChangeHandler}/>
             }
 
@@ -61,6 +65,7 @@ const SingleSelect: React.FC<Props> = ({
                                             placeholder={`Select ${namePlaceHolder}`}
                                             isClearable={isClearable}
                                             ref={selectRef}
+                                            formatOptionLabel={showHierarchy ? indentOptions : undefined}
                                             onChange={singleSelectChangeHandler}/>
             }
         </>

@@ -28,7 +28,7 @@ export const DefaultLayoutConfig: ILayout = {
     minimize: true,
   },
   content: {
-    width: 'fixed', // Set fixed|fluid to change width
+    width: 'fluid', // Set fixed|fluid to change width
   },
   footer: {
     width: 'fluid', // Set fixed|fluid to change width type

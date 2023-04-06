@@ -6,7 +6,11 @@ import {Sections} from '../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {defaultFormFields, FormFields, VerticalSchema} from '../core/form';
-import {GenericErrorMessage, genericOnChangeHandler, genericSelectOnChangeHandler} from '../../../../helpers/form';
+import {
+    GenericErrorMessage,
+    genericOnChangeHandler,
+    genericSingleSelectOnChangeHandler
+} from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
@@ -48,10 +52,6 @@ const VerticalCreate: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const selectChangeHandler = (e: any) => {
-        genericSelectOnChangeHandler(e, form, setForm, 'parent');
-    };
-
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
     };
@@ -89,7 +89,7 @@ const VerticalCreate: React.FC = () => {
                 <Formik initialValues={form} validationSchema={VerticalSchema} onSubmit={handleCreate}
                         enableReinitialize>
                     {
-                        (formik) => (
+                        ({errors}) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
@@ -105,16 +105,16 @@ const VerticalCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Vertical Parent" isRequired={false}/>
 
-                                    <Select name="parent"
+                                    <Select name="parent_id"
                                             options={verticals}
                                             getOptionLabel={(vertical) => vertical.name}
                                             getOptionValue={(vertical) => vertical.id.toString()}
-                                            onChange={selectChangeHandler}
+                                            onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'parent_id')}
                                             formatOptionLabel={indentOptions}
                                             isClearable={true}/>
 
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="parent" className="mt-2"/>
+                                    <div className="mt-3 text-danger">
+                                        {errors?.parent_id ? errors?.parent_id : null}
                                     </div>
                                 </div>
 
