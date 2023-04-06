@@ -27,11 +27,10 @@ import {Publisher} from '../../../../models/supply/publisher/Publisher';
 import {getAllPublishers} from '../../../../requests/supply/publisher/Publisher';
 import {Language} from '../../../../models/misc/Language';
 import {getAllLanguages} from '../../../../requests/misc/Language';
-import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
 import KrysRadioButton from '../../../../components/forms/KrysRadioButton';
 import {APPLICATION_TYPE, PUBLICATION_TYPE, REVENUE_TYPE} from '../../../../models/supply/Options';
 import {FormControl, FormGroup, FormLabel, InputGroup} from 'react-bootstrap';
-import KrysCheckbox2 from '../../../../components/forms/KrysCheckbox2';
+import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
 
 const PublicationCreate: React.FC = () => {
     const navigate = useNavigate();
@@ -230,11 +229,11 @@ const PublicationCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Publication type" isRequired={true}/>
 
-                                    <KrysCheckbox2 name="types[]" label={'Website'}
+                                    <KrysCheckbox name="types[]" label={'Website'}
                                                    onChangeHandler={(e) => checkboxChangeHandler(e, 'types', PUBLICATION_TYPE.WEBSITE, true)}
                                                    defaultValue={form.types.includes(PUBLICATION_TYPE.WEBSITE)}/>
 
-                                    <KrysCheckbox2 name="types[]" label={'Mobile application'}
+                                    <KrysCheckbox name="types[]" label={'Mobile application'}
                                                    onChangeHandler={(e) => checkboxChangeHandler(e, 'types', PUBLICATION_TYPE.MOBILE_APPLICATION, true)}
                                                    defaultValue={form.types.includes(PUBLICATION_TYPE.MOBILE_APPLICATION)}/>
 
@@ -541,21 +540,21 @@ const PublicationCreate: React.FC = () => {
                                 </div>
 
                                 <div className="mb-7">
-                                    <KrysCheckbox2 name="is_deal_pmp" label={'Deal ID / PMP'}
+                                    <KrysCheckbox name="is_deal_pmp" label={'Deal ID / PMP'}
                                                    onChangeHandler={(e) => {
                                                        e.stopPropagation();
                                                        setForm({...form, is_deal_pmp: !form.is_deal_pmp})
                                                    }}
                                                    defaultValue={form.is_deal_pmp}/>
 
-                                    <KrysCheckbox2 name="is_archived" label={'Temporarily Not Sending Inventory'}
+                                    <KrysCheckbox name="is_archived" label={'Temporarily Not Sending Inventory'}
                                                    onChangeHandler={(e) => {
                                                        e.stopPropagation();
                                                        setForm({...form, is_archived: !form.is_archived})
                                                    }}
                                                    defaultValue={form.is_archived}/>
 
-                                    <KrysCheckbox2 name="has_hi10" label={'Does not accept Hi10 Monetization'}
+                                    <KrysCheckbox name="has_hi10" label={'Does not accept Hi10 Monetization'}
                                                    onChangeHandler={(e) => {
                                                        e.stopPropagation();
                                                        setForm({...form, has_hi10: !form.has_hi10})
