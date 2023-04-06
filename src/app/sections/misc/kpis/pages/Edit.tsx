@@ -18,7 +18,7 @@ import {Kpi} from '../../../../models/misc/Kpi';
 import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
 import {getAllPerformanceMetrics} from '../../../../requests/misc/PerformanceMetric';
 import {getKpi, updateKpi} from '../../../../requests/misc/Kpi';
-import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
+import KrysSwitch from '../../../../components/forms/KrysSwitch';
 import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 import MultiSelect from '../../../../components/forms/MultiSelect';
 
@@ -130,12 +130,12 @@ const KpiEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Is this KPI a rate?" isRequired={true}/>
 
-                                    <KrysCheckbox name="is_rate"
-                                                  onChangeHandler={(e) => {
+                                    <KrysSwitch name="is_rate"
+                                                onChangeHandler={(e) => {
                                                       e.stopPropagation();
                                                       setForm({...form, is_rate: Number(!form.is_rate)});
                                                   }}
-                                                  defaultValue={Boolean(form.is_rate)}/>
+                                                defaultValue={Boolean(form.is_rate)}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="is_rate" className="mt-2"/>
@@ -145,7 +145,7 @@ const KpiEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Is this a conversion KPI?" isRequired={true}/>
 
-                                    <KrysCheckbox name="is_conversion" onChangeHandler={(e) => {
+                                    <KrysSwitch name="is_conversion" onChangeHandler={(e) => {
                                         e.stopPropagation();
                                         setForm({...form, is_conversion: Number(!form.is_conversion)});
                                     }} defaultValue={Boolean(form.is_conversion)}/>

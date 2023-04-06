@@ -17,7 +17,7 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeKpi} from '../../../../requests/misc/Kpi';
-import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
+import KrysSwitch from '../../../../components/forms/KrysSwitch';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {getAllPerformanceMetrics} from "../../../../requests/misc/PerformanceMetric";
 import {PerformanceMetric} from "../../../../models/misc/PerformanceMetric";
@@ -104,12 +104,12 @@ const KpiCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Is this KPI a rate?" isRequired={true}/>
 
-                                    <KrysCheckbox name="is_rate"
-                                                  onChangeHandler={(e) => {
+                                    <KrysSwitch name="is_rate"
+                                                onChangeHandler={(e) => {
                                                       e.stopPropagation();
                                                       setForm({...form, is_rate: Number(!form.is_rate)});
                                                   }}
-                                                  defaultValue={Boolean(form.is_rate)}/>
+                                                defaultValue={Boolean(form.is_rate)}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="is_rate" className="mt-2"/>
@@ -119,7 +119,7 @@ const KpiCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Is this a conversion KPI?" isRequired={true}/>
 
-                                    <KrysCheckbox name="is_conversion" onChangeHandler={(e) => {
+                                    <KrysSwitch name="is_conversion" onChangeHandler={(e) => {
                                         e.stopPropagation();
                                         setForm({...form, is_conversion: Number(!form.is_conversion)});
                                     }} defaultValue={Boolean(form.is_conversion)}/>
