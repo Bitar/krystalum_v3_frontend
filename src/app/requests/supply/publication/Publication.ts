@@ -8,7 +8,7 @@ const ENDPOINT = `${API_URL}/supply/publications`
 
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const INCLUDES = '';
+export const INCLUDES = 'include[]=info';
 
 export const getAllPublications = async (): Promise<PublicationList | AxiosError | undefined> => {
     return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<PublicationList>) => response.data).catch((error) => {

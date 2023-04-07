@@ -12,7 +12,7 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {
-    genericDateOnChangeHandler, GenericErrorMessage,
+    genericDateOnChangeHandler, GenericErrorMessage, genericMultiSelectOnChangeHandler,
     genericOnChangeHandler,
     genericSingleSelectOnChangeHandler
 } from '../../../../helpers/form';
@@ -84,6 +84,10 @@ const PublicationCreate: React.FC = () => {
         genericSingleSelectOnChangeHandler(e, form, setForm, key);
     };
 
+    const multiSelectChangeHandler = (e: any, key: any) => {
+        genericMultiSelectOnChangeHandler(e, form, setForm, key);
+    };
+
     const dateChangeHandler = (date: Date | null, key: string) => {
         genericDateOnChangeHandler(date, form, setForm, key);
     };
@@ -95,7 +99,7 @@ const PublicationCreate: React.FC = () => {
             const formKeyArray = (form as any)[key];
 
             if (formKeyArray.includes(value)) {
-                setForm({...form, [key]: formKeyArray.filter((item: any) => item !== value)})
+                setForm({...form, [key]: formKeyArray.filter((item: any) => item !== value)});
             } else {
                 setForm({...form, [key]: [...(form as any)[key], value]});
             }
@@ -104,24 +108,25 @@ const PublicationCreate: React.FC = () => {
 
     const handleCreate = () => {
         // send API request to create the publication
-        storePublication(form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // it's publisher for sure
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('publication', Actions.CREATE, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    })
-
-                    navigate(`/supply/publications`);
-                }
-            }
-        );
+        console.log(form)
+        // storePublication(form).then(response => {
+        //         if (axios.isAxiosError(response)) {
+        //             // we need to show the errors
+        //             setFormErrors(extractErrors(response));
+        //         } else if (response === undefined) {
+        //             // show generic error message
+        //             setFormErrors([GenericErrorMessage])
+        //         } else {
+        //             // it's publisher for sure
+        //             krysApp.setAlert({
+        //                 message: new AlertMessageGenerator('publication', Actions.CREATE, KrysToastType.SUCCESS).message,
+        //                 type: KrysToastType.SUCCESS
+        //             })
+        //
+        //             navigate(`/supply/publications`);
+        //         }
+        //     }
+        // );
     };
 
     return (
@@ -189,7 +194,7 @@ const PublicationCreate: React.FC = () => {
                                             getOptionLabel={(language) => language.name}
                                             getOptionValue={(language) => language.id.toString()}
                                             onChange={(e) => {
-                                                selectChangeHandler(e, 'languages_ids')
+                                                multiSelectChangeHandler(e, 'languages_ids')
                                             }}
                                             placeholder="Select a language(s)"
                                             isMulti={true}/>
@@ -222,7 +227,7 @@ const PublicationCreate: React.FC = () => {
                                 <div className="mb-4">
                             <span
                                 className="fs-5 text-gray-700 d-flex fw-medium">Publication Type and Description</span>
-                                    <span className="text-muted">Enter the publication type (web or mobile app or both) and a
+                                    <span className="text-muted">Enter the publication type (website or mobile application or both) and a
                                 brief description of the publication's content or purpose</span>
                                 </div>
 
@@ -230,12 +235,16 @@ const PublicationCreate: React.FC = () => {
                                     <KrysFormLabel text="Publication type" isRequired={true}/>
 
                                     <KrysCheckbox name="types[]" label={'Website'}
-                                                   onChangeHandler={(e) => checkboxChangeHandler(e, 'types', PUBLICATION_TYPE.WEBSITE, true)}
-                                                   defaultValue={form.types.includes(PUBLICATION_TYPE.WEBSITE)}/>
+                                                  onChangeHandler={(e) => checkboxChangeHandler(e, 'types', PUBLICATION_TYPE.WEBSITE, true)}
+                                                  defaultValue={form.types.includes(PUBLICATION_TYPE.WEBSITE)}/>
 
-                                    <KrysCheckbox name="types[]" label={'Mobile application'}
-                                                   onChangeHandler={(e) => checkboxChangeHandler(e, 'types', PUBLICATION_TYPE.MOBILE_APPLICATION, true)}
-                                                   defaultValue={form.types.includes(PUBLICATION_TYPE.MOBILE_APPLICATION)}/>
+                                    <KrysCheckbox name="types[]" label={'iOS Application'}
+                                                  onChangeHandler={(e) => checkboxChangeHandler(e, 'types', PUBLICATION_TYPE.IOS_APPLICATION, true)}
+                                                  defaultValue={form.types.includes(PUBLICATION_TYPE.IOS_APPLICATION)}/>
+
+                                    <KrysCheckbox name="types[]" label={'Android Application'}
+                                                  onChangeHandler={(e) => checkboxChangeHandler(e, 'types', PUBLICATION_TYPE.ANDROID_APPLICATION, true)}
+                                                  defaultValue={form.types.includes(PUBLICATION_TYPE.ANDROID_APPLICATION)}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="types" className="mt-2"/>
@@ -260,176 +269,187 @@ const PublicationCreate: React.FC = () => {
                                 }
 
                                 {
-                                    form.types.includes(PUBLICATION_TYPE.MOBILE_APPLICATION) &&
+                                    form.types.includes(PUBLICATION_TYPE.ANDROID_APPLICATION) &&
 
                                     <div className="d-block">
-                                        <div className="android-mobile-app">
-                                            <div
-                                                className="notice d-flex bg-light-primary rounded border-primary border border-dashed mb-5 p-6">
-                                                <div className="d-flex flex-stack flex-grow-1">
-                                                    <div>
-                                                        <div className="fs-6 fw-bold text-gray-600">Android Application
-                                                            Details
-                                                        </div>
-                                                        <div className="fs-6 text-gray-400">Please enter the below details
-                                                            if this application is available on Android devices.
-                                                        </div>
+                                        <div
+                                            className="notice d-flex bg-light-primary rounded border-primary border border-dashed mb-5 p-6">
+                                            <div className="d-flex flex-stack flex-grow-1">
+                                                <div>
+                                                    <div className="fs-6 fw-bold text-gray-600">Android Application
+                                                        Details
                                                     </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="mb-7">
-                                                <KrysFormLabel text="Android store URL" isRequired={true}/>
-
-                                                <Field className="form-control fs-base"
-                                                       type="text"
-                                                       placeholder="Enter publication Android store URL" name="android_store_url"/>
-
-                                                <div className="mt-1 text-danger">
-                                                    <div className="mt-2">
-                                                        {errors?.android_store_url ? errors?.android_store_url : null}
+                                                    <div className="fs-6 text-gray-400">Please enter the below
+                                                        details
+                                                        if this application is available on Android devices.
                                                     </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="mb-7">
-                                                <KrysFormLabel text="Android bundle ID" isRequired={true}/>
-
-                                                <Field className="form-control fs-base"
-                                                       type="text"
-                                                       placeholder="Enter publication Android bundle ID" name="android_bundle_id"/>
-
-                                                <div className="mt-1 text-danger">
-                                                    <div className="mt-2">
-                                                        {errors?.android_bundle_id ? errors?.android_bundle_id : null}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="mb-7">
-                                                <KrysFormLabel text="Android version" isRequired={true}/>
-
-                                                <Field className="form-control fs-base"
-                                                       type="text"
-                                                       placeholder="Enter publication Android version" name="android_version"/>
-
-                                                <div className="mt-1 text-danger">
-                                                    <div className="mt-2">
-                                                        {errors?.android_version ? errors?.android_version : null}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="mb-7">
-                                                <KrysFormLabel text="Android application type" isRequired={true}/>
-
-                                                <KrysRadioButton name="android_application_type" label={'Free'}
-                                                                 onChangeHandler={(e) => {
-                                                                     e.stopPropagation();
-                                                                     setForm({
-                                                                         ...form,
-                                                                         android_application_type: APPLICATION_TYPE.FREE
-                                                                     });
-                                                                 }}
-                                                                 defaultValue={form.android_application_type === APPLICATION_TYPE.FREE}/>
-
-                                                <KrysRadioButton name="android_application_type" label={'Paid'}
-                                                                 onChangeHandler={(e) => {
-                                                                     e.stopPropagation();
-                                                                     setForm({
-                                                                         ...form,
-                                                                         android_application_type: APPLICATION_TYPE.PAID
-                                                                     });
-                                                                 }}
-                                                                 defaultValue={form.android_application_type === APPLICATION_TYPE.PAID}/>
-
-                                                <div className="mt-1 text-danger">
-                                                    <ErrorMessage name="android_application_type" className="mt-2"/>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="ios-mobile-app">
-                                            <div
-                                                className="notice d-flex bg-light-primary rounded border-primary border border-dashed mb-5 p-6">
-                                                <div className="d-flex flex-stack flex-grow-1">
-                                                    <div>
-                                                        <div className="fs-6 fw-bold text-gray-600">iOS Application Details
-                                                        </div>
-                                                        <div className="fs-6 text-gray-400">Please enter the below details
-                                                            if this application is available on iOS devices.
-                                                        </div>
+
+                                        <div className="mb-7">
+                                            <KrysFormLabel text="Android store URL" isRequired={true}/>
+
+                                            <Field className="form-control fs-base"
+                                                   type="text"
+                                                   placeholder="Enter publication Android store URL"
+                                                   name="android_store_url"/>
+
+                                            <div className="mt-1 text-danger">
+                                                <div className="mt-2">
+                                                    {errors?.android_store_url ? errors?.android_store_url : null}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="mb-7">
+                                            <KrysFormLabel text="Android bundle ID" isRequired={true}/>
+
+                                            <Field className="form-control fs-base"
+                                                   type="text"
+                                                   placeholder="Enter publication Android bundle ID"
+                                                   name="android_bundle_id"/>
+
+                                            <div className="mt-1 text-danger">
+                                                <div className="mt-2">
+                                                    {errors?.android_bundle_id ? errors?.android_bundle_id : null}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="mb-7">
+                                            <KrysFormLabel text="Android version" isRequired={true}/>
+
+                                            <Field className="form-control fs-base"
+                                                   type="text"
+                                                   placeholder="Enter publication Android version"
+                                                   name="android_version"/>
+
+                                            <div className="mt-1 text-danger">
+                                                <div className="mt-2">
+                                                    {errors?.android_version ? errors?.android_version : null}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="mb-7">
+                                            <KrysFormLabel text="Android application type" isRequired={true}/>
+
+                                            <KrysRadioButton name="android_application_type" label={'Free'}
+                                                             onChangeHandler={(e) => {
+                                                                 e.stopPropagation();
+                                                                 setForm({
+                                                                     ...form,
+                                                                     android_application_type: APPLICATION_TYPE.FREE
+                                                                 });
+                                                             }}
+                                                             defaultValue={form.android_application_type === APPLICATION_TYPE.FREE}/>
+
+                                            <KrysRadioButton name="android_application_type" label={'Paid'}
+                                                             onChangeHandler={(e) => {
+                                                                 e.stopPropagation();
+                                                                 setForm({
+                                                                     ...form,
+                                                                     android_application_type: APPLICATION_TYPE.PAID
+                                                                 });
+                                                             }}
+                                                             defaultValue={form.android_application_type === APPLICATION_TYPE.PAID}/>
+
+                                            <div className="mt-1 text-danger">
+                                                {errors?.android_application_type ? errors?.android_application_type : null}
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                                {
+                                    form.types.includes(PUBLICATION_TYPE.IOS_APPLICATION) &&
+
+                                    <div className="d-block">
+                                        <div
+                                            className="notice d-flex bg-light-primary rounded border-primary border border-dashed mb-5 p-6">
+                                            <div className="d-flex flex-stack flex-grow-1">
+                                                <div>
+                                                    <div className="fs-6 fw-bold text-gray-600">iOS Application
+                                                        Details
+                                                    </div>
+                                                    <div className="fs-6 text-gray-400">Please enter the below
+                                                        details
+                                                        if this application is available on iOS devices.
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
 
-                                            <div className="mb-7">
-                                                <KrysFormLabel text="iOS store URL" isRequired={true}/>
+                                        <div className="mb-7">
+                                            <KrysFormLabel text="iOS store URL" isRequired={true}/>
 
-                                                <Field className="form-control fs-base"
-                                                       type="text"
-                                                       placeholder="Enter publication iOS store URL" name="ios_store_url"/>
+                                            <Field className="form-control fs-base"
+                                                   type="text"
+                                                   placeholder="Enter publication iOS store URL"
+                                                   name="ios_store_url"/>
 
-                                                <div className="mt-1 text-danger">
-                                                    <div className="mt-2">
-                                                        {errors?.ios_store_url ? errors?.ios_store_url : null}
-                                                    </div>
+                                            <div className="mt-1 text-danger">
+                                                <div className="mt-2">
+                                                    {errors?.ios_store_url ? errors?.ios_store_url : null}
                                                 </div>
                                             </div>
+                                        </div>
 
-                                            <div className="mb-7">
-                                                <KrysFormLabel text="iOS bundle ID" isRequired={true}/>
+                                        <div className="mb-7">
+                                            <KrysFormLabel text="iOS bundle ID" isRequired={true}/>
 
-                                                <Field className="form-control fs-base"
-                                                       type="text"
-                                                       placeholder="Enter publication iOS bundle ID" name="ios_bundle_id"/>
+                                            <Field className="form-control fs-base"
+                                                   type="text"
+                                                   placeholder="Enter publication iOS bundle ID"
+                                                   name="ios_bundle_id"/>
 
-                                                <div className="mt-1 text-danger">
-                                                    <div className="mt-2">
-                                                        {errors?.ios_bundle_id ? errors?.ios_bundle_id : null}
-                                                    </div>
+                                            <div className="mt-1 text-danger">
+                                                <div className="mt-2">
+                                                    {errors?.ios_bundle_id ? errors?.ios_bundle_id : null}
                                                 </div>
                                             </div>
+                                        </div>
 
-                                            <div className="mb-7">
-                                                <KrysFormLabel text="iOS version" isRequired={true}/>
+                                        <div className="mb-7">
+                                            <KrysFormLabel text="iOS version" isRequired={true}/>
 
-                                                <Field className="form-control fs-base"
-                                                       type="text"
-                                                       placeholder="Enter publication iOS version" name="ios_version"/>
+                                            <Field className="form-control fs-base"
+                                                   type="text"
+                                                   placeholder="Enter publication iOS version" name="ios_version"/>
 
-                                                <div className="mt-1 text-danger">
-                                                    <div className="mt-2">
-                                                        {errors?.ios_version ? errors?.ios_version : null}
-                                                    </div>
+                                            <div className="mt-1 text-danger">
+                                                <div className="mt-2">
+                                                    {errors?.ios_version ? errors?.ios_version : null}
                                                 </div>
                                             </div>
+                                        </div>
 
-                                            <div className="mb-7">
-                                                <KrysFormLabel text="iOS application type" isRequired={true}/>
+                                        <div className="mb-7">
+                                            <KrysFormLabel text="iOS application type" isRequired={true}/>
 
-                                                <KrysRadioButton name="ios_application_type" label={'Free'}
-                                                                 onChangeHandler={(e) => {
-                                                                     e.stopPropagation();
-                                                                     setForm({
-                                                                         ...form,
-                                                                         ios_application_type: APPLICATION_TYPE.FREE
-                                                                     });
-                                                                 }}
-                                                                 defaultValue={form.ios_application_type === APPLICATION_TYPE.FREE}/>
+                                            <KrysRadioButton name="ios_application_type" label={'Free'}
+                                                             onChangeHandler={(e) => {
+                                                                 e.stopPropagation();
+                                                                 setForm({
+                                                                     ...form,
+                                                                     ios_application_type: APPLICATION_TYPE.FREE
+                                                                 });
+                                                             }}
+                                                             defaultValue={form.ios_application_type === APPLICATION_TYPE.FREE}/>
 
-                                                <KrysRadioButton name="ios_application_type" label={'Paid'}
-                                                                 onChangeHandler={(e) => {
-                                                                     e.stopPropagation();
-                                                                     setForm({
-                                                                         ...form,
-                                                                         ios_application_type: APPLICATION_TYPE.PAID
-                                                                     });
-                                                                 }}
-                                                                 defaultValue={form.ios_application_type === APPLICATION_TYPE.PAID}/>
+                                            <KrysRadioButton name="ios_application_type" label={'Paid'}
+                                                             onChangeHandler={(e) => {
+                                                                 e.stopPropagation();
+                                                                 setForm({
+                                                                     ...form,
+                                                                     ios_application_type: APPLICATION_TYPE.PAID
+                                                                 });
+                                                             }}
+                                                             defaultValue={form.ios_application_type === APPLICATION_TYPE.PAID}/>
 
-                                                <div className="mt-1 text-danger">
-                                                    <ErrorMessage name="ios_application_type" className="mt-2"/>
-                                                </div>
+                                            <div className="mt-1 text-danger">
+                                                {errors?.ios_application_type ? errors?.ios_application_type : null}
                                             </div>
                                         </div>
                                     </div>
@@ -468,8 +488,7 @@ const PublicationCreate: React.FC = () => {
                                                          setForm({
                                                              ...form,
                                                              revenue_type: REVENUE_TYPE.SAME_AS_PUBLISHER,
-                                                             revenue_share: '',
-                                                             commitment: ''
+                                                             revenue_value: ''
                                                          });
                                                      }}
                                                      defaultValue={form.revenue_type === REVENUE_TYPE.SAME_AS_PUBLISHER}/>
@@ -480,7 +499,6 @@ const PublicationCreate: React.FC = () => {
                                                          setForm({
                                                              ...form,
                                                              revenue_type: REVENUE_TYPE.REVENUE_SHARE,
-                                                             commitment: ''
                                                          });
                                                      }}
                                                      defaultValue={form.revenue_type === REVENUE_TYPE.REVENUE_SHARE}/>
@@ -491,12 +509,11 @@ const PublicationCreate: React.FC = () => {
                                                          setForm({
                                                              ...form,
                                                              revenue_type: REVENUE_TYPE.COMMITMENT,
-                                                             revenue_share: ''
                                                          });
                                                      }} defaultValue={form.revenue_type === REVENUE_TYPE.COMMITMENT}/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="revenue_type" className="mt-2"/>
+                                        {errors?.revenue_type ? errors?.revenue_type : null}
                                     </div>
                                 </div>
 
@@ -508,12 +525,12 @@ const PublicationCreate: React.FC = () => {
                                         <InputGroup className="mb-3">
                                             <Field className="form-control fs-base" type="number"
                                                    placeholder="Enter publication revenue share"
-                                                   name="revenue_share"/>
+                                                   name="revenue_value"/>
                                             <InputGroup.Text id="basic-addon1">%</InputGroup.Text>
                                         </InputGroup>
 
                                         <div className="mt-1 text-danger">
-                                            <ErrorMessage name="revenue_share" className="mt-2"/>
+                                            {errors?.revenue_value ? errors?.revenue_value : null}
                                         </div>
                                     </div>
                                 }
@@ -524,10 +541,10 @@ const PublicationCreate: React.FC = () => {
                                         <KrysFormLabel text="Commitment" isRequired={true}/>
 
                                         <Field className="form-control fs-base" type="text"
-                                               placeholder="Enter publication commitment amount" name="commitment"/>
+                                               placeholder="Enter publication commitment amount" name="revenue_value"/>
 
                                         <div className="mt-1 text-danger">
-                                            <ErrorMessage name="commitment" className="mt-2"/>
+                                            {errors?.revenue_value ? errors?.revenue_value : null}
                                         </div>
                                     </div>
                                 }
@@ -541,26 +558,63 @@ const PublicationCreate: React.FC = () => {
 
                                 <div className="mb-7">
                                     <KrysCheckbox name="is_deal_pmp" label={'Deal ID / PMP'}
-                                                   onChangeHandler={(e) => {
-                                                       e.stopPropagation();
-                                                       setForm({...form, is_deal_pmp: !form.is_deal_pmp})
-                                                   }}
-                                                   defaultValue={form.is_deal_pmp}/>
+                                                  onChangeHandler={(e) => {
+                                                      e.stopPropagation();
+                                                      setForm({...form, is_deal_pmp: !form.is_deal_pmp})
+                                                  }}
+                                                  defaultValue={form.is_deal_pmp}/>
 
                                     <KrysCheckbox name="is_archived" label={'Temporarily Not Sending Inventory'}
-                                                   onChangeHandler={(e) => {
-                                                       e.stopPropagation();
-                                                       setForm({...form, is_archived: !form.is_archived})
-                                                   }}
-                                                   defaultValue={form.is_archived}/>
+                                                  onChangeHandler={(e) => {
+                                                      e.stopPropagation();
+                                                      setForm({...form, is_archived: !form.is_archived})
+                                                  }}
+                                                  defaultValue={form.is_archived}/>
 
-                                    <KrysCheckbox name="has_hi10" label={'Does not accept Hi10 Monetization'}
-                                                   onChangeHandler={(e) => {
-                                                       e.stopPropagation();
-                                                       setForm({...form, has_hi10: !form.has_hi10})
-                                                   }}
-                                                   defaultValue={form.has_hi10}/>
+                                    <KrysCheckbox name="has_hi10" label={'Accept Hi10 Monetization'}
+                                                  onChangeHandler={(e) => {
+                                                      e.stopPropagation();
+                                                      setForm({
+                                                          ...form,
+                                                          has_hi10: !form.has_hi10,
+                                                          hi10_to_display: form.has_hi10
+                                                      })
+                                                  }}
+                                                  defaultValue={form.has_hi10}/>
                                 </div>
+
+                                {
+                                    !form.has_hi10 &&
+                                    <div className="mb-7">
+                                        <div className="mb-4">
+                                            <span className="text-danger d-flex fw-regular">You have unchecked 'Accept Hi10 Monetization', hence, please choose from the options below to indicate whether you want to transfer impressions to display or video:</span>
+                                        </div>
+
+                                        <KrysRadioButton name="hi10_to_display"
+                                                         label={'Transfer Impressions to Display (default)'}
+                                                         onChangeHandler={(e) => {
+                                                             e.stopPropagation();
+                                                             setForm({
+                                                                 ...form,
+                                                                 hi10_to_display: true,
+                                                                 hi10_to_video: false
+                                                             });
+                                                         }}
+                                                         defaultValue={form.hi10_to_display}/>
+
+                                        <KrysRadioButton name="hi10_to_video"
+                                                         label={'Transfer Impressions to Video'}
+                                                         onChangeHandler={(e) => {
+                                                             e.stopPropagation();
+                                                             setForm({
+                                                                 ...form,
+                                                                 hi10_to_video: true,
+                                                                 hi10_to_display: false
+                                                             });
+                                                         }}
+                                                         defaultValue={form.hi10_to_video}/>
+                                    </div>
+                                }
 
                                 <KrysFormFooter cancelUrl={'/supply/publications'}/>
                             </Form>

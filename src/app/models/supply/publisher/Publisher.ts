@@ -10,8 +10,7 @@ export type Publisher = {
     tier: Tier | null,
     integration_date: Date | null,
     revenue_type: REVENUE_TYPE,
-    revenue_share: number | null,
-    commitment: string | null,
+    revenue_value: string,
     info: PublisherInfo | null,
     accountManager: PublisherAccountManager | null
 };

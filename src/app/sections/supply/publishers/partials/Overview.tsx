@@ -4,6 +4,7 @@ import {KTCard, KTCardBody, KTSVG} from '../../../../../_metronic/helpers';
 import {formatDateToMonthDayYear} from '../../../../helpers/dateFormatter';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 import {usePublisher} from '../core/PublisherContext';
+import {REVENUE_TYPE} from '../../../../models/supply/Options';
 
 const PublisherOverview: React.FC = () => {
     const {publisher} = usePublisher();
@@ -84,7 +85,7 @@ const PublisherOverview: React.FC = () => {
                             <div className="d-flex flex-column flex-grow-1 pe-8">
                                 <div className="d-flex flex-wrap">
                                     {
-                                        publisher?.revenue_share &&
+                                        publisher?.revenue_type === REVENUE_TYPE.REVENUE_SHARE &&
                                         <div
                                             className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                                             <div className="d-flex align-items-center">
@@ -92,14 +93,14 @@ const PublisherOverview: React.FC = () => {
                                                     path="/media/icons/duotune/finance/fin008.svg"
                                                     className="svg-icon-1 svg-icon-success me-2"
                                                 />
-                                                <div className="fs-5 fw-bold">{publisher?.revenue_share}%</div>
+                                                <div className="fs-5 fw-bold">{publisher?.revenue_value}%</div>
                                             </div>
                                             <div className="fw-bold fs-6 text-gray-400">Revenue share</div>
                                         </div>
                                     }
 
                                     {
-                                        publisher?.commitment &&
+                                        publisher?.revenue_type === REVENUE_TYPE.COMMITMENT &&
                                         <div
                                             className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                                             <div className="d-flex align-items-center">
@@ -107,7 +108,7 @@ const PublisherOverview: React.FC = () => {
                                                     path="/media/icons/duotune/finance/fin006.svg"
                                                     className="svg-icon-1 svg-icon-success me-2"
                                                 />
-                                                <div className="fs-5 fw-bold">{publisher?.commitment}</div>
+                                                <div className="fs-5 fw-bold">{publisher?.revenue_value}</div>
                                             </div>
                                             <div className="fw-bold fs-6 text-gray-400">Commitment</div>
                                         </div>

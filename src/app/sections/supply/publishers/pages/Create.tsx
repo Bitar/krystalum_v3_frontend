@@ -178,13 +178,13 @@ const PublisherCreate: React.FC = () => {
                             <KrysRadioButton name="revenue_type" label={'Revenue Share'}
                                              onChangeHandler={(e) => {
                                                  e.stopPropagation();
-                                                 setForm({...form, revenue_type: REVENUE_TYPE.REVENUE_SHARE, commitment: ''});
+                                                 setForm({...form, revenue_type: REVENUE_TYPE.REVENUE_SHARE});
                                              }} defaultValue={form.revenue_type === REVENUE_TYPE.REVENUE_SHARE}/>
 
                             <KrysRadioButton name="revenue_type" label={'Amount Commitment'}
                                              onChangeHandler={(e) => {
                                                  e.stopPropagation();
-                                                 setForm({...form, revenue_type: REVENUE_TYPE.COMMITMENT, revenue_share: ''});
+                                                 setForm({...form, revenue_type: REVENUE_TYPE.COMMITMENT});
                                              }} defaultValue={form.revenue_type === REVENUE_TYPE.COMMITMENT}/>
 
                             <div className="mt-1 text-danger">
@@ -199,12 +199,12 @@ const PublisherCreate: React.FC = () => {
                                 <InputGroup className="mb-3">
                                     <Field className="form-control fs-base" type="number"
                                            placeholder="Enter publisher revenue share"
-                                           name="revenue_share"/>
+                                           name="revenue_value"/>
                                     <InputGroup.Text id="basic-addon1">%</InputGroup.Text>
                                 </InputGroup>
 
                                 <div className="mt-1 text-danger">
-                                    <ErrorMessage name="revenue_share" className="mt-2"/>
+                                    <ErrorMessage name="revenue_value" className="mt-2"/>
                                 </div>
                             </div>
                         }
@@ -214,10 +214,10 @@ const PublisherCreate: React.FC = () => {
                                 <KrysFormLabel text="Commitment" isRequired={true}/>
 
                                 <Field className="form-control fs-base" type="text"
-                                       placeholder="Enter publisher commitment amount" name="commitment"/>
+                                       placeholder="Enter publisher commitment amount" name="revenue_value"/>
 
                                 <div className="mt-1 text-danger">
-                                    <ErrorMessage name="commitment" className="mt-2"/>
+                                    <ErrorMessage name="revenue_value" className="mt-2"/>
                                 </div>
                             </div>
                         }

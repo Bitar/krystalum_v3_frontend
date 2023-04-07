@@ -13,7 +13,8 @@ export enum REVENUE_TYPE {
 export enum PUBLICATION_TYPE {
     WEBSITE = 'website',
     MOBILE_APPLICATION = 'mobile_application',
-    BOTH = 'both'
+    IOS_APPLICATION = 'ios',
+    ANDROID_APPLICATION = 'android'
 }
 
 /*
