@@ -1,4 +1,6 @@
 import * as Yup from 'yup';
+import {Campaign} from '../../../../models/demand/Campaign';
+import {AdvertiserTypeEnum} from '../../../../enums/AdvertiserTypeEnum';
 
 export interface FormFields {
     name: string,
@@ -73,4 +75,42 @@ export const getCampaignSchema = (isDemandUser: boolean) => {
             roleBasedValidation
         )
     });
+}
+
+export function fillEditForm(campaign: Campaign): FormFields {
+    let campaignForm: FormFields = {
+        name: campaign.name,
+        booking_type_id: campaign.bookingType.id,
+        revenue_country_id: campaign.revenueCountry.id,
+        advertiser_type: campaign.advertiser_type,
+        advertiser_id: campaign.advertiser.id,
+    };
+
+    if(campaign.buyType){
+        campaignForm.buy_type_id = campaign.buyType.id;
+    }
+
+    if(campaign.seat_id) {
+        campaignForm.seat_id = campaign.seat_id;
+    }
+
+    if(campaign.advertiser_type === AdvertiserTypeEnum.WITH_AGENCY) {
+        // set the agency_id
+        campaignForm.agency_id = campaign.agency?.id;
+    } else if(campaign.advertiser_type === AdvertiserTypeEnum.DIRECT_CLIENT) {
+        // set the region_id
+        campaignForm.region_id = campaign.region?.id
+    }
+
+    if(campaign.objectives) {
+        campaignForm.objectives_ids = campaign.objectives.map((objective) => objective.id);
+    }
+
+    if(campaign.owner) {
+        campaignForm.user_id = campaign.owner.id;
+    }
+
+    // TODO add case with publisher
+
+    return campaignForm;
 }

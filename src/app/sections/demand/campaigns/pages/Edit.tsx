@@ -8,7 +8,7 @@ import {getCampaign, updateCampaign} from '../../../../requests/demand/Campaign'
 import {extractErrors} from '../../../../helpers/requests';
 import {
     GenericErrorMessage,
-    genericOnChangeHandler
+    genericOnChangeHandler, genericSingleSelectOnChangeHandler
 } from '../../../../helpers/form';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
@@ -24,134 +24,513 @@ import {Sections} from "../../../../helpers/sections";
 
 import Creatable, {useCreatable} from 'react-select/creatable';
 import CreatableSelect from 'react-select/creatable';
+import {defaultFormFields, fillEditForm, FormFields, getCampaignSchema} from '../core/form';
+import {getAllBookingTypes} from '../../../../requests/misc/BookingType';
+import {getAllBuyTypes} from '../../../../requests/misc/BuyType';
+import {getAllCountries} from '../../../../requests/misc/Country';
+import {filterData} from '../../../../helpers/dataManipulation';
+import {getAllAdvertiserTypes} from '../../../../requests/demand/Options';
+import {getAllAdvertisers} from '../../../../requests/demand/Advertiser';
+import {getAllAgencies} from '../../../../requests/demand/Agency';
+import {getAllRegions} from '../../../../requests/misc/Region';
+import {getAllObjectives} from '../../../../requests/misc/Objective';
+import {getAllUsers} from '../../../../requests/iam/User';
+import {BookingType} from '../../../../models/misc/BookingType';
+import {BuyType} from '../../../../models/misc/BuyType';
+import {Country} from '../../../../models/misc/Country';
+import {AdvertiserType} from '../../../../models/demand/Options';
+import {Advertiser} from '../../../../models/demand/Advertiser';
+import {Agency} from '../../../../models/demand/Agency';
+import {Region} from '../../../../models/misc/Region';
+import {Objective} from '../../../../models/misc/Objective';
+import {User} from '../../../../models/iam/User';
+import {BookingTypeEnum} from '../../../../enums/BookingTypeEnum';
+import {useAuth} from '../../../../modules/auth';
+import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
+import SingleSelect from '../../../../components/forms/SingleSelect';
 
 const CampaignEdit: React.FC = () => {
-    // const [form, setForm] = useState<FormFields>(defaultFormFields);
-    // const [formErrors, setFormErrors] = useState<string[]>([]);
-    //
-    // const [campaign, setCampaign] = useState<Campaign | null>(null);
-    //
-    // const krysApp = useKrysApp();
-    //
-    // let {id} = useParams();
-    // const navigate = useNavigate();
-    //
-    // useEffect(() => {
-    //     if (id) {
-    //         // get the campaign we need to edit from the database
-    //         getCampaign(parseInt(id)).then(response => {
-    //             if (axios.isAxiosError(response)) {
-    //                 // we were not able to fetch the campaign to edit so we need to redirect
-    //                 // to error page
-    //                 navigate('/error/404');
-    //             } else if (response === undefined) {
-    //                 // unknown error occurred
-    //                 navigate('/error/400');
-    //             } else {
-    //                 // ... add code to set the API response to form object or manipulate it
-    //                 // before you update the form object
-    //             }
-    //         });
-    //
-    //         // ... get any API data you may need to fill the form
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [id]);
-    //
-    // useEffect(() => {
-    //     // when we're here it means our campaign object is loaded from the API
-    //     if (campaign) {
-    //         krysApp.setPageTitle(generatePageTitle(Sections.TODO, PageTypes.EDIT, campaign.name))
-    //     }
-    //
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [campaign]);
-    //
-    // const onChangeHandler = (e: any) => {
-    //     // in case of multi select, the element doesn't have a name because
-    //     // we get only a list of values from the select and not an element with target value and name
-    //
-    //     // TODO update the code here if you want some fields to not be handled by default onchange handler
-    //     if (e.target.name !== 'image') {
-    //         genericOnChangeHandler(e, form, setForm);
-    //     }
-    // };
-    //
-    // const handleEdit = (e: any) => {
-    //     // send API request to create the campaign
-    //     updateCampaign(form).then(response => {
-    //             if (axios.isAxiosError(response)) {
-    //                 // we need to show the errors
-    //                 setFormErrors(extractErrors(response));
-    //             } else if (response === undefined) {
-    //                 // show generic error message
-    //                 setFormErrors([GenericErrorMessage])
-    //             } else {
-    //                 // we were able to store the campaign
-    //                 krysApp.setAlert({
-    //                     message: new AlertMessageGenerator('campaign', Actions.EDIT, KrysToastType.SUCCESS).message,
-    //                     type: KrysToastType.SUCCESS
-    //                 });
-    //
-    //                 navigate(`TODO`);
-    //             }
-    //         }
-    //     );
-    // };
+    const {currentUser, hasAnyRoles} = useAuth();
 
-    const colourOptions = [
-        {
-            name: 'option 1',
-            id: '1'
-        },
-        {
-            name: 'option 2',
-            id: '2'
-        },
-        {
-            name: 'option 3',
-            id: '3'
+    const [campaign, setCampaign] = useState<Campaign | null>(null);
+    const [isTD, setIsTD] = useState<boolean>(false);
+    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
+
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
+    const [formErrors, setFormErrors] = useState<string[]>([]);
+
+    const [bookingTypes, setBookingTypes] = useState<BookingType[]>([]);
+    const [buyTypes, setBuyTypes] = useState<BuyType[]>([]);
+    const [countries, setCountries] = useState<Country[]>([]);
+    const [advertiserTypes, setAdvertiserTypes] = useState<AdvertiserType[]>([]);
+    const [advertisers, setAdvertisers] = useState<Advertiser[]>([]);
+    const [agencies, setAgencies] = useState<Agency[]>([]);
+    const [regions, setRegions] = useState<Region[]>([]);
+    const [objectives, setObjectives] = useState<Objective[]>([]);
+    const [demandUsers, setDemandUsers] = useState<User[]>([]);
+    const [allUsers, setAllUsers] = useState<User[]>([]);
+
+    const krysApp = useKrysApp();
+
+    let {id} = useParams();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (id) {
+            // get the campaign we need to edit from the database
+            getCampaign(parseInt(id)).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // we were not able to fetch the campaign to edit so we need to redirect
+                    // to error page
+                    navigate('/error/404');
+                } else if (response === undefined) {
+                    // unknown error occurred
+                    navigate('/error/400');
+                } else {
+                    // ... add code to set the API response to form object or manipulate it
+                    // before you update the form object
+                    setCampaign(response);
+                }
+            });
+
+            // get the booking types
+            getAllBookingTypes().then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    if (response.data) {
+                        setBookingTypes(response.data);
+                    }
+                }
+            });
+
+            // get the buy types
+            getAllBuyTypes().then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    if (response.data) {
+                        setBuyTypes(response.data);
+                    }
+                }
+            });
+
+            // get all countries
+            getAllCountries().then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    if (response.data) {
+                        setCountries(filterData(response.data, 'name', ['All Countries']));
+                    }
+                }
+            });
+
+            // get all advertiser types
+            getAllAdvertiserTypes().then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    if (response.data) {
+                        setAdvertiserTypes(response.data);
+                    }
+                }
+            });
+
+            // get all advertisers
+            getAllAdvertisers('filter[per_page]=30').then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    if (response.data) {
+                        setAdvertisers(response.data);
+                    }
+                }
+            });
+
+            // get all agencies
+            getAllAgencies().then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    if (response.data) {
+                        setAgencies(response.data);
+                    }
+                }
+            });
+
+            // get all regions
+            getAllRegions().then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    if (response.data) {
+                        setRegions(filterData(response.data, 'name', ['All Regions', 'Rest of the world']));
+                    }
+                }
+            });
+
+            // get all objectives
+            getAllObjectives().then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    if (response.data) {
+                        setObjectives(response.data);
+                    }
+                }
+            });
+
+            // get all the demand users
+            getAllUsers('filter[roles][]=11&filter[roles][]=10').then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    if (response.data) {
+                        setDemandUsers(response.data);
+                    }
+                }
+            });
+
+            // get all users regardless of role
+            getAllUsers('filter[user_type]=internal').then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    if (response.data) {
+                        setAllUsers(response.data);
+                    }
+                }
+            });
         }
-    ];
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id]);
 
-    return (<>
-            <CreatableSelect isMulti
-                             options={colourOptions.map((objective) => ({
-                                 value: objective.id.toString(),
-                                 label: objective.name,
-                             }))}
-            />
 
-        </>
-        // <KTCard>
-        //     <KTCardHeader text="Edit Campaign" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
-        //
-        //     <KTCardBody>
-        //         <FormErrors errorMessages={formErrors}/>
-        //
-        //         <Formik initialValues={form} validationSchema={CampaignSchema} onSubmit={handleEdit}
-        //                 enableReinitialize>
-        //             {
-        //                 (formik) => (
-        //                     <Form onChange={onChangeHandler}>
-        //                         <div className="mb-7">
-        //                             <KrysFormLabel text="Name" isRequired={true}/>
-        //
-        //                             <Field className="form-control fs-base" type="text"
-        //                                    placeholder="Enter full name" name="name"/>
-        //
-        //                             <div className="mt-1 text-danger">
-        //                                 <ErrorMessage name="name" className="mt-2"/>
-        //                             </div>
-        //                         </div>
-        //
-        //                         <KrysFormFooter cancelUrl={'TODO'}/>
-        //                     </Form>
-        //                 )
-        //             }
-        //         </Formik>
-        //     </KTCardBody>
-        // </KTCard>
+    useEffect(() => {
+        // when we're here it means our campaign object is loaded from the API
+        if (campaign) {
+            krysApp.setPageTitle(generatePageTitle(Sections.DEMAND_CAMPAIGNS, PageTypes.EDIT, campaign.name));
+
+            setForm(fillEditForm(campaign));
+
+            if (campaign.bookingType.id === BookingTypeEnum.TD) {
+                setIsTD(true);
+            }
+
+            setIsResourceLoaded(true);
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [campaign]);
+
+    const onChangeHandler = (e: any) => {
+        // in case of multi select, the element doesn't have a name because
+        // we get only a list of values from the select and not an element with target value and name
+
+        genericOnChangeHandler(e, form, setForm);
+    };
+
+    const handleEdit = (e: any) => {
+        // send API request to create the campaign
+        updateCampaign(form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // we need to show the errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error message
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    // we were able to store the campaign
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('campaign', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    });
+
+                    navigate(`/demand/campaigns`);
+                }
+            }
+        );
+    };
+
+    return (
+        <KTCard>
+            <KTCardHeader text="Create New Campaign"/>
+
+            <KTCardBody>
+                <FormErrors errorMessages={formErrors}/>
+
+                <Formik initialValues={form}
+                        validationSchema={getCampaignSchema(hasAnyRoles(currentUser, ['Demand', 'Head of Demand']))}
+                        onSubmit={handleEdit}
+                        enableReinitialize>
+                    {
+                        (formik) => (
+                            <Form onChange={onChangeHandler}>
+                                <div className='mb-4'>
+                                    <span className='fs-5 text-gray-700 d-flex fw-medium'>General information</span>
+                                    <span className='text-muted'>Enter the core details for the campaign</span>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Name" isRequired={true}/>
+
+                                    <Field className="form-control fs-base" type="text"
+                                           placeholder="Enter campaign name" name="name"/>
+
+                                    <div className="mt-1 text-danger">
+                                        <ErrorMessage name="name" className="mt-2"/>
+                                    </div>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Booking type" isRequired={true}/>
+
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={bookingTypes} defaultValue={campaign?.bookingType} form={form} setForm={setForm} name='booking_type_id' customOnChange={(e) => {
+                                        // if the chosen booking type has ID 2 then it's TD
+                                        if (e) {
+                                            setIsTD(e.id === BookingTypeEnum.TD);
+                                        }
+
+                                        genericSingleSelectOnChangeHandler(e, form, setForm, 'booking_type_id');
+                                    }} placeholder='Choose booking type'/>
+
+                                    <div className="mt-3 text-danger">
+                                        {formik.errors?.booking_type_id ? formik.errors?.booking_type_id : null}
+                                    </div>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Buy type" isRequired={isTD}/>
+
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={buyTypes} defaultValue={campaign?.bookingType} form={form} setForm={setForm} name='buy_type_id' isClearable={!isTD} placeholder='Choose buy type'/>
+
+                                    <div className="mt-3 text-danger">
+                                        {formik.errors?.buy_type_id && isTD ? formik.errors?.buy_type_id : null}
+                                    </div>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Seat ID" isRequired={isTD}/>
+
+                                    <Field className="form-control fs-base" type="text"
+                                           placeholder="Enter the campaign's seat ID" name="seat_id"/>
+
+                                    <div className="mt-1 text-danger">
+                                        <ErrorMessage name="seat_id" className="mt-2"/>
+                                    </div>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Revenue country" isRequired={true}/>
+
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={countries} defaultValue={campaign?.revenueCountry} form={form} setForm={setForm} name='revenue_country_id' placeholder='Choose revenue country'/>
+
+                                    <div className="mt-3 text-danger">
+                                        {formik.errors?.revenue_country_id ? formik.errors?.revenue_country_id : null}
+                                    </div>
+                                </div>
+
+                                <div className='separator separator-dashed my-10'></div>
+
+                                <div className='mb-4'>
+                                    <span className='fs-5 text-gray-700 d-flex fw-medium'>Advertiser linking</span>
+                                    <span
+                                        className='text-muted'>Link the campaign to its corresponding advertiser</span>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Advertiser type" isRequired={true}/>
+
+                                    <Select name="advertiser_type"
+                                            options={advertiserTypes}
+                                            getOptionLabel={(advertiserType) => advertiserType.name}
+                                            getOptionValue={(advertiserType) => advertiserType.id}
+                                            placeholder='Choose advertiser type'
+                                        // onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'advertiser_type')}
+                                            onChange={onAdvertiserTypeChangeHandler}
+                                    />
+
+                                    <div className="mt-3 text-danger">
+                                        {formik.errors?.advertiser_type ? formik.errors?.advertiser_type : null}
+                                    </div>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Advertiser" isRequired={true}/>
+
+                                    <AsyncSelect placeholder='Choose advertiser'
+                                                 defaultOptions={advertisers}
+                                                 getOptionLabel={(advertiser) => advertiser.name}
+                                                 getOptionValue={(advertiser) => advertiser.id.toString()}
+                                                 onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'advertiser_id')}
+                                                 loadOptions={inputValue => asyncSelectLoadOptions(inputValue, getAllAdvertisers, setFormErrors)}
+                                    />
+
+                                    <div className="mt-3 text-danger">
+                                        {formik.errors?.advertiser_id ? formik.errors?.advertiser_id : null}
+                                    </div>
+                                </div>
+
+                                <div
+                                    className={clsx("mb-7", form.advertiser_type === AdvertiserTypeEnum.WITH_AGENCY ? 'd-block' : 'd-none')}>
+                                    {/* this is only required if advertiser_type is 'with_agency' */}
+                                    <KrysFormLabel text="Agency" isRequired={form.advertiser_type === AdvertiserTypeEnum.WITH_AGENCY}/>
+
+                                    <Select name="agency_id"
+                                            options={agencies}
+                                            getOptionLabel={(agency) => agency.name}
+                                            getOptionValue={(agency) => agency.id.toString()}
+                                            placeholder='Choose agency'
+                                            ref={agenciesSelectRef}
+                                            onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'agency_id')}
+                                            formatOptionLabel={indentOptions}/>
+
+                                    <div className="mt-3 text-danger">
+                                        {formik.errors?.agency_id ? formik.errors?.agency_id : null}
+                                    </div>
+                                </div>
+
+                                <div
+                                    className={clsx("mb-7", form.advertiser_type !== 'with_agency' ? 'd-block' : 'd-none')}>
+                                    {/* this is only required if advertiser_type is NOT 'with_agency' */}
+                                    <KrysFormLabel text="Region" isRequired={form.advertiser_type !== 'with_agency'}/>
+
+                                    <Select name="region_id"
+                                            options={regions}
+                                            getOptionLabel={(region) => region.name}
+                                            getOptionValue={(region) => region.id.toString()}
+                                            placeholder='Choose region'
+                                            ref={regionsSelectRef}
+                                            onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'region_id')}/>
+
+                                    <div className="mt-3 text-danger">
+                                        {formik.errors?.region_id ? formik.errors?.region_id : null}
+                                    </div>
+                                </div>
+
+                                {/*// TODO add publisher*/}
+
+                                <div className='separator separator-dashed my-10'></div>
+
+                                <div className='mb-4'>
+                                    <span className='fs-5 text-gray-700 d-flex fw-medium'>Campaign objectives</span>
+                                    <span
+                                        className='text-muted'>Define the campaign's objectives by choosing from the list or typing in your own</span>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Objectives" isRequired={false}/>
+
+                                    <CreatableSelect isMulti name="objectives_ids"
+                                                     options={objectives.map((objective) => ({
+                                                         value: objective.id.toString(),
+                                                         label: objective.name,
+                                                     }))}
+                                                     onChange={creatableSelectChangeHandler}
+                                    />
+
+                                    <div className="mt-1 text-danger">
+                                        <ErrorMessage name="objectives_ids" className="mt-2"/>
+                                    </div>
+                                </div>
+
+                                {/*if the user is not sales, then we need to add the user section*/}
+                                {
+                                    hasAnyRoles(currentUser, ['Demand', 'Head of Demand']) &&
+                                    <>
+                                        <div className='separator separator-dashed my-10'></div>
+                                        <div className='mb-4'>
+                                                <span
+                                                    className='fs-5 text-gray-700 d-flex fw-medium'>Assign owner</span>
+                                            <span
+                                                className='text-muted'>Choose a sales user or any other user in MMPWW to be the owner of this campaign.</span>
+                                        </div>
+
+                                        {/*we include a checkbox so the user can choose which type of user he wants the owner to be*/}
+                                        <div className="mb-7">
+                                            <KrysFormLabel text="Is the owner part of demand?" isRequired={true}/>
+
+                                            <KrysCheckbox name="is_owner_demand"
+                                                          onChangeHandler={(e) => {
+                                                              e.stopPropagation();
+                                                              setForm({
+                                                                  ...form,
+                                                                  is_owner_demand: Number(!form.is_owner_demand)
+                                                              });
+                                                          }}
+                                                          defaultValue={Boolean(form.is_owner_demand)}/>
+
+                                            <div className="mt-1 text-danger">
+                                                <ErrorMessage name="is_owner_demand" className="mt-2"/>
+                                            </div>
+                                        </div>
+
+                                        {
+                                            Boolean(form.is_owner_demand) &&
+                                            <div className="mb-7">
+                                                <KrysFormLabel text="Demand users" isRequired={true}/>
+
+                                                <Select name="user_id"
+                                                        options={demandUsers}
+                                                        getOptionLabel={(user) => user.name}
+                                                        getOptionValue={(user) => user.id.toString()}
+                                                        placeholder='Choose owner'
+                                                        onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'user_id')}/>
+
+                                                <div className="mt-3 text-danger">
+                                                    {formik.errors?.user_id ? formik.errors?.user_id : null}
+                                                </div>
+                                            </div>
+                                        }
+
+                                        {
+                                            !Boolean(form.is_owner_demand) &&
+                                            <div className="mb-7">
+                                                <KrysFormLabel text="All users" isRequired={true}/>
+
+                                                <Select name="user_id"
+                                                        options={allUsers}
+                                                        getOptionLabel={(user) => user.name}
+                                                        getOptionValue={(user) => user.id.toString()}
+                                                        placeholder='Choose owner'
+                                                        onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'user_id')}/>
+
+                                                <div className="mt-3 text-danger">
+                                                    {formik.errors?.user_id ? formik.errors?.user_id : null}
+                                                </div>
+                                            </div>
+                                        }
+                                    </>
+                                }
+
+                                <KrysFormFooter cancelUrl={'/demand/campaigns'}/>
+                            </Form>
+                        )
+                    }
+                </Formik>
+            </KTCardBody>
+        </KTCard>
     );
 };
 

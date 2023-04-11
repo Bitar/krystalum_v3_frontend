@@ -47,6 +47,8 @@ import AsyncSelect from 'react-select/async';
 import {storeCampaign} from '../../../../requests/demand/Campaign';
 import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 import {useNavigate} from 'react-router-dom';
+import {AdvertiserTypeEnum} from '../../../../enums/AdvertiserTypeEnum';
+import {BookingTypeEnum} from '../../../../enums/BookingTypeEnum';
 
 const CampaignCreate: React.FC = () => {
     const {currentUser, hasAnyRoles} = useAuth();
@@ -319,7 +321,7 @@ const CampaignCreate: React.FC = () => {
                                             onChange={(e) => {
                                                 // if the chosen booking type has ID 2 then it's TD
                                                 if (e) {
-                                                    setIsTD(e.id === 2);
+                                                    setIsTD(e.id === BookingTypeEnum.TD);
                                                 }
 
                                                 genericSingleSelectOnChangeHandler(e, form, setForm, 'booking_type_id');
@@ -415,9 +417,9 @@ const CampaignCreate: React.FC = () => {
                                 </div>
 
                                 <div
-                                    className={clsx("mb-7", form.advertiser_type === 'with_agency' ? 'd-block' : 'd-none')}>
+                                    className={clsx("mb-7", form.advertiser_type === AdvertiserTypeEnum.WITH_AGENCY ? 'd-block' : 'd-none')}>
                                     {/* this is only required if advertiser_type is 'with_agency' */}
-                                    <KrysFormLabel text="Agency" isRequired={form.advertiser_type === 'with_agency'}/>
+                                    <KrysFormLabel text="Agency" isRequired={form.advertiser_type === AdvertiserTypeEnum.WITH_AGENCY}/>
 
                                     <Select name="agency_id"
                                             options={agencies}

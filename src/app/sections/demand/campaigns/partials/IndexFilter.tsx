@@ -1,14 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
+import {Field, Form, Formik} from 'formik';
 import {Col, Collapse, Row} from 'react-bootstrap';
 
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
-import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
+import {defaultFilterFields, FilterFields} from '../core/filterForm';
 import {
     GenericErrorMessage,
     genericMultiSelectOnChangeHandler,
     genericOnChangeHandler,
-    genericSingleSelectOnChangeHandler
 } from '../../../../helpers/form';
 import {initialQueryState} from '../../../../../_metronic/helpers';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
@@ -33,6 +32,8 @@ import {filterData} from '../../../../helpers/dataManipulation';
 import {Country} from '../../../../models/misc/Country';
 import {getAllUsers} from '../../../../requests/iam/User';
 import {User} from '../../../../models/iam/User';
+import {getAllRegions} from '../../../../requests/misc/Region';
+import {Region} from '../../../../models/misc/Region';
 
 interface Props {
     showFilter: boolean,
@@ -51,6 +52,7 @@ const CampaignIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     const [bookingTypes, setBookingTypes] = useState<BookingType[]>([]);
     const [buyTypes, setBuyTypes] = useState<BuyType[]>([]);
     const [countries, setCountries] = useState<Country[]>([]);
+    const [regions, setRegions] = useState<Region[]>([]);
     const [users, setUsers] = useState<User[]>([]);
 
     useEffect(function () {
@@ -119,6 +121,19 @@ const CampaignIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
             }
         });
 
+        // get all regions
+        getAllRegions().then(response => {
+            if (axios.isAxiosError(response)) {
+                setFormErrors(extractErrors(response));
+            } else if (response === undefined) {
+                setFormErrors([GenericErrorMessage])
+            } else {
+                if (response.data) {
+                    setRegions(filterData(response.data, 'name', ['All Regions', 'Rest of the world']));
+                }
+            }
+        });
+
         // get all users regardless of role
         getAllUsers('filter[user_type]=internal').then(response => {
             if (axios.isAxiosError(response)) {
@@ -156,6 +171,7 @@ const CampaignIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
         buyTypesSelectRef.current?.clearValue();
         countriesSelectRef.current?.clearValue();
         usersSelectRef.current?.clearValue();
+        regionsSelectRef.current?.clearValue();
         setReset(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reset]);
@@ -171,6 +187,7 @@ const CampaignIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     const buyTypesSelectRef = useRef<any>(null);
     const countriesSelectRef = useRef<any>(null);
     const usersSelectRef = useRef<any>(null);
+    const regionsSelectRef = useRef<any>(null);
 
     return (
         <Collapse in={showFilter}>
@@ -179,7 +196,7 @@ const CampaignIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                     <div className="card-rounded bg-primary bg-opacity-5 p-10 mb-15">
                         <FormErrors errorMessages={formErrors}/>
 
-                        <Formik initialValues={defaultFilterFields} validationSchema={FilterSchema}
+                        <Formik initialValues={defaultFilterFields}
                                 onSubmit={handleFilter}
                                 enableReinitialize>
                             {
@@ -284,6 +301,19 @@ const CampaignIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                                         ref={usersSelectRef}
                                                         onChange={(e) => genericMultiSelectOnChangeHandler(e, filters, setFilters, 'owners')}
                                                         placeholder="Select one or more owners"
+                                                />
+                                            </Col>
+
+                                            <Col md={4}>
+                                                <KrysFormLabel text="Advertiser region(s)" isRequired={false}/>
+
+                                                <Select isMulti name="advertiser_regions"
+                                                        options={regions}
+                                                        getOptionLabel={(region) => region.name}
+                                                        getOptionValue={(region) => region.id.toString()}
+                                                        ref={regionsSelectRef}
+                                                        onChange={(e) => genericMultiSelectOnChangeHandler(e, filters, setFilters, 'advertiser_regions')}
+                                                        placeholder="Select one or more regions"
                                                 />
                                             </Col>
                                         </Row>

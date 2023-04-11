@@ -13,6 +13,8 @@ interface Props {
     showHierarchy?: boolean;
     isClearable?: boolean;
     doClear?: boolean;
+    customOnChange?: (e: any) => void;
+    placeholder?: string;
 }
 
 const SingleSelect: React.FC<Props> = ({
@@ -24,7 +26,9 @@ const SingleSelect: React.FC<Props> = ({
                                            name,
                                            showHierarchy = false,
                                            isClearable = false,
-                                           doClear = false
+                                           doClear = false,
+                                           customOnChange,
+                                           placeholder
                                        }) => {
 
     const selectRef = useRef<any>(null);
@@ -50,11 +54,11 @@ const SingleSelect: React.FC<Props> = ({
                                              options={options}
                                              getOptionLabel={(instance) => instance.name}
                                              getOptionValue={(instance) => instance.id.toString()}
-                                             placeholder={`Select ${namePlaceHolder}`}
+                                             placeholder={placeholder ? placeholder : `Select ${namePlaceHolder}`}
                                              isClearable={isClearable}
                                              ref={selectRef}
                                              formatOptionLabel={showHierarchy ? indentOptions : undefined}
-                                             onChange={singleSelectChangeHandler}/>
+                                             onChange={customOnChange ? customOnChange : singleSelectChangeHandler}/>
             }
 
             {
@@ -62,11 +66,11 @@ const SingleSelect: React.FC<Props> = ({
                                             options={options}
                                             getOptionLabel={(instance) => instance.name}
                                             getOptionValue={(instance) => instance.id.toString()}
-                                            placeholder={`Select ${namePlaceHolder}`}
+                                            placeholder={placeholder ? placeholder : `Select ${namePlaceHolder}`}
                                             isClearable={isClearable}
                                             ref={selectRef}
                                             formatOptionLabel={showHierarchy ? indentOptions : undefined}
-                                            onChange={singleSelectChangeHandler}/>
+                                            onChange={customOnChange ? customOnChange : singleSelectChangeHandler}/>
             }
         </>
     );

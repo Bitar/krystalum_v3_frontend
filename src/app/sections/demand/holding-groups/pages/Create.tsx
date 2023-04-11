@@ -52,7 +52,7 @@ const HoldingGroupCreate: React.FC = () => {
                     setRegions(filterData(response.data, 'name', ['All Regions', 'Rest of the world']));
 
                     // since the region is required, we set the region to the most likely which is GCC
-                    setForm({...form, region: response.data.filter((region) => region.id === 3)[0]});
+                    // setForm({...form, region: response.data.filter((region) => region.id === 3)[0]});
                 }
             }
         });
@@ -109,7 +109,7 @@ const HoldingGroupCreate: React.FC = () => {
                 <Formik initialValues={form} validationSchema={HoldingGroupSchema} onSubmit={handleCreate}
                         enableReinitialize>
                     {
-                        () => (
+                        ({errors}) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
@@ -125,30 +125,30 @@ const HoldingGroupCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Region" isRequired={true}/>
 
-                                    <Select name="region"
+                                    <Select name="region_id"
                                             options={regions}
                                             getOptionLabel={(region) => region.name}
                                             getOptionValue={(region) => region.id.toString()}
-                                            value={form.region} // make the default value as the first region
-                                            onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'region')}/>
+                                            // value={form.region} // make the default value as the first region
+                                            onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'region_id')}/>
 
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="region" className="mt-2"/>
+                                    <div className="mt-3 text-danger">
+                                        {errors?.region_id ? errors?.region_id : null}
                                     </div>
                                 </div>
 
                                 <div className="mb-7">
                                     <KrysFormLabel text="Trading desk" isRequired={false}/>
 
-                                    <Select name="trading_desk"
+                                    <Select name="trading_desk_id"
                                             options={tradingDesks}
                                             getOptionLabel={(tradingDesk) => tradingDesk.name}
                                             getOptionValue={(tradingDesk) => tradingDesk.id.toString()}
-                                            onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'trading_desk')}
+                                            onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'trading_desk_id')}
                                             isClearable={true}/>
 
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="trading_desk" className="mt-2"/>
+                                    <div className="mt-3 text-danger">
+                                        {errors?.trading_desk_id ? errors?.trading_desk_id : null}
                                     </div>
                                 </div>
 

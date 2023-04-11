@@ -27,11 +27,16 @@ import {Region} from '../../../../models/misc/Region';
 import {TradingDesk} from '../../../../models/demand/TradingDesk';
 import Select from 'react-select';
 import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
+import SingleSelect from '../../../../components/forms/SingleSelect';
+import {HoldingGroup} from '../../../../models/demand/HoldingGroup';
 
 
 const HoldingGroupEdit: React.FC = () => {
+    const [holdingGroup, setHoldingGroup] = useState<HoldingGroup|null>(null);
+
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
+    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
     const [regions, setRegions] = useState<Region[]>([]);
     const [tradingDesks, setTradingDesks] = useState<TradingDesk[]>([]);
@@ -56,13 +61,7 @@ const HoldingGroupEdit: React.FC = () => {
                     // since we have single select, we take the region and holding group as is from the API
                     // and set them to form
                     // we need to set the response's tradingDesk as the form's trading_desk
-                    const {tradingDesk, ...currentHoldingGroup} = response
-
-                    if(tradingDesk) {
-                        setForm({...currentHoldingGroup, trading_desk: tradingDesk});
-                    } else {
-                        setForm(currentHoldingGroup);
-                    }
+                    setHoldingGroup(response);
                 }
             });
 
@@ -98,9 +97,22 @@ const HoldingGroupEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.DEMAND_HOLDING_GROUPS, PageTypes.EDIT, form.name))
+        if(holdingGroup) {
+            krysApp.setPageTitle(generatePageTitle(Sections.DEMAND_HOLDING_GROUPS, PageTypes.EDIT, holdingGroup.name));
+
+            setIsResourceLoaded(true);
+
+            const {tradingDesk, region, ...currentHoldingGroup} = holdingGroup;
+
+            if(tradingDesk) {
+                setForm({...currentHoldingGroup, region_id: region.id, trading_desk_id: tradingDesk.id});
+            } else {
+                setForm({...currentHoldingGroup, region_id: region.id});
+            }
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [form]);
+    }, [holdingGroup]);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
@@ -137,7 +149,7 @@ const HoldingGroupEdit: React.FC = () => {
                 <Formik initialValues={form} validationSchema={HoldingGroupSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
-                        (formik) => (
+                        ({errors}) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
                                     <KrysFormLabel text="Name" isRequired={true}/>
@@ -153,31 +165,20 @@ const HoldingGroupEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Region" isRequired={true}/>
 
-                                    <Select name="region"
-                                            options={regions}
-                                            getOptionLabel={(region) => region.name}
-                                            getOptionValue={(region) => region.id.toString()}
-                                            value={form.region} // make the default value as the first region
-                                            onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'region')}/>
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={regions} defaultValue={holdingGroup?.region} form={form} setForm={setForm} name='region_id' />
 
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="region" className="mt-2"/>
+                                    <div className="mt-3 text-danger">
+                                        {errors?.region_id ? errors?.region_id : null}
                                     </div>
                                 </div>
 
                                 <div className="mb-7">
                                     <KrysFormLabel text="Trading desk" isRequired={false}/>
 
-                                    <Select name="trading_desk"
-                                            options={tradingDesks}
-                                            getOptionLabel={(tradingDesk) => tradingDesk.name}
-                                            getOptionValue={(tradingDesk) => tradingDesk.id.toString()}
-                                            value={form.trading_desk}
-                                            onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'trading_desk')}
-                                            isClearable={true}/>
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={tradingDesks} defaultValue={holdingGroup?.tradingDesk} form={form} setForm={setForm} name='trading_desk_id' isClearable={true}/>
 
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="trading_desk" className="mt-2"/>
+                                    <div className="mt-3 text-danger">
+                                        {errors?.trading_desk_id ? errors?.trading_desk_id : null}
                                     </div>
                                 </div>
 
