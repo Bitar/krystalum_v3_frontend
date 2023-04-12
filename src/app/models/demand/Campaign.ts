@@ -7,6 +7,7 @@ import {AgencyCondensed} from './Agency';
 import {RegionCondensed} from '../misc/Region';
 import {UserCondensed} from '../iam/User';
 import {Objective} from '../misc/Objective';
+import {AdvertiserType} from './Options';
 
 export type Campaign = {
     id: number,
@@ -16,7 +17,7 @@ export type Campaign = {
     buyType: BuyType | null, // this might be null in case of BO
     seat_id: string | null, // this might be null in case of BO
     revenueCountry: CountryCondensed,
-    advertiser_type: string,
+    advertiser_type: AdvertiserType,
     advertiser: Advertiser, // the advertiser is always set
     agency: AgencyCondensed | null, // could be null in case advertiser is not with agency
     region: RegionCondensed,

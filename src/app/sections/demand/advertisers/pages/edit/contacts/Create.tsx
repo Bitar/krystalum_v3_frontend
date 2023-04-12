@@ -69,7 +69,7 @@ const AdvertiserContactCreate: React.FC = () => {
 
     return (
         <KTCard className='card-bordered border-1'>
-            <KTCardHeader text='Add New Contact'/>
+            <KTCardHeader text='Assign New Owner'/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

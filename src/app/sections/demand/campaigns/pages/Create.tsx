@@ -49,6 +49,7 @@ import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 import {useNavigate} from 'react-router-dom';
 import {AdvertiserTypeEnum} from '../../../../enums/AdvertiserTypeEnum';
 import {BookingTypeEnum} from '../../../../enums/BookingTypeEnum';
+import {RoleEnum} from '../../../../enums/RoleEnum';
 
 const CampaignCreate: React.FC = () => {
     const {currentUser, hasAnyRoles} = useAuth();
@@ -287,7 +288,7 @@ const CampaignCreate: React.FC = () => {
                 <FormErrors errorMessages={formErrors}/>
 
                 <Formik initialValues={form}
-                        validationSchema={getCampaignSchema(hasAnyRoles(currentUser, ['Demand', 'Head of Demand']))}
+                        validationSchema={getCampaignSchema(hasAnyRoles(currentUser, [RoleEnum.DEMAND, RoleEnum.HEAD_OF_DEMAND]))}
                         onSubmit={handleCreate}
                         enableReinitialize>
                     {
@@ -481,7 +482,7 @@ const CampaignCreate: React.FC = () => {
 
                                 {/*if the user is not sales, then we need to add the user section*/}
                                 {
-                                    hasAnyRoles(currentUser, ['Demand', 'Head of Demand']) &&
+                                    !hasAnyRoles(currentUser, [RoleEnum.DEMAND, RoleEnum.HEAD_OF_DEMAND]) &&
                                     <>
                                         <div className='separator separator-dashed my-10'></div>
                                         <div className='mb-4'>
@@ -515,15 +516,15 @@ const CampaignCreate: React.FC = () => {
                                             <div className="mb-7">
                                                 <KrysFormLabel text="Demand users" isRequired={true}/>
 
-                                                <Select name="user_id"
+                                                <Select name="owner_id"
                                                         options={demandUsers}
                                                         getOptionLabel={(user) => user.name}
                                                         getOptionValue={(user) => user.id.toString()}
                                                         placeholder='Choose owner'
-                                                        onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'user_id')}/>
+                                                        onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'owner_id')}/>
 
                                                 <div className="mt-3 text-danger">
-                                                    {formik.errors?.user_id ? formik.errors?.user_id : null}
+                                                    {formik.errors?.owner_id ? formik.errors?.owner_id : null}
                                                 </div>
                                             </div>
                                         }
@@ -533,15 +534,15 @@ const CampaignCreate: React.FC = () => {
                                             <div className="mb-7">
                                                 <KrysFormLabel text="All users" isRequired={true}/>
 
-                                                <Select name="user_id"
+                                                <Select name="owner_id"
                                                         options={allUsers}
                                                         getOptionLabel={(user) => user.name}
                                                         getOptionValue={(user) => user.id.toString()}
                                                         placeholder='Choose owner'
-                                                        onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'user_id')}/>
+                                                        onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'owner_id')}/>
 
                                                 <div className="mt-3 text-danger">
-                                                    {formik.errors?.user_id ? formik.errors?.user_id : null}
+                                                    {formik.errors?.owner_id ? formik.errors?.owner_id : null}
                                                 </div>
                                             </div>
                                         }
