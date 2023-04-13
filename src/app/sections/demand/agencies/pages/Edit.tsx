@@ -152,25 +152,27 @@ const AgencyEdit: React.FC = () => {
     }, [form.holding_group_id]);
 
     const handleEdit = (e: any) => {
-        // send API request to create the agency
-        updateAgency(form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // we were able to store the agency
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('agency', Actions.EDIT, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    });
+        if(agency) {
+            // send API request to create the agency
+            updateAgency(agency.id, form).then(response => {
+                    if (axios.isAxiosError(response)) {
+                        // we need to show the errors
+                        setFormErrors(extractErrors(response));
+                    } else if (response === undefined) {
+                        // show generic error message
+                        setFormErrors([GenericErrorMessage])
+                    } else {
+                        // we were able to store the agency
+                        krysApp.setAlert({
+                            message: new AlertMessageGenerator('agency', Actions.EDIT, KrysToastType.SUCCESS).message,
+                            type: KrysToastType.SUCCESS
+                        });
 
-                    navigate(`/demand/agencies`);
+                        navigate(`/demand/agencies`);
+                    }
                 }
-            }
-        );
+            );
+        }
     };
 
     return (

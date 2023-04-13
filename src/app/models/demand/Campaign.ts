@@ -9,6 +9,19 @@ import {UserCondensed} from '../iam/User';
 import {Objective} from '../misc/Objective';
 import {AdvertiserType} from './Options';
 
+export type CampaignOwner = {
+    id: number,
+    name: string,
+    created_at: Date,
+    is_active: number
+}
+
+export type CampaignOwnerPaginate = Response<CampaignOwner[]>;
+
+export type CampaignOwnerList = {
+    data: CampaignOwner[]
+}
+
 export type Campaign = {
     id: number,
     unique_identifier: string,

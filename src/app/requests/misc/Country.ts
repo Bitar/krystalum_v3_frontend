@@ -7,7 +7,7 @@ const ENDPOINT = `${API_URL}/misc/countries`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
 export const getAllCountries = async (): Promise<CountryList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<CountryList>) => response.data).catch((error) => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<CountryList>) => response.data).catch((error) => {
         return error;
     });
 }

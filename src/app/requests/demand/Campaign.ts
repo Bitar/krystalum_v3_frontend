@@ -43,12 +43,12 @@ export const storeCampaign = async (campaign: any): Promise<Campaign | AxiosErro
         });
 }
 
-export const updateCampaign = async (campaign: any): Promise<Campaign | AxiosError | undefined> => {
+export const updateCampaign = async (id: number, campaign: any): Promise<Campaign | AxiosError | undefined> => {
     let formData = createFormData(campaign);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + campaign.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

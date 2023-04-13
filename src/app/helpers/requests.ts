@@ -29,13 +29,15 @@ export const createFormData = (form: any) => {
                     formData.append(`${key}[]`, form[key][item]);
                 }
             }
-        } else if (form[key] instanceof File) {
-            formData.append(key, form[key]);
-        } else if (form[key] instanceof Object) {
-            formData.append(`${key}_id`, form[key].id);
         } else {
             formData.append(key, form[key]);
         }
+
+    // else if (form[key] instanceof File) {
+    //         formData.append(key, form[key]);
+    //     } else if (form[key] instanceof Object) {
+    //         formData.append(`${key}_id`, form[key].id);
+    //     }
     }
 
     return formData;

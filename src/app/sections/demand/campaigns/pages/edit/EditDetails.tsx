@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
-import {Campaign} from '../../../../../models/demand/Campaign';
 import {useAuth} from '../../../../../modules/auth';
 import {getAllBookingTypes} from '../../../../../requests/misc/BookingType';
 import {extractErrors} from '../../../../../helpers/requests';
@@ -42,19 +41,13 @@ import {Region} from '../../../../../models/misc/Region';
 import {RoleEnum} from '../../../../../enums/RoleEnum';
 import AsyncSingleSelect from '../../../../../components/forms/AsyncSingleSelect';
 import CreatableMultiSelect from '../../../../../components/forms/CreatableMultiSelect';
-import {getAllUsers} from '../../../../../requests/iam/User';
-import {User} from '../../../../../models/iam/User';
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
 import {
-    CampaignInfoFormFields,
+    CampaignInfoFormFields, CampaignInfoSchema,
     defaultCampaignInfoFormFields,
-    fillEditForm,
-    getCampaignInfoSchema
+    fillEditForm
 } from '../../core/edit/info/form';
-
-interface Props {
-    campaign: Campaign | null
-}
+import {useCampaign} from '../../core/CampaignContext';
 
 // TODO add publisher_id
 const defaultEditableFields = {
@@ -70,12 +63,14 @@ const defaultEditableFields = {
     objectives_ids: false
 }
 
-const EditDetails: React.FC<Props> = ({campaign}) => {
+const EditDetails: React.FC = () => {
+    const {campaign} = useCampaign();
     const {currentUser, hasAnyRoles} = useAuth();
 
     const [isTD, setIsTD] = useState<boolean>(false);
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false);
     const [editableFields, setEditableFields] = useState<any>(defaultEditableFields);
+    const [disableSubmit, setDisableSubmit] = useState<boolean>(false);
 
     const [form, setForm] = useState<CampaignInfoFormFields>(defaultCampaignInfoFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -88,7 +83,6 @@ const EditDetails: React.FC<Props> = ({campaign}) => {
     const [agencies, setAgencies] = useState<Agency[]>([]);
     const [regions, setRegions] = useState<Region[]>([]);
     const [objectives, setObjectives] = useState<Objective[]>([]);
-    const [demandUsers, setDemandUsers] = useState<User[]>([]);
 
     const [clearRegion, setClearRegion] = useState<boolean>(false);
     const [clearAgency, setClearAgency] = useState<boolean>(false);
@@ -98,7 +92,7 @@ const EditDetails: React.FC<Props> = ({campaign}) => {
 
     useEffect(() => {
         if (campaign) {
-            setForm(fillEditForm(campaign, demandUsers));
+            setForm(fillEditForm(campaign));
 
             if (campaign.bookingType.id === BookingTypeEnum.TD) {
                 setIsTD(true);
@@ -210,19 +204,6 @@ const EditDetails: React.FC<Props> = ({campaign}) => {
                     }
                 }
             });
-
-            // get all the demand users
-            getAllUsers('filter[roles][]=11&filter[roles][]=10').then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    if (response.data) {
-                        setDemandUsers(response.data);
-                    }
-                }
-            });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [campaign]);
@@ -235,7 +216,7 @@ const EditDetails: React.FC<Props> = ({campaign}) => {
 
             // if the user is Demand and he's the owner OR if he's the head of demand
             if ((hasAnyRoles(currentUser, [RoleEnum.DEMAND]) && campaign.owner && campaign.owner.id === currentUser.id)
-                || hasAnyRoles(currentUser, [RoleEnum.HEAD_OF_DEMAND])) {
+                || hasAnyRoles(currentUser, [RoleEnum.HEAD_OF_DEMAND, RoleEnum.ADMINISTRATOR, RoleEnum.CAMPAIGN_EDITOR])) {
                 // he can change name, buy type, seat ID and objectives
                 // TODO add publisher_id
                 let fields = defaultEditableFields;
@@ -246,6 +227,7 @@ const EditDetails: React.FC<Props> = ({campaign}) => {
                 fields.objectives_ids = true;
 
                 setEditableFields(fields);
+                setDisableSubmit(false);
             } else if (hasAnyRoles(currentUser, [RoleEnum.R_N_D])) {
                 // R&D users can edit anything
                 // TODO add publisher_id
@@ -263,6 +245,10 @@ const EditDetails: React.FC<Props> = ({campaign}) => {
                 }
 
                 setEditableFields(fields);
+                setDisableSubmit(false);
+            } else {
+                // the user can't edit any fields
+                setDisableSubmit(true);
             }
 
             // the user is either sales but not owner or some other role that can't edit anything.
@@ -298,36 +284,38 @@ const EditDetails: React.FC<Props> = ({campaign}) => {
     }, [form.advertiser_type]);
 
     const handleEdit = (e: any) => {
-        // send API request to create the campaign
-        updateCampaign(form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // we were able to store the campaign
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('campaign', Actions.EDIT, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    });
+        if (campaign) {
+            // send API request to create the campaign
+            updateCampaign(campaign.id, form).then(response => {
+                    if (axios.isAxiosError(response)) {
+                        // we need to show the errors
+                        setFormErrors(extractErrors(response));
+                    } else if (response === undefined) {
+                        // show generic error message
+                        setFormErrors([GenericErrorMessage])
+                    } else {
+                        // we were able to store the campaign
+                        krysApp.setAlert({
+                            message: new AlertMessageGenerator('campaign', Actions.EDIT, KrysToastType.SUCCESS).message,
+                            type: KrysToastType.SUCCESS
+                        });
 
-                    navigate(`/demand/campaigns`);
+                        navigate(`/demand/campaigns`);
+                    }
                 }
-            }
-        );
+            );
+        }
     };
 
     return (
         <KTCard className='card-bordered border-1'>
-            <KTCardHeader text='Update basic information' />
+            <KTCardHeader text='Update basic information'/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
                 <Formik initialValues={form}
-                        validationSchema={getCampaignInfoSchema}
+                        validationSchema={CampaignInfoSchema}
                         onSubmit={handleEdit}
                         enableReinitialize>
                     {
@@ -343,7 +331,7 @@ const EditDetails: React.FC<Props> = ({campaign}) => {
 
                                     <Field className="form-control fs-base" type="text"
                                            placeholder="Enter campaign name" name="name"
-                                           disabled={editableFields.name}/>
+                                           disabled={!editableFields.name}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="name" className="mt-2"/>
@@ -362,7 +350,7 @@ const EditDetails: React.FC<Props> = ({campaign}) => {
                                         }
 
                                         genericSingleSelectOnChangeHandler(e, form, setForm, 'booking_type_id');
-                                    }} placeholder='Choose booking type' isDisabled={editableFields.booking_type_id}/>
+                                    }} placeholder='Choose booking type' isDisabled={!editableFields.booking_type_id}/>
 
                                     <div className="mt-3 text-danger">
                                         {formik.errors?.booking_type_id ? formik.errors?.booking_type_id : null}
@@ -375,7 +363,7 @@ const EditDetails: React.FC<Props> = ({campaign}) => {
                                     <SingleSelect isResourceLoaded={isResourceLoaded} options={buyTypes}
                                                   defaultValue={campaign?.buyType} form={form} setForm={setForm}
                                                   name='buy_type_id' isClearable={!isTD} placeholder='Choose buy type'
-                                                  isDisabled={editableFields.buy_type_id}/>
+                                                  isDisabled={!editableFields.buy_type_id}/>
 
                                     <div className="mt-3 text-danger">
                                         {formik.errors?.buy_type_id && isTD ? formik.errors?.buy_type_id : null}
@@ -387,7 +375,7 @@ const EditDetails: React.FC<Props> = ({campaign}) => {
 
                                     <Field className="form-control fs-base" type="text"
                                            placeholder="Enter the campaign's seat ID" name="seat_id"
-                                           disabled={editableFields.seat_id}/>
+                                           disabled={!editableFields.seat_id}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="seat_id" className="mt-2"/>
@@ -400,7 +388,7 @@ const EditDetails: React.FC<Props> = ({campaign}) => {
                                     <SingleSelect isResourceLoaded={isResourceLoaded} options={countries}
                                                   defaultValue={campaign?.revenueCountry} form={form} setForm={setForm}
                                                   name='revenue_country_id' placeholder='Choose revenue country'
-                                                  isDisabled={editableFields.revenue_country_id}/>
+                                                  isDisabled={!editableFields.revenue_country_id}/>
 
                                     <div className="mt-3 text-danger">
                                         {formik.errors?.revenue_country_id ? formik.errors?.revenue_country_id : null}
@@ -418,7 +406,10 @@ const EditDetails: React.FC<Props> = ({campaign}) => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Advertiser type" isRequired={true}/>
 
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={advertiserTypes} defaultValue={campaign?.advertiser_type} form={form} setForm={setForm} name='advertiser_type' customOnChange={onAdvertiserTypeChangeHandler} isDisabled={editableFields.advertiser_type}/>
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={advertiserTypes}
+                                                  defaultValue={campaign?.advertiser_type} form={form} setForm={setForm}
+                                                  name='advertiser_type' customOnChange={onAdvertiserTypeChangeHandler}
+                                                  isDisabled={!editableFields.advertiser_type}/>
 
                                     <div className="mt-3 text-danger">
                                         {formik.errors?.advertiser_type ? formik.errors?.advertiser_type : null}
@@ -428,7 +419,11 @@ const EditDetails: React.FC<Props> = ({campaign}) => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Advertiser" isRequired={true}/>
 
-                                    <AsyncSingleSelect isResourceLoaded={isResourceLoaded} options={advertisers} defaultValue={campaign?.advertiser} form={form} setForm={setForm} name='advertiser_id' setFormErrors={setFormErrors} getAllOptions={getAllAdvertisers} isDisabled={editableFields.advertiser_id} />
+                                    <AsyncSingleSelect isResourceLoaded={isResourceLoaded} options={advertisers}
+                                                       defaultValue={campaign?.advertiser} form={form} setForm={setForm}
+                                                       name='advertiser_id' setFormErrors={setFormErrors}
+                                                       getAllOptions={getAllAdvertisers}
+                                                       isDisabled={!editableFields.advertiser_id}/>
 
                                     <div className="mt-3 text-danger">
                                         {formik.errors?.advertiser_id ? formik.errors?.advertiser_id : null}
@@ -441,7 +436,10 @@ const EditDetails: React.FC<Props> = ({campaign}) => {
                                     <KrysFormLabel text="Agency"
                                                    isRequired={form.advertiser_type === AdvertiserTypeEnum.WITH_AGENCY}/>
 
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={agencies} defaultValue={campaign?.agency} form={form} setForm={setForm} name='agency_id' doClear={clearAgency} showHierarchy={true} isDisabled={editableFields.agency_id}/>
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={agencies}
+                                                  defaultValue={campaign?.agency} form={form} setForm={setForm}
+                                                  name='agency_id' doClear={clearAgency} showHierarchy={true}
+                                                  isDisabled={!editableFields.agency_id}/>
 
                                     <div className="mt-3 text-danger">
                                         {formik.errors?.agency_id ? formik.errors?.agency_id : null}
@@ -451,9 +449,13 @@ const EditDetails: React.FC<Props> = ({campaign}) => {
                                 <div
                                     className={clsx("mb-7", form.advertiser_type !== AdvertiserTypeEnum.WITH_AGENCY ? 'd-block' : 'd-none')}>
                                     {/* this is only required if advertiser_type is NOT 'with_agency' */}
-                                    <KrysFormLabel text="Region" isRequired={form.advertiser_type !== AdvertiserTypeEnum.WITH_AGENCY}/>
+                                    <KrysFormLabel text="Region"
+                                                   isRequired={form.advertiser_type !== AdvertiserTypeEnum.WITH_AGENCY}/>
 
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={regions} defaultValue={campaign?.region} form={form} setForm={setForm} name='region_id' doClear={clearRegion} isDisabled={editableFields.region_id}/>
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={regions}
+                                                  defaultValue={campaign?.region} form={form} setForm={setForm}
+                                                  name='region_id' doClear={clearRegion}
+                                                  isDisabled={!editableFields.region_id}/>
 
                                     <div className="mt-3 text-danger">
                                         {formik.errors?.region_id ? formik.errors?.region_id : null}
@@ -473,14 +475,18 @@ const EditDetails: React.FC<Props> = ({campaign}) => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Objectives" isRequired={false}/>
 
-                                    <CreatableMultiSelect isResourceLoaded={isResourceLoaded} options={objectives} defaultValue={campaign?.objectives} form={form} setForm={setForm} name='objectives_ids' newOptionsName='objectives' isDisabled={editableFields.objectives_ids} />
+                                    <CreatableMultiSelect isResourceLoaded={isResourceLoaded} options={objectives}
+                                                          defaultValue={campaign?.objectives} form={form}
+                                                          setForm={setForm} name='objectives_ids'
+                                                          newOptionsName='objectives'
+                                                          isDisabled={!editableFields.objectives_ids}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="objectives_ids" className="mt-2"/>
                                     </div>
                                 </div>
 
-                                <KrysFormFooter cancelUrl={'/demand/campaigns'}/>
+                                <KrysFormFooter cancelUrl={'/demand/campaigns'} disableSubmit={disableSubmit}/>
                             </Form>
                         )
                     }

@@ -19,18 +19,18 @@ export type KTCardHeaderProps = {
 }
 
 const KTCardHeader: FC<KTCardHeaderProps> = ({
-                                     className,
-                                     text,
-                                     id,
-                                     bg,
-                                     text_color,
-                                     collapse = false,
-                                     target_id,
-                                     actions,
-                                     icon,
-                                     icon_style
+                                                 className,
+                                                 text,
+                                                 id,
+                                                 bg,
+                                                 text_color,
+                                                 collapse = false,
+                                                 target_id,
+                                                 actions,
+                                                 icon,
+                                                 icon_style
 
-                                 }) => {
+                                             }) => {
     let opts: any = {}
     if (collapse) {
         opts['role'] = 'button'
@@ -38,6 +38,11 @@ const KTCardHeader: FC<KTCardHeaderProps> = ({
         opts['data-bs-target'] = `#${target_id}`
         opts['aria-expanded'] = 'true'
         opts['aria-controls'] = `${target_id}`
+    }
+
+    if (text.length > 0) {
+        text = text.split(' ').map((entry) => entry.toLowerCase()).join(' ');
+        text = text.charAt(0).toUpperCase() + text.slice(1);
     }
 
     return (

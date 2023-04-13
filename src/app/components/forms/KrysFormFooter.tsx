@@ -5,10 +5,11 @@ import {Link} from 'react-router-dom';
 interface Props {
     cancelUrl: string,
     loading?: boolean,
-    useSeparator?: boolean
+    useSeparator?: boolean,
+    disableSubmit?: boolean
 }
 
-const KrysFormFooter: React.FC<Props> = ({cancelUrl, loading = false, useSeparator = true}) => {
+const KrysFormFooter: React.FC<Props> = ({cancelUrl, loading = false, useSeparator = true, disableSubmit= false}) => {
     return (
         <>
             {
@@ -16,7 +17,7 @@ const KrysFormFooter: React.FC<Props> = ({cancelUrl, loading = false, useSeparat
             }
 
             <div className="d-flex justify-content-end">
-                <Button variant="krys" type="submit" className={'me-2'}>
+                <Button variant="krys" type="submit" className={'me-2'} disabled={disableSubmit}>
                     { !loading && 'Submit' }
                     { loading && 'Please wait ...'}
                 </Button>

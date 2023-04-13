@@ -10,9 +10,7 @@ export const defaultCampaignOwnershipFormFields = {
     owner_id: ''
 };
 
-export const getCampaignOwnershipSchema = () => {
-    return Yup.object().shape({
-        is_owner_demand: Yup.number().required(),
-        owner_id: Yup.number().required()
-    });
-}
+export const CampaignOwnershipSchema = Yup.object().shape({
+    is_owner_demand: Yup.number().required(),
+    owner_id: Yup.number().required()
+});

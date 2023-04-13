@@ -42,17 +42,22 @@ const CreatableMultiSelect: React.FC<Props> = ({
         let newOptions: string [] = [];
         let selectedOptions: number[] = [];
 
-        e.forEach((option: any) => {
-            if (isNaN(parseInt(option.value))) {
-                // this is a new option
-                newOptions.push(option.value);
-            } else {
-                // this is a selected option
-                selectedOptions.push(parseInt(option.value));
-            }
+        if(e.length > 0) {
+            e.forEach((option: any) => {
+                if (isNaN(parseInt(option.value))) {
+                    // this is a new option
+                    newOptions.push(option.value);
+                } else {
+                    // this is a selected option
+                    selectedOptions.push(parseInt(option.value));
+                }
 
+                setForm({...form, [name]: selectedOptions, [newOptionsName]: newOptions});
+            });
+        } else {
+            // we need to make both as empty arrays
             setForm({...form, [name]: selectedOptions, [newOptionsName]: newOptions});
-        });
+        }
     }
 
     const namePlaceHolder = name.replace(/_ids/g, "").replace(/_/g, " ");

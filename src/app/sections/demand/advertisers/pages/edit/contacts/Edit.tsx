@@ -93,7 +93,7 @@ const AdvertiserContactEdit: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Advertiser Contact" icon="fa-solid fa-pencil" icon_style="fs-3 text-warning"/>
+            <KTCardHeader text="Edit Advertiser Contact"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

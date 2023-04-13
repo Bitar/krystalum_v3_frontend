@@ -27,35 +27,33 @@ export const defaultCampaignInfoFormFields: CampaignInfoFormFields = {
     advertiser_id: ''
 };
 
-export const getCampaignInfoSchema = () => {
-    return Yup.object().shape({
-        name: Yup.string().required(),
-        booking_type_id: Yup.number().required(),
-        buy_type_id: Yup.number().when("booking_type_id", {
-            is: 2, // TD
-            then: Yup.number().required("You must select a buy type if the campaign is a TD")
-        }),
-        seat_id: Yup.string().when("booking_type_id", {
-            is: 2, // TD
-            then: Yup.string().required("You must enter a seat ID if the campaign is a TD")
-        }),
-        revenue_country_id: Yup.number().required(),
-        advertiser_type: Yup.string().required(),
-        advertiser_id: Yup.number().required(),
-        agency_id: Yup.number().when("advertiser_type", {
-            is: 'with_agency',
-            then: Yup.number().required("You must select an agency when advertiser type is 'with agency'")
-        }),
-        region_id: Yup.number().when("advertiser_type", {
-            is: 'with_publisher' || 'direct_client',
-            then: Yup.number().required("You must select a region when advertiser type is not 'with agency'")
-        }),
-        objectives_ids: Yup.array().of(Yup.number()).notRequired(),
-        objectives: Yup.array().of(Yup.string()).notRequired()
-    });
-}
+export const CampaignInfoSchema = Yup.object().shape({
+    name: Yup.string().required(),
+    booking_type_id: Yup.number().required(),
+    buy_type_id: Yup.number().when("booking_type_id", {
+        is: 2, // TD
+        then: Yup.number().required("You must select a buy type if the campaign is a TD")
+    }),
+    seat_id: Yup.string().when("booking_type_id", {
+        is: 2, // TD
+        then: Yup.string().required("You must enter a seat ID if the campaign is a TD")
+    }),
+    revenue_country_id: Yup.number().required(),
+    advertiser_type: Yup.string().required(),
+    advertiser_id: Yup.number().required(),
+    agency_id: Yup.number().when("advertiser_type", {
+        is: 'with_agency',
+        then: Yup.number().required("You must select an agency when advertiser type is 'with agency'")
+    }),
+    region_id: Yup.number().when("advertiser_type", {
+        is: 'with_publisher' || 'direct_client',
+        then: Yup.number().required("You must select a region when advertiser type is not 'with agency'")
+    }),
+    objectives_ids: Yup.array().of(Yup.number()).notRequired(),
+    objectives: Yup.array().of(Yup.string()).notRequired()
+});
 
-export function fillEditForm(campaign: Campaign, demandUsers: UserCondensed[]): FormFields {
+export function fillEditForm(campaign: Campaign): FormFields {
     let campaignForm: FormFields = {
         name: campaign.name,
         booking_type_id: campaign.bookingType.id,
@@ -64,39 +62,27 @@ export function fillEditForm(campaign: Campaign, demandUsers: UserCondensed[]): 
         advertiser_id: campaign.advertiser.id,
     };
 
-    if(campaign.buyType){
+    if (campaign.buyType) {
         campaignForm.buy_type_id = campaign.buyType.id;
     }
 
-    if(campaign.seat_id) {
+    if (campaign.seat_id) {
         campaignForm.seat_id = campaign.seat_id;
     } else {
         campaignForm.seat_id = '';
     }
 
-    if(campaign.advertiser_type.id === AdvertiserTypeEnum.WITH_AGENCY) {
+    if (campaign.advertiser_type.id === AdvertiserTypeEnum.WITH_AGENCY) {
         // set the agency_id
         campaignForm.agency_id = campaign.agency?.id;
-    } else if(campaign.advertiser_type.id === AdvertiserTypeEnum.DIRECT_CLIENT) {
+    } else if (campaign.advertiser_type.id === AdvertiserTypeEnum.DIRECT_CLIENT) {
         // set the region_id
         campaignForm.region_id = campaign.region?.id
     }
 
-    if(campaign.objectives) {
+    if (campaign.objectives) {
         campaignForm.objectives_ids = campaign.objectives.map((objective) => objective.id);
     }
-
-    if(campaign.owner) {
-        campaignForm.owner_id = campaign.owner.id;
-
-        // if the owner_id is not in demandUsers, then the user is not a demand user and we can set is_owner_demand properly
-        if(demandUsers.find(user => user.id === campaign?.owner?.id) !== undefined) {
-            campaignForm.is_owner_demand = 1;
-        } else {
-            campaignForm.is_owner_demand = 0;
-        }
-    }
-
 
     // TODO add case with publisher
 

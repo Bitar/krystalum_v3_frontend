@@ -8,7 +8,7 @@ export interface AdvertiserContactsFormFields {
     contact_info: string
 }
 
-export const defaultAdvertiserContactsFormFields = {contact_name: '', agency_name: '', contact_info: ''};
+export const defaultAdvertiserContactsFormFields = {contact_info: '', agency_name: '', contact_name: ''};
 
 export const AdvertiserContactsSchema = Yup.object().shape({
     contact_name: Yup.string().notRequired(),
@@ -17,7 +17,11 @@ export const AdvertiserContactsSchema = Yup.object().shape({
 });
 
 export function fillEditForm(advertiserContact: AdvertiserContact): AdvertiserContactsFormFields {
-    let advertiserContactForm: AdvertiserContactsFormFields = {contact_info: advertiserContact.contact_info};
+    let advertiserContactForm: AdvertiserContactsFormFields = {
+        contact_info: advertiserContact.contact_info,
+        agency_name: '',
+        contact_name: ''
+    };
 
     if (advertiserContact.agency_name) {
         advertiserContactForm.agency_name = advertiserContact.agency_name;

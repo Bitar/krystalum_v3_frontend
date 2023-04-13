@@ -17,9 +17,12 @@ import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {defaultFormFields, FormFields, TradingDeskSchema} from '../core/form';
 import {getTradingDesk, updateTradingDesk} from '../../../../requests/demand/TradingDesk';
 import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
+import {TradingDesk} from '../../../../models/demand/TradingDesk';
 
 
 const TradingDeskEdit: React.FC = () => {
+    const [tradingDesk, setTradingDesk] = useState<TradingDesk | null>(null);
+
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -41,6 +44,7 @@ const TradingDeskEdit: React.FC = () => {
                     navigate('/error/400');
                 } else {
                     // we were able to fetch current trading desk to edit
+                    setTradingDesk(response);
                     setForm(response);
                 }
             });
@@ -49,38 +53,43 @@ const TradingDeskEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.DEMAND_TRADING_DESKS, PageTypes.EDIT, form.name))
+        if (tradingDesk) {
+            krysApp.setPageTitle(generatePageTitle(Sections.DEMAND_TRADING_DESKS, PageTypes.EDIT, tradingDesk.name))
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [form]);
+    }, [tradingDesk]);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the trading desk's data by doing API call with form
-        updateTradingDesk(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the updated trading desk so we're good
-                krysApp.setAlert({
-                    message: new AlertMessageGenerator('trading desk', Actions.EDIT, KrysToastType.SUCCESS).message,
-                    type: KrysToastType.SUCCESS
-                })
+        if (tradingDesk) {
+            // we need to update the trading desk's data by doing API call with form
+            updateTradingDesk(tradingDesk.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the updated trading desk so we're good
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('trading desk', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
 
-                navigate(`/demand/trading-desks`);
-            }
-        });
+                    navigate(`/demand/trading-desks`);
+                }
+            });
+        }
     }
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Trading Desk" />
+            <KTCardHeader text="Edit Trading Desk"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

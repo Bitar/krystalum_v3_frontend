@@ -1,13 +1,13 @@
 import React, {lazy} from 'react';
 import {Route, Routes} from 'react-router-dom';
 import {SuspenseView} from '../../components/misc/SuspenseView';
-import CampaignRoutes from './CampaignRoutes';
 
 const DemandModuleRoutes: React.FC = () => {
     const TradingDeskRoutes = lazy(() => import('./TradingDeskRoutes'));
     const HoldingGroupRoutes = lazy(() => import('./HoldingGroupRoutes'));
     const AgencyRoutes = lazy(() => import('./AgencyRoutes'));
     const AdvertiserRoutes = lazy(() => import('./AdvertiserRoutes'));
+    const CampaignRoutes = lazy(() => import('./CampaignRoutes'));
 
     return (
         <Routes>

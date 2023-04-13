@@ -7,7 +7,6 @@ import CampaignIndex from '../../sections/demand/campaigns/pages/Index';
 import CampaignCreate from '../../sections/demand/campaigns/pages/Create';
 import CampaignEdit from '../../sections/demand/campaigns/pages/Edit';
 
-
 const breadcrumbs: Array<PageLink> = [
     {
         title: Sections.DEMAND_CAMPAIGNS,

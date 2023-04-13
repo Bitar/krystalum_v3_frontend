@@ -9,8 +9,7 @@ import {Sections} from '../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {
     GenericErrorMessage,
-    genericOnChangeHandler,
-    genericSingleSelectOnChangeHandler
+    genericOnChangeHandler
 } from '../../../../helpers/form';
 import {extractErrors} from '../../../../helpers/requests';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
@@ -25,7 +24,6 @@ import {filterData} from '../../../../helpers/dataManipulation';
 import {getAllTradingDesks} from '../../../../requests/demand/TradingDesk';
 import {Region} from '../../../../models/misc/Region';
 import {TradingDesk} from '../../../../models/demand/TradingDesk';
-import Select from 'react-select';
 import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 import SingleSelect from '../../../../components/forms/SingleSelect';
 import {HoldingGroup} from '../../../../models/demand/HoldingGroup';
@@ -119,24 +117,26 @@ const HoldingGroupEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        // we need to update the holding group's data by doing API call with form
-        updateHoldingGroup(form).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the updated holding group so we're good
-                krysApp.setAlert({
-                    message: new AlertMessageGenerator('holding group', Actions.EDIT, KrysToastType.SUCCESS).message,
-                    type: KrysToastType.SUCCESS
-                })
+        if(holdingGroup) {
+            // we need to update the holding group's data by doing API call with form
+            updateHoldingGroup(holdingGroup.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the updated holding group so we're good
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('holding group', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
 
-                navigate(`/demand/holding-groups`);
-            }
-        });
+                    navigate(`/demand/holding-groups`);
+                }
+            });
+        }
     }
 
     return (

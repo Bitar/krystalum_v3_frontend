@@ -191,7 +191,7 @@ const AdvertiserInfoEdit: React.FC = () => {
 
     return (
         <KTCard className='card-bordered border-1'>
-            <KTCardHeader text='Update Basic Information'/>
+            <KTCardHeader text='Update basic information'/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

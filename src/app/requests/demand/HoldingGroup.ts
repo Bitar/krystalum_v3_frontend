@@ -43,12 +43,12 @@ export const storeHoldingGroup = async (holdingGroup: any): Promise<HoldingGroup
         });
 }
 
-export const updateHoldingGroup = async (holdingGroup: any): Promise<HoldingGroup | AxiosError | undefined> => {
+export const updateHoldingGroup = async (id: number, holdingGroup: any): Promise<HoldingGroup | AxiosError | undefined> => {
     let formData = createFormData(holdingGroup);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + holdingGroup.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

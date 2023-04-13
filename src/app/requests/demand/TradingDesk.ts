@@ -43,12 +43,12 @@ export const storeTradingDesk = async (tradingDesk: any): Promise<TradingDesk | 
         });
 }
 
-export const updateTradingDesk = async (tradingDesk: any): Promise<TradingDesk | AxiosError | undefined> => {
+export const updateTradingDesk = async (id: number, tradingDesk: any): Promise<TradingDesk | AxiosError | undefined> => {
     let formData = createFormData(tradingDesk);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + tradingDesk.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

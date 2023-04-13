@@ -12,6 +12,7 @@ import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHe
 import {Nav, Tab} from 'react-bootstrap';
 import EditDetails from './edit/EditDetails';
 import EditOwnership from './edit/EditOwnership';
+import {CampaignContext} from '../core/CampaignContext';
 
 
 const CampaignEdit: React.FC = () => {
@@ -92,15 +93,18 @@ const CampaignEdit: React.FC = () => {
                         <div className='col-lg-8 col-xl-9'>
                             <Tab.Content>
                                 {
-                                    <>
+                                    <CampaignContext.Provider value={{
+                                        campaign: campaign,
+                                        setCampaign: setCampaign
+                                    }}>
                                         <Tab.Pane eventKey='settingsNav-0'>
-                                            <EditDetails campaign={campaign}/>
+                                            <EditDetails/>
                                         </Tab.Pane>
 
                                         <Tab.Pane eventKey='settingsNav-1'>
-                                            <EditOwnership campaign={campaign}/>
+                                            <EditOwnership/>
                                         </Tab.Pane>
-                                    </>
+                                    </CampaignContext.Provider>
                                 }
                             </Tab.Content>
                         </div>

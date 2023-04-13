@@ -43,12 +43,12 @@ export const storeAgency = async (agency: any): Promise<Agency | AxiosError | un
         });
 }
 
-export const updateAgency = async (agency: any): Promise<Agency | AxiosError | undefined> => {
+export const updateAgency = async (id: number, agency: any): Promise<Agency | AxiosError | undefined> => {
     let formData = createFormData(agency);
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + agency.id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }
