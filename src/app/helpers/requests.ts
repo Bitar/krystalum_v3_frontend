@@ -1,6 +1,4 @@
 import axios, {AxiosError, AxiosResponse} from 'axios';
-import {Agency} from '../models/demand/Agency';
-import {getAllAgencies} from '../requests/demand/Agency';
 import {GenericErrorMessage} from './form';
 
 export const extractErrors = (error: any) => {
