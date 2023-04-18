@@ -1,16 +1,33 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers';
+import {KTCard, KTCardBody, QUERIES} from '../../../../../../_metronic/helpers';
 
-import {useKrysApp} from '../../../../../modules/general/KrysApp';
+import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
+import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';
+import {usePublisher} from '../../core/PublisherContext';
+import {PublisherPublicationsColumns} from '../../core/edit/publications/TableColumns';
+import {getPublisherPublications} from '../../../../../requests/supply/publisher/PublisherPublication';
 
 const PublisherPublication: React.FC = () => {
-    const krysApp = useKrysApp();
+    const {publisher} = usePublisher();
+    const [refreshTable] = useState<boolean>(false);
 
     return (
         <KTCard className="card-bordered border-1">
+            <KTCardHeader text="Associated Publications"/>
+
             <KTCardBody>
-                TODO
+                {
+                    publisher &&
+                    <KrysInnerTable
+                        doRefetch={refreshTable}
+                        slug="publisher-publications"
+                        queryId={QUERIES.PUBLISHER_PUBLICATIONS_LIST}
+                        requestFunction={getPublisherPublications}
+                        requestId={publisher.id}
+                        columnsArray={PublisherPublicationsColumns}
+                    ></KrysInnerTable>
+                }
             </KTCardBody>
         </KTCard>
     );

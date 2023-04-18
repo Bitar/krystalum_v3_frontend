@@ -20,7 +20,7 @@ export const createFormData = (form: any) => {
     let formData = new FormData();
 
     for (const key in form) {
-        if (form[key]) {
+        if (form[key] !== undefined && form[key] !== null && form[key] !== '') {
             if (form[key] instanceof Array) {
                 if (form[key].length > 0) {
                     for (const item in form[key]) {

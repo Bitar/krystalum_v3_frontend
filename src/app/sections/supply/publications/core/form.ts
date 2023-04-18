@@ -8,15 +8,15 @@ export interface FormFields {
     publisher_id: number,
     languages_ids: number[],
     live_date: Date | null,
-    is_archived: boolean, // i.e. not sending inventory
-    is_deal_pmp: boolean, // if 1 => deal based, else if 0 => tag based
+    is_archived: number, // i.e. not sending inventory
+    is_deal_pmp: number, // if 1 => deal based, else if 0 => tag based
     revenue_type: string,
     revenue_value: string,
-    has_hi10: boolean, // if 1, then both 'hi10_to_display' and 'hi10_to_video' should be set to 0 /
+    has_hi10: number, // if 1, then both 'hi10_to_display' and 'hi10_to_video' should be set to 0 /
     // if 0, then 'hi10_to_display' should be set to 1 and 'hi10_to_video' should be set to 0 by default,
     // unless the user specifies otherwise.
-    hi10_to_display: boolean,
-    hi10_to_video: boolean,
+    hi10_to_display: number,
+    hi10_to_video: number,
     types: string[], // this is for publication type (web, mobile application or both)
     description?: string | null,
     url?: string | null, // this will be filled in case the type is `website`
@@ -36,13 +36,13 @@ export const defaultFormFields = {
     publisher_id: 0,
     languages_ids: [],
     live_date: null,
-    is_archived: false,
-    is_deal_pmp: false,
+    is_archived: 0,
+    is_deal_pmp: 0,
     revenue_type: REVENUE_TYPE.SAME_AS_PUBLISHER,
     revenue_value: '',
-    has_hi10: true,
-    hi10_to_display: false,
-    hi10_to_video: false,
+    has_hi10: 1,
+    hi10_to_display: 0,
+    hi10_to_video: 0,
     types: [],
     url: '',
     ios_store_url: '',
@@ -71,6 +71,15 @@ export const PublicationSchema = Yup.object().shape({
     live_date: Yup.date()
         .typeError('enter a valid date')
         .required('date is a required field'),
+    has_hi10: Yup.boolean().required(),
+    hi10_to_display: Yup.mixed().when('has_hi10', (hasHi10, hi10ToVideo) =>
+        hasHi10 === 0 && hi10ToVideo === 0
+            ? Yup.boolean().required()
+            : Yup.boolean().notRequired()),
+    hi10_to_video: Yup.mixed().when('has_hi10', (hasHi10, hi10ToDisplay) =>
+        hasHi10 === 1 && hi10ToDisplay === 1
+            ? Yup.boolean().required()
+            : Yup.boolean().notRequired()),
     types: Yup.array()
         .min(1, 'select at least one publication type')
         .required(),
@@ -119,17 +128,11 @@ export const PublicationSchema = Yup.object().shape({
         then: Yup.string().required('ios application type is required when the publication type is ios application'),
         otherwise: Yup.string().notRequired(),
     }),
-    revenue_type: Yup.string()
-        .required(),
-    // revenue_value: Yup.mixed().when('revenue_type', {
-    //     is: REVENUE_TYPE.REVENUE_SHARE,
-    //     then: Yup.number().min(1, 'revenue share must be greater than 0').max(100, 'revenue share must be less than or equal to 100').required(),
-    //     otherwise: Yup.string().required(),
-    // }),
-    revenue_value: Yup.mixed().when("revenue_type", (revenueType) =>
-        revenueType == REVENUE_TYPE.REVENUE_SHARE
+    revenue_type: Yup.string().required(),
+    revenue_value: Yup.mixed().when('revenue_type', (revenueType) =>
+        revenueType === REVENUE_TYPE.REVENUE_SHARE
             ? Yup.number().min(1, 'revenue share must be greater than 0').max(100, 'revenue share must be less than or equal to 100').required()
-            : (revenueType == REVENUE_TYPE.COMMITMENT ? Yup.string().required() : Yup.string().notRequired())
+            : (revenueType === REVENUE_TYPE.COMMITMENT ? Yup.string().required() : Yup.string().notRequired())
     )
 });
 

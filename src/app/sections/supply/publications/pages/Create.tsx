@@ -29,7 +29,7 @@ import {Language} from '../../../../models/misc/Language';
 import {getAllLanguages} from '../../../../requests/misc/Language';
 import KrysRadioButton from '../../../../components/forms/KrysRadioButton';
 import {APPLICATION_TYPE, PUBLICATION_TYPE, REVENUE_TYPE} from '../../../../models/supply/Options';
-import {FormControl, FormGroup, FormLabel, InputGroup} from 'react-bootstrap';
+import {FormControl, FormGroup, InputGroup} from 'react-bootstrap';
 import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
 
 const PublicationCreate: React.FC = () => {
@@ -108,25 +108,24 @@ const PublicationCreate: React.FC = () => {
 
     const handleCreate = () => {
         // send API request to create the publication
-        console.log(form)
-        // storePublication(form).then(response => {
-        //         if (axios.isAxiosError(response)) {
-        //             // we need to show the errors
-        //             setFormErrors(extractErrors(response));
-        //         } else if (response === undefined) {
-        //             // show generic error message
-        //             setFormErrors([GenericErrorMessage])
-        //         } else {
-        //             // it's publisher for sure
-        //             krysApp.setAlert({
-        //                 message: new AlertMessageGenerator('publication', Actions.CREATE, KrysToastType.SUCCESS).message,
-        //                 type: KrysToastType.SUCCESS
-        //             })
-        //
-        //             navigate(`/supply/publications`);
-        //         }
-        //     }
-        // );
+        storePublication(form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // we need to show the errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error message
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    // it's publication for sure
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('publication', Actions.CREATE, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
+
+                    navigate(`/supply/publications`);
+                }
+            }
+        );
     };
 
     return (
@@ -247,7 +246,7 @@ const PublicationCreate: React.FC = () => {
                                                   defaultValue={form.types.includes(PUBLICATION_TYPE.ANDROID_APPLICATION)}/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="types" className="mt-2"/>
+                                        {errors?.types ? errors?.types : null}
                                     </div>
                                 </div>
 
@@ -560,27 +559,32 @@ const PublicationCreate: React.FC = () => {
                                     <KrysCheckbox name="is_deal_pmp" label={'Deal ID / PMP'}
                                                   onChangeHandler={(e) => {
                                                       e.stopPropagation();
-                                                      setForm({...form, is_deal_pmp: !form.is_deal_pmp})
+                                                      setForm({...form, is_deal_pmp: Number(!form.is_deal_pmp)})
                                                   }}
-                                                  defaultValue={form.is_deal_pmp}/>
+                                                  defaultValue={Boolean(form.is_deal_pmp)}/>
 
                                     <KrysCheckbox name="is_archived" label={'Temporarily Not Sending Inventory'}
                                                   onChangeHandler={(e) => {
                                                       e.stopPropagation();
-                                                      setForm({...form, is_archived: !form.is_archived})
+                                                      setForm({...form, is_archived: Number(!form.is_archived)})
                                                   }}
-                                                  defaultValue={form.is_archived}/>
+                                                  defaultValue={Boolean(form.is_archived)}/>
 
                                     <KrysCheckbox name="has_hi10" label={'Accept Hi10 Monetization'}
                                                   onChangeHandler={(e) => {
                                                       e.stopPropagation();
                                                       setForm({
                                                           ...form,
-                                                          has_hi10: !form.has_hi10,
-                                                          hi10_to_display: form.has_hi10
+                                                          has_hi10: Number(!form.has_hi10),
+                                                          hi10_to_display: 1,
+                                                          hi10_to_video: 0,
                                                       })
                                                   }}
-                                                  defaultValue={form.has_hi10}/>
+                                                  defaultValue={Boolean(form.has_hi10)}/>
+
+                                    <div className="mt-1 text-danger">
+                                        {errors?.has_hi10 ? errors?.has_hi10 : null}
+                                    </div>
                                 </div>
 
                                 {
@@ -596,11 +600,11 @@ const PublicationCreate: React.FC = () => {
                                                              e.stopPropagation();
                                                              setForm({
                                                                  ...form,
-                                                                 hi10_to_display: true,
-                                                                 hi10_to_video: false
+                                                                 hi10_to_display: 1,
+                                                                 hi10_to_video: 0
                                                              });
                                                          }}
-                                                         defaultValue={form.hi10_to_display}/>
+                                                         defaultValue={Boolean(form.hi10_to_display)}/>
 
                                         <KrysRadioButton name="hi10_to_video"
                                                          label={'Transfer Impressions to Video'}
@@ -608,11 +612,16 @@ const PublicationCreate: React.FC = () => {
                                                              e.stopPropagation();
                                                              setForm({
                                                                  ...form,
-                                                                 hi10_to_video: true,
-                                                                 hi10_to_display: false
+                                                                 hi10_to_video: 1,
+                                                                 hi10_to_display: 0
                                                              });
                                                          }}
-                                                         defaultValue={form.hi10_to_video}/>
+                                                         defaultValue={Boolean(form.hi10_to_video)}/>
+
+                                        <div className="mt-1 text-danger">
+                                            {errors?.hi10_to_video ? errors?.hi10_to_video : null}
+                                            {errors?.hi10_to_display ? errors?.hi10_to_display : null}
+                                        </div>
                                     </div>
                                 }
 
