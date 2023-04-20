@@ -3,6 +3,7 @@ import {Tier} from '../../misc/Tier';
 import {PublisherInfo} from './PublisherInfo';
 import {PublisherAccountManager} from './PublisherAccountManager';
 import {REVENUE_TYPE} from '../Options';
+import {Publication} from '../publication/Publication';
 
 export type Publisher = {
     id: number,
@@ -12,7 +13,8 @@ export type Publisher = {
     revenue_type: REVENUE_TYPE,
     revenue_value: string,
     info: PublisherInfo | null,
-    accountManager: PublisherAccountManager | null
+    accountManager: PublisherAccountManager | null,
+    publications: Publication[] | null
 };
 
 export type PublisherCondensed = {

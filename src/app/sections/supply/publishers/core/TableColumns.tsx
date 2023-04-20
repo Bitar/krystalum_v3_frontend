@@ -6,7 +6,8 @@ import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {QUERIES} from '../../../../../_metronic/helpers'
 import {Publisher} from '../../../../models/supply/publisher/Publisher';
 import {Restricted} from '../../../../modules/auth/AuthAccessControl';
-import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
+import {Publication} from '../../../../models/supply/publication/Publication';
+import {truncateText} from '../../../../helpers/stringGenerator';
 
 const PublishersColumns: ReadonlyArray<Column<Publisher>> = [
     {
@@ -22,7 +23,7 @@ const PublishersColumns: ReadonlyArray<Column<Publisher>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Publications" className="min-w-125px"/>,
         id: 'publications',
-        Cell: ({...props}) => <BadgesCell texts={['TODO']} color="light-info" align="left"/>,
+        Cell: ({...props}) => <TextCell text={truncateText(props.data[props.row.index].publications?.map((publication: Publication) => publication.name).join(', '))} />,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Account Manager" className="min-w-125px"/>,

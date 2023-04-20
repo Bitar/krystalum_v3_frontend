@@ -8,7 +8,7 @@ const ENDPOINT = `${API_URL}/supply/publishers`
 
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const INCLUDES = 'include[]=tier&include[]=info&include[]=accountManager';
+export const INCLUDES = 'include[]=tier&include[]=info&include[]=accountManager&include[]=publications';
 
 export const getAllPublishers = async (): Promise<PublisherList | AxiosError | undefined> => {
     return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<PublisherList>) => response.data).catch((error) => {

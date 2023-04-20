@@ -1,13 +1,15 @@
 import {Response} from '../../../../_metronic/helpers';
-import {PublisherCondensed} from '../publisher/Publisher';
+import {Publisher, PublisherCondensed} from '../publisher/Publisher';
 import {PublicationInfo} from './PublicationInfo';
 import {REVENUE_TYPE} from '../Options';
+import {PublicationLanguage} from './PublicationLanguage';
+import {Language} from '../../misc/Language';
 
 export type Publication = {
     id: number,
     unique_identifier: string,
     name: string,
-    publisher: PublisherCondensed,
+    publisher: Publisher,
     live_date: Date,
     is_archived: boolean, // i.e. not sending inventory
     is_deal_pmp: boolean, // if 1 => deal based, else if 0 => tag based
@@ -18,7 +20,8 @@ export type Publication = {
     // unless the user specifies otherwise.
     hi10_to_display: boolean,
     hi10_to_video: boolean,
-    info: PublicationInfo
+    info: PublicationInfo,
+    languages: Language[]
 };
 
 export type PublicationPaginate = Response<Publication[]>;
