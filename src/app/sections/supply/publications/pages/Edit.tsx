@@ -13,6 +13,7 @@ import {Sections} from '../../../../helpers/sections';
 import {Publication} from '../../../../models/supply/publication/Publication';
 import {getPublication} from '../../../../requests/supply/publication/Publication';
 import PublicationOverview from '../partials/Overview';
+import PublicationBasicInformationEdit from './edit/BasicInformation';
 
 const PublicationEdit: React.FC = () => {
     let {id} = useParams();
@@ -135,7 +136,9 @@ const PublicationEdit: React.FC = () => {
                             </div>
                             <div className="col-lg-8 col-xl-9">
                                 <Tab.Content>
-
+                                    <Tab.Pane eventKey="settingsNav-0">
+                                        <PublicationBasicInformationEdit/>
+                                    </Tab.Pane>
                                 </Tab.Content>
                             </div>
                         </div>

@@ -12,7 +12,7 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {Publisher} from '../../../../models/supply/publisher/Publisher';
 import {getPublisher} from '../../../../requests/supply/publisher/Publisher';
-import BasicInformationEdit from './edit/BasicInformation';
+import PublisherBasicInformationEdit from './edit/BasicInformation';
 import PublisherOverview from '../partials/Overview';
 import PublisherPublication from './edit/Publication';
 import PublisherAccountManager from './edit/AccountManager';
@@ -116,7 +116,7 @@ const PublisherEdit: React.FC = () => {
                             <div className="col-lg-8 col-xl-9">
                                 <Tab.Content>
                                     <Tab.Pane eventKey="settingsNav-0">
-                                        <BasicInformationEdit/>
+                                        <PublisherBasicInformationEdit/>
                                     </Tab.Pane>
 
                                     <Tab.Pane eventKey="settingsNav-1">

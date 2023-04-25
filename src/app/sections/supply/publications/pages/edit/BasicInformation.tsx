@@ -1,91 +1,88 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-import Select from 'react-select';
 import {DatePicker} from 'rsuite';
-
-import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {
-    genericDateOnChangeHandler, GenericErrorMessage, genericMultiSelectOnChangeHandler,
-    genericOnChangeHandler,
-    genericSingleSelectOnChangeHandler
-} from '../../../../helpers/form';
-import {storePublication} from '../../../../requests/supply/publication/Publication';
-import {extractErrors} from '../../../../helpers/requests';
-import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
-import FormErrors from '../../../../components/forms/FormErrors';
-import {defaultFormFields, FormFields, PublicationSchema} from '../core/form';
-import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import {Publisher} from '../../../../models/supply/publisher/Publisher';
-import {getAllPublishers} from '../../../../requests/supply/publisher/Publisher';
-import {Language} from '../../../../models/misc/Language';
-import {getAllLanguages} from '../../../../requests/misc/Language';
-import KrysRadioButton from '../../../../components/forms/KrysRadioButton';
-import {APPLICATION_TYPE, PUBLICATION_TYPE, REVENUE_TYPE} from '../../../../models/supply/Options';
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import {FormControl, FormGroup, InputGroup} from 'react-bootstrap';
-import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
+import axios from 'axios';
 
-const PublicationCreate: React.FC = () => {
-    const navigate = useNavigate();
+import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
+import {useKrysApp} from '../../../../../modules/general/KrysApp';
+import {extractErrors} from '../../../../../helpers/requests';
+import {
+    genericDateOnChangeHandler,
+    GenericErrorMessage,
+    genericOnChangeHandler
+} from '../../../../../helpers/form';
+import {Actions, KrysToastType} from '../../../../../helpers/variables';
+import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
+import FormErrors from '../../../../../components/forms/FormErrors';
+import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers';
+import {defaultFormFields, fillEditForm, FormFields, PublicationSchema} from '../../core/form';
+import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
+import KrysRadioButton from '../../../../../components/forms/KrysRadioButton';
+import SingleSelect from '../../../../../components/forms/SingleSelect';
+import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
+import {APPLICATION_TYPE, PUBLICATION_TYPE, REVENUE_TYPE} from '../../../../../models/supply/Options';
+import {usePublication} from '../../core/PublicationContext';
+import {updatePublication} from '../../../../../requests/supply/publication/Publication';
+import KrysCheckbox from '../../../../../components/forms/KrysCheckbox';
+import {getAllPublishers} from '../../../../../requests/supply/publisher/Publisher';
+import {getAllLanguages} from '../../../../../requests/misc/Language';
+import {Publisher} from '../../../../../models/supply/publisher/Publisher';
+import {Language} from '../../../../../models/misc/Language';
+import MultiSelect from '../../../../../components/forms/MultiSelect';
+
+const PublicationBasicInformationEdit: React.FC = () => {
+    const {publication, setPublication} = usePublication();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
+    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false);
+
     const [publishers, setPublishers] = useState<Publisher[]>([]);
     const [languages, setLanguages] = useState<Language[]>([]);
 
     useEffect(() => {
-        krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATIONS, PageTypes.CREATE))
+        if (publication) {
+            setIsResourceLoaded(true);
 
-        // get the list of all publishers
-        getAllPublishers().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFormErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of publishers, then we fill our state with them
-                if (response.data) {
-                    setPublishers(response.data);
+            setForm(fillEditForm(publication));
+console.log(fillEditForm(publication))
+            // get the list of all publishers
+            getAllPublishers().then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    // if we were able to get the list of publishers, then we fill our state with them
+                    if (response.data) {
+                        setPublishers(response.data);
+                    }
                 }
-            }
-        });
+            });
 
-        // get the list of all languages
-        getAllLanguages().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFormErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of languages, then we fill our state with them
-                if (response.data) {
-                    setLanguages(response.data);
+            // get the list of all languages
+            getAllLanguages().then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    // if we were able to get the list of languages, then we fill our state with them
+                    if (response.data) {
+                        setLanguages(response.data);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [publication]);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
-    };
-
-    const selectChangeHandler = (e: any, key: string) => {
-        genericSingleSelectOnChangeHandler(e, form, setForm, key);
-    };
-
-    const multiSelectChangeHandler = (e: any, key: any) => {
-        genericMultiSelectOnChangeHandler(e, form, setForm, key);
     };
 
     const dateChangeHandler = (date: Date | null, key: string) => {
@@ -106,36 +103,41 @@ const PublicationCreate: React.FC = () => {
         }
     };
 
-    const handleCreate = () => {
-        // send API request to create the publication
-        storePublication(form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // it's publication for sure
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('publication', Actions.CREATE, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    })
+    const handleEdit = () => {
+        if (publication) {
+            // send API request to update the publication
+            updatePublication(publication.id, form).then(response => {
+                    if (axios.isAxiosError(response)) {
+                        // we need to show the errors
+                        setFormErrors(extractErrors(response));
+                    } else if (response === undefined) {
+                        // show generic error message
+                        setFormErrors([GenericErrorMessage])
+                    } else {
+                        // we were able to store the publication
+                        krysApp.setAlert({
+                            message: new AlertMessageGenerator('publication', Actions.EDIT, KrysToastType.SUCCESS).message,
+                            type: KrysToastType.SUCCESS
+                        });
 
-                    navigate(`/supply/publications`);
+                        // set the updated publication so that the overview will be updated
+                        setPublication(response)
+
+                        setFormErrors([]);
+                    }
                 }
-            }
-        );
+            );
+        }
     };
 
     return (
-        <KTCard>
-            <KTCardHeader text="Create New Publication"/>
+        <KTCard className="card-bordered border-1">
+            <KTCardHeader text="Update Basic Information"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={PublicationSchema} onSubmit={handleCreate}
+                <Formik initialValues={form} validationSchema={PublicationSchema} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         ({errors}) => (
@@ -160,14 +162,11 @@ const PublicationCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Publisher" isRequired={true}/>
 
-                                    <Select name="publisher_id"
-                                            options={publishers}
-                                            getOptionLabel={(publisher) => publisher.name}
-                                            getOptionValue={(publisher) => publisher.id.toString()}
-                                            onChange={(e) => {
-                                                selectChangeHandler(e, 'publisher_id')
-                                            }}
-                                            placeholder="Select a publisher"/>
+                                    <SingleSelect isResourceLoaded={isResourceLoaded}
+                                                  options={publishers}
+                                                  defaultValue={publication?.publisher}
+                                                  form={form} setForm={setForm}
+                                                  name="publisher_id" isClearable={true}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="publisher_id" className="mt-2"/>
@@ -188,15 +187,9 @@ const PublicationCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Language(s)" isRequired={true}/>
 
-                                    <Select name="languages_ids"
-                                            options={languages}
-                                            getOptionLabel={(language) => language.name}
-                                            getOptionValue={(language) => language.id.toString()}
-                                            onChange={(e) => {
-                                                multiSelectChangeHandler(e, 'languages_ids')
-                                            }}
-                                            placeholder="Select a language(s)"
-                                            isMulti={true}/>
+                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={languages}
+                                                 defaultValue={publication?.languages} form={form} setForm={setForm}
+                                                 name={'languages_ids'}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="languages_ids" className="mt-2"/>
@@ -207,6 +200,7 @@ const PublicationCreate: React.FC = () => {
                                     <KrysFormLabel text="Live date" isRequired={true}/>
 
                                     <DatePicker name="live_date"
+                                                value={(form.live_date ? new Date(form.live_date) : null)}
                                                 className="krys-datepicker"
                                                 oneTap={true}
                                                 block
@@ -461,6 +455,7 @@ const PublicationCreate: React.FC = () => {
                                         <FormControl as="textarea"
                                                      rows={3}
                                                      name="description"
+                                                     defaultValue={form.description || ''}
                                                      className="form-control fs-base"
                                                      placeholder="Enter publication description"
                                         />
@@ -632,7 +627,7 @@ const PublicationCreate: React.FC = () => {
                 </Formik>
             </KTCardBody>
         </KTCard>
-    )
+    );
 }
 
-export default PublicationCreate;
+export default PublicationBasicInformationEdit;

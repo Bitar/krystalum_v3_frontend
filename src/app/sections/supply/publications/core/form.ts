@@ -11,7 +11,7 @@ export interface FormFields {
     is_archived: number, // i.e. not sending inventory
     is_deal_pmp: number, // if 1 => deal based, else if 0 => tag based
     revenue_type: string,
-    revenue_value: string,
+    revenue_value: string | null, // it can be null in case the revenue_type is 'same_as_publisher'
     has_hi10: number, // if 1, then both 'hi10_to_display' and 'hi10_to_video' should be set to 0 /
     // if 0, then 'hi10_to_display' should be set to 1 and 'hi10_to_video' should be set to 0 by default,
     // unless the user specifies otherwise.
@@ -139,9 +139,49 @@ export const PublicationSchema = Yup.object().shape({
 export function fillEditForm(publication: Publication) {
     const {info, ...currentPublication} = publication
 
-    // const form: FormFields = {
-    //     ...currentPublication
-    // };
-    //
-    // return form;
+    const types = [];
+
+    // publication object can have a type property that specifies whether it is a website, an iOS application,
+    // an Android application, or a combination of these types /
+    // if the type is website, then the website value should be added to the types array /
+    // if the type is mobile_application, then the code should check whether it is an iOS application,
+    // an Android application, or both. If it is an iOS application, then the ios_application value should be added
+    // to the types array. If it is an Android application, then the android_application value should
+    // be added to the types array. If it is both, then the website and mobile application (ios or android or both)
+    // values should be added to the types array.
+    if (info.type === PUBLICATION_TYPE.WEBSITE) {
+        types.push(info.type);
+    } else {
+        if (info.ios_store_url) {
+            types.push(PUBLICATION_TYPE.IOS_APPLICATION);
+        }
+
+        if (info.android_store_url) {
+            types.push(PUBLICATION_TYPE.ANDROID_APPLICATION);
+        }
+
+        if (info.type === PUBLICATION_TYPE.BOTH) {
+            types.push(PUBLICATION_TYPE.WEBSITE);
+        }
+    }
+
+    const form: FormFields = {
+        ...currentPublication,
+        publisher_id: publication.publisher.id,
+        revenue_value: publication.revenue_value || '',
+        languages_ids: publication.languages?.map((language) => language.id),
+        types: types,
+        description: info.description || '',
+        url: info.url || '',
+        ios_store_url: info.ios_store_url || '',
+        ios_bundle_id: info.ios_bundle_id || '',
+        ios_version: info.ios_version || '',
+        ios_application_type: info.ios_application_type || '',
+        android_store_url: info.android_store_url || '',
+        android_bundle_id: info.android_bundle_id || '',
+        android_version: info.android_version || '',
+        android_application_type: info.android_application_type || '',
+    };
+
+    return form;
 }

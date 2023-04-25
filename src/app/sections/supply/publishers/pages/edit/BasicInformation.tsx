@@ -30,7 +30,7 @@ import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCar
 import {usePublisher} from '../../core/PublisherContext';
 import {REVENUE_TYPE} from '../../../../../models/supply/Options';
 
-const BasicInformationEdit: React.FC = () => {
+const PublisherBasicInformationEdit: React.FC = () => {
     const {publisher, setPublisher} = usePublisher();
     const krysApp = useKrysApp();
 
@@ -279,4 +279,4 @@ const BasicInformationEdit: React.FC = () => {
     );
 }
 
-export default BasicInformationEdit;
+export default PublisherBasicInformationEdit;

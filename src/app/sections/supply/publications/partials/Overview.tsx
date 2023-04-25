@@ -150,8 +150,7 @@ const PublisherOverview: React.FC = () => {
                                                 <div
                                                     className="fs-5 fw-bold">{publication?.revenue_value ? publication?.revenue_value : publication?.publisher?.revenue_value}</div>
                                             </div>
-                                            <div className="fw-bold fs-6 text-gray-400">Revenue
-                                                share {publication?.revenue_type === REVENUE_TYPE.SAME_AS_PUBLISHER &&
+                                            <div className="fw-bold fs-6 text-gray-400">Commitment {publication?.revenue_type === REVENUE_TYPE.SAME_AS_PUBLISHER &&
                                                     <small
                                                         className="fw-normal">(same as publisher)</small>}</div>
                                         </div>
