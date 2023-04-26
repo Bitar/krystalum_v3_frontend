@@ -24,7 +24,7 @@ import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {getAllBuyingModels} from "../../../../requests/misc/BuyingModel";
 import {BuyingModel} from "../../../../models/misc/BuyingModel";
 import MultiSelect from "../../../../components/forms/MultiSelect";
-import KrysCheckbox from "../../../../components/forms/KrysCheckbox";
+import KrysSwitch from "../../../../components/forms/KrysSwitch";
 import {filterData} from '../../../../helpers/dataManipulation';
 import SingleSelect from '../../../../components/forms/SingleSelect';
 
@@ -177,7 +177,7 @@ const FormatEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Does this format has buying model?" isRequired={true}/>
 
-                                    <KrysCheckbox name="has_buying_model" onChangeHandler={(e) => {
+                                    <KrysSwitch name="has_buying_model" onChangeHandler={(e) => {
                                         e.stopPropagation();
                                         setForm({...form, has_buying_model: Number(!form.has_buying_model)});
                                     }} defaultValue={Boolean(form.has_buying_model)}/>

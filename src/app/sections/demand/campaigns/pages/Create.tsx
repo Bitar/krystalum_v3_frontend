@@ -42,7 +42,6 @@ import CreatableSelect from 'react-select/creatable';
 import {useAuth} from '../../../../modules/auth';
 import {User} from '../../../../models/iam/User';
 import {getAllUsers} from '../../../../requests/iam/User';
-import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
 import AsyncSelect from 'react-select/async';
 import {storeCampaign} from '../../../../requests/demand/Campaign';
 import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
@@ -50,6 +49,7 @@ import {useNavigate} from 'react-router-dom';
 import {AdvertiserTypeEnum} from '../../../../enums/AdvertiserTypeEnum';
 import {BookingTypeEnum} from '../../../../enums/BookingTypeEnum';
 import {RoleEnum} from '../../../../enums/RoleEnum';
+import KrysSwitch from '../../../../components/forms/KrysSwitch';
 
 const CampaignCreate: React.FC = () => {
     const {currentUser, hasAnyRoles} = useAuth();
@@ -496,7 +496,7 @@ const CampaignCreate: React.FC = () => {
                                         <div className="mb-7">
                                             <KrysFormLabel text="Is the owner part of demand?" isRequired={true}/>
 
-                                            <KrysCheckbox name="is_owner_demand"
+                                            <KrysSwitch name="is_owner_demand"
                                                           onChangeHandler={(e) => {
                                                               e.stopPropagation();
                                                               setForm({

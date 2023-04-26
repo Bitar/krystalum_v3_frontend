@@ -18,7 +18,6 @@ import {
 import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';
 import axios from 'axios';
 import {extractErrors} from '../../../../../helpers/requests';
-import KrysCheckbox from '../../../../../components/forms/KrysCheckbox';
 import Select from 'react-select';
 import {User} from '../../../../../models/iam/User';
 import {getAllUsers} from '../../../../../requests/iam/User';
@@ -27,6 +26,7 @@ import {getCampaignOwners, storeCampaignOwner} from '../../../../../requests/dem
 import {useKrysApp} from '../../../../../modules/general/KrysApp';
 import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
+import KrysSwitch from '../../../../../components/forms/KrysSwitch';
 
 const EditOwnership: React.FC = () => {
     const {campaign} = useCampaign();
@@ -125,7 +125,7 @@ const EditOwnership: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Is the owner part of demand?" isRequired={true}/>
 
-                                    <KrysCheckbox name="is_owner_demand"
+                                    <KrysSwitch name="is_owner_demand"
                                                   onChangeHandler={(e) => {
                                                       e.stopPropagation();
                                                       setForm({

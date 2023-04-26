@@ -36,6 +36,7 @@ const TableColumns: ReadonlyArray<Column<User>> = [
                 showView={true}
                 showEdit={accessControl.userCan('manage-iam')}
                 showDelete={accessControl.userCan('manage-iam')}
+                showImpersonate={accessControl.userCan('impersonate-user')}
                 title="Delete User"
                 text={`Are you sure you want to delete the user '${props.data[props.row.index].name}'?`}
             />)

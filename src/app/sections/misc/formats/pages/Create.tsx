@@ -22,7 +22,7 @@ import {getAllFormats, storeFormat} from '../../../../requests/misc/Format';
 import Select from "react-select";
 import {Format} from "../../../../models/misc/Format";
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import KrysCheckbox from "../../../../components/forms/KrysCheckbox";
+import KrysSwitch from "../../../../components/forms/KrysSwitch";
 import {BuyingModel} from "../../../../models/misc/BuyingModel";
 import {getAllBuyingModels} from "../../../../requests/misc/BuyingModel";
 import {filterData} from '../../../../helpers/dataManipulation';
@@ -137,7 +137,7 @@ const FormatCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Does this format has buying model?" isRequired={true}/>
 
-                                    <KrysCheckbox name="has_buying_model" onChangeHandler={(e) => {
+                                    <KrysSwitch name="has_buying_model" onChangeHandler={(e) => {
                                         e.stopPropagation();
                                         setForm({...form, has_buying_model: Number(!form.has_buying_model)});
                                     }} defaultValue={Boolean(form.has_buying_model)}/>
