@@ -48,6 +48,7 @@ import {
     fillEditForm
 } from '../../core/edit/info/form';
 import {useCampaign} from '../../core/CampaignContext';
+import {useAccessControl} from '../../../../../modules/auth/AuthAccessControl';
 
 // TODO add publisher_id
 const defaultEditableFields = {
@@ -89,6 +90,7 @@ const EditDetails: React.FC = () => {
 
     const krysApp = useKrysApp();
     const navigate = useNavigate();
+    const accessControl = useAccessControl();
 
     useEffect(() => {
         if (campaign) {
@@ -212,24 +214,10 @@ const EditDetails: React.FC = () => {
         if (campaign && currentUser) {
             // sales person edit: if it’s for him he can change name, buy type, seat ID, objectives + ownership
             // sales person edit not owner: only ownership
-            // dev (r&d): they can edit anything + propagation
-
-            // if the user is Demand and he's the owner OR if he's the head of demand
-            if ((hasAnyRoles(currentUser, [RoleEnum.DEMAND]) && campaign.owner && campaign.owner.id === currentUser.id)
-                || hasAnyRoles(currentUser, [RoleEnum.HEAD_OF_DEMAND, RoleEnum.ADMINISTRATOR, RoleEnum.CAMPAIGN_EDITOR])) {
-                // he can change name, buy type, seat ID and objectives
-                // TODO add publisher_id
-                let fields = defaultEditableFields;
-
-                fields.name = true;
-                fields.buy_type_id = true;
-                fields.seat_id = true;
-                fields.objectives_ids = true;
-
-                setEditableFields(fields);
-                setDisableSubmit(false);
-            } else if (hasAnyRoles(currentUser, [RoleEnum.R_N_D])) {
-                // R&D users can edit anything
+            // edit-campaigns-ui-fields: they can edit anything + propagation
+            if (accessControl.userCan('edit-campaigns-ui-fields')) {
+                // if the user has the permission to edit-campaigns-ui-fields
+                // then he can edit all the fields
                 // TODO add publisher_id
                 let fields = {
                     name: true,
@@ -243,6 +231,20 @@ const EditDetails: React.FC = () => {
                     agency_id: true,
                     objectives_ids: true
                 }
+
+                setEditableFields(fields);
+                setDisableSubmit(false);
+            } else if ((hasAnyRoles(currentUser, [RoleEnum.DEMAND]) && campaign.owner && campaign.owner.id === currentUser.id)
+                || hasAnyRoles(currentUser, [RoleEnum.HEAD_OF_DEMAND, RoleEnum.ADMINISTRATOR, RoleEnum.CAMPAIGN_EDITOR])) {
+                // if the user is Demand and he's the owner OR if he's the head of demand
+                // he can change name, buy type, seat ID and objectives
+                // TODO add publisher_id
+                let fields = defaultEditableFields;
+
+                fields.name = true;
+                fields.buy_type_id = true;
+                fields.seat_id = true;
+                fields.objectives_ids = true;
 
                 setEditableFields(fields);
                 setDisableSubmit(false);

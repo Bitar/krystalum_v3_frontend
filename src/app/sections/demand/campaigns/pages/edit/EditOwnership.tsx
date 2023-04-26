@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../_metronic/helpers';
 import FormErrors from '../../../../../components/forms/FormErrors';
@@ -23,7 +23,7 @@ import Select from 'react-select';
 import {User} from '../../../../../models/iam/User';
 import {getAllUsers} from '../../../../../requests/iam/User';
 import {CampaignOwnershipColumns} from '../../core/edit/ownership/TableColumns';
-import {getCampaignOwners, storeCampaignOwner} from '../../../../../requests/demand/CampaignOwnership';
+import {getCampaignOwners, storeCampaignOwner} from '../../../../../requests/demand/CampaignOwner';
 import {useKrysApp} from '../../../../../modules/general/KrysApp';
 import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
@@ -99,11 +99,16 @@ const EditOwnership: React.FC = () => {
 
                         // we need to clear the form data
                         setForm(defaultCampaignOwnershipFormFields);
+
+                        // clear the form
+                        usersSelectRef.current?.clearValue();
                     }
                 }
             );
         }
     };
+
+    const usersSelectRef = useRef<any>(null);
 
     return (
         <KTCard className='card-bordered border-1'>
@@ -145,6 +150,7 @@ const EditOwnership: React.FC = () => {
                                                 getOptionLabel={(user) => user.name}
                                                 getOptionValue={(user) => user.id.toString()}
                                                 placeholder='Choose owner'
+                                                ref={usersSelectRef}
                                                 onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'owner_id')}/>
 
                                         <div className="mt-3 text-danger">

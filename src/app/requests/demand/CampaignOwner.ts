@@ -4,7 +4,7 @@ import {Campaign, CampaignOwner, CampaignOwnerPaginate} from '../../models/deman
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/demand/campaigns`
-const ENDPOINT_APPEND = 'ownership'
+const ENDPOINT_APPEND = 'owners'
 
 export const getCampaignOwners = (requestId?: number, query?: String): Promise<CampaignOwnerPaginate> => {
     let url = `${ENDPOINT}/${requestId}/${ENDPOINT_APPEND}`;
