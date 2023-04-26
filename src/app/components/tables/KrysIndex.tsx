@@ -63,7 +63,9 @@ const IndexTable = ({columnsArray}: TableProps) => {
     const modelData = useQueryResponseData();
     const isLoading = useQueryResponseLoading();
     const data = useMemo(() => modelData, [modelData]);
-    const columns = useMemo(() => columnsArray, []);
+    const columns = useMemo(() => columnsArray,
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        []);
 
     return (
         <KrysTable data={data} columns={columns} model={modelData.length > 0 ? modelData[0] : null}
