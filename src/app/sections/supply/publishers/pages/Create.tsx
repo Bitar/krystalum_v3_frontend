@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
+import {Field, Form, Formik} from 'formik';
 import Select from 'react-select';
 import {InputGroup} from 'react-bootstrap';
 import {DatePicker} from 'rsuite';
@@ -120,160 +120,165 @@ const PublisherCreate: React.FC = () => {
 
                 <Formik initialValues={form} validationSchema={PublisherSchema} onSubmit={handleCreate}
                         enableReinitialize>
-                    <Form onChange={onChangeHandler}>
-                        <div className='mb-4'>
-                            <span className='fs-5 text-gray-700 d-flex fw-medium'>General Information</span>
-                            <span className='text-muted'>Enter basic information about the publisher</span>
-                        </div>
-
-                        <div className="mb-7">
-                            <KrysFormLabel text="Name" isRequired={true}/>
-
-                            <Field className="form-control fs-base" type="text"
-                                   placeholder="Enter publisher name" name="name"/>
-
-                            <div className="mt-1 text-danger">
-                                <ErrorMessage name="name" className="mt-2"/>
-                            </div>
-                        </div>
-
-                        <div className="mb-7">
-                            <KrysFormLabel text="Tier" isRequired={false}/>
-
-                            <Select name="tier_id"
-                                    options={tiers}
-                                    getOptionLabel={(tier) => tier.name}
-                                    getOptionValue={(tier) => tier.id.toString()}
-                                    onChange={(e) => {
-                                        selectChangeHandler(e, 'tier_id')
-                                    }}
-                                    placeholder="Select a tier"/>
-
-                            <div className="mt-1 text-danger">
-                                <ErrorMessage name="tier_id" className="mt-2"/>
-                            </div>
-                        </div>
-
-                        <div className="mb-7">
-                            <KrysFormLabel text="Integration date" isRequired={false}/>
-
-                            <DatePicker name="integration_date"
-                                        className="krys-datepicker"
-                                        oneTap={true}
-                                        block
-                                        isoWeek
-                                        preventOverflow={false}
-                                        placeholder="Select publisher integration date"
-                                        onChange={(date) => dateChangeHandler(date, 'integration_date')}
-                            />
-
-                            <div className="mt-1 text-danger">
-                                <ErrorMessage name="integration_date" className="mt-2"/>
-                            </div>
-                        </div>
-
-                        <div className="mb-7">
-                            <KrysFormLabel text="Revenue type" isRequired={true}/>
-
-                            <KrysRadioButton name="revenue_type" label={'Revenue Share'}
-                                             onChangeHandler={(e) => {
-                                                 e.stopPropagation();
-                                                 setForm({...form, revenue_type: REVENUE_TYPE.REVENUE_SHARE});
-                                             }} defaultValue={form.revenue_type === REVENUE_TYPE.REVENUE_SHARE}/>
-
-                            <KrysRadioButton name="revenue_type" label={'Amount Commitment'}
-                                             onChangeHandler={(e) => {
-                                                 e.stopPropagation();
-                                                 setForm({...form, revenue_type: REVENUE_TYPE.COMMITMENT});
-                                             }} defaultValue={form.revenue_type === REVENUE_TYPE.COMMITMENT}/>
-
-                            <div className="mt-1 text-danger">
-                                <ErrorMessage name="revenue_type" className="mt-2"/>
-                            </div>
-                        </div>
-
-                        {form.revenue_type === REVENUE_TYPE.REVENUE_SHARE &&
-                            <div className="mb-7">
-                                <KrysFormLabel text="Revenue share" isRequired={true}/>
-
-                                <InputGroup className="mb-3">
-                                    <Field className="form-control fs-base" type="number"
-                                           placeholder="Enter publisher revenue share"
-                                           name="revenue_value"/>
-                                    <InputGroup.Text id="basic-addon1">%</InputGroup.Text>
-                                </InputGroup>
-
-                                <div className="mt-1 text-danger">
-                                    <ErrorMessage name="revenue_value" className="mt-2"/>
+                    {
+                        ({errors}) => (
+                            <Form onChange={onChangeHandler}>
+                                <div className="mb-4">
+                                    <span className="fs-5 text-gray-700 d-flex fw-medium">General Information</span>
+                                    <span className="text-muted">Enter basic information about the publisher</span>
                                 </div>
-                            </div>
-                        }
 
-                        {form.revenue_type === REVENUE_TYPE.COMMITMENT &&
-                            <div className="mb-7">
-                                <KrysFormLabel text="Commitment" isRequired={true}/>
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Name" isRequired={true}/>
 
-                                <Field className="form-control fs-base" type="text"
-                                       placeholder="Enter publisher commitment amount" name="revenue_value"/>
+                                    <Field className="form-control fs-base" type="text"
+                                           placeholder="Enter publisher name" name="name"/>
 
-                                <div className="mt-1 text-danger">
-                                    <ErrorMessage name="revenue_value" className="mt-2"/>
+                                    <div className="mt-1 text-danger">
+                                        {errors?.name ? errors?.name : null}
+                                    </div>
                                 </div>
-                            </div>
-                        }
 
-                        <div className="separator border-2 my-10"></div>
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Tier" isRequired={false}/>
 
-                        <div className='mb-4'>
-                            <span className='fs-5 text-gray-700 d-flex fw-medium'>HQ Information</span>
-                            <span
-                                className='text-muted'>Enter the hq details about the publisher to stay connected and
+                                    <Select name="tier_id"
+                                            options={tiers}
+                                            getOptionLabel={(tier) => tier.name}
+                                            getOptionValue={(tier) => tier.id.toString()}
+                                            onChange={(e) => {
+                                                selectChangeHandler(e, 'tier_id')
+                                            }}
+                                            placeholder="Select a tier"/>
+
+                                    <div className="mt-1 text-danger">
+                                        {errors?.tier_id ? errors?.tier_id : null}
+                                    </div>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Integration date" isRequired={false}/>
+
+                                    <DatePicker name="integration_date"
+                                                className="krys-datepicker"
+                                                oneTap={true}
+                                                block
+                                                isoWeek
+                                                preventOverflow={false}
+                                                placeholder="Select publisher integration date"
+                                                onChange={(date) => dateChangeHandler(date, 'integration_date')}
+                                    />
+
+                                    <div className="mt-1 text-danger">
+                                        {errors?.integration_date ? errors?.integration_date : null}
+                                    </div>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Revenue type" isRequired={true}/>
+
+                                    <KrysRadioButton name="revenue_type" label={'Revenue Share'}
+                                                     onChangeHandler={(e) => {
+                                                         e.stopPropagation();
+                                                         setForm({...form, revenue_type: REVENUE_TYPE.REVENUE_SHARE});
+                                                     }}
+                                                     defaultValue={form.revenue_type === REVENUE_TYPE.REVENUE_SHARE}/>
+
+                                    <KrysRadioButton name="revenue_type" label={'Amount Commitment'}
+                                                     onChangeHandler={(e) => {
+                                                         e.stopPropagation();
+                                                         setForm({...form, revenue_type: REVENUE_TYPE.COMMITMENT});
+                                                     }} defaultValue={form.revenue_type === REVENUE_TYPE.COMMITMENT}/>
+
+                                    <div className="mt-1 text-danger">
+                                        {errors?.revenue_type ? errors?.revenue_type : null}
+                                    </div>
+                                </div>
+
+                                {form.revenue_type === REVENUE_TYPE.REVENUE_SHARE &&
+                                    <div className="mb-7">
+                                        <KrysFormLabel text="Revenue share" isRequired={true}/>
+
+                                        <InputGroup className="mb-3">
+                                            <Field className="form-control fs-base" type="number"
+                                                   placeholder="Enter publisher revenue share"
+                                                   name="revenue_value"/>
+                                            <InputGroup.Text id="basic-addon1">%</InputGroup.Text>
+                                        </InputGroup>
+
+                                        <div className="mt-1 text-danger">
+                                            {errors?.revenue_value ? errors?.revenue_value : null}
+                                        </div>
+                                    </div>
+                                }
+
+                                {form.revenue_type === REVENUE_TYPE.COMMITMENT &&
+                                    <div className="mb-7">
+                                        <KrysFormLabel text="Commitment" isRequired={true}/>
+
+                                        <Field className="form-control fs-base" type="text"
+                                               placeholder="Enter publisher commitment amount" name="revenue_value"/>
+
+                                        <div className="mt-1 text-danger">
+                                            {errors?.revenue_value ? errors?.revenue_value : null}
+                                        </div>
+                                    </div>
+                                }
+
+                                <div className="separator border-2 my-10"></div>
+
+                                <div className="mb-4">
+                                    <span className="fs-5 text-gray-700 d-flex fw-medium">HQ Information</span>
+                                    <span
+                                        className="text-muted">Enter the hq details about the publisher to stay connected and
                                 understand your publishers' location</span>
-                        </div>
+                                </div>
 
-                        <div className="mb-7">
-                            <KrysFormLabel text="Email address" isRequired={false}/>
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Email address" isRequired={false}/>
 
-                            <Field className="form-control fs-base" type="email"
-                                   placeholder="Enter publisher email address" name="email"/>
+                                    <Field className="form-control fs-base" type="email"
+                                           placeholder="Enter publisher email address" name="email"/>
 
-                            <div className="mt-1 text-danger">
-                                <ErrorMessage name="email" className="mt-2"/>
-                            </div>
-                        </div>
+                                    <div className="mt-1 text-danger">
+                                        {errors?.email ? errors?.email : null}
+                                    </div>
+                                </div>
 
-                        <div className="mb-7">
-                            <KrysFormLabel text="HQ address" isRequired={false}/>
+                                <div className="mb-7">
+                                    <KrysFormLabel text="HQ address" isRequired={false}/>
 
-                            <Field className="form-control fs-base" type="text"
-                                   placeholder="Enter publisher hq address" name="hq_address"/>
+                                    <Field className="form-control fs-base" type="text"
+                                           placeholder="Enter publisher hq address" name="hq_address"/>
 
-                            <div className="mt-1 text-danger">
-                                <ErrorMessage name="hq_address" className="mt-2"/>
-                            </div>
-                        </div>
+                                    <div className="mt-1 text-danger">
+                                        {errors?.hq_address ? errors?.hq_address : null}
+                                    </div>
+                                </div>
 
-                        <div className="mb-7">
-                            <KrysFormLabel text="HQ country" isRequired={false}/>
+                                <div className="mb-7">
+                                    <KrysFormLabel text="HQ country" isRequired={false}/>
 
-                            <Select name="hq_country_id"
-                                    menuPlacement={'top'}
-                                    options={countries}
-                                    getOptionLabel={(country) => country?.name}
-                                    getOptionValue={(country) => country?.id.toString()}
-                                    onChange={(e) => {
-                                        selectChangeHandler(e, 'hq_country_id')
-                                    }}
-                                    placeholder="Select a hq country"
-                                    isClearable={true}/>
+                                    <Select name="hq_country_id"
+                                            menuPlacement={'top'}
+                                            options={countries}
+                                            getOptionLabel={(country) => country?.name}
+                                            getOptionValue={(country) => country?.id.toString()}
+                                            onChange={(e) => {
+                                                selectChangeHandler(e, 'hq_country_id')
+                                            }}
+                                            placeholder="Select a hq country"
+                                            isClearable={true}/>
 
-                            <div className="mt-1 text-danger">
-                                <ErrorMessage name="hq_country_id" className="mt-2"/>
-                            </div>
-                        </div>
+                                    <div className="mt-1 text-danger">
+                                        {errors?.hq_country_id ? errors?.hq_country_id : null}
+                                    </div>
+                                </div>
 
-                        <KrysFormFooter cancelUrl={'/supply/publishers'}/>
-                    </Form>
+                                <KrysFormFooter cancelUrl={'/supply/publishers'}/>
+                            </Form>
+
+                        )}
                 </Formik>
             </KTCardBody>
         </KTCard>

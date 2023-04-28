@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
+import {Field, Form, Formik} from 'formik';
 
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 
@@ -95,76 +95,79 @@ const PublisherPaymentCreate: React.FC = () => {
 
                 <Formik initialValues={form} validationSchema={PublisherPaymentSchema} onSubmit={handleCreate}
                         enableReinitialize>
-                    <Form onChange={onChangeHandler}>
-                        <div className="mb-7">
-                            <KrysFormLabel text="Beneficiary" isRequired={true}/>
+                    {
+                        ({errors}) => (
+                            <Form onChange={onChangeHandler}>
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Beneficiary" isRequired={true}/>
 
-                            <Field className="form-control fs-base" type="text"
-                                   placeholder="Enter the beneficiary" name="beneficiary"/>
+                                    <Field className="form-control fs-base" type="text"
+                                           placeholder="Enter the beneficiary" name="beneficiary"/>
 
-                            <div className="mt-1 text-danger">
-                                <ErrorMessage name="beneficiary" className="mt-2"/>
-                            </div>
-                        </div>
+                                    <div className="mt-1 text-danger">
+                                        {errors?.beneficiary ? errors?.beneficiary : null}
+                                    </div>
+                                </div>
 
-                        <div className="mb-7">
-                            <KrysFormLabel text="Account number" isRequired={true}/>
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Account number" isRequired={true}/>
 
-                            <Field className="form-control fs-base" type="text"
-                                   placeholder="Enter the account number" name="account_number"/>
+                                    <Field className="form-control fs-base" type="text"
+                                           placeholder="Enter the account number" name="account_number"/>
 
-                            <div className="mt-1 text-danger">
-                                <ErrorMessage name="account_number" className="mt-2"/>
-                            </div>
-                        </div>
+                                    <div className="mt-1 text-danger">
+                                        {errors?.account_number ? errors?.account_number : null}
+                                    </div>
+                                </div>
 
-                        <div className="mb-7">
-                            <KrysFormLabel text="Swift code" isRequired={true}/>
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Swift code" isRequired={true}/>
 
-                            <Field className="form-control fs-base" type="text"
-                                   placeholder="Enter the swift code" name="swift_code"/>
+                                    <Field className="form-control fs-base" type="text"
+                                           placeholder="Enter the swift code" name="swift_code"/>
 
-                            <div className="mt-1 text-danger">
-                                <ErrorMessage name="swift_code" className="mt-2"/>
-                            </div>
-                        </div>
+                                    <div className="mt-1 text-danger">
+                                        {errors?.swift_code ? errors?.swift_code : null}
+                                    </div>
+                                </div>
 
-                        <div className="mb-7">
-                            <KrysFormLabel text="IBAN" isRequired={false}/>
+                                <div className="mb-7">
+                                    <KrysFormLabel text="IBAN" isRequired={false}/>
 
-                            <Field className="form-control fs-base" type="text"
-                                   placeholder="Enter the iban" name="iban"/>
+                                    <Field className="form-control fs-base" type="text"
+                                           placeholder="Enter the iban" name="iban"/>
 
-                            <div className="mt-1 text-danger">
-                                <ErrorMessage name="iban" className="mt-2"/>
-                            </div>
-                        </div>
+                                    <div className="mt-1 text-danger">
+                                        {errors?.iban ? errors?.iban : null}
+                                    </div>
+                                </div>
 
-                        <div className="mb-7">
-                            <KrysFormLabel text="Bank name" isRequired={true}/>
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Bank name" isRequired={true}/>
 
-                            <Field className="form-control fs-base" type="text"
-                                   placeholder="Enter the bank name" name="bank_name"/>
+                                    <Field className="form-control fs-base" type="text"
+                                           placeholder="Enter the bank name" name="bank_name"/>
 
-                            <div className="mt-1 text-danger">
-                                <ErrorMessage name="bank_name" className="mt-2"/>
-                            </div>
-                        </div>
+                                    <div className="mt-1 text-danger">
+                                        {errors?.bank_name ? errors?.bank_name : null}
+                                    </div>
+                                </div>
 
 
-                        <div className="mb-7">
-                            <KrysFormLabel text="Bank address" isRequired={false}/>
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Bank address" isRequired={false}/>
 
-                            <Field className="form-control fs-base" type="text"
-                                   placeholder="Enter the bank address" name="bank_address"/>
+                                    <Field className="form-control fs-base" type="text"
+                                           placeholder="Enter the bank address" name="bank_address"/>
 
-                            <div className="mt-1 text-danger">
-                                <ErrorMessage name="bank_address" className="mt-2"/>
-                            </div>
-                        </div>
+                                    <div className="mt-1 text-danger">
+                                        {errors?.bank_address ? errors?.bank_address : null}
+                                    </div>
+                                </div>
 
-                        <KrysFormFooter cancelUrl={'/supply/publishers'}/>
-                    </Form>
+                                <KrysFormFooter cancelUrl={'/supply/publishers'}/>
+                            </Form>
+                        )}
                 </Formik>
 
                 <div className="separator separator-dashed my-10"></div>

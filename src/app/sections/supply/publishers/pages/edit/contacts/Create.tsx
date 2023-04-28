@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import Select from 'react-select';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
+import {Field, Form, Formik} from 'formik';
 
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 
@@ -121,39 +121,43 @@ const PublisherContactCreate: React.FC = () => {
 
                 <Formik initialValues={form} validationSchema={PublisherContactSchema} onSubmit={handleCreate}
                         enableReinitialize>
-                    <Form onChange={onChangeHandler}>
-                        <div className="mb-7">
-                            <KrysFormLabel text="Contact type" isRequired={true}/>
+                    {
+                        ({errors}) => (
+                            <Form onChange={onChangeHandler}>
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Contact type" isRequired={true}/>
 
-                            <Select name="type"
-                                    options={contactTypes}
-                                    getOptionLabel={(contactType) => contactType.name}
-                                    getOptionValue={(contactType) => contactType.id.toString()}
-                                    onChange={(e) => {
-                                        selectChangeHandler(e, 'type')
-                                    }}
-                                    placeholder="Select a contact type"
-                                    isClearable={true}
-                                    ref={contactTypesSelectRef}/>
+                                    <Select name="type"
+                                            options={contactTypes}
+                                            getOptionLabel={(contactType) => contactType.name}
+                                            getOptionValue={(contactType) => contactType.id.toString()}
+                                            onChange={(e) => {
+                                                selectChangeHandler(e, 'type')
+                                            }}
+                                            placeholder="Select a contact type"
+                                            isClearable={true}
+                                            ref={contactTypesSelectRef}/>
 
-                            <div className="mt-1 text-danger">
-                                <ErrorMessage name="type" className="mt-2"/>
-                            </div>
-                        </div>
+                                    <div className="mt-1 text-danger">
+                                        {errors?.type ? errors?.type : null}
+                                    </div>
+                                </div>
 
-                        <div className="mb-7">
-                            <KrysFormLabel text="Contact detail" isRequired={true}/>
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Contact detail" isRequired={true}/>
 
-                            <Field className="form-control fs-base" type="text"
-                                   placeholder="Enter contact detail (address, email address or phone)" name="detail"/>
+                                    <Field className="form-control fs-base" type="text"
+                                           placeholder="Enter contact detail (address, email address or phone)"
+                                           name="detail"/>
 
-                            <div className="mt-1 text-danger">
-                                <ErrorMessage name="detail" className="mt-2"/>
-                            </div>
-                        </div>
+                                    <div className="mt-1 text-danger">
+                                        {errors?.detail ? errors?.detail : null}
+                                    </div>
+                                </div>
 
-                        <KrysFormFooter cancelUrl={'/supply/publishers'}/>
-                    </Form>
+                                <KrysFormFooter cancelUrl={'/supply/publishers'}/>
+                            </Form>
+                        )}
                 </Formik>
 
                 <div className="separator separator-dashed my-10"></div>

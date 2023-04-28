@@ -33,5 +33,6 @@ export const QUERIES = {
     PUBLISHER_PAYMENTS_LIST: 'publisher-payments-list',
     PUBLISHER_PUBLICATIONS_LIST: 'publisher-publications-list',
     PUBLISHER_ACCOUNT_MANAGERS_LIST: 'publisher-account-managers-list',
-    PUBLICATIONS_LIST: 'publications-list',
+    PUBLICATIONS_LIST: 'publication-list',
+    PUBLICATIONS_ANALYTICS_LIST: 'publication-analytics-list',
 }

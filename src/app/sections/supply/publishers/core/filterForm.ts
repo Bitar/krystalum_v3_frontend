@@ -10,7 +10,14 @@ export interface FilterFields {
 
 }
 
-export const defaultFilterFields = {name: '', starts_between: ''}
+export const defaultFilterFields = {
+    name: '',
+    countries_ids: [],
+    regions_ids: [],
+    tiers_ids: [],
+    integration_date_range: '',
+    account_managers_ids: []
+}
 
 export const FilterSchema = Yup.object().shape({
     name: Yup.string().notRequired(),

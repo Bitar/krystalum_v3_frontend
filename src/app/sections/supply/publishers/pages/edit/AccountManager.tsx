@@ -124,28 +124,31 @@ const PublisherAccountManager: React.FC = () => {
 
                 <Formik initialValues={form} validationSchema={PublisherAccountManagerSchema} onSubmit={handleCreate}
                         enableReinitialize>
-                    <Form onChange={onChangeHandler}>
-                        <div className="mb-7">
-                            <KrysFormLabel text="Account manager" isRequired={true}/>
+                    {
+                        ({errors}) => (
+                            <Form onChange={onChangeHandler}>
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Account manager" isRequired={true}/>
 
-                            <Select name="user_id"
-                                    options={accountManagers}
-                                    getOptionLabel={(accountManager) => accountManager.name}
-                                    getOptionValue={(accountManager) => accountManager.id.toString()}
-                                    onChange={(e) => {
-                                        selectChangeHandler(e, 'user_id')
-                                    }}
-                                    placeholder="Select an account manager"
-                                    isClearable={true}
-                                    ref={accountManagersSelectRef}/>
+                                    <Select name="user_id"
+                                            options={accountManagers}
+                                            getOptionLabel={(accountManager) => accountManager.name}
+                                            getOptionValue={(accountManager) => accountManager.id.toString()}
+                                            onChange={(e) => {
+                                                selectChangeHandler(e, 'user_id')
+                                            }}
+                                            placeholder="Select an account manager"
+                                            isClearable={true}
+                                            ref={accountManagersSelectRef}/>
 
-                            <div className="mt-1 text-danger">
-                                <ErrorMessage name="user_id" className="mt-2"/>
-                            </div>
-                        </div>
+                                    <div className="mt-1 text-danger">
+                                        {errors?.user_id ? errors?.user_id : null}
+                                    </div>
+                                </div>
 
-                        <KrysFormFooter cancelUrl={'/supply/publishers'}/>
-                    </Form>
+                                <KrysFormFooter cancelUrl={'/supply/publishers'}/>
+                            </Form>
+                        )}
                 </Formik>
 
                 <div className="separator separator-dashed my-10"></div>

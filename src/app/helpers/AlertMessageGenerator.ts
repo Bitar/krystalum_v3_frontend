@@ -10,6 +10,7 @@ const ActionTexts: { [key in Actions]: string } = {
     [Actions.EDIT]: 'edit',
     [Actions.FILTER]: 'filter',
     [Actions.EXPORT]: 'export',
+    [Actions.SELECT]: 'select',
 };
 
 export class AlertMessageGenerator {

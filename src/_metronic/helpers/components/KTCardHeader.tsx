@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import {
     CardAction,
 } from '../../../app/components/misc/CardAction';
+import Select from 'react-select';
 
 export type KTCardHeaderProps = {
     className?: string
@@ -65,7 +66,6 @@ const KTCardHeader: FC<KTCardHeaderProps> = ({
                     }
                 </div> : <></>
             }
-
         </div>
     )
 }

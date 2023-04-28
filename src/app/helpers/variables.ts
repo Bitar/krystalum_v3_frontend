@@ -5,7 +5,8 @@ export enum Actions {
     CREATE = 1,
     EDIT,
     FILTER,
-    EXPORT
+    EXPORT,
+    SELECT
 }
 
 export enum PageTypes {

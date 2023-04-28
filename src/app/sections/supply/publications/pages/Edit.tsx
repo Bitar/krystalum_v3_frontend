@@ -14,6 +14,7 @@ import {Publication} from '../../../../models/supply/publication/Publication';
 import {getPublication} from '../../../../requests/supply/publication/Publication';
 import PublicationOverview from '../partials/Overview';
 import PublicationBasicInformationEdit from './edit/BasicInformation';
+import PublicationAnalyticCreate from './edit/analytics/Create';
 
 const PublicationEdit: React.FC = () => {
     let {id} = useParams();
@@ -138,6 +139,10 @@ const PublicationEdit: React.FC = () => {
                                 <Tab.Content>
                                     <Tab.Pane eventKey="settingsNav-0">
                                         <PublicationBasicInformationEdit/>
+                                    </Tab.Pane>
+
+                                    <Tab.Pane eventKey="settingsNav-1">
+                                        <PublicationAnalyticCreate/>
                                     </Tab.Pane>
                                 </Tab.Content>
                             </div>

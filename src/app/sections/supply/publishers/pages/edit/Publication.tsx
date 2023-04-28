@@ -18,7 +18,7 @@ const PublisherPublication: React.FC = () => {
 
             <KTCardBody>
                 {
-                    publisher &&
+                    publisher ?
                     <KrysInnerTable
                         doRefetch={refreshTable}
                         slug="publisher-publications"
@@ -26,7 +26,7 @@ const PublisherPublication: React.FC = () => {
                         requestFunction={getPublisherPublications}
                         requestId={publisher.id}
                         columnsArray={PublisherPublicationsColumns}
-                    ></KrysInnerTable>
+                    ></KrysInnerTable> : <>TODO: add engage with no publications</>
                 }
             </KTCardBody>
         </KTCard>

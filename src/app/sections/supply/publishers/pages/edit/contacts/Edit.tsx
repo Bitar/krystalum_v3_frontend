@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
+import {Field, Form, Formik} from 'formik';
 
 import {usePublisher} from '../../../core/PublisherContext';
 import {ContactType, PublisherContact} from '../../../../../../models/supply/publisher/PublisherContact';
@@ -133,32 +133,36 @@ const PublisherContactEdit: React.FC = () => {
 
                 <Formik initialValues={form} validationSchema={PublisherContactSchema} onSubmit={handleEdit}
                         enableReinitialize>
-                    <Form onChange={onChangeHandler}>
-                        <div className="mb-7">
-                            <KrysFormLabel text="Contact type" isRequired={true}/>
+                    {
+                        ({errors}) => (
+                            <Form onChange={onChangeHandler}>
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Contact type" isRequired={true}/>
 
-                            <SingleSelect isResourceLoaded={isResourceLoaded} options={contactTypes}
-                                          defaultValue={publisherContact?.contactType} form={form}
-                                          setForm={setForm} name="type" isClearable={true}/>
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={contactTypes}
+                                                  defaultValue={publisherContact?.contactType} form={form}
+                                                  setForm={setForm} name="type" isClearable={true}/>
 
-                            <div className="mt-1 text-danger">
-                                <ErrorMessage name="type" className="mt-2"/>
-                            </div>
-                        </div>
+                                    <div className="mt-1 text-danger">
+                                        {errors?.type ? errors?.type : null}
+                                    </div>
+                                </div>
 
-                        <div className="mb-7">
-                            <KrysFormLabel text="Contact detail" isRequired={true}/>
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Contact detail" isRequired={true}/>
 
-                            <Field className="form-control fs-base" type="text"
-                                   placeholder="Enter contact detail (address, email address or phone)" name="detail"/>
+                                    <Field className="form-control fs-base" type="text"
+                                           placeholder="Enter contact detail (address, email address or phone)"
+                                           name="detail"/>
 
-                            <div className="mt-1 text-danger">
-                                <ErrorMessage name="detail" className="mt-2"/>
-                            </div>
-                        </div>
+                                    <div className="mt-1 text-danger">
+                                        {errors?.detail ? errors?.detail : null}
+                                    </div>
+                                </div>
 
-                        <KrysFormFooter cancelUrl={`/supply/publishers/${publisher?.id}/edit`}/>
-                    </Form>
+                                <KrysFormFooter cancelUrl={`/supply/publishers/${publisher?.id}/edit`}/>
+                            </Form>
+                        )}
                 </Formik>
             </KTCardBody>
         </KTCard>

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
+import {Field, Form, Formik} from 'formik';
 import Select from 'react-select';
 import {DatePicker} from 'rsuite';
 
@@ -84,7 +84,7 @@ const PublicationCreate: React.FC = () => {
         genericSingleSelectOnChangeHandler(e, form, setForm, key);
     };
 
-    const multiSelectChangeHandler = (e: any, key: any) => {
+    const multiSelectChangeHandler = (e: any, key: string) => {
         genericMultiSelectOnChangeHandler(e, form, setForm, key);
     };
 
@@ -92,7 +92,7 @@ const PublicationCreate: React.FC = () => {
         genericDateOnChangeHandler(date, form, setForm, key);
     };
 
-    const checkboxChangeHandler = (e: any, key: any, value: any, isMulti: boolean) => {
+    const checkboxChangeHandler = (e: any, key: string, value: any, isMulti: boolean) => {
         if (isMulti) {
             e.stopPropagation();
 
@@ -153,7 +153,7 @@ const PublicationCreate: React.FC = () => {
                                            placeholder="Enter publication name" name="name"/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="name" className="mt-2"/>
+                                        {errors?.name ? errors?.name : null}
                                     </div>
                                 </div>
 
@@ -170,7 +170,7 @@ const PublicationCreate: React.FC = () => {
                                             placeholder="Select a publisher"/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="publisher_id" className="mt-2"/>
+                                        {errors?.publisher_id ? errors?.publisher_id : null}
                                     </div>
                                 </div>
 
@@ -181,7 +181,7 @@ const PublicationCreate: React.FC = () => {
                                            placeholder="Enter publication unique identifier" name="unique_identifier"/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="unique_identifier" className="mt-2"/>
+                                        {errors?.unique_identifier ? errors?.unique_identifier : null}
                                     </div>
                                 </div>
 
@@ -199,7 +199,7 @@ const PublicationCreate: React.FC = () => {
                                             isMulti={true}/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="languages_ids" className="mt-2"/>
+                                        {errors?.languages_ids ? errors?.languages_ids : null}
                                     </div>
                                 </div>
 
@@ -217,7 +217,7 @@ const PublicationCreate: React.FC = () => {
                                     />
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="live_date" className="mt-2"/>
+                                        {errors?.live_date ? errors?.live_date : null}
                                     </div>
                                 </div>
 
@@ -260,9 +260,7 @@ const PublicationCreate: React.FC = () => {
                                                placeholder="Enter publication url" name="url"/>
 
                                         <div className="mt-1 text-danger">
-                                            <div className="mt-2">
-                                                {errors?.url ? errors?.url : null}
-                                            </div>
+                                            {errors?.url ? errors?.url : null}
                                         </div>
                                     </div>
                                 }
@@ -295,9 +293,7 @@ const PublicationCreate: React.FC = () => {
                                                    name="android_store_url"/>
 
                                             <div className="mt-1 text-danger">
-                                                <div className="mt-2">
                                                     {errors?.android_store_url ? errors?.android_store_url : null}
-                                                </div>
                                             </div>
                                         </div>
 
@@ -310,9 +306,7 @@ const PublicationCreate: React.FC = () => {
                                                    name="android_bundle_id"/>
 
                                             <div className="mt-1 text-danger">
-                                                <div className="mt-2">
                                                     {errors?.android_bundle_id ? errors?.android_bundle_id : null}
-                                                </div>
                                             </div>
                                         </div>
 
@@ -325,9 +319,7 @@ const PublicationCreate: React.FC = () => {
                                                    name="android_version"/>
 
                                             <div className="mt-1 text-danger">
-                                                <div className="mt-2">
                                                     {errors?.android_version ? errors?.android_version : null}
-                                                </div>
                                             </div>
                                         </div>
 
@@ -389,9 +381,7 @@ const PublicationCreate: React.FC = () => {
                                                    name="ios_store_url"/>
 
                                             <div className="mt-1 text-danger">
-                                                <div className="mt-2">
                                                     {errors?.ios_store_url ? errors?.ios_store_url : null}
-                                                </div>
                                             </div>
                                         </div>
 
@@ -404,9 +394,7 @@ const PublicationCreate: React.FC = () => {
                                                    name="ios_bundle_id"/>
 
                                             <div className="mt-1 text-danger">
-                                                <div className="mt-2">
                                                     {errors?.ios_bundle_id ? errors?.ios_bundle_id : null}
-                                                </div>
                                             </div>
                                         </div>
 
@@ -418,9 +406,7 @@ const PublicationCreate: React.FC = () => {
                                                    placeholder="Enter publication iOS version" name="ios_version"/>
 
                                             <div className="mt-1 text-danger">
-                                                <div className="mt-2">
                                                     {errors?.ios_version ? errors?.ios_version : null}
-                                                </div>
                                             </div>
                                         </div>
 
@@ -467,7 +453,7 @@ const PublicationCreate: React.FC = () => {
                                     </FormGroup>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="description" className="mt-2"/>
+                                        {errors?.description ? errors?.description : null}
                                     </div>
                                 </div>
 
@@ -552,7 +538,8 @@ const PublicationCreate: React.FC = () => {
 
                                 <div className="mb-4">
                                     <span className="fs-5 text-gray-700 d-flex fw-medium">Report Settings</span>
-                                    <span className="text-muted">Configure advertising-related settings for the publication, including Deal ID/PMP, temporary inventory restrictions <small className="fw-bold text-muted">(if 'Temporarily Not Sending Inventory' is selected, then the publication will be archived)</small>, and Hi10 monetization</span>
+                                    <span className="text-muted">Configure advertising-related settings for the publication, including Deal ID/PMP, temporary inventory restrictions <small
+                                        className="fw-bold text-muted">(if 'Temporarily Not Sending Inventory' is selected, then the publication will be archived)</small>, and Hi10 monetization</span>
                                 </div>
 
                                 <div className="mb-7">
@@ -619,8 +606,8 @@ const PublicationCreate: React.FC = () => {
                                                          defaultValue={Boolean(form.hi10_to_video)}/>
 
                                         <div className="mt-1 text-danger">
-                                            {errors?.hi10_to_video ? errors?.hi10_to_video : null}
                                             {errors?.hi10_to_display ? errors?.hi10_to_display : null}
+                                            {errors?.hi10_to_video ? errors?.hi10_to_video : null}
                                         </div>
                                     </div>
                                 }

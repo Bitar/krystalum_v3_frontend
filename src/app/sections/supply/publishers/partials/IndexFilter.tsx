@@ -169,104 +169,107 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
                         <Formik initialValues={defaultFilterFields} validationSchema={FilterSchema}
                                 onSubmit={handleFilter}
                                 enableReinitialize>
-                            <Form onChange={onChangeHandler}>
-                                <Row>
-                                    <Col md={4}>
-                                        <KrysFormLabel text="Name" isRequired={false}/>
+                            {
+                                ({errors}) => (
+                                    <Form onChange={onChangeHandler}>
+                                        <Row>
+                                            <Col md={4}>
+                                                <KrysFormLabel text="Name" isRequired={false}/>
 
-                                        <Field className="form-control fs-base" type="text"
-                                               placeholder="Filter by name" name="name"/>
+                                                <Field className="form-control fs-base" type="text"
+                                                       placeholder="Filter by name" name="name"/>
 
-                                        <div className="mt-1 text-danger">
-                                            <ErrorMessage name="name" className="mt-2"/>
-                                        </div>
-                                    </Col>
+                                                <div className="mt-1 text-danger">
+                                                    {errors?.name ? errors?.name : null}
+                                                </div>
+                                            </Col>
 
-                                    <Col md={4}>
-                                        <KrysFormLabel text="HQ Country(ies)" isRequired={false}/>
+                                            <Col md={4}>
+                                                <KrysFormLabel text="HQ Country(ies)" isRequired={false}/>
 
-                                        <Select isMulti name="countries_ids"
-                                                options={countries}
-                                                getOptionLabel={(country) => country?.name}
-                                                getOptionValue={(country) => country?.id.toString()}
-                                                onChange={(e) => multiSelectChangeHandler(e, 'countries_ids')}
-                                                ref={countriesSelectRef}
-                                                placeholder="Filter by country(ies)"/>
+                                                <Select isMulti name="countries_ids"
+                                                        options={countries}
+                                                        getOptionLabel={(country) => country?.name}
+                                                        getOptionValue={(country) => country?.id.toString()}
+                                                        onChange={(e) => multiSelectChangeHandler(e, 'countries_ids')}
+                                                        ref={countriesSelectRef}
+                                                        placeholder="Filter by country(ies)"/>
 
-                                        <div className="mt-1 text-danger">
-                                            <ErrorMessage name="countries_ids" className="mt-2"/>
-                                        </div>
-                                    </Col>
+                                                <div className="mt-1 text-danger">
+                                                    {errors?.countries_ids ? errors?.countries_ids : null}
+                                                </div>
+                                            </Col>
 
-                                    <Col md={4}>
-                                        <KrysFormLabel text="HQ Region(s)" isRequired={false}/>
+                                            <Col md={4}>
+                                                <KrysFormLabel text="HQ Region(s)" isRequired={false}/>
 
-                                        <Select isMulti name="regions_ids"
-                                                options={regions}
-                                                getOptionLabel={(region) => region?.name}
-                                                getOptionValue={(region) => region?.id.toString()}
-                                                onChange={(e) => multiSelectChangeHandler(e, 'regions_ids')}
-                                                ref={regionsSelectRef}
-                                                placeholder="Filter by region(s)"
-                                                isDisabled={(!!(filters?.countries_ids && filters?.countries_ids.length > 0))}/>
+                                                <Select isMulti name="regions_ids"
+                                                        options={regions}
+                                                        getOptionLabel={(region) => region?.name}
+                                                        getOptionValue={(region) => region?.id.toString()}
+                                                        onChange={(e) => multiSelectChangeHandler(e, 'regions_ids')}
+                                                        ref={regionsSelectRef}
+                                                        placeholder="Filter by region(s)"
+                                                        isDisabled={(!!(filters?.countries_ids && filters?.countries_ids.length > 0))}/>
 
-                                        <div className="mt-1 text-danger">
-                                            <ErrorMessage name="regions_ids" className="mt-2"/>
-                                        </div>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col md={4}>
-                                        <KrysFormLabel text="Tier(s)" isRequired={false}/>
+                                                <div className="mt-1 text-danger">
+                                                    {errors?.regions_ids ? errors?.regions_ids : null}
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md={4}>
+                                                <KrysFormLabel text="Tier(s)" isRequired={false}/>
 
-                                        <Select isMulti name="tiers_ids"
-                                                options={tiers}
-                                                getOptionLabel={(tier) => tier?.name}
-                                                getOptionValue={(tier) => tier?.id.toString()}
-                                                onChange={(e) => multiSelectChangeHandler(e, 'tiers_ids')}
-                                                ref={tiersSelectRef}
-                                                placeholder="Filter by tier(s)"/>
+                                                <Select isMulti name="tiers_ids"
+                                                        options={tiers}
+                                                        getOptionLabel={(tier) => tier?.name}
+                                                        getOptionValue={(tier) => tier?.id.toString()}
+                                                        onChange={(e) => multiSelectChangeHandler(e, 'tiers_ids')}
+                                                        ref={tiersSelectRef}
+                                                        placeholder="Filter by tier(s)"/>
 
-                                        <div className="mt-1 text-danger">
-                                            <ErrorMessage name="tiers_ids" className="mt-2"/>
-                                        </div>
-                                    </Col>
+                                                <div className="mt-1 text-danger">
+                                                    {errors?.tiers_ids ? errors?.tiers_ids : null}
+                                                </div>
+                                            </Col>
 
-                                    <Col md={4}>
-                                        <KrysFormLabel text="Integration Date" isRequired={false}/>
+                                            <Col md={4}>
+                                                <KrysFormLabel text="Integration Date" isRequired={false}/>
 
-                                        <DateRangePicker name="integration_date_range"
-                                                         placeholder="Filter by integration date range"
-                                                         className="krys-datepicker krys-daterangepicker"
-                                                         block
-                                                         isoWeek
-                                                         onChange={(date) => dateRangeChangeHandler(date, 'integration_date_range')}
-                                        />
+                                                <DateRangePicker name="integration_date_range"
+                                                                 placeholder="Filter by integration date range"
+                                                                 className="krys-datepicker krys-daterangepicker"
+                                                                 block
+                                                                 isoWeek
+                                                                 onChange={(date) => dateRangeChangeHandler(date, 'integration_date_range')}
+                                                />
 
-                                        <div className="mt-1 text-danger">
-                                            <ErrorMessage name="integration_date_range" className="mt-2"/>
-                                        </div>
-                                    </Col>
+                                                <div className="mt-1 text-danger">
+                                                    {errors?.integration_date_range ? errors?.integration_date_range : null}
+                                                </div>
+                                            </Col>
 
-                                    <Col md={4}>
-                                        <KrysFormLabel text="Account Manager(s)" isRequired={false}/>
+                                            <Col md={4}>
+                                                <KrysFormLabel text="Account Manager(s)" isRequired={false}/>
 
-                                        <Select isMulti name="account_managers_ids"
-                                                options={accountManagers}
-                                                getOptionLabel={(accountManager) => accountManager?.name}
-                                                getOptionValue={(accountManager) => accountManager?.id.toString()}
-                                                onChange={(e) => multiSelectChangeHandler(e, 'account_managers_ids')}
-                                                ref={accountManagersSelectRef}
-                                                placeholder="Filter by account manager(s)"/>
+                                                <Select isMulti name="account_managers_ids"
+                                                        options={accountManagers}
+                                                        getOptionLabel={(accountManager) => accountManager?.name}
+                                                        getOptionValue={(accountManager) => accountManager?.id.toString()}
+                                                        onChange={(e) => multiSelectChangeHandler(e, 'account_managers_ids')}
+                                                        ref={accountManagersSelectRef}
+                                                        placeholder="Filter by account manager(s)"/>
 
-                                        <div className="mt-1 text-danger">
-                                            <ErrorMessage name="account_managers_ids" className="mt-2"/>
-                                        </div>
-                                    </Col>
-                                </Row>
+                                                <div className="mt-1 text-danger">
+                                                    {errors?.account_managers_ids ? errors?.account_managers_ids : null}
+                                                </div>
+                                            </Col>
+                                        </Row>
 
-                                <FilterFormFooter resetFilter={resetFilter}/>
-                            </Form>
+                                        <FilterFormFooter resetFilter={resetFilter}/>
+                                    </Form>
+                                )}
                         </Formik>
                     </div>
                 </Col>

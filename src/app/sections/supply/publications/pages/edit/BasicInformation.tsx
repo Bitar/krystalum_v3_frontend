@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {DatePicker} from 'rsuite';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
+import {Field, Form, Formik} from 'formik';
 import {FormControl, FormGroup, InputGroup} from 'react-bootstrap';
 import axios from 'axios';
 
@@ -48,7 +48,7 @@ const PublicationBasicInformationEdit: React.FC = () => {
             setIsResourceLoaded(true);
 
             setForm(fillEditForm(publication));
-console.log(fillEditForm(publication))
+            console.log(fillEditForm(publication))
             // get the list of all publishers
             getAllPublishers().then(response => {
                 if (axios.isAxiosError(response)) {
@@ -89,7 +89,7 @@ console.log(fillEditForm(publication))
         genericDateOnChangeHandler(date, form, setForm, key);
     };
 
-    const checkboxChangeHandler = (e: any, key: any, value: any, isMulti: boolean) => {
+    const checkboxChangeHandler = (e: any, key: string, value: any, isMulti: boolean) => {
         if (isMulti) {
             e.stopPropagation();
 
@@ -155,7 +155,7 @@ console.log(fillEditForm(publication))
                                            placeholder="Enter publication name" name="name"/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="name" className="mt-2"/>
+                                        {errors?.name ? errors?.name : null}
                                     </div>
                                 </div>
 
@@ -169,7 +169,7 @@ console.log(fillEditForm(publication))
                                                   name="publisher_id" isClearable={true}/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="publisher_id" className="mt-2"/>
+                                        {errors?.publisher_id ? errors?.publisher_id : null}
                                     </div>
                                 </div>
 
@@ -180,7 +180,7 @@ console.log(fillEditForm(publication))
                                            placeholder="Enter publication unique identifier" name="unique_identifier"/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="unique_identifier" className="mt-2"/>
+                                        {errors?.unique_identifier ? errors?.unique_identifier : null}
                                     </div>
                                 </div>
 
@@ -192,7 +192,7 @@ console.log(fillEditForm(publication))
                                                  name={'languages_ids'}/>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="languages_ids" className="mt-2"/>
+                                        {errors?.languages_ids ? errors?.languages_ids : null}
                                     </div>
                                 </div>
 
@@ -211,7 +211,7 @@ console.log(fillEditForm(publication))
                                     />
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="live_date" className="mt-2"/>
+                                        {errors?.live_date ? errors?.live_date : null}
                                     </div>
                                 </div>
 
@@ -254,9 +254,7 @@ console.log(fillEditForm(publication))
                                                placeholder="Enter publication url" name="url"/>
 
                                         <div className="mt-1 text-danger">
-                                            <div className="mt-2">
-                                                {errors?.url ? errors?.url : null}
-                                            </div>
+                                            {errors?.url ? errors?.url : null}
                                         </div>
                                     </div>
                                 }
@@ -289,9 +287,7 @@ console.log(fillEditForm(publication))
                                                    name="android_store_url"/>
 
                                             <div className="mt-1 text-danger">
-                                                <div className="mt-2">
-                                                    {errors?.android_store_url ? errors?.android_store_url : null}
-                                                </div>
+                                                {errors?.android_store_url ? errors?.android_store_url : null}
                                             </div>
                                         </div>
 
@@ -304,9 +300,7 @@ console.log(fillEditForm(publication))
                                                    name="android_bundle_id"/>
 
                                             <div className="mt-1 text-danger">
-                                                <div className="mt-2">
-                                                    {errors?.android_bundle_id ? errors?.android_bundle_id : null}
-                                                </div>
+                                                {errors?.android_bundle_id ? errors?.android_bundle_id : null}
                                             </div>
                                         </div>
 
@@ -319,9 +313,7 @@ console.log(fillEditForm(publication))
                                                    name="android_version"/>
 
                                             <div className="mt-1 text-danger">
-                                                <div className="mt-2">
-                                                    {errors?.android_version ? errors?.android_version : null}
-                                                </div>
+                                                {errors?.android_version ? errors?.android_version : null}
                                             </div>
                                         </div>
 
@@ -383,9 +375,7 @@ console.log(fillEditForm(publication))
                                                    name="ios_store_url"/>
 
                                             <div className="mt-1 text-danger">
-                                                <div className="mt-2">
-                                                    {errors?.ios_store_url ? errors?.ios_store_url : null}
-                                                </div>
+                                                {errors?.ios_store_url ? errors?.ios_store_url : null}
                                             </div>
                                         </div>
 
@@ -398,9 +388,7 @@ console.log(fillEditForm(publication))
                                                    name="ios_bundle_id"/>
 
                                             <div className="mt-1 text-danger">
-                                                <div className="mt-2">
-                                                    {errors?.ios_bundle_id ? errors?.ios_bundle_id : null}
-                                                </div>
+                                                {errors?.ios_bundle_id ? errors?.ios_bundle_id : null}
                                             </div>
                                         </div>
 
@@ -412,9 +400,7 @@ console.log(fillEditForm(publication))
                                                    placeholder="Enter publication iOS version" name="ios_version"/>
 
                                             <div className="mt-1 text-danger">
-                                                <div className="mt-2">
-                                                    {errors?.ios_version ? errors?.ios_version : null}
-                                                </div>
+                                                {errors?.ios_version ? errors?.ios_version : null}
                                             </div>
                                         </div>
 
@@ -462,7 +448,7 @@ console.log(fillEditForm(publication))
                                     </FormGroup>
 
                                     <div className="mt-1 text-danger">
-                                        <ErrorMessage name="description" className="mt-2"/>
+                                        {errors?.description ? errors?.description : null}
                                     </div>
                                 </div>
 
@@ -547,7 +533,8 @@ console.log(fillEditForm(publication))
 
                                 <div className="mb-4">
                                     <span className="fs-5 text-gray-700 d-flex fw-medium">Report Settings</span>
-                                    <span className="text-muted">Configure advertising-related settings for the publication, including Deal ID/PMP, temporary inventory restrictions <small className="fw-bold text-muted">(if 'Temporarily Not Sending Inventory' is selected, then the publication will be archived)</small>, and Hi10 monetization</span>
+                                    <span className="text-muted">Configure advertising-related settings for the publication, including Deal ID/PMP, temporary inventory restrictions <small
+                                        className="fw-bold text-muted">(if 'Temporarily Not Sending Inventory' is selected, then the publication will be archived)</small>, and Hi10 monetization</span>
                                 </div>
 
                                 <div className="mb-7">
@@ -614,8 +601,8 @@ console.log(fillEditForm(publication))
                                                          defaultValue={Boolean(form.hi10_to_video)}/>
 
                                         <div className="mt-1 text-danger">
-                                            {errors?.hi10_to_video ? errors?.hi10_to_video : null}
                                             {errors?.hi10_to_display ? errors?.hi10_to_display : null}
+                                            {errors?.hi10_to_video ? errors?.hi10_to_video : null}
                                         </div>
                                     </div>
                                 }
