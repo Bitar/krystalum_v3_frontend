@@ -2,5 +2,6 @@ import {User} from '../../../models/iam/User'
 
 export interface AuthModel {
   data: User
-  token: string
+  token: string,
+  impersonatedUserId?: number
 }

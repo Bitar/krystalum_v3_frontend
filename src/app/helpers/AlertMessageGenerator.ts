@@ -1,4 +1,4 @@
-import {Actions, KrysToastType} from "./variables";
+import {Actions, KrysToastType} from './variables';
 import {GenericErrorMessage} from './form';
 
 type AlertFunctionType = {

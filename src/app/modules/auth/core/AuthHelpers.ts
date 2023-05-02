@@ -54,11 +54,15 @@ export function setupAxios(axios: any) {
     axios.defaults.headers.Accept = 'application/json';
 
     axios.interceptors.request.use(
-        (config: { headers: { Authorization: string } }) => {
+        (config: any) => {
             const auth = getAuth();
 
             if (auth && auth.token) {
                 config.headers.Authorization = `Bearer ${auth.token}`;
+
+                if(auth.impersonatedUserId !== undefined) {
+                    config.headers['Impersonated-User-Id'] = auth.impersonatedUserId;
+                }
             }
 
             return config;

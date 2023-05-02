@@ -9,6 +9,8 @@ import clsx from 'clsx'
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import {deleteObject, extractErrors} from '../../../helpers/requests';
+import {Button} from 'react-bootstrap';
+import {useAuth} from '../../auth';
 
 type Props = {
     id: number
@@ -16,6 +18,7 @@ type Props = {
     queryKey: string
     showEdit?: boolean
     showDelete?: boolean
+    showImpersonate?: boolean
     showView?: boolean
     callBackFn?: any
     title?: string,
@@ -29,6 +32,7 @@ const ActionsCell: FC<React.PropsWithChildren<Props>> = ({
                                                              showEdit,
                                                              showDelete = true,
                                                              showView,
+                                                             showImpersonate = false,
                                                              callBackFn,
                                                              title,
                                                              text
@@ -36,6 +40,7 @@ const ActionsCell: FC<React.PropsWithChildren<Props>> = ({
     const queryClient = useQueryClient();
     const {state} = useQueryRequest();
     const [query, setQuery] = useState<string>(stringifyRequestQuery(state));
+    const {auth, saveAuth} = useAuth();
 
     useEffect(() => {
         MenuComponent.reinitialization()
@@ -87,6 +92,20 @@ const ActionsCell: FC<React.PropsWithChildren<Props>> = ({
         }
     }
 
+    const impersonateUser = function() {
+        // we just need to update the auth user to have the impersonated user id
+        // remove existing impersonatedUserId
+        if(auth) {
+            const {impersonatedUserId, ...newAuth} = auth;
+
+            saveAuth({...newAuth, impersonatedUserId: id});
+
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 3000);
+        }
+    }
+
     return (
         <>
             {showView && (
@@ -94,6 +113,14 @@ const ActionsCell: FC<React.PropsWithChildren<Props>> = ({
                     <i className={clsx('fa-duotone fs-3 text-info', 'fa-circle-info')}></i>
                 </Link>
             )}
+
+            {
+                showImpersonate && (
+                    <Button className='btn-sm btn-icon' variant='active-light-primary' onClick={impersonateUser}>
+                        <i className={clsx('fa-duotone fs-3 text-primary', 'fa-user-secret')}></i>
+                    </Button>
+                )
+            }
 
             {showEdit && (
                 <Link
