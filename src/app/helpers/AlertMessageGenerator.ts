@@ -1,4 +1,4 @@
-import {Actions, KrysToastType} from "./variables";
+import {Actions, KrysToastType} from './variables';
 import {GenericErrorMessage} from './form';
 
 type AlertFunctionType = {
@@ -10,6 +10,7 @@ const ActionTexts: { [key in Actions]: string } = {
     [Actions.EDIT]: 'edit',
     [Actions.FILTER]: 'filter',
     [Actions.EXPORT]: 'export',
+    [Actions.SELECT]: 'select',
 };
 
 export class AlertMessageGenerator {
