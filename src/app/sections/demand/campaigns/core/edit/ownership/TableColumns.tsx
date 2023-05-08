@@ -3,7 +3,8 @@ import React from 'react';
 import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
 import {TextCell} from '../../../../../../modules/table/columns/TextCell';
 import {User} from '../../../../../../models/iam/User';
-import {useCampaign} from '../../CampaignContext';
+import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
+import {toDateTimeString} from '../../../../../../helpers/stringGenerator';
 
 const CampaignOwnershipColumns: ReadonlyArray<Column<User>> = [
     {
@@ -12,26 +13,19 @@ const CampaignOwnershipColumns: ReadonlyArray<Column<User>> = [
         Cell: ({...props}) => <TextCell text={props.data[props.row.index].name}/>,
     },
     {
+        Header: (props) => <CustomHeader tableProps={props} title="Email" className="min-w-125px"/>,
+        id: 'email',
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].email}/>,
+    },
+    {
         Header: (props) => <CustomHeader tableProps={props} title="Status" className="min-w-125px"/>,
         id: 'status',
-        Cell: ({...props}) => {
-            const {campaign} = useCampaign();
-
-            let status = 'inactive';
-
-            if(campaign?.owner && campaign?.owner.id === props.data[props.row.index].id && props.row.index === 0) {
-                // if the campaign owner is the same as the ownership record user AND it's the latest ownership record
-                // then he's the active one
-                status = 'active';
-            }
-
-            return <TextCell text={status}/>
-        },
+        Cell: ({...props}) => <BadgeCell status={props.data[props.row.index].is_active === 1 ? 'Active' : 'Inactive'} color={props.data[props.row.index].is_active === 1 ? 'success' : 'secondary'}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Ownership date" className="min-w-125px"/>,
         id: 'ownership-date',
-        Cell: ({...props}) => <TextCell text={'TODO'}/>,
+        Cell: ({...props}) => <TextCell text={toDateTimeString(new Date(props.data[props.row.index].assignment_date))}/>,
     }
 ]
 

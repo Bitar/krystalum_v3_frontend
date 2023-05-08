@@ -12,7 +12,8 @@ import {AdvertiserType} from './Options';
 export type CampaignOwner = {
     id: number,
     name: string,
-    created_at: Date,
+    email: string,
+    assignment_date: Date,
     is_active: number
 }
 
