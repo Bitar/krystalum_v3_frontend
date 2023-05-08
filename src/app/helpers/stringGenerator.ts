@@ -7,3 +7,9 @@ export const formatText = (text: string) => {
         .replace(/_/g, ' ')
         .replace(/^\w/, (c) => c.toUpperCase());
 }
+
+const padLeft = (nr: any, len = 2, chr = `0`) => `${nr}`.padStart(2, chr);
+
+export const toDateTimeString = (date: Date) => {
+    return date.toDateString() + ', ' + padLeft(date.getHours()) + ':' + padLeft(date.getMinutes()) + ':' + padLeft(date.getSeconds())
+}
