@@ -3,7 +3,7 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import {Col, Collapse, Row} from 'react-bootstrap';
 
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
-import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
+import {defaultFilterFields, FilterFields} from '../core/filterForm';
 import {genericOnChangeHandler} from '../../../../helpers/form';
 import {initialQueryState} from '../../../../../_metronic/helpers';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
@@ -50,7 +50,7 @@ const PerformanceMetricIndexFilter: React.FC<Props> = ({showFilter, setExportQue
             <Row id='#performance-metrics-list-filter'>
                 <Col>
                     <div className="card-rounded bg-primary bg-opacity-5 p-10 mb-15">
-                        <Formik initialValues={defaultFilterFields} validationSchema={FilterSchema}
+                        <Formik initialValues={defaultFilterFields}
                                 onSubmit={handleFilter}
                                 enableReinitialize>
                             {
@@ -65,6 +65,17 @@ const PerformanceMetricIndexFilter: React.FC<Props> = ({showFilter, setExportQue
 
                                                 <div className="mt-1 text-danger">
                                                     <ErrorMessage name="name" className="mt-2"/>
+                                                </div>
+                                            </Col>
+
+                                            <Col md={4}>
+                                                <KrysFormLabel text="Title" isRequired={false}/>
+
+                                                <Field className="form-control fs-base" type="text"
+                                                       placeholder="Filter by title" name="title"/>
+
+                                                <div className="mt-1 text-danger">
+                                                    <ErrorMessage name="title" className="mt-2"/>
                                                 </div>
                                             </Col>
                                         </Row>

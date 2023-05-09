@@ -21,14 +21,22 @@ export const createFormData = (form: any) => {
     let formData = new FormData();
 
     for (const key in form) {
-        if (form[key] instanceof Array) {
-            if (form[key].length > 0) {
-                for (const item in form[key]) {
-                    formData.append(`${key}[]`, form[key][item]);
+        if(form[key] !== null && form[key] !== undefined) {
+            if (form[key] instanceof Array) {
+                if (form[key].length > 0) {
+                    for (const item in form[key]) {
+                        formData.append(`${key}[]`, form[key][item]);
+                    }
                 }
+            } else if ((form[key] instanceof String || typeof form[key] === 'string')) {
+                // this condition needs to be inside the String check because we don't
+                // want strings who fail the length check to end up in the last `else`
+                if(form[key].length !== 0) {
+                    formData.append(key, form[key]);
+                }
+            } else {
+                formData.append(key, form[key]);
             }
-        } else {
-            formData.append(key, form[key]);
         }
     }
 

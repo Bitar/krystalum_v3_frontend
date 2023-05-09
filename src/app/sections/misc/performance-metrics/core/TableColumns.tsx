@@ -14,6 +14,11 @@ const PerformanceMetricsColumns: ReadonlyArray<Column<PerformanceMetric>> = [
         Cell: ({...props}) => <TextCell text={props.data[props.row.index].name}/>,
     },
     {
+        Header: (props) => <CustomHeader tableProps={props} title='Title' className='min-w-125px'/>,
+        id: 'title',
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].title}/>,
+    },
+    {
         Header: (props) => (
             <Restricted to='manage-misc'>
                 <CustomHeader tableProps={props} title='Actions' className='text-end min-w-100px'/>
