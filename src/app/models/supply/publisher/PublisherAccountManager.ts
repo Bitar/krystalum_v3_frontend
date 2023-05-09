@@ -5,7 +5,7 @@ export type PublisherAccountManager = {
     name: string,
     email: string,
     assignment_date: Date,
-    status: number
+    is_active: number
 };
 
 export type PublisherAccountManagerPaginate = Response<PublisherAccountManager[]>;

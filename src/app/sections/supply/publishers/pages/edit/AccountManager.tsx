@@ -32,6 +32,7 @@ import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCar
 import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';
 import {PublisherAccountManagersColumns} from '../../core/edit/account-managers/TableColumns';
 import {getAllUsers} from '../../../../../requests/iam/User';
+import {PublisherAccountManager as AccountManager} from '../../../../../models/supply/publisher/PublisherAccountManager';
 
 const PublisherAccountManager: React.FC = () => {
     const {publisher} = usePublisher();
@@ -44,6 +45,7 @@ const PublisherAccountManager: React.FC = () => {
 
     const [allAccountManagers, setAllAccountManagers] = useState<User[]>([]);
     const [accountManagers, setAccountManagers] = useState<User[]>([]);
+    const [addedAccountManager, setAddedAccountManager] = useState<AccountManager | null>(null);
 
     const accountManagersSelectRef = useRef<any>(null);
 
@@ -68,6 +70,8 @@ const PublisherAccountManager: React.FC = () => {
     }, [publisher]);
 
     const selectChangeHandler = (e: any, key: string) => {
+        setRefreshTable(false);
+
         genericSingleSelectOnChangeHandler(e, form, setForm, key);
     };
 
@@ -89,6 +93,8 @@ const PublisherAccountManager: React.FC = () => {
                         // show generic error message
                         setFormErrors([GenericErrorMessage])
                     } else {
+                        setAddedAccountManager(null);
+
                         // we were able to store the publisher account manager
                         krysApp.setAlert({
                             message: new AlertMessageGenerator('publisher account manager', Actions.CREATE, KrysToastType.SUCCESS).message,
@@ -100,6 +106,9 @@ const PublisherAccountManager: React.FC = () => {
 
                         // refresh the dropdown options to remove the added user
                         setAccountManagers(allAccountManagers.filter((user) => user.id !== response.id));
+
+                        // set the latest added account manager so that we add it to the table data
+                        setAddedAccountManager({...response, assignment_date: new Date(), is_active: 1})
 
                         // clear the selected values from dropdown
                         accountManagersSelectRef.current?.clearValue();
@@ -162,6 +171,7 @@ const PublisherAccountManager: React.FC = () => {
                         requestFunction={getPublisherAccountManagers}
                         requestId={publisher.id}
                         columnsArray={PublisherAccountManagersColumns}
+                        addedRecord={addedAccountManager}
                     ></KrysInnerTable>
                 }
             </KTCardBody>

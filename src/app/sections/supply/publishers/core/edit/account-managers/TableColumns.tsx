@@ -6,6 +6,7 @@ import {TextCell} from '../../../../../../modules/table/columns/TextCell';
 import {PublisherAccountManager} from '../../../../../../models/supply/publisher/PublisherAccountManager';
 import {formatDateToMonthDayYear} from '../../../../../../helpers/dateFormatter';
 import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
+import {toDateTimeString} from '../../../../../../helpers/stringGenerator';
 
 const PublisherAccountManagersColumns: ReadonlyArray<Column<PublisherAccountManager>> = [
     {
@@ -22,13 +23,13 @@ const PublisherAccountManagersColumns: ReadonlyArray<Column<PublisherAccountMana
         Header: (props) => <CustomHeader tableProps={props} title="Assignment date" className="min-w-125px"/>,
         id: 'assignment_date',
         Cell: ({...props}) => <TextCell
-            text={props.data[props.row.index].assignment_date ? formatDateToMonthDayYear(props.data[props.row.index].assignment_date) : ''}/>,
+            text={props.data[props.row.index].assignment_date ? toDateTimeString(new Date(props.data[props.row.index].assignment_date)) : ''}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Status" className="min-w-125px"/>,
         id: 'status',
-        Cell: ({...props}) => <BadgeCell status={props.data[props.row.index].status ? 'Active' : 'Inactive'}
-                                         color={props.data[props.row.index].status ? 'light-success' : 'light-danger'}
+        Cell: ({...props}) => <BadgeCell status={props.data[props.row.index].is_active ? 'Active' : 'Inactive'}
+                                         color={props.data[props.row.index].is_active ? 'light-success' : 'light-danger'}
                                          align="left"/>,
     }
 ]
