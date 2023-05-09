@@ -48,7 +48,7 @@ const PublicationBasicInformationEdit: React.FC = () => {
             setIsResourceLoaded(true);
 
             setForm(fillEditForm(publication));
-            console.log(fillEditForm(publication))
+
             // get the list of all publishers
             getAllPublishers().then(response => {
                 if (axios.isAxiosError(response)) {

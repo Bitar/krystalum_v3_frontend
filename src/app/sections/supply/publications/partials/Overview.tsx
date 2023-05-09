@@ -70,7 +70,7 @@ const PublisherOverview: React.FC = () => {
                                             <div
                                                 className="d-flex align-items-center text-gray-400 me-5 mb-2">
                                                 <KTSVG
-                                                    path="/media/icons/duotune/communications/com003.svg"
+                                                    path="/media/icons/duotune/communication/com003.svg"
                                                     className="svg-icon-4 me-1"
                                                 />{publication?.languages.map((language: Language) => language.name).join(', ')}
                                             </div>
@@ -95,14 +95,16 @@ const PublisherOverview: React.FC = () => {
                                     {/* TODO: change the title and the way I am displaying it*/}
                                     <OverlayTrigger
                                         placement="top"
-                                        overlay={<Tooltip>Deal ID/PMP</Tooltip>}
+                                        overlay={<Tooltip>Is Deal PMP?</Tooltip>}
                                     >
                                         <div
                                             className="d-flex align-items-center text-gray-400 me-5 mb-2">
                                             <KTSVG
                                                 path="/media/icons/duotune/general/gen005.svg"
                                                 className="svg-icon-4 me-1"
-                                            />Deal ID/PMP: {publication?.is_deal_pmp ? 'Yes' : 'No'}</div>
+                                            />Deal PMP: &nbsp; {publication?.is_deal_pmp ? <BadgesCell texts={['Yes']} color="light-success"
+                                                                                                align="left"/> :  <BadgesCell texts={['No']} color="light-danger"
+                                                                                                                              align="left"/>}</div>
                                     </OverlayTrigger>
                                 </div>
 

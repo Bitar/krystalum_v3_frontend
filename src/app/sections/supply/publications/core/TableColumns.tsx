@@ -21,7 +21,7 @@ const PublicationsColumns: ReadonlyArray<Column<Publication>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Type" className="min-w-125px"/>,
         id: 'type',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].info.type.charAt(0).toUpperCase() + props.data[props.row.index].info.type.slice(1)}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].info?.type.charAt(0).toUpperCase() + props.data[props.row.index].info?.type.slice(1)}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Publisher" className="min-w-125px"/>,
@@ -31,7 +31,7 @@ const PublicationsColumns: ReadonlyArray<Column<Publication>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="URL" className="min-w-125px"/>,
         id: 'url',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].info.url}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].info?.url}/>,
     },
     {
         Header: (props) => (

@@ -4,7 +4,7 @@ import {createFormData} from '../../../helpers/requests';
 import {
     PublicationAnalytic,
     PublicationAnalyticPaginate
-} from '../../../models/supply/publication/PublicationAnalytics';
+} from '../../../models/supply/publication/PublicationAnalytic';
 import {Publication} from '../../../models/supply/publication/Publication';
 
 const API_URL = process.env.REACT_APP_API_URL
@@ -17,6 +17,16 @@ export const getPublicationAnalytics = (publicationId: number, query?: String): 
     if (query) {
         url += `?${query}`;
     }
+
+    return axios.get(url).then((response: AxiosResponse<PublicationAnalyticPaginate>) => response.data).catch((error) => {
+        return error;
+    });
+}
+
+export const getPublicationAnalyticsUniqueUsers = (publicationId: number): Promise<PublicationAnalyticPaginate> => {
+    let url = `${ENDPOINT}/${publicationId}/${ANALYTICS_ENDPOINT}`;
+
+    url += `?type=unique_users`;
 
     return axios.get(url).then((response: AxiosResponse<PublicationAnalyticPaginate>) => response.data).catch((error) => {
         return error;

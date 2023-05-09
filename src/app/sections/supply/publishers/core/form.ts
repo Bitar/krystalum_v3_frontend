@@ -26,9 +26,9 @@ export const PublisherSchema = Yup.object().shape({
     tier_id: Yup.number().notRequired(),
     revenue_type: Yup.string().required(),
     revenue_value: Yup.mixed().when('revenue_type', (revenueType) =>
-        revenueType == REVENUE_TYPE.REVENUE_SHARE
+        revenueType === REVENUE_TYPE.REVENUE_SHARE
             ? Yup.number().min(1, 'revenue share must be greater than 0').max(100, 'revenue share must be less than or equal to 100').required()
-            : (revenueType == REVENUE_TYPE.COMMITMENT ? Yup.string().required() : Yup.string().notRequired())
+            : (revenueType === REVENUE_TYPE.COMMITMENT ? Yup.string().required() : Yup.string().notRequired())
     ),
     email: Yup.string().notRequired().email(),
     hq_address: Yup.string().notRequired(),

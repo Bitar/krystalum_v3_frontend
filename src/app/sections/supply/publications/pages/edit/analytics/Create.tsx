@@ -11,10 +11,17 @@ import {useKrysApp} from '../../../../../../modules/general/KrysApp';
 import FormErrors from '../../../../../../components/forms/FormErrors';
 import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
 import {usePublication} from '../../../core/PublicationContext';
-import {getPublicationAnalytics} from '../../../../../../requests/supply/publication/PublisherAnalytics';
+import {
+    getPublicationAnalytics,
+    storePublicationAnalytic
+} from '../../../../../../requests/supply/publication/PublisherAnalytic';
 import {PublicationAnalyticsColumns} from '../../../core/edit/analytics/TableColumns';
 import {SelectCardAction} from '../../../../../../components/misc/CardAction';
-import {ANALYTICS_TYPE, GEO_TYPE} from '../../../../../../models/supply/Options';
+import {
+    AnalyticType,
+    defaultAnalyticsType,
+    GEO_TYPE
+} from '../../../../../../models/supply/Options';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import {
     defaultPublicationAnalyticFormFields,
@@ -25,13 +32,20 @@ import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton'
 import {Country} from '../../../../../../models/misc/Country';
 import {getAllCountries} from '../../../../../../requests/misc/Country';
 import {extractErrors} from '../../../../../../helpers/requests';
-import {GenericErrorMessage, genericSingleSelectOnChangeHandler} from '../../../../../../helpers/form';
+import {
+    GenericErrorMessage,
+    genericOnChangeHandler,
+    genericSingleSelectOnChangeHandler
+} from '../../../../../../helpers/form';
 import {filterData} from '../../../../../../helpers/dataManipulation';
 import {Region} from '../../../../../../models/misc/Region';
 import {getAllRegions} from '../../../../../../requests/misc/Region';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import {Device} from '../../../../../../models/misc/Device';
 import {getAllDevices} from '../../../../../../requests/misc/Device';
+import {getAnalyticsTypes} from '../../../../../../requests/supply/Options';
+import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
+import {Actions, KrysToastType} from '../../../../../../helpers/variables';
 
 
 const PublicationAnalyticCreate: React.FC = () => {
@@ -46,18 +60,26 @@ const PublicationAnalyticCreate: React.FC = () => {
     const [countries, setCountries] = useState<Country[]>([]);
     const [devices, setDevices] = useState<Device[]>([]);
 
-    const [analyticsTypes, setAnalyticsType] = useState<Object[]>([
-        {id: 1, name: ANALYTICS_TYPE.UNIQUE_USERS},
-        {id: 2, name: ANALYTICS_TYPE.PAGE_VIEWS},
-        {id: 3, name: ANALYTICS_TYPE.AVERAGE_SESSIONS_DURATION},
-        {id: 4, name: ANALYTICS_TYPE.BOUNCE_RATE}]);
+    const [analyticsTypes, setAnalyticsType] = useState<AnalyticType[]>([]);
+    const [currentAnalyticTypeFormatted, setCurrentAnalyticTypeFormatted] = useState<string>(defaultAnalyticsType.name);
 
     const krysApp = useKrysApp();
 
     useEffect(() => {
         if (publication) {
             // get publication analytics types options
-            // TODO
+            getAnalyticsTypes().then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    // if we were able to get the list of analytics types, then we fill our state with them
+                    if (response.data) {
+                        setAnalyticsType(response.data);
+                    }
+                }
+            });
 
             // get the regions
             getAllRegions().then(response => {
@@ -106,10 +128,15 @@ const PublicationAnalyticCreate: React.FC = () => {
     }, [publication]);
 
     const selectChangeHandler = (e: any, key: string) => {
-        if (key === 'type') {
-            setForm({...form, [key]: e.name})
-        } else {
-            genericSingleSelectOnChangeHandler(e, form, setForm, key);
+        genericSingleSelectOnChangeHandler(e, form, setForm, key);
+
+        if (key === 'type' && e) {
+            const type = analyticsTypes.find(analyticsType => analyticsType.id === e.id);
+
+            if (type) setCurrentAnalyticTypeFormatted(type.name)
+
+            // as long as we are updating the create form, we should set the table refresh to false
+            setRefreshTable(true);
         }
     };
 
@@ -118,48 +145,44 @@ const PublicationAnalyticCreate: React.FC = () => {
         // as long as we are updating the create form, we should set the table refresh to false
         setRefreshTable(false);
 
-        // genericOnChangeHandler(e, form, setForm);
+        genericOnChangeHandler(e, form, setForm);
     };
 
     const handleCreate = () => {
         if (publication) {
-            console.log(form)
             // send API request to create the publication analytics
-            // storePublicationAnalytic(publication, form).then(response => {
-            //         if (axios.isAxiosError(response)) {
-            //             // we need to show the errors
-            //             setFormErrors(extractErrors(response));
-            //         } else if (response === undefined) {
-            //             // show generic error message
-            //             setFormErrors([GenericErrorMessage])
-            //         } else {
-            //             // we were able to store the publisher payments
-            //             krysApp.setAlert({
-            //                 message: new AlertMessageGenerator('publication google analytics data', Actions.CREATE, KrysToastType.SUCCESS).message,
-            //                 type: KrysToastType.SUCCESS
-            //             });
-            //
-            //             // now that we have a new record successfully we need to refresh the table
-            //             setRefreshTable(true);
-            //
-            //             // we need to clear the form data
-            //             // setForm(defaultPublicationAnalyticFormFields);
-            //
-            //             // we need to clear the form data
-            //             setFormErrors([]);
-            //         }
-            //     }
-            // );
+            storePublicationAnalytic(publication, form).then(response => {
+                    if (axios.isAxiosError(response)) {
+                        // we need to show the errors
+                        setFormErrors(extractErrors(response));
+                    } else if (response === undefined) {
+                        // show generic error message
+                        setFormErrors([GenericErrorMessage])
+                    } else {
+                        // we were able to store the publisher payments
+                        krysApp.setAlert({
+                            message: new AlertMessageGenerator('publication google analytics data', Actions.CREATE, KrysToastType.SUCCESS).message,
+                            type: KrysToastType.SUCCESS
+                        });
+
+                        // now that we have a new record successfully we need to refresh the table
+                        setRefreshTable(true);
+
+                        // we need to clear the form data
+                        // setForm(defaultPublicationAnalyticFormFields);
+
+                        // we need to clear the form data
+                        setFormErrors([]);
+                    }
+                }
+            );
         }
     };
 
     return (
         <KTCard className="card-bordered border-1">
             <KTCardHeader text="Add New Analytic"
-                          actions={[new SelectCardAction('manage-supply', analyticsTypes, 'Select analytics type', selectChangeHandler, 'type', {
-                              id: 1,
-                              name: ANALYTICS_TYPE.UNIQUE_USERS
-                          })]}/>
+                          actions={[new SelectCardAction('manage-supply', analyticsTypes, 'Select analytics type', selectChangeHandler, 'type', defaultAnalyticsType)]}/>
 
             <KTCardBody>
                 <div className="mb-4">
@@ -196,7 +219,6 @@ const PublicationAnalyticCreate: React.FC = () => {
                                                          });
                                                      }}
                                                      defaultValue={form.geo_type === GEO_TYPE.COUNTRY}/>
-
 
                                     <div className="mt-1 text-danger">
                                         {errors?.geo_type ? errors?.geo_type : null}
@@ -288,16 +310,22 @@ const PublicationAnalyticCreate: React.FC = () => {
 
                 <div className="separator separator-dashed my-10"></div>
 
-                <h5 className="fs-5 text-gray-700 d-flex fw-medium">{form.type}</h5>
+                <div className="mb-4">
+                            <span
+                                className="fs-5 text-gray-700 d-flex fw-medium">{currentAnalyticTypeFormatted}</span>
+                    <span
+                        className="text-muted">This table displays a list of '{currentAnalyticTypeFormatted}' records:</span>
+                </div>
 
                 {
                     publication &&
                     <KrysInnerTable
                         doRefetch={refreshTable}
                         slug="publication-analytics"
-                        queryId={QUERIES.PUBLICATIONS_ANALYTICS_LIST}
+                        queryId={QUERIES.PUBLICATION_ANALYTICS_LIST}
                         requestFunction={getPublicationAnalytics}
                         requestId={publication.id}
+                        requestQuery={'type=' + form.type}
                         columnsArray={PublicationAnalyticsColumns}
                     ></KrysInnerTable>
                 }

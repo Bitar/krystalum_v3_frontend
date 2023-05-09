@@ -34,5 +34,11 @@ export const QUERIES = {
     PUBLISHER_PUBLICATIONS_LIST: 'publisher-publications-list',
     PUBLISHER_ACCOUNT_MANAGERS_LIST: 'publisher-account-managers-list',
     PUBLICATIONS_LIST: 'publication-list',
-    PUBLICATIONS_ANALYTICS_LIST: 'publication-analytics-list',
+    PUBLICATION_ARCHIVED_LIST: 'publication-archived-list',
+    PUBLICATION_ANALYTICS_LIST: 'publication-analytics-list',
+    PUBLICATION_FORMATS_LIST: 'publication-formats-list',
+    PUBLICATION_VERTICALS_LIST: 'publication-verticals-list',
+    PUBLICATION_AD_SERVERS_LIST: 'publication-ad-servers-list',
+    PUBLICATION_TECHNOLOGIES_LIST: 'publication-technologies-list',
+    PUBLICATION_AD_TECHNOLOGIES_LIST: 'publication-ad-technologies-list',
 }

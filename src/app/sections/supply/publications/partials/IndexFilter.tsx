@@ -37,6 +37,7 @@ import {getAllTechnologies} from '../../../../requests/misc/Technology';
 import {getAllVerticals} from '../../../../requests/misc/Vertical';
 import {getAllRegions} from '../../../../requests/misc/Region';
 import {indentOptions} from '../../../../components/forms/IndentOptions';
+import KrysSwitch from '../../../../components/forms/KrysSwitch';
 
 interface Props {
     showFilter: boolean,
@@ -421,6 +422,21 @@ const PublicationIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) =
 
                                                 <div className="mt-1 text-danger">
                                                     {errors?.url ? errors?.url : null}
+                                                </div>
+                                            </Col>
+                                        </Row>
+
+                                        <Row>
+                                            <Col md={4}>
+                                                <KrysFormLabel text="Deal PMP" isRequired={false}/>
+
+                                                <KrysSwitch name="is_deal_pmp" onChangeHandler={(e) => {
+                                                    e.stopPropagation();
+                                                    setFilters({...filters, is_deal_pmp: Number(!filters.is_deal_pmp)});
+                                                }} defaultValue={Boolean(filters.is_deal_pmp)}/>
+
+                                                <div className="mt-1 text-danger">
+                                                    {errors?.is_deal_pmp ? errors?.is_deal_pmp : null}
                                                 </div>
                                             </Col>
                                         </Row>

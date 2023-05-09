@@ -23,6 +23,7 @@ const PublicationIndex: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+
     return (
         <>
             <KrysIndex queryId={QUERIES.PUBLICATIONS_LIST}
@@ -58,12 +59,11 @@ const PublicationIndex: React.FC = () => {
                                 }}>
                                 <div className="card-body d-flex flex-column justify-content-between">
                                     <h2 className="text-white fw-bold mb-1">Archived Publications</h2>
-                                    <p className="text-white mb-5">Browse through the list of publications that don't
-                                        have
-                                        publications that are currently receiving inventory</p>
+                                    <p className="text-white mb-5">Browse through the list of publications that
+                                        currently are not receiving inventory</p>
                                     <div className="m-0">
                                         <Link to={`/supply/publications/archived`}
-                                              className="btn btn-danger fw-semibold px-6 py-3">
+                                              className="btn btn-primary fw-semibold px-6 py-3">
                                             Go to Archived Publications
                                         </Link>
                                     </div>

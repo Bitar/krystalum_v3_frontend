@@ -42,6 +42,14 @@ export const getArchivedPublishers = (query?: String): Promise<PublisherPaginate
 
     if (query) {
         url += `?${query}`;
+
+        if (query.charAt(query.length - 1) === '&') {
+            url += `${INCLUDES}`;
+        } else {
+            url += `&${INCLUDES}`;
+        }
+    } else {
+        url += `?${INCLUDES}`
     }
 
     return axios.get(url).then((response: AxiosResponse<PublisherPaginate>) => response.data).catch((error) => {

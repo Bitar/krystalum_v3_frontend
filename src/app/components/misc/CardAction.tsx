@@ -6,8 +6,6 @@ import EditButton from '../buttons/Edit';
 import FilterButton from '../buttons/Filter';
 import ExportButton from '../buttons/Export';
 import {Restricted} from '../../modules/auth/AuthAccessControl';
-import Select, {GroupBase, OptionsOrGroups} from 'react-select';
-import {Language} from '../../models/misc/Language';
 
 export class CardAction {
     type: Actions
@@ -96,41 +94,6 @@ export class ExportCardAction extends CardAction {
         return (<ExportButton exportQuery={this.exportQuery}
                               exportEndpoint={this.exportEndpoint} key={index}
                               className="ms-2"/>)
-    }
-}
-
-export class SelectCardAction extends CardAction {
-    permission: string;
-    options: any[];
-    placeholder: string;
-    selectChangeHandler: (e: any, key: string) => void;
-    key: string;
-    defaultValue?: any | undefined;
-
-
-    constructor(permission: string, options: any[], placeholder: string, selectChangeHandler: (e: any, key: string) => void, key: string, defaultValue?: any) {
-        super(Actions.SELECT);
-
-        this.permission = permission;
-        this.options = options;
-        this.placeholder = placeholder;
-        this.selectChangeHandler = selectChangeHandler;
-        this.key = key;
-        this.defaultValue = defaultValue;
-    }
-
-    getHtmlComponent(index?: number): JSX.Element {
-        return (<Select
-            key={index}
-            name="header_card_select"
-            options={this.options}
-            defaultValue={this.defaultValue}
-            getOptionLabel={(option) => option.name}
-            getOptionValue={(option) => option.id.toString()}
-            onChange={(e) => {
-                this.selectChangeHandler(e, this.key)
-            }}
-            placeholder={this.placeholder}/>)
     }
 }
 

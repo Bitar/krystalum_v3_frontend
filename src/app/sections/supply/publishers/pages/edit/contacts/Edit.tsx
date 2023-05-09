@@ -4,7 +4,7 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {Field, Form, Formik} from 'formik';
 
 import {usePublisher} from '../../../core/PublisherContext';
-import {ContactType, PublisherContact} from '../../../../../../models/supply/publisher/PublisherContact';
+import {PublisherContact} from '../../../../../../models/supply/publisher/PublisherContact';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../../../helpers/sections';
@@ -31,6 +31,7 @@ import FormErrors from '../../../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import SingleSelect from '../../../../../../components/forms/SingleSelect';
+import {ContactType} from '../../../../../../models/supply/Options';
 
 const PublisherContactEdit: React.FC = () => {
     const {publisher} = usePublisher();

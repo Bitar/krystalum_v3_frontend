@@ -15,6 +15,11 @@ import {getPublication} from '../../../../requests/supply/publication/Publicatio
 import PublicationOverview from '../partials/Overview';
 import PublicationBasicInformationEdit from './edit/BasicInformation';
 import PublicationAnalyticCreate from './edit/analytics/Create';
+import PublicationFormatCreate from './edit/formats/Create';
+import PublicationVerticalCreate from './edit/verticals/Create';
+import PublicationAdServerCreate from './edit/ad-servers/Create';
+import PublicationTechnologyCreate from './edit/technologies/Create';
+import PublicationAdTechnologyIndex from './edit/ad-technologies/Index';
 
 const PublicationEdit: React.FC = () => {
     let {id} = useParams();
@@ -143,6 +148,26 @@ const PublicationEdit: React.FC = () => {
 
                                     <Tab.Pane eventKey="settingsNav-1">
                                         <PublicationAnalyticCreate/>
+                                    </Tab.Pane>
+
+                                    <Tab.Pane eventKey="settingsNav-2">
+                                        <PublicationFormatCreate/>
+                                    </Tab.Pane>
+
+                                    <Tab.Pane eventKey="settingsNav-3">
+                                        <PublicationVerticalCreate/>
+                                    </Tab.Pane>
+
+                                    <Tab.Pane eventKey="settingsNav-4">
+                                        <PublicationAdServerCreate/>
+                                    </Tab.Pane>
+
+                                    <Tab.Pane eventKey="settingsNav-5">
+                                        <PublicationTechnologyCreate/>
+                                    </Tab.Pane>
+
+                                    <Tab.Pane eventKey="settingsNav-8">
+                                        <PublicationAdTechnologyIndex/>
                                     </Tab.Pane>
                                 </Tab.Content>
                             </div>

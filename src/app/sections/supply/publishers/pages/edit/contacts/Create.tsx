@@ -11,7 +11,6 @@ import {
     PublisherContactFormFields,
     PublisherContactSchema
 } from '../../../core/edit/contacts/form';
-import {ContactType} from '../../../../../../models/supply/publisher/PublisherContact';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
 import {getContactTypes} from '../../../../../../requests/supply/Options';
 import {extractErrors} from '../../../../../../helpers/requests';
@@ -32,6 +31,7 @@ import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
 import {PublisherContactsColumns} from '../../../core/edit/contacts/TableColumns';
+import {ContactType} from '../../../../../../models/supply/Options';
 
 
 const PublisherContactCreate: React.FC = () => {

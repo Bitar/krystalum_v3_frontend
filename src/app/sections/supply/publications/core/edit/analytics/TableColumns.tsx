@@ -5,7 +5,7 @@ import {TextCell} from '../../../../../../modules/table/columns/TextCell';
 import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {QUERIES} from '../../../../../../../_metronic/helpers';
-import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytics';
+import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic';
 import {usePublication} from '../../PublicationContext';
 
 const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = [
@@ -17,17 +17,17 @@ const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = 
     {
         Header: (props) => <CustomHeader tableProps={props} title="Device" className="min-w-125px"/>,
         id: 'device',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].device.name}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].device ? props.data[props.row.index].device?.name : '- N/A -'}/>,
     },
     {
-        Header: (props) => <CustomHeader tableProps={props} title="Type" className="min-w-125px"/>,
-        id: 'type',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].geoType}/>,
+        Header: (props) => <CustomHeader tableProps={props} title="Geo Type" className="min-w-125px"/>,
+        id: 'geo_type',
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].geo_type}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Geo" className="min-w-125px"/>,
         id: 'geo',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].geo.name}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].geo?.name}/>,
     },
     {
         Header: (props) => (
@@ -44,7 +44,7 @@ const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = 
                     <ActionsCell
                         id={props.data[props.row.index].id}
                         path={`supply/publications/${publication?.id}/analytics`}
-                        queryKey={QUERIES.PUBLICATIONS_ANALYTICS_LIST}
+                        queryKey={QUERIES.PUBLICATION_ANALYTICS_LIST}
                         showView={false}
                         showEdit={true}
                         showDelete={true}

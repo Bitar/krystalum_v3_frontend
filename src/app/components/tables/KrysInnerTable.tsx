@@ -16,6 +16,7 @@ type Props = {
     queryId: string,
     requestFunction: (id: number, query?: string) => Promise<any>,
     requestId: string | number,
+    requestQuery?: string,
     columnsArray: readonly Column<any>[],
     slug: string,
     doRefetch: boolean,
@@ -29,6 +30,7 @@ const KrysInnerTable: React.FC<Props> = ({
                                              queryId,
                                              requestFunction,
                                              requestId,
+                                             requestQuery,
                                              columnsArray,
                                              slug,
                                              doRefetch
@@ -37,7 +39,7 @@ const KrysInnerTable: React.FC<Props> = ({
     return (
         <QueryRequestProvider>
             <QueryResponseProvider id={queryId}
-                                   requestFunction={requestFunction} requestId={requestId}>
+                                   requestFunction={requestFunction} requestId={requestId} requestQuery={requestQuery}>
                 <TableRefetch doRefetch={doRefetch}/>
 
                 <ListViewProvider>

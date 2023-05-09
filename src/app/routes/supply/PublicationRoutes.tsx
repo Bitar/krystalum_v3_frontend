@@ -6,6 +6,7 @@ import {Sections} from '../../helpers/sections';
 import PublicationEditRoutes from './PublicationEditRoutes';
 import PublicationIndex from '../../sections/supply/publications/pages/Index';
 import PublicationCreate from '../../sections/supply/publications/pages/Create';
+import PublicationArchived from '../../sections/supply/publications/pages/Archived';
 
 const breadcrumbs: Array<PageLink> = [
     {
@@ -54,7 +55,7 @@ const PublicationRoutes: React.FC = () => {
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Archived'}</PageTitle>
-                        {/*<PublicationArchived/>*/}
+                        <PublicationArchived/>
                     </SuspenseView>
                 }
             />

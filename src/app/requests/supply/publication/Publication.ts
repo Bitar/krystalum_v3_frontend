@@ -8,7 +8,7 @@ const ENDPOINT = `${API_URL}/supply/publications`
 
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const INCLUDES = 'include[]=info';
+export const INCLUDES = 'include[]=info&include[]=languages';
 
 export const getAllPublications = async (): Promise<PublicationList | AxiosError | undefined> => {
     return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<PublicationList>) => response.data).catch((error) => {
@@ -31,7 +31,6 @@ export const getPublications = (query?: String): Promise<PublicationPaginate> =>
         url += `?${INCLUDES}`
     }
 
-
     return axios.get(url).then((response: AxiosResponse<PublicationPaginate>) => response.data).catch((error) => {
         return error;
     });
@@ -42,6 +41,14 @@ export const getArchivedPublications = (query?: String): Promise<PublicationPagi
 
     if (query) {
         url += `?${query}`;
+
+        if (query.charAt(query.length - 1) === '&') {
+            url += `${INCLUDES}`;
+        } else {
+            url += `&${INCLUDES}`;
+        }
+    } else {
+        url += `?${INCLUDES}`
     }
 
     return axios.get(url).then((response: AxiosResponse<PublicationPaginate>) => response.data).catch((error) => {

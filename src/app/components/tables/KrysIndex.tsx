@@ -64,6 +64,8 @@ const IndexTable = ({columnsArray}: TableProps) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []);
 
+    console.log(data)
+
     return (
         <KrysTable data={data} columns={columns} model={modelData.length > 0 ? modelData[0] : null}
                    isLoading={isLoading}/>

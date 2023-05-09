@@ -9,6 +9,7 @@ import {getPublication} from '../../requests/supply/publication/Publication';
 import {PageLink, PageTitle} from '../../../_metronic/layout/core';
 import PublicationEdit from '../../sections/supply/publications/pages/Edit';
 import {PublicationContext} from '../../sections/supply/publications/core/PublicationContext';
+import PublicationAnalyticEdit from '../../sections/supply/publications/pages/edit/analytics/Edit';
 
 const PublicationEditRoutes: React.FC = () => {
     const [publication, setPublication] = useState<Publication | null>(null);
@@ -79,24 +80,15 @@ const PublicationEditRoutes: React.FC = () => {
                         </SuspenseView>
                     }
                 />
-                {/*<Route*/}
-                {/*    path='/contacts/:cid/edit'*/}
-                {/*    element={*/}
-                {/*        <SuspenseView>*/}
-                {/*            <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>*/}
-                {/*            <PublicationContactEdit/>*/}
-                {/*        </SuspenseView>*/}
-                {/*    }*/}
-                {/*/>*/}
-                {/*<Route*/}
-                {/*    path='/payments/:cid/edit'*/}
-                {/*    element={*/}
-                {/*        <SuspenseView>*/}
-                {/*            <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>*/}
-                {/*            <PublicationPaymentEdit/>*/}
-                {/*        </SuspenseView>*/}
-                {/*    }*/}
-                {/*/>*/}
+                <Route
+                    path='/analytics/:cid/edit'
+                    element={
+                        <SuspenseView>
+                            <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
+                            <PublicationAnalyticEdit/>
+                        </SuspenseView>
+                    }
+                />
             </Routes>
         </PublicationContext.Provider>
     )
