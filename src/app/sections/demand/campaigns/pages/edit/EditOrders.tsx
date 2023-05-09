@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../_metronic/helpers';
 import FormErrors from '../../../../../components/forms/FormErrors';
@@ -7,40 +7,36 @@ import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
 import {useCampaign} from '../../core/CampaignContext';
 import {
-    CampaignOwnershipFormFields, CampaignOwnershipSchema,
-    defaultCampaignOwnershipFormFields
-} from '../../core/edit/ownership/form';
-import {
     GenericErrorMessage,
-    genericOnChangeHandler,
-    genericSingleSelectOnChangeHandler
+    genericOnChangeHandler
 } from '../../../../../helpers/form';
 import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';
 import axios from 'axios';
 import {extractErrors} from '../../../../../helpers/requests';
-import Select from 'react-select';
-import {User} from '../../../../../models/iam/User';
-import {getAllUsers} from '../../../../../requests/iam/User';
-import {CampaignOwnershipColumns} from '../../core/edit/ownership/TableColumns';
-import {getCampaignOwners, storeCampaignOwner} from '../../../../../requests/demand/CampaignOwner';
 import {useKrysApp} from '../../../../../modules/general/KrysApp';
 import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
-import KrysSwitch from '../../../../../components/forms/KrysSwitch';
-import {CampaignOrderFormFields, defaultCampaignOrderFormFields} from '../../core/edit/orders/form';
+import {
+    CampaignOrderFormFields,
+    CampaignOrderSchema,
+    defaultCampaignOrderFormFields
+} from '../../core/edit/orders/form';
+import {getCampaignOrders, storeCampaignOrder} from '../../../../../requests/demand/CampaignOrder';
+import {CampaignOrderColumns} from '../../core/edit/orders/TableColumns';
+import {BookingTypeEnum} from '../../../../../enums/BookingTypeEnum';
+import {Button} from 'react-bootstrap';
+import clsx from 'clsx';
 
-const EditOwnership: React.FC = () => {
+const EditOrders: React.FC = () => {
     const {campaign} = useCampaign();
-    //
-    // const krysApp = useKrysApp();
-    //
+
+    const krysApp = useKrysApp();
+
     const [form, setForm] = useState<CampaignOrderFormFields>(defaultCampaignOrderFormFields);
+
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
-    //
-    // const [demandUsers, setDemandUsers] = useState<User[]>([]);
-    // const [allUsers, setAllUsers] = useState<User[]>([]);
-    //
+
     const onChangeHandler = (e: any) => {
         // as long as we are updating the create form, we should set the table refresh to false
         setRefreshTable(false);
@@ -49,110 +45,101 @@ const EditOwnership: React.FC = () => {
         // we get only a list of values from the select and not an element with target value and name
         genericOnChangeHandler(e, form, setForm);
     };
-    //
-    // useEffect(() => {
-    //     // get all the demand users
-    //     getAllUsers('filter[roles][]=11&filter[roles][]=10').then(response => {
-    //         if (axios.isAxiosError(response)) {
-    //             setFormErrors(extractErrors(response));
-    //         } else if (response === undefined) {
-    //             setFormErrors([GenericErrorMessage])
-    //         } else {
-    //             if (response.data) {
-    //                 setDemandUsers(response.data);
-    //             }
-    //         }
-    //     });
-    //
-    //     // get all users regardless of role
-    //     getAllUsers('filter[user_type]=internal').then(response => {
-    //         if (axios.isAxiosError(response)) {
-    //             setFormErrors(extractErrors(response));
-    //         } else if (response === undefined) {
-    //             setFormErrors([GenericErrorMessage])
-    //         } else {
-    //             if (response.data) {
-    //                 setAllUsers(response.data);
-    //             }
-    //         }
-    //     });
-    // }, []);
-    //
 
     const handleCreate = (e: any) => {
-        console.log('form submitted!');
+        console.log("hello");
+        if (campaign) {
+            // send API request to create the advertiser
+            storeCampaignOrder(campaign, form).then(response => {
+                    if (axios.isAxiosError(response)) {
+                        // we need to show the errors
+                        setFormErrors(extractErrors(response));
+                    } else if (response === undefined) {
+                        // show generic error message
+                        setFormErrors([GenericErrorMessage])
+                    } else {
+                        // we were able to store the advertiser
+                        krysApp.setAlert({
+                            message: new AlertMessageGenerator('campaign order', Actions.CREATE, KrysToastType.SUCCESS).message,
+                            type: KrysToastType.SUCCESS
+                        });
+
+                        // now that we have a new record successfully we need to refresh the table
+                        setRefreshTable(true);
+
+                        // we need to clear the form data
+                        setForm(defaultCampaignOrderFormFields);
+                    }
+                }
+            );
+        }
     };
-    // const handleCreate = (e: any) => {
-    //     if (campaign) {
-    //         // send API request to create the advertiser
-    //         storeCampaignOwner(campaign, form).then(response => {
-    //                 if (axios.isAxiosError(response)) {
-    //                     // we need to show the errors
-    //                     setFormErrors(extractErrors(response));
-    //                 } else if (response === undefined) {
-    //                     // show generic error message
-    //                     setFormErrors([GenericErrorMessage])
-    //                 } else {
-    //                     // we were able to store the advertiser
-    //                     krysApp.setAlert({
-    //                         message: new AlertMessageGenerator('campaign owner', Actions.CREATE, KrysToastType.SUCCESS).message,
-    //                         type: KrysToastType.SUCCESS
-    //                     });
-    //
-    //                     // now that we have a new record successfully we need to refresh the table
-    //                     setRefreshTable(true);
-    //
-    //                     // we need to clear the form data
-    //                     setForm(defaultCampaignOwnershipFormFields);
-    //
-    //                     // clear the form
-    //                     usersSelectRef.current?.clearValue();
-    //                 }
-    //             }
-    //         );
-    //     }
-    // };
-    //
-    // const usersSelectRef = useRef<any>(null);
 
     return (
         <KTCard className='card-bordered border-1'>
-            <KTCardHeader text='Assign new owner'/>
+            <KTCardHeader text='Add new order'/>
 
             <KTCardBody>
-                <FormErrors errorMessages={formErrors}/>
+                {
+                    campaign?.bookingType?.id === BookingTypeEnum.BO ?
+                        <>
+                            <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={CampaignOwnershipSchema} onSubmit={handleCreate}
-                        enableReinitialize>
-                    {
-                        (formik) => (
-                            <Form onChange={onChangeHandler}>
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Booking order number" isRequired={true}/>
+                            <Formik initialValues={form} validationSchema={CampaignOrderSchema}
+                                    onSubmit={handleCreate}
+                                    enableReinitialize>
+                                {
+                                    (formik) => (
+                                        <Form onChange={onChangeHandler}>
+                                            <div className="mb-7">
+                                                <KrysFormLabel text="Booking order number" isRequired={true}/>
 
-                                    <Field className="form-control fs-base" type="text"
-                                           placeholder="Enter booking order number" name="booking_order_number"/>
+                                                <Field className="form-control fs-base" type="text"
+                                                       placeholder="Enter booking order number"
+                                                       name="booking_order_number"/>
 
-                                    <div className="mt-1 text-danger">
-                                        <ErrorMessage name="booking_order_number" className="mt-2"/>
+                                                <div className="mt-1 text-danger">
+                                                    <ErrorMessage name="booking_order_number" className="mt-2"/>
+                                                </div>
+                                            </div>
+
+                                            <KrysFormFooter cancelUrl={'/demand/campaigns'}/>
+                                        </Form>
+                                    )
+                                }
+                            </Formik>
+                        </>
+                        :
+                        <>
+                            <div className="alert alert-dismissible bg-light-warning p-5 mb-10">
+                                <div>
+                                    <div className="d-flex flex-column pe-0 pe-sm-10">
+                                        <h4 className="fw-semibold">Reminder</h4>
+                                        <span className='text-gray-700'>Since orders under a TD campaign don't have a booking order
+                                number, you can add a new order under this campaign by simply clicking on the button
+                                below.</span>
                                     </div>
                                 </div>
 
-                                <KrysFormFooter cancelUrl={'/demand/campaigns'} />
-                            </Form>
-                        )
-                    }
-                </Formik>
+                                <div className='mt-5'>
+                                    <Button variant={'success'} onClick={handleCreate}><i
+                                        className={clsx('fa-duotone fs-4', 'fa-plus')}></i> Add new
+                                        order</Button>
+                                </div>
+                            </div>
+                        </>
+                }
+
 
                 <div className="separator separator-dashed my-10"></div>
 
                 {
                     campaign ? <KrysInnerTable
                         doRefetch={refreshTable}
-                        slug="campaign-ownership"
-                        queryId={QUERIES.CAMPAIGN_OWNERSHIP_LIST}
-                        requestFunction={getCampaignOwners}
-                        requestId={campaign.id} columnsArray={CampaignOwnershipColumns}
+                        slug="campaign-orders"
+                        queryId={QUERIES.CAMPAIGN_ORDERS_LIST}
+                        requestFunction={getCampaignOrders}
+                        requestId={campaign.id} columnsArray={CampaignOrderColumns}
                     ></KrysInnerTable> : <></>
                 }
 
@@ -161,4 +148,4 @@ const EditOwnership: React.FC = () => {
     );
 };
 
-export default EditOwnership;
+export default EditOrders;

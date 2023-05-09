@@ -1,11 +1,9 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
 import {
     Campaign,
-    CampaignOrder,
-    CampaignOrderList,
-    CampaignOrderPaginate
 } from '../../models/demand/Campaign';
 import {createFormData} from '../../helpers/requests';
+import {CampaignOrder, CampaignOrderList, CampaignOrderPaginate} from '../../models/demand/CampaignOrder';
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/demand/campaigns`

@@ -234,7 +234,7 @@ const EditDetails: React.FC = () => {
 
                 setEditableFields(fields);
                 setDisableSubmit(false);
-            } else if ((hasAnyRoles(currentUser, [RoleEnum.DEMAND]) && campaign.owner && campaign.owner.id === currentUser.id)
+            } else if ((hasAnyRoles(currentUser, [RoleEnum.DEMAND]) && campaign.owner !== null && campaign.owner.id === currentUser.id)
                 || hasAnyRoles(currentUser, [RoleEnum.HEAD_OF_DEMAND, RoleEnum.ADMINISTRATOR, RoleEnum.CAMPAIGN_EDITOR])) {
                 // if the user is Demand and he's the owner OR if he's the head of demand
                 // he can change name, buy type, seat ID and objectives

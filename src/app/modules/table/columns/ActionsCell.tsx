@@ -132,12 +132,12 @@ const ActionsCell: FC<React.PropsWithChildren<Props>> = ({
             )}
 
             {showDelete && (
-                <a
+                <button
                     className='btn btn-icon btn-sm btn-active-light-danger'
                     onClick={async () => deleteItem()}
                 >
                     <i className={clsx('fa-duotone fs-3 text-danger', 'fa-trash')}></i>
-                </a>
+                </button>
             )}
         </>
     )

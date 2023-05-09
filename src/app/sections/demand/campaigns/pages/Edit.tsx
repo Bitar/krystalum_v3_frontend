@@ -13,6 +13,7 @@ import {Nav, Tab} from 'react-bootstrap';
 import EditDetails from './edit/EditDetails';
 import EditOwnership from './edit/EditOwnership';
 import {CampaignContext} from '../core/CampaignContext';
+import EditOrders from './edit/EditOrders';
 
 
 const CampaignEdit: React.FC = () => {
@@ -111,7 +112,7 @@ const CampaignEdit: React.FC = () => {
                                         </Tab.Pane>
 
                                         <Tab.Pane eventKey='settingsNav-2'>
-                                            <EditOwnership/>
+                                            <EditOrders/>
                                         </Tab.Pane>
                                     </CampaignContext.Provider>
                                 }

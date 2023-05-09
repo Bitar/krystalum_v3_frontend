@@ -2,11 +2,10 @@ import {Column} from 'react-table'
 import React from 'react';
 import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
 import {TextCell} from '../../../../../../modules/table/columns/TextCell';
-import {User} from '../../../../../../models/iam/User';
 import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
-import {toDateTimeString} from '../../../../../../helpers/stringGenerator';
+import {CampaignOwner} from '../../../../../../models/demand/Campaign';
 
-const CampaignOwnershipColumns: ReadonlyArray<Column<User>> = [
+const CampaignOwnershipColumns: ReadonlyArray<Column<CampaignOwner>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Name" className="min-w-125px"/>,
         id: 'name',
