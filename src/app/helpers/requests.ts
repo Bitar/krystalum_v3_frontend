@@ -26,6 +26,12 @@ export const createFormData = (form: any) => {
                     formData.append(`${key}[]`, form[key][item]);
                 }
             }
+        } else if ((form[key] instanceof String || typeof form[key] === 'string')) {
+            // this condition needs to be inside the String check because we don't
+            // want strings who fail the length check to end up in the last `else`
+            if(form[key].length !== 0) {
+                formData.append(key, form[key]);
+            }
         } else {
             formData.append(key, form[key]);
         }

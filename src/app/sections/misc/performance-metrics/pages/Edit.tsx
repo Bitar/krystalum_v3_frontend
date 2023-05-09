@@ -44,7 +44,14 @@ const PerformanceMetricEdit: React.FC = () => {
                 } else {
                     // we were able to fetch current performance metric to edit
                     setPerformanceMetric(response);
-                    setForm(response);
+
+                    const {title, ...currentPerformanceMetric} = response
+
+                    if(title !== null) {
+                        setForm({...currentPerformanceMetric, title: title});
+                    } else {
+                        setForm({...currentPerformanceMetric, title: ''});
+                    }
                 }
             });
         }
@@ -103,6 +110,17 @@ const PerformanceMetricEdit: React.FC = () => {
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="name" className="mt-2"/>
+                                    </div>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Title" isRequired={false}/>
+
+                                    <Field className="form-control fs-base" type="text"
+                                           placeholder="Enter name of target related to metric" name="title"/>
+
+                                    <div className="mt-1 text-danger">
+                                        <ErrorMessage name="title" className="mt-2"/>
                                     </div>
                                 </div>
 
