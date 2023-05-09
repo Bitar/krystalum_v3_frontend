@@ -1,6 +1,5 @@
 import * as Yup from 'yup';
 import {Campaign} from '../../../../../../models/demand/Campaign';
-import {UserCondensed} from '../../../../../../models/iam/User';
 import {AdvertiserTypeEnum} from '../../../../../../enums/AdvertiserTypeEnum';
 import {FormFields} from '../../form';
 

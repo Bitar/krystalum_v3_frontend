@@ -1,10 +1,6 @@
 import React from 'react';
 import {FormikProps} from 'formik';
 import {DateRange} from 'rsuite/DateRangePicker';
-import {Advertiser} from '../models/demand/Advertiser';
-import {getAllAdvertisers} from '../requests/demand/Advertiser';
-import axios from 'axios';
-import {extractErrors} from './requests';
 
 export const genericOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>) => {
     const value = e.target.value;

@@ -61,6 +61,11 @@ const CampaignEdit: React.FC = () => {
             title: 'Ownership',
             description: 'Assign point of contact',
             icon: 'fa-duotone fa-user'
+        },
+        {
+            title: 'Orders',
+            description: 'Add or update the orders of this campaign',
+            icon: 'fa-duotone fa-list-ul'
         }
     ]
 
@@ -102,6 +107,10 @@ const CampaignEdit: React.FC = () => {
                                         </Tab.Pane>
 
                                         <Tab.Pane eventKey='settingsNav-1'>
+                                            <EditOwnership/>
+                                        </Tab.Pane>
+
+                                        <Tab.Pane eventKey='settingsNav-2'>
                                             <EditOwnership/>
                                         </Tab.Pane>
                                     </CampaignContext.Provider>

@@ -13,14 +13,30 @@ export type CampaignOwner = {
     id: number,
     name: string,
     email: string,
-    assignment_date: Date,
+    assignment_date: string,
     is_active: number
 }
 
 export type CampaignOwnerPaginate = Response<CampaignOwner[]>;
 
-export type CampaignOwnerList = {
-    data: CampaignOwner[]
+export type CampaignOrder = {
+    id: number,
+    campaign: CampaignCondensed,
+    owner: UserCondensed,
+    booking_order_number: string | null
+    // TODO add the formats
+}
+
+export type CampaignOrderPaginate = Response<CampaignOrder[]>;
+
+export type CampaignOrderList = {
+    data: CampaignOrder[]
+}
+
+export type CampaignCondensed = {
+    id: number,
+    name: string,
+    unique_identifier: string
 }
 
 export type Campaign = {

@@ -25,7 +25,7 @@ const CampaignOwnershipColumns: ReadonlyArray<Column<User>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Ownership date" className="min-w-125px"/>,
         id: 'ownership-date',
-        Cell: ({...props}) => <TextCell text={toDateTimeString(new Date(props.data[props.row.index].assignment_date))}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].assignment_date}/>,
     }
 ]
 
