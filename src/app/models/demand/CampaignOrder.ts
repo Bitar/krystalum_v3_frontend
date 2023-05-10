@@ -6,7 +6,8 @@ export type CampaignOrder = {
     id: number,
     campaign: CampaignCondensed,
     owner: UserCondensed,
-    booking_order_number: string | null
+    booking_order_number: string | null,
+    created_at: string
     // TODO add the formats
 }
 

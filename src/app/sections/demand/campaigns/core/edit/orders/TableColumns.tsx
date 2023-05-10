@@ -41,7 +41,7 @@ const CampaignOrderColumns: ReadonlyArray<Column<CampaignOrder>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Created at" className="min-w-125px"/>,
         id: 'created-at',
-        Cell: ({...props}) => <TextCell text={'TODO'}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].created_at}/>,
     },
     {
         Header: (props) => (
