@@ -4,7 +4,6 @@ import React from 'react';
 import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
 import {TextCell} from '../../../../../../modules/table/columns/TextCell';
 import {PublisherAccountManager} from '../../../../../../models/supply/publisher/PublisherAccountManager';
-import {formatDateToMonthDayYear} from '../../../../../../helpers/dateFormatter';
 import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
 import {toDateTimeString} from '../../../../../../helpers/stringGenerator';
 

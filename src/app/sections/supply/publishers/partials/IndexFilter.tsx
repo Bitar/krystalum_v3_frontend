@@ -1,6 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Field, Form, Formik} from 'formik';
 import {Col, Collapse, Row} from 'react-bootstrap';
+import Select from 'react-select';
+import {DateRangePicker} from 'rsuite';
+import {DateRange} from 'rsuite/DateRangePicker';
+import axios from 'axios';
+
+import {initialQueryState} from '../../../../../_metronic/helpers';
 
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
 import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
@@ -10,23 +16,18 @@ import {
     genericMultiSelectOnChangeHandler,
     genericOnChangeHandler
 } from '../../../../helpers/form';
-import {initialQueryState} from '../../../../../_metronic/helpers';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
 import {createFilterQueryParam, extractErrors} from '../../../../helpers/requests';
-import Select from 'react-select';
 import {Country} from '../../../../models/misc/Country';
 import {Tier} from '../../../../models/misc/Tier';
 import {getAllCountries} from '../../../../requests/misc/Country';
-import axios from 'axios';
 import {filterData} from '../../../../helpers/dataManipulation';
 import {getAllTiers} from '../../../../requests/misc/Tier';
 import FormErrors from '../../../../components/forms/FormErrors';
 import {Region} from '../../../../models/misc/Region';
 import {User} from '../../../../models/iam/User';
 import {getAllRegions} from '../../../../requests/misc/Region';
-import {DateRangePicker} from 'rsuite';
-import {DateRange} from 'rsuite/DateRangePicker';
 import {getAllUsers} from '../../../../requests/iam/User';
 
 interface Props {

@@ -7,11 +7,11 @@ import {usePublication} from '../../../core/PublicationContext';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../../../helpers/sections';
-import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
+import {PageTypes} from '../../../../../../helpers/variables';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {
     GenericErrorMessage,
-    genericOnChangeHandler, genericSingleSelectOnChangeHandler
+    genericOnChangeHandler
 } from '../../../../../../helpers/form';
 import {
     defaultPublicationAnalyticFormFields,
@@ -20,17 +20,14 @@ import {
 } from '../../../core/edit/analytics/form';
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
-import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import FormErrors from '../../../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import SingleSelect from '../../../../../../components/forms/SingleSelect';
 import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic';
-import {AnalyticType, defaultAnalyticsType, GEO_TYPE} from '../../../../../../models/supply/Options';
+import {GEO_TYPE} from '../../../../../../models/supply/Options';
 import {getPublicationAnalytic} from '../../../../../../requests/supply/publication/PublisherAnalytic';
-import {getAnalyticsTypes} from '../../../../../../requests/supply/Options';
 import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton';
-import Select from 'react-select';
 import {InputGroup} from 'react-bootstrap';
 import {Region} from '../../../../../../models/misc/Region';
 import {Country} from '../../../../../../models/misc/Country';
@@ -134,10 +131,6 @@ const PublicationAnalyticEdit: React.FC = () => {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [publicationAnalytic]);
-
-    const selectChangeHandler = (e: any, key: string) => {
-        genericSingleSelectOnChangeHandler(e, form, setForm, key);
-    };
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);

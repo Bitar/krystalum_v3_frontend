@@ -33,7 +33,6 @@ import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
 import {PublisherContactsColumns} from '../../../core/edit/contacts/TableColumns';
 import {ContactType} from '../../../../../../models/supply/Options';
 
-
 const PublisherContactCreate: React.FC = () => {
     const {publisher} = usePublisher();
     const krysApp = useKrysApp();

@@ -29,7 +29,6 @@ import {
 } from '../../../../../../requests/supply/publisher/PublisherPayment';
 import {PublisherPaymentsColumns} from '../../../core/edit/payments/TableColumns';
 
-
 const PublisherPaymentCreate: React.FC = () => {
     const {publisher} = usePublisher();
 

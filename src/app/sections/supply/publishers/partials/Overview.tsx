@@ -1,8 +1,9 @@
 import React from 'react';
+import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 
 import {KTCard, KTCardBody, KTSVG} from '../../../../../_metronic/helpers';
+
 import {formatDateToMonthDayYear} from '../../../../helpers/dateFormatter';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 import {usePublisher} from '../core/PublisherContext';
 import {REVENUE_TYPE} from '../../../../models/supply/Options';
 

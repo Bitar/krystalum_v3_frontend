@@ -30,7 +30,6 @@ import {
     PublisherPaymentSchema
 } from '../../../core/edit/payments/form';
 
-
 const PublisherPaymentEdit: React.FC = () => {
     const {publisher} = usePublisher();
     // get the publisher and publisher payments id

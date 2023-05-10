@@ -4,7 +4,7 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {PageTypes} from '../../../../helpers/variables';
 import {QUERIES} from '../../../../../_metronic/helpers';
-import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import {ExportCardAction} from '../../../../components/misc/CardAction';
 import KrysIndex from '../../../../components/tables/KrysIndex';
 import {EXPORT_ENDPOINT, getArchivedPublications} from '../../../../requests/supply/publication/Publication';
 import {PublicationsColumns} from '../core/TableColumns';
@@ -14,7 +14,6 @@ const PublicationArchived: React.FC = () => {
     const krysApp = useKrysApp();
 
     const [exportQuery, setExportQuery] = useState<string>('');
-    const [showFilter, setShowFilter] = useState<boolean>(false);
 
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATIONS, PageTypes.ARCHIVED))
@@ -31,11 +30,9 @@ const PublicationArchived: React.FC = () => {
                        cardHeader={
                            {
                                text: 'All Archived Publications',
-                               actions: [new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
-                                   new FilterCardAction('publications-list-filter', showFilter, setShowFilter),
-                                   new CreateCardAction('/supply/publications', 'manage-supply')],
+                               actions: [new ExportCardAction(exportQuery, EXPORT_ENDPOINT)],
                            }}
-                       showFilter={showFilter}
+                       showFilter={false}
                        setExportQuery={setExportQuery}
                        FilterComponent={PublicationIndexFilter}
             ></KrysIndex>

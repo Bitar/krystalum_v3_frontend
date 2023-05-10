@@ -92,7 +92,6 @@ const PublisherOverview: React.FC = () => {
                                         </OverlayTrigger>
                                     }
 
-                                    {/* TODO: change the title and the way I am displaying it*/}
                                     <OverlayTrigger
                                         placement="top"
                                         overlay={<Tooltip>Is Deal PMP?</Tooltip>}

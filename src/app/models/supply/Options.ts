@@ -19,6 +19,15 @@ export type AnalyticTypeList = {
     data: AnalyticType[]
 }
 
+export type GeoType = {
+    id: string,
+    name: string
+};
+
+export type GeoTypeList = {
+    data: GeoType[]
+}
+
 export type FormatType = {
     id: string, // this column is of type string because the enum we receive from the API is represented as a string
     name: string
