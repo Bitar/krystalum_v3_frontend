@@ -7,7 +7,7 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publishers`
 
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
-export const ARCHIVED_EXPORT_ENDPOINT = `${ENDPOINT}/export?filter[is_archived]=1`;
+export const ARCHIVED_EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 export const INCLUDES = 'include[]=tier&include[]=info&include[]=accountManager&include[]=publications';
 
 export const getAllPublishers = async (): Promise<PublisherList | AxiosError | undefined> => {
@@ -31,6 +31,7 @@ export const getPublishers = (query?: String): Promise<PublisherPaginate> => {
         url += `?${INCLUDES}`
     }
 
+    url += `&filter[is_archived]=0`
 
     return axios.get(url).then((response: AxiosResponse<PublisherPaginate>) => response.data).catch((error) => {
         return error;
@@ -38,7 +39,7 @@ export const getPublishers = (query?: String): Promise<PublisherPaginate> => {
 }
 
 export const getArchivedPublishers = (query?: String): Promise<PublisherPaginate> => {
-    let url = `${ENDPOINT}`;
+    let url = `${ENDPOINT}/archived`;
 
     if (query) {
         url += `?${query}`;
@@ -51,8 +52,6 @@ export const getArchivedPublishers = (query?: String): Promise<PublisherPaginate
     } else {
         url += `?${INCLUDES}`
     }
-
-    url += `&filter[is_archived]=1`
 
     return axios.get(url).then((response: AxiosResponse<PublisherPaginate>) => response.data).catch((error) => {
         return error;

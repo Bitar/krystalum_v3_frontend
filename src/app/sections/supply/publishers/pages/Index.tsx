@@ -11,7 +11,7 @@ import {EXPORT_ENDPOINT, getPublishers} from '../../../../requests/supply/publis
 import {PublishersColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 import KrysIndex from '../../../../components/tables/KrysIndex';
-import PublisherIndexFilter from '../partials/IndexFilter';
+import PublisherIndexFilter from '../partials/filters/IndexFilter';
 
 const PublisherIndex: React.FC = () => {
     const krysApp = useKrysApp();

@@ -13,7 +13,8 @@ export interface FilterFields {
     countries_ids?: number[],
     regions_ids?: number[],
     url?: string,
-    is_deal_pmp?: number | string
+    is_deal_pmp?: number | string,
+    is_archived?: number
 }
 
 export const defaultFilterFields = {
@@ -29,9 +30,13 @@ export const defaultFilterFields = {
     countries_ids: [],
     regions_ids: [],
     url: '',
-    is_deal_pmp: '',
+    is_deal_pmp: ''
 }
 
 export const FilterSchema = Yup.object().shape({
     name: Yup.string().notRequired(),
 });
+
+export function fillFilterFields(key: string, value: any) {
+    return {...defaultFilterFields, [key]: value}
+}

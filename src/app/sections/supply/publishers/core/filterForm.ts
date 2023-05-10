@@ -7,7 +7,6 @@ export interface FilterFields {
     tiers_ids?: number[],
     integration_date_range?: string,
     account_managers_ids?: number[]
-
 }
 
 export const defaultFilterFields = {
@@ -27,3 +26,7 @@ export const FilterSchema = Yup.object().shape({
     integration_date_range: Yup.string().notRequired(),
     account_managers_ids: Yup.array().of(Yup.number()).notRequired(),
 });
+
+export function fillFilterFields(key: string, value: any) {
+    return {...defaultFilterFields, [key]: value}
+}

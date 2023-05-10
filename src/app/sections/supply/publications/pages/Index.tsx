@@ -8,8 +8,8 @@ import {EXPORT_ENDPOINT, getPublications} from '../../../../requests/supply/publ
 import {PublicationsColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 import KrysIndex from '../../../../components/tables/KrysIndex';
-import PublicationIndexFilter from '../partials/IndexFilter';
 import {Link} from 'react-router-dom';
+import PublicationIndexFilter from '../partials/filters/IndexFilter';
 
 const PublicationIndex: React.FC = () => {
     const krysApp = useKrysApp();
@@ -37,6 +37,7 @@ const PublicationIndex: React.FC = () => {
                                actions: [new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                    new FilterCardAction('publications-list-filter', showFilter, setShowFilter),
                                    new CreateCardAction('/supply/publications', 'manage-supply')],
+
                            }}
                        showFilter={showFilter}
                        setExportQuery={setExportQuery}

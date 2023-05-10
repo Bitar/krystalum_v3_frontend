@@ -2,53 +2,54 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Field, Form, Formik} from 'formik';
 import {Col, Collapse, Row} from 'react-bootstrap';
 
-import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
-import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
+import {useQueryRequest} from '../../../../../modules/table/QueryRequestProvider';
+import {defaultFilterFields, FilterSchema} from '../../core/filterForm';
 import {
     genericDateRangeOnChangeHandler,
     GenericErrorMessage,
     genericMultiSelectOnChangeHandler,
     genericOnChangeHandler
-} from '../../../../helpers/form';
-import {initialQueryState} from '../../../../../_metronic/helpers';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
-import {createFilterQueryParam, extractErrors} from '../../../../helpers/requests';
-import FormErrors from '../../../../components/forms/FormErrors';
+} from '../../../../../helpers/form';
+import {initialQueryState} from '../../../../../../_metronic/helpers';
+import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
+import FilterFormFooter from '../../../../../components/forms/FilterFormFooter';
+import {createFilterQueryParam, extractErrors} from '../../../../../helpers/requests';
+import FormErrors from '../../../../../components/forms/FormErrors';
 import Select from 'react-select';
-import {getAllCountries} from '../../../../requests/misc/Country';
+import {getAllCountries} from '../../../../../requests/misc/Country';
 import axios from 'axios';
-import {filterData} from '../../../../helpers/dataManipulation';
-import {Publisher} from '../../../../models/supply/publisher/Publisher';
-import {getAllPublishers} from '../../../../requests/supply/publisher/Publisher';
-import {getAllLanguages} from '../../../../requests/misc/Language';
-import {Language} from '../../../../models/misc/Language';
+import {filterData} from '../../../../../helpers/dataManipulation';
+import {Publisher} from '../../../../../models/supply/publisher/Publisher';
+import {getAllPublishers} from '../../../../../requests/supply/publisher/Publisher';
+import {getAllLanguages} from '../../../../../requests/misc/Language';
+import {Language} from '../../../../../models/misc/Language';
 import {DateRangePicker} from 'rsuite';
 import {DateRange} from 'rsuite/DateRangePicker';
-import {getAllFormats} from '../../../../requests/misc/Format';
-import {Format} from '../../../../models/misc/Format';
-import {Country} from '../../../../models/misc/Country';
-import {Region} from '../../../../models/misc/Region';
-import {Technology} from '../../../../models/misc/Technology';
-import {AdServer} from '../../../../models/misc/AdServer';
-import {Vertical} from '../../../../models/misc/Vertical';
-import {getAllAdServers} from '../../../../requests/misc/AdServer';
-import {getAllTechnologies} from '../../../../requests/misc/Technology';
-import {getAllVerticals} from '../../../../requests/misc/Vertical';
-import {getAllRegions} from '../../../../requests/misc/Region';
-import {indentOptions} from '../../../../components/forms/IndentOptions';
-import KrysSwitch from '../../../../components/forms/KrysSwitch';
+import {getAllFormats} from '../../../../../requests/misc/Format';
+import {Format} from '../../../../../models/misc/Format';
+import {Country} from '../../../../../models/misc/Country';
+import {Region} from '../../../../../models/misc/Region';
+import {Technology} from '../../../../../models/misc/Technology';
+import {AdServer} from '../../../../../models/misc/AdServer';
+import {Vertical} from '../../../../../models/misc/Vertical';
+import {getAllAdServers} from '../../../../../requests/misc/AdServer';
+import {getAllTechnologies} from '../../../../../requests/misc/Technology';
+import {getAllVerticals} from '../../../../../requests/misc/Vertical';
+import {getAllRegions} from '../../../../../requests/misc/Region';
+import {indentOptions} from '../../../../../components/forms/IndentOptions';
+import KrysSwitch from '../../../../../components/forms/KrysSwitch';
 
 interface Props {
     showFilter: boolean,
-    setExportQuery: React.Dispatch<React.SetStateAction<string>>
+    setExportQuery: React.Dispatch<React.SetStateAction<string>>,
+    filters: any,
+    setFilters: React.Dispatch<React.SetStateAction<any>>
 }
 
-const PublicationIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
+const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, setFilters}) => {
     const {updateState} = useQueryRequest();
 
     const [filterErrors, setFilterErrors] = useState<string[]>([]);
-    const [filters, setFilters] = useState<FilterFields>(defaultFilterFields);
     const [reset, setReset] = useState<boolean>(false);
 
     const [publishers, setPublishers] = useState<Publisher[]>([]);
@@ -452,4 +453,4 @@ const PublicationIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) =
     );
 }
 
-export default PublicationIndexFilter;
+export default PublicationFilter;

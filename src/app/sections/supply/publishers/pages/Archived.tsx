@@ -11,15 +11,16 @@ import {
     getArchivedPublishers
 } from '../../../../requests/supply/publisher/Publisher';
 import {PublishersColumns} from '../core/TableColumns';
-import {ExportCardAction} from '../../../../components/misc/CardAction';
+import {ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 import KrysIndex from '../../../../components/tables/KrysIndex';
-import PublisherIndexFilter from '../partials/IndexFilter';
+import PublisherArchivedFilter from '../partials/filters/ArchivedFilter';
 
 
 const PublisherArchived: React.FC = () => {
     const krysApp = useKrysApp();
 
     const [exportQuery, setExportQuery] = useState<string>('');
+    const [showFilter, setShowFilter] = useState<boolean>(false);
 
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLISHERS, PageTypes.ARCHIVED))
@@ -36,11 +37,12 @@ const PublisherArchived: React.FC = () => {
                        cardHeader={
                            {
                                text: 'All Archived Publishers',
-                               actions: [new ExportCardAction(exportQuery, ARCHIVED_EXPORT_ENDPOINT)],
+                               actions: [new ExportCardAction(exportQuery, ARCHIVED_EXPORT_ENDPOINT),
+                                   new FilterCardAction('publishers-list-filter', showFilter, setShowFilter)],
                            }}
-                       showFilter={false}
+                       showFilter={showFilter}
                        setExportQuery={setExportQuery}
-                       FilterComponent={PublisherIndexFilter}
+                       FilterComponent={PublisherArchivedFilter}
             ></KrysIndex>
         </>
     )

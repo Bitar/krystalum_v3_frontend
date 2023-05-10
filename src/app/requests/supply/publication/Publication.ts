@@ -7,6 +7,7 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publications`
 
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
+export const ARCHIVED_EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
 export const INCLUDES = 'include[]=info&include[]=languages';
 

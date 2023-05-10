@@ -6,36 +6,38 @@ import {DateRangePicker} from 'rsuite';
 import {DateRange} from 'rsuite/DateRangePicker';
 import axios from 'axios';
 
-import {initialQueryState} from '../../../../../_metronic/helpers';
+import {initialQueryState} from '../../../../../../_metronic/helpers';
 
-import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
-import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
+import {useQueryRequest} from '../../../../../modules/table/QueryRequestProvider';
+import {defaultFilterFields, FilterSchema} from '../../core/filterForm';
 import {
     genericDateRangeOnChangeHandler,
     GenericErrorMessage,
     genericMultiSelectOnChangeHandler,
     genericOnChangeHandler
-} from '../../../../helpers/form';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
-import {createFilterQueryParam, extractErrors} from '../../../../helpers/requests';
-import {Country} from '../../../../models/misc/Country';
-import {Tier} from '../../../../models/misc/Tier';
-import {getAllCountries} from '../../../../requests/misc/Country';
-import {filterData} from '../../../../helpers/dataManipulation';
-import {getAllTiers} from '../../../../requests/misc/Tier';
-import FormErrors from '../../../../components/forms/FormErrors';
-import {Region} from '../../../../models/misc/Region';
-import {User} from '../../../../models/iam/User';
-import {getAllRegions} from '../../../../requests/misc/Region';
-import {getAllUsers} from '../../../../requests/iam/User';
+} from '../../../../../helpers/form';
+import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
+import FilterFormFooter from '../../../../../components/forms/FilterFormFooter';
+import {createFilterQueryParam, extractErrors} from '../../../../../helpers/requests';
+import {Country} from '../../../../../models/misc/Country';
+import {Tier} from '../../../../../models/misc/Tier';
+import {getAllCountries} from '../../../../../requests/misc/Country';
+import {filterData} from '../../../../../helpers/dataManipulation';
+import {getAllTiers} from '../../../../../requests/misc/Tier';
+import FormErrors from '../../../../../components/forms/FormErrors';
+import {Region} from '../../../../../models/misc/Region';
+import {User} from '../../../../../models/iam/User';
+import {getAllRegions} from '../../../../../requests/misc/Region';
+import {getAllUsers} from '../../../../../requests/iam/User';
 
 interface Props {
     showFilter: boolean,
-    setExportQuery: React.Dispatch<React.SetStateAction<string>>
+    setExportQuery: React.Dispatch<React.SetStateAction<string>>,
+    filters: any,
+    setFilters: React.Dispatch<React.SetStateAction<any>>
 }
 
-const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
+const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, setFilters}) => {
     const {updateState} = useQueryRequest();
 
     const [countries, setCountries] = useState<Country[]>([]);
@@ -44,7 +46,6 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
     const [accountManagers, setAccountManagers] = useState<User[]>([]);
 
     const [filterErrors, setFilterErrors] = useState<string[]>([]);
-    const [filters, setFilters] = useState<FilterFields>(defaultFilterFields);
     const [reset, setReset] = useState<boolean>(false);
 
     useEffect(() => {
@@ -279,4 +280,4 @@ const PublisherIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => 
     );
 }
 
-export default PublisherIndexFilter;
+export default PublisherFilter;
