@@ -16,6 +16,7 @@ interface Props {
     customOnChange?: (e: any) => void;
     placeholder?: string;
     isDisabled?: boolean;
+    label?: string;
 }
 
 const SingleSelect: React.FC<Props> = ({
@@ -30,7 +31,8 @@ const SingleSelect: React.FC<Props> = ({
                                            doClear = false,
                                            customOnChange,
                                            placeholder,
-                                           isDisabled = false
+                                           isDisabled = false,
+                                           label = 'name'
                                        }) => {
 
     const selectRef = useRef<any>(null);
@@ -54,7 +56,7 @@ const SingleSelect: React.FC<Props> = ({
             {
                 !isResourceLoaded && <Select name={name}
                                              options={options}
-                                             getOptionLabel={(instance) => instance.name}
+                                             getOptionLabel={(instance) => instance[label]}
                                              getOptionValue={(instance) => instance.id.toString()}
                                              placeholder={placeholder ? placeholder : `Select ${namePlaceHolder}`}
                                              isClearable={isClearable}
@@ -67,7 +69,7 @@ const SingleSelect: React.FC<Props> = ({
             {
                 isResourceLoaded && <Select name={name} defaultValue={defaultValue}
                                             options={options}
-                                            getOptionLabel={(instance) => instance.name}
+                                            getOptionLabel={(instance) => instance[label]}
                                             getOptionValue={(instance) => instance.id.toString()}
                                             placeholder={placeholder ? placeholder : `Select ${namePlaceHolder}`}
                                             isClearable={isClearable}

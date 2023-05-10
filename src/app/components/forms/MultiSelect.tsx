@@ -10,9 +10,10 @@ interface Props {
     setForm: React.Dispatch<React.SetStateAction<any>>;
     name: string;
     doClear?: boolean;
+    setSelected?: React.Dispatch<React.SetStateAction<any>>;
 }
 
-const MultiSelect: React.FC<Props> = ({isResourceLoaded, options, defaultValue, form, setForm, name, doClear = false}) => {
+const MultiSelect: React.FC<Props> = ({isResourceLoaded, options, defaultValue, form, setForm, name, doClear = false, setSelected}) => {
     const selectRef = useRef<any>(null);
 
     useEffect(() => {
@@ -25,6 +26,10 @@ const MultiSelect: React.FC<Props> = ({isResourceLoaded, options, defaultValue, 
 
     const multiSelectChangeHandler = (e: any) => {
         genericMultiSelectOnChangeHandler(e, form, setForm, name);
+
+        if(setSelected !== undefined) {
+            setSelected(e);
+        }
     };
 
     const namePlaceHolder = name.replace(/_ids/g, "").replace(/_/g, " ");

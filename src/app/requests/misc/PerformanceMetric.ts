@@ -7,8 +7,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/performance-metrics`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllPerformanceMetrics = async (): Promise<PerformanceMetricList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<PerformanceMetricList>) => response.data).catch((error) => {
+export const getAllPerformanceMetrics = async (sort = 'name'): Promise<PerformanceMetricList | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + `/all?sort[]=${sort}`).then((response: AxiosResponse<PerformanceMetricList>) => response.data).catch((error) => {
         return error;
     });
 }

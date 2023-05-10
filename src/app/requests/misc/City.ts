@@ -6,8 +6,9 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/cities`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllCities = async (): Promise<CityList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<CityList>) => response.data).catch((error) => {
+export const getAllCities = async (query?: string): Promise<CityList | AxiosError | undefined> => {
+
+    return axios.get(ENDPOINT + '/all?sort[]=name' + (query ? '&' + query : '')).then((response: AxiosResponse<CityList>) => response.data).catch((error) => {
         return error;
     });
 }

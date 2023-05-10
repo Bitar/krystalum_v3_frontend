@@ -6,6 +6,12 @@ export type PerformanceMetric = {
     title: string | null
 };
 
+
+export type PerformanceMetricCondensedTitle = {
+    id: number,
+    title: string | null
+}
+
 export type PerformanceMetricPaginate = Response<PerformanceMetric[]>;
 
 export type PerformanceMetricList = {

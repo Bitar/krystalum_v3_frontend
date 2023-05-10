@@ -1,6 +1,11 @@
 import {Response} from '../../../_metronic/helpers';
 import {PerformanceMetric} from "./PerformanceMetric";
 
+export type BuyingModelCondensed = {
+    id: number,
+    name: string
+}
+
 export type BuyingModel = {
     id: number,
     name: string,

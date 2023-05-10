@@ -24,8 +24,8 @@ import {
 import {getCampaignOrders, storeCampaignOrder} from '../../../../../requests/demand/CampaignOrder';
 import {CampaignOrderColumns} from '../../core/edit/orders/TableColumns';
 import {BookingTypeEnum} from '../../../../../enums/BookingTypeEnum';
-import {Button} from 'react-bootstrap';
-import clsx from 'clsx';
+import KrysModal from '../../../../../components/modals/KrysModal';
+import CreateFormatForm from '../../core/edit/orders/formats/CreateFormatForm';
 
 const EditOrders: React.FC = () => {
     const {campaign} = useCampaign();
@@ -47,7 +47,6 @@ const EditOrders: React.FC = () => {
     };
 
     const handleCreate = (e: any) => {
-        console.log("hello");
         if (campaign) {
             // send API request to create the advertiser
             storeCampaignOrder(campaign, form).then(response => {
@@ -76,21 +75,21 @@ const EditOrders: React.FC = () => {
     };
 
     return (
-        <KTCard className='card-bordered border-1'>
-            <KTCardHeader text='Add new order'/>
+        <>
+            <KTCard className='card-bordered border-1'>
+                <KTCardHeader text='Add new order'/>
 
-            <KTCardBody>
-                {
-                    campaign?.bookingType?.id === BookingTypeEnum.BO ?
-                        <>
-                            <FormErrors errorMessages={formErrors}/>
+                <KTCardBody>
+                    <FormErrors errorMessages={formErrors}/>
 
-                            <Formik initialValues={form} validationSchema={CampaignOrderSchema}
-                                    onSubmit={handleCreate}
-                                    enableReinitialize>
-                                {
-                                    (formik) => (
-                                        <Form onChange={onChangeHandler}>
+                    <Formik initialValues={form} validationSchema={CampaignOrderSchema}
+                            onSubmit={handleCreate}
+                            enableReinitialize>
+                        {
+                            (formik) => (
+                                <Form onChange={onChangeHandler}>
+                                    {
+                                        campaign?.bookingType?.id === BookingTypeEnum.BO ?
                                             <div className="mb-7">
                                                 <KrysFormLabel text="Booking order number" isRequired={true}/>
 
@@ -102,49 +101,56 @@ const EditOrders: React.FC = () => {
                                                     <ErrorMessage name="booking_order_number" className="mt-2"/>
                                                 </div>
                                             </div>
+                                            :
+                                            <div className="alert alert-dismissible bg-light-warning p-5 mb-10">
+                                                <div>
+                                                    <div className="d-flex flex-column pe-0 pe-sm-10">
+                                                        <h4 className="fw-semibold">Reminder</h4>
+                                                        <span className='text-gray-700'>Since orders under a TD campaign don't have a booking order
+                                            number, you can directly proceed to adding formats under the order to create it.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    }
 
-                                            <KrysFormFooter cancelUrl={'/demand/campaigns'}/>
-                                        </Form>
-                                    )
-                                }
-                            </Formik>
-                        </>
-                        :
-                        <>
-                            <div className="alert alert-dismissible bg-light-warning p-5 mb-10">
-                                <div>
-                                    <div className="d-flex flex-column pe-0 pe-sm-10">
-                                        <h4 className="fw-semibold">Reminder</h4>
-                                        <span className='text-gray-700'>Since orders under a TD campaign don't have a booking order
-                                number, you can add a new order under this campaign by simply clicking on the button
-                                below.</span>
+                                    <div className="mb-7">
+                                        <h5 className="align-items-start flex-column">
+                                            <p className="fw-bold text-dark mb-1">Formats</p>
+                                            <p className="text-muted mt-1 fw-semibold fs-7">Add all the formats
+                                                associated
+                                                with this new booking order</p>
+                                        </h5>
+
+                                        <div className='mt-5'>
+                                            {<KrysModal title={'Add new format'} buttonVariant='success' buttonSize='sm'
+                                                        buttonIconClasses='fa-duotone fa-plus fs-6'
+                                                        buttonText='Add new format'><CreateFormatForm onSubmit={() => console.log("hello")} /></KrysModal>}
+                                        </div>
                                     </div>
-                                </div>
-
-                                <div className='mt-5'>
-                                    <Button variant={'success'} onClick={handleCreate}><i
-                                        className={clsx('fa-duotone fs-4', 'fa-plus')}></i> Add new
-                                        order</Button>
-                                </div>
-                            </div>
-                        </>
-                }
 
 
-                <div className="separator separator-dashed my-10"></div>
+                                    <KrysFormFooter cancelUrl={'/demand/campaigns'}/>
+                                </Form>
+                            )
+                        }
+                    </Formik>
 
-                {
-                    campaign ? <KrysInnerTable
-                        doRefetch={refreshTable}
-                        slug="campaign-orders"
-                        queryId={QUERIES.CAMPAIGN_ORDERS_LIST}
-                        requestFunction={getCampaignOrders}
-                        requestId={campaign.id} columnsArray={CampaignOrderColumns}
-                    ></KrysInnerTable> : <></>
-                }
+                    <div className="separator separator-dashed my-10"></div>
 
-            </KTCardBody>
-        </KTCard>
+                    {
+                        campaign ? <KrysInnerTable
+                            doRefetch={refreshTable}
+                            slug="campaign-orders"
+                            queryId={QUERIES.CAMPAIGN_ORDERS_LIST}
+                            requestFunction={getCampaignOrders}
+                            requestId={campaign.id} columnsArray={CampaignOrderColumns}
+                        ></KrysInnerTable> : <></>
+                    }
+
+                </KTCardBody>
+            </KTCard>
+        </>
+
     );
 };
 

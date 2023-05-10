@@ -97,6 +97,6 @@
 
 // this class is the dropdown menu of the react select, I need to give it high z-index inorder to overlap on any
 // input under it
-.css-1nmdiq5-menu {
+.rs-picker-menu, .css-1nmdiq5-menu {
   z-index: 99999999 !important;
 }
