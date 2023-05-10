@@ -33,7 +33,6 @@ const ChangePassword: React.FC<Props> = ({user}) => {
     const handleChangePassword = (e: any) => {
         // send API request to create the user
         changePassword(user, form).then(response => {
-            console.log(response);
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
                     setFormErrors(extractErrors(response));

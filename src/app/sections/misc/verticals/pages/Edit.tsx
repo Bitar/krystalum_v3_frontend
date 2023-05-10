@@ -96,8 +96,6 @@ const VerticalEdit: React.FC = () => {
 
     const handleEdit = (e: any) => {
         if (vertical) {
-            console.log(form);
-
             // we need to update the vertical's data by doing API call with form
             updateVertical(vertical.id, form).then(response => {
                 if (axios.isAxiosError(response)) {

@@ -19,13 +19,11 @@ type Props = {
     requestQuery?: string,
     columnsArray: readonly Column<any>[],
     slug: string,
-    doRefetch: boolean,
-    addedRecord?: any
+    doRefetch: boolean
 }
 
 type TableProps = {
-    columnsArray: readonly Column<any>[],
-    addedRecord?: any
+    columnsArray: readonly Column<any>[]
 }
 
 const KrysInnerTable: React.FC<Props> = ({
@@ -35,10 +33,9 @@ const KrysInnerTable: React.FC<Props> = ({
                                              requestQuery,
                                              columnsArray,
                                              slug,
-                                             doRefetch,
-                                             addedRecord
+                                             doRefetch
                                          }) => {
-    console.log(doRefetch)
+
     return (
         <QueryRequestProvider>
             <QueryResponseProvider id={queryId}
@@ -47,25 +44,20 @@ const KrysInnerTable: React.FC<Props> = ({
 
                 <ListViewProvider>
                     <KrysTableSearchFilter slug={slug}/>
-                    <InnerTable columnsArray={columnsArray} addedRecord={addedRecord}/>
+                    <InnerTable columnsArray={columnsArray}/>
                 </ListViewProvider>
             </QueryResponseProvider>
         </QueryRequestProvider>
     )
 }
 
-const InnerTable = ({columnsArray, addedRecord}: TableProps) => {
+const InnerTable = ({columnsArray}: TableProps) => {
     const modelData = useQueryResponseData();
     const isLoading = useQueryResponseLoading();
     const data = useMemo(() => modelData, [modelData]);
     const columns = useMemo(() => columnsArray,
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []);
-
-    if (addedRecord) {
-        data.find((datum) => datum.is_active = 0)
-        data.unshift(addedRecord)
-    }
 
     return (
         <KrysBorderlessTable data={data} columns={columns} model={modelData.length > 0 ? modelData[0] : null}

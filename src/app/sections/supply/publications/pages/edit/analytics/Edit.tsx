@@ -45,9 +45,6 @@ const PublicationAnalyticEdit: React.FC = () => {
     // get the publication and publication analytics id
     const {cid} = useParams();
 
-    console.log(cid)
-    console.log(publication)
-
     const krysApp = useKrysApp();
     const navigate = useNavigate();
 
@@ -74,8 +71,6 @@ const PublicationAnalyticEdit: React.FC = () => {
                 } else {
                     // we were able to fetch current publication analytics to edit
                     setPublicationAnalytic(response);
-
-                    console.log(response)
 
                     // we also set the form to be the publication's analytics details
                     // const {analyticType, ...currentPublicationAnalytic} = response;
