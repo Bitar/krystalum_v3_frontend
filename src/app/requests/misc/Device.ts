@@ -7,7 +7,7 @@ const ENDPOINT = `${API_URL}/misc/devices`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
 export const getAllDevices = async (): Promise<DeviceList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<DeviceList>) => response.data).catch((error) => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<DeviceList>) => response.data).catch((error) => {
         return error;
     });
 }

@@ -7,7 +7,7 @@ const ENDPOINT = `${API_URL}/misc/languages`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
 export const getAllLanguages = async (): Promise<LanguageList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<LanguageList>) => response.data).catch((error) => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<LanguageList>) => response.data).catch((error) => {
         return error;
     });
 }

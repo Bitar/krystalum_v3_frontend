@@ -25,7 +25,7 @@ import {getCampaignOrders, storeCampaignOrder} from '../../../../../requests/dem
 import {CampaignOrderColumns} from '../../core/edit/orders/TableColumns';
 import {BookingTypeEnum} from '../../../../../enums/BookingTypeEnum';
 import KrysModal from '../../../../../components/modals/KrysModal';
-import CreateFormatForm from '../../core/edit/orders/formats/CreateFormatForm';
+import CreateFormatForm from '../../partials/orders/formats/CreateFormatForm';
 
 const EditOrders: React.FC = () => {
     const {campaign} = useCampaign();

@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import {FormatSplitField} from './formatSplitField';
 
 export interface CampaignOrderFormatFormFields {
     format_id: number | string,
@@ -13,14 +14,15 @@ export interface CampaignOrderFormatFormFields {
     performance_metric_id?: number | string,
     target?: number | string,
     booked_amount: number | string,
-    booked_currency_id: number | string
+    booked_currency_id: number | string,
+    splits?: FormatSplitField[]
 }
 
 export const defaultCampaignOrderFormatFormFields = {
     format_id: '',
     buying_model_id: '',
     cost: '',
-    cost_currency_id: '',
+    cost_currency_id: 236,
     start_date: '',
     end_date: '',
     regions_ids: [],
@@ -29,7 +31,8 @@ export const defaultCampaignOrderFormatFormFields = {
     performance_metric_id: '',
     target: '',
     booked_amount: '',
-    booked_currency_id: ''
+    booked_currency_id: 236,
+    splits: []
 };
 
 export const CampaignOrderFormatSchema = Yup.object().shape({
