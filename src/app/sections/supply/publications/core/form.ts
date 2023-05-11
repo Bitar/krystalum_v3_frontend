@@ -145,7 +145,7 @@ export const publicationSchema = (isEdit: boolean) => {
 }
 
 export function fillEditForm(publication: Publication) {
-    const {info, ...currentPublication} = publication
+    const {info, publisher, languages, ...currentPublication} = publication
 
     const types = [];
 
@@ -175,9 +175,14 @@ export function fillEditForm(publication: Publication) {
 
     const form: FormFields = {
         ...currentPublication,
-        publisher_id: publication.publisher.id,
+        publisher_id: publisher.id,
         revenue_value: publication.revenue_value || '',
-        languages_ids: publication.languages?.map((language) => language.id),
+        is_archived: Number(publication.is_archived),
+        is_deal_pmp: Number(publication.is_deal_pmp),
+        has_hi10: Number(publication.has_hi10),
+        hi10_to_display: Number(publication.hi10_to_display),
+        hi10_to_video: Number(publication.hi10_to_video),
+        languages_ids: languages?.map((language) => language.id),
         types: types,
         description: info.description || '',
         url: info.url || '',

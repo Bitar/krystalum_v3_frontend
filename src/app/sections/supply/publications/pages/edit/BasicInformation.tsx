@@ -4,6 +4,8 @@ import {Field, Form, Formik} from 'formik';
 import {FormControl, FormGroup, InputGroup} from 'react-bootstrap';
 import axios from 'axios';
 
+import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers';
+
 import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
 import {useKrysApp} from '../../../../../modules/general/KrysApp';
 import {extractErrors} from '../../../../../helpers/requests';
@@ -15,7 +17,6 @@ import {
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
 import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
 import FormErrors from '../../../../../components/forms/FormErrors';
-import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers';
 import {defaultFormFields, fillEditForm, FormFields, publicationSchema} from '../../core/form';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysRadioButton from '../../../../../components/forms/KrysRadioButton';
@@ -82,7 +83,6 @@ const PublicationBasicInformationEdit: React.FC = () => {
     }, [publication]);
 
     const onChangeHandler = (e: any) => {
-        console.log('Papa Mama')
         genericOnChangeHandler(e, form, setForm);
     };
 
@@ -91,16 +91,39 @@ const PublicationBasicInformationEdit: React.FC = () => {
     };
 
     const checkboxChangeHandler = (e: any, key: string, value: any, isMulti: boolean) => {
-        if (isMulti) {
-            e.stopPropagation();
+        // this function is designed to handle changes to a checkbox element that allows single or multiple selections
+        // and update the corresponding property in the form object accordingly
 
+        // stop the propagation of the event using the stopPropagation() method
+        // this is done to prevent the event from bubbling up to the parent elements
+        // and triggering their event listeners (i.e. stop triggering onChangeHandler)
+        e.stopPropagation();
+
+        // checkbox accept multiple values for the same key (name)
+        // hence the value will be array
+        if (isMulti) {
+            // multiple values
+
+            // get the current value of the key property in the form object
             const formKeyArray = (form as any)[key];
 
+            // check if the value is already present in the formKeyArray
             if (formKeyArray.includes(value)) {
+                // the value is present in the formKeyArray
+                // remove the value from the formKeyArray and update the form object by calling the setForm function
+                // with a new object of the key property (i.e. updated array with no value)
                 setForm({...form, [key]: formKeyArray.filter((item: any) => item !== value)});
             } else {
+                // the value is not present in the formKeyArray
+                // add the value to the formKeyArray and update the form object by calling the setForm function
+                // with a new object of the key property (i.e. updated array with new value)
                 setForm({...form, [key]: [...(form as any)[key], value]});
             }
+        } else {
+            // single value
+
+            // update the form object by calling the setForm function with a new value of the key property
+            setForm({...form, [key]: value})
         }
     };
 
@@ -123,10 +146,6 @@ const PublicationBasicInformationEdit: React.FC = () => {
 
                         // set the updated publication so that the overview will be updated
                         setPublication(response)
-
-                        console.log(form)
-                        console.log('is_deal_pmp')
-                        console.log(Boolean(form.is_deal_pmp))
 
                         setFormErrors([]);
                     }
@@ -182,7 +201,7 @@ const PublicationBasicInformationEdit: React.FC = () => {
                                     <KrysFormLabel text="Unique identifier" isRequired={true}/>
 
                                     <Field className="form-control fs-base" type="text"
-                                           placeholder="Enter publication unique identifier" name="unique_identifier" disabled={true}/>
+                                           placeholder="Enter publication unique identifier" name="unique_identifier"/>
 
                                     <div className="mt-1 text-danger">
                                         {errors?.unique_identifier ? errors?.unique_identifier : null}
@@ -543,31 +562,13 @@ const PublicationBasicInformationEdit: React.FC = () => {
                                 </div>
 
                                 <div className="mb-7">
-                                    {/*
-                                        if is_deal_pmp true => selected
-                                        if is_deal_pmp false => not selected
-
-                                        if is_archived true => selected
-                                        if is_archived false => not selected
-
-                                        if has_hi10 true => selected, hi10_to_display = false, hi10_to_video = false
-                                        if has_hi10 false => selected, (hi10_to_display = true AND hi10_to_video = false)
-                                                            OR (hi10_to_display = false AND hi10_to_video = true)
-                                    */}
                                     <KrysCheckbox name="is_deal_pmp" label={'Deal ID / PMP'}
-                                                  onChangeHandler={(e) => {
-                                                      console.log('is_deal_pmp')
-                                                      e.stopPropagation();
-                                                      setForm({...form, is_deal_pmp: Number(!form.is_deal_pmp)})
-                                                  }}
-                                                  defaultValue={form.is_deal_pmp === 1}/>
+                                                  onChangeHandler={(e) => checkboxChangeHandler(e, 'is_deal_pmp', Number(!form.is_deal_pmp), false)}
+                                                  defaultValue={Boolean(form.is_deal_pmp)}/>
 
                                     <KrysCheckbox name="is_archived" label={'Temporarily Not Sending Inventory'}
-                                                  onChangeHandler={(e) => {
-                                                      e.stopPropagation();
-                                                      setForm({...form, is_archived: Number(!form.is_archived)})
-                                                  }}
-                                                  defaultValue={form.is_archived === 1}/>
+                                                  onChangeHandler={(e) => checkboxChangeHandler(e, 'is_archived', Number(!form.is_archived), false)}
+                                                  defaultValue={Boolean(form.is_archived)}/>
 
                                     <KrysCheckbox name="has_hi10" label={'Accept Hi10 Monetization'}
                                                   onChangeHandler={(e) => {
@@ -579,7 +580,7 @@ const PublicationBasicInformationEdit: React.FC = () => {
                                                           hi10_to_video: 0,
                                                       })
                                                   }}
-                                                  defaultValue={form.has_hi10 === 1}/>
+                                                  defaultValue={Boolean(form.has_hi10)}/>
 
                                     <div className="mt-1 text-danger">
                                         {errors?.has_hi10 ? errors?.has_hi10 : null}
