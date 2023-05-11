@@ -93,16 +93,39 @@ const PublicationCreate: React.FC = () => {
     };
 
     const checkboxChangeHandler = (e: any, key: string, value: any, isMulti: boolean) => {
-        if (isMulti) {
-            e.stopPropagation();
+        // this function is designed to handle changes to a checkbox element that allows single or multiple selections
+        // and update the corresponding property in the form object accordingly
 
+        // stop the propagation of the event using the stopPropagation() method
+        // this is done to prevent the event from bubbling up to the parent elements
+        // and triggering their event listeners (i.e. stop triggering onChangeHandler)
+        e.stopPropagation();
+
+        // checkbox accept multiple values for the same key (name)
+        // hence the value will be array
+        if (isMulti) {
+            // multiple values
+
+            // get the current value of the key property in the form object
             const formKeyArray = (form as any)[key];
 
+            // check if the value is already present in the formKeyArray
             if (formKeyArray.includes(value)) {
+                // the value is present in the formKeyArray
+                // remove the value from the formKeyArray and update the form object by calling the setForm function
+                // with a new object of the key property (i.e. updated array with no value)
                 setForm({...form, [key]: formKeyArray.filter((item: any) => item !== value)});
             } else {
+                // the value is not present in the formKeyArray
+                // add the value to the formKeyArray and update the form object by calling the setForm function
+                // with a new object of the key property (i.e. updated array with new value)
                 setForm({...form, [key]: [...(form as any)[key], value]});
             }
+        } else {
+            // single value
+
+            // update the form object by calling the setForm function with a new value of the key property
+            setForm({...form, [key]: value})
         }
     };
 
@@ -544,17 +567,11 @@ const PublicationCreate: React.FC = () => {
 
                                 <div className="mb-7">
                                     <KrysCheckbox name="is_deal_pmp" label={'Deal ID / PMP'}
-                                                  onChangeHandler={(e) => {
-                                                      e.stopPropagation();
-                                                      setForm({...form, is_deal_pmp: Number(!form.is_deal_pmp)})
-                                                  }}
+                                                  onChangeHandler={(e) => checkboxChangeHandler(e, 'is_deal_pmp', Number(!form.is_deal_pmp), false)}
                                                   defaultValue={Boolean(form.is_deal_pmp)}/>
 
                                     <KrysCheckbox name="is_archived" label={'Temporarily Not Sending Inventory'}
-                                                  onChangeHandler={(e) => {
-                                                      e.stopPropagation();
-                                                      setForm({...form, is_archived: Number(!form.is_archived)})
-                                                  }}
+                                                  onChangeHandler={(e) => checkboxChangeHandler(e, 'is_archived', Number(!form.is_archived), false)}
                                                   defaultValue={Boolean(form.is_archived)}/>
 
                                     <KrysCheckbox name="has_hi10" label={'Accept Hi10 Monetization'}
@@ -563,7 +580,7 @@ const PublicationCreate: React.FC = () => {
                                                       setForm({
                                                           ...form,
                                                           has_hi10: Number(!form.has_hi10),
-                                                          hi10_to_display: 1,
+                                                          hi10_to_display: Number(form.has_hi10),
                                                           hi10_to_video: 0,
                                                       })
                                                   }}
