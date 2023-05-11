@@ -20,7 +20,7 @@ import {storePublication} from '../../../../requests/supply/publication/Publicat
 import {extractErrors} from '../../../../helpers/requests';
 import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 import FormErrors from '../../../../components/forms/FormErrors';
-import {defaultFormFields, FormFields, PublicationSchema} from '../core/form';
+import {defaultFormFields, FormFields, publicationSchema} from '../core/form';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import {Publisher} from '../../../../models/supply/publisher/Publisher';
@@ -135,7 +135,7 @@ const PublicationCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={PublicationSchema} onSubmit={handleCreate}
+                <Formik initialValues={form} validationSchema={publicationSchema(false)} onSubmit={handleCreate}
                         enableReinitialize>
                     {
                         ({errors}) => (

@@ -55,86 +55,94 @@ export const defaultFormFields = {
     android_application_type: ''
 };
 
-export const PublicationSchema = Yup.object().shape({
-    name: Yup.string()
-        .required(),
-    publisher_id: Yup.number()
-        .min(1, 'publisher is a required field')
-        .required(),
-    unique_identifier: Yup.string()
-        .required()
-        .matches(/^[A-Z]{3,4}$/, 'enter a 3 or 4 capital letters code'),
-    languages_ids: Yup.array()
-        .of(Yup.number())
-        .required()
-        .min(1, 'you must select at least one language'),
-    live_date: Yup.date()
-        .typeError('enter a valid date')
-        .required('date is a required field'),
-    has_hi10: Yup.boolean().required(),
-    hi10_to_display: Yup.mixed().when('has_hi10', (hasHi10, hi10ToVideo) =>
-        hasHi10 === 0 && hi10ToVideo === 0
-            ? Yup.boolean().required()
-            : Yup.boolean().notRequired()),
-    hi10_to_video: Yup.mixed().when('has_hi10', (hasHi10, hi10ToDisplay) =>
-        hasHi10 === 1 && hi10ToDisplay === 1
-            ? Yup.boolean().required()
-            : Yup.boolean().notRequired()),
-    types: Yup.array()
-        .min(1, 'select at least one publication type')
-        .required(),
-    url: Yup.string().when('types', {
-        is: (types: string[]) => types.includes(PUBLICATION_TYPE.WEBSITE),
-        then: Yup.string().url().required('publication url is required when the publication type is website'),
-        otherwise: Yup.string().notRequired(),
-    }),
-    android_store_url: Yup.string().when('types', {
-        is: (types: string[]) => types.includes(PUBLICATION_TYPE.ANDROID_APPLICATION),
-        then: Yup.string().url().required('android store url is required when the publication type is android application'),
-        otherwise: Yup.string().notRequired(),
-    }),
-    android_bundle_id: Yup.string().when('types', {
-        is: (types: string[]) => types.includes(PUBLICATION_TYPE.ANDROID_APPLICATION),
-        then: Yup.string().required('android bundle id is required when the publication type is android application'),
-        otherwise: Yup.string().notRequired(),
-    }),
-    android_version: Yup.string().when('types', {
-        is: (types: string[]) => types.includes(PUBLICATION_TYPE.ANDROID_APPLICATION),
-        then: Yup.string().required('android version is required when the publication type is android application'),
-        otherwise: Yup.string().notRequired(),
-    }),
-    android_application_type: Yup.string().when('types', {
-        is: (types: string[]) => types.includes(PUBLICATION_TYPE.ANDROID_APPLICATION),
-        then: Yup.string().required('android application type is required when the publication type is android application'),
-        otherwise: Yup.string().notRequired(),
-    }),
-    ios_store_url: Yup.string().when('types', {
-        is: (types: string[]) => types.includes(PUBLICATION_TYPE.IOS_APPLICATION),
-        then: Yup.string().url().required('ios store url is required when the publication type is ios application'),
-        otherwise: Yup.string().notRequired(),
-    }),
-    ios_bundle_id: Yup.string().when('types', {
-        is: (types: string[]) => types.includes(PUBLICATION_TYPE.IOS_APPLICATION),
-        then: Yup.string().required('ios bundle id is required when the publication type is ios application'),
-        otherwise: Yup.string().notRequired(),
-    }),
-    ios_version: Yup.string().when('types', {
-        is: (types: string[]) => types.includes(PUBLICATION_TYPE.IOS_APPLICATION),
-        then: Yup.string().required('ios version is required when the publication type is ios application'),
-        otherwise: Yup.string().notRequired(),
-    }),
-    ios_application_type: Yup.string().when('types', {
-        is: (types: string[]) => types.includes(PUBLICATION_TYPE.IOS_APPLICATION),
-        then: Yup.string().required('ios application type is required when the publication type is ios application'),
-        otherwise: Yup.string().notRequired(),
-    }),
-    revenue_type: Yup.string().required(),
-    revenue_value: Yup.mixed().when('revenue_type', (revenueType) =>
-        revenueType === REVENUE_TYPE.REVENUE_SHARE
-            ? Yup.number().min(1, 'revenue share must be greater than 0').max(100, 'revenue share must be less than or equal to 100').required()
-            : (revenueType === REVENUE_TYPE.COMMITMENT ? Yup.string().required() : Yup.string().notRequired())
-    )
-});
+export const publicationSchema = (isEdit: boolean) => {
+    let schema = {
+        name: Yup.string()
+            .required(),
+        publisher_id: Yup.number()
+            .min(1, 'publisher is a required field')
+            .required(),
+        // if we are editing the publication schema, then unique identifier is not required and disabled
+        // so no need to validate it
+        ...(!isEdit ? {
+            unique_identifier: Yup.string()
+                .required()
+                .matches(/^[A-Z]{3,4}$/, 'enter a 3 or 4 capital letters code')
+        } : {}),
+        languages_ids: Yup.array()
+            .of(Yup.number())
+            .required()
+            .min(1, 'you must select at least one language'),
+        live_date: Yup.date()
+            .typeError('enter a valid date')
+            .required('date is a required field'),
+        has_hi10: Yup.boolean().required(),
+        hi10_to_display: Yup.mixed().when('has_hi10', (hasHi10, hi10ToVideo) =>
+            hasHi10 === 0 && hi10ToVideo === 0
+                ? Yup.boolean().required()
+                : Yup.boolean().notRequired()),
+        hi10_to_video: Yup.mixed().when('has_hi10', (hasHi10, hi10ToDisplay) =>
+            hasHi10 === 1 && hi10ToDisplay === 1
+                ? Yup.boolean().required()
+                : Yup.boolean().notRequired()),
+        types: Yup.array()
+            .min(1, 'select at least one publication type')
+            .required(),
+        url: Yup.string().when('types', {
+            is: (types: string[]) => types.includes(PUBLICATION_TYPE.WEBSITE),
+            then: Yup.string().url().required('publication url is required when the publication type is website'),
+            otherwise: Yup.string().notRequired(),
+        }),
+        android_store_url: Yup.string().when('types', {
+            is: (types: string[]) => types.includes(PUBLICATION_TYPE.ANDROID_APPLICATION),
+            then: Yup.string().url().required('android store url is required when the publication type is android application'),
+            otherwise: Yup.string().notRequired(),
+        }),
+        android_bundle_id: Yup.string().when('types', {
+            is: (types: string[]) => types.includes(PUBLICATION_TYPE.ANDROID_APPLICATION),
+            then: Yup.string().required('android bundle id is required when the publication type is android application'),
+            otherwise: Yup.string().notRequired(),
+        }),
+        android_version: Yup.string().when('types', {
+            is: (types: string[]) => types.includes(PUBLICATION_TYPE.ANDROID_APPLICATION),
+            then: Yup.string().required('android version is required when the publication type is android application'),
+            otherwise: Yup.string().notRequired(),
+        }),
+        android_application_type: Yup.string().when('types', {
+            is: (types: string[]) => types.includes(PUBLICATION_TYPE.ANDROID_APPLICATION),
+            then: Yup.string().required('android application type is required when the publication type is android application'),
+            otherwise: Yup.string().notRequired(),
+        }),
+        ios_store_url: Yup.string().when('types', {
+            is: (types: string[]) => types.includes(PUBLICATION_TYPE.IOS_APPLICATION),
+            then: Yup.string().url().required('ios store url is required when the publication type is ios application'),
+            otherwise: Yup.string().notRequired(),
+        }),
+        ios_bundle_id: Yup.string().when('types', {
+            is: (types: string[]) => types.includes(PUBLICATION_TYPE.IOS_APPLICATION),
+            then: Yup.string().required('ios bundle id is required when the publication type is ios application'),
+            otherwise: Yup.string().notRequired(),
+        }),
+        ios_version: Yup.string().when('types', {
+            is: (types: string[]) => types.includes(PUBLICATION_TYPE.IOS_APPLICATION),
+            then: Yup.string().required('ios version is required when the publication type is ios application'),
+            otherwise: Yup.string().notRequired(),
+        }),
+        ios_application_type: Yup.string().when('types', {
+            is: (types: string[]) => types.includes(PUBLICATION_TYPE.IOS_APPLICATION),
+            then: Yup.string().required('ios application type is required when the publication type is ios application'),
+            otherwise: Yup.string().notRequired(),
+        }),
+        revenue_type: Yup.string().required(),
+        revenue_value: Yup.mixed().when('revenue_type', (revenueType) =>
+            revenueType === REVENUE_TYPE.REVENUE_SHARE
+                ? Yup.number().min(1, 'revenue share must be greater than 0').max(100, 'revenue share must be less than or equal to 100').required()
+                : (revenueType === REVENUE_TYPE.COMMITMENT ? Yup.string().required() : Yup.string().notRequired())
+        )
+    };
+
+    return Yup.object().shape(schema);
+}
 
 export function fillEditForm(publication: Publication) {
     const {info, ...currentPublication} = publication

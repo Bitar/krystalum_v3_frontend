@@ -21,8 +21,7 @@ const QueryResponseContext = createResponseContext<any>(initialQueryResponse)
 const QueryResponseProvider: FC<React.PropsWithChildren<Props>> = ({
   id,
   requestFunction,
-  requestId,
-                                                                     requestQuery,
+  requestId, requestQuery,
   children,
 }) => {
   const {state} = useQueryRequest()

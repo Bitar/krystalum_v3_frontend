@@ -160,6 +160,7 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
     const countriesSelectRef = useRef<any>(null);
     const regionsSelectRef = useRef<any>(null);
     const accountManagersSelectRef = useRef<any>(null);
+    const integrationDateRangeRef = useRef<any>(null);
 
     return (
         <Collapse in={showFilter}>
@@ -245,6 +246,7 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
                                                                  block
                                                                  isoWeek
                                                                  onChange={(date) => dateRangeChangeHandler(date, 'integration_date_range')}
+                                                                 ref={integrationDateRangeRef}
                                                 />
 
                                                 <div className="mt-1 text-danger">
