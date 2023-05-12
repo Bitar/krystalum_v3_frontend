@@ -19,7 +19,7 @@ type Props = {
     columnsArray: readonly Column<any>[],
     slug: string,
     doRefetch: boolean,
-    showSearchFilter: boolean
+    showSearchFilter?: boolean
 }
 
 type TableProps = {
@@ -33,7 +33,7 @@ const KrysInnerTable: React.FC<Props> = ({
                                              columnsArray,
                                              slug,
                                              doRefetch,
-                                             showSearchFilter
+                                             showSearchFilter = true
                                          }) => {
 
     return (
