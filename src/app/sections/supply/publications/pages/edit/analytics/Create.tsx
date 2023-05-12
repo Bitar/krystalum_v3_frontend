@@ -325,7 +325,7 @@ const PublicationAnalyticCreate: React.FC = () => {
                         queryId={QUERIES.PUBLICATION_ANALYTICS_LIST}
                         requestFunction={getPublicationAnalytics}
                         requestId={publication.id}
-                        requestQuery={'type=' + form.type}
+                        requestQuery={'filter[type]=' + form.type}
                         columnsArray={PublicationAnalyticsColumns}
                     ></KrysInnerTable>
                 }

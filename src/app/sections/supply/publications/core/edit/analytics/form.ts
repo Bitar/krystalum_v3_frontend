@@ -4,7 +4,7 @@ import {GEO_TYPE} from '../../../../../../models/supply/Options';
 
 export interface PublicationAnalyticFormFields {
     type: string,
-    geo_type: GEO_TYPE | string,
+    geo_type: string,
     geo_id: number,
     device_id: number,
     value: number

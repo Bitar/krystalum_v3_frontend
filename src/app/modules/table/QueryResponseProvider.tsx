@@ -13,15 +13,14 @@ import {
 type Props = {
   id: string
   requestFunction: any
-  requestId?: number | string,
-  requestQuery?: string,
+  requestId?: number | string
 }
 
 const QueryResponseContext = createResponseContext<any>(initialQueryResponse)
 const QueryResponseProvider: FC<React.PropsWithChildren<Props>> = ({
   id,
   requestFunction,
-  requestId, requestQuery,
+  requestId,
   children,
 }) => {
   const {state} = useQueryRequest()
@@ -35,11 +34,6 @@ const QueryResponseProvider: FC<React.PropsWithChildren<Props>> = ({
     }
   }, [query, updatedQuery])
 
-  useEffect(() => {
-    const updatedQuery = requestQuery + '&' + query;
-    setQuery(updatedQuery)
-  }, [requestQuery])
-
   const {
     isFetching,
     refetch,
@@ -47,16 +41,10 @@ const QueryResponseProvider: FC<React.PropsWithChildren<Props>> = ({
   } = useQuery(
     `${id}-${query}`,
     () => {
-      if (requestQuery) {
-        requestQuery += '&' + query
-      } else {
-        requestQuery = query
-      }
-
       if (requestId) {
-        return requestFunction(requestId, requestQuery)
+        return requestFunction(requestId, query)
       } else {
-        return requestFunction(requestQuery)
+        return requestFunction(query)
       }
     },
     {cacheTime: 0, keepPreviousData: true, refetchOnWindowFocus: false, enabled: true}

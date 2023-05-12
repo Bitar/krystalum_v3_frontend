@@ -2,7 +2,7 @@ import React, {useMemo} from 'react';
 import {Column} from 'react-table';
 
 import KrysBorderlessTable from './KrysBorderlessTable';
-import {QueryRequestProvider} from '../../modules/table/QueryRequestProvider';
+import {QueryRequestProvider, useQueryRequest} from '../../modules/table/QueryRequestProvider';
 import {
     QueryResponseProvider,
     useQueryResponseData,
@@ -39,7 +39,7 @@ const KrysInnerTable: React.FC<Props> = ({
     return (
         <QueryRequestProvider>
             <QueryResponseProvider id={queryId}
-                                   requestFunction={requestFunction} requestId={requestId} requestQuery={requestQuery}>
+                                   requestFunction={requestFunction} requestId={requestId}>
                 <TableRefetch doRefetch={doRefetch}/>
 
                 <ListViewProvider>
@@ -58,6 +58,10 @@ const InnerTable = ({columnsArray}: TableProps) => {
     const columns = useMemo(() => columnsArray,
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []);
+
+    const {state} = useQueryRequest()
+
+    console.log(state)
 
     return (
         <KrysBorderlessTable data={data} columns={columns} model={modelData.length > 0 ? modelData[0] : null}
