@@ -162,6 +162,7 @@ const PublisherAccountManager: React.FC = () => {
                         requestFunction={getPublisherAccountManagers}
                         requestId={publisher.id}
                         columnsArray={PublisherAccountManagersColumns}
+                        showSearchFilter={false}
                     ></KrysInnerTable>
                 }
             </KTCardBody>
