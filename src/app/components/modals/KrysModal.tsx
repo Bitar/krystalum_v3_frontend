@@ -1,11 +1,14 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import React, {useState} from 'react';
+import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
 
 interface Props {
     title: string,
     buttonText: string,
     buttonVariant: string,
+    onSubmit: (e: any) => void,
+    forceHide?: boolean,
+    setForceHide?: Dispatch<SetStateAction<any>>,
     size?: 'sm' | 'lg' | 'xl',
     buttonSize?: 'sm' | 'lg',
     submitButtonText?: string,
@@ -16,6 +19,9 @@ const KrysModal: React.FC<React.PropsWithChildren<Props>> = ({
                                                                  title,
                                                                  buttonText,
                                                                  buttonVariant,
+                                                                 onSubmit,
+                                                                 forceHide = false,
+                                                                 setForceHide,
                                                                  size,
                                                                  buttonSize,
                                                                  submitButtonText,
@@ -25,7 +31,22 @@ const KrysModal: React.FC<React.PropsWithChildren<Props>> = ({
     const [show, setShow] = useState<boolean>(false);
 
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleShow = () => {
+        // when we just opened the modal, we don't want to force close it
+        if(setForceHide) {
+            setForceHide(false);
+        }
+
+        setShow(true)
+    };
+
+    useEffect(() => {
+        if (forceHide) {
+            handleClose();
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [forceHide]);
 
     return (
         <>
@@ -51,7 +72,7 @@ const KrysModal: React.FC<React.PropsWithChildren<Props>> = ({
                     {children}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="krys">{submitButtonText ? submitButtonText : 'Save'}</Button>
+                    <Button variant="krys" onClick={onSubmit}>{submitButtonText ? submitButtonText : 'Save'}</Button>
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>

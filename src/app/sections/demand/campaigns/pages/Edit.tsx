@@ -14,6 +14,9 @@ import EditDetails from './edit/EditDetails';
 import EditOwnership from './edit/EditOwnership';
 import {CampaignContext} from '../core/CampaignContext';
 import EditOrders from './edit/EditOrders';
+import {CampaignOrderFormFields, defaultCampaignOrderFormFields} from '../core/edit/orders/form';
+import {CampaignOrderFormatFormFields, defaultCampaignOrderFormatFormFields} from '../core/edit/orders/formats/form';
+import {CreateOrderContext} from '../core/edit/orders/CreateOrderContext';
 
 
 const CampaignEdit: React.FC = () => {
@@ -51,6 +54,10 @@ const CampaignEdit: React.FC = () => {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [campaign]);
+
+    // creating the context to create an order
+    const [orderForm, setOrderForm] = useState<CampaignOrderFormFields>(defaultCampaignOrderFormFields);
+    const [formatForm, setFormatForm] = useState<CampaignOrderFormatFormFields>(defaultCampaignOrderFormatFormFields);
 
     const settingsNav = [
         {
@@ -111,9 +118,16 @@ const CampaignEdit: React.FC = () => {
                                             <EditOwnership/>
                                         </Tab.Pane>
 
-                                        <Tab.Pane eventKey='settingsNav-2'>
-                                            <EditOrders/>
-                                        </Tab.Pane>
+                                        <CreateOrderContext.Provider value={{
+                                            orderForm: orderForm,
+                                            setOrderForm: setOrderForm,
+                                            formatForm: formatForm,
+                                            setFormatForm: setFormatForm
+                                        }}>
+                                            <Tab.Pane eventKey='settingsNav-2'>
+                                                <EditOrders/>
+                                            </Tab.Pane>
+                                        </CreateOrderContext.Provider>
                                     </CampaignContext.Provider>
                                 }
                             </Tab.Content>

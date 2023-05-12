@@ -1,76 +1,67 @@
-import React, {useEffect, useState} from 'react';
+import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
+import {ErrorMessage, Field, Form, Formik} from 'formik';
+import Select from 'react-select';
+import axios from 'axios';
+import {DatePicker} from 'rsuite';
+import {Col, Row} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+
 import FormErrors from '../../../../../../components/forms/FormErrors';
 import {
-    CampaignOrderFormFields,
     CampaignOrderSchema,
-    defaultCampaignOrderFormFields
 } from '../../../core/edit/orders/form';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-import {
-    CampaignOrderFormatFormFields,
-    defaultCampaignOrderFormatFormFields
-} from '../../../core/edit/orders/formats/form';
 import {
     genericDateOnChangeHandler,
     GenericErrorMessage, genericMultiSelectOnChangeHandler,
     genericOnChangeHandler,
     genericSingleSelectOnChangeHandler
 } from '../../../../../../helpers/form';
-import Select from 'react-select';
-import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../../../helpers/sections';
-import {PageTypes} from '../../../../../../helpers/variables';
-import {getAllBookingTypes} from '../../../../../../requests/misc/BookingType';
-import axios, {AxiosError} from 'axios';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {getAllFormats, getFormat} from '../../../../../../requests/misc/Format';
 import {Format} from '../../../../../../models/misc/Format';
 import {useCampaign} from '../../../core/CampaignContext';
 import {BuyTypeEnum} from '../../../../../../enums/BuyTypeEnum';
-import {BuyingModel, BuyingModelCondensed} from '../../../../../../models/misc/BuyingModel';
-import {getAllBuyingModels, getBuyingModel} from '../../../../../../requests/misc/BuyingModel';
+import {BuyingModelCondensed} from '../../../../../../models/misc/BuyingModel';
+import {getBuyingModel} from '../../../../../../requests/misc/BuyingModel';
 import {indentOptions} from '../../../../../../components/forms/IndentOptions';
 import {filterData} from '../../../../../../helpers/dataManipulation';
 import {Country} from '../../../../../../models/misc/Country';
-import {getAllCountries} from '../../../../../../requests/misc/Country';
+import {getAllCountries, getAllCurrencies} from '../../../../../../requests/misc/Country';
 import SingleSelect from '../../../../../../components/forms/SingleSelect';
-import {DatePicker} from 'rsuite';
 import {Region} from '../../../../../../models/misc/Region';
 import {getAllRegions} from '../../../../../../requests/misc/Region';
 import {City} from '../../../../../../models/misc/City';
 import {getAllCities} from '../../../../../../requests/misc/City';
 import MultiSelect from '../../../../../../components/forms/MultiSelect';
-import {PerformanceMetric, PerformanceMetricCondensedTitle} from '../../../../../../models/misc/PerformanceMetric';
+import {PerformanceMetricCondensedTitle} from '../../../../../../models/misc/PerformanceMetric';
 import {getAllPerformanceMetrics} from '../../../../../../requests/misc/PerformanceMetric';
-import {Col, Row} from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
-import clsx from 'clsx';
-import {getAllDevices} from '../../../../../../requests/misc/Device';
-import {getAllLanguages} from '../../../../../../requests/misc/Language';
-import {getAllOperatingSystems} from '../../../../../../requests/misc/OperatingSystem';
-import {getAllAudiences} from '../../../../../../requests/misc/Audience';
 import FormatSplitRepeater from './FormatSplitRepeater';
 import {defaultFormatSplitField, FormatSplitField} from '../../../core/edit/orders/formats/formatSplitField';
+import {defaultFormatKpiField, FormatKpiField} from '../../../core/edit/orders/formats/formatKpiField';
+import FormatKpiRepeater from './FormatKpiRepeater';
+import {useCreateOrder} from '../../../core/edit/orders/CreateOrderContext';
+import {Currency} from '../../../../../../models/misc/Currency';
 
 interface Props {
-    onSubmit: any,
+    setHideFormatModal: Dispatch<SetStateAction<any>>
 }
 
-const CreateFormatForm: React.FC<Props> = ({onSubmit}) => {
+const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
     const {campaign} = useCampaign();
+    const {formatForm, setFormatForm} = useCreateOrder();
 
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [isAlwaysOn, setIsAlwaysOn] = useState<boolean>(false);
     const [hasBuyingModels, setHasBuyingModels] = useState<boolean>(false);
 
-    const [form, setForm] = useState<CampaignOrderFormatFormFields>(defaultCampaignOrderFormatFormFields);
     const [defaultSelectCities, setDefaultSelectedCities] = useState<City[]>([]);
 
     const [formats, setFormats] = useState<Format[]>([]);
     const [buyingModels, setBuyingModels] = useState<BuyingModelCondensed[]>([]);
     const [isBuyingModelsLoaded, setIsBuyingModelsLoaded] = useState<boolean>(false);
     const [countries, setCountries] = useState<Country[]>([]);
+    const [currencies, setCurrencies] = useState<Currency[]>([]);
     const [regions, setRegions] = useState<Region[]>([]);
     const [cities, setCities] = useState<City[]>([]);
     const [isCitiesLoaded, setIsCitiesLoaded] = useState<boolean>(false);
@@ -79,6 +70,7 @@ const CreateFormatForm: React.FC<Props> = ({onSubmit}) => {
     const [defaultPerformanceMetric, setDefaultPerformanceMetric] = useState<PerformanceMetricCondensedTitle | undefined>(undefined);
 
     const [formatSplits, setFormatSplits] = useState<FormatSplitField[]>([defaultFormatSplitField]);
+    const [formatKpis, setFormatKpis] = useState<FormatKpiField[]>([defaultFormatKpiField]);
 
     useEffect(() => {
         if (campaign && campaign.buyType?.id === BuyTypeEnum.AO) {
@@ -96,6 +88,18 @@ const CreateFormatForm: React.FC<Props> = ({onSubmit}) => {
             } else {
                 if (response.data) {
                     setFormats(filterData(response.data, 'name', ['All Formats']));
+                }
+            }
+        });
+
+        getAllCurrencies().then(response => {
+            if (axios.isAxiosError(response)) {
+                setFormErrors(extractErrors(response));
+            } else if (response === undefined) {
+                setFormErrors([GenericErrorMessage])
+            } else {
+                if (response.data) {
+                    setCurrencies(response.data);
                 }
             }
         });
@@ -141,17 +145,23 @@ const CreateFormatForm: React.FC<Props> = ({onSubmit}) => {
     }, []);
 
     const onChangeHandler = (e: any) => {
+        // while we're editing the format form, we need to reset the hide modal variable to false
+        setHideFormatModal(false);
+
         // in case of multi select, the element doesn't have a name because
         // we get only a list of values from the select and not an element with target value and name
 
         // add here any fields you don't want the default handler to handle
-        genericOnChangeHandler(e, form, setForm);
+        if (e.target.name !== 'kpi_target') {
+            genericOnChangeHandler(e, formatForm, setFormatForm);
+        }
     };
 
     const onChangeFormat = (e: any) => {
         setIsBuyingModelsLoaded(false);
 
-        genericSingleSelectOnChangeHandler(e, form, setForm, 'format_id');
+        genericSingleSelectOnChangeHandler(e, formatForm, setFormatForm, 'format_id');
+        setFormatForm({...formatForm, format_name: e.name});
 
         // get the buying models based on the selected format
         getFormat(e.id).then(response => {
@@ -182,7 +192,13 @@ const CreateFormatForm: React.FC<Props> = ({onSubmit}) => {
         // when we change countries we need to update the cities select with the new cities list
         setIsCitiesLoaded(false);
 
-        genericMultiSelectOnChangeHandler(e, form, setForm, 'countries_ids');
+        genericMultiSelectOnChangeHandler(e, formatForm, setFormatForm, 'countries_ids');
+
+        if (e.length > 0) {
+            setFormatForm({...formatForm, countries_names: e.map((entity: any) => entity.id)});
+        } else {
+            setFormatForm({...formatForm, countries_names: []});
+        }
 
         let query = '';
 
@@ -214,14 +230,16 @@ const CreateFormatForm: React.FC<Props> = ({onSubmit}) => {
     }
 
     useEffect(() => {
-        if (typeof form.buying_model_id === 'number') {
-            getBuyingModel(form.buying_model_id).then(response => {
+        if (typeof formatForm.buying_model_id === 'number') {
+            getBuyingModel(formatForm.buying_model_id).then(response => {
                 if (axios.isAxiosError(response)) {
                     setFormErrors(extractErrors(response));
                 } else if (response === undefined) {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     if (response) {
+                        setFormatForm({...formatForm, buying_model_name: response.name});
+
                         // if there's only one performance metric then we make the default selection
                         let buyingModelMetrics = response.performanceMetrics;
 
@@ -236,18 +254,32 @@ const CreateFormatForm: React.FC<Props> = ({onSubmit}) => {
                 }
             });
         }
-    }, [form.buying_model_id]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formatForm.buying_model_id]);
+
+    useEffect(() => {
+        if(formatForm.cities_ids) {
+            if(formatForm.cities_ids.length > 0) {
+                setFormatForm({...formatForm, cities_names: cities.filter((city) => formatForm.cities_ids?.includes(city.id)).map((city) => city.name)});
+            } else {
+                setFormatForm({...formatForm, cities_names: []});
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formatForm.cities_ids])
 
     useEffect(() => {
         if (defaultPerformanceMetric !== undefined) {
             setReloadTargetMetrics(true);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [defaultPerformanceMetric]);
 
     useEffect(() => {
         if (cities.length > 0) {
             setIsCitiesLoaded(true);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cities]);
 
     useEffect(() => {
@@ -258,23 +290,29 @@ const CreateFormatForm: React.FC<Props> = ({onSubmit}) => {
             // the new list of buying models
             setReloadTargetMetrics(false);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [buyingModels]);
 
     useEffect(() => {
-        setForm({...form, splits: formatSplits});
+        setFormatForm({...formatForm, splits: formatSplits});
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formatSplits]);
 
+    useEffect(() => {
+        setFormatForm({...formatForm, kpis: formatKpis});
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formatKpis]);
+
     const dateChangeHandler = (date: Date | null, key: string) => {
-        genericDateOnChangeHandler(date, form, setForm, key);
+        genericDateOnChangeHandler(date, formatForm, setFormatForm, key);
     };
 
     return (
         <>
             <FormErrors errorMessages={formErrors}/>
 
-            <Formik initialValues={form} validationSchema={CampaignOrderSchema}
-                    onSubmit={onSubmit}
+            <Formik initialValues={formatForm} validationSchema={CampaignOrderSchema}
+                    onSubmit={() => console.log("format form was submitted")}
                     enableReinitialize>
                 {
                     (formik) => (
@@ -305,7 +343,7 @@ const CreateFormatForm: React.FC<Props> = ({onSubmit}) => {
                                 <KrysFormLabel text="Buying model" isRequired={hasBuyingModels}/>
 
                                 <SingleSelect isResourceLoaded={isBuyingModelsLoaded} options={buyingModels}
-                                              defaultValue={undefined} form={form} setForm={setForm}
+                                              defaultValue={undefined} form={formatForm} setForm={setFormatForm}
                                               name='buying_model_id' isClearable={!hasBuyingModels}/>
 
                                 <div className="mt-3 text-danger">
@@ -330,13 +368,19 @@ const CreateFormatForm: React.FC<Props> = ({onSubmit}) => {
                                 <KrysFormLabel text="Cost currency" isRequired={hasBuyingModels}/>
 
                                 <Select name="cost_currency_id"
-                                        defaultValue={{id: 236, name: 'United States'}}
-                                        options={countries}
-                                        getOptionLabel={(country) => country.name}
-                                        getOptionValue={(country) => country.id.toString()}
+                                        defaultValue={{id: 236, currency: 'USD'}}
+                                        options={currencies}
+                                        getOptionLabel={(currency) => currency.currency}
+                                        getOptionValue={(currency) => currency.id.toString()}
                                         placeholder='Choose currency for cost'
                                         isClearable={!hasBuyingModels}
-                                        onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'cost_currency_id')}/>
+                                        onChange={(e) => {
+                                            genericSingleSelectOnChangeHandler(e, formatForm, setFormatForm, 'cost_currency_id');
+
+                                            if(e) {
+                                                setFormatForm({...formatForm, cost_currency_name: e.currency});
+                                            }
+                                        }}/>
 
                                 <div className="mt-3 text-danger">
                                     {formik.errors?.cost_currency_id ? formik.errors?.cost_currency_id : null}
@@ -386,7 +430,15 @@ const CreateFormatForm: React.FC<Props> = ({onSubmit}) => {
                                         options={regions}
                                         getOptionLabel={(region) => region.name}
                                         getOptionValue={(region) => region.id.toString()}
-                                        onChange={(e) => genericMultiSelectOnChangeHandler(e, form, setForm, 'regions_ids')}
+                                        onChange={(e) => {
+                                            genericMultiSelectOnChangeHandler(e, formatForm, setFormatForm, 'regions_ids');
+
+                                            if (e.length > 0) {
+                                                setFormatForm({...formatForm, regions_names: e.map((entity: any) => entity.name)});
+                                            } else {
+                                                setFormatForm({...formatForm, regions_names: []});
+                                            }
+                                        }}
                                         placeholder='Select target regions'/>
 
                                 <div className="mt-3 text-danger">
@@ -413,7 +465,8 @@ const CreateFormatForm: React.FC<Props> = ({onSubmit}) => {
                                 <KrysFormLabel text="Target cities" isRequired={false}/>
 
                                 <MultiSelect isResourceLoaded={isCitiesLoaded} options={cities}
-                                             defaultValue={defaultSelectCities} form={form} setForm={setForm}
+                                             defaultValue={defaultSelectCities} form={formatForm}
+                                             setForm={setFormatForm}
                                              name={'cities_ids'} setSelected={setDefaultSelectedCities}/>
 
                                 <div className="mt-3 text-danger">
@@ -426,7 +479,8 @@ const CreateFormatForm: React.FC<Props> = ({onSubmit}) => {
                                 <KrysFormLabel text="Target metric" isRequired={hasBuyingModels}/>
 
                                 <SingleSelect isResourceLoaded={reloadTargetMetrics} options={performanceMetrics}
-                                              defaultValue={defaultPerformanceMetric} form={form} setForm={setForm}
+                                              defaultValue={defaultPerformanceMetric} form={formatForm}
+                                              setForm={setFormatForm}
                                               name='performance_metric_id' isClearable={!hasBuyingModels}
                                               label='title'/>
 
@@ -461,12 +515,18 @@ const CreateFormatForm: React.FC<Props> = ({onSubmit}) => {
                                 <KrysFormLabel text="Booked amount currency" isRequired={true}/>
 
                                 <Select name="booked_currency_id"
-                                        defaultValue={{id: 236, name: 'United States'}}
-                                        options={countries}
-                                        getOptionLabel={(country) => country.name}
-                                        getOptionValue={(country) => country.id.toString()}
+                                        defaultValue={{id: 236, currency: 'USD'}}
+                                        options={currencies}
+                                        getOptionLabel={(currency) => currency.currency}
+                                        getOptionValue={(currency) => currency.id.toString()}
                                         placeholder='Choose currency for booked amount'
-                                        onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'booked_currency_id')}/>
+                                        onChange={(e) => {
+                                            genericSingleSelectOnChangeHandler(e, formatForm, setFormatForm, 'booked_currency_id');
+
+                                            if(e) {
+                                                setFormatForm({...formatForm, 'booked_currency_name': e.currency});
+                                            }
+                                        }}/>
 
                                 <div className="mt-3 text-danger">
                                     {formik.errors?.booked_currency_id ? formik.errors?.booked_currency_id : null}
@@ -481,14 +541,44 @@ const CreateFormatForm: React.FC<Props> = ({onSubmit}) => {
                             <div className="mb-7">
                                 {
                                     formatSplits.map((formatSplitBy, index) =>
-                                        <FormatSplitRepeater index={index} setSplits={setFormatSplits} parentSplits={formatSplits} setParentFormErrors={setFormErrors} key={`split-${index}`}/>)
+                                        <FormatSplitRepeater defaultValue={formatSplitBy} index={index}
+                                                             setParentSplits={setFormatSplits}
+                                                             parentSplits={formatSplits}
+                                                             setParentFormErrors={setFormErrors}
+                                                             key={`split-${index}`}/>)
                                 }
 
                                 <Row>
-                                    <Col md={2}>
-                                        <Button className='btn-sm btn-icon mt-1' variant='active-light-krys'
-                                                onClick={() => setFormatSplits([...formatSplits, defaultFormatSplitField])}>
-                                            <i className={clsx('fa-solid fs-3 text-krys', 'fa-circle-plus')}></i>
+                                    <Col>
+                                        <Button variant={'success'}
+                                                onClick={() => setFormatSplits([...formatSplits, defaultFormatSplitField])}
+                                                size={'sm'}>
+                                            <i className={'fa-duotone fa-plus fs-6'}></i> Add split
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            </div>
+
+                            <div className='mb-4 mt-10'>
+                                <span className='fs-5 text-gray-700 d-flex fw-medium'>Evaluating performance</span>
+                                <span className='text-muted'>List the KPIs based on which the performance of the format should be measured</span>
+                            </div>
+
+                            <div className="mb-7">
+                                {
+                                    formatKpis.map((formatKpi, index) =>
+                                        <FormatKpiRepeater defaultValue={formatKpi} index={index}
+                                                           setParentKpis={setFormatKpis} parentKpis={formatKpis}
+                                                           setParentFormErrors={setFormErrors} key={`kpi-${index}`}/>
+                                    )
+                                }
+
+                                <Row>
+                                    <Col>
+                                        <Button variant={'success'}
+                                                onClick={() => setFormatKpis([...formatKpis, defaultFormatKpiField])}
+                                                size={'sm'}>
+                                            <i className={'fa-duotone fa-plus fs-6'}></i> Add KPI
                                         </Button>
                                     </Col>
                                 </Row>

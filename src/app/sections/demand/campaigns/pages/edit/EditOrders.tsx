@@ -17,7 +17,6 @@ import {useKrysApp} from '../../../../../modules/general/KrysApp';
 import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
 import {
-    CampaignOrderFormFields,
     CampaignOrderSchema,
     defaultCampaignOrderFormFields
 } from '../../core/edit/orders/form';
@@ -26,16 +25,19 @@ import {CampaignOrderColumns} from '../../core/edit/orders/TableColumns';
 import {BookingTypeEnum} from '../../../../../enums/BookingTypeEnum';
 import KrysModal from '../../../../../components/modals/KrysModal';
 import CreateFormatForm from '../../partials/orders/formats/CreateFormatForm';
+import {useCreateOrder} from '../../core/edit/orders/CreateOrderContext';
+import {defaultCampaignOrderFormatFormFields} from '../../core/edit/orders/formats/form';
+import FormatSummary from '../../partials/orders/formats/FormatSummary';
 
 const EditOrders: React.FC = () => {
     const {campaign} = useCampaign();
+    const {orderForm, setOrderForm, formatForm, setFormatForm} = useCreateOrder();
 
     const krysApp = useKrysApp();
 
-    const [form, setForm] = useState<CampaignOrderFormFields>(defaultCampaignOrderFormFields);
-
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
+    const [hideFormatModal, setHideFormatModal] = useState<boolean>(false);
 
     const onChangeHandler = (e: any) => {
         // as long as we are updating the create form, we should set the table refresh to false
@@ -43,13 +45,17 @@ const EditOrders: React.FC = () => {
 
         // in case of multi select, the element doesn't have a name because
         // we get only a list of values from the select and not an element with target value and name
-        genericOnChangeHandler(e, form, setForm);
+
+        // we want to ignore the text fields that are in the format form
+        if (!['cost', 'target', 'booked_amount', 'kpi_target'].includes(e.target.name)) {
+            genericOnChangeHandler(e, orderForm, setOrderForm);
+        }
     };
 
     const handleCreate = (e: any) => {
         if (campaign) {
             // send API request to create the advertiser
-            storeCampaignOrder(campaign, form).then(response => {
+            storeCampaignOrder(campaign, orderForm).then(response => {
                     if (axios.isAxiosError(response)) {
                         // we need to show the errors
                         setFormErrors(extractErrors(response));
@@ -67,12 +73,29 @@ const EditOrders: React.FC = () => {
                         setRefreshTable(true);
 
                         // we need to clear the form data
-                        setForm(defaultCampaignOrderFormFields);
+                        setOrderForm(defaultCampaignOrderFormFields);
                     }
                 }
             );
         }
     };
+
+    const handleFormatSubmit = (e: any) => {
+        // we need to take the format form, put add it to order form and then reset the format form
+        let orderFormats = [...orderForm.formats];
+
+        // append one to the list
+        orderFormats.push(formatForm);
+
+        // add the new format to the order form
+        setOrderForm({...orderForm, formats: orderFormats});
+
+        // reset the format form
+        setFormatForm(defaultCampaignOrderFormatFormFields);
+
+        // hide the modal
+        setHideFormatModal(true);
+    }
 
     return (
         <>
@@ -82,7 +105,7 @@ const EditOrders: React.FC = () => {
                 <KTCardBody>
                     <FormErrors errorMessages={formErrors}/>
 
-                    <Formik initialValues={form} validationSchema={CampaignOrderSchema}
+                    <Formik initialValues={orderForm} validationSchema={CampaignOrderSchema}
                             onSubmit={handleCreate}
                             enableReinitialize>
                         {
@@ -122,12 +145,22 @@ const EditOrders: React.FC = () => {
                                         </h5>
 
                                         <div className='mt-5'>
-                                            {<KrysModal title={'Add new format'} buttonVariant='success' buttonSize='sm'
+                                            {
+                                                orderForm.formats.map((format, index) => <FormatSummary index={index} format={format}/>)
+                                            }
+                                        </div>
+
+                                        <div className='mt-5'>
+                                            {<KrysModal onSubmit={handleFormatSubmit} title={'Add new format'}
+                                                        buttonVariant='success' buttonSize='sm'
                                                         buttonIconClasses='fa-duotone fa-plus fs-6'
-                                                        buttonText='Add new format'><CreateFormatForm onSubmit={() => console.log("hello")} /></KrysModal>}
+                                                        forceHide={hideFormatModal}
+                                                        setForceHide={setHideFormatModal}
+                                                        buttonText='Add new format'>
+                                                <CreateFormatForm setHideFormatModal={setHideFormatModal}/>
+                                            </KrysModal>}
                                         </div>
                                     </div>
-
 
                                     <KrysFormFooter cancelUrl={'/demand/campaigns'}/>
                                 </Form>

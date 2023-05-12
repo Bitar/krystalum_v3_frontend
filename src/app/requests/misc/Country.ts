@@ -1,6 +1,7 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
 import {createFormData} from '../../helpers/requests';
 import {Country, CountryList, CountryPaginate} from '../../models/misc/Country';
+import {CurrencyList} from '../../models/misc/Currency';
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/countries`
@@ -8,6 +9,12 @@ export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
 export const getAllCountries = async (): Promise<CountryList | AxiosError | undefined> => {
     return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<CountryList>) => response.data).catch((error) => {
+        return error;
+    });
+}
+
+export const getAllCurrencies = async (): Promise<CurrencyList | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/currencies?sort[]=currency').then((response: AxiosResponse<CurrencyList>) => response.data).catch((error) => {
         return error;
     });
 }

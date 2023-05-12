@@ -1,4 +1,4 @@
-import {Col, Row} from 'react-bootstrap';
+import {Col, OverlayTrigger, Row, Tooltip} from 'react-bootstrap';
 import Select from 'react-select';
 import MultiSelect from '../../../../../../components/forms/MultiSelect';
 import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
@@ -9,21 +9,23 @@ import {getAllOperatingSystems} from '../../../../../../requests/misc/OperatingS
 import {getAllAudiences} from '../../../../../../requests/misc/Audience';
 import axios, {AxiosError} from 'axios';
 import {extractErrors} from '../../../../../../helpers/requests';
-import {defaultFormatSplitField, FormatSplitField} from '../../../core/edit/orders/formats/formatSplitField';
+import {FormatSplitField} from '../../../core/edit/orders/formats/formatSplitField';
+import Button from 'react-bootstrap/Button';
 
 type SplitToApiCall = {
     [key: string]: Promise<any | AxiosError<any, any> | undefined>;
 };
 
-type Props = {
+interface Props {
+    defaultValue: FormatSplitField,
     index: number,
-    setSplits: Dispatch<SetStateAction<any>>,
+    setParentSplits: Dispatch<SetStateAction<any>>,
     parentSplits: FormatSplitField[],
     setParentFormErrors: Dispatch<SetStateAction<any>>,
 }
 
-const FormatSplitRepeater: React.FC<Props> = ({index, setSplits, parentSplits, setParentFormErrors}) => {
-    const [form, setForm] = useState<FormatSplitField>(defaultFormatSplitField);
+const FormatSplitRepeater: React.FC<Props> = ({defaultValue, index, setParentSplits, parentSplits, setParentFormErrors}) => {
+    const [form, setForm] = useState<FormatSplitField>(defaultValue);
 
     const [splitValues, setSplitValues] = useState<any[]>([]);
     const [reloadSplitValues, setReloadSplitValues] = useState<boolean>(false);
@@ -70,14 +72,26 @@ const FormatSplitRepeater: React.FC<Props> = ({index, setSplits, parentSplits, s
         if(splits.length > index) {
             splits[index] = form;
 
-            setSplits(splits);
+            setParentSplits(splits);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form.split_by_value])
 
+    const handleDelete = (e: any) => {
+        // first we need to update the parent form by removing the current
+        // row from it
+        let splits = [...parentSplits];
+
+        if(splits.length > index) {
+            splits.splice(index, 1);
+
+            setParentSplits(splits);
+        }
+    }
+
     return (
         <Row className="mb-4">
-            <Col md={6}>
+            <Col md={4}>
                 <Select name="split_by_option"
                         options={[{id: 'devices', name: 'Devices'}, {
                             id: 'languages',
@@ -89,10 +103,23 @@ const FormatSplitRepeater: React.FC<Props> = ({index, setSplits, parentSplits, s
                         onChange={onChangeSplitOption}/>
             </Col>
 
-            <Col md={6}>
+            <Col md={4}>
                 <MultiSelect isResourceLoaded={reloadSplitValues} options={splitValues}
                              defaultValue={undefined} form={form} setForm={setForm}
                              name='split_by_value' />
+            </Col>
+
+            <Col md={4}>
+                {/*when we click on the trash icon, we need to delete the current row, and we need to*/}
+                {/*remove the row from the parent form*/}
+                <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip>Delete split</Tooltip>}>
+                    <Button className='btn-sm btn-icon mt-1' variant='active-light-danger'
+                            onClick={handleDelete}>
+                        <i className={'fa-duotone fs-3 text-danger fa-trash'}></i>
+                    </Button>
+                </OverlayTrigger>
             </Col>
         </Row>
     )
