@@ -12,7 +12,8 @@ export interface FilterFields {
     creation_date_range?: Date | string,
     countries_ids?: number[],
     regions_ids?: number[],
-    url?: string,
+    url?: string[],
+    unique_identifiers: string[],
     is_deal_pmp?: number | string,
     is_archived?: number
 }
@@ -29,7 +30,8 @@ export const defaultFilterFields = {
     creation_date_range: '',
     countries_ids: [],
     regions_ids: [],
-    url: '',
+    urls: [],
+    unique_identifiers: [],
     is_deal_pmp: ''
 }
 

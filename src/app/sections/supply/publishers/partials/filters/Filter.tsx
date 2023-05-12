@@ -173,7 +173,6 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
                                 onSubmit={handleFilter}
                                 enableReinitialize>
                             {
-                                ({errors}) => (
                                     <Form onChange={onChangeHandler}>
                                         <Row>
                                             <Col md={4}>
@@ -181,10 +180,6 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
 
                                                 <Field className="form-control fs-base" type="text"
                                                        placeholder="Filter by name" name="name"/>
-
-                                                <div className="mt-1 text-danger">
-                                                    {errors?.name ? errors?.name : null}
-                                                </div>
                                             </Col>
 
                                             <Col md={4}>
@@ -197,10 +192,6 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
                                                         onChange={(e) => multiSelectChangeHandler(e, 'countries_ids')}
                                                         ref={countriesSelectRef}
                                                         placeholder="Filter by country(ies)"/>
-
-                                                <div className="mt-1 text-danger">
-                                                    {errors?.countries_ids ? errors?.countries_ids : null}
-                                                </div>
                                             </Col>
 
                                             <Col md={4}>
@@ -214,10 +205,6 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
                                                         ref={regionsSelectRef}
                                                         placeholder="Filter by region(s)"
                                                         isDisabled={(!!(filters?.countries_ids && filters?.countries_ids.length > 0))}/>
-
-                                                <div className="mt-1 text-danger">
-                                                    {errors?.regions_ids ? errors?.regions_ids : null}
-                                                </div>
                                             </Col>
                                         </Row>
                                         <Row>
@@ -231,10 +218,6 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
                                                         onChange={(e) => multiSelectChangeHandler(e, 'tiers_ids')}
                                                         ref={tiersSelectRef}
                                                         placeholder="Filter by tier(s)"/>
-
-                                                <div className="mt-1 text-danger">
-                                                    {errors?.tiers_ids ? errors?.tiers_ids : null}
-                                                </div>
                                             </Col>
 
                                             <Col md={4}>
@@ -248,10 +231,6 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
                                                                  onChange={(date) => dateRangeChangeHandler(date, 'integration_date_range')}
                                                                  ref={integrationDateRangeRef}
                                                 />
-
-                                                <div className="mt-1 text-danger">
-                                                    {errors?.integration_date_range ? errors?.integration_date_range : null}
-                                                </div>
                                             </Col>
 
                                             <Col md={4}>
@@ -264,16 +243,12 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
                                                         onChange={(e) => multiSelectChangeHandler(e, 'account_managers_ids')}
                                                         ref={accountManagersSelectRef}
                                                         placeholder="Filter by account manager(s)"/>
-
-                                                <div className="mt-1 text-danger">
-                                                    {errors?.account_managers_ids ? errors?.account_managers_ids : null}
-                                                </div>
                                             </Col>
                                         </Row>
 
                                         <FilterFormFooter resetFilter={resetFilter}/>
                                     </Form>
-                                )}
+                            }
                         </Formik>
                     </div>
                 </Col>

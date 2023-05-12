@@ -2,7 +2,7 @@ import React, {useMemo} from 'react';
 import {Column} from 'react-table';
 
 import KrysBorderlessTable from './KrysBorderlessTable';
-import {QueryRequestProvider, useQueryRequest} from '../../modules/table/QueryRequestProvider';
+import {QueryRequestProvider} from '../../modules/table/QueryRequestProvider';
 import {
     QueryResponseProvider,
     useQueryResponseData,
@@ -16,10 +16,10 @@ type Props = {
     queryId: string,
     requestFunction: (id: number, query?: string) => Promise<any>,
     requestId: string | number,
-    requestQuery?: string,
     columnsArray: readonly Column<any>[],
     slug: string,
-    doRefetch: boolean
+    doRefetch: boolean,
+    showSearchFilter: boolean
 }
 
 type TableProps = {
@@ -30,20 +30,24 @@ const KrysInnerTable: React.FC<Props> = ({
                                              queryId,
                                              requestFunction,
                                              requestId,
-                                             requestQuery,
                                              columnsArray,
                                              slug,
-                                             doRefetch
+                                             doRefetch,
+                                             showSearchFilter
                                          }) => {
 
     return (
         <QueryRequestProvider>
             <QueryResponseProvider id={queryId}
                                    requestFunction={requestFunction} requestId={requestId}>
+
                 <TableRefetch doRefetch={doRefetch}/>
 
                 <ListViewProvider>
-                    <KrysTableSearchFilter slug={slug}/>
+                    {
+                        showSearchFilter ? <KrysTableSearchFilter slug={slug}/> : <></>
+                    }
+
                     <InnerTable columnsArray={columnsArray}/>
                 </ListViewProvider>
             </QueryResponseProvider>
@@ -58,10 +62,6 @@ const InnerTable = ({columnsArray}: TableProps) => {
     const columns = useMemo(() => columnsArray,
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []);
-
-    const {state} = useQueryRequest()
-
-    console.log(state)
 
     return (
         <KrysBorderlessTable data={data} columns={columns} model={modelData.length > 0 ? modelData[0] : null}

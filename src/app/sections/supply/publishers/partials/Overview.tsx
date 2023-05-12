@@ -33,8 +33,7 @@ const PublisherOverview: React.FC = () => {
                                             overlay={<Tooltip>Email address</Tooltip>}
                                         >
                                             <a href={`mailto:${publisher?.info?.email}`}
-                                               className="d-flex align-items-center text-gray-400 text-hover-krys me-5 mb-2"
-                                               data-toggle="tooltip" data-placement="top">
+                                               className="d-flex align-items-center text-gray-400 text-hover-krys me-5 mb-2">
                                                 <KTSVG
                                                     path="/media/icons/duotune/communication/com002.svg"
                                                     className="svg-icon-4 me-1"

@@ -4,7 +4,13 @@ import {Field, Form, Formik} from 'formik';
 import axios from 'axios';
 import Select from 'react-select';
 
-import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
+import {
+    initialQueryState,
+    KTCard,
+    KTCardBody,
+    QUERIES,
+    stringifyRequestQuery
+} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
 
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
@@ -24,6 +30,7 @@ import {
 } from '../../../../../../models/supply/Options';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import {
+    AnalyticsFilterFields, defaultAnalyticsFilterFields,
     defaultPublicationAnalyticFormFields,
     PublicationAnalyticFormFields,
     PublicationAnalyticSchema
@@ -46,6 +53,7 @@ import {getAllDevices} from '../../../../../../requests/misc/Device';
 import {getAnalyticsTypes} from '../../../../../../requests/supply/Options';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
+import {useQueryRequest} from '../../../../../../modules/table/QueryRequestProvider';
 
 
 const PublicationAnalyticCreate: React.FC = () => {
@@ -53,6 +61,7 @@ const PublicationAnalyticCreate: React.FC = () => {
 
     const [form, setForm] = useState<PublicationAnalyticFormFields>(defaultPublicationAnalyticFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
+    const [filters, setFilters] = useState<AnalyticsFilterFields>(defaultAnalyticsFilterFields);
 
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
@@ -62,6 +71,13 @@ const PublicationAnalyticCreate: React.FC = () => {
 
     const [analyticsTypes, setAnalyticsType] = useState<AnalyticType[]>([]);
     const [currentAnalyticTypeFormatted, setCurrentAnalyticTypeFormatted] = useState<string>(defaultAnalyticsType.name);
+
+    const {state, updateState} = useQueryRequest();
+    const [query, setQuery] = useState<string>(stringifyRequestQuery(state));
+
+    // useEffect(() => {
+    //     setQuery(stringifyRequestQuery(state));
+    // }, [state]);
 
     const krysApp = useKrysApp();
 
@@ -133,7 +149,13 @@ const PublicationAnalyticCreate: React.FC = () => {
         if (key === 'type' && e) {
             const type = analyticsTypes.find(analyticsType => analyticsType.id === e.id);
 
-            if (type) setCurrentAnalyticTypeFormatted(type.name)
+            if (type) {
+                setCurrentAnalyticTypeFormatted(type.name)
+                // updateState({
+                //     filter: {type: type.id},
+                //     ...initialQueryState,
+                // });
+            }
 
             // as long as we are updating the create form, we should set the table refresh to false
             setRefreshTable(true);
@@ -325,7 +347,6 @@ const PublicationAnalyticCreate: React.FC = () => {
                         queryId={QUERIES.PUBLICATION_ANALYTICS_LIST}
                         requestFunction={getPublicationAnalytics}
                         requestId={publication.id}
-                        requestQuery={'filter[type]=' + form.type}
                         columnsArray={PublicationAnalyticsColumns}
                     ></KrysInnerTable>
                 }

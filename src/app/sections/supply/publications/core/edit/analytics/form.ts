@@ -18,6 +18,14 @@ export const defaultPublicationAnalyticFormFields = {
     value: 0
 };
 
+export interface AnalyticsFilterFields {
+    type?: string
+}
+
+export const defaultAnalyticsFilterFields = {
+    type: 'unique_users'
+}
+
 export const PublicationAnalyticSchema = Yup.object().shape({
     geo_type: Yup
         .string()

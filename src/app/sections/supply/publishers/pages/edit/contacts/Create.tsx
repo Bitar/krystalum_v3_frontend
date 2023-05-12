@@ -170,6 +170,7 @@ const PublisherContactCreate: React.FC = () => {
                         requestFunction={getPublisherContacts}
                         requestId={publisher.id}
                         columnsArray={PublisherContactsColumns}
+                        showSearchFilter={true}
                     ></KrysInnerTable>
                 }
             </KTCardBody>

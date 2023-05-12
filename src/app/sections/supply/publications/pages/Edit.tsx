@@ -150,25 +150,25 @@ const PublicationEdit: React.FC = () => {
                                         <PublicationAnalyticCreate/>
                                     </Tab.Pane>
 
-                                    <Tab.Pane eventKey="settingsNav-2">
-                                        <PublicationFormatCreate/>
-                                    </Tab.Pane>
+                                    {/*<Tab.Pane eventKey="settingsNav-2">*/}
+                                    {/*    <PublicationFormatCreate/>*/}
+                                    {/*</Tab.Pane>*/}
 
-                                    <Tab.Pane eventKey="settingsNav-3">
-                                        <PublicationVerticalCreate/>
-                                    </Tab.Pane>
+                                    {/*<Tab.Pane eventKey="settingsNav-3">*/}
+                                    {/*    <PublicationVerticalCreate/>*/}
+                                    {/*</Tab.Pane>*/}
 
-                                    <Tab.Pane eventKey="settingsNav-4">
-                                        <PublicationAdServerCreate/>
-                                    </Tab.Pane>
+                                    {/*<Tab.Pane eventKey="settingsNav-4">*/}
+                                    {/*    <PublicationAdServerCreate/>*/}
+                                    {/*</Tab.Pane>*/}
 
-                                    <Tab.Pane eventKey="settingsNav-5">
-                                        <PublicationTechnologyCreate/>
-                                    </Tab.Pane>
+                                    {/*<Tab.Pane eventKey="settingsNav-5">*/}
+                                    {/*    <PublicationTechnologyCreate/>*/}
+                                    {/*</Tab.Pane>*/}
 
-                                    <Tab.Pane eventKey="settingsNav-8">
-                                        <PublicationAdTechnologyIndex/>
-                                    </Tab.Pane>
+                                    {/*<Tab.Pane eventKey="settingsNav-8">*/}
+                                    {/*    <PublicationAdTechnologyIndex/>*/}
+                                    {/*</Tab.Pane>*/}
                                 </Tab.Content>
                             </div>
                         </div>
