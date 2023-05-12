@@ -52,7 +52,11 @@ export const genericHandleSingleFile = (e: any, formik: FormikProps<any>, form: 
 
 export const genericDateOnChangeHandler = (date: Date | null, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
     if (date) {
-        const formattedDate = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+
+        const formattedDate = `${year}-${month}-${day}`;
 
         setForm({...form, [key]: formattedDate});
     } else {
@@ -66,8 +70,8 @@ export const genericDateRangeOnChangeHandler = (dateRange: DateRange | null, for
         const startDate = dateRange[0];
         const endDate = dateRange[1];
 
-        const formattedStartDate = startDate.getFullYear() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getDate();
-        const formattedEndDate = endDate.getFullYear() + '-' + (endDate.getMonth() + 1) + '-' + endDate.getDate();
+        const formattedStartDate = startDate.getFullYear() + '-' + String(startDate.getMonth() + 1).padStart(2, '0') + '-' + String(startDate.getDate()).padStart(2, '0');
+        const formattedEndDate = endDate.getFullYear() + '-' + (String(endDate.getMonth() + 1).padStart(2, '0')) + '-' + String(endDate.getDate()).padStart(2, '0');
 
         // we should use comma separator as this is the separator used in the backend to parse the date range
         const dateRangeString = formattedStartDate + ',' + formattedEndDate;
