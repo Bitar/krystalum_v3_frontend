@@ -166,9 +166,9 @@ const PublicationEdit: React.FC = () => {
                                     {/*    <PublicationTechnologyCreate/>*/}
                                     {/*</Tab.Pane>*/}
 
-                                    {/*<Tab.Pane eventKey="settingsNav-8">*/}
-                                    {/*    <PublicationAdTechnologyIndex/>*/}
-                                    {/*</Tab.Pane>*/}
+                                    <Tab.Pane eventKey="settingsNav-8">
+                                        <PublicationAdTechnologyIndex/>
+                                    </Tab.Pane>
                                 </Tab.Content>
                             </div>
                         </div>

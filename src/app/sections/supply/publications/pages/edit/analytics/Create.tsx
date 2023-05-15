@@ -159,8 +159,6 @@ const PublicationAnalyticCreate: React.FC = () => {
 
     const handleCreate = () => {
         if (publication) {
-            console.log('handleCreate')
-
             // send API request to create the publication analytics
             // storePublicationAnalytic(publication, form).then(response => {
             //         if (axios.isAxiosError(response)) {

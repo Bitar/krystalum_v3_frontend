@@ -7,7 +7,6 @@ import {usePublication} from '../../../core/PublicationContext';
 import {getPublicationAdTechnologies} from '../../../../../../requests/supply/publication/PublicationAdTechnology';
 import {PublicationAdTechnologiesColumns} from '../../../core/edit/ad-technologies/TableColumns';
 
-
 const PublicationAdTechnologyIndex: React.FC = () => {
     const {publication} = usePublication();
 
@@ -16,17 +15,17 @@ const PublicationAdTechnologyIndex: React.FC = () => {
             <KTCardHeader text="Ad Technologies"/>
 
             <KTCardBody>
-                {/*{*/}
-                {/*    publication &&*/}
-                {/*    <KrysInnerTable*/}
-                {/*        doRefetch={false}*/}
-                {/*        slug="publication-ad-technologies"*/}
-                {/*        queryId={QUERIES.PUBLICATION_AD_TECHNOLOGIES_LIST}*/}
-                {/*        requestFunction={getPublicationAdTechnologies}*/}
-                {/*        requestId={publication.id}*/}
-                {/*        columnsArray={PublicationAdTechnologiesColumns}*/}
-                {/*    ></KrysInnerTable>*/}
-                {/*}*/}
+                {
+                    publication &&
+                    <KrysInnerTable
+                        doRefetch={false}
+                        slug="publication-ad-technologies"
+                        queryId={QUERIES.PUBLICATION_AD_TECHNOLOGIES_LIST}
+                        requestFunction={getPublicationAdTechnologies}
+                        requestId={publication.id}
+                        columnsArray={PublicationAdTechnologiesColumns}
+                    ></KrysInnerTable>
+                }
             </KTCardBody>
         </KTCard>
     );
