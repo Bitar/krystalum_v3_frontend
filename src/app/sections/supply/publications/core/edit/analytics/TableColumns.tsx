@@ -7,12 +7,13 @@ import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {QUERIES} from '../../../../../../../_metronic/helpers';
 import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic';
 import {usePublication} from '../../PublicationContext';
+import {formatNumberWithSuffix} from '../../../../../../helpers/stringGenerator';
 
 const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Value" className="min-w-125px"/>,
         id: 'value',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].value}/>,
+        Cell: ({...props}) => <TextCell text={formatNumberWithSuffix(props.data[props.row.index].value)}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Device" className="min-w-125px"/>,
