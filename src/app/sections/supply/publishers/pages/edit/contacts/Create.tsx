@@ -103,7 +103,7 @@ const PublisherContactCreate: React.FC = () => {
                         // we need to clear the form data
                         setForm(defaultPublisherContactFormFields);
 
-                        // we need to clear the form data
+                        // we need to clear the form error
                         setFormErrors([]);
                     }
                 }

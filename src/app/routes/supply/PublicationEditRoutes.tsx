@@ -10,6 +10,7 @@ import {PageLink, PageTitle} from '../../../_metronic/layout/core';
 import PublicationEdit from '../../sections/supply/publications/pages/Edit';
 import {PublicationContext} from '../../sections/supply/publications/core/PublicationContext';
 import PublicationAnalyticEdit from '../../sections/supply/publications/pages/edit/analytics/Edit';
+import PublicationFormatEdit from '../../sections/supply/publications/pages/edit/formats/Edit';
 
 const PublicationEditRoutes: React.FC = () => {
     const [publication, setPublication] = useState<Publication | null>(null);
@@ -72,20 +73,32 @@ const PublicationEditRoutes: React.FC = () => {
         }}>
             <Routes>
                 <Route
-                    path='/edit'
+                    path="/edit"
                     element={
                         <SuspenseView>
-                            <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
+                            <PageTitle breadcrumbs={publicationEditBreadcrumbs}
+                                       showPageTitle={false}>{'Edit'}</PageTitle>
                             <PublicationEdit/>
                         </SuspenseView>
                     }
                 />
                 <Route
-                    path='/analytics/:cid/edit'
+                    path="/analytics/:cid/edit"
                     element={
                         <SuspenseView>
-                            <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
+                            <PageTitle breadcrumbs={publicationEditBreadcrumbs}
+                                       showPageTitle={false}>{'Edit'}</PageTitle>
                             <PublicationAnalyticEdit/>
+                        </SuspenseView>
+                    }
+                />
+                <Route
+                    path="/formats/:cid/edit"
+                    element={
+                        <SuspenseView>
+                            <PageTitle breadcrumbs={publicationEditBreadcrumbs}
+                                       showPageTitle={false}>{'Edit'}</PageTitle>
+                            <PublicationFormatEdit/>
                         </SuspenseView>
                     }
                 />

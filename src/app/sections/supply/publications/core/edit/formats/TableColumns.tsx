@@ -7,12 +7,20 @@ import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {QUERIES} from '../../../../../../../_metronic/helpers';
 import {usePublication} from '../../PublicationContext';
 import {PublicationFormat} from '../../../../../../models/supply/publication/PublicationFormat';
+import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
 
 const PublicationFormatsColumns: ReadonlyArray<Column<PublicationFormat>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Format" className="min-w-125px"/>,
         id: 'format',
         Cell: ({...props}) => <TextCell text={props.data[props.row.index].format.name}/>,
+    },
+    {
+        Header: (props) => <CustomHeader tableProps={props} title="Type" className="min-w-125px"/>,
+        id: 'type',
+        Cell: ({...props}) => <BadgeCell status={props.data[props.row.index].type.name}
+                                         color={props.data[props.row.index].type.id === 'available' ? 'light-success' : 'light-danger'}
+                                         align="left"/>
     },
     {
         Header: (props) => (
