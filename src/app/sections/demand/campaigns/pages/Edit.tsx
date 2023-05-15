@@ -21,6 +21,8 @@ import {CreateOrderContext} from '../core/edit/orders/CreateOrderContext';
 
 const CampaignEdit: React.FC = () => {
     const [campaign, setCampaign] = useState<Campaign | null>(null);
+    const [currentFormatId, setCurrentFormatId] = useState<number | null>(null);
+    const [isFormatCopy, setIsFormatCopy] = useState<boolean>(false);
 
     let {id} = useParams();
 
@@ -122,7 +124,11 @@ const CampaignEdit: React.FC = () => {
                                             orderForm: orderForm,
                                             setOrderForm: setOrderForm,
                                             formatForm: formatForm,
-                                            setFormatForm: setFormatForm
+                                            setFormatForm: setFormatForm,
+                                            currentFormatIndex: currentFormatId,
+                                            setCurrentFormatIndex: setCurrentFormatId,
+                                            isFormatCopy: isFormatCopy,
+                                            setIsFormatCopy: setIsFormatCopy
                                         }}>
                                             <Tab.Pane eventKey='settingsNav-2'>
                                                 <EditOrders/>

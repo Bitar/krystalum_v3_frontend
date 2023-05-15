@@ -9,10 +9,13 @@ interface Props {
     onSubmit: (e: any) => void,
     forceHide?: boolean,
     setForceHide?: Dispatch<SetStateAction<any>>,
+    forceShow?: boolean,
+    setForceShow?: Dispatch<SetStateAction<any>>,
     size?: 'sm' | 'lg' | 'xl',
     buttonSize?: 'sm' | 'lg',
     submitButtonText?: string,
     buttonIconClasses?: string
+    onClose?: (e: any) => void
 }
 
 const KrysModal: React.FC<React.PropsWithChildren<Props>> = ({
@@ -22,18 +25,28 @@ const KrysModal: React.FC<React.PropsWithChildren<Props>> = ({
                                                                  onSubmit,
                                                                  forceHide = false,
                                                                  setForceHide,
+                                                                 forceShow = false,
+                                                                 setForceShow,
                                                                  size,
                                                                  buttonSize,
                                                                  submitButtonText,
                                                                  buttonIconClasses,
+                                                                 onClose,
                                                                  children
                                                              }) => {
     const [show, setShow] = useState<boolean>(false);
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        // if we just closed the modal, we don't want to force open it
+        if (setForceShow) {
+            setForceShow(false);
+        }
+
+        setShow(false)
+    };
     const handleShow = () => {
         // when we just opened the modal, we don't want to force close it
-        if(setForceHide) {
+        if (setForceHide) {
             setForceHide(false);
         }
 
@@ -44,9 +57,15 @@ const KrysModal: React.FC<React.PropsWithChildren<Props>> = ({
         if (forceHide) {
             handleClose();
         }
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [forceHide]);
+
+    useEffect(() => {
+        if (forceShow) {
+            handleShow();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [forceShow]);
 
     return (
         <>
@@ -65,7 +84,7 @@ const KrysModal: React.FC<React.PropsWithChildren<Props>> = ({
                 keyboard={false}
                 size={size ? size : 'xl'}
             >
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title>{title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -73,7 +92,7 @@ const KrysModal: React.FC<React.PropsWithChildren<Props>> = ({
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="krys" onClick={onSubmit}>{submitButtonText ? submitButtonText : 'Save'}</Button>
-                    <Button variant="secondary" onClick={handleClose}>
+                    <Button variant="secondary" onClick={onClose ? onClose : handleClose}>
                         Close
                     </Button>
                 </Modal.Footer>

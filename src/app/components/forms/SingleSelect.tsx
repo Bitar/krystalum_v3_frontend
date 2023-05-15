@@ -17,6 +17,7 @@ interface Props {
     placeholder?: string;
     isDisabled?: boolean;
     label?: string;
+    value?: any;
 }
 
 const SingleSelect: React.FC<Props> = ({
@@ -32,7 +33,8 @@ const SingleSelect: React.FC<Props> = ({
                                            customOnChange,
                                            placeholder,
                                            isDisabled = false,
-                                           label = 'name'
+                                           label = 'name',
+                                           value
                                        }) => {
 
     const selectRef = useRef<any>(null);
@@ -61,6 +63,7 @@ const SingleSelect: React.FC<Props> = ({
                                              placeholder={placeholder ? placeholder : `Select ${namePlaceHolder}`}
                                              isClearable={isClearable}
                                              ref={selectRef}
+                                             value={value ? value: undefined}
                                              formatOptionLabel={showHierarchy ? indentOptions : undefined}
                                              onChange={customOnChange ? customOnChange : singleSelectChangeHandler}
                                              isDisabled={isDisabled}/>
@@ -74,6 +77,7 @@ const SingleSelect: React.FC<Props> = ({
                                             placeholder={placeholder ? placeholder : `Select ${namePlaceHolder}`}
                                             isClearable={isClearable}
                                             ref={selectRef}
+                                            value={value ? value: undefined}
                                             formatOptionLabel={showHierarchy ? indentOptions : undefined}
                                             onChange={customOnChange ? customOnChange : singleSelectChangeHandler}
                                             isDisabled={isDisabled}/>

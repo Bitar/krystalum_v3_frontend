@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../_metronic/helpers';
 import FormErrors from '../../../../../components/forms/FormErrors';
@@ -31,13 +31,14 @@ import FormatSummary from '../../partials/orders/formats/FormatSummary';
 
 const EditOrders: React.FC = () => {
     const {campaign} = useCampaign();
-    const {orderForm, setOrderForm, formatForm, setFormatForm} = useCreateOrder();
+    const {orderForm, setOrderForm, formatForm, setFormatForm, setCurrentFormatIndex, currentFormatIndex, isFormatCopy, setIsFormatCopy} = useCreateOrder();
 
     const krysApp = useKrysApp();
 
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
     const [hideFormatModal, setHideFormatModal] = useState<boolean>(false);
+    const [showFormatModal, setShowFormatModal] = useState<boolean>(false);
 
     const onChangeHandler = (e: any) => {
         // as long as we are updating the create form, we should set the table refresh to false
@@ -84,14 +85,65 @@ const EditOrders: React.FC = () => {
         // we need to take the format form, put add it to order form and then reset the format form
         let orderFormats = [...orderForm.formats];
 
-        // append one to the list
-        orderFormats.push(formatForm);
+        // remove the default split and kpis if these are the only values in the array
+        let currentFormatKpis = formatForm.kpis;
+        let currentFormatSplits = formatForm.splits;
 
-        // add the new format to the order form
+        if (currentFormatKpis) {
+            currentFormatKpis = currentFormatKpis.filter((option) => option.kpi_option !== '' && option.kpi_target !== '');
+        }
+
+        if (currentFormatSplits) {
+            currentFormatSplits = currentFormatSplits.filter((option) => option.split_by_option !== '' && option.split_by_value.length > 0);
+        }
+
+        let formatToSubmit = {...formatForm, kpis: currentFormatKpis, splits: currentFormatSplits};
+
+        if(currentFormatIndex !== null) {
+            // we are updating a format not creating a new one
+            // we need to check if this is copy or not
+            if(isFormatCopy) {
+                // append one to the list
+                orderFormats.push(formatToSubmit);
+            } else {
+                orderFormats[currentFormatIndex] = formatToSubmit;
+            }
+        } else {
+            // append one to the list
+            orderFormats.push(formatToSubmit);
+        }
+
+        // update the order form with the new formats (either one edited or one newly added)
         setOrderForm({...orderForm, formats: orderFormats});
 
         // reset the format form
         setFormatForm(defaultCampaignOrderFormatFormFields);
+
+        // after resetting the format form, we need to set the index of the current format as null
+        setCurrentFormatIndex(null);
+
+        // set the form as not copy
+        setIsFormatCopy(false);
+
+        // hide the modal
+        setHideFormatModal(true);
+    }
+
+    const formFormRef = useRef<any>(null);
+
+    const onModalSave = () => {
+        if (formFormRef.current) {
+            formFormRef.current.handleSubmit();
+        }
+    }
+
+    const onModalClose = () => {
+        // we just need to reset the form
+        // reset the format form
+        setFormatForm(defaultCampaignOrderFormatFormFields);
+
+        // after resetting the format form, we need to set the index of the current format as null
+        setCurrentFormatIndex(null);
 
         // hide the modal
         setHideFormatModal(true);
@@ -146,18 +198,24 @@ const EditOrders: React.FC = () => {
 
                                         <div className='mt-5'>
                                             {
-                                                orderForm.formats.map((format, index) => <FormatSummary index={index} format={format}/>)
+                                                orderForm.formats.map((format, index) => <FormatSummary
+                                                    key={`format-summary-${index}`} index={index} format={format} setShowFormatModal={setShowFormatModal}/>)
                                             }
                                         </div>
 
                                         <div className='mt-5'>
-                                            {<KrysModal onSubmit={handleFormatSubmit} title={'Add new format'}
+                                            {<KrysModal onSubmit={onModalSave} title={'Add new format'}
+                                                        onClose={onModalClose}
                                                         buttonVariant='success' buttonSize='sm'
                                                         buttonIconClasses='fa-duotone fa-plus fs-6'
                                                         forceHide={hideFormatModal}
                                                         setForceHide={setHideFormatModal}
+                                                        forceShow={showFormatModal}
+                                                        setForceShow={setShowFormatModal}
                                                         buttonText='Add new format'>
-                                                <CreateFormatForm setHideFormatModal={setHideFormatModal}/>
+                                                <CreateFormatForm formRef={formFormRef}
+                                                                  onSubmitHandler={handleFormatSubmit}
+                                                                  setHideFormatModal={setHideFormatModal}/>
                                             </KrysModal>}
                                         </div>
                                     </div>

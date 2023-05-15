@@ -11,13 +11,24 @@ interface Props {
     name: string;
     doClear?: boolean;
     setSelected?: React.Dispatch<React.SetStateAction<any>>;
+    value?: any;
 }
 
-const MultiSelect: React.FC<Props> = ({isResourceLoaded, options, defaultValue, form, setForm, name, doClear = false, setSelected}) => {
+const MultiSelect: React.FC<Props> = ({
+                                          isResourceLoaded,
+                                          options,
+                                          defaultValue,
+                                          form,
+                                          setForm,
+                                          name,
+                                          doClear = false,
+                                          setSelected,
+                                          value
+                                      }) => {
     const selectRef = useRef<any>(null);
 
     useEffect(() => {
-        if(doClear) {
+        if (doClear) {
             selectRef.current?.clearValue();
         }
 
@@ -27,7 +38,7 @@ const MultiSelect: React.FC<Props> = ({isResourceLoaded, options, defaultValue, 
     const multiSelectChangeHandler = (e: any) => {
         genericMultiSelectOnChangeHandler(e, form, setForm, name);
 
-        if(setSelected !== undefined) {
+        if (setSelected !== undefined) {
             setSelected(e);
         }
     };
@@ -43,6 +54,7 @@ const MultiSelect: React.FC<Props> = ({isResourceLoaded, options, defaultValue, 
                                              getOptionValue={(instance) => instance.id.toString()}
                                              placeholder={`Select one or more ${namePlaceHolder}`}
                                              ref={selectRef}
+                                             value={value ? value : undefined}
                                              onChange={multiSelectChangeHandler}/>
             }
 
@@ -53,6 +65,7 @@ const MultiSelect: React.FC<Props> = ({isResourceLoaded, options, defaultValue, 
                                             getOptionValue={(instance) => instance.id.toString()}
                                             placeholder={`Select one or more ${namePlaceHolder}`}
                                             ref={selectRef}
+                                            value={value ? value : undefined}
                                             onChange={multiSelectChangeHandler}/>
             }
         </>

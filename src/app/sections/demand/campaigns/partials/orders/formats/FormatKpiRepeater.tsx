@@ -13,18 +13,23 @@ import {
 } from '../../../../../../helpers/form';
 import {Field} from 'formik';
 import Button from 'react-bootstrap/Button';
+import {CampaignOrderFormatFormFields} from '../../../core/edit/orders/formats/form';
 
 interface Props {
     defaultValue: FormatKpiField,
     index: number,
-    setParentKpis: Dispatch<SetStateAction<any>>,
-    parentKpis: FormatKpiField[],
+    setParentForm: Dispatch<SetStateAction<any>>,
+    parentForm: CampaignOrderFormatFormFields,
     setParentFormErrors: Dispatch<SetStateAction<any>>,
 }
 
-const FormatKpiRepeater: React.FC<Props> = ({defaultValue, index, setParentKpis, parentKpis, setParentFormErrors}) => {
+const FormatKpiRepeater: React.FC<Props> = ({defaultValue, index, setParentForm, parentForm, setParentFormErrors}) => {
     const [form, setForm] = useState<FormatKpiField>(defaultValue);
     const [kpisOptions, setKpisOptions] = useState<Kpi[]>([]);
+
+    useEffect(() => {
+        setForm(defaultValue);
+    }, [defaultValue]);
 
     useEffect(() => {
         // we need to fill the KPI options
@@ -44,12 +49,16 @@ const FormatKpiRepeater: React.FC<Props> = ({defaultValue, index, setParentKpis,
     }, []);
 
     useEffect(() => {
-        let kpis = [...parentKpis];
+        let kpis : any[] = [];
 
-        if(kpis.length > index) {
+        if(parentForm.kpis) {
+            kpis = [...parentForm.kpis];
+        }
+
+        if (kpis.length > index && form.kpi_target !== '') {
             kpis[index] = form;
 
-            setParentKpis(kpis);
+            setParentForm({...parentForm, kpis: kpis});
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form.kpi_target])
@@ -57,29 +66,38 @@ const FormatKpiRepeater: React.FC<Props> = ({defaultValue, index, setParentKpis,
     const handleDelete = (e: any) => {
         // first we need to update the parent form by removing the current
         // row from it
-        let kpis = [...parentKpis];
+        let kpis : any[] = [];
 
-        if(kpis.length > index) {
+        if(parentForm.kpis) {
+            kpis = [...parentForm.kpis];
+        }
+
+        if (kpis.length > index) {
             kpis.splice(index, 1);
 
-            setParentKpis(kpis);
+            setParentForm({...parentForm, kpis: kpis});
         }
     }
-    
+
     return (
         <Row className="mb-4">
             <Col md={4}>
                 <Select name="kpi_option"
                         options={kpisOptions}
+                        value={kpisOptions.filter((option) => option.id === form.kpi_option)[0]}
                         getOptionLabel={(kpiOption) => kpiOption.name}
                         getOptionValue={(kpiOption) => kpiOption.id.toString()}
                         placeholder='Choose KPI'
-                        onChange={(e) => genericSingleSelectOnChangeHandler(e, form, setForm, 'kpi_option')}/>
+                        onChange={(e) =>
+                            genericSingleSelectOnChangeHandler(e, form, setForm, 'kpi_option')}/>
             </Col>
 
             <Col md={4}>
                 <Field className="form-control fs-base" type="text"
-                       placeholder="Enter target for KPI" name="kpi_target" onChange={(e: any) => genericOnChangeHandler(e, form, setForm)}/>
+                       value={form.kpi_target}
+                       placeholder="Enter target for KPI" name="kpi_target" onChange={(e: any) =>
+                    genericOnChangeHandler(e, form, setForm)
+                }/>
             </Col>
 
             <Col md={4}>

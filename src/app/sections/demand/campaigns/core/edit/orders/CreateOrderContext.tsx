@@ -9,7 +9,11 @@ interface Props {
     orderForm: CampaignOrderFormFields;
     setOrderForm: Dispatch<SetStateAction<any>>,
     formatForm: CampaignOrderFormatFormFields,
-    setFormatForm: Dispatch<SetStateAction<any>>
+    setFormatForm: Dispatch<SetStateAction<any>>,
+    currentFormatIndex: number | null,
+    setCurrentFormatIndex: Dispatch<SetStateAction<any>>
+    isFormatCopy: boolean,
+    setIsFormatCopy: Dispatch<SetStateAction<any>>
 }
 
 const defaultCreateOrderContext = {
@@ -18,6 +22,13 @@ const defaultCreateOrderContext = {
     },
     formatForm: defaultCampaignOrderFormatFormFields,
     setFormatForm: () => {
+    },
+    currentFormatIndex: null,
+    setCurrentFormatIndex: () => {
+    },
+    isFormatCopy: false,
+    setIsFormatCopy: () => {
+
     }
 }
 

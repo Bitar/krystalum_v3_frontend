@@ -24,7 +24,8 @@ export interface CampaignOrderFormatFormFields {
     booked_currency_id: number | string,
     booked_currency_name: string,
     splits?: FormatSplitField[],
-    kpis?: FormatKpiField[]
+    kpis?: FormatKpiField[],
+    kpi_meta?: string
 }
 
 export const defaultCampaignOrderFormatFormFields = {
@@ -34,7 +35,7 @@ export const defaultCampaignOrderFormatFormFields = {
     buying_model_name: '',
     cost: '',
     cost_currency_id: 236,
-    cost_currency_name: '',
+    cost_currency_name: 'USD',
     start_date: '',
     end_date: '',
     regions_ids: [],
@@ -47,21 +48,67 @@ export const defaultCampaignOrderFormatFormFields = {
     target: '',
     booked_amount: '',
     booked_currency_id: 236,
-    booked_currency_name: '',
+    booked_currency_name: 'USD',
     splits: [],
-    kpis: []
+    kpis: [],
+    kpi_meta: ''
 };
 
-// TODO finish the validation based on required
-export const CampaignOrderFormatSchema = Yup.object().shape({
-    format_id: Yup.number().required(),
-    buying_model_id: Yup.number().required(), // required IF the format_id is not masthead,
-    cost: Yup.number().required(), // required IF the format_id is not masthead,
-    cost_currency_id: Yup.number().required(), // required IF the format_id is not masthead,
-    start_date: Yup.string().required(),
-    end_date: Yup.string().required(), // required IF the campaign buy type is not ALWAYS ON
-    performance_metric_id: Yup.number().required(), // required IF the format_id is not masthead,
-    target: Yup.number().required(), // required IF the format_id is not masthead,
-    booked_amount: Yup.number().required(),
-    booked_currency_id: Yup.number().required()
-});
+export const getCampaignOrderFormatSchema = (hasBuyingModels: boolean, isAlwaysOn: boolean) => {
+    const formatTypeBasedValidation = (value: any | undefined, context: any) => {
+        if (hasBuyingModels) {
+            // if the format has buying models, then the validation should pass if the field is set
+            return value !== undefined && value !== null;
+        } else {
+            // if the format doesnt have buying models, then this field is not required so we just return true
+            return true;
+        }
+    };
+
+    const buyTypeBasedValidation = (value: any | undefined, context: any) => {
+        if (!isAlwaysOn) {
+            // if the format is NOT always on, then the validation should pass if the field is set (i.e. the field is required)
+            return value !== undefined && value !== null;
+        } else {
+            // if the format is always on, then we don't have any validation on this field
+            return true;
+        }
+    };
+
+    return Yup.object().shape({
+        format_id: Yup.number().required(),
+        buying_model_id: Yup.number().test(
+            'format-type-based-validation',
+            'this field is required',
+            formatTypeBasedValidation
+        ),
+        cost: Yup.number().test(
+            'format-type-based-validation',
+            'this field is required',
+            formatTypeBasedValidation
+        ),
+        cost_currency_id: Yup.number().test(
+            'format-type-based-validation',
+            'this field is required',
+            formatTypeBasedValidation
+        ),
+        start_date: Yup.string().required(),
+        end_date: Yup.string().test(
+            'buy-type-based-validation',
+            'this field is required',
+            buyTypeBasedValidation
+        ),
+        performance_metric_id: Yup.number().test(
+            'format-type-based-validation',
+            'this field is required',
+            formatTypeBasedValidation
+        ),
+        target: Yup.number().test(
+            'format-type-based-validation',
+            'this field is required',
+            formatTypeBasedValidation
+        ),
+        booked_amount: Yup.number().required(),
+        booked_currency_id: Yup.number().required()
+    });
+}

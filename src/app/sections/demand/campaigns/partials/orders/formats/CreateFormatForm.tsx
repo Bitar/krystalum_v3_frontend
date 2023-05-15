@@ -7,15 +7,11 @@ import {Col, Row} from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 
 import FormErrors from '../../../../../../components/forms/FormErrors';
-import {
-    CampaignOrderSchema,
-} from '../../../core/edit/orders/form';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import {
     genericDateOnChangeHandler,
     GenericErrorMessage, genericMultiSelectOnChangeHandler,
-    genericOnChangeHandler,
-    genericSingleSelectOnChangeHandler
+    genericOnChangeHandler
 } from '../../../../../../helpers/form';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {getAllFormats, getFormat} from '../../../../../../requests/misc/Format';
@@ -37,23 +33,26 @@ import MultiSelect from '../../../../../../components/forms/MultiSelect';
 import {PerformanceMetricCondensedTitle} from '../../../../../../models/misc/PerformanceMetric';
 import {getAllPerformanceMetrics} from '../../../../../../requests/misc/PerformanceMetric';
 import FormatSplitRepeater from './FormatSplitRepeater';
-import {defaultFormatSplitField, FormatSplitField} from '../../../core/edit/orders/formats/formatSplitField';
-import {defaultFormatKpiField, FormatKpiField} from '../../../core/edit/orders/formats/formatKpiField';
+import {defaultFormatSplitField} from '../../../core/edit/orders/formats/formatSplitField';
+import {defaultFormatKpiField} from '../../../core/edit/orders/formats/formatKpiField';
 import FormatKpiRepeater from './FormatKpiRepeater';
 import {useCreateOrder} from '../../../core/edit/orders/CreateOrderContext';
 import {Currency} from '../../../../../../models/misc/Currency';
+import {getCampaignOrderFormatSchema} from '../../../core/edit/orders/formats/form';
 
 interface Props {
-    setHideFormatModal: Dispatch<SetStateAction<any>>
+    setHideFormatModal: Dispatch<SetStateAction<any>>,
+    formRef: any,
+    onSubmitHandler: any
 }
 
-const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
+const CreateFormatForm: React.FC<Props> = ({setHideFormatModal, formRef, onSubmitHandler}) => {
     const {campaign} = useCampaign();
-    const {formatForm, setFormatForm} = useCreateOrder();
+    const {formatForm, setFormatForm, currentFormatIndex} = useCreateOrder();
 
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [isAlwaysOn, setIsAlwaysOn] = useState<boolean>(false);
-    const [hasBuyingModels, setHasBuyingModels] = useState<boolean>(false);
+    const [hasBuyingModels, setHasBuyingModels] = useState<boolean>(true);
 
     const [defaultSelectCities, setDefaultSelectedCities] = useState<City[]>([]);
 
@@ -69,14 +68,75 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
     const [reloadTargetMetrics, setReloadTargetMetrics] = useState<boolean>(false);
     const [defaultPerformanceMetric, setDefaultPerformanceMetric] = useState<PerformanceMetricCondensedTitle | undefined>(undefined);
 
-    const [formatSplits, setFormatSplits] = useState<FormatSplitField[]>([defaultFormatSplitField]);
-    const [formatKpis, setFormatKpis] = useState<FormatKpiField[]>([defaultFormatKpiField]);
-
     useEffect(() => {
         if (campaign && campaign.buyType?.id === BuyTypeEnum.AO) {
             setIsAlwaysOn(true);
         }
     }, [campaign]);
+
+    useEffect(() => {
+        if(currentFormatIndex !== null) {
+            // we need to refetch form items based on selected values in the form
+
+            // fetch the buying models based on the form's format
+            // get the buying models based on the selected format
+            if(formatForm.buying_model_id && typeof formatForm.buying_model_id === 'number') {
+                getFormat(formatForm.buying_model_id).then(response => {
+                    if (axios.isAxiosError(response)) {
+                        setFormErrors(extractErrors(response));
+                    } else if (response === undefined) {
+                        setFormErrors([GenericErrorMessage])
+                    } else {
+                        if (response) {
+                            if (response.has_buying_model === 1) {
+                                setHasBuyingModels(true);
+                            } else {
+                                setHasBuyingModels(false);
+                            }
+
+                            let buyingModels = response.buyingModels.map((buyingModel) => ({
+                                id: buyingModel.id,
+                                name: buyingModel.name
+                            }));
+
+                            setBuyingModels(buyingModels);
+                        }
+                    }
+                });
+            }
+
+            // set the selected performance metric
+            setDefaultPerformanceMetric(performanceMetrics.filter((option) => option.id === formatForm.performance_metric_id)[0]);
+
+            // get the list of cities and update the selection if need be
+            let query = '';
+
+            if (formatForm.countries_ids && formatForm.countries_ids.length > 0) {
+                query = 'filter[countries]=' + formatForm.countries_ids.map((entity: any) => entity.id).join(',');
+
+                // get the cities and fill the select
+                getAllCities(query).then(response => {
+                    if (axios.isAxiosError(response)) {
+                        setFormErrors(extractErrors(response));
+                    } else if (response === undefined) {
+                        setFormErrors([GenericErrorMessage])
+                    } else {
+                        if (response.data) {
+                            setCities(response.data);
+
+                            setDefaultSelectedCities(response.data.filter((option) => formatForm.cities_ids?.includes(option.id)));
+                        }
+                    }
+                });
+            } else {
+                setCities([]);
+                setDefaultSelectedCities([]);
+            }
+
+            setFormatForm({...formatForm, kpis: formatForm.kpis, splits: formatForm.splits});
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentFormatIndex]);
 
     useEffect(() => {
         // get the booking types
@@ -160,8 +220,7 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
     const onChangeFormat = (e: any) => {
         setIsBuyingModelsLoaded(false);
 
-        genericSingleSelectOnChangeHandler(e, formatForm, setFormatForm, 'format_id');
-        setFormatForm({...formatForm, format_name: e.name});
+        setFormatForm({...formatForm, format_name: e.name, format_id: e.id});
 
         // get the buying models based on the selected format
         getFormat(e.id).then(response => {
@@ -195,9 +254,13 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
         genericMultiSelectOnChangeHandler(e, formatForm, setFormatForm, 'countries_ids');
 
         if (e.length > 0) {
-            setFormatForm({...formatForm, countries_names: e.map((entity: any) => entity.id)});
+            setFormatForm({
+                ...formatForm,
+                countries_ids: e.map((entity: any) => entity.id),
+                countries_names: e.map((entity: any) => entity.name)
+            });
         } else {
-            setFormatForm({...formatForm, countries_names: []});
+            setFormatForm({...formatForm, countries_ids: [], countries_names: []});
         }
 
         let query = '';
@@ -238,7 +301,7 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
                     setFormErrors([GenericErrorMessage])
                 } else {
                     if (response) {
-                        setFormatForm({...formatForm, buying_model_name: response.name});
+
 
                         // if there's only one performance metric then we make the default selection
                         let buyingModelMetrics = response.performanceMetrics;
@@ -249,6 +312,14 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
                                 id: buyingModelMetrics[0].id,
                                 title: buyingModelMetrics[0].title
                             });
+
+                            setFormatForm({
+                                ...formatForm,
+                                performance_metric_id: buyingModelMetrics[0].id,
+                                buying_model_name: response.name
+                            });
+                        } else {
+                            setFormatForm({...formatForm, buying_model_name: response.name});
                         }
                     }
                 }
@@ -258,9 +329,12 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
     }, [formatForm.buying_model_id]);
 
     useEffect(() => {
-        if(formatForm.cities_ids) {
-            if(formatForm.cities_ids.length > 0) {
-                setFormatForm({...formatForm, cities_names: cities.filter((city) => formatForm.cities_ids?.includes(city.id)).map((city) => city.name)});
+        if (formatForm.cities_ids) {
+            if (formatForm.cities_ids.length > 0) {
+                setFormatForm({
+                    ...formatForm,
+                    cities_names: cities.filter((city) => formatForm.cities_ids?.includes(city.id)).map((city) => city.name)
+                });
             } else {
                 setFormatForm({...formatForm, cities_names: []});
             }
@@ -293,16 +367,6 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [buyingModels]);
 
-    useEffect(() => {
-        setFormatForm({...formatForm, splits: formatSplits});
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [formatSplits]);
-
-    useEffect(() => {
-        setFormatForm({...formatForm, kpis: formatKpis});
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [formatKpis]);
-
     const dateChangeHandler = (date: Date | null, key: string) => {
         genericDateOnChangeHandler(date, formatForm, setFormatForm, key);
     };
@@ -311,8 +375,9 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
         <>
             <FormErrors errorMessages={formErrors}/>
 
-            <Formik initialValues={formatForm} validationSchema={CampaignOrderSchema}
-                    onSubmit={() => console.log("format form was submitted")}
+            <Formik initialValues={formatForm} validationSchema={getCampaignOrderFormatSchema(hasBuyingModels, isAlwaysOn)}
+                    onSubmit={onSubmitHandler}
+                    innerRef={formRef}
                     enableReinitialize>
                 {
                     (formik) => (
@@ -326,6 +391,7 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
                                 <KrysFormLabel text="Format" isRequired={true}/>
 
                                 <Select name="format_id"
+                                        value={formats.filter((option) => option.id === formatForm.format_id)[0]}
                                         options={formats}
                                         getOptionLabel={(formats) => formats.name}
                                         getOptionValue={(formats) => formats.id.toString()}
@@ -344,6 +410,7 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
 
                                 <SingleSelect isResourceLoaded={isBuyingModelsLoaded} options={buyingModels}
                                               defaultValue={undefined} form={formatForm} setForm={setFormatForm}
+                                              value={buyingModels.filter((option) => option.id === formatForm.buying_model_id)[0]}
                                               name='buying_model_id' isClearable={!hasBuyingModels}/>
 
                                 <div className="mt-3 text-danger">
@@ -368,17 +435,19 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
                                 <KrysFormLabel text="Cost currency" isRequired={hasBuyingModels}/>
 
                                 <Select name="cost_currency_id"
-                                        defaultValue={{id: 236, currency: 'USD'}}
+                                        value={currencies.filter((option) => option.id === formatForm.cost_currency_id)[0]}
                                         options={currencies}
                                         getOptionLabel={(currency) => currency.currency}
                                         getOptionValue={(currency) => currency.id.toString()}
                                         placeholder='Choose currency for cost'
                                         isClearable={!hasBuyingModels}
                                         onChange={(e) => {
-                                            genericSingleSelectOnChangeHandler(e, formatForm, setFormatForm, 'cost_currency_id');
-
-                                            if(e) {
-                                                setFormatForm({...formatForm, cost_currency_name: e.currency});
+                                            if (e) {
+                                                setFormatForm({
+                                                    ...formatForm,
+                                                    cost_currency_id: e.id,
+                                                    cost_currency_name: e.currency
+                                                });
                                             }
                                         }}/>
 
@@ -395,6 +464,7 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
                                             oneTap={true}
                                             block
                                             isoWeek
+                                            defaultValue={formatForm.start_date ? new Date(parseInt(formatForm.start_date.split('-')[0]), parseInt(formatForm.start_date.split('-')[1]), parseInt(formatForm.start_date.split('-')[2])) : undefined}
                                             preventOverflow={false}
                                             placeholder="Select format start date"
                                             onChange={(date) => dateChangeHandler(date, 'start_date')}
@@ -414,6 +484,7 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
                                             block
                                             isoWeek
                                             preventOverflow={false}
+                                            defaultValue={formatForm.end_date ? new Date(parseInt(formatForm.end_date.split('-')[0]), parseInt(formatForm.end_date.split('-')[1]), parseInt(formatForm.end_date.split('-')[2])) : undefined}
                                             placeholder="Select format end date"
                                             onChange={(date) => dateChangeHandler(date, 'end_date')}
                                 />
@@ -427,16 +498,19 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
                                 <KrysFormLabel text="Target regions" isRequired={false}/>
 
                                 <Select isMulti name="regions_ids"
+                                        value={regions.filter((option) => formatForm.regions_ids?.includes(option.id))}
                                         options={regions}
                                         getOptionLabel={(region) => region.name}
                                         getOptionValue={(region) => region.id.toString()}
                                         onChange={(e) => {
-                                            genericMultiSelectOnChangeHandler(e, formatForm, setFormatForm, 'regions_ids');
-
                                             if (e.length > 0) {
-                                                setFormatForm({...formatForm, regions_names: e.map((entity: any) => entity.name)});
+                                                setFormatForm({
+                                                    ...formatForm,
+                                                    regions_ids: e.map((entity: any) => entity.id),
+                                                    regions_names: e.map((entity: any) => entity.name)
+                                                });
                                             } else {
-                                                setFormatForm({...formatForm, regions_names: []});
+                                                setFormatForm({...formatForm, regions_ids: [], regions_names: []});
                                             }
                                         }}
                                         placeholder='Select target regions'/>
@@ -450,6 +524,7 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
                                 <KrysFormLabel text="Target countries" isRequired={false}/>
 
                                 <Select isMulti name="countries"
+                                        value={countries.filter((option) => formatForm.countries_ids?.includes(option.id))}
                                         options={countries}
                                         getOptionLabel={(country) => country.name}
                                         getOptionValue={(country) => country.id.toString()}
@@ -515,16 +590,18 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
                                 <KrysFormLabel text="Booked amount currency" isRequired={true}/>
 
                                 <Select name="booked_currency_id"
-                                        defaultValue={{id: 236, currency: 'USD'}}
+                                        value={currencies.filter((option) => option.id === formatForm.booked_currency_id)[0]}
                                         options={currencies}
                                         getOptionLabel={(currency) => currency.currency}
                                         getOptionValue={(currency) => currency.id.toString()}
                                         placeholder='Choose currency for booked amount'
                                         onChange={(e) => {
-                                            genericSingleSelectOnChangeHandler(e, formatForm, setFormatForm, 'booked_currency_id');
-
-                                            if(e) {
-                                                setFormatForm({...formatForm, 'booked_currency_name': e.currency});
+                                            if (e) {
+                                                setFormatForm({
+                                                    ...formatForm,
+                                                    booked_currency_id: e.id,
+                                                    booked_currency_name: e.currency
+                                                });
                                             }
                                         }}/>
 
@@ -540,18 +617,31 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
 
                             <div className="mb-7">
                                 {
-                                    formatSplits.map((formatSplitBy, index) =>
-                                        <FormatSplitRepeater defaultValue={formatSplitBy} index={index}
-                                                             setParentSplits={setFormatSplits}
-                                                             parentSplits={formatSplits}
-                                                             setParentFormErrors={setFormErrors}
-                                                             key={`split-${index}`}/>)
+                                    formatForm.splits?.map((formatSplitBy, index) => {
+                                        return <FormatSplitRepeater defaultValue={formatSplitBy} index={index}
+                                                                    setParentForm={setFormatForm}
+                                                                    parentForm={formatForm}
+                                                                    setParentFormErrors={setFormErrors}
+                                                                    key={`format-split-${index}`}/>;
+                                    })
                                 }
 
                                 <Row>
                                     <Col>
                                         <Button variant={'success'}
-                                                onClick={() => setFormatSplits([...formatSplits, defaultFormatSplitField])}
+                                                onClick={() => {
+                                                    if(formatForm.splits) {
+                                                        setFormatForm({
+                                                            ...formatForm,
+                                                            splits: [...formatForm.splits, defaultFormatSplitField]
+                                                        })
+                                                    } else {
+                                                        setFormatForm({
+                                                            ...formatForm,
+                                                            splits: [defaultFormatSplitField]
+                                                        })
+                                                    }
+                                                }}
                                                 size={'sm'}>
                                             <i className={'fa-duotone fa-plus fs-6'}></i> Add split
                                         </Button>
@@ -566,22 +656,47 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal}) => {
 
                             <div className="mb-7">
                                 {
-                                    formatKpis.map((formatKpi, index) =>
-                                        <FormatKpiRepeater defaultValue={formatKpi} index={index}
-                                                           setParentKpis={setFormatKpis} parentKpis={formatKpis}
-                                                           setParentFormErrors={setFormErrors} key={`kpi-${index}`}/>
+                                    formatForm.kpis?.map((formatKpi, index) => {
+                                            return <FormatKpiRepeater defaultValue={formatKpi} index={index}
+                                                                      setParentForm={setFormatForm} parentForm={formatForm}
+                                                                      setParentFormErrors={setFormErrors}
+                                                                      key={`format-kpi-${index}`}/>
+                                        }
                                     )
                                 }
 
                                 <Row>
                                     <Col>
                                         <Button variant={'success'}
-                                                onClick={() => setFormatKpis([...formatKpis, defaultFormatKpiField])}
+                                                onClick={() => {
+                                                    if(formatForm.kpis) {
+                                                        setFormatForm({
+                                                            ...formatForm,
+                                                            kpis: [...formatForm.kpis, defaultFormatKpiField]
+                                                        })
+                                                    } else {
+                                                        setFormatForm({
+                                                            ...formatForm,
+                                                            kpis: [defaultFormatKpiField]
+                                                        })
+                                                    }
+                                                }}
                                                 size={'sm'}>
                                             <i className={'fa-duotone fa-plus fs-6'}></i> Add KPI
                                         </Button>
                                     </Col>
                                 </Row>
+                            </div>
+
+                            <div className="mb-7">
+                                <KrysFormLabel text="KPI Meta" isRequired={false}/>
+
+                                <Field className="form-control fs-base" type="text" as="textarea" style={{resize: 'none'}}
+                                       placeholder="Enter any additional information related to the format's KPIs" name="kpi_meta"/>
+
+                                <div className="mt-1 text-danger">
+                                    <ErrorMessage name="kpi_meta" className="mt-2"/>
+                                </div>
                             </div>
                         </Form>
                     )

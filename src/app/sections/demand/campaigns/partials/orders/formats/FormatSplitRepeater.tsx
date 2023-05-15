@@ -11,6 +11,7 @@ import axios, {AxiosError} from 'axios';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {FormatSplitField} from '../../../core/edit/orders/formats/formatSplitField';
 import Button from 'react-bootstrap/Button';
+import {CampaignOrderFormatFormFields} from '../../../core/edit/orders/formats/form';
 
 type SplitToApiCall = {
     [key: string]: Promise<any | AxiosError<any, any> | undefined>;
@@ -19,33 +20,48 @@ type SplitToApiCall = {
 interface Props {
     defaultValue: FormatSplitField,
     index: number,
-    setParentSplits: Dispatch<SetStateAction<any>>,
-    parentSplits: FormatSplitField[],
+    setParentForm: Dispatch<SetStateAction<any>>,
+    parentForm: CampaignOrderFormatFormFields,
     setParentFormErrors: Dispatch<SetStateAction<any>>,
 }
 
-const FormatSplitRepeater: React.FC<Props> = ({defaultValue, index, setParentSplits, parentSplits, setParentFormErrors}) => {
+const FormatSplitRepeater: React.FC<Props> = ({
+                                                  defaultValue,
+                                                  index,
+                                                  setParentForm,
+                                                  parentForm,
+                                                  setParentFormErrors
+                                              }) => {
     const [form, setForm] = useState<FormatSplitField>(defaultValue);
 
     const [splitValues, setSplitValues] = useState<any[]>([]);
     const [reloadSplitValues, setReloadSplitValues] = useState<boolean>(false);
+
+    // when we change the split option => we set the reload values to false
+    // when we're done fetching the values of the split option => we set reload values to true
+
+    useEffect(() => {
+        setForm(defaultValue);
+    }, [defaultValue]);
 
     const onChangeSplitOption = (e: any) => {
         // do API call to fill the values
         setReloadSplitValues(false);
 
         genericSingleSelectOnChangeHandler(e, form, setForm, 'split_by_option');
+    }
 
-        let splitToApiCall: SplitToApiCall = {
-            'devices': getAllDevices(),
-            'languages': getAllLanguages(),
-            'operating-systems': getAllOperatingSystems(),
-            'audiences': getAllAudiences()
-        }
+    useEffect(() => {
+        if (form.split_by_option) {
+            let splitToApiCall: SplitToApiCall = {
+                'devices': getAllDevices(),
+                'languages': getAllLanguages(),
+                'operating-systems': getAllOperatingSystems(),
+                'audiences': getAllAudiences()
+            }
 
-        // get the value of the selected split
-        if(e) {
-            splitToApiCall[e.id].then(response => {
+            // get the value of the selected split
+            splitToApiCall[form.split_by_option].then(response => {
                 if (axios.isAxiosError(response)) {
                     setParentFormErrors(extractErrors(response));
                 } else if (response === undefined) {
@@ -58,21 +74,26 @@ const FormatSplitRepeater: React.FC<Props> = ({defaultValue, index, setParentSpl
                 }
             });
         }
-    }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [form.split_by_option]);
 
     useEffect(() => {
-        if(splitValues.length > 0) {
+        if (splitValues.length > 0) {
             setReloadSplitValues(true);
         }
     }, [splitValues])
 
     useEffect(() => {
-        let splits = [...parentSplits];
+        let splits : any[] = [];
 
-        if(splits.length > index) {
+        if(parentForm.splits) {
+            splits = [...parentForm.splits];
+        }
+
+        if (splits.length > index) {
             splits[index] = form;
 
-            setParentSplits(splits);
+            setParentForm({...parentForm, splits: splits});
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form.split_by_value])
@@ -80,12 +101,16 @@ const FormatSplitRepeater: React.FC<Props> = ({defaultValue, index, setParentSpl
     const handleDelete = (e: any) => {
         // first we need to update the parent form by removing the current
         // row from it
-        let splits = [...parentSplits];
+        let splits : any[] = [];
 
-        if(splits.length > index) {
+        if(parentForm.splits) {
+            splits = [...parentForm.splits];
+        }
+
+        if (splits.length > index) {
             splits.splice(index, 1);
 
-            setParentSplits(splits);
+            setParentForm({...parentForm, splits: splits});
         }
     }
 
@@ -97,6 +122,10 @@ const FormatSplitRepeater: React.FC<Props> = ({defaultValue, index, setParentSpl
                             id: 'languages',
                             name: 'Languages'
                         }]}
+                        value={[{id: 'devices', name: 'Devices'}, {
+                            id: 'languages',
+                            name: 'Languages'
+                        }].filter((option) => option.id === form.split_by_option)[0]}
                         getOptionLabel={(splitOption) => splitOption.name}
                         getOptionValue={(splitOption) => splitOption.id.toString()}
                         placeholder='Split format by'
@@ -105,8 +134,9 @@ const FormatSplitRepeater: React.FC<Props> = ({defaultValue, index, setParentSpl
 
             <Col md={4}>
                 <MultiSelect isResourceLoaded={reloadSplitValues} options={splitValues}
+                             value={splitValues.filter((option) => form.split_by_value.includes(option.id))}
                              defaultValue={undefined} form={form} setForm={setForm}
-                             name='split_by_value' />
+                             name='split_by_value'/>
             </Col>
 
             <Col md={4}>
