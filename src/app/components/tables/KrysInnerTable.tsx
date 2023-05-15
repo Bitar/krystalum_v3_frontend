@@ -45,6 +45,7 @@ const KrysInnerTable: React.FC<Props> = ({
                                    requestFunction={requestFunction} requestId={requestId}>
 
                 <TableRefetch doRefetch={doRefetch}/>
+
                 <TableFilter filters={filters}/>
 
                 <ListViewProvider>
