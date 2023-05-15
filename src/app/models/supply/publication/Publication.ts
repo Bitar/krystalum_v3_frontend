@@ -1,11 +1,11 @@
 import {Response} from '../../../../_metronic/helpers';
 import {Publisher, PublisherCondensed} from '../publisher/Publisher';
 import {PublicationInfo} from './PublicationInfo';
-import {REVENUE_TYPE} from '../Options';
 import {PublicationLanguage} from './PublicationLanguage';
 import {Language} from '../../misc/Language';
 import {PublicationFormat} from './PublicationFormat';
 import {PublicationVertical} from './PublicationVertical';
+import {REVENUE_TYPE} from '../../../enums/Supply/RevenueType';
 
 export type Publication = {
     id: number,

@@ -28,7 +28,7 @@ import {Country} from '../../../../../models/misc/Country';
 import SingleSelect from '../../../../../components/forms/SingleSelect';
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
 import {usePublisher} from '../../core/PublisherContext';
-import {REVENUE_TYPE} from '../../../../../models/supply/Options';
+import {REVENUE_TYPE} from '../../../../../enums/Supply/RevenueType';
 
 const PublisherBasicInformationEdit: React.FC = () => {
     const {publisher, setPublisher} = usePublisher();

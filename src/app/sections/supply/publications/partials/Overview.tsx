@@ -3,10 +3,10 @@ import React from 'react';
 import {KTCard, KTCardBody, KTSVG} from '../../../../../_metronic/helpers';
 import {formatDateToMonthDayYear} from '../../../../helpers/dateFormatter';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
-import {REVENUE_TYPE} from '../../../../models/supply/Options';
 import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
 import {usePublication} from '../core/PublicationContext';
 import {Language} from '../../../../models/misc/Language';
+import {REVENUE_TYPE} from '../../../../enums/Supply/RevenueType';
 
 const PublisherOverview: React.FC = () => {
     const {publication} = usePublication();

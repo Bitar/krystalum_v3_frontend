@@ -22,7 +22,6 @@ import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysRadioButton from '../../../../../components/forms/KrysRadioButton';
 import SingleSelect from '../../../../../components/forms/SingleSelect';
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
-import {APPLICATION_TYPE, PUBLICATION_TYPE, REVENUE_TYPE} from '../../../../../models/supply/Options';
 import {usePublication} from '../../core/PublicationContext';
 import {updatePublication} from '../../../../../requests/supply/publication/Publication';
 import KrysCheckbox from '../../../../../components/forms/KrysCheckbox';
@@ -31,6 +30,9 @@ import {getAllLanguages} from '../../../../../requests/misc/Language';
 import {Publisher} from '../../../../../models/supply/publisher/Publisher';
 import {Language} from '../../../../../models/misc/Language';
 import MultiSelect from '../../../../../components/forms/MultiSelect';
+import {APPLICATION_TYPE} from '../../../../../enums/Supply/ApplicationType';
+import {PUBLICATION_TYPE} from '../../../../../enums/Supply/PublicationType';
+import {REVENUE_TYPE} from '../../../../../enums/Supply/RevenueType';
 
 const PublicationBasicInformationEdit: React.FC = () => {
     const {publication, setPublication} = usePublication();

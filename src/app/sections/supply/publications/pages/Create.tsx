@@ -28,9 +28,11 @@ import {getAllPublishers} from '../../../../requests/supply/publisher/Publisher'
 import {Language} from '../../../../models/misc/Language';
 import {getAllLanguages} from '../../../../requests/misc/Language';
 import KrysRadioButton from '../../../../components/forms/KrysRadioButton';
-import {APPLICATION_TYPE, PUBLICATION_TYPE, REVENUE_TYPE} from '../../../../models/supply/Options';
 import {FormControl, FormGroup, InputGroup} from 'react-bootstrap';
 import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
+import {APPLICATION_TYPE} from '../../../../enums/Supply/ApplicationType';
+import {PUBLICATION_TYPE} from '../../../../enums/Supply/PublicationType';
+import {REVENUE_TYPE} from '../../../../enums/Supply/RevenueType';
 
 const PublicationCreate: React.FC = () => {
     const navigate = useNavigate();

@@ -23,7 +23,7 @@ import {PublicationAnalyticsColumns} from '../../../core/edit/analytics/TableCol
 import {SelectCardAction} from '../../../../../../components/misc/CardAction';
 import {
     AnalyticType,
-    defaultAnalyticsType
+    defaultAnalyticsType, GeoType
 } from '../../../../../../models/supply/Options';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import {
@@ -47,11 +47,12 @@ import {getAllRegions} from '../../../../../../requests/misc/Region';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import {Device} from '../../../../../../models/misc/Device';
 import {getAllDevices} from '../../../../../../requests/misc/Device';
-import {getAnalyticsTypes} from '../../../../../../requests/supply/Options';
+import {getAnalyticsTypes, getGeoTypes} from '../../../../../../requests/supply/Options';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
 import {useQueryRequest} from '../../../../../../modules/table/QueryRequestProvider';
 import {fillFilterFields, FilterFields} from '../../../core/filterForm';
+import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
 
 
 const PublicationAnalyticCreate: React.FC = () => {
@@ -210,77 +211,74 @@ const PublicationAnalyticCreate: React.FC = () => {
                         ({errors}) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
-                                    TODO
-                                    {/*<KrysRadioButton name="geo_type" label={'Regions'}*/}
-                                    {/*                 onChangeHandler={(e) => {*/}
-                                    {/*                     e.stopPropagation();*/}
-                                    {/*                     setForm({*/}
-                                    {/*                         ...form,*/}
-                                    {/*                         geo_type: GEO_TYPE.REGION*/}
-                                    {/*                     });*/}
-                                    {/*                 }}*/}
-                                    {/*                 defaultValue={form.geo_type === GEO_TYPE.REGION}/>*/}
+                                    <KrysRadioButton name="geo_type" label={'Regions'}
+                                                     onChangeHandler={(e) => {
+                                                         e.stopPropagation();
+                                                         setForm({
+                                                             ...form,
+                                                             geo_type: GEO_TYPE.REGION
+                                                         });
+                                                     }}
+                                                     defaultValue={form.geo_type === GEO_TYPE.REGION}/>
 
-                                    {/*<KrysRadioButton name="geo_type" label={'Countries'}*/}
-                                    {/*                 onChangeHandler={(e) => {*/}
-                                    {/*                     e.stopPropagation();*/}
-                                    {/*                     setForm({*/}
-                                    {/*                         ...form,*/}
-                                    {/*                         geo_type: GEO_TYPE.COUNTRY*/}
-                                    {/*                     });*/}
-                                    {/*                 }}*/}
-                                    {/*                 defaultValue={form.geo_type === GEO_TYPE.COUNTRY}/>*/}
+                                    <KrysRadioButton name="geo_type" label={'Countries'}
+                                                     onChangeHandler={(e) => {
+                                                         e.stopPropagation();
+                                                         setForm({
+                                                             ...form,
+                                                             geo_type: GEO_TYPE.COUNTRY
+                                                         });
+                                                     }}
+                                                     defaultValue={form.geo_type === GEO_TYPE.COUNTRY}/>
 
                                     <div className="mt-1 text-danger">
                                         {errors?.geo_type ? errors?.geo_type : null}
                                     </div>
                                 </div>
 
-                                TODO
+                                {
+                                    form.geo_type === GEO_TYPE.REGION &&
+                                    <div className="mb-7">
+                                        <KrysFormLabel text="Region" isRequired={true}/>
 
-                                {/*{*/}
-                                {/*    form.geo_type === GEO_TYPE.REGION &&*/}
-                                {/*    <div className="mb-7">*/}
-                                {/*        <KrysFormLabel text="Region" isRequired={true}/>*/}
+                                        <Select name="geo_id"
+                                                menuPlacement={'top'}
+                                                options={regions}
+                                                getOptionLabel={(region) => region?.name}
+                                                getOptionValue={(region) => region?.id.toString()}
+                                                onChange={(e) => {
+                                                    selectChangeHandler(e, 'geo_id')
+                                                }}
+                                                placeholder="Select a region"
+                                                isClearable={true}/>
 
-                                {/*        <Select name="geo_id"*/}
-                                {/*                menuPlacement={'top'}*/}
-                                {/*                options={regions}*/}
-                                {/*                getOptionLabel={(region) => region?.name}*/}
-                                {/*                getOptionValue={(region) => region?.id.toString()}*/}
-                                {/*                onChange={(e) => {*/}
-                                {/*                    selectChangeHandler(e, 'geo_id')*/}
-                                {/*                }}*/}
-                                {/*                placeholder="Select a region"*/}
-                                {/*                isClearable={true}/>*/}
+                                        <div className="mt-1 text-danger">
+                                            {errors?.geo_id ? errors?.geo_id : null}
+                                        </div>
+                                    </div>
+                                }
 
-                                {/*        <div className="mt-1 text-danger">*/}
-                                {/*            {errors?.geo_id ? errors?.geo_id : null}*/}
-                                {/*        </div>*/}
-                                {/*    </div>*/}
-                                {/*}*/}
+                                {
+                                    form.geo_type === GEO_TYPE.COUNTRY &&
+                                    <div className="mb-7">
+                                        <KrysFormLabel text="Country" isRequired={true}/>
 
-                                {/*{*/}
-                                {/*    form.geo_type === GEO_TYPE.COUNTRY &&*/}
-                                {/*    <div className="mb-7">*/}
-                                {/*        <KrysFormLabel text="Country" isRequired={true}/>*/}
+                                        <Select name="geo_id"
+                                                menuPlacement={'top'}
+                                                options={countries}
+                                                getOptionLabel={(country) => country?.name}
+                                                getOptionValue={(country) => country?.id.toString()}
+                                                onChange={(e) => {
+                                                    selectChangeHandler(e, 'geo_id')
+                                                }}
+                                                placeholder="Select a country"
+                                                isClearable={true}/>
 
-                                {/*        <Select name="geo_id"*/}
-                                {/*                menuPlacement={'top'}*/}
-                                {/*                options={countries}*/}
-                                {/*                getOptionLabel={(country) => country?.name}*/}
-                                {/*                getOptionValue={(country) => country?.id.toString()}*/}
-                                {/*                onChange={(e) => {*/}
-                                {/*                    selectChangeHandler(e, 'geo_id')*/}
-                                {/*                }}*/}
-                                {/*                placeholder="Select a country"*/}
-                                {/*                isClearable={true}/>*/}
-
-                                {/*        <div className="mt-1 text-danger">*/}
-                                {/*            {errors?.geo_id ? errors?.geo_id : null}*/}
-                                {/*        </div>*/}
-                                {/*    </div>*/}
-                                {/*}*/}
+                                        <div className="mt-1 text-danger">
+                                            {errors?.geo_id ? errors?.geo_id : null}
+                                        </div>
+                                    </div>
+                                }
 
                                 <div className="mb-7">
                                     <KrysFormLabel text="Device" isRequired={false}/>

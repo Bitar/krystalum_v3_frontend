@@ -32,7 +32,7 @@ import KrysRadioButton from '../../../../components/forms/KrysRadioButton';
 import {Country} from '../../../../models/misc/Country';
 import {getAllCountries} from '../../../../requests/misc/Country';
 import {filterData} from '../../../../helpers/dataManipulation';
-import {REVENUE_TYPE} from '../../../../models/supply/Options';
+import {REVENUE_TYPE} from '../../../../enums/Supply/RevenueType';
 
 const PublisherCreate: React.FC = () => {
     const navigate = useNavigate();

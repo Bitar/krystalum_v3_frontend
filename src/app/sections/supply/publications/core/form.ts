@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import {Publication} from '../../../../models/supply/publication/Publication';
-import {PUBLICATION_TYPE, REVENUE_TYPE} from '../../../../models/supply/Options';
+import {PUBLICATION_TYPE} from '../../../../enums/Supply/PublicationType';
+import {REVENUE_TYPE} from '../../../../enums/Supply/RevenueType';
 
 export interface FormFields {
     name: string,

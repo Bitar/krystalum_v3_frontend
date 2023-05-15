@@ -2,8 +2,8 @@ import {Response} from '../../../../_metronic/helpers';
 import {Tier} from '../../misc/Tier';
 import {PublisherInfo} from './PublisherInfo';
 import {PublisherAccountManager} from './PublisherAccountManager';
-import {REVENUE_TYPE} from '../Options';
 import {Publication} from '../publication/Publication';
+import {REVENUE_TYPE} from '../../../enums/Supply/RevenueType';
 
 export type Publisher = {
     id: number,

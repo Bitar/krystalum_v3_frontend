@@ -1,4 +1,4 @@
-import {PUBLICATION_TYPE} from '../Options';
+import {PUBLICATION_TYPE} from '../../../enums/Supply/PublicationType';
 
 export type PublicationInfo = {
     id: number,
