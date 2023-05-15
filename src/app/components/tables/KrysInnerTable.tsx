@@ -50,7 +50,7 @@ const KrysInnerTable: React.FC<Props> = ({
 
                 <ListViewProvider>
                     {
-                        showSearchFilter ? <KrysTableSearchFilter slug={slug}/> : <></>
+                        showSearchFilter ? <KrysTableSearchFilter slug={slug} filters={filters}/> : <></>
                     }
 
                     <InnerTable columnsArray={columnsArray}/>
