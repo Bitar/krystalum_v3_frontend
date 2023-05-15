@@ -30,12 +30,12 @@ export const getPublicationVertical = async (publication: Publication, id: numbe
         });
 }
 
-export const storePublicationVertical = async (publication: Publication, form: any): Promise<PublicationVertical | AxiosError | undefined> => {
+export const storePublicationVertical = async (publication: Publication, form: any): Promise<Publication | AxiosError | undefined> => {
     let url = `${ENDPOINT}/${publication.id}/${VERTICALS_ENDPOINT}`;
 
     let formData = createFormData(form);
 
-    return await axios.post(url, formData).then(res => res.data).catch((error) => {
+    return await axios.post(url, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

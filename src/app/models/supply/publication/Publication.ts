@@ -5,6 +5,7 @@ import {REVENUE_TYPE} from '../Options';
 import {PublicationLanguage} from './PublicationLanguage';
 import {Language} from '../../misc/Language';
 import {PublicationFormat} from './PublicationFormat';
+import {PublicationVertical} from './PublicationVertical';
 
 export type Publication = {
     id: number,
@@ -24,7 +25,8 @@ export type Publication = {
     info: PublicationInfo,
     languages: Language[],
 
-    formats?: PublicationFormat[]
+    formats?: PublicationFormat[],
+    verticals?: PublicationVertical[],
 };
 
 export type PublicationPaginate = Response<Publication[]>;

@@ -11,6 +11,7 @@ import PublicationEdit from '../../sections/supply/publications/pages/Edit';
 import {PublicationContext} from '../../sections/supply/publications/core/PublicationContext';
 import PublicationAnalyticEdit from '../../sections/supply/publications/pages/edit/analytics/Edit';
 import PublicationFormatEdit from '../../sections/supply/publications/pages/edit/formats/Edit';
+import PublicationVerticalEdit from '../../sections/supply/publications/pages/edit/verticals/Edit';
 
 const PublicationEditRoutes: React.FC = () => {
     const [publication, setPublication] = useState<Publication | null>(null);
@@ -99,6 +100,16 @@ const PublicationEditRoutes: React.FC = () => {
                             <PageTitle breadcrumbs={publicationEditBreadcrumbs}
                                        showPageTitle={false}>{'Edit'}</PageTitle>
                             <PublicationFormatEdit/>
+                        </SuspenseView>
+                    }
+                />
+                <Route
+                    path="/verticals/:cid/edit"
+                    element={
+                        <SuspenseView>
+                            <PageTitle breadcrumbs={publicationEditBreadcrumbs}
+                                       showPageTitle={false}>{'Edit'}</PageTitle>
+                            <PublicationVerticalEdit/>
                         </SuspenseView>
                     }
                 />

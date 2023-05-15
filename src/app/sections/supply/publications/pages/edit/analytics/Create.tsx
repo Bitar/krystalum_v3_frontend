@@ -59,7 +59,7 @@ const PublicationAnalyticCreate: React.FC = () => {
 
     const [form, setForm] = useState<PublicationAnalyticFormFields>(defaultPublicationAnalyticFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-    // const [filters, setFilters] = useState<AnalyticsFilterFields>(defaultAnalyticsFilterFields);
+    const [filters, setFilters] = useState<AnalyticsFilterFields>(defaultAnalyticsFilterFields);
 
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
@@ -142,6 +142,7 @@ const PublicationAnalyticCreate: React.FC = () => {
 
             if (type) {
                 setCurrentAnalyticTypeFormatted(type.name)
+                setFilters({...filters, ['type']: e.id})
             }
 
             // as long as we are updating the create form, we should set the table refresh to false
@@ -338,6 +339,7 @@ const PublicationAnalyticCreate: React.FC = () => {
                         requestFunction={getPublicationAnalytics}
                         requestId={publication.id}
                         columnsArray={PublicationAnalyticsColumns}
+                        filters={filters}
                     ></KrysInnerTable>
                 }
             </KTCardBody>

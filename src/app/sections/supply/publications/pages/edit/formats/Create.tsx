@@ -127,7 +127,7 @@ const PublicationFormatCreate: React.FC = () => {
                         // we need to clear the form data
                         setForm(defaultPublicationFormatFormFields);
 
-                        // we need to clear the form data
+                        // we need to clear the form errors
                         setFormErrors([]);
                     }
                 }

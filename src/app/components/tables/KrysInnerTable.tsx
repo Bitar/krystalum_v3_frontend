@@ -11,6 +11,7 @@ import {
 import {ListViewProvider} from '../../modules/table/ListViewProvider';
 import KrysTableSearchFilter from './KrysTableSearchFilter';
 import TableRefetch from './TableRefetch';
+import TableFilter from './TableFilter';
 
 type Props = {
     queryId: string,
@@ -19,7 +20,8 @@ type Props = {
     columnsArray: readonly Column<any>[],
     slug: string,
     doRefetch: boolean,
-    showSearchFilter?: boolean
+    showSearchFilter?: boolean,
+    filters?: any,
 }
 
 type TableProps = {
@@ -33,7 +35,8 @@ const KrysInnerTable: React.FC<Props> = ({
                                              columnsArray,
                                              slug,
                                              doRefetch,
-                                             showSearchFilter = true
+                                             showSearchFilter = true,
+                                             filters
                                          }) => {
 
     return (
@@ -42,6 +45,8 @@ const KrysInnerTable: React.FC<Props> = ({
                                    requestFunction={requestFunction} requestId={requestId}>
 
                 <TableRefetch doRefetch={doRefetch}/>
+
+                <TableFilter filters={filters}/>
 
                 <ListViewProvider>
                     {

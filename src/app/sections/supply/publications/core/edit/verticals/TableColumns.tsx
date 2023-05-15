@@ -7,12 +7,20 @@ import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {QUERIES} from '../../../../../../../_metronic/helpers';
 import {usePublication} from '../../PublicationContext';
 import {PublicationVertical} from '../../../../../../models/supply/publication/PublicationVertical';
+import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
 
 const PublicationVerticalsColumns: ReadonlyArray<Column<PublicationVertical>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Vertical" className="min-w-125px"/>,
         id: 'vertical',
         Cell: ({...props}) => <TextCell text={props.data[props.row.index].vertical.name}/>,
+    },
+    {
+        Header: (props) => <CustomHeader tableProps={props} title="Is Primary?" className="min-w-125px"/>,
+        id: 'is_primary',
+        Cell: ({...props}) => <BadgeCell status={props.data[props.row.index].is_primary ? 'Yes' : 'No'}
+                                         color={props.data[props.row.index].is_primary ? 'light-success' : 'light-danger'}
+                                         align="left"/>
     },
     {
         Header: (props) => (

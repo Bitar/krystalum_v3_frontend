@@ -10,7 +10,7 @@ export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 export const ARCHIVED_EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
 export const INCLUDES = 'include[]=info&include[]=languages';
-export const SHOW_INCLUDES = 'include[]=info&include[]=languages&include[]=formats';
+export const SHOW_INCLUDES = 'include[]=info&include[]=languages&include[]=formats&include[]=verticals';
 
 export const getAllPublications = async (): Promise<PublicationList | AxiosError | undefined> => {
     return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<PublicationList>) => response.data).catch((error) => {

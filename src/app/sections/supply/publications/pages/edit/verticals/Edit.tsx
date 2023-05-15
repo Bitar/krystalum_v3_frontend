@@ -8,19 +8,9 @@ import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KT
 
 import {usePublication} from '../../../core/PublicationContext';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {PublicationFormat} from '../../../../../../models/supply/publication/PublicationFormat';
-import {
-    defaultPublicationFormatEditFormFields,
-    PublicationFormatEditFormFields, publicationFormatSchema,
-} from '../../../core/edit/formats/form';
-import {
-    getPublicationFormat,
-    updatePublicationFormat
-} from '../../../../../../requests/supply/publication/PublicationFormat';
-import {getFormatTypes} from '../../../../../../requests/supply/Options';
+import {PublicationVertical} from '../../../../../../models/supply/publication/PublicationVertical';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
-import {FormatType} from '../../../../../../models/supply/Options';
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
 import {Sections} from '../../../../../../helpers/sections';
@@ -29,31 +19,40 @@ import FormErrors from '../../../../../../components/forms/FormErrors';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import SingleSelect from '../../../../../../components/forms/SingleSelect';
-import {Format} from '../../../../../../models/misc/Format';
-import {getAllFormats} from '../../../../../../requests/misc/Format';
+import {
+    defaultPublicationVerticalEditFormFields,
+    PublicationVerticalEditFormFields, publicationVerticalSchema
+} from '../../../core/edit/verticals/form';
+import {Vertical} from '../../../../../../models/misc/Vertical';
+import {
+    getPublicationVertical,
+    updatePublicationVertical
+} from '../../../../../../requests/supply/publication/PublicationVertical';
+import {getAllVerticals} from '../../../../../../requests/misc/Vertical';
+import {filterData} from '../../../../../../helpers/dataManipulation';
+import KrysSwitch from '../../../../../../components/forms/KrysSwitch';
 
-const PublicationFormatEdit: React.FC = () => {
+const PublicationVerticalEdit: React.FC = () => {
     const {publication} = usePublication();
 
-    // get the publication and publication format id
+    // get the publication and publication vertical id
     const {cid} = useParams();
 
     const krysApp = useKrysApp();
     const navigate = useNavigate();
 
-    const [publicationFormat, setPublicationFormat] = useState<PublicationFormat | null>(null);
-    const [form, setForm] = useState<PublicationFormatEditFormFields>(defaultPublicationFormatEditFormFields);
+    const [publicationVertical, setPublicationVertical] = useState<PublicationVertical | null>(null);
+    const [form, setForm] = useState<PublicationVerticalEditFormFields>(defaultPublicationVerticalEditFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
-    const [formats, setFormats] = useState<Format[]>([]);
-    const [formatTypes, setFormatTypes] = useState<FormatType[]>([]);
+    const [verticals, setVerticals] = useState<Vertical[]>([]);
 
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
     useEffect(() => {
         if (publication && cid) {
-            // get the publication format we need to edit from the database
-            getPublicationFormat(publication, parseInt(cid)).then(response => {
+            // get the publication veryical we need to edit from the database
+            getPublicationVertical(publication, parseInt(cid)).then(response => {
                 if (axios.isAxiosError(response)) {
                     // we were not able to fetch to edit so we need to redirect
                     // to error page
@@ -61,40 +60,28 @@ const PublicationFormatEdit: React.FC = () => {
                 } else if (response === undefined) {
                     navigate('/error/400');
                 } else {
-                    // we were able to fetch current publication format to edit
-                    setPublicationFormat(response);
+                    // we were able to fetch current publication vertical to edit
+                    setPublicationVertical(response);
 
-                    // we also set the form to be the publication format details
-                    const {format, type, ...currentPublicationFormat} = response;
+                    // we also set the form to be the publication vertical details
+                    const {vertical, ...currentPublicationVertical} = response;
 
-                    setForm({...currentPublicationFormat, format_id: format.id, type: type.id});
+                    setForm({...currentPublicationVertical, vertical_id: vertical.id});
                 }
             });
 
-            // get the formats
-            getAllFormats().then(response => {
+            // get the verticals
+            getAllVerticals().then(response => {
                 if (axios.isAxiosError(response)) {
                     setFormErrors(extractErrors(response));
                 } else if (response === undefined) {
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    // if we were able to get the list of formats, then we fill our state with them
+                    // if we were able to get the list of verticals, then we fill our state with them
                     if (response.data) {
-                        setFormats(response.data);
-                    }
-                }
-            });
+                        const excludedVerticalsNames: string[] = publication.verticals ? publication.verticals?.map((vertical) => vertical.vertical.name) : [];
 
-            // get the format types
-            getFormatTypes().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of format types, then we fill our state with them
-                    if (response.data) {
-                        setFormatTypes(response.data)
+                        setVerticals(filterData(response.data, 'name', excludedVerticalsNames));
                     }
                 }
             });
@@ -104,23 +91,23 @@ const PublicationFormatEdit: React.FC = () => {
     }, [publication, cid]);
 
     useEffect(() => {
-        if (publicationFormat) {
+        if (publicationVertical) {
             setIsResourceLoaded(true);
 
-            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_FORMATS, PageTypes.EDIT, publicationFormat.format.name))
+            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_VERTICALS, PageTypes.EDIT, publicationVertical.vertical.name))
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [publicationFormat]);
+    }, [publicationVertical]);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
     };
 
     const handleEdit = () => {
-        if (publication && publicationFormat) {
-            // we need to update the publication format's data by doing API call with form
-            updatePublicationFormat(publication, publicationFormat.id, form).then(response => {
+        if (publication && publicationVertical) {
+            // we need to update the publication vertical's data by doing API call with form
+            updatePublicationVertical(publication, publicationVertical.id, form).then(response => {
                 if (axios.isAxiosError(response)) {
                     // show errors
                     setFormErrors(extractErrors(response));
@@ -128,9 +115,9 @@ const PublicationFormatEdit: React.FC = () => {
                     // show generic error
                     setFormErrors([GenericErrorMessage]);
                 } else {
-                    // we got the updated publication formats so we're good
+                    // we got the updated publication vertical so we're good
                     krysApp.setAlert({
-                        message: new AlertMessageGenerator('publication format', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        message: new AlertMessageGenerator('publication vertical', Actions.EDIT, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS
                     })
 
@@ -142,38 +129,39 @@ const PublicationFormatEdit: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Publication Format"/>
+            <KTCardHeader text="Edit Publication Vertical"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={publicationFormatSchema(true)} onSubmit={handleEdit}
+                <Formik initialValues={form} validationSchema={publicationVerticalSchema(true)} onSubmit={handleEdit}
                         enableReinitialize>
                     {
                         ({errors}) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Format" isRequired={true}/>
+                                    <KrysFormLabel text="Vertical" isRequired={true}/>
 
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={formats}
-                                                  defaultValue={publicationFormat?.format} form={form}
-                                                  setForm={setForm} name="format_id" isClearable={true}
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={verticals}
+                                                  defaultValue={publicationVertical?.vertical} form={form}
+                                                  setForm={setForm} name="vertical_id" isClearable={true}
                                                   showHierarchy={true}/>
 
                                     <div className="mt-1 text-danger">
-                                        {errors?.format_id ? errors?.format_id : null}
+                                        {errors?.vertical_id ? errors?.vertical_id : null}
                                     </div>
                                 </div>
 
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Type" isRequired={true}/>
+                                    <KrysFormLabel text="Is primary?" isRequired={true}/>
 
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={formatTypes}
-                                                  defaultValue={publicationFormat?.type} form={form}
-                                                  setForm={setForm} name="type" isClearable={true}/>
+                                    <KrysSwitch name="is_primary" onChangeHandler={(e) => {
+                                        e.stopPropagation();
+                                        setForm({...form, is_primary: Number(!form.is_primary)});
+                                    }} defaultValue={Boolean(form.is_primary)}/>
 
                                     <div className="mt-1 text-danger">
-                                        {errors?.type ? errors?.type : null}
+                                        {errors?.is_primary ? errors?.is_primary : null}
                                     </div>
                                 </div>
 
@@ -186,4 +174,4 @@ const PublicationFormatEdit: React.FC = () => {
     )
 }
 
-export default PublicationFormatEdit;
+export default PublicationVerticalEdit;
