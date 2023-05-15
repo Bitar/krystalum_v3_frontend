@@ -21,7 +21,7 @@ type Props = {
     slug: string,
     doRefetch: boolean,
     showSearchFilter?: boolean,
-    filters?: any[]
+    filters?: any
 }
 
 type TableProps = {
@@ -36,7 +36,7 @@ const KrysInnerTable: React.FC<Props> = ({
                                              slug,
                                              doRefetch,
                                              showSearchFilter = true,
-                                             filters = []
+                                             filters
                                          }) => {
 
     return (
