@@ -25,7 +25,6 @@ import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import SingleSelect from '../../../../../../components/forms/SingleSelect';
 import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic';
-import {GEO_TYPE} from '../../../../../../models/supply/Options';
 import {getPublicationAnalytic} from '../../../../../../requests/supply/publication/PublisherAnalytic';
 import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton';
 import {InputGroup} from 'react-bootstrap';
@@ -172,60 +171,62 @@ const PublicationAnalyticEdit: React.FC = () => {
                         ({errors}) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
-                                    <KrysRadioButton name="geo_type" label={'Regions'}
-                                                     onChangeHandler={(e) => {
-                                                         e.stopPropagation();
-                                                         setForm({
-                                                             ...form,
-                                                             geo_type: GEO_TYPE.REGION
-                                                         });
-                                                     }}
-                                                     defaultValue={form.geo_type === GEO_TYPE.REGION}/>
+                                    TODO
+                                    {/*<KrysRadioButton name="geo_type" label={'Regions'}*/}
+                                    {/*                 onChangeHandler={(e) => {*/}
+                                    {/*                     e.stopPropagation();*/}
+                                    {/*                     setForm({*/}
+                                    {/*                         ...form,*/}
+                                    {/*                         geo_type: GEO_TYPE.REGION*/}
+                                    {/*                     });*/}
+                                    {/*                 }}*/}
+                                    {/*                 defaultValue={form.geo_type === GEO_TYPE.REGION}/>*/}
 
-                                    <KrysRadioButton name="geo_type" label={'Countries'}
-                                                     onChangeHandler={(e) => {
-                                                         e.stopPropagation();
-                                                         setForm({
-                                                             ...form,
-                                                             geo_type: GEO_TYPE.COUNTRY
-                                                         });
-                                                     }}
-                                                     defaultValue={form.geo_type === GEO_TYPE.COUNTRY}/>
+                                    {/*<KrysRadioButton name="geo_type" label={'Countries'}*/}
+                                    {/*                 onChangeHandler={(e) => {*/}
+                                    {/*                     e.stopPropagation();*/}
+                                    {/*                     setForm({*/}
+                                    {/*                         ...form,*/}
+                                    {/*                         geo_type: GEO_TYPE.COUNTRY*/}
+                                    {/*                     });*/}
+                                    {/*                 }}*/}
+                                    {/*                 defaultValue={form.geo_type === GEO_TYPE.COUNTRY}/>*/}
 
-                                    <div className="mt-1 text-danger">
-                                        {errors?.geo_type ? errors?.geo_type : null}
-                                    </div>
+                                    {/*<div className="mt-1 text-danger">*/}
+                                    {/*    {errors?.geo_type ? errors?.geo_type : null}*/}
+                                    {/*</div>*/}
                                 </div>
 
-                                {
-                                    form.geo_type === GEO_TYPE.REGION &&
-                                    <div className="mb-7">
-                                        <KrysFormLabel text="Region" isRequired={true}/>
+                                TODO
+                                {/*{*/}
+                                {/*    form.geo_type === GEO_TYPE.REGION &&*/}
+                                {/*    <div className="mb-7">*/}
+                                {/*        <KrysFormLabel text="Region" isRequired={true}/>*/}
 
-                                        <SingleSelect isResourceLoaded={isResourceLoaded} options={regions}
-                                                      defaultValue={publicationAnalytic?.geo} form={form}
-                                                      setForm={setForm} name="geo_id" isClearable={true}/>
+                                {/*        <SingleSelect isResourceLoaded={isResourceLoaded} options={regions}*/}
+                                {/*                      defaultValue={publicationAnalytic?.geo} form={form}*/}
+                                {/*                      setForm={setForm} name="geo_id" isClearable={true}/>*/}
 
-                                        <div className="mt-1 text-danger">
-                                            {errors?.geo_id ? errors?.geo_id : null}
-                                        </div>
-                                    </div>
-                                }
+                                {/*        <div className="mt-1 text-danger">*/}
+                                {/*            {errors?.geo_id ? errors?.geo_id : null}*/}
+                                {/*        </div>*/}
+                                {/*    </div>*/}
+                                {/*}*/}
 
-                                {
-                                    form.geo_type === GEO_TYPE.COUNTRY &&
-                                    <div className="mb-7">
-                                        <KrysFormLabel text="Country" isRequired={true}/>
+                                {/*{*/}
+                                {/*    form.geo_type === GEO_TYPE.COUNTRY &&*/}
+                                {/*    <div className="mb-7">*/}
+                                {/*        <KrysFormLabel text="Country" isRequired={true}/>*/}
 
-                                        <SingleSelect isResourceLoaded={isResourceLoaded} options={countries}
-                                                      defaultValue={publicationAnalytic?.geo} form={form}
-                                                      setForm={setForm} name="geo_id" isClearable={true}/>
+                                {/*        <SingleSelect isResourceLoaded={isResourceLoaded} options={countries}*/}
+                                {/*                      defaultValue={publicationAnalytic?.geo} form={form}*/}
+                                {/*                      setForm={setForm} name="geo_id" isClearable={true}/>*/}
 
-                                        <div className="mt-1 text-danger">
-                                            {errors?.geo_id ? errors?.geo_id : null}
-                                        </div>
-                                    </div>
-                                }
+                                {/*        <div className="mt-1 text-danger">*/}
+                                {/*            {errors?.geo_id ? errors?.geo_id : null}*/}
+                                {/*        </div>*/}
+                                {/*    </div>*/}
+                                {/*}*/}
 
                                 <div className="mb-7">
                                     <KrysFormLabel text="Device" isRequired={false}/>

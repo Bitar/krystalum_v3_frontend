@@ -22,7 +22,7 @@ const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = 
     {
         Header: (props) => <CustomHeader tableProps={props} title="Geo Type" className="min-w-125px"/>,
         id: 'geo_type',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].geo_type}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].geoType.name}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Geo" className="min-w-125px"/>,

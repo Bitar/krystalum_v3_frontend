@@ -1,5 +1,5 @@
 import {Response} from '../../../../_metronic/helpers';
-import {AnalyticType, GEO_TYPE} from '../Options';
+import {AnalyticType, GeoType} from '../Options';
 import {Region} from '../../misc/Region';
 import {Country} from '../../misc/Country';
 import {Device} from '../../misc/Device';
@@ -7,7 +7,7 @@ import {Device} from '../../misc/Device';
 export type PublicationAnalytic = {
     id: number,
     type: AnalyticType,
-    geo_type: GEO_TYPE,
+    geoType: GeoType,
     geo: Region | Country,
     device: Device,
     value: number

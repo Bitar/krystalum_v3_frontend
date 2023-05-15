@@ -33,7 +33,7 @@ const KrysInnerTable: React.FC<Props> = ({
                                              columnsArray,
                                              slug,
                                              doRefetch,
-                                             showSearchFilter= true
+                                             showSearchFilter = true
                                          }) => {
 
     return (

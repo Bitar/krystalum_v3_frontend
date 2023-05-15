@@ -29,6 +29,7 @@ const QueryResponseProvider: FC<React.PropsWithChildren<Props>> = ({
   const updatedQuery = useMemo(() => stringifyRequestQuery(state), [state])
 
   useEffect(() => {
+    console.log(query)
     if (query !== updatedQuery) {
       setQuery(updatedQuery)
     }
@@ -41,6 +42,7 @@ const QueryResponseProvider: FC<React.PropsWithChildren<Props>> = ({
   } = useQuery(
       `${id}-${query}`,
       () => {
+        console.log(query);
         if (requestId) {
           return requestFunction(requestId, query)
         } else {

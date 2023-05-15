@@ -62,9 +62,3 @@ export enum APPLICATION_TYPE {
     FREE = 'free',
     PAID = 'paid'
 }
-
-/* This Enum defines the possible geo types that can be used in the project. */
-export enum GEO_TYPE {
-    COUNTRY = 'App\\Models\\Misc\\Country',
-    REGION = 'App\\Models\\Misc\\Region'
-}
