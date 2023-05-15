@@ -15,7 +15,6 @@ const TableFilter: React.FC<Props> = ({filters}) => {
                 filter: filters,
                 ...initialQueryState,
             });
-
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
