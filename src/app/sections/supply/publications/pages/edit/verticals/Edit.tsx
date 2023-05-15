@@ -158,7 +158,14 @@ const PublicationVerticalEdit: React.FC = () => {
                                     <KrysSwitch name="is_primary" onChangeHandler={(e) => {
                                         e.stopPropagation();
                                         setForm({...form, is_primary: Number(!form.is_primary)});
-                                    }} defaultValue={Boolean(form.is_primary)}/>
+                                    }} defaultValue={Boolean(form.is_primary)} disabled={Boolean(form.is_primary)}/>
+
+                                    {
+                                        Boolean(publicationVertical?.is_primary) ?
+                                        <div className="mb-4">
+                                            <span className="text-muted">Since this vertical is already set as the primary vertical, it cannot be changed to false until you set another vertical as the primary one.</span>
+                                        </div> : <></>
+                                    }
 
                                     <div className="mt-1 text-danger">
                                         {errors?.is_primary ? errors?.is_primary : null}

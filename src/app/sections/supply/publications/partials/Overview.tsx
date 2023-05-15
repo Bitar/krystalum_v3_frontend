@@ -36,8 +36,7 @@ const PublisherOverview: React.FC = () => {
                                             overlay={<Tooltip>Publisher</Tooltip>}
                                         >
                                             <div
-                                                className="d-flex align-items-center text-gray-400 me-5 mb-2"
-                                                data-toggle="tooltip" data-placement="top">
+                                                className="d-flex align-items-center text-gray-400 me-5 mb-2">
                                                 <KTSVG
                                                     path="/media/icons/duotune/communication/com001.svg"
                                                     className="svg-icon-4 me-1"
