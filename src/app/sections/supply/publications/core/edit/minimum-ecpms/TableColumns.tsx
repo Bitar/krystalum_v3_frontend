@@ -31,7 +31,7 @@ const PublicationMinimumEcpmColumns: ReadonlyArray<Column<PublicationMinimumEcpm
     {
         Header: (props) => <CustomHeader tableProps={props} title="Price" className="min-w-125px"/>,
         id: 'price',
-        Cell: ({...props}) => <TextCell text={`${props.data[props.row.index].price} ${props.data[props.row.index].currency.currency}`}/>,
+        Cell: ({...props}) => <TextCell text={`${props.data[props.row.index].rate} ${props.data[props.row.index].currency.currency}`}/>,
     },
     {
         Header: (props) => (
