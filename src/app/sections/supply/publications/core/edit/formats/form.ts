@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import {PublicationFormat} from '../../../../../../models/supply/publication/PublicationFormat';
 
 export interface PublicationFormatFormFields {
     format_ids: number[],

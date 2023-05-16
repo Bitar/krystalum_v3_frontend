@@ -7,7 +7,6 @@ import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {QUERIES} from '../../../../../../../_metronic/helpers';
 import {PublicationFixedCpm} from '../../../../../../models/supply/publication/PublicationFixedCpm';
 import {usePublication} from '../../PublicationContext';
-import {formatNumberWithSuffix} from '../../../../../../helpers/stringGenerator';
 import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
 

@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import {PublicationVertical} from '../../../../../../models/supply/publication/PublicationVertical';
 
 export interface PublicationVerticalFormFields {
     vertical_ids: number[],

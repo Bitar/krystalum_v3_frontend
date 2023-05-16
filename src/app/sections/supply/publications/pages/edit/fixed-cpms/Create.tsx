@@ -23,8 +23,7 @@ import {indentOptions} from '../../../../../../components/forms/IndentOptions';
 import {filterData} from '../../../../../../helpers/dataManipulation';
 import {
     defaultPublicationFixedCpmFormFields,
-    PublicationFixedCpmFormFields,
-    PublicationFixedCpmSchema
+    PublicationFixedCpmFormFields, publicationFixedCpmSchema
 } from '../../../core/edit/fixed-cpms/form';
 import {
     getPublicationFixedCpms,
@@ -38,11 +37,12 @@ import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
 import {Region} from '../../../../../../models/misc/Region';
 import {Country} from '../../../../../../models/misc/Country';
 import {getAllRegions} from '../../../../../../requests/misc/Region';
-import {getAllCountries} from '../../../../../../requests/misc/Country';
+import {getAllCountries, getAllCurrencies} from '../../../../../../requests/misc/Country';
+import {Currency, usdCurrency} from '../../../../../../models/misc/Currency';
 
 
 const PublicationFixedCpmCreate: React.FC = () => {
-    const {publication, setPublication} = usePublication();
+    const {publication} = usePublication();
 
     const [form, setForm] = useState<PublicationFixedCpmFormFields>(defaultPublicationFixedCpmFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -50,12 +50,13 @@ const PublicationFixedCpmCreate: React.FC = () => {
     const [formats, setFormats] = useState<Format[]>([]);
     const [regions, setRegions] = useState<Region[]>([]);
     const [countries, setCountries] = useState<Country[]>([]);
-    const [currencies, setCurrencies] = useState<Country[]>([]);
+    const [currencies, setCurrencies] = useState<Currency[]>([]);
 
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
     const formatsSelectRef = useRef<any>(null);
     const geosSelectRef = useRef<any>(null);
+    const currenciesSelectRef = useRef<any>(null);
 
     const krysApp = useKrysApp();
 
@@ -104,18 +105,18 @@ const PublicationFixedCpmCreate: React.FC = () => {
             });
 
             // get the currencies
-            // getCurr().then(response => {
-            //     if (axios.isAxiosError(response)) {
-            //         setFormErrors(extractErrors(response));
-            //     } else if (response === undefined) {
-            //         setFormErrors([GenericErrorMessage])
-            //     } else {
-            //         // if we were able to get the list of countries, then we fill our state with them
-            //         if (response.data) {
-            //             setCountries(filterData(response.data, 'name', ['All Countries']));
-            //         }
-            //     }
-            // });
+            getAllCurrencies().then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    // if we were able to get the list of currencies, then we fill our state with them
+                    if (response.data) {
+                        setCurrencies(response.data);
+                    }
+                }
+            });
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -123,6 +124,10 @@ const PublicationFixedCpmCreate: React.FC = () => {
 
     const selectChangeHandler = (e: any, key: string) => {
         genericSingleSelectOnChangeHandler(e, form, setForm, key);
+    };
+
+    const multiSelectChangeHandler = (e: any, key: string) => {
+        genericMultiSelectOnChangeHandler(e, form, setForm, key);
     };
 
     const onChangeHandler = (e: any) => {
@@ -133,8 +138,9 @@ const PublicationFixedCpmCreate: React.FC = () => {
     };
 
     const handleCreate = () => {
+        console.log(form)
         if (publication) {
-            // send API request to create the publication fixed cpms
+            // send API request to create the publication fixed cpm
             storePublicationFixedCpm(publication, form).then(response => {
                     if (axios.isAxiosError(response)) {
                         // we need to show the errors
@@ -143,7 +149,7 @@ const PublicationFixedCpmCreate: React.FC = () => {
                         // show generic error message
                         setFormErrors([GenericErrorMessage])
                     } else {
-                        // we were able to store the publication fixed cpms
+                        // we were able to store the publication fixed cpm
                         krysApp.setAlert({
                             message: new AlertMessageGenerator('publication fixed cpm', Actions.CREATE, KrysToastType.SUCCESS).message,
                             type: KrysToastType.SUCCESS
@@ -155,6 +161,7 @@ const PublicationFixedCpmCreate: React.FC = () => {
                         // clear the selected values from dropdown
                         formatsSelectRef.current?.clearValue();
                         geosSelectRef.current?.clearValue();
+                        currenciesSelectRef.current?.clearValue();
 
                         // we need to clear the form data
                         setForm(defaultPublicationFixedCpmFormFields);
@@ -174,7 +181,7 @@ const PublicationFixedCpmCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={PublicationFixedCpmSchema} onSubmit={handleCreate}
+                <Formik initialValues={form} validationSchema={publicationFixedCpmSchema(false)} onSubmit={handleCreate}
                         enableReinitialize>
                     {
                         ({errors}) => (
@@ -186,7 +193,7 @@ const PublicationFixedCpmCreate: React.FC = () => {
                                                          setForm({
                                                              ...form,
                                                              geo_type: GEO_TYPE.REGION,
-                                                             geo_id: 0
+                                                             geo_ids: []
                                                          });
                                                      }}
                                                      defaultValue={form.geo_type === GEO_TYPE.REGION}/>
@@ -197,7 +204,7 @@ const PublicationFixedCpmCreate: React.FC = () => {
                                                          setForm({
                                                              ...form,
                                                              geo_type: GEO_TYPE.COUNTRY,
-                                                             geo_id: 0
+                                                             geo_ids: []
                                                          });
                                                      }}
                                                      defaultValue={form.geo_type === GEO_TYPE.COUNTRY}/>
@@ -210,22 +217,21 @@ const PublicationFixedCpmCreate: React.FC = () => {
                                 {
                                     form.geo_type === GEO_TYPE.REGION &&
                                     <div className="mb-7">
-                                        <KrysFormLabel text="Region" isRequired={true}/>
+                                        <KrysFormLabel text="Regions" isRequired={true}/>
 
-                                        <Select name="geo_id"
-                                                menuPlacement={'top'}
+                                        <Select isMulti name="geo_ids"
                                                 options={regions}
-                                                getOptionLabel={(region) => region?.name}
-                                                getOptionValue={(region) => region?.id.toString()}
+                                                getOptionLabel={(region) => region.name}
+                                                getOptionValue={(region) => region.id.toString()}
                                                 onChange={(e) => {
-                                                    selectChangeHandler(e, 'geo_id')
+                                                    multiSelectChangeHandler(e, 'geo_ids')
                                                 }}
-                                                placeholder="Select a region"
-                                                isClearable={true}
+                                                formatOptionLabel={indentOptions}
+                                                placeholder="Select one or more region"
                                                 ref={geosSelectRef}/>
 
                                         <div className="mt-1 text-danger">
-                                            {errors?.geo_id ? errors?.geo_id : null}
+                                            {errors?.geo_ids ? errors?.geo_ids : null}
                                         </div>
                                     </div>
                                 }
@@ -233,42 +239,41 @@ const PublicationFixedCpmCreate: React.FC = () => {
                                 {
                                     form.geo_type === GEO_TYPE.COUNTRY &&
                                     <div className="mb-7">
-                                        <KrysFormLabel text="Country" isRequired={true}/>
+                                        <KrysFormLabel text="Countries" isRequired={true}/>
 
-                                        <Select name="geo_id"
-                                                menuPlacement={'top'}
+                                        <Select isMulti name="geo_ids"
                                                 options={countries}
-                                                getOptionLabel={(country) => country?.name}
-                                                getOptionValue={(country) => country?.id.toString()}
+                                                getOptionLabel={(country) => country.name}
+                                                getOptionValue={(country) => country.id.toString()}
                                                 onChange={(e) => {
-                                                    selectChangeHandler(e, 'geo_id')
+                                                    multiSelectChangeHandler(e, 'geo_ids')
                                                 }}
-                                                placeholder="Select a country"
-                                                isClearable={true}
+                                                formatOptionLabel={indentOptions}
+                                                placeholder="Select one or more country"
                                                 ref={geosSelectRef}/>
 
                                         <div className="mt-1 text-danger">
-                                            {errors?.geo_id ? errors?.geo_id : null}
+                                            {errors?.geo_ids ? errors?.geo_ids : null}
                                         </div>
                                     </div>
                                 }
 
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Format" isRequired={true}/>
+                                    <KrysFormLabel text="Formats" isRequired={true}/>
 
-                                    <Select name="format_id"
+                                    <Select isMulti name="format_ids"
                                             options={formats}
                                             getOptionLabel={(format) => format.name}
                                             getOptionValue={(format) => format.id.toString()}
                                             onChange={(e) => {
-                                                selectChangeHandler(e, 'format_ids')
+                                                multiSelectChangeHandler(e, 'format_ids')
                                             }}
                                             formatOptionLabel={indentOptions}
-                                            placeholder="Select a format"
+                                            placeholder="Select one or more formats"
                                             ref={formatsSelectRef}/>
 
                                     <div className="mt-1 text-danger">
-                                        {errors?.format_id ? errors?.format_id : null}
+                                        {errors?.format_ids ? errors?.format_ids : null}
                                     </div>
                                 </div>
 
@@ -288,15 +293,15 @@ const PublicationFixedCpmCreate: React.FC = () => {
                                     <KrysFormLabel text="Currency" isRequired={true}/>
 
                                     <Select name="currency_id"
-                                            options={formats}
-                                            getOptionLabel={(format) => format.name}
-                                            getOptionValue={(format) => format.id.toString()}
+                                            options={currencies}
+                                            getOptionLabel={(currency) => currency.currency}
+                                            getOptionValue={(currency) => currency.id.toString()}
                                             onChange={(e) => {
-                                                selectChangeHandler(e, 'format_ids')
+                                                selectChangeHandler(e, 'currency_id')
                                             }}
-                                            formatOptionLabel={indentOptions}
-                                            placeholder="Select a format"
-                                            ref={formatsSelectRef}/>
+                                            value={usdCurrency}
+                                            placeholder="Select a currency"
+                                            ref={currenciesSelectRef}/>
 
                                     <div className="mt-1 text-danger">
                                         {errors?.currency_id ? errors?.currency_id : null}

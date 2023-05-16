@@ -3,6 +3,7 @@ import {GeoType} from '../Options';
 import {Region} from '../../misc/Region';
 import {Country} from '../../misc/Country';
 import {Format} from '../../misc/Format';
+import {Currency} from '../../misc/Currency';
 
 export type PublicationFixedCpm = {
     id: number,
@@ -10,7 +11,7 @@ export type PublicationFixedCpm = {
     geoType: GeoType,
     geo: Region | Country,
     price: number,
-    currency: Country
+    currency: Currency
 };
 
 export type PublicationFixedCpmPaginate = Response<PublicationFixedCpm[]>;

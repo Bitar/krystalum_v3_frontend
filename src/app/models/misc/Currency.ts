@@ -12,3 +12,6 @@ export type CurrencyList = {
 }
 
 export const defaultCurrency: Currency = {id: 0, currency: ''};
+export const usdCurrency: Currency = {id: 236, currency: 'USD (United States)'};
+
+

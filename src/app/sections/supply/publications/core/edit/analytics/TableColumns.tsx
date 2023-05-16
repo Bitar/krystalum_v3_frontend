@@ -10,6 +10,7 @@ import {usePublication} from '../../PublicationContext';
 import {formatNumberWithSuffix} from '../../../../../../helpers/stringGenerator';
 import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {ANALYTIC_TYPE} from '../../../../../../enums/Supply/AnalyticType';
 
 const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = [
     {
@@ -33,7 +34,11 @@ const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = 
     {
         Header: (props) => <CustomHeader tableProps={props} title="Value" className="min-w-125px"/>,
         id: 'value',
-        Cell: ({...props}) => <TextCell text={formatNumberWithSuffix(props.data[props.row.index].value)}/>,
+        Cell: ({...props}) => <TextCell text={
+            props.data[props.row.index].type.id === ANALYTIC_TYPE.UNIQUE_USERS ||
+            props.data[props.row.index].type.id === ANALYTIC_TYPE.PAGE_VIEWS ?
+                formatNumberWithSuffix(props.data[props.row.index].value) : props.data[props.row.index].value
+        }/>,
     },
     {
         Header: (props) => (
