@@ -188,6 +188,7 @@ const EditOwnership: React.FC = () => {
                 {
                     campaign ? <KrysInnerTable
                         doRefetch={refreshTable}
+                        showSearchFilter={false}
                         slug="campaign-ownership"
                         queryId={QUERIES.CAMPAIGN_OWNERSHIP_LIST}
                         requestFunction={getCampaignOwners}

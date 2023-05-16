@@ -12,5 +12,5 @@ export const defaultCampaignOrderFormFields = {
 };
 
 export const CampaignOrderSchema = Yup.object().shape({
-    booking_order_number: Yup.string().required()
+    booking_order_number: Yup.string().required() // if the campaign is BO
 });

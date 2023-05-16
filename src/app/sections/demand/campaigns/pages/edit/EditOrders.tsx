@@ -54,30 +54,47 @@ const EditOrders: React.FC = () => {
     };
 
     const handleCreate = (e: any) => {
+        console.log("here");
         if (campaign) {
+            console.log(orderForm);
+
             // send API request to create the advertiser
-            storeCampaignOrder(campaign, orderForm).then(response => {
-                    if (axios.isAxiosError(response)) {
-                        // we need to show the errors
-                        setFormErrors(extractErrors(response));
-                    } else if (response === undefined) {
-                        // show generic error message
-                        setFormErrors([GenericErrorMessage])
-                    } else {
-                        // we were able to store the advertiser
-                        krysApp.setAlert({
-                            message: new AlertMessageGenerator('campaign order', Actions.CREATE, KrysToastType.SUCCESS).message,
-                            type: KrysToastType.SUCCESS
-                        });
+            // storeCampaignOrder(campaign, orderForm).then(response => {
+            //         if (axios.isAxiosError(response)) {
+            //             // we need to show the errors
+            //             setFormErrors(extractErrors(response));
+            //         } else if (response === undefined) {
+            //             // show generic error message
+            //             setFormErrors([GenericErrorMessage])
+            //         } else {
+            //             // we were able to store the advertiser
+            //             krysApp.setAlert({
+            //                 message: new AlertMessageGenerator('campaign order', Actions.CREATE, KrysToastType.SUCCESS).message,
+            //                 type: KrysToastType.SUCCESS
+            //             });
+            //
+            //             // now that we have a new record successfully we need to refresh the table
+            //             setRefreshTable(true);
+            //
+            //             // we need to clear the form data
+            //             setOrderForm(defaultCampaignOrderFormFields);
+            //         }
+            //     }
+            // );
 
-                        // now that we have a new record successfully we need to refresh the table
-                        setRefreshTable(true);
+            krysApp.setAlert({
+                message: new AlertMessageGenerator('campaign order', Actions.CREATE, KrysToastType.SUCCESS).message,
+                type: KrysToastType.SUCCESS
+            });
 
-                        // we need to clear the form data
-                        setOrderForm(defaultCampaignOrderFormFields);
-                    }
-                }
-            );
+            // now that we have a new record successfully we need to refresh the table
+            setRefreshTable(true);
+
+            // reset the whole context
+            setOrderForm(defaultCampaignOrderFormFields);
+            setFormatForm(defaultCampaignOrderFormatFormFields);
+            setCurrentFormatIndex(null);
+            setIsFormatCopy(false);
         }
     };
 
@@ -161,8 +178,10 @@ const EditOrders: React.FC = () => {
                             onSubmit={handleCreate}
                             enableReinitialize>
                         {
-                            (formik) => (
-                                <Form onChange={onChangeHandler}>
+                            (formik) => {
+                                console.log(formik.errors);
+
+                                return <Form onChange={onChangeHandler}>
                                     {
                                         campaign?.bookingType?.id === BookingTypeEnum.BO ?
                                             <div className="mb-7">
@@ -199,7 +218,8 @@ const EditOrders: React.FC = () => {
                                         <div className='mt-5'>
                                             {
                                                 orderForm.formats.map((format, index) => <FormatSummary
-                                                    key={`format-summary-${index}`} index={index} format={format} setShowFormatModal={setShowFormatModal}/>)
+                                                    key={`format-summary-${index}`} index={index} format={format}
+                                                    setShowFormatModal={setShowFormatModal}/>)
                                             }
                                         </div>
 
@@ -222,7 +242,7 @@ const EditOrders: React.FC = () => {
 
                                     <KrysFormFooter cancelUrl={'/demand/campaigns'}/>
                                 </Form>
-                            )
+                            }
                         }
                     </Formik>
 
