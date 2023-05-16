@@ -35,4 +35,6 @@ export enum Sections {
     SUPPLY_PUBLICATION_ANALYTICS = 'Publications analytics',
     SUPPLY_PUBLICATION_FORMATS = 'Publications formats',
     SUPPLY_PUBLICATION_VERTICALS = 'Publications verticals',
+    SUPPLY_PUBLICATION_AD_SERVERS = 'Publications ad servers',
+    SUPPLY_PUBLICATION_TECHNOLOGIES = 'Publications technologies'
 }

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {Form, Formik} from 'formik';
 import Select from 'react-select';
@@ -9,7 +9,7 @@ import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KT
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {
-    GenericErrorMessage,
+    GenericErrorMessage, genericMultiSelectOnChangeHandler,
     genericOnChangeHandler, genericSingleSelectOnChangeHandler
 } from '../../../../../../helpers/form';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
@@ -25,16 +25,17 @@ import {
 import {usePublication} from '../../../core/PublicationContext';
 import {
     defaultPublicationTechnologyFormFields,
-    PublicationTechnologyFormFields,
-    PublicationTechnologySchema
+    PublicationTechnologyFormFields, publicationTechnologySchema
 } from '../../../core/edit/technologies/form';
 import {PublicationTechnologiesColumns} from '../../../core/edit/technologies/TableColumns';
 import {getAllTechnologies} from '../../../../../../requests/misc/Technology';
 import {Technology} from '../../../../../../models/misc/Technology';
+import {indentOptions} from '../../../../../../components/forms/IndentOptions';
+import {filterData} from '../../../../../../helpers/dataManipulation';
 
 
 const PublicationTechnologyCreate: React.FC = () => {
-    const {publication} = usePublication();
+    const {publication, setPublication} = usePublication();
 
     const [form, setForm] = useState<PublicationTechnologyFormFields>(defaultPublicationTechnologyFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -42,6 +43,8 @@ const PublicationTechnologyCreate: React.FC = () => {
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
     const [technologies, setTechnologies] = useState<Technology[]>([]);
+
+    const technologiesSelectRef = useRef<any>(null);
 
     const krysApp = useKrysApp();
 
@@ -56,7 +59,9 @@ const PublicationTechnologyCreate: React.FC = () => {
                 } else {
                     // if we were able to get the list of technologies, then we fill our state with them
                     if (response.data) {
-                        setTechnologies(response.data);
+                        const excludedTechnologiesNames: string[] = publication.technologies ? publication.technologies?.map((technology) => technology.name) : [];
+
+                        setTechnologies(filterData(response.data, 'name', excludedTechnologiesNames));
                     }
                 }
             });
@@ -65,8 +70,8 @@ const PublicationTechnologyCreate: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [publication]);
 
-    const selectChangeHandler = (e: any, key: string) => {
-        genericSingleSelectOnChangeHandler(e, form, setForm, key);
+    const multiSelectChangeHandler = (e: any, key: string) => {
+        genericMultiSelectOnChangeHandler(e, form, setForm, key);
     };
 
     const onChangeHandler = (e: any) => {
@@ -96,8 +101,15 @@ const PublicationTechnologyCreate: React.FC = () => {
                             type: KrysToastType.SUCCESS
                         });
 
+                        // set the updated publication with its all technologies so that the dropdown will be updated and
+                        // the new added technologies will be excluded from the dropdown
+                        setPublication(response)
+
                         // now that we have a new record successfully we need to refresh the table
                         setRefreshTable(true);
+
+                        // clear the selected values from dropdown
+                        technologiesSelectRef.current?.clearValue();
 
                         // we need to clear the form data
                         setForm(defaultPublicationTechnologyFormFields);
@@ -117,7 +129,7 @@ const PublicationTechnologyCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={PublicationTechnologySchema} onSubmit={handleCreate}
+                <Formik initialValues={form} validationSchema={publicationTechnologySchema(false)} onSubmit={handleCreate}
                         enableReinitialize>
                     {
                         ({errors}) => (
@@ -125,23 +137,21 @@ const PublicationTechnologyCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Technology" isRequired={true}/>
 
-                                    <Select name="technology_id"
-                                            menuPlacement={'top'}
+                                    <Select isMulti name="technology_ids"
                                             options={technologies}
-                                            getOptionLabel={(technology) => technology?.name}
-                                            getOptionValue={(technology) => technology?.id.toString()}
+                                            getOptionLabel={(technology) => technology.name}
+                                            getOptionValue={(technology) => technology.id.toString()}
                                             onChange={(e) => {
-                                                selectChangeHandler(e, 'technology_id')
+                                                multiSelectChangeHandler(e, 'technology_ids')
                                             }}
-                                            placeholder="Select a technology"
-                                            isClearable={true}/>
+                                            formatOptionLabel={indentOptions}
+                                            placeholder="Select one or more technologies"
+                                            ref={technologiesSelectRef}/>
 
                                     <div className="mt-1 text-danger">
-                                        {errors?.technology_id ? errors?.technology_id : null}
+                                        {errors?.technology_ids ? errors?.technology_ids : null}
                                     </div>
                                 </div>
-
-                                {/*TODO*/}
 
                                 <KrysFormFooter cancelUrl={'/supply/publications'}/>
                             </Form>

@@ -8,6 +8,7 @@ import {PublicationVertical} from './PublicationVertical';
 import {REVENUE_TYPE} from '../../../enums/Supply/RevenueType';
 import {PublicationAdServer} from './PublicationAdServer';
 import {AdServer} from '../../misc/AdServer';
+import {Technology} from '../../misc/Technology';
 
 export type Publication = {
     id: number,
@@ -29,7 +30,8 @@ export type Publication = {
 
     formats?: PublicationFormat[],
     verticals?: PublicationVertical[],
-    adServers?: AdServer[]
+    adServers?: AdServer[],
+    technologies?: Technology[]
 };
 
 export type PublicationPaginate = Response<Publication[]>;

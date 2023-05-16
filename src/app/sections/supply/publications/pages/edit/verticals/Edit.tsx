@@ -51,7 +51,7 @@ const PublicationVerticalEdit: React.FC = () => {
 
     useEffect(() => {
         if (publication && cid) {
-            // get the publication veryical we need to edit from the database
+            // get the publication vertical we need to edit from the database
             getPublicationVertical(publication, parseInt(cid)).then(response => {
                 if (axios.isAxiosError(response)) {
                     // we were not able to fetch to edit so we need to redirect

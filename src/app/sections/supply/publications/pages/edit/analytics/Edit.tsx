@@ -63,7 +63,7 @@ const PublicationAnalyticEdit: React.FC = () => {
             // get the publication analytics we need to edit from the database
             getPublicationAnalytic(publication, parseInt(cid)).then(response => {
                 if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the advertiser analytics to edit so we need to redirect
+                    // we were not able to fetch the publication analytics to edit so we need to redirect
                     // to error page
                     navigate('/error/404');
                 } else if (response === undefined) {

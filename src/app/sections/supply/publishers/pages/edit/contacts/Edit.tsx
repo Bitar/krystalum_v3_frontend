@@ -54,7 +54,7 @@ const PublisherContactEdit: React.FC = () => {
             // get the publisher contacts we need to edit from the database
             getPublisherContact(publisher, parseInt(cid)).then(response => {
                 if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the advertiser contacts to edit so we need to redirect
+                    // we were not able to fetch the publisher contacts to edit so we need to redirect
                     // to error page
                     navigate('/error/404');
                 } else if (response === undefined) {

@@ -30,12 +30,12 @@ export const getPublicationTechnology = async (publication: Publication, id: num
         });
 }
 
-export const storePublicationTechnology = async (publication: Publication, form: any): Promise<PublicationTechnology | AxiosError | undefined> => {
+export const storePublicationTechnology = async (publication: Publication, form: any): Promise<Publication | AxiosError | undefined> => {
     let url = `${ENDPOINT}/${publication.id}/${TECHNOLOGIES_ENDPOINT}`;
 
     let formData = createFormData(form);
 
-    return await axios.post(url, formData).then(res => res.data).catch((error) => {
+    return await axios.post(url, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }
