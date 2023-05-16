@@ -177,10 +177,8 @@ const EditOrders: React.FC = () => {
                             onSubmit={handleCreate}
                             enableReinitialize>
                         {
-                            (formik) => {
-                                console.log(formik.errors);
-
-                                return <Form onChange={onChangeHandler}>
+                            (formik) => (
+                                <Form onChange={onChangeHandler}>
                                     {
                                         campaign?.bookingType?.id === BookingTypeEnum.BO ?
                                             <div className="mb-7">
@@ -223,7 +221,7 @@ const EditOrders: React.FC = () => {
                                         </div>
 
                                         <div className='mt-5'>
-                                            {<KrysModal onSubmit={onModalSave} title={'Add new format'}
+                                            {<KrysModal onSubmit={onModalSave} title={currentFormatIndex !== null && isFormatCopy ? 'Add new format from copy' : currentFormatIndex !== null && !isFormatCopy ? 'Edit format' : 'Add new format'}
                                                         onClose={onModalClose}
                                                         buttonVariant='success' buttonSize='sm'
                                                         buttonIconClasses='fa-duotone fa-plus fs-6'
@@ -245,7 +243,7 @@ const EditOrders: React.FC = () => {
 
                                     <KrysFormFooter cancelUrl={'/demand/campaigns'}/>
                                 </Form>
-                            }
+                            )
                         }
                     </Formik>
 

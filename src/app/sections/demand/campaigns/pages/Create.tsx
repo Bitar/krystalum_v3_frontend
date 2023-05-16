@@ -257,7 +257,6 @@ const CampaignCreate: React.FC = () => {
     const handleCreate = (e: any) => {
         // send API request to create the campaign
         storeCampaign(form).then(response => {
-                console.log(response);
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
                     setFormErrors(extractErrors(response));
