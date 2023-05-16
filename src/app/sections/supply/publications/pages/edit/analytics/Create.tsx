@@ -22,7 +22,7 @@ import {PublicationAnalyticsColumns} from '../../../core/edit/analytics/TableCol
 import {SelectCardAction} from '../../../../../../components/misc/CardAction';
 import {
     AnalyticType,
-    defaultAnalyticsType, GeoType
+    defaultAnalyticsType
 } from '../../../../../../models/supply/Options';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import {
@@ -143,7 +143,7 @@ const PublicationAnalyticCreate: React.FC = () => {
 
             if (type) {
                 setCurrentAnalyticTypeFormatted(type.name)
-                setFilters({...filters, ['type']: e.id})
+                setFilters({...filters, 'type': e.id})
             }
 
             // as long as we are updating the create form, we should set the table refresh to false

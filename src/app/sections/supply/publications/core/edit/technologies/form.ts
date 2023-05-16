@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import {PublicationTechnology} from '../../../../../../models/supply/publication/PublicationTechnology';
 
 export interface PublicationTechnologyFormFields {
     technology_ids: number[]

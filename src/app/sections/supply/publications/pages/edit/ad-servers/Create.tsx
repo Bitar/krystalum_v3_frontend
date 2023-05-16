@@ -30,9 +30,7 @@ import {
 import {PublicationAdServersColumns} from '../../../core/edit/ad-servers/TableColumns';
 import {getAllAdServers} from '../../../../../../requests/misc/AdServer';
 import {AdServer} from '../../../../../../models/misc/AdServer';
-import {publicationSchema} from '../../../core/form';
 import {filterData} from '../../../../../../helpers/dataManipulation';
-import {indentOptions} from '../../../../../../components/forms/IndentOptions';
 
 
 const PublicationAdServerCreate: React.FC = () => {

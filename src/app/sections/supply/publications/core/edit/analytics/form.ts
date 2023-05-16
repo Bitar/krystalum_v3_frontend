@@ -1,7 +1,6 @@
 import * as Yup from 'yup';
 import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
-import {REVENUE_TYPE} from '../../../../../../enums/Supply/RevenueType';
 import {ANALYTIC_TYPE} from '../../../../../../enums/Supply/AnalyticType';
 
 export interface PublicationAnalyticFormFields {

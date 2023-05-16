@@ -10,7 +10,7 @@ import {useKrysApp} from '../../../../../../modules/general/KrysApp';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {
     GenericErrorMessage, genericMultiSelectOnChangeHandler,
-    genericOnChangeHandler, genericSingleSelectOnChangeHandler
+    genericOnChangeHandler
 } from '../../../../../../helpers/form';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
