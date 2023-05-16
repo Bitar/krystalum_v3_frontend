@@ -7,14 +7,14 @@ import {usePublication} from '../../../core/PublicationContext';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../../../helpers/sections';
-import {PageTypes} from '../../../../../../helpers/variables';
+import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {
     GenericErrorMessage,
     genericOnChangeHandler
 } from '../../../../../../helpers/form';
 import {
-    defaultPublicationAnalyticFormFields,
+    defaultPublicationAnalyticFormFields, fillEditForm,
     PublicationAnalyticFormFields,
     PublicationAnalyticSchema
 } from '../../../core/edit/analytics/form';
@@ -25,9 +25,11 @@ import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import SingleSelect from '../../../../../../components/forms/SingleSelect';
 import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic';
-import {getPublicationAnalytic} from '../../../../../../requests/supply/publication/PublisherAnalytic';
+import {
+    getPublicationAnalytic,
+    updatePublicationAnalytic
+} from '../../../../../../requests/supply/publication/PublisherAnalytic';
 import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton';
-import {InputGroup} from 'react-bootstrap';
 import {Region} from '../../../../../../models/misc/Region';
 import {Country} from '../../../../../../models/misc/Country';
 import {Device} from '../../../../../../models/misc/Device';
@@ -35,6 +37,8 @@ import {getAllRegions} from '../../../../../../requests/misc/Region';
 import {filterData} from '../../../../../../helpers/dataManipulation';
 import {getAllCountries} from '../../../../../../requests/misc/Country';
 import {getAllDevices} from '../../../../../../requests/misc/Device';
+import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 
 const PublicationAnalyticEdit: React.FC = () => {
     const {publication} = usePublication();
@@ -69,9 +73,7 @@ const PublicationAnalyticEdit: React.FC = () => {
                     setPublicationAnalytic(response);
 
                     // we also set the form to be the publication's analytics details
-                    // const {analyticType, ...currentPublicationAnalytic} = response;
-                    //
-                    // setForm({...currentPublicationAnalytic, type: analyticType?.id});
+                    setForm(fillEditForm(response));
                 }
             });
 
@@ -138,23 +140,23 @@ const PublicationAnalyticEdit: React.FC = () => {
     const handleEdit = () => {
         if (publication && publicationAnalytic) {
             // we need to update the analytic's data by doing API call with form
-            // updatePublicationAnalytic(publication, publicationAnalytic.id, form).then(response => {
-            //     if (axios.isAxiosError(response)) {
-            //         // show errors
-            //         setFormErrors(extractErrors(response));
-            //     } else if (response === undefined) {
-            //         // show generic error
-            //         setFormErrors([GenericErrorMessage]);
-            //     } else {
-            //         // we got the updated publication analytics so we're good
-            //         krysApp.setAlert({
-            //             message: new AlertMessageGenerator('publication analytics', Actions.EDIT, KrysToastType.SUCCESS).message,
-            //             type: KrysToastType.SUCCESS
-            //         })
-            //
-            //         navigate(`/supply/publications/${publication.id}/edit`);
-            //     }
-            // });
+            updatePublicationAnalytic(publication, publicationAnalytic.id, form).then(response => {
+                if (axios.isAxiosError(response)) {
+                    // show errors
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    // show generic error
+                    setFormErrors([GenericErrorMessage]);
+                } else {
+                    // we got the updated publication analytics so we're good
+                    krysApp.setAlert({
+                        message: new AlertMessageGenerator('publication analytic', Actions.EDIT, KrysToastType.SUCCESS).message,
+                        type: KrysToastType.SUCCESS
+                    })
+
+                    navigate(`/supply/publications/${publication.id}/edit`);
+                }
+            });
         }
     }
 
@@ -171,62 +173,60 @@ const PublicationAnalyticEdit: React.FC = () => {
                         ({errors}) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
-                                    TODO
-                                    {/*<KrysRadioButton name="geo_type" label={'Regions'}*/}
-                                    {/*                 onChangeHandler={(e) => {*/}
-                                    {/*                     e.stopPropagation();*/}
-                                    {/*                     setForm({*/}
-                                    {/*                         ...form,*/}
-                                    {/*                         geo_type: GEO_TYPE.REGION*/}
-                                    {/*                     });*/}
-                                    {/*                 }}*/}
-                                    {/*                 defaultValue={form.geo_type === GEO_TYPE.REGION}/>*/}
+                                    <KrysRadioButton name="geo_type" label={'Regions'}
+                                                     onChangeHandler={(e) => {
+                                                         e.stopPropagation();
+                                                         setForm({
+                                                             ...form,
+                                                             geo_type: GEO_TYPE.REGION
+                                                         });
+                                                     }}
+                                                     defaultValue={form.geo_type === GEO_TYPE.REGION}/>
 
-                                    {/*<KrysRadioButton name="geo_type" label={'Countries'}*/}
-                                    {/*                 onChangeHandler={(e) => {*/}
-                                    {/*                     e.stopPropagation();*/}
-                                    {/*                     setForm({*/}
-                                    {/*                         ...form,*/}
-                                    {/*                         geo_type: GEO_TYPE.COUNTRY*/}
-                                    {/*                     });*/}
-                                    {/*                 }}*/}
-                                    {/*                 defaultValue={form.geo_type === GEO_TYPE.COUNTRY}/>*/}
+                                    <KrysRadioButton name="geo_type" label={'Countries'}
+                                                     onChangeHandler={(e) => {
+                                                         e.stopPropagation();
+                                                         setForm({
+                                                             ...form,
+                                                             geo_type: GEO_TYPE.COUNTRY
+                                                         });
+                                                     }}
+                                                     defaultValue={form.geo_type === GEO_TYPE.COUNTRY}/>
 
-                                    {/*<div className="mt-1 text-danger">*/}
-                                    {/*    {errors?.geo_type ? errors?.geo_type : null}*/}
-                                    {/*</div>*/}
+                                    <div className="mt-1 text-danger">
+                                        {errors?.geo_type ? errors?.geo_type : null}
+                                    </div>
                                 </div>
 
-                                TODO
-                                {/*{*/}
-                                {/*    form.geo_type === GEO_TYPE.REGION &&*/}
-                                {/*    <div className="mb-7">*/}
-                                {/*        <KrysFormLabel text="Region" isRequired={true}/>*/}
+                                {
+                                    form.geo_type === GEO_TYPE.REGION &&
+                                    <div className="mb-7">
+                                        <KrysFormLabel text="Region" isRequired={true}/>
 
-                                {/*        <SingleSelect isResourceLoaded={isResourceLoaded} options={regions}*/}
-                                {/*                      defaultValue={publicationAnalytic?.geo} form={form}*/}
-                                {/*                      setForm={setForm} name="geo_id" isClearable={true}/>*/}
+                                        <SingleSelect isResourceLoaded={isResourceLoaded} options={regions}
+                                                      defaultValue={publicationAnalytic?.geo} form={form}
+                                                      setForm={setForm} name="geo_id" isClearable={true}/>
 
-                                {/*        <div className="mt-1 text-danger">*/}
-                                {/*            {errors?.geo_id ? errors?.geo_id : null}*/}
-                                {/*        </div>*/}
-                                {/*    </div>*/}
-                                {/*}*/}
+                                        <div className="mt-1 text-danger">
+                                            {errors?.geo_id ? errors?.geo_id : null}
+                                        </div>
+                                    </div>
+                                }
 
-                                {/*{*/}
-                                {/*    form.geo_type === GEO_TYPE.COUNTRY &&*/}
-                                {/*    <div className="mb-7">*/}
-                                {/*        <KrysFormLabel text="Country" isRequired={true}/>*/}
+                                {
+                                    form.geo_type === GEO_TYPE.COUNTRY &&
+                                    <div className="mb-7">
+                                        <KrysFormLabel text="Country" isRequired={true}/>
 
-                                {/*        <SingleSelect isResourceLoaded={isResourceLoaded} options={countries}*/}
-                                {/*                      defaultValue={publicationAnalytic?.geo} form={form}*/}
-                                {/*                      setForm={setForm} name="geo_id" isClearable={true}/>*/}
+                                        <SingleSelect isResourceLoaded={isResourceLoaded} options={countries}
+                                                      defaultValue={publicationAnalytic?.geo} form={form}
+                                                      setForm={setForm} name="geo_id" isClearable={true}/>
 
-                                {/*        <div className="mt-1 text-danger">*/}
-                                {/*            {errors?.geo_id ? errors?.geo_id : null}*/}
-                                {/*        </div>*/}
-                                {/*    </div>*/}
-                                {/*}*/}
+                                        <div className="mt-1 text-danger">
+                                            {errors?.geo_id ? errors?.geo_id : null}
+                                        </div>
+                                    </div>
+                                }
 
                                 <div className="mb-7">
                                     <KrysFormLabel text="Device" isRequired={false}/>
@@ -243,12 +243,9 @@ const PublicationAnalyticEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Value" isRequired={true}/>
 
-                                    <InputGroup className="mb-3">
-                                        <Field className="form-control fs-base" type="number"
-                                               placeholder="Enter the value"
-                                               name="value"/>
-                                        <InputGroup.Text id="basic-addon1">$</InputGroup.Text>
-                                    </InputGroup>
+                                    <Field className="form-control fs-base" type="number"
+                                           placeholder="Enter the value"
+                                           name="value"/>
 
                                     <div className="mt-1 text-danger">
                                         {errors?.value ? errors?.value : null}

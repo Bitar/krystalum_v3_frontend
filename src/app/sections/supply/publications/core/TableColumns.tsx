@@ -6,6 +6,8 @@ import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {QUERIES} from '../../../../../_metronic/helpers'
 import {Publication} from '../../../../models/supply/publication/Publication';
 import {Restricted} from '../../../../modules/auth/AuthAccessControl';
+import {BadgeCell} from '../../../../modules/table/columns/BadgeCell';
+import React from 'react';
 
 const PublicationsColumns: ReadonlyArray<Column<Publication>> = [
     {
@@ -16,7 +18,9 @@ const PublicationsColumns: ReadonlyArray<Column<Publication>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Unique Identifier" className="min-w-125px"/>,
         id: 'unique_identifier',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].unique_identifier}/>,
+        Cell: ({...props}) => <BadgeCell status={props.data[props.row.index].unique_identifier}
+                                         color={'light-info'}
+                                         align="left"/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Type" className="min-w-125px"/>,

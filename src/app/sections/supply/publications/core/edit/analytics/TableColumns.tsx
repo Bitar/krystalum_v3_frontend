@@ -8,27 +8,32 @@ import {QUERIES} from '../../../../../../../_metronic/helpers';
 import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic';
 import {usePublication} from '../../PublicationContext';
 import {formatNumberWithSuffix} from '../../../../../../helpers/stringGenerator';
+import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
+import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
 
 const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = [
     {
-        Header: (props) => <CustomHeader tableProps={props} title="Value" className="min-w-125px"/>,
-        id: 'value',
-        Cell: ({...props}) => <TextCell text={formatNumberWithSuffix(props.data[props.row.index].value)}/>,
-    },
-    {
-        Header: (props) => <CustomHeader tableProps={props} title="Device" className="min-w-125px"/>,
-        id: 'device',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].device ? props.data[props.row.index].device?.name : '- N/A -'}/>,
-    },
-    {
         Header: (props) => <CustomHeader tableProps={props} title="Geo Type" className="min-w-125px"/>,
         id: 'geo_type',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].geoType.name}/>,
+        Cell: ({...props}) => <BadgeCell status={props.data[props.row.index].geoType.name}
+                                         color={props.data[props.row.index].geoType.id === GEO_TYPE.REGION ? 'light-primary' : 'light-info'}
+                                         align="left"/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Geo" className="min-w-125px"/>,
         id: 'geo',
         Cell: ({...props}) => <TextCell text={props.data[props.row.index].geo?.name}/>,
+    },
+    {
+        Header: (props) => <CustomHeader tableProps={props} title="Device" className="min-w-125px"/>,
+        id: 'device',
+        Cell: ({...props}) => <TextCell
+            text={props.data[props.row.index].device ? props.data[props.row.index].device?.name : '- N/A -'}/>,
+    },
+    {
+        Header: (props) => <CustomHeader tableProps={props} title="Value" className="min-w-125px"/>,
+        id: 'value',
+        Cell: ({...props}) => <TextCell text={formatNumberWithSuffix(props.data[props.row.index].value)}/>,
     },
     {
         Header: (props) => (

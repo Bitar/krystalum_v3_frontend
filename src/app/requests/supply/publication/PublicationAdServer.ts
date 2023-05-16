@@ -30,12 +30,12 @@ export const getPublicationAdServer = async (publication: Publication, id: numbe
         });
 }
 
-export const storePublicationAdServer = async (publication: Publication, form: any): Promise<PublicationAdServer | AxiosError | undefined> => {
+export const storePublicationAdServer = async (publication: Publication, form: any): Promise<Publication | AxiosError | undefined> => {
     let url = `${ENDPOINT}/${publication.id}/${AD_SERVERS_ENDPOINT}`;
 
     let formData = createFormData(form);
 
-    return await axios.post(url, formData).then(res => res.data).catch((error) => {
+    return await axios.post(url, formData).then(res => res.data.data).catch((error) => {
         return error;
     });
 }

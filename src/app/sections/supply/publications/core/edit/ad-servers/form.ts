@@ -2,16 +2,30 @@ import * as Yup from 'yup';
 import {PublicationAdServer} from '../../../../../../models/supply/publication/PublicationAdServer';
 
 export interface PublicationAdServerFormFields {
-    ad_server_id: number
+    ad_server_ids: number[]
 }
 
 export const defaultPublicationAdServerFormFields = {
+    ad_server_ids: [],
+};
+
+export interface PublicationAdServerEditFormFields {
+    ad_server_id: number
+}
+
+export const defaultPublicationAdServerEditFormFields = {
     ad_server_id: 0,
 };
 
-export const PublicationAdServerSchema = Yup.object().shape({
-    ad_server_id: Yup.number().min(1, 'ad server is a required field').required()
-});
+export const publicationAdServerSchema = (isEdit: boolean) => {
+    let schema = {
+        ...(isEdit ? {
+            ad_server_id: Yup.number().required().min(1, 'ad server is a required field')
+        } : {ad_server_ids: Yup.array().of(Yup.number()).required().min(1, 'You must select at least one ad server')}),
+    };
+
+    return Yup.object().shape(schema);
+}
 
 export function fillEditForm(publicationAdServer: PublicationAdServer) {
 

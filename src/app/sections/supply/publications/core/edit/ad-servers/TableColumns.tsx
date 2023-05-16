@@ -12,7 +12,7 @@ const PublicationAdServersColumns: ReadonlyArray<Column<PublicationAdServer>> = 
     {
         Header: (props) => <CustomHeader tableProps={props} title="Ad Server" className="min-w-125px"/>,
         id: 'ad_server',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].ad_server.name}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].adServer.name}/>,
     },
     {
         Header: (props) => (

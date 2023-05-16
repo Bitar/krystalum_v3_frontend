@@ -40,7 +40,7 @@ const PublicationVerticalsColumns: ReadonlyArray<Column<PublicationVertical>> = 
                         queryKey={QUERIES.PUBLICATION_VERTICALS_LIST}
                         showView={false}
                         showEdit={true}
-                        showDelete={true}
+                        showDelete={!props.data[props.row.index].is_primary}
                         title="Delete Publication Verticals"
                         text={`Are you sure you want to delete the publication vertical of vertical '${props.data[props.row.index].vertical.name}'?`}
                     />

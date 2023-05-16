@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import {InputGroup} from 'react-bootstrap';
+import React, {useEffect, useRef, useState} from 'react';
 import {Field, Form, Formik} from 'formik';
 import axios from 'axios';
 import Select from 'react-select';
@@ -47,11 +46,9 @@ import {getAllRegions} from '../../../../../../requests/misc/Region';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import {Device} from '../../../../../../models/misc/Device';
 import {getAllDevices} from '../../../../../../requests/misc/Device';
-import {getAnalyticsTypes, getGeoTypes} from '../../../../../../requests/supply/Options';
+import {getAnalyticsTypes} from '../../../../../../requests/supply/Options';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
-import {useQueryRequest} from '../../../../../../modules/table/QueryRequestProvider';
-import {fillFilterFields, FilterFields} from '../../../core/filterForm';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
 
 
@@ -70,6 +67,9 @@ const PublicationAnalyticCreate: React.FC = () => {
 
     const [analyticsTypes, setAnalyticsType] = useState<AnalyticType[]>([]);
     const [currentAnalyticTypeFormatted, setCurrentAnalyticTypeFormatted] = useState<string>(defaultAnalyticsType.name);
+
+    const geosSelectRef = useRef<any>(null);
+    const devicesSelectRef = useRef<any>(null);
 
     const krysApp = useKrysApp();
 
@@ -162,31 +162,35 @@ const PublicationAnalyticCreate: React.FC = () => {
     const handleCreate = () => {
         if (publication) {
             // send API request to create the publication analytics
-            // storePublicationAnalytic(publication, form).then(response => {
-            //         if (axios.isAxiosError(response)) {
-            //             // we need to show the errors
-            //             setFormErrors(extractErrors(response));
-            //         } else if (response === undefined) {
-            //             // show generic error message
-            //             setFormErrors([GenericErrorMessage])
-            //         } else {
-            //             // we were able to store the publisher payments
-            //             krysApp.setAlert({
-            //                 message: new AlertMessageGenerator('publication google analytics data', Actions.CREATE, KrysToastType.SUCCESS).message,
-            //                 type: KrysToastType.SUCCESS
-            //             });
-            //
-            //             // now that we have a new record successfully we need to refresh the table
-            //             setRefreshTable(true);
-            //
-            //             // we need to clear the form data
-            //             // setForm(defaultPublicationAnalyticFormFields);
-            //
-            //             // we need to clear the form data
-            //             setFormErrors([]);
-            //         }
-            //     }
-            // );
+            storePublicationAnalytic(publication, form).then(response => {
+                    if (axios.isAxiosError(response)) {
+                        // we need to show the errors
+                        setFormErrors(extractErrors(response));
+                    } else if (response === undefined) {
+                        // show generic error message
+                        setFormErrors([GenericErrorMessage])
+                    } else {
+                        // we were able to store the publisher payments
+                        krysApp.setAlert({
+                            message: new AlertMessageGenerator('publication google analytics data', Actions.CREATE, KrysToastType.SUCCESS).message,
+                            type: KrysToastType.SUCCESS
+                        });
+
+                        // now that we have a new record successfully we need to refresh the table
+                        setRefreshTable(true);
+
+                        // clear the selected values from dropdown
+                        geosSelectRef.current?.clearValue();
+                        devicesSelectRef.current?.clearValue();
+
+                        // we need to clear the form data
+                        setForm(defaultPublicationAnalyticFormFields);
+
+                        // we need to clear the form data
+                        setFormErrors([]);
+                    }
+                }
+            );
         }
     };
 
@@ -216,7 +220,8 @@ const PublicationAnalyticCreate: React.FC = () => {
                                                          e.stopPropagation();
                                                          setForm({
                                                              ...form,
-                                                             geo_type: GEO_TYPE.REGION
+                                                             geo_type: GEO_TYPE.REGION,
+                                                             geo_id: 0
                                                          });
                                                      }}
                                                      defaultValue={form.geo_type === GEO_TYPE.REGION}/>
@@ -226,7 +231,8 @@ const PublicationAnalyticCreate: React.FC = () => {
                                                          e.stopPropagation();
                                                          setForm({
                                                              ...form,
-                                                             geo_type: GEO_TYPE.COUNTRY
+                                                             geo_type: GEO_TYPE.COUNTRY,
+                                                             geo_id: 0
                                                          });
                                                      }}
                                                      defaultValue={form.geo_type === GEO_TYPE.COUNTRY}/>
@@ -250,7 +256,8 @@ const PublicationAnalyticCreate: React.FC = () => {
                                                     selectChangeHandler(e, 'geo_id')
                                                 }}
                                                 placeholder="Select a region"
-                                                isClearable={true}/>
+                                                isClearable={true}
+                                                ref={geosSelectRef}/>
 
                                         <div className="mt-1 text-danger">
                                             {errors?.geo_id ? errors?.geo_id : null}
@@ -272,7 +279,8 @@ const PublicationAnalyticCreate: React.FC = () => {
                                                     selectChangeHandler(e, 'geo_id')
                                                 }}
                                                 placeholder="Select a country"
-                                                isClearable={true}/>
+                                                isClearable={true}
+                                                ref={geosSelectRef}/>
 
                                         <div className="mt-1 text-danger">
                                             {errors?.geo_id ? errors?.geo_id : null}
@@ -292,7 +300,8 @@ const PublicationAnalyticCreate: React.FC = () => {
                                                 selectChangeHandler(e, 'device_id')
                                             }}
                                             placeholder="Select a device"
-                                            isClearable={true}/>
+                                            isClearable={true}
+                                            ref={devicesSelectRef}/>
 
                                     <div className="mt-1 text-danger">
                                         {errors?.device_id ? errors?.device_id : null}
@@ -302,12 +311,9 @@ const PublicationAnalyticCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Value" isRequired={true}/>
 
-                                    <InputGroup className="mb-3">
-                                        <Field className="form-control fs-base" type="number"
-                                               placeholder="Enter the value"
-                                               name="value"/>
-                                        <InputGroup.Text id="basic-addon1">$</InputGroup.Text>
-                                    </InputGroup>
+                                    <Field className="form-control fs-base" type="number"
+                                           placeholder="Enter the value"
+                                           name="value"/>
 
                                     <div className="mt-1 text-danger">
                                         {errors?.value ? errors?.value : null}

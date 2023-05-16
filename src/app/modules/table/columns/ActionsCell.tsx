@@ -20,7 +20,7 @@ type Props = {
     showDelete?: boolean
     showImpersonate?: boolean
     showView?: boolean
-    callBackFn?: any
+    callBackFn?: any,
     title?: string,
     text?: string
 }

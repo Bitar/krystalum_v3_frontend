@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {Form, Formik} from 'formik';
 import Select from 'react-select';
@@ -9,8 +9,8 @@ import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KT
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {
-    GenericErrorMessage,
-    genericOnChangeHandler, genericSingleSelectOnChangeHandler
+    GenericErrorMessage, genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler
 } from '../../../../../../helpers/form';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
@@ -25,16 +25,18 @@ import {
 import {usePublication} from '../../../core/PublicationContext';
 import {
     defaultPublicationAdServerFormFields,
-    PublicationAdServerFormFields,
-    PublicationAdServerSchema
+    PublicationAdServerFormFields, publicationAdServerSchema
 } from '../../../core/edit/ad-servers/form';
 import {PublicationAdServersColumns} from '../../../core/edit/ad-servers/TableColumns';
 import {getAllAdServers} from '../../../../../../requests/misc/AdServer';
 import {AdServer} from '../../../../../../models/misc/AdServer';
+import {publicationSchema} from '../../../core/form';
+import {filterData} from '../../../../../../helpers/dataManipulation';
+import {indentOptions} from '../../../../../../components/forms/IndentOptions';
 
 
 const PublicationAdServerCreate: React.FC = () => {
-    const {publication} = usePublication();
+    const {publication, setPublication} = usePublication();
 
     const [form, setForm] = useState<PublicationAdServerFormFields>(defaultPublicationAdServerFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -42,6 +44,8 @@ const PublicationAdServerCreate: React.FC = () => {
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
     const [adServers, setAdServers] = useState<AdServer[]>([]);
+
+    const adServersSelectRef = useRef<any>(null);
 
     const krysApp = useKrysApp();
 
@@ -57,6 +61,9 @@ const PublicationAdServerCreate: React.FC = () => {
                     // if we were able to get the list of adServers, then we fill our state with them
                     if (response.data) {
                         setAdServers(response.data);
+                        const excludedAdServersNames: string[] = publication.adServers ? publication.adServers?.map((adServer) => adServer.name) : [];
+
+                        setAdServers(filterData(response.data, 'name', excludedAdServersNames));
                     }
                 }
             });
@@ -65,8 +72,8 @@ const PublicationAdServerCreate: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [publication]);
 
-    const selectChangeHandler = (e: any, key: string) => {
-        genericSingleSelectOnChangeHandler(e, form, setForm, key);
+    const multiSelectChangeHandler = (e: any, key: string) => {
+        genericMultiSelectOnChangeHandler(e, form, setForm, key);
     };
 
     const onChangeHandler = (e: any) => {
@@ -78,6 +85,9 @@ const PublicationAdServerCreate: React.FC = () => {
 
     const handleCreate = () => {
         if (publication) {
+            // as long as we are updating the create form, we should set the table refresh to false
+            setRefreshTable(false);
+
             // send API request to create the publication payments
             storePublicationAdServer(publication, form).then(response => {
                     if (axios.isAxiosError(response)) {
@@ -93,8 +103,15 @@ const PublicationAdServerCreate: React.FC = () => {
                             type: KrysToastType.SUCCESS
                         });
 
+                        // set the updated publication with its all ad servers so that the dropdown will be updated and
+                        // the new added ad servers will be excluded from the dropdown
+                        setPublication(response)
+
                         // now that we have a new record successfully we need to refresh the table
                         setRefreshTable(true);
+
+                        // clear the selected values from dropdown
+                        adServersSelectRef.current?.clearValue();
 
                         // we need to clear the form data
                         setForm(defaultPublicationAdServerFormFields);
@@ -109,12 +126,12 @@ const PublicationAdServerCreate: React.FC = () => {
 
     return (
         <KTCard className="card-bordered border-1">
-            <KTCardHeader text="Add New AdServer"/>
+            <KTCardHeader text="Add New Ad Server"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={PublicationAdServerSchema} onSubmit={handleCreate}
+                <Formik initialValues={form} validationSchema={publicationAdServerSchema(false)} onSubmit={handleCreate}
                         enableReinitialize>
                     {
                         ({errors}) => (
@@ -122,23 +139,20 @@ const PublicationAdServerCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Ad server" isRequired={true}/>
 
-                                    <Select name="ad_server_id"
-                                            menuPlacement={'top'}
+                                    <Select isMulti name="ad_server_ids"
                                             options={adServers}
-                                            getOptionLabel={(adServer) => adServer?.name}
-                                            getOptionValue={(adServer) => adServer?.id.toString()}
+                                            getOptionLabel={(adServer) => adServer.name}
+                                            getOptionValue={(adServer) => adServer.id.toString()}
                                             onChange={(e) => {
-                                                selectChangeHandler(e, 'ad_server_id')
+                                                multiSelectChangeHandler(e, 'ad_server_ids')
                                             }}
-                                            placeholder="Select a ad server"
-                                            isClearable={true}/>
+                                            placeholder="Select one or more ad servers"
+                                            ref={adServersSelectRef}/>
 
                                     <div className="mt-1 text-danger">
-                                        {errors?.ad_server_id ? errors?.ad_server_id : null}
+                                        {errors?.ad_server_ids ? errors?.ad_server_ids : null}
                                     </div>
                                 </div>
-
-                                {/*TODO*/}
 
                                 <KrysFormFooter cancelUrl={'/supply/publications'}/>
                             </Form>

@@ -102,6 +102,9 @@ const PublicationFormatCreate: React.FC = () => {
 
     const handleCreate = () => {
         if (publication) {
+            // as long as we are updating the create form, we should set the table refresh to false
+            setRefreshTable(false);
+
             // send API request to create the publication payments
             storePublicationFormat(publication, form).then(response => {
                     if (axios.isAxiosError(response)) {
