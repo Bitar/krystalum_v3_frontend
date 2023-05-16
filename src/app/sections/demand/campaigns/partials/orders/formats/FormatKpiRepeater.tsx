@@ -3,7 +3,7 @@ import {FormatKpiField} from '../../../core/edit/orders/formats/formatKpiField';
 import {Col, OverlayTrigger, Row, Tooltip} from 'react-bootstrap';
 import Select from 'react-select';
 import {Kpi} from '../../../../../../models/misc/Kpi';
-import {getAllKpis} from '../../../../../../requests/misc/Kpi';
+import {getAllKpis, getKpi} from '../../../../../../requests/misc/Kpi';
 import axios from 'axios';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {
@@ -25,7 +25,22 @@ interface Props {
 
 const FormatKpiRepeater: React.FC<Props> = ({defaultValue, index, setParentForm, parentForm, setParentFormErrors}) => {
     const [form, setForm] = useState<FormatKpiField>(defaultValue);
+    const [isRateKpi, setIsRateKpi] = useState<boolean>(false);
+    const [showWarning, setShowWarning] = useState<boolean>(false);
     const [kpisOptions, setKpisOptions] = useState<Kpi[]>([]);
+
+    function doShowWarning(): boolean {
+        // check if the kpi_target has %
+        if (!form.kpi_target.includes('%')) {
+            // check if the float val of the kpi_target is < 0
+            if (parseFloat(form.kpi_target) < 1) {
+                // we're in the case where the kpi_target doesn't have % and it's < 0
+                return true
+            }
+        }
+
+        return false;
+    }
 
     useEffect(() => {
         setForm(defaultValue);
@@ -49,26 +64,63 @@ const FormatKpiRepeater: React.FC<Props> = ({defaultValue, index, setParentForm,
     }, []);
 
     useEffect(() => {
-        let kpis : any[] = [];
+        let kpis: any[] = [];
 
-        if(parentForm.kpis) {
+        if (parentForm.kpis) {
             kpis = [...parentForm.kpis];
         }
 
-        if (kpis.length > index && form.kpi_target !== '') {
+        if (kpis.length > index) {
+            if(form.kpi_target !== '') {
+                if (isRateKpi) {
+                    setShowWarning(doShowWarning());
+                }
+            } else {
+                setShowWarning(false);
+            }
+
             kpis[index] = form;
 
             setParentForm({...parentForm, kpis: kpis});
+        } else {
+            // don't show a warning because there's no value
+            setShowWarning(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form.kpi_target])
 
+    // when a kpi is selected, we get that kpi from the backend
+    useEffect(() => {
+        if (form.kpi_option && typeof form.kpi_option === 'number') {
+            getKpi(form.kpi_option).then(response => {
+                if (axios.isAxiosError(response)) {
+                    setParentFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setParentFormErrors([GenericErrorMessage])
+                } else {
+                    if (response.is_rate) {
+                        setIsRateKpi(true);
+
+                        // check if there's already a target
+                        // in this case we might need to show the warning message
+                        // when the option changes from no rate to rate.
+                        setShowWarning(doShowWarning());
+                    } else {
+                        setIsRateKpi(false);
+                        setShowWarning(false);
+                    }
+                }
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [form.kpi_option])
+
     const handleDelete = (e: any) => {
         // first we need to update the parent form by removing the current
         // row from it
-        let kpis : any[] = [];
+        let kpis: any[] = [];
 
-        if(parentForm.kpis) {
+        if (parentForm.kpis) {
             kpis = [...parentForm.kpis];
         }
 
@@ -95,9 +147,18 @@ const FormatKpiRepeater: React.FC<Props> = ({defaultValue, index, setParentForm,
             <Col md={4}>
                 <Field className="form-control fs-base" type="text"
                        value={form.kpi_target}
-                       placeholder="Enter target for KPI" name="kpi_target" onChange={(e: any) =>
-                    genericOnChangeHandler(e, form, setForm)
+                       placeholder="Enter target for KPI" name="kpi_target" onChange={(e: any) => genericOnChangeHandler(e, form, setForm)
                 }/>
+
+                {
+                    showWarning && <div className="alert alert-dismissible bg-light-warning p-5 mb-2 mt-2">
+                        <div>
+                            <div className="d-flex flex-column pe-0">
+                                <span className='text-gray-700'><b>Warning.</b> This value will be counted as a fraction and not a percentage without the % symbol.</span>
+                            </div>
+                        </div>
+                    </div>
+                }
             </Col>
 
             <Col md={4}>
