@@ -17,8 +17,7 @@ import {useKrysApp} from '../../../../../modules/general/KrysApp';
 import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
 import {
-    CampaignOrderSchema,
-    defaultCampaignOrderFormFields
+    defaultCampaignOrderFormFields, getCampaignOrderSchema
 } from '../../core/edit/orders/form';
 import {getCampaignOrders, storeCampaignOrder} from '../../../../../requests/demand/CampaignOrder';
 import {CampaignOrderColumns} from '../../core/edit/orders/TableColumns';
@@ -174,7 +173,7 @@ const EditOrders: React.FC = () => {
                 <KTCardBody>
                     <FormErrors errorMessages={formErrors}/>
 
-                    <Formik initialValues={orderForm} validationSchema={CampaignOrderSchema}
+                    <Formik initialValues={orderForm} validationSchema={getCampaignOrderSchema(campaign)}
                             onSubmit={handleCreate}
                             enableReinitialize>
                         {
@@ -237,6 +236,10 @@ const EditOrders: React.FC = () => {
                                                                   onSubmitHandler={handleFormatSubmit}
                                                                   setHideFormatModal={setHideFormatModal}/>
                                             </KrysModal>}
+                                        </div>
+
+                                        <div className="mt-1 text-danger">
+                                            <ErrorMessage name="formats" className="mt-2"/>
                                         </div>
                                     </div>
 
