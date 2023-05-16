@@ -21,8 +21,7 @@ import {
 import {PublicationAnalyticsColumns} from '../../../core/edit/analytics/TableColumns';
 import {SelectCardAction} from '../../../../../../components/misc/CardAction';
 import {
-    AnalyticType,
-    defaultAnalyticsType
+    AnalyticType
 } from '../../../../../../models/supply/Options';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import {
@@ -50,6 +49,7 @@ import {getAnalyticsTypes} from '../../../../../../requests/supply/Options';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {DEFAULT_ANALYTIC_TYPE} from '../../../../../../helpers/settings';
 
 
 const PublicationAnalyticCreate: React.FC = () => {
@@ -66,7 +66,7 @@ const PublicationAnalyticCreate: React.FC = () => {
     const [devices, setDevices] = useState<Device[]>([]);
 
     const [analyticsTypes, setAnalyticsType] = useState<AnalyticType[]>([]);
-    const [currentAnalyticTypeFormatted, setCurrentAnalyticTypeFormatted] = useState<string>(defaultAnalyticsType.name);
+    const [currentAnalyticTypeFormatted, setCurrentAnalyticTypeFormatted] = useState<string>(DEFAULT_ANALYTIC_TYPE.name);
 
     const geosSelectRef = useRef<any>(null);
     const devicesSelectRef = useRef<any>(null);
@@ -197,7 +197,7 @@ const PublicationAnalyticCreate: React.FC = () => {
     return (
         <KTCard className="card-bordered border-1">
             <KTCardHeader text="Add New Analytic"
-                          actions={[new SelectCardAction('manage-supply', analyticsTypes, 'Select analytics type', selectChangeHandler, 'type', defaultAnalyticsType)]}/>
+                          actions={[new SelectCardAction('manage-supply', analyticsTypes, 'Select analytics type', selectChangeHandler, 'type', DEFAULT_ANALYTIC_TYPE)]}/>
 
             <KTCardBody>
                 <div className="mb-4">

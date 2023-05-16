@@ -1,38 +1,38 @@
 import * as Yup from 'yup';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
-import {PublicationFixedCpm} from '../../../../../../models/supply/publication/PublicationFixedCpm';
+import {PublicationMinimumEcpm} from '../../../../../../models/supply/publication/PublicationMinimumEcpm';
 import {DEFAULT_CURRENCY} from '../../../../../../helpers/settings';
 
-export interface PublicationFixedCpmFormFields {
+export interface PublicationMinimumEcpmFormFields {
     format_ids: number[];
     geo_type: string;
     geo_ids: number[];
-    price: number;
+    rate: number;
     currency_id: number;
 }
 
-export const defaultPublicationFixedCpmFormFields: PublicationFixedCpmFormFields = {
+export const defaultPublicationMinimumEcpmFormFields: PublicationMinimumEcpmFormFields = {
     format_ids: [],
     geo_type: '',
     geo_ids: [],
-    price: 0,
+    rate: 0,
     currency_id: DEFAULT_CURRENCY.id,
 };
 
-export interface PublicationFixedCpmEditFormFields extends Omit<PublicationFixedCpmFormFields, 'format_ids' | 'geo_ids'> {
+export interface PublicationMinimumEcpmEditFormFields extends Omit<PublicationMinimumEcpmFormFields, 'format_ids' | 'geo_ids'> {
     format_id: number;
     geo_id: number;
 }
 
-export const defaultPublicationFixedCpmEditFormFields: PublicationFixedCpmEditFormFields = {
+export const defaultPublicationMinimumEcpmEditFormFields: PublicationMinimumEcpmEditFormFields = {
     format_id: 0,
     geo_type: '',
     geo_id: 0,
-    price: 0,
+    rate: 0,
     currency_id: 0,
 };
 
-export const publicationFixedCpmSchema = (isEdit: boolean) => {
+export const publicationMinimumEcpmSchema = (isEdit: boolean) => {
     let schema = {
         geo_type: Yup
             .string()
@@ -45,20 +45,20 @@ export const publicationFixedCpmSchema = (isEdit: boolean) => {
             format_ids: Yup.array().of(Yup.number()).required().min(1, 'You must select at least one format'),
             geo_ids: Yup.array().of(Yup.number()).required().min(1, 'You must select at least one geo'),
         }),
-        price: Yup.number().min(1, 'price must be greater than 0').required(),
+        rate: Yup.number().min(1, 'price must be greater than 0').required(),
         currency_id: Yup.number().min(1, 'currency is a required field').required(),
     };
 
     return Yup.object().shape(schema);
 }
 
-export function fillEditForm(publicationFixedCpm: PublicationFixedCpm) {
-    const form: PublicationFixedCpmEditFormFields = {
-        ...publicationFixedCpm,
-        format_id: publicationFixedCpm.format.id,
-        geo_type: publicationFixedCpm.geoType.id,
-        geo_id: publicationFixedCpm.geo.id,
-        currency_id: publicationFixedCpm.currency.id,
+export function fillEditForm(publicationMinimumEcpm: PublicationMinimumEcpm) {
+    const form: PublicationMinimumEcpmEditFormFields = {
+        ...publicationMinimumEcpm,
+        format_id: publicationMinimumEcpm.format.id,
+        geo_type: publicationMinimumEcpm.geoType.id,
+        geo_id: publicationMinimumEcpm.geo.id,
+        currency_id: publicationMinimumEcpm.currency.id,
     };
 
     return form;

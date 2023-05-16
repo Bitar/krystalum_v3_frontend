@@ -21,6 +21,7 @@ import PublicationAdServerCreate from './edit/ad-servers/Create';
 import PublicationTechnologyCreate from './edit/technologies/Create';
 import PublicationAdTechnologyIndex from './edit/ad-technologies/Index';
 import PublicationFixedCpmCreate from './edit/fixed-cpms/Create';
+import PublicationMinimumEcpmCreate from './edit/minimum-ecpms/Create';
 
 const PublicationEdit: React.FC = () => {
     let {id} = useParams();
@@ -169,6 +170,10 @@ const PublicationEdit: React.FC = () => {
 
                                     <Tab.Pane eventKey="settingsNav-6">
                                         <PublicationFixedCpmCreate/>
+                                    </Tab.Pane>
+
+                                    <Tab.Pane eventKey="settingsNav-7">
+                                        <PublicationMinimumEcpmCreate/>
                                     </Tab.Pane>
 
                                     <Tab.Pane eventKey="settingsNav-8">

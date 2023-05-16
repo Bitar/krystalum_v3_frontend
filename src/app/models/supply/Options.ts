@@ -62,5 +62,3 @@ export type RevenueType = {
 export type RevenueTypeList = {
     data: RevenueType[]
 }
-
-export const defaultAnalyticsType = {id: 'unique_users', name: 'Unique users'}

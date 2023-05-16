@@ -14,6 +14,8 @@ import PublicationFormatEdit from '../../sections/supply/publications/pages/edit
 import PublicationVerticalEdit from '../../sections/supply/publications/pages/edit/verticals/Edit';
 import PublicationAdServerEdit from '../../sections/supply/publications/pages/edit/ad-servers/Edit';
 import PublicationTechnologyEdit from '../../sections/supply/publications/pages/edit/technologies/Edit';
+import PublicationFixedCpmEdit from '../../sections/supply/publications/pages/edit/fixed-cpms/Edit';
+import PublicationMinimumEcpmEdit from '../../sections/supply/publications/pages/edit/minimum-ecpms/Edit';
 
 const PublicationEditRoutes: React.FC = () => {
     const [publication, setPublication] = useState<Publication | null>(null);
@@ -141,7 +143,7 @@ const PublicationEditRoutes: React.FC = () => {
                         <SuspenseView>
                             <PageTitle breadcrumbs={publicationEditBreadcrumbs}
                                        showPageTitle={false}>{'Edit'}</PageTitle>
-                            {/*<PublicationFixedCpmEdit/>*/}
+                            <PublicationFixedCpmEdit/>
                         </SuspenseView>
                     }
                 />
@@ -151,7 +153,7 @@ const PublicationEditRoutes: React.FC = () => {
                         <SuspenseView>
                             <PageTitle breadcrumbs={publicationEditBreadcrumbs}
                                        showPageTitle={false}>{'Edit'}</PageTitle>
-                            {/*<PublicationMinimumEcpmEdit/>*/}
+                            <PublicationMinimumEcpmEdit/>
                         </SuspenseView>
                     }
                 />

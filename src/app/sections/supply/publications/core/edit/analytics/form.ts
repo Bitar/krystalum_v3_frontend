@@ -2,6 +2,7 @@ import * as Yup from 'yup';
 import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
 import {ANALYTIC_TYPE} from '../../../../../../enums/Supply/AnalyticType';
+import {DEFAULT_ANALYTIC_TYPE} from '../../../../../../helpers/settings';
 
 export interface PublicationAnalyticFormFields {
     type: string,
@@ -12,7 +13,7 @@ export interface PublicationAnalyticFormFields {
 }
 
 export const defaultPublicationAnalyticFormFields = {
-    type: 'unique_users',
+    type: DEFAULT_ANALYTIC_TYPE.id,
     geo_type: '',
     geo_id: 0,
     value: 0
@@ -23,7 +24,7 @@ export interface AnalyticsFilterFields {
 }
 
 export const defaultAnalyticsFilterFields = {
-    type: 'unique_users'
+    type: DEFAULT_ANALYTIC_TYPE.id
 }
 
 export const PublicationAnalyticSchema = Yup.object().shape({

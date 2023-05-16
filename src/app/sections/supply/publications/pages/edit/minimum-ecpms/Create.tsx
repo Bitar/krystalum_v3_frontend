@@ -22,14 +22,14 @@ import {usePublication} from '../../../core/PublicationContext';
 import {indentOptions} from '../../../../../../components/forms/IndentOptions';
 import {filterData} from '../../../../../../helpers/dataManipulation';
 import {
-    defaultPublicationFixedCpmFormFields,
-    PublicationFixedCpmFormFields, publicationFixedCpmSchema
-} from '../../../core/edit/fixed-cpms/form';
+    defaultPublicationMinimumEcpmFormFields,
+    PublicationMinimumEcpmFormFields, publicationMinimumEcpmSchema
+} from '../../../core/edit/minimum-ecpms/form';
 import {
-    getPublicationFixedCpms,
-    storePublicationFixedCpm
-} from '../../../../../../requests/supply/publication/PublisherFixedCpm';
-import {PublicationFixedCpmColumns} from '../../../core/edit/fixed-cpms/TableColumns';
+    getPublicationMinimumEcpms,
+    storePublicationMinimumEcpm
+} from '../../../../../../requests/supply/publication/PublisherMinimumEcpm';
+import {PublicationMinimumEcpmColumns} from '../../../core/edit/minimum-ecpms/TableColumns';
 import {Format} from '../../../../../../models/misc/Format';
 import {getAllFormats} from '../../../../../../requests/misc/Format';
 import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton';
@@ -42,10 +42,10 @@ import {Currency} from '../../../../../../models/misc/Currency';
 import {DEFAULT_CURRENCY} from '../../../../../../helpers/settings';
 
 
-const PublicationFixedCpmCreate: React.FC = () => {
+const PublicationMinimumEcpmCreate: React.FC = () => {
     const {publication} = usePublication();
 
-    const [form, setForm] = useState<PublicationFixedCpmFormFields>(defaultPublicationFixedCpmFormFields);
+    const [form, setForm] = useState<PublicationMinimumEcpmFormFields>(defaultPublicationMinimumEcpmFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const [formats, setFormats] = useState<Format[]>([]);
@@ -139,8 +139,8 @@ const PublicationFixedCpmCreate: React.FC = () => {
 
     const handleCreate = () => {
         if (publication) {
-            // send API request to create the publication fixed cpm
-            storePublicationFixedCpm(publication, form).then(response => {
+            // send API request to create the publication minimum ecpm
+            storePublicationMinimumEcpm(publication, form).then(response => {
                     if (axios.isAxiosError(response)) {
                         // we need to show the errors
                         setFormErrors(extractErrors(response));
@@ -148,9 +148,9 @@ const PublicationFixedCpmCreate: React.FC = () => {
                         // show generic error message
                         setFormErrors([GenericErrorMessage])
                     } else {
-                        // we were able to store the publication fixed cpm
+                        // we were able to store the publication minimum ecpm
                         krysApp.setAlert({
-                            message: new AlertMessageGenerator('publication fixed cpm', Actions.CREATE, KrysToastType.SUCCESS).message,
+                            message: new AlertMessageGenerator('publication minimum ecpm', Actions.CREATE, KrysToastType.SUCCESS).message,
                             type: KrysToastType.SUCCESS
                         });
 
@@ -162,7 +162,7 @@ const PublicationFixedCpmCreate: React.FC = () => {
                         geosSelectRef.current?.clearValue();
 
                         // we need to clear the form data
-                        setForm(defaultPublicationFixedCpmFormFields);
+                        setForm(defaultPublicationMinimumEcpmFormFields);
 
                         // we need to clear the form data
                         setFormErrors([]);
@@ -174,12 +174,12 @@ const PublicationFixedCpmCreate: React.FC = () => {
 
     return (
         <KTCard className="card-bordered border-1">
-            <KTCardHeader text="Add New Fixed CPM (NET)"/>
+            <KTCardHeader text="Add New Minimum ECPM (NET)"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={publicationFixedCpmSchema(false)} onSubmit={handleCreate}
+                <Formik initialValues={form} validationSchema={publicationMinimumEcpmSchema(false)} onSubmit={handleCreate}
                         enableReinitialize>
                     {
                         ({errors}) => (
@@ -276,14 +276,14 @@ const PublicationFixedCpmCreate: React.FC = () => {
                                 </div>
 
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Price" isRequired={true}/>
+                                    <KrysFormLabel text="Rate" isRequired={true}/>
 
                                     <Field className="form-control fs-base" type="number"
-                                           placeholder="Enter the price"
-                                           name="price"/>
+                                           placeholder="Enter the rate"
+                                           name="rate"/>
 
                                     <div className="mt-1 text-danger">
-                                        {errors?.price ? errors?.price : null}
+                                        {errors?.rate ? errors?.rate : null}
                                     </div>
                                 </div>
 
@@ -316,11 +316,11 @@ const PublicationFixedCpmCreate: React.FC = () => {
                     publication &&
                     <KrysInnerTable
                         doRefetch={refreshTable}
-                        slug="publication-fixed-cpms"
-                        queryId={QUERIES.PUBLICATION_FIXED_CPMS_LIST}
-                        requestFunction={getPublicationFixedCpms}
+                        slug="publication-minimum-ecpms"
+                        queryId={QUERIES.PUBLICATION_MINIMUM_ECPMS_LIST}
+                        requestFunction={getPublicationMinimumEcpms}
                         requestId={publication.id}
-                        columnsArray={PublicationFixedCpmColumns}
+                        columnsArray={PublicationMinimumEcpmColumns}
                     ></KrysInnerTable>
                 }
             </KTCardBody>
@@ -328,4 +328,4 @@ const PublicationFixedCpmCreate: React.FC = () => {
     );
 }
 
-export default PublicationFixedCpmCreate;
+export default PublicationMinimumEcpmCreate;
