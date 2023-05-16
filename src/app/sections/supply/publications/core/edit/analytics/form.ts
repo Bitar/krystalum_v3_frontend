@@ -1,6 +1,8 @@
 import * as Yup from 'yup';
 import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {REVENUE_TYPE} from '../../../../../../enums/Supply/RevenueType';
+import {ANALYTIC_TYPE} from '../../../../../../enums/Supply/AnalyticType';
 
 export interface PublicationAnalyticFormFields {
     type: string,
@@ -31,7 +33,12 @@ export const PublicationAnalyticSchema = Yup.object().shape({
         .oneOf(Object.values(GEO_TYPE))
         .required(),
     geo_id: Yup.number().min(1, 'geo is a required field').required(),
-    value: Yup.number().min(1, 'value must be greater than 0').required()
+    value: Yup.number().when('type', {
+        is: (type: string) => type === ANALYTIC_TYPE.UNIQUE_USERS || type === ANALYTIC_TYPE.PAGE_VIEWS,
+        then: Yup.number().integer().min(1, 'value must be greater than 0').required(),
+        otherwise: Yup.number().min(1, 'value must be greater than 0').required(),
+    }),
+
 });
 
 export function fillEditForm(publicationAnalytic: PublicationAnalytic) {
