@@ -7,7 +7,8 @@ import {genericOnChangeHandler} from '../../helpers/form';
 import {initialQueryState} from '../../../_metronic/helpers';
 
 interface Props {
-    slug: string
+    slug: string,
+    filters: any
 }
 
 interface SearchFilterFields {
@@ -16,18 +17,18 @@ interface SearchFilterFields {
 
 const defaultSearchFilterFields = {search: ''}
 
-const KrysTableSearchFilter: React.FC<Props> = ({slug}) => {
+const KrysTableSearchFilter: React.FC<Props> = ({slug, filters}) => {
     const {updateState} = useQueryRequest();
 
-    const [filters, setFilters] = useState<SearchFilterFields>(defaultSearchFilterFields);
+    const [searchFilters, setSearchFilters] = useState<SearchFilterFields>(defaultSearchFilterFields);
 
     const onChangeHandler = (e: any) => {
-        genericOnChangeHandler(e, filters, setFilters);
+        genericOnChangeHandler(e, searchFilters, setSearchFilters);
     };
 
     const handleFilter = () => {
         updateState({
-            filter: filters,
+            filter: filters ? {...searchFilters, ...filters} : searchFilters,
             ...initialQueryState,
         });
     }
