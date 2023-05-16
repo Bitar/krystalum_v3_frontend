@@ -13,6 +13,11 @@ interface Props {
     showHierarchy?: boolean;
     isClearable?: boolean;
     doClear?: boolean;
+    customOnChange?: (e: any) => void;
+    placeholder?: string;
+    isDisabled?: boolean;
+    label?: string;
+    value?: any;
 }
 
 const SingleSelect: React.FC<Props> = ({
@@ -24,7 +29,12 @@ const SingleSelect: React.FC<Props> = ({
                                            name,
                                            showHierarchy = false,
                                            isClearable = false,
-                                           doClear = false
+                                           doClear = false,
+                                           customOnChange,
+                                           placeholder,
+                                           isDisabled = false,
+                                           label = 'name',
+                                           value
                                        }) => {
 
     const selectRef = useRef<any>(null);
@@ -48,25 +58,29 @@ const SingleSelect: React.FC<Props> = ({
             {
                 !isResourceLoaded && <Select name={name}
                                              options={options}
-                                             getOptionLabel={(instance) => instance.name}
+                                             getOptionLabel={(instance) => instance[label]}
                                              getOptionValue={(instance) => instance.id.toString()}
-                                             placeholder={`Select ${namePlaceHolder}`}
+                                             placeholder={placeholder ? placeholder : `Select ${namePlaceHolder}`}
                                              isClearable={isClearable}
                                              ref={selectRef}
+                                             value={value ? value: undefined}
                                              formatOptionLabel={showHierarchy ? indentOptions : undefined}
-                                             onChange={singleSelectChangeHandler}/>
+                                             onChange={customOnChange ? customOnChange : singleSelectChangeHandler}
+                                             isDisabled={isDisabled}/>
             }
 
             {
                 isResourceLoaded && <Select name={name} defaultValue={defaultValue}
                                             options={options}
-                                            getOptionLabel={(instance) => instance.name}
+                                            getOptionLabel={(instance) => instance[label]}
                                             getOptionValue={(instance) => instance.id.toString()}
-                                            placeholder={`Select ${namePlaceHolder}`}
+                                            placeholder={placeholder ? placeholder : `Select ${namePlaceHolder}`}
                                             isClearable={isClearable}
                                             ref={selectRef}
+                                            value={value ? value: undefined}
                                             formatOptionLabel={showHierarchy ? indentOptions : undefined}
-                                            onChange={singleSelectChangeHandler}/>
+                                            onChange={customOnChange ? customOnChange : singleSelectChangeHandler}
+                                            isDisabled={isDisabled}/>
             }
         </>
     );
