@@ -39,6 +39,7 @@ import FormatKpiRepeater from './FormatKpiRepeater';
 import {useCreateOrder} from '../../../core/edit/orders/CreateOrderContext';
 import {Currency} from '../../../../../../models/misc/Currency';
 import {getCampaignOrderFormatSchema} from '../../../core/edit/orders/formats/form';
+import {DEFAULT_CURRENCY} from '../../../../../../helpers/settings';
 
 interface Props {
     setHideFormatModal: Dispatch<SetStateAction<any>>,
@@ -435,7 +436,7 @@ const CreateFormatForm: React.FC<Props> = ({setHideFormatModal, formRef, onSubmi
                                 <KrysFormLabel text="Cost currency" isRequired={hasBuyingModels}/>
 
                                 <Select name="cost_currency_id"
-                                        value={currencies.filter((option) => option.id === formatForm.cost_currency_id)[0]}
+                                        value={DEFAULT_CURRENCY}
                                         options={currencies}
                                         getOptionLabel={(currency) => currency.currency}
                                         getOptionValue={(currency) => currency.id.toString()}

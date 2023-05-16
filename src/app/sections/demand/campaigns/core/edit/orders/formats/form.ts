@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import {FormatSplitField} from './formatSplitField';
 import {FormatKpiField} from './formatKpiField';
+import {DEFAULT_CURRENCY} from '../../../../../../../helpers/settings';
 
 export interface CampaignOrderFormatFormFields {
     format_id: number | string,
@@ -34,8 +35,8 @@ export const defaultCampaignOrderFormatFormFields = {
     buying_model_id: '',
     buying_model_name: '',
     cost: '',
-    cost_currency_id: 236,
-    cost_currency_name: 'USD',
+    cost_currency_id: DEFAULT_CURRENCY.id,
+    cost_currency_name: DEFAULT_CURRENCY.currency,
     start_date: '',
     end_date: '',
     regions_ids: [],
@@ -47,8 +48,8 @@ export const defaultCampaignOrderFormatFormFields = {
     performance_metric_id: '',
     target: '',
     booked_amount: '',
-    booked_currency_id: 236,
-    booked_currency_name: 'USD',
+    booked_currency_id: DEFAULT_CURRENCY.id,
+    booked_currency_name: DEFAULT_CURRENCY.currency,
     splits: [],
     kpis: [],
     kpi_meta: ''

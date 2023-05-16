@@ -19,12 +19,6 @@ export const getAllCurrencies = async (): Promise<CurrencyList | AxiosError | un
     });
 }
 
-export const getAllCurrencies = async (): Promise<CurrencyList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/currencies?sort[]=currency').then((response: AxiosResponse<CurrencyList>) => response.data).catch((error) => {
-        return error;
-    });
-}
-
 export const getCountries = (query?: String): Promise<CountryPaginate> => {
     let url = `${ENDPOINT}`;
 
