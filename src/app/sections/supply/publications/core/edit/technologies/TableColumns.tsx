@@ -12,7 +12,7 @@ const PublicationTechnologiesColumns: ReadonlyArray<Column<PublicationTechnology
     {
         Header: (props) => <CustomHeader tableProps={props} title="Technology" className="min-w-125px"/>,
         id: 'technology',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].technology.name}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].technology?.name}/>,
     },
     {
         Header: (props) => (
@@ -34,7 +34,7 @@ const PublicationTechnologiesColumns: ReadonlyArray<Column<PublicationTechnology
                         showEdit={true}
                         showDelete={true}
                         title="Delete Publication Technologies"
-                        text={`Are you sure you want to delete the publication technology of technology '${props.data[props.row.index].technology.name}'?`}
+                        text={`Are you sure you want to delete the publication technology of technology '${props.data[props.row.index].technology?.name}'?`}
                     />
                 </Restricted>
             )

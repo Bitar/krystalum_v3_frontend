@@ -12,7 +12,7 @@ const PublicationAdServersColumns: ReadonlyArray<Column<PublicationAdServer>> = 
     {
         Header: (props) => <CustomHeader tableProps={props} title="Ad Server" className="min-w-125px"/>,
         id: 'ad_server',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].adServer.name}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].adServer?.name}/>,
     },
     {
         Header: (props) => (
@@ -34,7 +34,7 @@ const PublicationAdServersColumns: ReadonlyArray<Column<PublicationAdServer>> = 
                         showEdit={true}
                         showDelete={true}
                         title="Delete Publication Ad Servers"
-                        text={`Are you sure you want to delete the publication ad server of ad server '${props.data[props.row.index].adServer.name}'?`}
+                        text={`Are you sure you want to delete the publication ad server of ad server '${props.data[props.row.index].adServer?.name}'?`}
                     />
                 </Restricted>
             )

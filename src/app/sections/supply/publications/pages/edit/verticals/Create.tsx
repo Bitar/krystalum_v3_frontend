@@ -86,7 +86,7 @@ const PublicationVerticalCreate: React.FC = () => {
             // as long as we are updating the create form, we should set the table refresh to false
             setRefreshTable(false);
 
-            // send API request to create the publication payments
+            // send API request to create the publication verticals
             storePublicationVertical(publication, form).then(response => {
                     if (axios.isAxiosError(response)) {
                         // we need to show the errors
@@ -95,7 +95,7 @@ const PublicationVerticalCreate: React.FC = () => {
                         // show generic error message
                         setFormErrors([GenericErrorMessage])
                     } else {
-                        // we were able to store the publication payments
+                        // we were able to store the publication verticals
                         krysApp.setAlert({
                             message: new AlertMessageGenerator('publication vertical', Actions.CREATE, KrysToastType.SUCCESS).message,
                             type: KrysToastType.SUCCESS
@@ -135,7 +135,7 @@ const PublicationVerticalCreate: React.FC = () => {
                         ({errors}) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Vertical" isRequired={true}/>
+                                    <KrysFormLabel text="Verticals" isRequired={true}/>
 
                                     <Select isMulti name="vertical_ids"
                                             options={verticals}

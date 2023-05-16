@@ -23,17 +23,6 @@ export const getPublicationAnalytics = (publicationId: number, query?: String): 
     });
 }
 
-export const getPublicationAnalyticsUniqueUsers = (publicationId: number): Promise<PublicationAnalyticPaginate> => {
-    let url = `${ENDPOINT}/${publicationId}/${ANALYTICS_ENDPOINT}`;
-
-    url += `?type=unique_users`;
-
-    return axios.get(url).then((response: AxiosResponse<PublicationAnalyticPaginate>) => response.data).catch((error) => {
-        return error;
-    });
-}
-
-
 export const getPublicationAnalytic = async (publication: Publication, id: number): Promise<PublicationAnalytic | AxiosError | undefined> => {
     let url = `${ENDPOINT}/${publication.id}/${ANALYTICS_ENDPOINT}`;
 

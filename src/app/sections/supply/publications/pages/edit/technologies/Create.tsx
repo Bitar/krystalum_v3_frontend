@@ -86,7 +86,7 @@ const PublicationTechnologyCreate: React.FC = () => {
             // as long as we are updating the create form, we should set the table refresh to false
             setRefreshTable(false);
 
-            // send API request to create the publication payments
+            // send API request to create the publication technologies
             storePublicationTechnology(publication, form).then(response => {
                     if (axios.isAxiosError(response)) {
                         // we need to show the errors
@@ -95,7 +95,7 @@ const PublicationTechnologyCreate: React.FC = () => {
                         // show generic error message
                         setFormErrors([GenericErrorMessage])
                     } else {
-                        // we were able to store the publication payments
+                        // we were able to store the publication technologies0
                         krysApp.setAlert({
                             message: new AlertMessageGenerator('publication technology', Actions.CREATE, KrysToastType.SUCCESS).message,
                             type: KrysToastType.SUCCESS
@@ -135,7 +135,7 @@ const PublicationTechnologyCreate: React.FC = () => {
                         ({errors}) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Technology" isRequired={true}/>
+                                    <KrysFormLabel text="Technologies" isRequired={true}/>
 
                                     <Select isMulti name="technology_ids"
                                             options={technologies}

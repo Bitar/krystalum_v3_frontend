@@ -1,90 +1,76 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Field, Form, Formik} from 'formik';
 import axios from 'axios';
+import {Field, Form, Formik} from 'formik';
 import Select from 'react-select';
 
-import {
-    KTCard,
-    KTCardBody,
-    QUERIES
-} from '../../../../../../../_metronic/helpers';
+import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
 
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import FormErrors from '../../../../../../components/forms/FormErrors';
-import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
-import {usePublication} from '../../../core/PublicationContext';
-import {
-    getPublicationAnalytics,
-    storePublicationAnalytic
-} from '../../../../../../requests/supply/publication/PublisherAnalytic';
-import {PublicationAnalyticsColumns} from '../../../core/edit/analytics/TableColumns';
-import {SelectCardAction} from '../../../../../../components/misc/CardAction';
-import {
-    AnalyticType,
-    defaultAnalyticsType
-} from '../../../../../../models/supply/Options';
-import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
-import {
-    AnalyticsFilterFields, defaultAnalyticsFilterFields,
-    defaultPublicationAnalyticFormFields,
-    PublicationAnalyticFormFields,
-    PublicationAnalyticSchema
-} from '../../../core/edit/analytics/form';
-import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton';
-import {Country} from '../../../../../../models/misc/Country';
-import {getAllCountries} from '../../../../../../requests/misc/Country';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {
-    GenericErrorMessage,
-    genericOnChangeHandler,
-    genericSingleSelectOnChangeHandler
+    GenericErrorMessage, genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler, genericSingleSelectOnChangeHandler
 } from '../../../../../../helpers/form';
-import {filterData} from '../../../../../../helpers/dataManipulation';
-import {Region} from '../../../../../../models/misc/Region';
-import {getAllRegions} from '../../../../../../requests/misc/Region';
-import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
-import {Device} from '../../../../../../models/misc/Device';
-import {getAllDevices} from '../../../../../../requests/misc/Device';
-import {getAnalyticsTypes} from '../../../../../../requests/supply/Options';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
+import FormErrors from '../../../../../../components/forms/FormErrors';
+import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
+import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
+import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
+import {usePublication} from '../../../core/PublicationContext';
+import {indentOptions} from '../../../../../../components/forms/IndentOptions';
+import {filterData} from '../../../../../../helpers/dataManipulation';
+import {
+    defaultPublicationFixedCpmFormFields,
+    PublicationFixedCpmFormFields,
+    PublicationFixedCpmSchema
+} from '../../../core/edit/fixed-cpms/form';
+import {
+    getPublicationFixedCpms,
+    storePublicationFixedCpm
+} from '../../../../../../requests/supply/publication/PublisherFixedCpm';
+import {PublicationFixedCpmColumns} from '../../../core/edit/fixed-cpms/TableColumns';
+import {Format} from '../../../../../../models/misc/Format';
+import {getAllFormats} from '../../../../../../requests/misc/Format';
+import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {Region} from '../../../../../../models/misc/Region';
+import {Country} from '../../../../../../models/misc/Country';
+import {getAllRegions} from '../../../../../../requests/misc/Region';
+import {getAllCountries} from '../../../../../../requests/misc/Country';
 
 
-const PublicationAnalyticCreate: React.FC = () => {
-    const {publication} = usePublication();
+const PublicationFixedCpmCreate: React.FC = () => {
+    const {publication, setPublication} = usePublication();
 
-    const [form, setForm] = useState<PublicationAnalyticFormFields>(defaultPublicationAnalyticFormFields);
+    const [form, setForm] = useState<PublicationFixedCpmFormFields>(defaultPublicationFixedCpmFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-    const [filters, setFilters] = useState<AnalyticsFilterFields>(defaultAnalyticsFilterFields);
+
+    const [formats, setFormats] = useState<Format[]>([]);
+    const [regions, setRegions] = useState<Region[]>([]);
+    const [countries, setCountries] = useState<Country[]>([]);
+    const [currencies, setCurrencies] = useState<Country[]>([]);
 
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
-    const [regions, setRegions] = useState<Region[]>([]);
-    const [countries, setCountries] = useState<Country[]>([]);
-    const [devices, setDevices] = useState<Device[]>([]);
-
-    const [analyticsTypes, setAnalyticsType] = useState<AnalyticType[]>([]);
-    const [currentAnalyticTypeFormatted, setCurrentAnalyticTypeFormatted] = useState<string>(defaultAnalyticsType.name);
-
+    const formatsSelectRef = useRef<any>(null);
     const geosSelectRef = useRef<any>(null);
-    const devicesSelectRef = useRef<any>(null);
 
     const krysApp = useKrysApp();
 
     useEffect(() => {
         if (publication) {
-            // get publication analytics types options
-            getAnalyticsTypes().then(response => {
+            // get the formats
+            getAllFormats().then(response => {
                 if (axios.isAxiosError(response)) {
                     setFormErrors(extractErrors(response));
                 } else if (response === undefined) {
                     setFormErrors([GenericErrorMessage])
                 } else {
-                    // if we were able to get the list of analytics types, then we fill our state with them
+                    // if we were able to get the list of formats, then we fill our state with them
                     if (response.data) {
-                        setAnalyticsType(response.data);
+                        setFormats(response.data);
                     }
                 }
             });
@@ -117,19 +103,19 @@ const PublicationAnalyticCreate: React.FC = () => {
                 }
             });
 
-            // get the devices
-            getAllDevices().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of devices, then we fill our state with them
-                    if (response.data) {
-                        setDevices(response.data);
-                    }
-                }
-            });
+            // get the currencies
+            // getCurr().then(response => {
+            //     if (axios.isAxiosError(response)) {
+            //         setFormErrors(extractErrors(response));
+            //     } else if (response === undefined) {
+            //         setFormErrors([GenericErrorMessage])
+            //     } else {
+            //         // if we were able to get the list of countries, then we fill our state with them
+            //         if (response.data) {
+            //             setCountries(filterData(response.data, 'name', ['All Countries']));
+            //         }
+            //     }
+            // });
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,20 +123,7 @@ const PublicationAnalyticCreate: React.FC = () => {
 
     const selectChangeHandler = (e: any, key: string) => {
         genericSingleSelectOnChangeHandler(e, form, setForm, key);
-
-        if (key === 'type' && e) {
-            const type = analyticsTypes.find(analyticsType => analyticsType.id === e.id);
-
-            if (type) {
-                setCurrentAnalyticTypeFormatted(type.name)
-                setFilters({...filters, 'type': e.id})
-            }
-
-            // as long as we are updating the create form, we should set the table refresh to false
-            setRefreshTable(true);
-        }
     };
-
 
     const onChangeHandler = (e: any) => {
         // as long as we are updating the create form, we should set the table refresh to false
@@ -161,8 +134,8 @@ const PublicationAnalyticCreate: React.FC = () => {
 
     const handleCreate = () => {
         if (publication) {
-            // send API request to create the publication analytics
-            storePublicationAnalytic(publication, form).then(response => {
+            // send API request to create the publication fixed cpms
+            storePublicationFixedCpm(publication, form).then(response => {
                     if (axios.isAxiosError(response)) {
                         // we need to show the errors
                         setFormErrors(extractErrors(response));
@@ -170,9 +143,9 @@ const PublicationAnalyticCreate: React.FC = () => {
                         // show generic error message
                         setFormErrors([GenericErrorMessage])
                     } else {
-                        // we were able to store the publisher analytics
+                        // we were able to store the publication fixed cpms
                         krysApp.setAlert({
-                            message: new AlertMessageGenerator('publication google analytics data', Actions.CREATE, KrysToastType.SUCCESS).message,
+                            message: new AlertMessageGenerator('publication fixed cpm', Actions.CREATE, KrysToastType.SUCCESS).message,
                             type: KrysToastType.SUCCESS
                         });
 
@@ -180,11 +153,11 @@ const PublicationAnalyticCreate: React.FC = () => {
                         setRefreshTable(true);
 
                         // clear the selected values from dropdown
+                        formatsSelectRef.current?.clearValue();
                         geosSelectRef.current?.clearValue();
-                        devicesSelectRef.current?.clearValue();
 
                         // we need to clear the form data
-                        setForm(defaultPublicationAnalyticFormFields);
+                        setForm(defaultPublicationFixedCpmFormFields);
 
                         // we need to clear the form data
                         setFormErrors([]);
@@ -196,20 +169,12 @@ const PublicationAnalyticCreate: React.FC = () => {
 
     return (
         <KTCard className="card-bordered border-1">
-            <KTCardHeader text="Add New Analytic"
-                          actions={[new SelectCardAction('manage-supply', analyticsTypes, 'Select analytics type', selectChangeHandler, 'type', defaultAnalyticsType)]}/>
+            <KTCardHeader text="Add New Fixed CPM (NET)"/>
 
             <KTCardBody>
-                <div className="mb-4">
-                            <span
-                                className="fs-5 text-gray-700 d-flex fw-medium">New Analytics Record Creation Form</span>
-                    <span className="text-muted">This form allows you to create a new analytics record. You will need to provide the following information:
-                    </span>
-                </div>
-
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={PublicationAnalyticSchema} onSubmit={handleCreate}
+                <Formik initialValues={form} validationSchema={PublicationFixedCpmSchema} onSubmit={handleCreate}
                         enableReinitialize>
                     {
                         ({errors}) => (
@@ -289,34 +254,52 @@ const PublicationAnalyticCreate: React.FC = () => {
                                 }
 
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Device" isRequired={false}/>
+                                    <KrysFormLabel text="Format" isRequired={true}/>
 
-                                    <Select name="device_id"
-                                            menuPlacement={'top'}
-                                            options={devices}
-                                            getOptionLabel={(device) => device?.name}
-                                            getOptionValue={(device) => device?.id.toString()}
+                                    <Select name="format_id"
+                                            options={formats}
+                                            getOptionLabel={(format) => format.name}
+                                            getOptionValue={(format) => format.id.toString()}
                                             onChange={(e) => {
-                                                selectChangeHandler(e, 'device_id')
+                                                selectChangeHandler(e, 'format_ids')
                                             }}
-                                            placeholder="Select a device"
-                                            isClearable={true}
-                                            ref={devicesSelectRef}/>
+                                            formatOptionLabel={indentOptions}
+                                            placeholder="Select a format"
+                                            ref={formatsSelectRef}/>
 
                                     <div className="mt-1 text-danger">
-                                        {errors?.device_id ? errors?.device_id : null}
+                                        {errors?.format_id ? errors?.format_id : null}
                                     </div>
                                 </div>
 
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Value" isRequired={true}/>
+                                    <KrysFormLabel text="Price" isRequired={true}/>
 
                                     <Field className="form-control fs-base" type="number"
-                                           placeholder="Enter the value"
-                                           name="value"/>
+                                           placeholder="Enter the price"
+                                           name="price"/>
 
                                     <div className="mt-1 text-danger">
-                                        {errors?.value ? errors?.value : null}
+                                        {errors?.price ? errors?.price : null}
+                                    </div>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Currency" isRequired={true}/>
+
+                                    <Select name="currency_id"
+                                            options={formats}
+                                            getOptionLabel={(format) => format.name}
+                                            getOptionValue={(format) => format.id.toString()}
+                                            onChange={(e) => {
+                                                selectChangeHandler(e, 'format_ids')
+                                            }}
+                                            formatOptionLabel={indentOptions}
+                                            placeholder="Select a format"
+                                            ref={formatsSelectRef}/>
+
+                                    <div className="mt-1 text-danger">
+                                        {errors?.currency_id ? errors?.currency_id : null}
                                     </div>
                                 </div>
 
@@ -327,23 +310,15 @@ const PublicationAnalyticCreate: React.FC = () => {
 
                 <div className="separator separator-dashed my-10"></div>
 
-                <div className="mb-4">
-                            <span
-                                className="fs-5 text-gray-700 d-flex fw-medium">{currentAnalyticTypeFormatted}</span>
-                    <span
-                        className="text-muted">This table displays a list of '{currentAnalyticTypeFormatted}' records:</span>
-                </div>
-
                 {
                     publication &&
                     <KrysInnerTable
                         doRefetch={refreshTable}
-                        slug="publication-analytics"
-                        queryId={QUERIES.PUBLICATION_ANALYTICS_LIST}
-                        requestFunction={getPublicationAnalytics}
+                        slug="publication-fixed-cpms"
+                        queryId={QUERIES.PUBLICATION_FIXED_CPMS_LIST}
+                        requestFunction={getPublicationFixedCpms}
                         requestId={publication.id}
-                        columnsArray={PublicationAnalyticsColumns}
-                        filters={filters}
+                        columnsArray={PublicationFixedCpmColumns}
                     ></KrysInnerTable>
                 }
             </KTCardBody>
@@ -351,4 +326,4 @@ const PublicationAnalyticCreate: React.FC = () => {
     );
 }
 
-export default PublicationAnalyticCreate;
+export default PublicationFixedCpmCreate;

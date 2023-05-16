@@ -105,7 +105,7 @@ const PublicationFormatCreate: React.FC = () => {
             // as long as we are updating the create form, we should set the table refresh to false
             setRefreshTable(false);
 
-            // send API request to create the publication payments
+            // send API request to create the publication formats
             storePublicationFormat(publication, form).then(response => {
                     if (axios.isAxiosError(response)) {
                         // we need to show the errors
@@ -114,7 +114,7 @@ const PublicationFormatCreate: React.FC = () => {
                         // show generic error message
                         setFormErrors([GenericErrorMessage])
                     } else {
-                        // we were able to store the publication payments
+                        // we were able to store the publication formats
                         krysApp.setAlert({
                             message: new AlertMessageGenerator('publication format', Actions.CREATE, KrysToastType.SUCCESS).message,
                             type: KrysToastType.SUCCESS
@@ -151,7 +151,7 @@ const PublicationFormatCreate: React.FC = () => {
                         ({errors}) => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Format" isRequired={true}/>
+                                    <KrysFormLabel text="Formats" isRequired={true}/>
 
                                     <Select isMulti name="format_ids"
                                             options={formats}

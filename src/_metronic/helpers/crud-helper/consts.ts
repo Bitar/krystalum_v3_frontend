@@ -41,4 +41,5 @@ export const QUERIES = {
     PUBLICATION_AD_SERVERS_LIST: 'publication-ad-servers-list',
     PUBLICATION_TECHNOLOGIES_LIST: 'publication-technologies-list',
     PUBLICATION_AD_TECHNOLOGIES_LIST: 'publication-ad-technologies-list',
+    PUBLICATION_FIXED_CPMS_LIST: 'publication-fixed-cpms-list',
 }

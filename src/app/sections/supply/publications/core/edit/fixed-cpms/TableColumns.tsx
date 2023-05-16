@@ -5,13 +5,18 @@ import {TextCell} from '../../../../../../modules/table/columns/TextCell';
 import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {QUERIES} from '../../../../../../../_metronic/helpers';
-import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic';
+import {PublicationFixedCpm} from '../../../../../../models/supply/publication/PublicationFixedCpm';
 import {usePublication} from '../../PublicationContext';
 import {formatNumberWithSuffix} from '../../../../../../helpers/stringGenerator';
 import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
 
-const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = [
+const PublicationFixedCpmColumns: ReadonlyArray<Column<PublicationFixedCpm>> = [
+    {
+        Header: (props) => <CustomHeader tableProps={props} title="Format" className="min-w-125px"/>,
+        id: 'format',
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].format?.name}/>,
+    },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Geo Type" className="min-w-125px"/>,
         id: 'geo_type',
@@ -25,15 +30,9 @@ const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = 
         Cell: ({...props}) => <TextCell text={props.data[props.row.index].geo?.name}/>,
     },
     {
-        Header: (props) => <CustomHeader tableProps={props} title="Device" className="min-w-125px"/>,
-        id: 'device',
-        Cell: ({...props}) => <TextCell
-            text={props.data[props.row.index].device ? props.data[props.row.index].device?.name : '- N/A -'}/>,
-    },
-    {
-        Header: (props) => <CustomHeader tableProps={props} title="Value" className="min-w-125px"/>,
-        id: 'value',
-        Cell: ({...props}) => <TextCell text={formatNumberWithSuffix(props.data[props.row.index].value)}/>,
+        Header: (props) => <CustomHeader tableProps={props} title="Price" className="min-w-125px"/>,
+        id: 'price',
+        Cell: ({...props}) => <TextCell text={`${props.data[props.row.index].price} ${props.data[props.row.index].currency.currency}`}/>,
     },
     {
         Header: (props) => (
@@ -49,13 +48,13 @@ const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = 
                 <Restricted to={'manage-supply'}>
                     <ActionsCell
                         id={props.data[props.row.index].id}
-                        path={`supply/publications/${publication?.id}/analytics`}
-                        queryKey={QUERIES.PUBLICATION_ANALYTICS_LIST}
+                        path={`supply/publications/${publication?.id}/fixed-cpms`}
+                        queryKey={QUERIES.PUBLICATION_FIXED_CPMS_LIST}
                         showView={false}
                         showEdit={true}
                         showDelete={true}
-                        title="Delete Publication Analytic"
-                        text={`Are you sure you want to delete the publication analytic of TODO '${props.data[props.row.index].value}'?`}
+                        title="Delete Publication Fixed CPM"
+                        text={`Are you sure you want to delete the publication fixed cpm of TODO '${props.data[props.row.index].value}'?`}
                     />
                 </Restricted>
             )
@@ -63,4 +62,4 @@ const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = 
     },
 ]
 
-export {PublicationAnalyticsColumns}
+export {PublicationFixedCpmColumns}
