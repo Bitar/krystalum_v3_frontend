@@ -268,9 +268,9 @@ const CampaignCreate: React.FC = () => {
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('campaign', Actions.CREATE, KrysToastType.SUCCESS).message,
                         type: KrysToastType.SUCCESS
-                    })
+                    });
 
-                    navigate(`/demand/campaigns`);
+                    navigate(`/demand/campaigns/${response.id}/edit`);
                 }
             }
         );
