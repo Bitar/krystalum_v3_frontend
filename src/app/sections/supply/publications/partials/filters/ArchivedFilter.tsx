@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import PublicationFilter from './Filter';
 import {fillFilterFields, FilterFields} from '../../core/filterForm';
+import PublicationFilter from './Filter';
 
 interface Props {
     showFilter: boolean;

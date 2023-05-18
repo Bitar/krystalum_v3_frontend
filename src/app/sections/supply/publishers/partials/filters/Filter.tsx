@@ -1,34 +1,34 @@
-import React, {useEffect, useRef, useState} from 'react';
+import axios from 'axios';
 import {Field, Form, Formik} from 'formik';
+import React, {useEffect, useRef, useState} from 'react';
 import {Col, Collapse, Row} from 'react-bootstrap';
 import Select from 'react-select';
 import {DateRangePicker} from 'rsuite';
 import {DateRange} from 'rsuite/DateRangePicker';
-import axios from 'axios';
 
 import {initialQueryState} from '../../../../../../_metronic/helpers';
-
-import {useQueryRequest} from '../../../../../modules/table/QueryRequestProvider';
-import {defaultFilterFields, FilterSchema} from '../../core/filterForm';
+import FilterFormFooter from '../../../../../components/forms/FilterFormFooter';
+import FormErrors from '../../../../../components/forms/FormErrors';
+import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
+import {filterData} from '../../../../../helpers/dataManipulation';
 import {
     genericDateRangeOnChangeHandler,
     GenericErrorMessage,
     genericMultiSelectOnChangeHandler,
     genericOnChangeHandler
 } from '../../../../../helpers/form';
-import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
-import FilterFormFooter from '../../../../../components/forms/FilterFormFooter';
 import {createFilterQueryParam, extractErrors} from '../../../../../helpers/requests';
-import {Country} from '../../../../../models/misc/Country';
-import {Tier} from '../../../../../models/misc/Tier';
-import {getAllCountries} from '../../../../../requests/misc/Country';
-import {filterData} from '../../../../../helpers/dataManipulation';
-import {getAllTiers} from '../../../../../requests/misc/Tier';
-import FormErrors from '../../../../../components/forms/FormErrors';
-import {Region} from '../../../../../models/misc/Region';
 import {User} from '../../../../../models/iam/User';
-import {getAllRegions} from '../../../../../requests/misc/Region';
+import {Country} from '../../../../../models/misc/Country';
+import {Region} from '../../../../../models/misc/Region';
+import {Tier} from '../../../../../models/misc/Tier';
+
+import {useQueryRequest} from '../../../../../modules/table/QueryRequestProvider';
 import {getAllUsers} from '../../../../../requests/iam/User';
+import {getAllCountries} from '../../../../../requests/misc/Country';
+import {getAllRegions} from '../../../../../requests/misc/Region';
+import {getAllTiers} from '../../../../../requests/misc/Tier';
+import {defaultFilterFields, FilterSchema} from '../../core/filterForm';
 
 interface Props {
     showFilter: boolean;
@@ -173,81 +173,81 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
                                 onSubmit={handleFilter}
                                 enableReinitialize>
                             {
-                                    <Form onChange={onChangeHandler}>
-                                        <Row>
-                                            <Col md={4}>
-                                                <KrysFormLabel text="Name" isRequired={false}/>
+                                <Form onChange={onChangeHandler}>
+                                    <Row>
+                                        <Col md={4}>
+                                            <KrysFormLabel text="Name" isRequired={false}/>
 
-                                                <Field className="form-control fs-base" type="text"
-                                                       placeholder="Filter by name" name="name"/>
-                                            </Col>
+                                            <Field className="form-control fs-base" type="text"
+                                                   placeholder="Filter by name" name="name"/>
+                                        </Col>
 
-                                            <Col md={4}>
-                                                <KrysFormLabel text="HQ Country(ies)" isRequired={false}/>
+                                        <Col md={4}>
+                                            <KrysFormLabel text="HQ Country(ies)" isRequired={false}/>
 
-                                                <Select isMulti name="countries_ids"
-                                                        options={countries}
-                                                        getOptionLabel={(country) => country?.name}
-                                                        getOptionValue={(country) => country?.id.toString()}
-                                                        onChange={(e) => multiSelectChangeHandler(e, 'countries_ids')}
-                                                        ref={countriesSelectRef}
-                                                        placeholder="Filter by country(ies)"/>
-                                            </Col>
+                                            <Select isMulti name="countries_ids"
+                                                    options={countries}
+                                                    getOptionLabel={(country) => country?.name}
+                                                    getOptionValue={(country) => country?.id.toString()}
+                                                    onChange={(e) => multiSelectChangeHandler(e, 'countries_ids')}
+                                                    ref={countriesSelectRef}
+                                                    placeholder="Filter by country(ies)"/>
+                                        </Col>
 
-                                            <Col md={4}>
-                                                <KrysFormLabel text="HQ Region(s)" isRequired={false}/>
+                                        <Col md={4}>
+                                            <KrysFormLabel text="HQ Region(s)" isRequired={false}/>
 
-                                                <Select isMulti name="regions_ids"
-                                                        options={regions}
-                                                        getOptionLabel={(region) => region?.name}
-                                                        getOptionValue={(region) => region?.id.toString()}
-                                                        onChange={(e) => multiSelectChangeHandler(e, 'regions_ids')}
-                                                        ref={regionsSelectRef}
-                                                        placeholder="Filter by region(s)"
-                                                        isDisabled={(!!(filters?.countries_ids && filters?.countries_ids.length > 0))}/>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col md={4}>
-                                                <KrysFormLabel text="Tier(s)" isRequired={false}/>
+                                            <Select isMulti name="regions_ids"
+                                                    options={regions}
+                                                    getOptionLabel={(region) => region?.name}
+                                                    getOptionValue={(region) => region?.id.toString()}
+                                                    onChange={(e) => multiSelectChangeHandler(e, 'regions_ids')}
+                                                    ref={regionsSelectRef}
+                                                    placeholder="Filter by region(s)"
+                                                    isDisabled={(!!(filters?.countries_ids && filters?.countries_ids.length > 0))}/>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col md={4}>
+                                            <KrysFormLabel text="Tier(s)" isRequired={false}/>
 
-                                                <Select isMulti name="tiers_ids"
-                                                        options={tiers}
-                                                        getOptionLabel={(tier) => tier?.name}
-                                                        getOptionValue={(tier) => tier?.id.toString()}
-                                                        onChange={(e) => multiSelectChangeHandler(e, 'tiers_ids')}
-                                                        ref={tiersSelectRef}
-                                                        placeholder="Filter by tier(s)"/>
-                                            </Col>
+                                            <Select isMulti name="tiers_ids"
+                                                    options={tiers}
+                                                    getOptionLabel={(tier) => tier?.name}
+                                                    getOptionValue={(tier) => tier?.id.toString()}
+                                                    onChange={(e) => multiSelectChangeHandler(e, 'tiers_ids')}
+                                                    ref={tiersSelectRef}
+                                                    placeholder="Filter by tier(s)"/>
+                                        </Col>
 
-                                            <Col md={4}>
-                                                <KrysFormLabel text="Integration Date" isRequired={false}/>
+                                        <Col md={4}>
+                                            <KrysFormLabel text="Integration Date" isRequired={false}/>
 
-                                                <DateRangePicker name="integration_date_range"
-                                                                 placeholder="Filter by integration date range"
-                                                                 className="krys-datepicker krys-daterangepicker"
-                                                                 block
-                                                                 isoWeek
-                                                                 onChange={(date) => dateRangeChangeHandler(date, 'integration_date_range')}
-                                                                 ref={integrationDateRangeRef}
-                                                />
-                                            </Col>
+                                            <DateRangePicker name="integration_date_range"
+                                                             placeholder="Filter by integration date range"
+                                                             className="krys-datepicker krys-daterangepicker"
+                                                             block
+                                                             isoWeek
+                                                             onChange={(date) => dateRangeChangeHandler(date, 'integration_date_range')}
+                                                             ref={integrationDateRangeRef}
+                                            />
+                                        </Col>
 
-                                            <Col md={4}>
-                                                <KrysFormLabel text="Account Manager(s)" isRequired={false}/>
+                                        <Col md={4}>
+                                            <KrysFormLabel text="Account Manager(s)" isRequired={false}/>
 
-                                                <Select isMulti name="account_managers_ids"
-                                                        options={accountManagers}
-                                                        getOptionLabel={(accountManager) => accountManager?.name}
-                                                        getOptionValue={(accountManager) => accountManager?.id.toString()}
-                                                        onChange={(e) => multiSelectChangeHandler(e, 'account_managers_ids')}
-                                                        ref={accountManagersSelectRef}
-                                                        placeholder="Filter by account manager(s)"/>
-                                            </Col>
-                                        </Row>
+                                            <Select isMulti name="account_managers_ids"
+                                                    options={accountManagers}
+                                                    getOptionLabel={(accountManager) => accountManager?.name}
+                                                    getOptionValue={(accountManager) => accountManager?.id.toString()}
+                                                    onChange={(e) => multiSelectChangeHandler(e, 'account_managers_ids')}
+                                                    ref={accountManagersSelectRef}
+                                                    placeholder="Filter by account manager(s)"/>
+                                        </Col>
+                                    </Row>
 
-                                        <FilterFormFooter resetFilter={resetFilter}/>
-                                    </Form>
+                                    <FilterFormFooter resetFilter={resetFilter}/>
+                                </Form>
                             }
                         </Formik>
                     </div>

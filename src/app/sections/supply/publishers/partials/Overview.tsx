@@ -2,10 +2,10 @@ import React from 'react';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 
 import {KTCard, KTCardBody, KTSVG} from '../../../../../_metronic/helpers';
+import {REVENUE_TYPE} from '../../../../enums/Supply/RevenueType';
 
 import {formatDateToMonthDayYear} from '../../../../helpers/dateFormatter';
 import {usePublisher} from '../core/PublisherContext';
-import {REVENUE_TYPE} from '../../../../enums/Supply/RevenueType';
 
 const PublisherOverview: React.FC = () => {
     const {publisher} = usePublisher();

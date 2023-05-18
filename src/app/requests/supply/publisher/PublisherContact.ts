@@ -1,8 +1,7 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
-
 import {createFormData} from '../../../helpers/requests';
-import {PublisherContact, PublisherContactPaginate} from '../../../models/supply/publisher/PublisherContact';
 import {Publisher} from '../../../models/supply/publisher/Publisher';
+import {PublisherContact, PublisherContactPaginate} from '../../../models/supply/publisher/PublisherContact';
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publishers`

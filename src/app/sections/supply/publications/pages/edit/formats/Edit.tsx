@@ -1,36 +1,37 @@
-import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {useNavigate, useParams} from 'react-router-dom';
 import {Form, Formik} from 'formik';
+import React, {useEffect, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
-
-import {usePublication} from '../../../core/PublicationContext';
-import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {PublicationFormat} from '../../../../../../models/supply/publication/PublicationFormat';
-import {
-    defaultPublicationFormatEditFormFields,
-    PublicationFormatEditFormFields, publicationFormatSchema,
-} from '../../../core/edit/formats/form';
-import {
-    getPublicationFormat,
-    updatePublicationFormat
-} from '../../../../../../requests/supply/publication/PublicationFormat';
-import {getFormatTypes} from '../../../../../../requests/supply/Options';
-import {extractErrors} from '../../../../../../helpers/requests';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
-import {FormatType} from '../../../../../../models/supply/Options';
-import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
-import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
-import {Sections} from '../../../../../../helpers/sections';
-import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import FormErrors from '../../../../../../components/forms/FormErrors';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import SingleSelect from '../../../../../../components/forms/SingleSelect';
+import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
+import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
+import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
+import {extractErrors} from '../../../../../../helpers/requests';
+import {Sections} from '../../../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
 import {Format} from '../../../../../../models/misc/Format';
+import {FormatType} from '../../../../../../models/supply/Options';
+import {PublicationFormat} from '../../../../../../models/supply/publication/PublicationFormat';
+import {useKrysApp} from '../../../../../../modules/general/KrysApp';
 import {getAllFormats} from '../../../../../../requests/misc/Format';
+import {getFormatTypes} from '../../../../../../requests/supply/Options';
+import {
+    getPublicationFormat,
+    updatePublicationFormat
+} from '../../../../../../requests/supply/publication/PublicationFormat';
+import {
+    defaultPublicationFormatEditFormFields,
+    PublicationFormatEditFormFields,
+    publicationFormatSchema,
+} from '../../../core/edit/formats/form';
+
+import {usePublication} from '../../../core/PublicationContext';
 
 const PublicationFormatEdit: React.FC = () => {
     const {publication} = usePublication();

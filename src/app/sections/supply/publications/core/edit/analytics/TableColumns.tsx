@@ -1,16 +1,16 @@
-import {Column} from 'react-table'
 import React from 'react';
-import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
-import {TextCell} from '../../../../../../modules/table/columns/TextCell';
+import {Column} from 'react-table'
+import {QUERIES} from '../../../../../../../_metronic/helpers';
+import {ANALYTIC_TYPE} from '../../../../../../enums/Supply/AnalyticType';
+import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {formatNumberWithSuffix} from '../../../../../../helpers/stringGenerator';
+import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic';
 import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
-import {QUERIES} from '../../../../../../../_metronic/helpers';
-import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic';
-import {usePublication} from '../../PublicationContext';
-import {formatNumberWithSuffix} from '../../../../../../helpers/stringGenerator';
 import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
-import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
-import {ANALYTIC_TYPE} from '../../../../../../enums/Supply/AnalyticType';
+import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
+import {TextCell} from '../../../../../../modules/table/columns/TextCell';
+import {usePublication} from '../../PublicationContext';
 
 const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = [
     {

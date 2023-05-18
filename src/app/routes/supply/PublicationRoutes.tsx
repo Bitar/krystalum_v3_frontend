@@ -1,12 +1,12 @@
-import {Route, Routes} from 'react-router-dom'
 import React from 'react'
+import {Route, Routes} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections';
-import PublicationEditRoutes from './PublicationEditRoutes';
-import PublicationIndex from '../../sections/supply/publications/pages/Index';
-import PublicationCreate from '../../sections/supply/publications/pages/Create';
 import PublicationArchived from '../../sections/supply/publications/pages/Archived';
+import PublicationCreate from '../../sections/supply/publications/pages/Create';
+import PublicationIndex from '../../sections/supply/publications/pages/Index';
+import PublicationEditRoutes from './PublicationEditRoutes';
 
 const breadcrumbs: Array<PageLink> = [
     {
@@ -33,7 +33,7 @@ const PublicationRoutes: React.FC = () => {
                 </SuspenseView>
             }/>
             <Route
-                path='/create'
+                path="/create"
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Create'}</PageTitle>
@@ -42,7 +42,7 @@ const PublicationRoutes: React.FC = () => {
                 }
             />
             <Route
-                path='/:id/*'
+                path="/:id/*"
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
@@ -51,7 +51,7 @@ const PublicationRoutes: React.FC = () => {
                 }
             />
             <Route
-                path='/archived'
+                path="/archived"
                 element={
                     <SuspenseView>
                         <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Archived'}</PageTitle>

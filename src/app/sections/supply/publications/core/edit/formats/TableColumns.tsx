@@ -1,13 +1,13 @@
-import {Column} from 'react-table'
 import React from 'react';
-import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
-import {TextCell} from '../../../../../../modules/table/columns/TextCell';
+import {Column} from 'react-table'
+import {QUERIES} from '../../../../../../../_metronic/helpers';
+import {PublicationFormat} from '../../../../../../models/supply/publication/PublicationFormat';
 import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
-import {QUERIES} from '../../../../../../../_metronic/helpers';
-import {usePublication} from '../../PublicationContext';
-import {PublicationFormat} from '../../../../../../models/supply/publication/PublicationFormat';
 import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
+import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
+import {TextCell} from '../../../../../../modules/table/columns/TextCell';
+import {usePublication} from '../../PublicationContext';
 
 const PublicationFormatsColumns: ReadonlyArray<Column<PublicationFormat>> = [
     {

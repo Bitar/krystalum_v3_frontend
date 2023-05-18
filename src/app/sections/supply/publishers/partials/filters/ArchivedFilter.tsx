@@ -12,7 +12,7 @@ const PublisherArchivedFilter: React.FC<Props> = ({showFilter, setExportQuery}) 
 
     return (
         <PublisherFilter showFilter={showFilter} setExportQuery={setExportQuery} filters={filters}
-                           setFilters={setFilters}/>
+                         setFilters={setFilters}/>
     );
 }
 

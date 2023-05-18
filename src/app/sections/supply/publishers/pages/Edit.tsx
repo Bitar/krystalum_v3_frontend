@@ -1,23 +1,23 @@
-import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {useNavigate, useParams} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
 import {Nav, Tab} from 'react-bootstrap';
-
-import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import {useNavigate, useParams} from 'react-router-dom';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 
-import {PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
+
+import {PageTypes} from '../../../../helpers/variables';
 import {Publisher} from '../../../../models/supply/publisher/Publisher';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {getPublisher} from '../../../../requests/supply/publisher/Publisher';
-import PublisherBasicInformationEdit from './edit/BasicInformation';
 import PublisherOverview from '../partials/Overview';
-import PublisherPublication from './edit/Publication';
 import PublisherAccountManager from './edit/AccountManager';
+import PublisherBasicInformationEdit from './edit/BasicInformation';
 import PublisherContactCreate from './edit/contacts/Create';
 import PublisherPaymentCreate from './edit/payments/Create';
+import PublisherPublication from './edit/Publication';
 
 const PublisherEdit: React.FC = () => {
     let {id} = useParams();

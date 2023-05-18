@@ -1,34 +1,32 @@
-import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {useNavigate, useParams} from 'react-router-dom';
 import {Field, Form, Formik} from 'formik';
-
-import {usePublisher} from '../../../core/PublisherContext';
-import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../../../helpers/sections';
-import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
-import {extractErrors} from '../../../../../../helpers/requests';
-import {
-    GenericErrorMessage,
-    genericOnChangeHandler
-} from '../../../../../../helpers/form';
+import React, {useEffect, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
-import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import FormErrors from '../../../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
+import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
+import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
+import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
+import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
+import {extractErrors} from '../../../../../../helpers/requests';
+import {Sections} from '../../../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
+import {PublisherPayment} from '../../../../../../models/supply/publisher/PublisherPayment';
+import {useKrysApp} from '../../../../../../modules/general/KrysApp';
 import {
     getPublisherPayment,
     updatePublisherPayment
 } from '../../../../../../requests/supply/publisher/PublisherPayment';
-import {PublisherPayment} from '../../../../../../models/supply/publisher/PublisherPayment';
 import {
-    defaultPublisherPaymentFormFields, fillEditForm,
+    defaultPublisherPaymentFormFields,
+    fillEditForm,
     PublisherPaymentFormFields,
     PublisherPaymentSchema
 } from '../../../core/edit/payments/form';
+
+import {usePublisher} from '../../../core/PublisherContext';
 
 const PublisherPaymentEdit: React.FC = () => {
     const {publisher} = usePublisher();

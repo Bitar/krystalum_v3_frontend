@@ -1,5 +1,4 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
-
 import {createFormData} from '../../../helpers/requests';
 import {Publisher, PublisherList, PublisherPaginate} from '../../../models/supply/publisher/Publisher';
 

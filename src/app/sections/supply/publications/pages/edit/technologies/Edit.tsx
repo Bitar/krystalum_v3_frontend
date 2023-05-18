@@ -1,34 +1,35 @@
-import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {useNavigate, useParams} from 'react-router-dom';
 import {Form, Formik} from 'formik';
+import React, {useEffect, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
-
-import {usePublication} from '../../../core/PublicationContext';
-import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {extractErrors} from '../../../../../../helpers/requests';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
-import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
-import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
-import {Sections} from '../../../../../../helpers/sections';
-import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import FormErrors from '../../../../../../components/forms/FormErrors';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import SingleSelect from '../../../../../../components/forms/SingleSelect';
+import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
+import {filterData} from '../../../../../../helpers/dataManipulation';
+import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
+import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
+import {extractErrors} from '../../../../../../helpers/requests';
+import {Sections} from '../../../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
+import {Technology} from '../../../../../../models/misc/Technology';
+import {useKrysApp} from '../../../../../../modules/general/KrysApp';
+import {getAllTechnologies} from '../../../../../../requests/misc/Technology';
 import {
     getPublicationTechnology,
     updatePublicationTechnology
 } from '../../../../../../requests/supply/publication/PublicationTechnology';
-import {filterData} from '../../../../../../helpers/dataManipulation';
 import {
     defaultPublicationTechnologyEditFormFields,
-    PublicationTechnologyEditFormFields, publicationTechnologySchema
+    PublicationTechnologyEditFormFields,
+    publicationTechnologySchema
 } from '../../../core/edit/technologies/form';
-import {Technology} from '../../../../../../models/misc/Technology';
-import {getAllTechnologies} from '../../../../../../requests/misc/Technology';
+
+import {usePublication} from '../../../core/PublicationContext';
 
 const PublicationTechnologyEdit: React.FC = () => {
     const {publication} = usePublication();

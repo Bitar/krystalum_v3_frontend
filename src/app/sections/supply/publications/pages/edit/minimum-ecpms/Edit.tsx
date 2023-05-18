@@ -1,45 +1,43 @@
-import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {useNavigate, useParams} from 'react-router-dom';
 import {Field, Form, Formik} from 'formik';
-
-import {usePublication} from '../../../core/PublicationContext';
-import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../../../helpers/sections';
-import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
-import {extractErrors} from '../../../../../../helpers/requests';
-import {
-    GenericErrorMessage,
-    genericOnChangeHandler
-} from '../../../../../../helpers/form';
+import React, {useEffect, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
-import SingleSelect from '../../../../../../components/forms/SingleSelect';
-import {PublicationMinimumEcpm} from '../../../../../../models/supply/publication/PublicationMinimumEcpm';
+import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton';
-import {Region} from '../../../../../../models/misc/Region';
-import {Country} from '../../../../../../models/misc/Country';
-import {getAllRegions} from '../../../../../../requests/misc/Region';
-import {filterData} from '../../../../../../helpers/dataManipulation';
-import {getAllCountries, getAllCurrencies} from '../../../../../../requests/misc/Country';
+import SingleSelect from '../../../../../../components/forms/SingleSelect';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
-import {
-    defaultPublicationMinimumEcpmEditFormFields,
-    fillEditForm, PublicationMinimumEcpmEditFormFields,
-    publicationMinimumEcpmSchema
-} from '../../../core/edit/minimum-ecpms/form';
-import {Format} from '../../../../../../models/misc/Format';
+import {filterData} from '../../../../../../helpers/dataManipulation';
+import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
+import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
+import {extractErrors} from '../../../../../../helpers/requests';
+import {Sections} from '../../../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
+import {Country} from '../../../../../../models/misc/Country';
 import {Currency} from '../../../../../../models/misc/Currency';
+import {Format} from '../../../../../../models/misc/Format';
+import {Region} from '../../../../../../models/misc/Region';
+import {PublicationMinimumEcpm} from '../../../../../../models/supply/publication/PublicationMinimumEcpm';
+import {useKrysApp} from '../../../../../../modules/general/KrysApp';
+import {getAllCountries, getAllCurrencies} from '../../../../../../requests/misc/Country';
 import {getAllFormats} from '../../../../../../requests/misc/Format';
+import {getAllRegions} from '../../../../../../requests/misc/Region';
 import {
     getPublicationMinimumEcpm,
     updatePublicationMinimumEcpm
 } from '../../../../../../requests/supply/publication/PublisherMinimumEcpm';
+import {
+    defaultPublicationMinimumEcpmEditFormFields,
+    fillEditForm,
+    PublicationMinimumEcpmEditFormFields,
+    publicationMinimumEcpmSchema
+} from '../../../core/edit/minimum-ecpms/form';
+
+import {usePublication} from '../../../core/PublicationContext';
 
 const PublicationMinimumEcpmEdit: React.FC = () => {
     const {publication} = usePublication();
@@ -274,7 +272,8 @@ const PublicationMinimumEcpmEdit: React.FC = () => {
 
                                     <SingleSelect isResourceLoaded={isResourceLoaded} options={currencies}
                                                   defaultValue={publicationMinimumEcpm?.currency} form={form}
-                                                  setForm={setForm} name="currency_id" label="currency" isClearable={true}/>
+                                                  setForm={setForm} name="currency_id" label="currency"
+                                                  isClearable={true}/>
 
                                     <div className="mt-1 text-danger">
                                         {errors?.currency_id ? errors?.currency_id : null}

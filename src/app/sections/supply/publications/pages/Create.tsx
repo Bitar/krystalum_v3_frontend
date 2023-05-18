@@ -1,38 +1,40 @@
-import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
 import {Field, Form, Formik} from 'formik';
+import React, {useEffect, useState} from 'react';
+import {FormControl, FormGroup, InputGroup} from 'react-bootstrap';
+import {useNavigate} from 'react-router-dom';
 import Select from 'react-select';
 import {DatePicker} from 'rsuite';
+import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {
-    genericDateOnChangeHandler, GenericErrorMessage, genericMultiSelectOnChangeHandler,
-    genericOnChangeHandler,
-    genericSingleSelectOnChangeHandler
-} from '../../../../helpers/form';
-import {storePublication} from '../../../../requests/supply/publication/Publication';
-import {extractErrors} from '../../../../helpers/requests';
-import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 import FormErrors from '../../../../components/forms/FormErrors';
-import {defaultFormFields, FormFields, publicationSchema} from '../core/form';
+import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import {Publisher} from '../../../../models/supply/publisher/Publisher';
-import {getAllPublishers} from '../../../../requests/supply/publisher/Publisher';
-import {Language} from '../../../../models/misc/Language';
-import {getAllLanguages} from '../../../../requests/misc/Language';
 import KrysRadioButton from '../../../../components/forms/KrysRadioButton';
-import {FormControl, FormGroup, InputGroup} from 'react-bootstrap';
-import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
 import {APPLICATION_TYPE} from '../../../../enums/Supply/ApplicationType';
 import {PUBLICATION_TYPE} from '../../../../enums/Supply/PublicationType';
 import {REVENUE_TYPE} from '../../../../enums/Supply/RevenueType';
+import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
+import {
+    genericDateOnChangeHandler,
+    GenericErrorMessage,
+    genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler,
+    genericSingleSelectOnChangeHandler
+} from '../../../../helpers/form';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {extractErrors} from '../../../../helpers/requests';
+import {Sections} from '../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
+import {Language} from '../../../../models/misc/Language';
+import {Publisher} from '../../../../models/supply/publisher/Publisher';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {getAllLanguages} from '../../../../requests/misc/Language';
+import {storePublication} from '../../../../requests/supply/publication/Publication';
+import {getAllPublishers} from '../../../../requests/supply/publisher/Publisher';
+import {defaultFormFields, FormFields, publicationSchema} from '../core/form';
 
 const PublicationCreate: React.FC = () => {
     const navigate = useNavigate();
@@ -318,7 +320,7 @@ const PublicationCreate: React.FC = () => {
                                                    name="android_store_url"/>
 
                                             <div className="mt-1 text-danger">
-                                                    {errors?.android_store_url ? errors?.android_store_url : null}
+                                                {errors?.android_store_url ? errors?.android_store_url : null}
                                             </div>
                                         </div>
 
@@ -331,7 +333,7 @@ const PublicationCreate: React.FC = () => {
                                                    name="android_bundle_id"/>
 
                                             <div className="mt-1 text-danger">
-                                                    {errors?.android_bundle_id ? errors?.android_bundle_id : null}
+                                                {errors?.android_bundle_id ? errors?.android_bundle_id : null}
                                             </div>
                                         </div>
 
@@ -344,7 +346,7 @@ const PublicationCreate: React.FC = () => {
                                                    name="android_version"/>
 
                                             <div className="mt-1 text-danger">
-                                                    {errors?.android_version ? errors?.android_version : null}
+                                                {errors?.android_version ? errors?.android_version : null}
                                             </div>
                                         </div>
 
@@ -406,7 +408,7 @@ const PublicationCreate: React.FC = () => {
                                                    name="ios_store_url"/>
 
                                             <div className="mt-1 text-danger">
-                                                    {errors?.ios_store_url ? errors?.ios_store_url : null}
+                                                {errors?.ios_store_url ? errors?.ios_store_url : null}
                                             </div>
                                         </div>
 
@@ -419,7 +421,7 @@ const PublicationCreate: React.FC = () => {
                                                    name="ios_bundle_id"/>
 
                                             <div className="mt-1 text-danger">
-                                                    {errors?.ios_bundle_id ? errors?.ios_bundle_id : null}
+                                                {errors?.ios_bundle_id ? errors?.ios_bundle_id : null}
                                             </div>
                                         </div>
 
@@ -431,7 +433,7 @@ const PublicationCreate: React.FC = () => {
                                                    placeholder="Enter publication iOS version" name="ios_version"/>
 
                                             <div className="mt-1 text-danger">
-                                                    {errors?.ios_version ? errors?.ios_version : null}
+                                                {errors?.ios_version ? errors?.ios_version : null}
                                             </div>
                                         </div>
 

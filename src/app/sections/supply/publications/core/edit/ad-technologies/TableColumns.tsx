@@ -1,8 +1,8 @@
-import {Column} from 'react-table'
 import React from 'react';
+import {Column} from 'react-table'
+import {PublicationAdTechnology} from '../../../../../../models/supply/publication/PublicationAdTechnology';
 import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
 import {TextCell} from '../../../../../../modules/table/columns/TextCell';
-import {PublicationAdTechnology} from '../../../../../../models/supply/publication/PublicationAdTechnology';
 
 const PublicationAdTechnologiesColumns: ReadonlyArray<Column<PublicationAdTechnology>> = [
     {

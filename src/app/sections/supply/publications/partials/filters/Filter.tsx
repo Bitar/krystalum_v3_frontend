@@ -1,44 +1,44 @@
-import React, {useEffect, useRef, useState} from 'react';
+import axios from 'axios';
 import {Field, Form, Formik} from 'formik';
+import React, {useEffect, useRef, useState} from 'react';
 import {Col, Collapse, Row} from 'react-bootstrap';
-
-import {useQueryRequest} from '../../../../../modules/table/QueryRequestProvider';
-import {defaultFilterFields, FilterSchema} from '../../core/filterForm';
+import Select from 'react-select';
+import {TagsInput} from 'react-tag-input-component';
+import {DateRangePicker} from 'rsuite';
+import {DateRange} from 'rsuite/DateRangePicker';
+import {initialQueryState} from '../../../../../../_metronic/helpers';
+import FilterFormFooter from '../../../../../components/forms/FilterFormFooter';
+import FormErrors from '../../../../../components/forms/FormErrors';
+import {indentOptions} from '../../../../../components/forms/IndentOptions';
+import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
+import KrysSwitch from '../../../../../components/forms/KrysSwitch';
+import {filterData} from '../../../../../helpers/dataManipulation';
 import {
     genericDateRangeOnChangeHandler,
     GenericErrorMessage,
     genericMultiSelectOnChangeHandler,
     genericOnChangeHandler
 } from '../../../../../helpers/form';
-import {initialQueryState} from '../../../../../../_metronic/helpers';
-import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
-import FilterFormFooter from '../../../../../components/forms/FilterFormFooter';
 import {createFilterQueryParam, extractErrors} from '../../../../../helpers/requests';
-import FormErrors from '../../../../../components/forms/FormErrors';
-import Select from 'react-select';
-import {getAllCountries} from '../../../../../requests/misc/Country';
-import axios from 'axios';
-import {filterData} from '../../../../../helpers/dataManipulation';
-import {Publisher} from '../../../../../models/supply/publisher/Publisher';
-import {getAllPublishers} from '../../../../../requests/supply/publisher/Publisher';
-import {getAllLanguages} from '../../../../../requests/misc/Language';
-import {Language} from '../../../../../models/misc/Language';
-import {DateRangePicker} from 'rsuite';
-import {DateRange} from 'rsuite/DateRangePicker';
-import {getAllFormats} from '../../../../../requests/misc/Format';
-import {Format} from '../../../../../models/misc/Format';
+import {AdServer} from '../../../../../models/misc/AdServer';
 import {Country} from '../../../../../models/misc/Country';
+import {Format} from '../../../../../models/misc/Format';
+import {Language} from '../../../../../models/misc/Language';
 import {Region} from '../../../../../models/misc/Region';
 import {Technology} from '../../../../../models/misc/Technology';
-import {AdServer} from '../../../../../models/misc/AdServer';
 import {Vertical} from '../../../../../models/misc/Vertical';
+import {Publisher} from '../../../../../models/supply/publisher/Publisher';
+
+import {useQueryRequest} from '../../../../../modules/table/QueryRequestProvider';
 import {getAllAdServers} from '../../../../../requests/misc/AdServer';
+import {getAllCountries} from '../../../../../requests/misc/Country';
+import {getAllFormats} from '../../../../../requests/misc/Format';
+import {getAllLanguages} from '../../../../../requests/misc/Language';
+import {getAllRegions} from '../../../../../requests/misc/Region';
 import {getAllTechnologies} from '../../../../../requests/misc/Technology';
 import {getAllVerticals} from '../../../../../requests/misc/Vertical';
-import {getAllRegions} from '../../../../../requests/misc/Region';
-import {indentOptions} from '../../../../../components/forms/IndentOptions';
-import KrysSwitch from '../../../../../components/forms/KrysSwitch';
-import {TagsInput} from 'react-tag-input-component';
+import {getAllPublishers} from '../../../../../requests/supply/publisher/Publisher';
+import {defaultFilterFields, FilterSchema} from '../../core/filterForm';
 
 interface Props {
     showFilter: boolean;

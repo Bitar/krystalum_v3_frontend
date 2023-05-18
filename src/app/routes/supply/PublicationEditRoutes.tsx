@@ -1,21 +1,21 @@
+import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import {Route, Routes, useNavigate, useParams} from 'react-router-dom';
-import axios from 'axios';
+import {PageLink, PageTitle} from '../../../_metronic/layout/core';
 
 import {SuspenseView} from '../../components/misc/SuspenseView';
 import {Sections} from '../../helpers/sections';
 import {Publication} from '../../models/supply/publication/Publication';
 import {getPublication} from '../../requests/supply/publication/Publication';
-import {PageLink, PageTitle} from '../../../_metronic/layout/core';
-import PublicationEdit from '../../sections/supply/publications/pages/Edit';
 import {PublicationContext} from '../../sections/supply/publications/core/PublicationContext';
-import PublicationAnalyticEdit from '../../sections/supply/publications/pages/edit/analytics/Edit';
-import PublicationFormatEdit from '../../sections/supply/publications/pages/edit/formats/Edit';
-import PublicationVerticalEdit from '../../sections/supply/publications/pages/edit/verticals/Edit';
+import PublicationEdit from '../../sections/supply/publications/pages/Edit';
 import PublicationAdServerEdit from '../../sections/supply/publications/pages/edit/ad-servers/Edit';
-import PublicationTechnologyEdit from '../../sections/supply/publications/pages/edit/technologies/Edit';
+import PublicationAnalyticEdit from '../../sections/supply/publications/pages/edit/analytics/Edit';
 import PublicationFixedCpmEdit from '../../sections/supply/publications/pages/edit/fixed-cpms/Edit';
+import PublicationFormatEdit from '../../sections/supply/publications/pages/edit/formats/Edit';
 import PublicationMinimumEcpmEdit from '../../sections/supply/publications/pages/edit/minimum-ecpms/Edit';
+import PublicationTechnologyEdit from '../../sections/supply/publications/pages/edit/technologies/Edit';
+import PublicationVerticalEdit from '../../sections/supply/publications/pages/edit/verticals/Edit';
 
 const PublicationEditRoutes: React.FC = () => {
     const [publication, setPublication] = useState<Publication | null>(null);

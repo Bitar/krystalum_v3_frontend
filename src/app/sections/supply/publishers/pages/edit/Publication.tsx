@@ -4,9 +4,9 @@ import {KTCard, KTCardBody, QUERIES} from '../../../../../../_metronic/helpers';
 
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
 import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';
-import {usePublisher} from '../../core/PublisherContext';
-import {PublisherPublicationsColumns} from '../../core/edit/publications/TableColumns';
 import {getPublisherPublications} from '../../../../../requests/supply/publisher/PublisherPublication';
+import {PublisherPublicationsColumns} from '../../core/edit/publications/TableColumns';
+import {usePublisher} from '../../core/PublisherContext';
 
 const PublisherPublication: React.FC = () => {
     const {publisher} = usePublisher();
@@ -19,14 +19,14 @@ const PublisherPublication: React.FC = () => {
             <KTCardBody>
                 {
                     publisher ?
-                    <KrysInnerTable
-                        doRefetch={refreshTable}
-                        slug="publisher-publications"
-                        queryId={QUERIES.PUBLISHER_PUBLICATIONS_LIST}
-                        requestFunction={getPublisherPublications}
-                        requestId={publisher.id}
-                        columnsArray={PublisherPublicationsColumns}
-                    ></KrysInnerTable> : <>TODO: add engage with no publications</>
+                        <KrysInnerTable
+                            doRefetch={refreshTable}
+                            slug="publisher-publications"
+                            queryId={QUERIES.PUBLISHER_PUBLICATIONS_LIST}
+                            requestFunction={getPublisherPublications}
+                            requestId={publisher.id}
+                            columnsArray={PublisherPublicationsColumns}
+                        ></KrysInnerTable> : <>TODO: add engage with no publications</>
                 }
             </KTCardBody>
         </KTCard>

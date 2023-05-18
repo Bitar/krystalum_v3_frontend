@@ -1,44 +1,42 @@
-import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {useNavigate, useParams} from 'react-router-dom';
 import {Field, Form, Formik} from 'formik';
-
-import {usePublication} from '../../../core/PublicationContext';
-import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../../../helpers/sections';
-import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
-import {extractErrors} from '../../../../../../helpers/requests';
-import {
-    GenericErrorMessage,
-    genericOnChangeHandler
-} from '../../../../../../helpers/form';
-import {
-    defaultPublicationAnalyticFormFields, fillEditForm,
-    PublicationAnalyticFormFields,
-    PublicationAnalyticSchema
-} from '../../../core/edit/analytics/form';
+import React, {useEffect, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
+import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
+import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton';
 import SingleSelect from '../../../../../../components/forms/SingleSelect';
+import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
+import {filterData} from '../../../../../../helpers/dataManipulation';
+import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
+import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
+import {extractErrors} from '../../../../../../helpers/requests';
+import {Sections} from '../../../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
+import {Country} from '../../../../../../models/misc/Country';
+import {Device} from '../../../../../../models/misc/Device';
+import {Region} from '../../../../../../models/misc/Region';
 import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic';
+import {useKrysApp} from '../../../../../../modules/general/KrysApp';
+import {getAllCountries} from '../../../../../../requests/misc/Country';
+import {getAllDevices} from '../../../../../../requests/misc/Device';
+import {getAllRegions} from '../../../../../../requests/misc/Region';
 import {
     getPublicationAnalytic,
     updatePublicationAnalytic
 } from '../../../../../../requests/supply/publication/PublisherAnalytic';
-import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton';
-import {Region} from '../../../../../../models/misc/Region';
-import {Country} from '../../../../../../models/misc/Country';
-import {Device} from '../../../../../../models/misc/Device';
-import {getAllRegions} from '../../../../../../requests/misc/Region';
-import {filterData} from '../../../../../../helpers/dataManipulation';
-import {getAllCountries} from '../../../../../../requests/misc/Country';
-import {getAllDevices} from '../../../../../../requests/misc/Device';
-import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
-import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
+import {
+    defaultPublicationAnalyticFormFields,
+    fillEditForm,
+    PublicationAnalyticFormFields,
+    PublicationAnalyticSchema
+} from '../../../core/edit/analytics/form';
+
+import {usePublication} from '../../../core/PublicationContext';
 
 const PublicationAnalyticEdit: React.FC = () => {
     const {publication} = usePublication();

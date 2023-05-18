@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
-import {PublicationFixedCpm} from '../../../../../../models/supply/publication/PublicationFixedCpm';
 import {DEFAULT_CURRENCY} from '../../../../../../helpers/settings';
+import {PublicationFixedCpm} from '../../../../../../models/supply/publication/PublicationFixedCpm';
 
 export interface PublicationFixedCpmFormFields {
     format_ids: number[];
@@ -24,7 +24,7 @@ export interface PublicationFixedCpmEditFormFields extends Omit<PublicationFixed
     geo_id: number;
 }
 
-const { format_ids, geo_ids, ...defaultFields } = defaultPublicationFixedCpmFormFields;
+const {format_ids, geo_ids, ...defaultFields} = defaultPublicationFixedCpmFormFields;
 
 export const defaultPublicationFixedCpmEditFormFields: PublicationFixedCpmEditFormFields = {
     format_id: 0,

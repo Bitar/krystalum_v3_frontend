@@ -1,27 +1,27 @@
-import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {useNavigate, useParams} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
 import {Nav, Tab} from 'react-bootstrap';
-
-import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import {useNavigate, useParams} from 'react-router-dom';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 
-import {PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
+
+import {PageTypes} from '../../../../helpers/variables';
 import {Publication} from '../../../../models/supply/publication/Publication';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {getPublication} from '../../../../requests/supply/publication/Publication';
 import PublicationOverview from '../partials/Overview';
-import PublicationBasicInformationEdit from './edit/BasicInformation';
-import PublicationAnalyticCreate from './edit/analytics/Create';
-import PublicationFormatCreate from './edit/formats/Create';
-import PublicationVerticalCreate from './edit/verticals/Create';
 import PublicationAdServerCreate from './edit/ad-servers/Create';
-import PublicationTechnologyCreate from './edit/technologies/Create';
 import PublicationAdTechnologyIndex from './edit/ad-technologies/Index';
+import PublicationAnalyticCreate from './edit/analytics/Create';
+import PublicationBasicInformationEdit from './edit/BasicInformation';
 import PublicationFixedCpmCreate from './edit/fixed-cpms/Create';
+import PublicationFormatCreate from './edit/formats/Create';
 import PublicationMinimumEcpmCreate from './edit/minimum-ecpms/Create';
+import PublicationTechnologyCreate from './edit/technologies/Create';
+import PublicationVerticalCreate from './edit/verticals/Create';
 
 const PublicationEdit: React.FC = () => {
     let {id} = useParams();

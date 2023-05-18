@@ -1,5 +1,4 @@
 import axios, {AxiosResponse} from 'axios'
-
 import {PublicationPaginate} from '../../../models/supply/publication/Publication';
 
 const API_URL = process.env.REACT_APP_API_URL

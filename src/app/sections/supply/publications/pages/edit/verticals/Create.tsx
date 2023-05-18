@@ -1,37 +1,39 @@
-import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {Form, Formik} from 'formik';
+import React, {useEffect, useRef, useState} from 'react';
 import Select from 'react-select';
 
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
-
-import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {extractErrors} from '../../../../../../helpers/requests';
+import FormErrors from '../../../../../../components/forms/FormErrors';
+import {indentOptions} from '../../../../../../components/forms/IndentOptions';
+import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
+import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
+import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
+import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
+import {filterData} from '../../../../../../helpers/dataManipulation';
 import {
-    GenericErrorMessage, genericMultiSelectOnChangeHandler,
+    GenericErrorMessage,
+    genericMultiSelectOnChangeHandler,
     genericOnChangeHandler
 } from '../../../../../../helpers/form';
-import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
+import {extractErrors} from '../../../../../../helpers/requests';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
-import FormErrors from '../../../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
-import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
+import {Vertical} from '../../../../../../models/misc/Vertical';
+
+import {useKrysApp} from '../../../../../../modules/general/KrysApp';
+import {getAllVerticals} from '../../../../../../requests/misc/Vertical';
 import {
     getPublicationVerticals,
     storePublicationVertical
 } from '../../../../../../requests/supply/publication/PublicationVertical';
-import {usePublication} from '../../../core/PublicationContext';
 import {
     defaultPublicationVerticalFormFields,
-    PublicationVerticalFormFields, publicationVerticalSchema,
+    PublicationVerticalFormFields,
+    publicationVerticalSchema,
 } from '../../../core/edit/verticals/form';
 import {PublicationVerticalsColumns} from '../../../core/edit/verticals/TableColumns';
-import {getAllVerticals} from '../../../../../../requests/misc/Vertical';
-import {Vertical} from '../../../../../../models/misc/Vertical';
-import {filterData} from '../../../../../../helpers/dataManipulation';
-import {indentOptions} from '../../../../../../components/forms/IndentOptions';
+import {usePublication} from '../../../core/PublicationContext';
 
 
 const PublicationVerticalCreate: React.FC = () => {

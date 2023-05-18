@@ -4,7 +4,9 @@ import {
     ApplicationTypeList,
     ContactTypeList,
     FormatTypeList,
-    GeoTypeList, RevenueTypeList, TypeList
+    GeoTypeList,
+    RevenueTypeList,
+    TypeList
 } from '../../models/supply/Options';
 
 const API_URL = process.env.REACT_APP_API_URL

@@ -1,6 +1,6 @@
 import {Response} from '../../../../_metronic/helpers';
-import {FormatType} from '../Options';
 import {Format} from '../../misc/Format';
+import {FormatType} from '../Options';
 
 export type PublicationFormat = {
     id: number,

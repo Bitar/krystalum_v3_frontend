@@ -1,12 +1,12 @@
-import {Column} from 'react-table'
 import React from 'react';
-import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
-import {TextCell} from '../../../../../../modules/table/columns/TextCell';
+import {Column} from 'react-table'
+import {QUERIES} from '../../../../../../../_metronic/helpers';
+import {Technology} from '../../../../../../models/misc/Technology';
 import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
-import {QUERIES} from '../../../../../../../_metronic/helpers';
+import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
+import {TextCell} from '../../../../../../modules/table/columns/TextCell';
 import {usePublication} from '../../PublicationContext';
-import {Technology} from '../../../../../../models/misc/Technology';
 
 const PublicationTechnologiesColumns: ReadonlyArray<Column<Technology>> = [
     {

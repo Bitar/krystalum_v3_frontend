@@ -1,10 +1,10 @@
+import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import {Route, Routes, useNavigate, useParams} from 'react-router-dom';
+import {PageLink, PageTitle} from '../../../_metronic/layout/core';
 
 import {SuspenseView} from '../../components/misc/SuspenseView';
-import {PageLink, PageTitle} from '../../../_metronic/layout/core';
 import {Sections} from '../../helpers/sections';
-import axios from 'axios';
 import {Publisher} from '../../models/supply/publisher/Publisher';
 import {getPublisher} from '../../requests/supply/publisher/Publisher';
 import {PublisherContext} from '../../sections/supply/publishers/core/PublisherContext';
@@ -73,7 +73,7 @@ const PublisherEditRoutes: React.FC = () => {
         }}>
             <Routes>
                 <Route
-                    path='/edit'
+                    path="/edit"
                     element={
                         <SuspenseView>
                             <PageTitle breadcrumbs={publisherEditBreadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
@@ -82,7 +82,7 @@ const PublisherEditRoutes: React.FC = () => {
                     }
                 />
                 <Route
-                    path='/contacts/:cid/edit'
+                    path="/contacts/:cid/edit"
                     element={
                         <SuspenseView>
                             <PageTitle breadcrumbs={publisherEditBreadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
@@ -91,7 +91,7 @@ const PublisherEditRoutes: React.FC = () => {
                     }
                 />
                 <Route
-                    path='/payments/:cid/edit'
+                    path="/payments/:cid/edit"
                     element={
                         <SuspenseView>
                             <PageTitle breadcrumbs={publisherEditBreadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>

@@ -1,11 +1,11 @@
-import {Column} from 'react-table'
 import React from 'react';
-import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
-import {TextCell} from '../../../../../../modules/table/columns/TextCell';
-import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
-import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
+import {Column} from 'react-table'
 import {QUERIES} from '../../../../../../../_metronic/helpers';
 import {PublisherPayment} from '../../../../../../models/supply/publisher/PublisherPayment';
+import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
+import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
+import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
+import {TextCell} from '../../../../../../modules/table/columns/TextCell';
 import {usePublisher} from '../../PublisherContext';
 
 const PublisherPaymentsColumns: ReadonlyArray<Column<PublisherPayment>> = [

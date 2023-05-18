@@ -1,38 +1,34 @@
-import React, {useEffect, useState} from 'react';
-import {DatePicker} from 'rsuite';
-import {Field, Form, Formik} from 'formik';
-import {FormControl, FormGroup, InputGroup} from 'react-bootstrap';
 import axios from 'axios';
+import {Field, Form, Formik} from 'formik';
+import React, {useEffect, useState} from 'react';
+import {FormControl, FormGroup, InputGroup} from 'react-bootstrap';
+import {DatePicker} from 'rsuite';
 
 import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers';
+import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
+import FormErrors from '../../../../../components/forms/FormErrors';
+import KrysCheckbox from '../../../../../components/forms/KrysCheckbox';
 
 import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
-import {useKrysApp} from '../../../../../modules/general/KrysApp';
-import {extractErrors} from '../../../../../helpers/requests';
-import {
-    genericDateOnChangeHandler,
-    GenericErrorMessage,
-    genericOnChangeHandler
-} from '../../../../../helpers/form';
-import {Actions, KrysToastType} from '../../../../../helpers/variables';
-import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
-import FormErrors from '../../../../../components/forms/FormErrors';
-import {defaultFormFields, fillEditForm, FormFields, publicationSchema} from '../../core/form';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysRadioButton from '../../../../../components/forms/KrysRadioButton';
-import SingleSelect from '../../../../../components/forms/SingleSelect';
-import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
-import {usePublication} from '../../core/PublicationContext';
-import {updatePublication} from '../../../../../requests/supply/publication/Publication';
-import KrysCheckbox from '../../../../../components/forms/KrysCheckbox';
-import {getAllPublishers} from '../../../../../requests/supply/publisher/Publisher';
-import {getAllLanguages} from '../../../../../requests/misc/Language';
-import {Publisher} from '../../../../../models/supply/publisher/Publisher';
-import {Language} from '../../../../../models/misc/Language';
 import MultiSelect from '../../../../../components/forms/MultiSelect';
+import SingleSelect from '../../../../../components/forms/SingleSelect';
 import {APPLICATION_TYPE} from '../../../../../enums/Supply/ApplicationType';
 import {PUBLICATION_TYPE} from '../../../../../enums/Supply/PublicationType';
 import {REVENUE_TYPE} from '../../../../../enums/Supply/RevenueType';
+import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
+import {genericDateOnChangeHandler, GenericErrorMessage, genericOnChangeHandler} from '../../../../../helpers/form';
+import {extractErrors} from '../../../../../helpers/requests';
+import {Actions, KrysToastType} from '../../../../../helpers/variables';
+import {Language} from '../../../../../models/misc/Language';
+import {Publisher} from '../../../../../models/supply/publisher/Publisher';
+import {useKrysApp} from '../../../../../modules/general/KrysApp';
+import {getAllLanguages} from '../../../../../requests/misc/Language';
+import {updatePublication} from '../../../../../requests/supply/publication/Publication';
+import {getAllPublishers} from '../../../../../requests/supply/publisher/Publisher';
+import {defaultFormFields, fillEditForm, FormFields, publicationSchema} from '../../core/form';
+import {usePublication} from '../../core/PublicationContext';
 
 const PublicationBasicInformationEdit: React.FC = () => {
     const {publication, setPublication} = usePublication();

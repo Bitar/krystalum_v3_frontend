@@ -3,9 +3,9 @@ import React from 'react';
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
 import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
-import {usePublication} from '../../../core/PublicationContext';
 import {getPublicationAdTechnologies} from '../../../../../../requests/supply/publication/PublicationAdTechnology';
 import {PublicationAdTechnologiesColumns} from '../../../core/edit/ad-technologies/TableColumns';
+import {usePublication} from '../../../core/PublicationContext';
 
 const PublicationAdTechnologyIndex: React.FC = () => {
     const {publication} = usePublication();

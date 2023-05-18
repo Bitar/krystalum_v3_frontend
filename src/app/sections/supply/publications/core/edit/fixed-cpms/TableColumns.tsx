@@ -1,16 +1,14 @@
-import {Column} from 'react-table'
 import React from 'react';
-import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
-import {TextCell} from '../../../../../../modules/table/columns/TextCell';
+import {Column} from 'react-table'
+import {QUERIES} from '../../../../../../../_metronic/helpers';
+import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {PublicationFixedCpm} from '../../../../../../models/supply/publication/PublicationFixedCpm';
 import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
-import {QUERIES} from '../../../../../../../_metronic/helpers';
-import {PublicationFixedCpm} from '../../../../../../models/supply/publication/PublicationFixedCpm';
-import {usePublication} from '../../PublicationContext';
 import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
-import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
-import {ANALYTIC_TYPE} from '../../../../../../enums/Supply/AnalyticType';
-import {formatNumberWithSuffix} from '../../../../../../helpers/stringGenerator';
+import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
+import {TextCell} from '../../../../../../modules/table/columns/TextCell';
+import {usePublication} from '../../PublicationContext';
 
 const PublicationFixedCpmColumns: ReadonlyArray<Column<PublicationFixedCpm>> = [
     {
@@ -33,7 +31,8 @@ const PublicationFixedCpmColumns: ReadonlyArray<Column<PublicationFixedCpm>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Price" className="min-w-125px"/>,
         id: 'price',
-        Cell: ({...props}) => <TextCell text={`${props.data[props.row.index].price} ${props.data[props.row.index].currency.currency}`}/>,
+        Cell: ({...props}) => <TextCell
+            text={`${props.data[props.row.index].price} ${props.data[props.row.index].currency.currency}`}/>,
     },
     {
         Header: (props) => (

@@ -1,12 +1,12 @@
 import {Response} from '../../../../_metronic/helpers';
-import {Publisher} from '../publisher/Publisher';
-import {PublicationInfo} from './PublicationInfo';
-import {Language} from '../../misc/Language';
-import {PublicationFormat} from './PublicationFormat';
-import {PublicationVertical} from './PublicationVertical';
 import {REVENUE_TYPE} from '../../../enums/Supply/RevenueType';
 import {AdServer} from '../../misc/AdServer';
+import {Language} from '../../misc/Language';
 import {Technology} from '../../misc/Technology';
+import {Publisher} from '../publisher/Publisher';
+import {PublicationFormat} from './PublicationFormat';
+import {PublicationInfo} from './PublicationInfo';
+import {PublicationVertical} from './PublicationVertical';
 
 export type Publication = {
     id: number,

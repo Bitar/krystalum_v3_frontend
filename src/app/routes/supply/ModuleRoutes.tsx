@@ -10,7 +10,7 @@ const SupplyModuleRoutes: React.FC = () => {
         <Routes>
             {/* Sections */}
             <Route
-                path='publishers/*'
+                path="publishers/*"
                 element={
                     <SuspenseView>
                         <PublisherRoutes/>
@@ -19,7 +19,7 @@ const SupplyModuleRoutes: React.FC = () => {
             ></Route>
 
             <Route
-                path='publications/*'
+                path="publications/*"
                 element={
                     <SuspenseView>
                         <PublicationRoutes/>

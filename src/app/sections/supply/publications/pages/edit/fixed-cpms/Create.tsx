@@ -1,45 +1,48 @@
-import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {Field, Form, Formik} from 'formik';
+import React, {useEffect, useRef, useState} from 'react';
 import Select from 'react-select';
 
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
-
-import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {extractErrors} from '../../../../../../helpers/requests';
-import {
-    GenericErrorMessage, genericMultiSelectOnChangeHandler,
-    genericOnChangeHandler, genericSingleSelectOnChangeHandler
-} from '../../../../../../helpers/form';
-import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
-import {Actions, KrysToastType} from '../../../../../../helpers/variables';
 import FormErrors from '../../../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
-import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
-import {usePublication} from '../../../core/PublicationContext';
 import {indentOptions} from '../../../../../../components/forms/IndentOptions';
+import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
+import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
+import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton';
+import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
+import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {filterData} from '../../../../../../helpers/dataManipulation';
 import {
-    defaultPublicationFixedCpmFormFields,
-    PublicationFixedCpmFormFields, publicationFixedCpmSchema
-} from '../../../core/edit/fixed-cpms/form';
+    GenericErrorMessage,
+    genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler,
+    genericSingleSelectOnChangeHandler
+} from '../../../../../../helpers/form';
+import {extractErrors} from '../../../../../../helpers/requests';
+import {DEFAULT_CURRENCY} from '../../../../../../helpers/settings';
+import {Actions, KrysToastType} from '../../../../../../helpers/variables';
+import {Country} from '../../../../../../models/misc/Country';
+import {Currency} from '../../../../../../models/misc/Currency';
+import {Format} from '../../../../../../models/misc/Format';
+import {Region} from '../../../../../../models/misc/Region';
+
+import {useKrysApp} from '../../../../../../modules/general/KrysApp';
+import {getAllCountries, getAllCurrencies} from '../../../../../../requests/misc/Country';
+import {getAllFormats} from '../../../../../../requests/misc/Format';
+import {getAllRegions} from '../../../../../../requests/misc/Region';
 import {
     getPublicationFixedCpms,
     storePublicationFixedCpm
 } from '../../../../../../requests/supply/publication/PublisherFixedCpm';
+import {
+    defaultPublicationFixedCpmFormFields,
+    PublicationFixedCpmFormFields,
+    publicationFixedCpmSchema
+} from '../../../core/edit/fixed-cpms/form';
 import {PublicationFixedCpmColumns} from '../../../core/edit/fixed-cpms/TableColumns';
-import {Format} from '../../../../../../models/misc/Format';
-import {getAllFormats} from '../../../../../../requests/misc/Format';
-import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton';
-import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
-import {Region} from '../../../../../../models/misc/Region';
-import {Country} from '../../../../../../models/misc/Country';
-import {getAllRegions} from '../../../../../../requests/misc/Region';
-import {getAllCountries, getAllCurrencies} from '../../../../../../requests/misc/Country';
-import {Currency} from '../../../../../../models/misc/Currency';
-import {DEFAULT_CURRENCY} from '../../../../../../helpers/settings';
+import {usePublication} from '../../../core/PublicationContext';
 
 
 const PublicationFixedCpmCreate: React.FC = () => {

@@ -1,14 +1,14 @@
-import {Column} from 'react-table'
 import React from 'react';
-import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
-import {TextCell} from '../../../../../../modules/table/columns/TextCell';
+import {Column} from 'react-table'
+import {QUERIES} from '../../../../../../../_metronic/helpers';
+import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {PublicationMinimumEcpm} from '../../../../../../models/supply/publication/PublicationMinimumEcpm';
 import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
-import {QUERIES} from '../../../../../../../_metronic/helpers';
-import {PublicationMinimumEcpm} from '../../../../../../models/supply/publication/PublicationMinimumEcpm';
-import {usePublication} from '../../PublicationContext';
 import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
-import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
+import {TextCell} from '../../../../../../modules/table/columns/TextCell';
+import {usePublication} from '../../PublicationContext';
 
 const PublicationMinimumEcpmColumns: ReadonlyArray<Column<PublicationMinimumEcpm>> = [
     {
@@ -31,7 +31,8 @@ const PublicationMinimumEcpmColumns: ReadonlyArray<Column<PublicationMinimumEcpm
     {
         Header: (props) => <CustomHeader tableProps={props} title="Price" className="min-w-125px"/>,
         id: 'price',
-        Cell: ({...props}) => <TextCell text={`${props.data[props.row.index].rate} ${props.data[props.row.index].currency.currency}`}/>,
+        Cell: ({...props}) => <TextCell
+            text={`${props.data[props.row.index].rate} ${props.data[props.row.index].currency.currency}`}/>,
     },
     {
         Header: (props) => (

@@ -1,12 +1,13 @@
-import {Column} from 'react-table'
 import React from 'react';
-import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
-import {TextCell} from '../../../../../../modules/table/columns/TextCell';
+import {Column} from 'react-table';
+import {QUERIES} from '../../../../../../../_metronic/helpers';
+import {AdServer} from '../../../../../../models/misc/AdServer';
 import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
-import {QUERIES} from '../../../../../../../_metronic/helpers';
+import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
+import {TextCell} from '../../../../../../modules/table/columns/TextCell';
 import {usePublication} from '../../PublicationContext';
-import {AdServer} from '../../../../../../models/misc/AdServer';
+
 
 const PublicationAdServersColumns: ReadonlyArray<Column<AdServer>> = [
     {

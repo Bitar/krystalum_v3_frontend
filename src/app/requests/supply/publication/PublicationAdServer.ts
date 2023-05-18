@@ -1,8 +1,7 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
-
 import {createFormData} from '../../../helpers/requests';
-import {Publication} from '../../../models/supply/publication/Publication';
 import {AdServer, AdServerPaginate} from '../../../models/misc/AdServer';
+import {Publication} from '../../../models/supply/publication/Publication';
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publications`

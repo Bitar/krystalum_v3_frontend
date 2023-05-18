@@ -1,38 +1,41 @@
-import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {Form, Formik} from 'formik';
+import React, {useEffect, useRef, useState} from 'react';
 import Select from 'react-select';
 
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
+import FormErrors from '../../../../../../components/forms/FormErrors';
+import {indentOptions} from '../../../../../../components/forms/IndentOptions';
+import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
+import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
+import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
+import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
+import {
+    GenericErrorMessage,
+    genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler,
+    genericSingleSelectOnChangeHandler
+} from '../../../../../../helpers/form';
+import {extractErrors} from '../../../../../../helpers/requests';
+import {Actions, KrysToastType} from '../../../../../../helpers/variables';
+import {Format} from '../../../../../../models/misc/Format';
+import {FormatType} from '../../../../../../models/supply/Options';
 
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {extractErrors} from '../../../../../../helpers/requests';
-import {
-    GenericErrorMessage, genericMultiSelectOnChangeHandler,
-    genericOnChangeHandler, genericSingleSelectOnChangeHandler
-} from '../../../../../../helpers/form';
-import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
-import {Actions, KrysToastType} from '../../../../../../helpers/variables';
-import FormErrors from '../../../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
-import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
+import {getAllFormats} from '../../../../../../requests/misc/Format';
+import {getFormatTypes} from '../../../../../../requests/supply/Options';
 import {
     getPublicationFormats,
     storePublicationFormat
 } from '../../../../../../requests/supply/publication/PublicationFormat';
-import {usePublication} from '../../../core/PublicationContext';
 import {
     defaultPublicationFormatFormFields,
-    PublicationFormatFormFields, publicationFormatSchema
+    PublicationFormatFormFields,
+    publicationFormatSchema
 } from '../../../core/edit/formats/form';
 import {PublicationFormatsColumns} from '../../../core/edit/formats/TableColumns';
-import {getAllFormats} from '../../../../../../requests/misc/Format';
-import {Format} from '../../../../../../models/misc/Format';
-import {getFormatTypes} from '../../../../../../requests/supply/Options';
-import {FormatType} from '../../../../../../models/supply/Options';
-import {indentOptions} from '../../../../../../components/forms/IndentOptions';
+import {usePublication} from '../../../core/PublicationContext';
 
 
 const PublicationFormatCreate: React.FC = () => {

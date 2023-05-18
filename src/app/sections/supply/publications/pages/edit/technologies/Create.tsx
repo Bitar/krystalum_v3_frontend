@@ -1,37 +1,39 @@
-import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {Form, Formik} from 'formik';
+import React, {useEffect, useRef, useState} from 'react';
 import Select from 'react-select';
 
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
-
-import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {extractErrors} from '../../../../../../helpers/requests';
+import FormErrors from '../../../../../../components/forms/FormErrors';
+import {indentOptions} from '../../../../../../components/forms/IndentOptions';
+import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
+import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
+import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
+import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
+import {filterData} from '../../../../../../helpers/dataManipulation';
 import {
-    GenericErrorMessage, genericMultiSelectOnChangeHandler,
+    GenericErrorMessage,
+    genericMultiSelectOnChangeHandler,
     genericOnChangeHandler
 } from '../../../../../../helpers/form';
-import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
+import {extractErrors} from '../../../../../../helpers/requests';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
-import FormErrors from '../../../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
-import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
+import {Technology} from '../../../../../../models/misc/Technology';
+
+import {useKrysApp} from '../../../../../../modules/general/KrysApp';
+import {getAllTechnologies} from '../../../../../../requests/misc/Technology';
 import {
     getPublicationTechnologies,
     storePublicationTechnology
 } from '../../../../../../requests/supply/publication/PublicationTechnology';
-import {usePublication} from '../../../core/PublicationContext';
 import {
     defaultPublicationTechnologyFormFields,
-    PublicationTechnologyFormFields, publicationTechnologySchema
+    PublicationTechnologyFormFields,
+    publicationTechnologySchema
 } from '../../../core/edit/technologies/form';
 import {PublicationTechnologiesColumns} from '../../../core/edit/technologies/TableColumns';
-import {getAllTechnologies} from '../../../../../../requests/misc/Technology';
-import {Technology} from '../../../../../../models/misc/Technology';
-import {indentOptions} from '../../../../../../components/forms/IndentOptions';
-import {filterData} from '../../../../../../helpers/dataManipulation';
+import {usePublication} from '../../../core/PublicationContext';
 
 
 const PublicationTechnologyCreate: React.FC = () => {
@@ -129,7 +131,8 @@ const PublicationTechnologyCreate: React.FC = () => {
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={publicationTechnologySchema(false)} onSubmit={handleCreate}
+                <Formik initialValues={form} validationSchema={publicationTechnologySchema(false)}
+                        onSubmit={handleCreate}
                         enableReinitialize>
                     {
                         ({errors}) => (

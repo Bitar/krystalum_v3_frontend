@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
-import {PublicationMinimumEcpm} from '../../../../../../models/supply/publication/PublicationMinimumEcpm';
 import {DEFAULT_CURRENCY} from '../../../../../../helpers/settings';
+import {PublicationMinimumEcpm} from '../../../../../../models/supply/publication/PublicationMinimumEcpm';
 
 export interface PublicationMinimumEcpmFormFields {
     format_ids: number[];

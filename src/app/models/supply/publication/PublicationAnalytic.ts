@@ -1,8 +1,8 @@
 import {Response} from '../../../../_metronic/helpers';
-import {AnalyticType, GeoType} from '../Options';
-import {Region} from '../../misc/Region';
 import {Country} from '../../misc/Country';
 import {Device} from '../../misc/Device';
+import {Region} from '../../misc/Region';
+import {AnalyticType, GeoType} from '../Options';
 
 export type PublicationAnalytic = {
     id: number,

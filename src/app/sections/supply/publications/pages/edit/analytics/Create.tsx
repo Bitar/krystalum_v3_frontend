@@ -1,55 +1,50 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Field, Form, Formik} from 'formik';
 import axios from 'axios';
+import {Field, Form, Formik} from 'formik';
+import React, {useEffect, useRef, useState} from 'react';
 import Select from 'react-select';
 
-import {
-    KTCard,
-    KTCardBody,
-    QUERIES
-} from '../../../../../../../_metronic/helpers';
+import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
-
-import {useKrysApp} from '../../../../../../modules/general/KrysApp';
 import FormErrors from '../../../../../../components/forms/FormErrors';
-import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
-import {usePublication} from '../../../core/PublicationContext';
-import {
-    getPublicationAnalytics,
-    storePublicationAnalytic
-} from '../../../../../../requests/supply/publication/PublisherAnalytic';
-import {PublicationAnalyticsColumns} from '../../../core/edit/analytics/TableColumns';
-import {SelectCardAction} from '../../../../../../components/misc/CardAction';
-import {
-    AnalyticType
-} from '../../../../../../models/supply/Options';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
-import {
-    AnalyticsFilterFields, defaultAnalyticsFilterFields,
-    defaultPublicationAnalyticFormFields,
-    PublicationAnalyticFormFields,
-    PublicationAnalyticSchema
-} from '../../../core/edit/analytics/form';
+import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton';
-import {Country} from '../../../../../../models/misc/Country';
-import {getAllCountries} from '../../../../../../requests/misc/Country';
-import {extractErrors} from '../../../../../../helpers/requests';
+import {SelectCardAction} from '../../../../../../components/misc/CardAction';
+import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
+import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
+import {filterData} from '../../../../../../helpers/dataManipulation';
 import {
     GenericErrorMessage,
     genericOnChangeHandler,
     genericSingleSelectOnChangeHandler
 } from '../../../../../../helpers/form';
-import {filterData} from '../../../../../../helpers/dataManipulation';
-import {Region} from '../../../../../../models/misc/Region';
-import {getAllRegions} from '../../../../../../requests/misc/Region';
-import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
-import {Device} from '../../../../../../models/misc/Device';
-import {getAllDevices} from '../../../../../../requests/misc/Device';
-import {getAnalyticsTypes} from '../../../../../../requests/supply/Options';
-import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
-import {Actions, KrysToastType} from '../../../../../../helpers/variables';
-import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {extractErrors} from '../../../../../../helpers/requests';
 import {DEFAULT_ANALYTIC_TYPE} from '../../../../../../helpers/settings';
+import {Actions, KrysToastType} from '../../../../../../helpers/variables';
+import {Country} from '../../../../../../models/misc/Country';
+import {Device} from '../../../../../../models/misc/Device';
+import {Region} from '../../../../../../models/misc/Region';
+import {AnalyticType} from '../../../../../../models/supply/Options';
+
+import {useKrysApp} from '../../../../../../modules/general/KrysApp';
+import {getAllCountries} from '../../../../../../requests/misc/Country';
+import {getAllDevices} from '../../../../../../requests/misc/Device';
+import {getAllRegions} from '../../../../../../requests/misc/Region';
+import {getAnalyticsTypes} from '../../../../../../requests/supply/Options';
+import {
+    getPublicationAnalytics,
+    storePublicationAnalytic
+} from '../../../../../../requests/supply/publication/PublisherAnalytic';
+import {
+    AnalyticsFilterFields,
+    defaultAnalyticsFilterFields,
+    defaultPublicationAnalyticFormFields,
+    PublicationAnalyticFormFields,
+    PublicationAnalyticSchema
+} from '../../../core/edit/analytics/form';
+import {PublicationAnalyticsColumns} from '../../../core/edit/analytics/TableColumns';
+import {usePublication} from '../../../core/PublicationContext';
 
 
 const PublicationAnalyticCreate: React.FC = () => {

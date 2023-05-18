@@ -1,13 +1,13 @@
+import React from 'react';
 import {Column} from 'react-table'
-
-import {TextCell} from '../../../../modules/table/columns/TextCell'
-import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
-import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {QUERIES} from '../../../../../_metronic/helpers'
 import {Publication} from '../../../../models/supply/publication/Publication';
 import {Restricted} from '../../../../modules/auth/AuthAccessControl';
+import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {BadgeCell} from '../../../../modules/table/columns/BadgeCell';
-import React from 'react';
+import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
+
+import {TextCell} from '../../../../modules/table/columns/TextCell'
 
 const PublicationsColumns: ReadonlyArray<Column<Publication>> = [
     {
@@ -25,7 +25,8 @@ const PublicationsColumns: ReadonlyArray<Column<Publication>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Type" className="min-w-125px"/>,
         id: 'type',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].info?.type ? props.data[props.row.index].info?.type.charAt(0).toUpperCase() + props.data[props.row.index].info?.type.slice(1) : 'N/A'}/>,
+        Cell: ({...props}) => <TextCell
+            text={props.data[props.row.index].info?.type ? props.data[props.row.index].info?.type.charAt(0).toUpperCase() + props.data[props.row.index].info?.type.slice(1) : 'N/A'}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Publisher" className="min-w-125px"/>,
@@ -35,7 +36,8 @@ const PublicationsColumns: ReadonlyArray<Column<Publication>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="URL" className="min-w-125px"/>,
         id: 'url',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].info?.url ? props.data[props.row.index].info?.url : 'N/A'}/>,
+        Cell: ({...props}) => <TextCell
+            text={props.data[props.row.index].info?.url ? props.data[props.row.index].info?.url : 'N/A'}/>,
     },
     {
         Header: (props) => (
