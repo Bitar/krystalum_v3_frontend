@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../_metronic/helpers';
 
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
+import DefaultEngageWidget from '../../../../../components/engages/DefaultEngageWidget';
 import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';
 import {getPublisherPublications} from '../../../../../requests/supply/publisher/PublisherPublication';
 import {PublisherPublicationsColumns} from '../../core/edit/publications/TableColumns';
@@ -26,8 +27,13 @@ const PublisherPublication: React.FC = () => {
                             requestFunction={getPublisherPublications}
                             requestId={publisher.id}
                             columnsArray={PublisherPublicationsColumns}
-                        ></KrysInnerTable> : <>TODO: add engage with no publications</>
+                        ></KrysInnerTable> : <></>
                 }
+
+                <DefaultEngageWidget title={'Keep track of your publications'}
+                                     text={'Ensure to keep track of all the publications by adding them to the platform. By doing so, you can conveniently monitor their details and access their reports.'}
+                                     ctaText={'Add New Publication'}
+                                     ctaUrl={'/supply/publications/create'}/>
             </KTCardBody>
         </KTCard>
     );

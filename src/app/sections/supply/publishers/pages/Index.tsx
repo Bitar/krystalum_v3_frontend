@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 
 import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
+import DefaultEngageWidget from '../../../../components/engages/DefaultEngageWidget';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 import KrysIndex from '../../../../components/tables/KrysIndex';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
@@ -49,25 +50,16 @@ const PublisherIndex: React.FC = () => {
                 <KTCardBody>
                     <div className="row">
                         <div className="col-12">
-                            <div
-                                className="card h-175px bgi-no-repeat bgi-size-contain card-xl-stretch mb-5 mb-xl-8 krys-engage-1"
-                                style={{
-                                    backgroundColor: 'rgb(102, 50, 89)',
-                                    backgroundPosition: 'right center',
-                                    backgroundImage: 'url("/media/illustrations/sigma-1/5.png")'
-                                }}>
-                                <div className="card-body d-flex flex-column justify-content-between">
-                                    <h2 className="text-white fw-bold mb-1">Archived Publishers</h2>
-                                    <p className="text-white mb-5">Browse through the list of publishers that don't have
-                                        publications that are currently receiving inventory</p>
-                                    <div className="m-0">
-                                        <Link to={`/supply/publishers/archived`}
-                                              className="btn btn-primary fw-semibold px-6 py-3">
-                                            Go to Archived Publishers
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
+                            <DefaultEngageWidget
+                                backgroundColor={'rgb(102, 50, 89)'}
+                                backgroundPosition={'right center'}
+                                backgroundImage={'/media/illustrations/sigma-1/5.png'}
+                                title={'Archived Publishers'}
+                                text={'Browse through the list of publishers that don\'t have publications that are currently receiving inventory'}
+                                ctaText={'Go to Archived Publishers'}
+                                ctaUrl={'supply/publishers/archived'}
+                                ctaClasses={'btn-primary fw-semibold px-6 py-3'}
+                            />
                         </div>
                     </div>
                 </KTCardBody>
