@@ -54,7 +54,7 @@ const PublisherIndex: React.FC = () => {
                                 style={{
                                     backgroundColor: 'rgb(102, 50, 89)',
                                     backgroundPosition: 'right center',
-                                    backgroundImage: 'url("/media/svg/misc/taieri.svg")'
+                                    backgroundImage: 'url("/media/illustrations/sigma-1/5.png")'
                                 }}>
                                 <div className="card-body d-flex flex-column justify-content-between">
                                     <h2 className="text-white fw-bold mb-1">Archived Publishers</h2>
@@ -62,7 +62,7 @@ const PublisherIndex: React.FC = () => {
                                         publications that are currently receiving inventory</p>
                                     <div className="m-0">
                                         <Link to={`/supply/publishers/archived`}
-                                              className="btn btn-danger fw-semibold px-6 py-3">
+                                              className="btn btn-primary fw-semibold px-6 py-3">
                                             Go to Archived Publishers
                                         </Link>
                                     </div>
