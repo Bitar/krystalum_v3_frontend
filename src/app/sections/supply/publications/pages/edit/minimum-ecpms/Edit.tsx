@@ -142,7 +142,7 @@ const PublicationMinimumEcpmEdit: React.FC = () => {
         if (publicationMinimumEcpm) {
             setIsResourceLoaded(true);
 
-            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_FIXED_CPM, PageTypes.EDIT, publicationMinimumEcpm.format?.name))
+            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_MINIMUM_ECPM, PageTypes.EDIT, publicationMinimumEcpm.format?.name))
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -274,7 +274,7 @@ const PublicationMinimumEcpmEdit: React.FC = () => {
 
                                     <SingleSelect isResourceLoaded={isResourceLoaded} options={currencies}
                                                   defaultValue={publicationMinimumEcpm?.currency} form={form}
-                                                  setForm={setForm} name="currency_id" isClearable={true}/>
+                                                  setForm={setForm} name="currency_id" label="currency" isClearable={true}/>
 
                                     <div className="mt-1 text-danger">
                                         {errors?.currency_id ? errors?.currency_id : null}

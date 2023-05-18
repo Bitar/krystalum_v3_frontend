@@ -274,7 +274,7 @@ const PublicationFixedCpmEdit: React.FC = () => {
 
                                     <SingleSelect isResourceLoaded={isResourceLoaded} options={currencies}
                                                   defaultValue={publicationFixedCpm?.currency} form={form}
-                                                  setForm={setForm} name="currency_id" isClearable={true}/>
+                                                  setForm={setForm} name="currency_id" label="currency" isClearable={true}/>
 
                                     <div className="mt-1 text-danger">
                                         {errors?.currency_id ? errors?.currency_id : null}
