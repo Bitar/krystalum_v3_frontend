@@ -2,26 +2,26 @@ import axios, {AxiosError, AxiosResponse} from 'axios'
 
 import {createFormData} from '../../../helpers/requests';
 import {Publication} from '../../../models/supply/publication/Publication';
-import {PublicationTechnology, PublicationTechnologyPaginate} from '../../../models/supply/publication/PublicationTechnology';
+import {Technology, TechnologyPaginate} from '../../../models/misc/Technology';
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publications`
 const TECHNOLOGIES_ENDPOINT = 'technologies'
 
-export const getPublicationTechnologies = (publicationId: number, query?: String): Promise<PublicationTechnologyPaginate> => {
+export const getPublicationTechnologies = (publicationId: number, query?: String): Promise<TechnologyPaginate> => {
     let url = `${ENDPOINT}/${publicationId}/${TECHNOLOGIES_ENDPOINT}`;
 
     if (query) {
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<PublicationTechnologyPaginate>) => response.data).catch((error) => {
+    return axios.get(url).then((response: AxiosResponse<TechnologyPaginate>) => response.data).catch((error) => {
         return error;
     });
 }
 
 
-export const getPublicationTechnology = async (publication: Publication, id: number): Promise<PublicationTechnology | AxiosError | undefined> => {
+export const getPublicationTechnology = async (publication: Publication, id: number): Promise<Technology | AxiosError | undefined> => {
     let url = `${ENDPOINT}/${publication.id}/${TECHNOLOGIES_ENDPOINT}`;
 
     return await axios.get(url + '/' + id)
@@ -40,7 +40,7 @@ export const storePublicationTechnology = async (publication: Publication, form:
     });
 }
 
-export const updatePublicationTechnology = async (publication: Publication, id: number, publicationTechnology: any): Promise<PublicationTechnology | AxiosError | undefined> => {
+export const updatePublicationTechnology = async (publication: Publication, id: number, publicationTechnology: any): Promise<Technology | AxiosError | undefined> => {
     let url = `${ENDPOINT}/${publication.id}/${TECHNOLOGIES_ENDPOINT}`;
 
     let formData = createFormData(publicationTechnology);

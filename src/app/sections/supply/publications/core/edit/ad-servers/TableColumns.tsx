@@ -6,13 +6,13 @@ import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {QUERIES} from '../../../../../../../_metronic/helpers';
 import {usePublication} from '../../PublicationContext';
-import {PublicationAdServer} from '../../../../../../models/supply/publication/PublicationAdServer';
+import {AdServer} from '../../../../../../models/misc/AdServer';
 
-const PublicationAdServersColumns: ReadonlyArray<Column<PublicationAdServer>> = [
+const PublicationAdServersColumns: ReadonlyArray<Column<AdServer>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Ad Server" className="min-w-125px"/>,
         id: 'ad_server',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].adServer?.name}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].name}/>,
     },
     {
         Header: (props) => (
@@ -34,7 +34,7 @@ const PublicationAdServersColumns: ReadonlyArray<Column<PublicationAdServer>> = 
                         showEdit={true}
                         showDelete={true}
                         title="Delete Publication Ad Servers"
-                        text={`Are you sure you want to delete the publication ad server of ad server '${props.data[props.row.index].adServer?.name}'?`}
+                        text={`Are you sure you want to delete this record of ad server '${props.data[props.row.index].name}'?`}
                     />
                 </Restricted>
             )

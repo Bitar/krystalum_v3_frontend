@@ -2,26 +2,26 @@ import axios, {AxiosError, AxiosResponse} from 'axios'
 
 import {createFormData} from '../../../helpers/requests';
 import {Publication} from '../../../models/supply/publication/Publication';
-import {PublicationAdServer, PublicationAdServerPaginate} from '../../../models/supply/publication/PublicationAdServer';
+import {AdServer, AdServerPaginate} from '../../../models/misc/AdServer';
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publications`
 const AD_SERVERS_ENDPOINT = 'ad-servers'
 
-export const getPublicationAdServers = (publicationId: number, query?: String): Promise<PublicationAdServerPaginate> => {
+export const getPublicationAdServers = (publicationId: number, query?: String): Promise<AdServerPaginate> => {
     let url = `${ENDPOINT}/${publicationId}/${AD_SERVERS_ENDPOINT}`;
 
     if (query) {
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<PublicationAdServerPaginate>) => response.data).catch((error) => {
+    return axios.get(url).then((response: AxiosResponse<AdServerPaginate>) => response.data).catch((error) => {
         return error;
     });
 }
 
 
-export const getPublicationAdServer = async (publication: Publication, id: number): Promise<PublicationAdServer | AxiosError | undefined> => {
+export const getPublicationAdServer = async (publication: Publication, id: number): Promise<AdServer | AxiosError | undefined> => {
     let url = `${ENDPOINT}/${publication.id}/${AD_SERVERS_ENDPOINT}`;
 
     return await axios.get(url + '/' + id)
@@ -40,7 +40,7 @@ export const storePublicationAdServer = async (publication: Publication, form: a
     });
 }
 
-export const updatePublicationAdServer = async (publication: Publication, id: number, publicationAdServer: any): Promise<PublicationAdServer | AxiosError | undefined> => {
+export const updatePublicationAdServer = async (publication: Publication, id: number, publicationAdServer: any): Promise<AdServer | AxiosError | undefined> => {
     let url = `${ENDPOINT}/${publication.id}/${AD_SERVERS_ENDPOINT}`;
 
     let formData = createFormData(publicationAdServer);

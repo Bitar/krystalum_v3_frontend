@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import {PublicationAdServer} from '../../../../../../models/supply/publication/PublicationAdServer';
 
 export interface PublicationAdServerFormFields {
     ad_server_ids: number[]
@@ -25,8 +24,4 @@ export const publicationAdServerSchema = (isEdit: boolean) => {
     };
 
     return Yup.object().shape(schema);
-}
-
-export function fillEditForm(publicationAdServer: PublicationAdServer) {
-
 }

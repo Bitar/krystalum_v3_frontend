@@ -6,13 +6,13 @@ import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {QUERIES} from '../../../../../../../_metronic/helpers';
 import {usePublication} from '../../PublicationContext';
-import {PublicationTechnology} from '../../../../../../models/supply/publication/PublicationTechnology';
+import {Technology} from '../../../../../../models/misc/Technology';
 
-const PublicationTechnologiesColumns: ReadonlyArray<Column<PublicationTechnology>> = [
+const PublicationTechnologiesColumns: ReadonlyArray<Column<Technology>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Technology" className="min-w-125px"/>,
         id: 'technology',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].technology?.name}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].name}/>,
     },
     {
         Header: (props) => (
@@ -34,7 +34,7 @@ const PublicationTechnologiesColumns: ReadonlyArray<Column<PublicationTechnology
                         showEdit={true}
                         showDelete={true}
                         title="Delete Publication Technologies"
-                        text={`Are you sure you want to delete the publication technology of technology '${props.data[props.row.index].technology?.name}'?`}
+                        text={`Are you sure you want to delete the record of technology '${props.data[props.row.index].name}'?`}
                     />
                 </Restricted>
             )

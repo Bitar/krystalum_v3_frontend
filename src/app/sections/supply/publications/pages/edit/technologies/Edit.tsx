@@ -8,7 +8,6 @@ import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KT
 
 import {usePublication} from '../../../core/PublicationContext';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {PublicationTechnology} from '../../../../../../models/supply/publication/PublicationTechnology';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
@@ -40,7 +39,7 @@ const PublicationTechnologyEdit: React.FC = () => {
     const krysApp = useKrysApp();
     const navigate = useNavigate();
 
-    const [publicationTechnology, setPublicationTechnology] = useState<PublicationTechnology | null>(null);
+    const [publicationTechnology, setPublicationTechnology] = useState<Technology | null>(null);
     const [form, setForm] = useState<PublicationTechnologyEditFormFields>(defaultPublicationTechnologyEditFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -62,10 +61,9 @@ const PublicationTechnologyEdit: React.FC = () => {
                     // we were able to fetch current publication technology to edit
                     setPublicationTechnology(response);
 
-                    // we also set the form to be the publication technology details
-                    const {technology, ...currentPublicationTechnology} = response;
-
-                    setForm({...currentPublicationTechnology, technology_id: technology.id});
+                    // we are getting the response as technology and not publication technology
+                    // response is: {id, name}
+                    setForm({technology_id: response.id});
                 }
             });
 
@@ -93,7 +91,7 @@ const PublicationTechnologyEdit: React.FC = () => {
         if (publicationTechnology) {
             setIsResourceLoaded(true);
 
-            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_TECHNOLOGIES, PageTypes.EDIT, publicationTechnology.technology.name))
+            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_TECHNOLOGIES, PageTypes.EDIT, publicationTechnology.name))
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -142,7 +140,7 @@ const PublicationTechnologyEdit: React.FC = () => {
                                     <KrysFormLabel text="Technology" isRequired={true}/>
 
                                     <SingleSelect isResourceLoaded={isResourceLoaded} options={technologies}
-                                                  defaultValue={publicationTechnology?.technology} form={form}
+                                                  defaultValue={publicationTechnology} form={form}
                                                   setForm={setForm} name="technology_id" isClearable={true}
                                                   showHierarchy={true}/>
 

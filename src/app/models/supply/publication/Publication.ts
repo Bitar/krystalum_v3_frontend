@@ -1,12 +1,10 @@
 import {Response} from '../../../../_metronic/helpers';
-import {Publisher, PublisherCondensed} from '../publisher/Publisher';
+import {Publisher} from '../publisher/Publisher';
 import {PublicationInfo} from './PublicationInfo';
-import {PublicationLanguage} from './PublicationLanguage';
 import {Language} from '../../misc/Language';
 import {PublicationFormat} from './PublicationFormat';
 import {PublicationVertical} from './PublicationVertical';
 import {REVENUE_TYPE} from '../../../enums/Supply/RevenueType';
-import {PublicationAdServer} from './PublicationAdServer';
 import {AdServer} from '../../misc/AdServer';
 import {Technology} from '../../misc/Technology';
 

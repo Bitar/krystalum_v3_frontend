@@ -8,7 +8,6 @@ import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KT
 
 import {usePublication} from '../../../core/PublicationContext';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {PublicationAdServer} from '../../../../../../models/supply/publication/PublicationAdServer';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
@@ -41,7 +40,7 @@ const PublicationAdServerEdit: React.FC = () => {
     const krysApp = useKrysApp();
     const navigate = useNavigate();
 
-    const [publicationAdServer, setPublicationAdServer] = useState<PublicationAdServer | null>(null);
+    const [publicationAdServer, setPublicationAdServer] = useState<AdServer | null>(null);
     const [form, setForm] = useState<PublicationAdServerEditFormFields>(defaultPublicationAdServerEditFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -63,10 +62,9 @@ const PublicationAdServerEdit: React.FC = () => {
                     // we were able to fetch current publication ad server to edit
                     setPublicationAdServer(response);
 
-                    // we also set the form to be the publication ad server details
-                    const {adServer, ...currentPublicationAdServer} = response;
-
-                    setForm({...currentPublicationAdServer, ad_server_id: adServer.id});
+                    // we are getting the response as ad sever and not publication ad server
+                    // response is: {id, name}
+                    setForm({ad_server_id: response.id});
                 }
             });
 
@@ -94,7 +92,7 @@ const PublicationAdServerEdit: React.FC = () => {
         if (publicationAdServer) {
             setIsResourceLoaded(true);
 
-            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_AD_SERVERS, PageTypes.EDIT, publicationAdServer.adServer.name))
+            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_AD_SERVERS, PageTypes.EDIT, publicationAdServer.name))
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -143,7 +141,7 @@ const PublicationAdServerEdit: React.FC = () => {
                                     <KrysFormLabel text="Ad Server" isRequired={true}/>
 
                                     <SingleSelect isResourceLoaded={isResourceLoaded} options={adServers}
-                                                  defaultValue={publicationAdServer?.adServer} form={form}
+                                                  defaultValue={publicationAdServer} form={form}
                                                   setForm={setForm} name="ad_server_id" isClearable={true}
                                                   showHierarchy={true}/>
 
