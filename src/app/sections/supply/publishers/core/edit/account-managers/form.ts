@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
 export interface PublisherAccountManagerFormFields {
-    user_id: number
+    user_id: number;
 }
 
 export const defaultPublisherAccountManagerFormFields = {

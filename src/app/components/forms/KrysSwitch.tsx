@@ -1,11 +1,11 @@
 import React from 'react'
 
 interface Props {
-    name: string,
-    onChangeHandler: (e: any) => void,
-    defaultValue: boolean,
-    bgColor?: string,
-    disabled?: boolean
+    name: string;
+    onChangeHandler: (e: any) => void;
+    defaultValue: boolean;
+    bgColor?: string;
+    disabled?: boolean;
 }
 
 const KrysSwitch: React.FC<Props> = ({name, onChangeHandler, defaultValue, bgColor = 'success', disabled = false}) => {

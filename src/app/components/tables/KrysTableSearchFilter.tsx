@@ -7,12 +7,12 @@ import {genericOnChangeHandler} from '../../helpers/form';
 import {initialQueryState} from '../../../_metronic/helpers';
 
 interface Props {
-    slug: string,
-    filters: any
+    slug: string;
+    filters: any;
 }
 
 interface SearchFilterFields {
-    search?: string
+    search?: string;
 }
 
 const defaultSearchFilterFields = {search: ''}

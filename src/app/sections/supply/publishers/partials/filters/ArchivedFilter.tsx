@@ -3,8 +3,8 @@ import {fillFilterFields, FilterFields} from '../../core/filterForm';
 import PublisherFilter from './Filter';
 
 interface Props {
-    showFilter: boolean,
-    setExportQuery: React.Dispatch<React.SetStateAction<string>>
+    showFilter: boolean;
+    setExportQuery: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const PublisherArchivedFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {

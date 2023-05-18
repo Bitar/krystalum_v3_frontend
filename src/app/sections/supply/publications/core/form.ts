@@ -4,31 +4,31 @@ import {PUBLICATION_TYPE} from '../../../../enums/Supply/PublicationType';
 import {REVENUE_TYPE} from '../../../../enums/Supply/RevenueType';
 
 export interface FormFields {
-    name: string,
-    unique_identifier: string,
-    publisher_id: number,
-    languages_ids: number[],
-    live_date: Date | null,
-    is_archived: number, // i.e. not sending inventory
-    is_deal_pmp: number, // if 1 => deal based, else if 0 => tag based
-    revenue_type: string,
-    revenue_value: string | null, // it can be null in case the revenue_type is 'same_as_publisher'
-    has_hi10: number, // if 1, then both 'hi10_to_display' and 'hi10_to_video' should be set to 0 /
+    name: string;
+    unique_identifier: string;
+    publisher_id: number;
+    languages_ids: number[];
+    live_date: Date | null;
+    is_archived: number; // i.e. not sending inventory
+    is_deal_pmp: number; // if 1 => deal based, else if 0 => tag based
+    revenue_type: string;
+    revenue_value: string | null; // it can be null in case the revenue_type is 'same_as_publisher'
+    has_hi10: number; // if 1, then both 'hi10_to_display' and 'hi10_to_video' should be set to 0 /
     // if 0, then 'hi10_to_display' should be set to 1 and 'hi10_to_video' should be set to 0 by default,
     // unless the user specifies otherwise.
-    hi10_to_display: number,
-    hi10_to_video: number,
-    types: string[], // this is for publication type (web, mobile application or both)
-    description?: string | null,
-    url?: string | null, // this will be filled in case the type is `website`
-    ios_store_url?: string | null, // this will be filled in case the type is `mobile application` and is `ios`
-    ios_bundle_id?: string | null, // this will be filled in case the type is `mobile application` and is `ios`
-    ios_version?: string | null, // this will be filled in case the type is `mobile application` and is `ios`
-    ios_application_type?: string | null, // this will be filled in case the type is `mobile application` and is `ios`
-    android_store_url?: string | null, // this will be filled in case the type is `mobile application` and is `android`
-    android_bundle_id?: string | null, // this will be filled in case the type is `mobile application` and is `android`
-    android_version?: string | null, // this will be filled in case the type is `mobile application` and is `android`
-    android_application_type?: string | null // this will be filled in case the type is `mobile application` and is `android`
+    hi10_to_display: number;
+    hi10_to_video: number;
+    types: string[]; // this is for publication type (web, mobile application or both)
+    description?: string | null;
+    url?: string | null; // this will be filled in case the type is `website`
+    ios_store_url?: string | null; // this will be filled in case the type is `mobile application` and is `ios`
+    ios_bundle_id?: string | null; // this will be filled in case the type is `mobile application` and is `ios`
+    ios_version?: string | null; // this will be filled in case the type is `mobile application` and is `ios`
+    ios_application_type?: string | null; // this will be filled in case the type is `mobile application` and is `ios`
+    android_store_url?: string | null; // this will be filled in case the type is `mobile application` and is `android`
+    android_bundle_id?: string | null; // this will be filled in case the type is `mobile application` and is `android`
+    android_version?: string | null; // this will be filled in case the type is `mobile application` and is `android`
+    android_application_type?: string | null; // this will be filled in case the type is `mobile application` and is `android`
 }
 
 export const defaultFormFields = {

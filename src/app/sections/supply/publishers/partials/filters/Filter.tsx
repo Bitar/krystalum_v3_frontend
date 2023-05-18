@@ -31,10 +31,10 @@ import {getAllRegions} from '../../../../../requests/misc/Region';
 import {getAllUsers} from '../../../../../requests/iam/User';
 
 interface Props {
-    showFilter: boolean,
-    setExportQuery: React.Dispatch<React.SetStateAction<string>>,
-    filters: any,
-    setFilters: React.Dispatch<React.SetStateAction<any>>
+    showFilter: boolean;
+    setExportQuery: React.Dispatch<React.SetStateAction<string>>;
+    filters: any;
+    setFilters: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, setFilters}) => {

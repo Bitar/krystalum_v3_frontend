@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 
 export interface PublisherContactFormFields {
-    type: string,
-    detail: string
+    type: string;
+    detail: string;
 }
 
 export const defaultPublisherContactFormFields = {

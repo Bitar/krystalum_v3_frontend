@@ -3,14 +3,14 @@ import {Publisher} from '../../../../models/supply/publisher/Publisher';
 import {REVENUE_TYPE} from '../../../../enums/Supply/RevenueType';
 
 export interface FormFields {
-    name: string,
-    tier_id?: number | null,
-    integration_date?: Date | null,
-    revenue_type: string,
-    revenue_value: string | null,
-    email?: string | null,
-    hq_address?: string | null,
-    hq_country_id?: number | null
+    name: string;
+    tier_id?: number | null;
+    integration_date?: Date | null;
+    revenue_type: string;
+    revenue_value: string | null;
+    email?: string | null;
+    hq_address?: string | null;
+    hq_country_id?: number | null;
 }
 
 export const defaultFormFields = {

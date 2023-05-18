@@ -2,12 +2,12 @@ import * as Yup from 'yup';
 import {PublisherPayment} from '../../../../../../models/supply/publisher/PublisherPayment';
 
 export interface PublisherPaymentFormFields {
-    beneficiary: string,
-    account_number: string,
-    swift_code: string,
-    iban?: string | null,
-    bank_name: string,
-    bank_address?: string | null
+    beneficiary: string;
+    account_number: string;
+    swift_code: string;
+    iban?: string | null;
+    bank_name: string;
+    bank_address?: string | null;
 }
 
 export const defaultPublisherPaymentFormFields = {

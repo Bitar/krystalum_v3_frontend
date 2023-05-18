@@ -1,12 +1,12 @@
 import React from 'react'
 
 interface Props {
-    name: string,
-    label: string,
-    onChangeHandler: (e: any) => void,
-    defaultValue: boolean,
-    bgColor?: string,
-    disabled?: boolean
+    name: string;
+    label: string;
+    onChangeHandler: (e: any) => void;
+    defaultValue: boolean;
+    bgColor?: string;
+    disabled?: boolean;
 }
 
 const KrysCheckbox: React.FC<Props> = ({name, label, onChangeHandler, defaultValue, bgColor = 'success', disabled = false}) => {

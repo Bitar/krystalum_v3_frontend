@@ -3,8 +3,8 @@ import PublicationFilter from './Filter';
 import {fillFilterFields, FilterFields} from '../../core/filterForm';
 
 interface Props {
-    showFilter: boolean,
-    setExportQuery: React.Dispatch<React.SetStateAction<string>>
+    showFilter: boolean;
+    setExportQuery: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const PublicationIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {

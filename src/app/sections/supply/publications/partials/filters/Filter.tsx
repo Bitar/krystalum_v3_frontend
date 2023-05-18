@@ -41,10 +41,10 @@ import KrysSwitch from '../../../../../components/forms/KrysSwitch';
 import {TagsInput} from 'react-tag-input-component';
 
 interface Props {
-    showFilter: boolean,
-    setExportQuery: React.Dispatch<React.SetStateAction<string>>,
-    filters: any,
-    setFilters: React.Dispatch<React.SetStateAction<any>>
+    showFilter: boolean;
+    setExportQuery: React.Dispatch<React.SetStateAction<string>>;
+    filters: any;
+    setFilters: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, setFilters}) => {
