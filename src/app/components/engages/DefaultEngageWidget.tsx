@@ -15,17 +15,17 @@ type Props = {
 }
 
 const DefaultEngageWidget: React.FC<Props> = ({
-                                            cardClasses = 'h-200px mb-5 mb-xl-8',
-                                            cardBodyClasses = '',
-                                            backgroundColor = '#1C325E',
-                                            backgroundPosition = 'right bottom',
-                                            backgroundImage = '/media/illustrations/sigma-1/17-dark.png',
-                                            title,
-                                            text,
-                                            ctaText,
-                                            ctaUrl,
-                                            ctaClasses = 'btn-danger fw-semibold px-6 py-3'
-                                        }) => {
+                                                  cardClasses = 'h-200px mb-5 mb-xl-8',
+                                                  cardBodyClasses = '',
+                                                  backgroundColor = '#1C325E',
+                                                  backgroundPosition = 'right bottom',
+                                                  backgroundImage = '/media/illustrations/sigma-1/17-dark.png',
+                                                  title,
+                                                  text,
+                                                  ctaText,
+                                                  ctaUrl,
+                                                  ctaClasses = 'btn-danger fw-semibold px-6 py-3'
+                                              }) => {
     return (
         <div
             className={`card card-xl-stretch bgi-no-repeat bgi-size-contain ${cardClasses}`}
