@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
 import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
 import DefaultEngageWidget from '../../../../components/engages/DefaultEngageWidget';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
