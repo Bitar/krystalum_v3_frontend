@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import {Nav, Tab} from 'react-bootstrap';
 import {useNavigate, useParams} from 'react-router-dom';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';

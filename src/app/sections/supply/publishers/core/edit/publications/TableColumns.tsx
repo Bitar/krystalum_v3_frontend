@@ -4,7 +4,6 @@ import {QUERIES} from '../../../../../../../_metronic/helpers';
 import {Publication} from '../../../../../../models/supply/publication/Publication';
 import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
-
 import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
 import {TextCell} from '../../../../../../modules/table/columns/TextCell';
 

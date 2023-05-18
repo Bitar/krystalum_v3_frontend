@@ -1,6 +1,5 @@
 import React from 'react';
 import {Column} from 'react-table'
-
 import {QUERIES} from '../../../../../_metronic/helpers'
 import {truncateText} from '../../../../helpers/stringGenerator';
 import {Publication} from '../../../../models/supply/publication/Publication';
@@ -9,7 +8,6 @@ import {Restricted} from '../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
 import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
-
 import {TextCell} from '../../../../modules/table/columns/TextCell'
 
 const PublishersColumns: ReadonlyArray<Column<Publisher>> = [

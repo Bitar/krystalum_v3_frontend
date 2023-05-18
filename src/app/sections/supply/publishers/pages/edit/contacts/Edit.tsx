@@ -27,7 +27,6 @@ import {
     PublisherContactFormFields,
     PublisherContactSchema
 } from '../../../core/edit/contacts/form';
-
 import {usePublisher} from '../../../core/PublisherContext';
 
 const PublisherContactEdit: React.FC = () => {

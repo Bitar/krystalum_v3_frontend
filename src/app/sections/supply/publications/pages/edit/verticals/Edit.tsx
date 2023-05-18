@@ -2,7 +2,6 @@ import axios from 'axios';
 import {Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../../../components/forms/FormErrors';
@@ -30,7 +29,6 @@ import {
     PublicationVerticalEditFormFields,
     publicationVerticalSchema
 } from '../../../core/edit/verticals/form';
-
 import {usePublication} from '../../../core/PublicationContext';
 
 const PublicationVerticalEdit: React.FC = () => {

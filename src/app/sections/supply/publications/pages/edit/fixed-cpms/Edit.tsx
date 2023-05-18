@@ -36,7 +36,6 @@ import {
     PublicationFixedCpmEditFormFields,
     publicationFixedCpmSchema
 } from '../../../core/edit/fixed-cpms/form';
-
 import {usePublication} from '../../../core/PublicationContext';
 
 const PublicationFixedCpmEdit: React.FC = () => {

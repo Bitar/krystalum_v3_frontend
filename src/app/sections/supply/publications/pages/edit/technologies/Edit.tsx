@@ -2,7 +2,6 @@ import axios from 'axios';
 import {Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../../../components/forms/FormErrors';
@@ -28,7 +27,6 @@ import {
     PublicationTechnologyEditFormFields,
     publicationTechnologySchema
 } from '../../../core/edit/technologies/form';
-
 import {usePublication} from '../../../core/PublicationContext';
 
 const PublicationTechnologyEdit: React.FC = () => {

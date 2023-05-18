@@ -36,7 +36,6 @@ import {
     PublicationMinimumEcpmEditFormFields,
     publicationMinimumEcpmSchema
 } from '../../../core/edit/minimum-ecpms/form';
-
 import {usePublication} from '../../../core/PublicationContext';
 
 const PublicationMinimumEcpmEdit: React.FC = () => {

@@ -6,7 +6,6 @@ import {Restricted} from '../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {BadgeCell} from '../../../../modules/table/columns/BadgeCell';
 import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
-
 import {TextCell} from '../../../../modules/table/columns/TextCell'
 
 const PublicationsColumns: ReadonlyArray<Column<Publication>> = [

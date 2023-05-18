@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
-
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../_metronic/helpers';
-
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
 import DefaultEngageWidget from '../../../../../components/engages/DefaultEngageWidget';
 import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';

@@ -3,12 +3,10 @@ import {Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
 import {FormControl, FormGroup, InputGroup} from 'react-bootstrap';
 import {DatePicker} from 'rsuite';
-
 import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../../components/forms/FormErrors';
 import KrysCheckbox from '../../../../../components/forms/KrysCheckbox';
-
 import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysRadioButton from '../../../../../components/forms/KrysRadioButton';

@@ -35,7 +35,6 @@ import {
     PublicationAnalyticFormFields,
     PublicationAnalyticSchema
 } from '../../../core/edit/analytics/form';
-
 import {usePublication} from '../../../core/PublicationContext';
 
 const PublicationAnalyticEdit: React.FC = () => {

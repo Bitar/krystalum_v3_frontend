@@ -5,7 +5,6 @@ import {Col, Collapse, Row} from 'react-bootstrap';
 import Select from 'react-select';
 import {DateRangePicker} from 'rsuite';
 import {DateRange} from 'rsuite/DateRangePicker';
-
 import {initialQueryState} from '../../../../../../_metronic/helpers';
 import FilterFormFooter from '../../../../../components/forms/FilterFormFooter';
 import FormErrors from '../../../../../components/forms/FormErrors';
@@ -22,7 +21,6 @@ import {User} from '../../../../../models/iam/User';
 import {Country} from '../../../../../models/misc/Country';
 import {Region} from '../../../../../models/misc/Region';
 import {Tier} from '../../../../../models/misc/Tier';
-
 import {useQueryRequest} from '../../../../../modules/table/QueryRequestProvider';
 import {getAllUsers} from '../../../../../requests/iam/User';
 import {getAllCountries} from '../../../../../requests/misc/Country';

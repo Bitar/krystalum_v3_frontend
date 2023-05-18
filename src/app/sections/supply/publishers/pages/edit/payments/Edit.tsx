@@ -25,7 +25,6 @@ import {
     PublisherPaymentFormFields,
     PublisherPaymentSchema
 } from '../../../core/edit/payments/form';
-
 import {usePublisher} from '../../../core/PublisherContext';
 
 const PublisherPaymentEdit: React.FC = () => {

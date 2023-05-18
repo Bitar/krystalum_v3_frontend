@@ -6,7 +6,6 @@ import {useNavigate} from 'react-router-dom';
 import Select from 'react-select';
 import {DatePicker} from 'rsuite';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
@@ -21,7 +20,6 @@ import {
     genericOnChangeHandler,
     genericSingleSelectOnChangeHandler
 } from '../../../../helpers/form';
-
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {extractErrors} from '../../../../helpers/requests';
 import {Sections} from '../../../../helpers/sections';

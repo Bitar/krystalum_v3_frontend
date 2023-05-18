@@ -2,7 +2,6 @@ import axios from 'axios';
 import {Form, Formik} from 'formik';
 import React, {useEffect, useRef, useState} from 'react';
 import Select from 'react-select';
-
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../../../components/forms/FormErrors';

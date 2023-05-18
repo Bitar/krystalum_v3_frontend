@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
 import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';

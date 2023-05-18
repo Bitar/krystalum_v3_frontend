@@ -3,7 +3,6 @@ import {Column} from 'react-table'
 import {toDateTimeString} from '../../../../../../helpers/stringGenerator';
 import {PublisherAccountManager} from '../../../../../../models/supply/publisher/PublisherAccountManager';
 import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
-
 import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
 import {TextCell} from '../../../../../../modules/table/columns/TextCell';
 

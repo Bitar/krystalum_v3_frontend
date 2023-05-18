@@ -6,7 +6,6 @@ import {useNavigate} from 'react-router-dom';
 import Select from 'react-select';
 import {DatePicker} from 'rsuite';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
