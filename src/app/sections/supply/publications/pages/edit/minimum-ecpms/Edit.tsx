@@ -142,7 +142,7 @@ const PublicationMinimumEcpmEdit: React.FC = () => {
         if (publicationMinimumEcpm) {
             setIsResourceLoaded(true);
 
-            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_MINIMUM_ECPM, PageTypes.EDIT, publicationMinimumEcpm.format?.name))
+            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_MINIMUM_ECPM, PageTypes.EDIT, `${publication?.name}'s minimum ECPM`))
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

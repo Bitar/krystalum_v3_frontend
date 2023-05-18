@@ -142,7 +142,7 @@ const PublicationFixedCpmEdit: React.FC = () => {
         if (publicationFixedCpm) {
             setIsResourceLoaded(true);
 
-            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_FIXED_CPM, PageTypes.EDIT, publicationFixedCpm.format?.name))
+            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_FIXED_CPM, PageTypes.EDIT, `${publication?.name}'s fixed CPM`))
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

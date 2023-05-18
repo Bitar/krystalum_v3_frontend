@@ -107,7 +107,7 @@ const PublicationFormatEdit: React.FC = () => {
         if (publicationFormat) {
             setIsResourceLoaded(true);
 
-            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_FORMATS, PageTypes.EDIT, publicationFormat.format.name))
+            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_FORMATS, PageTypes.EDIT, `${publication?.name} - ${publicationFormat.format.name}`))
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

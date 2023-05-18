@@ -91,7 +91,7 @@ const PublicationTechnologyEdit: React.FC = () => {
         if (publicationTechnology) {
             setIsResourceLoaded(true);
 
-            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_TECHNOLOGIES, PageTypes.EDIT, publicationTechnology.name))
+            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_TECHNOLOGIES, PageTypes.EDIT, `${publication?.name} - ${publicationTechnology.name}`))
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

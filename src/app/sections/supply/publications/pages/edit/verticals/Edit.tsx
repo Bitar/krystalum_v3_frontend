@@ -94,7 +94,7 @@ const PublicationVerticalEdit: React.FC = () => {
         if (publicationVertical) {
             setIsResourceLoaded(true);
 
-            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_VERTICALS, PageTypes.EDIT, publicationVertical.vertical.name))
+            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_VERTICALS, PageTypes.EDIT, `${publication?.name} - ${publicationVertical.vertical.name}`))
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

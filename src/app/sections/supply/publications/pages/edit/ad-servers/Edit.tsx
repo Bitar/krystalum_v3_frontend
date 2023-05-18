@@ -92,7 +92,7 @@ const PublicationAdServerEdit: React.FC = () => {
         if (publicationAdServer) {
             setIsResourceLoaded(true);
 
-            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_AD_SERVERS, PageTypes.EDIT, publicationAdServer.name))
+            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_AD_SERVERS, PageTypes.EDIT, `${publication?.name} - ${publicationAdServer.name}`))
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

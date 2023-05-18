@@ -92,7 +92,7 @@ const PublisherContactEdit: React.FC = () => {
         if (publisherContact) {
             setIsResourceLoaded(true);
 
-            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLISHER_CONTACTS, PageTypes.EDIT, publisherContact.contactType?.name))
+            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLISHER_CONTACTS, PageTypes.EDIT, publisherContact.detail))
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

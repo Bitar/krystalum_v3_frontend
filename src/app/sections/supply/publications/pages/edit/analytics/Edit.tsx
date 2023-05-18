@@ -127,7 +127,7 @@ const PublicationAnalyticEdit: React.FC = () => {
         if (publicationAnalytic) {
             setIsResourceLoaded(true);
 
-            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_ANALYTICS, PageTypes.EDIT, publicationAnalytic.type?.name))
+            krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATION_ANALYTICS, PageTypes.EDIT, `${publication?.name}'s analytic`))
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
