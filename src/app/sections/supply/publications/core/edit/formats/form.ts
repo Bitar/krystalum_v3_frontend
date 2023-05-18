@@ -1,23 +1,24 @@
 import * as Yup from 'yup';
 
 export interface PublicationFormatFormFields {
-    format_ids: number[],
-    type: string
+    format_ids: number[];
+    type: string;
 }
 
-export const defaultPublicationFormatFormFields = {
+export const defaultPublicationFormatFormFields: PublicationFormatFormFields = {
     format_ids: [],
     type: ''
 };
 
-export interface PublicationFormatEditFormFields {
-    format_id: number,
-    type: string
+export interface PublicationFormatEditFormFields extends Omit<PublicationFormatFormFields, 'format_ids'> {
+    format_id: number;
 }
 
-export const defaultPublicationFormatEditFormFields = {
+const {format_ids, ...defaultFields} = defaultPublicationFormatFormFields;
+
+export const defaultPublicationFormatEditFormFields: PublicationFormatEditFormFields = {
     format_id: 0,
-    type: ''
+    ...defaultFields
 };
 
 export const publicationFormatSchema = (isEdit: boolean) => {

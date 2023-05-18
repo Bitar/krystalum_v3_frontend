@@ -33,8 +33,8 @@ const PublicationTechnologiesColumns: ReadonlyArray<Column<Technology>> = [
                         showView={false}
                         showEdit={true}
                         showDelete={true}
-                        title="Delete Publication Technologies"
-                        text={`Are you sure you want to delete the record of technology '${props.data[props.row.index].name}'?`}
+                        title="Delete Publication Technology"
+                        text={`Are you sure you want to delete this publication technology that has the technology name '${props.data[props.row.index].name}'?`}
                     />
                 </Restricted>
             )

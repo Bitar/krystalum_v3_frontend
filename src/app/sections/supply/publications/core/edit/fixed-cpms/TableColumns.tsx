@@ -9,12 +9,14 @@ import {PublicationFixedCpm} from '../../../../../../models/supply/publication/P
 import {usePublication} from '../../PublicationContext';
 import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {ANALYTIC_TYPE} from '../../../../../../enums/Supply/AnalyticType';
+import {formatNumberWithSuffix} from '../../../../../../helpers/stringGenerator';
 
 const PublicationFixedCpmColumns: ReadonlyArray<Column<PublicationFixedCpm>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Format" className="min-w-125px"/>,
         id: 'format',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].format?.name}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].format.name}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Geo Type" className="min-w-125px"/>,
@@ -26,7 +28,7 @@ const PublicationFixedCpmColumns: ReadonlyArray<Column<PublicationFixedCpm>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Geo" className="min-w-125px"/>,
         id: 'geo',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].geo?.name}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].geo.name}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Price" className="min-w-125px"/>,
@@ -43,6 +45,11 @@ const PublicationFixedCpmColumns: ReadonlyArray<Column<PublicationFixedCpm>> = [
         Cell: ({...props}) => {
             const {publication} = usePublication();
 
+            const publicationFixedCpmSummary = `format: ${props.data[props.row.index].format.name} | 
+            geo type: ${props.data[props.row.index].geoType.name} | 
+            geo: ${props.data[props.row.index].geo.name} | 
+            price: ${props.data[props.row.index].price} ${props.data[props.row.index].currency.currency}`;
+
             return (
                 <Restricted to={'manage-supply'}>
                     <ActionsCell
@@ -53,7 +60,7 @@ const PublicationFixedCpmColumns: ReadonlyArray<Column<PublicationFixedCpm>> = [
                         showEdit={true}
                         showDelete={true}
                         title="Delete Publication Fixed CPM"
-                        text={`Are you sure you want to delete the publication fixed cpm of TODO '${props.data[props.row.index].price}'?`}
+                        text={`Are you sure you want to delete the publication fixed CPM that includes the following details: '${publicationFixedCpmSummary}'?`}
                     />
                 </Restricted>
             )

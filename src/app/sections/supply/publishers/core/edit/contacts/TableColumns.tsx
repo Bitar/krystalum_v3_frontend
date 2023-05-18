@@ -29,6 +29,9 @@ const PublisherContactsColumns: ReadonlyArray<Column<PublisherContact>> = [
         Cell: ({...props}) => {
             const {publisher} = usePublisher();
 
+            const publisherContactSummary = `type: ${props.data[props.row.index].contactType.name} | 
+            detail: ${props.data[props.row.index].detail}`;
+
             return (
                 <Restricted to={'manage-supply'}>
                     <ActionsCell
@@ -39,7 +42,7 @@ const PublisherContactsColumns: ReadonlyArray<Column<PublisherContact>> = [
                         showEdit={true}
                         showDelete={true}
                         title="Delete Publisher Contact"
-                        text={`Are you sure you want to delete the publisher contact '${props.data[props.row.index].contactType.name}'?`}
+                        text={`Are you sure you want to delete the publisher contact that includes the following details: '${publisherContactSummary}'?`}
                     />
                 </Restricted>
             )

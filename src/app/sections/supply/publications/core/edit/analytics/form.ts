@@ -5,11 +5,11 @@ import {ANALYTIC_TYPE} from '../../../../../../enums/Supply/AnalyticType';
 import {DEFAULT_ANALYTIC_TYPE} from '../../../../../../helpers/settings';
 
 export interface PublicationAnalyticFormFields {
-    type: string,
-    geo_type: string,
-    geo_id: number,
-    device_id?: number | null,
-    value: number
+    type: string;
+    geo_type: string;
+    geo_id: number;
+    device_id?: number | null;
+    value: number;
 }
 
 export const defaultPublicationAnalyticFormFields = {
@@ -20,7 +20,7 @@ export const defaultPublicationAnalyticFormFields = {
 };
 
 export interface AnalyticsFilterFields {
-    type?: string
+    type?: string;
 }
 
 export const defaultAnalyticsFilterFields = {

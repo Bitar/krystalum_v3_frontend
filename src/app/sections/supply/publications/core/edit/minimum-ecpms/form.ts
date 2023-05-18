@@ -16,7 +16,7 @@ export const defaultPublicationMinimumEcpmFormFields: PublicationMinimumEcpmForm
     geo_type: '',
     geo_ids: [],
     rate: 0,
-    currency_id: DEFAULT_CURRENCY.id,
+    currency_id: DEFAULT_CURRENCY.id
 };
 
 export interface PublicationMinimumEcpmEditFormFields extends Omit<PublicationMinimumEcpmFormFields, 'format_ids' | 'geo_ids'> {
@@ -24,12 +24,12 @@ export interface PublicationMinimumEcpmEditFormFields extends Omit<PublicationMi
     geo_id: number;
 }
 
+const {format_ids, geo_ids, ...defaultFields} = defaultPublicationMinimumEcpmFormFields;
+
 export const defaultPublicationMinimumEcpmEditFormFields: PublicationMinimumEcpmEditFormFields = {
     format_id: 0,
-    geo_type: '',
     geo_id: 0,
-    rate: 0,
-    currency_id: 0,
+    ...defaultFields
 };
 
 export const publicationMinimumEcpmSchema = (isEdit: boolean) => {

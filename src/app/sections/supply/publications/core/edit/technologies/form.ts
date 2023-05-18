@@ -1,18 +1,18 @@
 import * as Yup from 'yup';
 
 export interface PublicationTechnologyFormFields {
-    technology_ids: number[]
+    technology_ids: number[];
 }
 
-export const defaultPublicationTechnologyFormFields = {
+export const defaultPublicationTechnologyFormFields: PublicationTechnologyFormFields = {
     technology_ids: [],
 };
 
-export interface PublicationTechnologyEditFormFields {
-    technology_id: number
+export interface PublicationTechnologyEditFormFields extends Omit<PublicationTechnologyFormFields, 'technology_ids'> {
+    technology_id: number;
 }
 
-export const defaultPublicationTechnologyEditFormFields = {
+export const defaultPublicationTechnologyEditFormFields: PublicationTechnologyEditFormFields = {
     technology_id: 0,
 };
 

@@ -16,7 +16,7 @@ export const defaultPublicationFixedCpmFormFields: PublicationFixedCpmFormFields
     geo_type: '',
     geo_ids: [],
     price: 0,
-    currency_id: DEFAULT_CURRENCY.id,
+    currency_id: DEFAULT_CURRENCY.id
 };
 
 export interface PublicationFixedCpmEditFormFields extends Omit<PublicationFixedCpmFormFields, 'format_ids' | 'geo_ids'> {
@@ -24,12 +24,12 @@ export interface PublicationFixedCpmEditFormFields extends Omit<PublicationFixed
     geo_id: number;
 }
 
+const { format_ids, geo_ids, ...defaultFields } = defaultPublicationFixedCpmFormFields;
+
 export const defaultPublicationFixedCpmEditFormFields: PublicationFixedCpmEditFormFields = {
     format_id: 0,
-    geo_type: '',
     geo_id: 0,
-    price: 0,
-    currency_id: 0,
+    ...defaultFields
 };
 
 export const publicationFixedCpmSchema = (isEdit: boolean) => {

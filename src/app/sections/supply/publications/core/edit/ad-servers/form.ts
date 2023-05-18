@@ -1,18 +1,18 @@
 import * as Yup from 'yup';
 
 export interface PublicationAdServerFormFields {
-    ad_server_ids: number[]
+    ad_server_ids: number[];
 }
 
-export const defaultPublicationAdServerFormFields = {
+export const defaultPublicationAdServerFormFields: PublicationAdServerFormFields = {
     ad_server_ids: [],
 };
 
-export interface PublicationAdServerEditFormFields {
-    ad_server_id: number
+export interface PublicationAdServerEditFormFields extends Omit<PublicationAdServerFormFields, 'ad_server_ids'> {
+    ad_server_id: number;
 }
 
-export const defaultPublicationAdServerEditFormFields = {
+export const defaultPublicationAdServerEditFormFields: PublicationAdServerEditFormFields = {
     ad_server_id: 0,
 };
 

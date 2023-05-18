@@ -43,6 +43,11 @@ const PublicationMinimumEcpmColumns: ReadonlyArray<Column<PublicationMinimumEcpm
         Cell: ({...props}) => {
             const {publication} = usePublication();
 
+            const publicationMinimumEcpmSummary = `format: ${props.data[props.row.index].format.name} | 
+            geo type: ${props.data[props.row.index].geoType.name} | 
+            geo: ${props.data[props.row.index].geo.name} | 
+            rate: ${props.data[props.row.index].rate} ${props.data[props.row.index].currency.currency}`;
+
             return (
                 <Restricted to={'manage-supply'}>
                     <ActionsCell
@@ -53,7 +58,7 @@ const PublicationMinimumEcpmColumns: ReadonlyArray<Column<PublicationMinimumEcpm
                         showEdit={true}
                         showDelete={true}
                         title="Delete Publication Minimum ECPM"
-                        text={`Are you sure you want to delete the publication minimum ecpm of TODO '${props.data[props.row.index].price}'?`}
+                        text={`Are you sure you want to delete the publication minimum ECPM that includes the following details: '${publicationMinimumEcpmSummary}'?`}
                     />
                 </Restricted>
             )

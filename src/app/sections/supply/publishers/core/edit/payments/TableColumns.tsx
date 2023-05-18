@@ -49,6 +49,13 @@ const PublisherPaymentsColumns: ReadonlyArray<Column<PublisherPayment>> = [
         Cell: ({...props}) => {
             const {publisher} = usePublisher();
 
+            const publisherPaymentSummary = `beneficiary: ${props.data[props.row.index].beneficiary} | 
+            account number: ${props.data[props.row.index].account_number} | 
+            swift code: ${props.data[props.row.index].swift_code} | 
+            iban: ${props.data[props.row.index].iban} | 
+            bank name: ${props.data[props.row.index].bank_name} | 
+            bank address: ${props.data[props.row.index].bank_address}`;
+
             return (
                 <Restricted to={'manage-supply'}>
                     <ActionsCell
@@ -59,7 +66,7 @@ const PublisherPaymentsColumns: ReadonlyArray<Column<PublisherPayment>> = [
                         showEdit={true}
                         showDelete={true}
                         title="Delete Publisher Payment"
-                        text={`Are you sure you want to delete the publisher payment of beneficiary '${props.data[props.row.index].beneficiary}'?`}
+                        text={`Are you sure you want to delete the publisher payment that includes the following details: '${publisherPaymentSummary}'?`}
                     />
                 </Restricted>
             )

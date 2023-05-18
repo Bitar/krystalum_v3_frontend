@@ -33,8 +33,8 @@ const PublicationAdServersColumns: ReadonlyArray<Column<AdServer>> = [
                         showView={false}
                         showEdit={true}
                         showDelete={true}
-                        title="Delete Publication Ad Servers"
-                        text={`Are you sure you want to delete this record of ad server '${props.data[props.row.index].name}'?`}
+                        title="Delete Publication Ad Server"
+                        text={`Are you sure you want to delete this publication ad server that has the ad server name '${props.data[props.row.index].name}'?`}
                     />
                 </Restricted>
             )
