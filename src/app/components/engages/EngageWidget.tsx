@@ -14,7 +14,7 @@ type Props = {
     ctaClasses?: string
 }
 
-const DefaultEngageWidget: React.FC<Props> = ({
+const EngageWidget: React.FC<Props> = ({
                                                   cardClasses = 'h-200px mb-5 mb-xl-8',
                                                   cardBodyClasses = '',
                                                   backgroundColor = '#1C325E',
@@ -54,4 +54,4 @@ const DefaultEngageWidget: React.FC<Props> = ({
     );
 }
 
-export default DefaultEngageWidget;
+export default EngageWidget;
