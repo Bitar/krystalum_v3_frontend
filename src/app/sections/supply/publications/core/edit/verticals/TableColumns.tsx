@@ -35,7 +35,6 @@ const PublicationVerticalsColumns: ReadonlyArray<Column<PublicationVertical>> = 
             const publicationVerticalSummary = `vertical: ${props.data[props.row.index].vertical.name} 
             and ${props.data[props.row.index].is_primary ? 'it is primary' : 'it is not primary'}`;
 
-
             return (
                 <Restricted to={'manage-supply'}>
                     <ActionsCell
