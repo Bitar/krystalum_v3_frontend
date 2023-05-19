@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {KTCard, KTCardBody, QUERIES} from '../../../../../_metronic/helpers';
-import DefaultEngageWidget from '../../../../components/engages/DefaultEngageWidget';
+import EngageWidget from '../../../../components/widgets/EngageWidget';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 import KrysIndex from '../../../../components/tables/KrysIndex';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
@@ -47,7 +47,7 @@ const PublisherIndex: React.FC = () => {
                 <KTCardBody>
                     <div className="row">
                         <div className="col-12">
-                            <DefaultEngageWidget
+                            <EngageWidget
                                 backgroundColor={'rgb(102, 50, 89)'}
                                 backgroundPosition={'right center'}
                                 backgroundImage={'/media/illustrations/sigma-1/5.png'}
