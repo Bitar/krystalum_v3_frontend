@@ -19,7 +19,6 @@ import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/varia
 import {Vertical} from '../../../../../../models/misc/Vertical';
 import {PublicationVertical} from '../../../../../../models/supply/publication/PublicationVertical';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getAllVerticals} from '../../../../../../requests/misc/Vertical';
 import {
     getPublicationVertical,
     updatePublicationVertical
@@ -32,21 +31,19 @@ import {
 import {usePublication} from '../../../core/PublicationContext';
 
 const PublicationVerticalEdit: React.FC = () => {
-    const {publication} = usePublication();
-
-    // get the publication and publication vertical id
     const {cid} = useParams();
 
+    const {publication, verticals} = usePublication();
     const krysApp = useKrysApp();
+
     const navigate = useNavigate();
 
-    const [publicationVertical, setPublicationVertical] = useState<PublicationVertical | null>(null);
     const [form, setForm] = useState<PublicationVerticalEditFormFields>(defaultPublicationVerticalEditFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-
-    const [verticals, setVerticals] = useState<Vertical[]>([]);
-
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
+
+    const [publicationVertical, setPublicationVertical] = useState<PublicationVertical | null>(null);
+    const [filteredVerticals, setFilteredVerticals] = useState<Vertical[]>([]);
 
     useEffect(() => {
         if (publication && cid) {
@@ -69,21 +66,9 @@ const PublicationVerticalEdit: React.FC = () => {
                 }
             });
 
-            // get the verticals
-            getAllVerticals().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of verticals, then we fill our state with them
-                    if (response.data) {
-                        const excludedVerticalsNames: string[] = publication.verticals ? publication.verticals?.map((vertical) => vertical.vertical.name) : [];
+            const excludedVerticalsNames: string[] = publication.verticals ? publication.verticals?.map((vertical) => vertical.vertical.name) : [];
 
-                        setVerticals(filterData(response.data, 'name', excludedVerticalsNames));
-                    }
-                }
-            });
+            setFilteredVerticals(filterData(verticals, 'name', excludedVerticalsNames));
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -141,7 +126,7 @@ const PublicationVerticalEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Vertical" isRequired={true}/>
 
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={verticals}
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={filteredVerticals}
                                                   defaultValue={publicationVertical?.vertical} form={form}
                                                   setForm={setForm} name="vertical_id" isClearable={true}
                                                   showHierarchy={true}/>

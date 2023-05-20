@@ -12,7 +12,6 @@ import {SelectCardAction} from '../../../../../../components/misc/CardAction';
 import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
-import {filterData} from '../../../../../../helpers/dataManipulation';
 import {
     GenericErrorMessage,
     genericOnChangeHandler,
@@ -21,15 +20,11 @@ import {
 import {extractErrors} from '../../../../../../helpers/requests';
 import {DEFAULT_ANALYTIC_TYPE} from '../../../../../../helpers/settings';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
-import {Country} from '../../../../../../models/misc/Country';
 import {Device} from '../../../../../../models/misc/Device';
-import {Region} from '../../../../../../models/misc/Region';
 import {AnalyticType} from '../../../../../../models/supply/Options';
 
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getAllCountries} from '../../../../../../requests/misc/Country';
 import {getAllDevices} from '../../../../../../requests/misc/Device';
-import {getAllRegions} from '../../../../../../requests/misc/Region';
 import {getAnalyticsTypes} from '../../../../../../requests/supply/Options';
 import {
     getPublicationAnalytics,
@@ -47,25 +42,20 @@ import {usePublication} from '../../../core/PublicationContext';
 
 
 const PublicationAnalyticCreate: React.FC = () => {
-    const {publication} = usePublication();
+    const {publication, regions, countries} = usePublication();
+    const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationAnalyticFormFields>(defaultPublicationAnalyticFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [filters, setFilters] = useState<AnalyticsFilterFields>(defaultAnalyticsFilterFields);
-
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
-    const [regions, setRegions] = useState<Region[]>([]);
-    const [countries, setCountries] = useState<Country[]>([]);
     const [devices, setDevices] = useState<Device[]>([]);
-
     const [analyticsTypes, setAnalyticsType] = useState<AnalyticType[]>([]);
     const [currentAnalyticTypeFormatted, setCurrentAnalyticTypeFormatted] = useState<string>(DEFAULT_ANALYTIC_TYPE.name);
 
     const geosSelectRef = useRef<any>(null);
     const devicesSelectRef = useRef<any>(null);
-
-    const krysApp = useKrysApp();
 
     useEffect(() => {
         if (publication) {
@@ -79,34 +69,6 @@ const PublicationAnalyticCreate: React.FC = () => {
                     // if we were able to get the list of analytics types, then we fill our state with them
                     if (response.data) {
                         setAnalyticsType(response.data);
-                    }
-                }
-            });
-
-            // get the regions
-            getAllRegions().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of regions, then we fill our state with them
-                    if (response.data) {
-                        setRegions(filterData(response.data, 'name', ['All Regions', 'Rest of the world']));
-                    }
-                }
-            });
-
-            // get the countries
-            getAllCountries().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of countries, then we fill our state with them
-                    if (response.data) {
-                        setCountries(filterData(response.data, 'name', ['All Countries']));
                     }
                 }
             });

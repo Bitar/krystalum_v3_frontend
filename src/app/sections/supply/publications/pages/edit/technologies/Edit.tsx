@@ -17,7 +17,6 @@ import {Sections} from '../../../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
 import {Technology} from '../../../../../../models/misc/Technology';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getAllTechnologies} from '../../../../../../requests/misc/Technology';
 import {
     getPublicationTechnology,
     updatePublicationTechnology
@@ -30,21 +29,19 @@ import {
 import {usePublication} from '../../../core/PublicationContext';
 
 const PublicationTechnologyEdit: React.FC = () => {
-    const {publication} = usePublication();
-
-    // get the publication and publication ad_server id
     const {cid} = useParams();
 
+    const {publication, technologies} = usePublication();
     const krysApp = useKrysApp();
+
     const navigate = useNavigate();
 
-    const [publicationTechnology, setPublicationTechnology] = useState<Technology | null>(null);
     const [form, setForm] = useState<PublicationTechnologyEditFormFields>(defaultPublicationTechnologyEditFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-
-    const [technologies, setTechnologies] = useState<Technology[]>([]);
-
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
+
+    const [publicationTechnology, setPublicationTechnology] = useState<Technology | null>(null);
+    const [filteredTechnologies, setFilteredTechnologies] = useState<Technology[]>([]);
 
     useEffect(() => {
         if (publication && cid) {
@@ -66,21 +63,9 @@ const PublicationTechnologyEdit: React.FC = () => {
                 }
             });
 
-            // get the technologies
-            getAllTechnologies().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of technologies, then we fill our state with them
-                    if (response.data) {
-                        const excludedTechnologiesNames: string[] = publication.technologies ? publication.technologies?.map((technology) => technology.name) : [];
+            const excludedTechnologiesNames: string[] = publication.technologies ? publication.technologies?.map((technology) => technology.name) : [];
 
-                        setTechnologies(filterData(response.data, 'name', excludedTechnologiesNames));
-                    }
-                }
-            });
+            setFilteredTechnologies(filterData(technologies, 'name', excludedTechnologiesNames));
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -138,7 +123,7 @@ const PublicationTechnologyEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Technology" isRequired={true}/>
 
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={technologies}
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={filteredTechnologies}
                                                   defaultValue={publicationTechnology} form={form}
                                                   setForm={setForm} name="technology_id" isClearable={true}
                                                   showHierarchy={true}/>

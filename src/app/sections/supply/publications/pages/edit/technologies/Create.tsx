@@ -21,7 +21,6 @@ import {Actions, KrysToastType} from '../../../../../../helpers/variables';
 import {Technology} from '../../../../../../models/misc/Technology';
 
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getAllTechnologies} from '../../../../../../requests/misc/Technology';
 import {
     getPublicationTechnologies,
     storePublicationTechnology
@@ -36,36 +35,22 @@ import {usePublication} from '../../../core/PublicationContext';
 
 
 const PublicationTechnologyCreate: React.FC = () => {
-    const {publication, setPublication} = usePublication();
+    const {publication, setPublication, technologies} = usePublication();
+    const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationTechnologyFormFields>(defaultPublicationTechnologyFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
-    const [technologies, setTechnologies] = useState<Technology[]>([]);
+    const [filteredTechnologies, setFilteredTechnologies] = useState<Technology[]>([]);
 
     const technologiesSelectRef = useRef<any>(null);
 
-    const krysApp = useKrysApp();
-
     useEffect(() => {
         if (publication) {
-            // get the technologies
-            getAllTechnologies().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of technologies, then we fill our state with them
-                    if (response.data) {
-                        const excludedTechnologiesNames: string[] = publication.technologies ? publication.technologies?.map((technology) => technology.name) : [];
+            const excludedTechnologiesNames: string[] = publication.technologies ? publication.technologies?.map((technology) => technology.name) : [];
 
-                        setTechnologies(filterData(response.data, 'name', excludedTechnologiesNames));
-                    }
-                }
-            });
+            setFilteredTechnologies(filterData(technologies, 'name', excludedTechnologiesNames));
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -140,7 +125,7 @@ const PublicationTechnologyCreate: React.FC = () => {
                                     <KrysFormLabel text="Technologies" isRequired={true}/>
 
                                     <Select isMulti name="technology_ids"
-                                            options={technologies}
+                                            options={filteredTechnologies}
                                             getOptionLabel={(technology) => technology.name}
                                             getOptionValue={(technology) => technology.id.toString()}
                                             onChange={(e) => {

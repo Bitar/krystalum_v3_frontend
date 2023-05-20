@@ -11,20 +11,15 @@ import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton'
 import SingleSelect from '../../../../../../components/forms/SingleSelect';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
-import {filterData} from '../../../../../../helpers/dataManipulation';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {Sections} from '../../../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
-import {Country} from '../../../../../../models/misc/Country';
 import {Device} from '../../../../../../models/misc/Device';
-import {Region} from '../../../../../../models/misc/Region';
 import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getAllCountries} from '../../../../../../requests/misc/Country';
 import {getAllDevices} from '../../../../../../requests/misc/Device';
-import {getAllRegions} from '../../../../../../requests/misc/Region';
 import {
     getPublicationAnalytic,
     updatePublicationAnalytic
@@ -38,21 +33,18 @@ import {
 import {usePublication} from '../../../core/PublicationContext';
 
 const PublicationAnalyticEdit: React.FC = () => {
-    const {publication} = usePublication();
-    // get the publication and publication analytics id
     const {cid} = useParams();
 
+    const {publication, regions, countries} = usePublication();
     const krysApp = useKrysApp();
+
     const navigate = useNavigate();
 
-    const [publicationAnalytic, setPublicationAnalytic] = useState<PublicationAnalytic | null>(null);
     const [form, setForm] = useState<PublicationAnalyticFormFields>(defaultPublicationAnalyticFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
-    const [regions, setRegions] = useState<Region[]>([]);
-    const [countries, setCountries] = useState<Country[]>([]);
+    const [publicationAnalytic, setPublicationAnalytic] = useState<PublicationAnalytic | null>(null);
     const [devices, setDevices] = useState<Device[]>([]);
 
     useEffect(() => {
@@ -71,34 +63,6 @@ const PublicationAnalyticEdit: React.FC = () => {
 
                     // we also set the form to be the publication's analytics details
                     setForm(fillEditForm(response));
-                }
-            });
-
-            // get the regions
-            getAllRegions().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of regions, then we fill our state with them
-                    if (response.data) {
-                        setRegions(filterData(response.data, 'name', ['All Regions', 'Rest of the world']));
-                    }
-                }
-            });
-
-            // get the countries
-            getAllCountries().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of countries, then we fill our state with them
-                    if (response.data) {
-                        setCountries(filterData(response.data, 'name', ['All Countries']));
-                    }
                 }
             });
 

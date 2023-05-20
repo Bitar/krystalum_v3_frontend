@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {Field, Form, Formik} from 'formik';
 import React, {useEffect, useRef, useState} from 'react';
 import {Col, Collapse, Row} from 'react-bootstrap';
@@ -12,33 +11,16 @@ import FormErrors from '../../../../../components/forms/FormErrors';
 import {indentOptions} from '../../../../../components/forms/IndentOptions';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysSwitch from '../../../../../components/forms/KrysSwitch';
-import {filterData} from '../../../../../helpers/dataManipulation';
 import {
     genericDateRangeOnChangeHandler,
-    GenericErrorMessage,
     genericMultiSelectOnChangeHandler,
     genericOnChangeHandler
 } from '../../../../../helpers/form';
-import {createFilterQueryParam, extractErrors} from '../../../../../helpers/requests';
-import {AdServer} from '../../../../../models/misc/AdServer';
-import {Country} from '../../../../../models/misc/Country';
-import {Format} from '../../../../../models/misc/Format';
-import {Language} from '../../../../../models/misc/Language';
-import {Region} from '../../../../../models/misc/Region';
-import {Technology} from '../../../../../models/misc/Technology';
-import {Vertical} from '../../../../../models/misc/Vertical';
-import {Publisher} from '../../../../../models/supply/publisher/Publisher';
+import {createFilterQueryParam} from '../../../../../helpers/requests';
 
 import {useQueryRequest} from '../../../../../modules/table/QueryRequestProvider';
-import {getAllAdServers} from '../../../../../requests/misc/AdServer';
-import {getAllCountries} from '../../../../../requests/misc/Country';
-import {getAllFormats} from '../../../../../requests/misc/Format';
-import {getAllLanguages} from '../../../../../requests/misc/Language';
-import {getAllRegions} from '../../../../../requests/misc/Region';
-import {getAllTechnologies} from '../../../../../requests/misc/Technology';
-import {getAllVerticals} from '../../../../../requests/misc/Vertical';
-import {getAllPublishers} from '../../../../../requests/supply/publisher/Publisher';
 import {defaultFilterFields, FilterSchema} from '../../core/filterForm';
+import {usePublication} from '../../core/PublicationContext';
 
 interface Props {
     showFilter: boolean;
@@ -53,130 +35,141 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
     const [filterErrors, setFilterErrors] = useState<string[]>([]);
     const [reset, setReset] = useState<boolean>(false);
 
-    const [publishers, setPublishers] = useState<Publisher[]>([]);
-    const [languages, setLanguages] = useState<Language[]>([]);
-    const [formats, setFormats] = useState<Format[]>([]);
-    const [adServers, setAdServers] = useState<AdServer[]>([]);
-    const [technologies, setTechnologies] = useState<Technology[]>([]);
-    const [verticals, setVerticals] = useState<Vertical[]>([]);
-    const [countries, setCountries] = useState<Country[]>([]);
-    const [regions, setRegions] = useState<Region[]>([]);
+    const {
+        publishers, setPublishers,
+        languages, setLanguages,
+        formats, setFormats,
+        adServers, setAdServers,
+        technologies, setTechnologies,
+        verticals, setVerticals,
+        regions, setRegions,
+        countries, setCountries
+    } = usePublication();
 
-    useEffect(() => {
-        // get the list of all publishers
-        getAllPublishers().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of publishers, then we fill our state with them
-                if (response.data) {
-                    setPublishers(response.data);
-                }
-            }
-        });
+    // const [publishers, setPublishers] = useState<Publisher[]>([]);
+    // const [languages, setLanguages] = useState<Language[]>([]);
+    // const [formats, setFormats] = useState<Format[]>([]);
+    // const [adServers, setAdServers] = useState<AdServer[]>([]);
+    // const [technologies, setTechnologies] = useState<Technology[]>([]);
+    // const [verticals, setVerticals] = useState<Vertical[]>([]);
+    // const [countries, setCountries] = useState<Country[]>([]);
+    // const [regions, setRegions] = useState<Region[]>([]);
 
-        // get the list of all languages
-        getAllLanguages().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of languages, then we fill our state with them
-                if (response.data) {
-                    setLanguages(response.data);
-                }
-            }
-        });
-
-        // get the list of all formats
-        getAllFormats().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of formats, then we fill our state with them
-                if (response.data) {
-                    setFormats(filterData(response.data, 'name', ['All Formats']));
-                }
-            }
-        });
-
-        // get the list of all ad servers
-        getAllAdServers().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of ad servers, then we fill our state with them
-                if (response.data) {
-                    setAdServers(response.data);
-                }
-            }
-        });
-
-        // get the list of all technologies
-        getAllTechnologies().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of technologies, then we fill our state with them
-                if (response.data) {
-                    setTechnologies(response.data);
-                }
-            }
-        });
-
-        // get the list of all verticals
-        getAllVerticals().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of verticals, then we fill our state with them
-                if (response.data) {
-                    setVerticals(response.data);
-                }
-            }
-        });
-
-        // get the list of all countries
-        getAllCountries().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of countries, then we fill our state with them
-                if (response.data) {
-                    setCountries(filterData(response.data, 'name', ['All Countries']));
-                }
-            }
-        });
-
-        // get the list of all regions
-        getAllRegions().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of regions, then we fill our state with them
-                if (response.data) {
-                    setRegions(filterData(response.data, 'name', ['All Regions', 'Rest of the world']));
-                }
-            }
-        });
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    // useEffect(() => {
+    //     // get the list of all publishers
+    //     getAllPublishers().then(response => {
+    //         if (axios.isAxiosError(response)) {
+    //             setFilterErrors(extractErrors(response));
+    //         } else if (response === undefined) {
+    //             setFilterErrors([GenericErrorMessage])
+    //         } else {
+    //             // if we were able to get the list of publishers, then we fill our state with them
+    //             if (response.data) {
+    //                 setPublishers(response.data);
+    //             }
+    //         }
+    //     });
+    //
+    //     // get the list of all languages
+    //     getAllLanguages().then(response => {
+    //         if (axios.isAxiosError(response)) {
+    //             setFilterErrors(extractErrors(response));
+    //         } else if (response === undefined) {
+    //             setFilterErrors([GenericErrorMessage])
+    //         } else {
+    //             // if we were able to get the list of languages, then we fill our state with them
+    //             if (response.data) {
+    //                 setLanguages(response.data);
+    //             }
+    //         }
+    //     });
+    //
+    //     // get the list of all formats
+    //     getAllFormats().then(response => {
+    //         if (axios.isAxiosError(response)) {
+    //             setFilterErrors(extractErrors(response));
+    //         } else if (response === undefined) {
+    //             setFilterErrors([GenericErrorMessage])
+    //         } else {
+    //             // if we were able to get the list of formats, then we fill our state with them
+    //             if (response.data) {
+    //                 setFormats(filterData(response.data, 'name', ['All Formats']));
+    //             }
+    //         }
+    //     });
+    //
+    //     // get the list of all ad servers
+    //     getAllAdServers().then(response => {
+    //         if (axios.isAxiosError(response)) {
+    //             setFilterErrors(extractErrors(response));
+    //         } else if (response === undefined) {
+    //             setFilterErrors([GenericErrorMessage])
+    //         } else {
+    //             // if we were able to get the list of ad servers, then we fill our state with them
+    //             if (response.data) {
+    //                 setAdServers(response.data);
+    //             }
+    //         }
+    //     });
+    //
+    //     // get the list of all technologies
+    //     getAllTechnologies().then(response => {
+    //         if (axios.isAxiosError(response)) {
+    //             setFilterErrors(extractErrors(response));
+    //         } else if (response === undefined) {
+    //             setFilterErrors([GenericErrorMessage])
+    //         } else {
+    //             // if we were able to get the list of technologies, then we fill our state with them
+    //             if (response.data) {
+    //                 setTechnologies(response.data);
+    //             }
+    //         }
+    //     });
+    //
+    //     // get the list of all verticals
+    //     getAllVerticals().then(response => {
+    //         if (axios.isAxiosError(response)) {
+    //             setFilterErrors(extractErrors(response));
+    //         } else if (response === undefined) {
+    //             setFilterErrors([GenericErrorMessage])
+    //         } else {
+    //             // if we were able to get the list of verticals, then we fill our state with them
+    //             if (response.data) {
+    //                 setVerticals(response.data);
+    //             }
+    //         }
+    //     });
+    //
+    //     // get the list of all countries
+    //     getAllCountries().then(response => {
+    //         if (axios.isAxiosError(response)) {
+    //             setFilterErrors(extractErrors(response));
+    //         } else if (response === undefined) {
+    //             setFilterErrors([GenericErrorMessage])
+    //         } else {
+    //             // if we were able to get the list of countries, then we fill our state with them
+    //             if (response.data) {
+    //                 setCountries(filterData(response.data, 'name', ['All Countries']));
+    //             }
+    //         }
+    //     });
+    //
+    //     // get the list of all regions
+    //     getAllRegions().then(response => {
+    //         if (axios.isAxiosError(response)) {
+    //             setFilterErrors(extractErrors(response));
+    //         } else if (response === undefined) {
+    //             setFilterErrors([GenericErrorMessage])
+    //         } else {
+    //             // if we were able to get the list of regions, then we fill our state with them
+    //             if (response.data) {
+    //                 setRegions(filterData(response.data, 'name', ['All Regions', 'Rest of the world']));
+    //             }
+    //         }
+    //     });
+    //
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
 
     const multiSelectChangeHandler = (e: any, key: string) => {
         if (key === 'countries_ids') {

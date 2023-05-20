@@ -36,8 +36,9 @@ import {getAllPublishers} from '../../../../requests/supply/publisher/Publisher'
 import {defaultFormFields, FormFields, publicationSchema} from '../core/form';
 
 const PublicationCreate: React.FC = () => {
-    const navigate = useNavigate();
     const krysApp = useKrysApp();
+
+    const navigate = useNavigate();
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);

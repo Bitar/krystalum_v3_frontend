@@ -21,7 +21,6 @@ import {Actions, KrysToastType} from '../../../../../../helpers/variables';
 import {Vertical} from '../../../../../../models/misc/Vertical';
 
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getAllVerticals} from '../../../../../../requests/misc/Vertical';
 import {
     getPublicationVerticals,
     storePublicationVertical
@@ -36,40 +35,26 @@ import {usePublication} from '../../../core/PublicationContext';
 
 
 const PublicationVerticalCreate: React.FC = () => {
-    const {publication, setPublication, refresh, setRefresh} = usePublication();
+    const {publication, setPublication, verticals} = usePublication();
+    const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationVerticalFormFields>(defaultPublicationVerticalFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
-    const [verticals, setVerticals] = useState<Vertical[]>([]);
+    const [filteredVerticals, setFilteredVerticals] = useState<Vertical[]>([]);
 
     const verticalsSelectRef = useRef<any>(null);
 
-    const krysApp = useKrysApp();
-
     useEffect(() => {
         if (publication) {
-            // get the verticals
-            getAllVerticals().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of verticals, then we fill our state with them
-                    if (response.data) {
-                        const excludedVerticalsNames: string[] = publication.verticals ? publication.verticals?.map((vertical) => vertical.vertical.name) : [];
+            const excludedVerticalsNames: string[] = publication.verticals ? publication.verticals?.map((vertical) => vertical.vertical.name) : [];
 
-                        setVerticals(filterData(response.data, 'name', excludedVerticalsNames));
-                    }
-                }
-            });
+            setFilteredVerticals(filterData(verticals, 'name', excludedVerticalsNames));
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [publication]);
+    }, [publication, verticals]);
 
     const multiSelectChangeHandler = (e: any, key: string) => {
         genericMultiSelectOnChangeHandler(e, form, setForm, key);
@@ -139,7 +124,7 @@ const PublicationVerticalCreate: React.FC = () => {
                                     <KrysFormLabel text="Verticals" isRequired={true}/>
 
                                     <Select isMulti name="vertical_ids"
-                                            options={verticals}
+                                            options={filteredVerticals}
                                             getOptionLabel={(vertical) => vertical.name}
                                             getOptionValue={(vertical) => vertical.id.toString()}
                                             onChange={(e) => {

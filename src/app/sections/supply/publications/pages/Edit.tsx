@@ -1,16 +1,12 @@
-import axios from 'axios';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Nav, Tab} from 'react-bootstrap';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
-
 import {PageTypes} from '../../../../helpers/variables';
-import {Publication} from '../../../../models/supply/publication/Publication';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {getPublication} from '../../../../requests/supply/publication/Publication';
 import {usePublication} from '../core/PublicationContext';
 import PublicationOverview from '../partials/Overview';
 import PublicationAdServerCreate from './edit/ad-servers/Create';
@@ -24,32 +20,10 @@ import PublicationTechnologyCreate from './edit/technologies/Create';
 import PublicationVerticalCreate from './edit/verticals/Create';
 
 const PublicationEdit: React.FC = () => {
-    let {id} = useParams();
+    const {id} = useParams();
 
-    const navigate = useNavigate();
+    const {publication} = usePublication();
     const krysApp = useKrysApp();
-
-    const [publication, setPublication] = useState<Publication | null>(null);
-
-    useEffect(() => {
-        if (id) {
-            // get the publication we need to edit from the database
-            getPublication(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the publication to edit so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    // unknown error occurred
-                    navigate('/error/400');
-                } else {
-                    setPublication(response);
-                }
-            });
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id]);
 
     useEffect(() => {
         // when we're here it means our publication object is loaded from the API

@@ -17,7 +17,6 @@ import {Sections} from '../../../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
 import {AdServer} from '../../../../../../models/misc/AdServer';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getAllAdServers} from '../../../../../../requests/misc/AdServer';
 import {
     getPublicationAdServer,
     updatePublicationAdServer
@@ -30,21 +29,19 @@ import {
 import {usePublication} from '../../../core/PublicationContext';
 
 const PublicationAdServerEdit: React.FC = () => {
-    const {publication} = usePublication();
-
-    // get the publication and publication ad_server id
     const {cid} = useParams();
 
+    const {publication, adServers} = usePublication();
     const krysApp = useKrysApp();
+
     const navigate = useNavigate();
 
-    const [publicationAdServer, setPublicationAdServer] = useState<AdServer | null>(null);
     const [form, setForm] = useState<PublicationAdServerEditFormFields>(defaultPublicationAdServerEditFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
+    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false);
 
-    const [adServers, setAdServers] = useState<AdServer[]>([]);
-
-    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
+    const [publicationAdServer, setPublicationAdServer] = useState<AdServer | null>(null);
+    const [filteredAdServers, setFilteredAdServers] = useState<AdServer[]>([]);
 
     useEffect(() => {
         if (publication && cid) {
@@ -66,21 +63,9 @@ const PublicationAdServerEdit: React.FC = () => {
                 }
             });
 
-            // get the ad servers
-            getAllAdServers().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of ad servers, then we fill our state with them
-                    if (response.data) {
-                        const excludedAdServersNames: string[] = publication.adServers ? publication.adServers?.map((adServer) => adServer.name) : [];
+            const excludedAdServersNames: string[] = publication.adServers ? publication.adServers?.map((adServer) => adServer.name) : [];
 
-                        setAdServers(filterData(response.data, 'name', excludedAdServersNames));
-                    }
-                }
-            });
+            setFilteredAdServers(filterData(adServers, 'name', excludedAdServersNames));
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -138,7 +123,7 @@ const PublicationAdServerEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Ad Server" isRequired={true}/>
 
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={adServers}
+                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={filteredAdServers}
                                                   defaultValue={publicationAdServer} form={form}
                                                   setForm={setForm} name="ad_server_id" isClearable={true}
                                                   showHierarchy={true}/>

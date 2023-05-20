@@ -19,60 +19,24 @@ import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerato
 import {genericDateOnChangeHandler, GenericErrorMessage, genericOnChangeHandler} from '../../../../../helpers/form';
 import {extractErrors} from '../../../../../helpers/requests';
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
-import {Language} from '../../../../../models/misc/Language';
-import {Publisher} from '../../../../../models/supply/publisher/Publisher';
 import {useKrysApp} from '../../../../../modules/general/KrysApp';
-import {getAllLanguages} from '../../../../../requests/misc/Language';
 import {updatePublication} from '../../../../../requests/supply/publication/Publication';
-import {getAllPublishers} from '../../../../../requests/supply/publisher/Publisher';
 import {defaultFormFields, fillEditForm, FormFields, publicationSchema} from '../../core/form';
 import {usePublication} from '../../core/PublicationContext';
 
 const PublicationBasicInformationEdit: React.FC = () => {
-    const {publication, setPublication} = usePublication();
+    const {publication, setPublication, publishers, languages} = usePublication();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false);
-
-    const [publishers, setPublishers] = useState<Publisher[]>([]);
-    const [languages, setLanguages] = useState<Language[]>([]);
 
     useEffect(() => {
         if (publication) {
             setIsResourceLoaded(true);
 
             setForm(fillEditForm(publication));
-
-            // get the list of all publishers
-            getAllPublishers().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of publishers, then we fill our state with them
-                    if (response.data) {
-                        setPublishers(response.data);
-                    }
-                }
-            });
-
-            // get the list of all languages
-            getAllLanguages().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of languages, then we fill our state with them
-                    if (response.data) {
-                        setLanguages(response.data);
-                    }
-                }
-            });
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

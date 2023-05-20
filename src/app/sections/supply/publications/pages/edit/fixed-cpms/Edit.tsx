@@ -11,21 +11,13 @@ import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton'
 import SingleSelect from '../../../../../../components/forms/SingleSelect';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
-import {filterData} from '../../../../../../helpers/dataManipulation';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {Sections} from '../../../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
-import {Country} from '../../../../../../models/misc/Country';
-import {Currency} from '../../../../../../models/misc/Currency';
-import {Format} from '../../../../../../models/misc/Format';
-import {Region} from '../../../../../../models/misc/Region';
 import {PublicationFixedCpm} from '../../../../../../models/supply/publication/PublicationFixedCpm';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getAllCountries, getAllCurrencies} from '../../../../../../requests/misc/Country';
-import {getAllFormats} from '../../../../../../requests/misc/Format';
-import {getAllRegions} from '../../../../../../requests/misc/Region';
 import {
     getPublicationFixedCpm,
     updatePublicationFixedCpm
@@ -39,23 +31,18 @@ import {
 import {usePublication} from '../../../core/PublicationContext';
 
 const PublicationFixedCpmEdit: React.FC = () => {
-    const {publication} = usePublication();
-    // get the publication and publication fixed cpm id
     const {cid} = useParams();
 
+    const {publication, formats, regions, countries, currencies} = usePublication();
     const krysApp = useKrysApp();
+
     const navigate = useNavigate();
 
-    const [publicationFixedCpm, setPublicationFixedCpm] = useState<PublicationFixedCpm | null>(null);
     const [form, setForm] = useState<PublicationFixedCpmEditFormFields>(defaultPublicationFixedCpmEditFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
-    const [formats, setFormats] = useState<Format[]>([]);
-    const [regions, setRegions] = useState<Region[]>([]);
-    const [countries, setCountries] = useState<Country[]>([]);
-    const [currencies, setCurrencies] = useState<Currency[]>([]);
+    const [publicationFixedCpm, setPublicationFixedCpm] = useState<PublicationFixedCpm | null>(null);
 
     useEffect(() => {
         if (publication && cid) {
@@ -72,62 +59,6 @@ const PublicationFixedCpmEdit: React.FC = () => {
                     setPublicationFixedCpm(response);
                     // we also set the form to be the publication's fixed cpm details
                     setForm(fillEditForm(response));
-                }
-            });
-
-            // get the formats
-            getAllFormats().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of formats, then we fill our state with them
-                    if (response.data) {
-                        setFormats(response.data);
-                    }
-                }
-            });
-
-            // get the regions
-            getAllRegions().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of regions, then we fill our state with them
-                    if (response.data) {
-                        setRegions(filterData(response.data, 'name', ['All Regions', 'Rest of the world']));
-                    }
-                }
-            });
-
-            // get the countries
-            getAllCountries().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of countries, then we fill our state with them
-                    if (response.data) {
-                        setCountries(filterData(response.data, 'name', ['All Countries']));
-                    }
-                }
-            });
-
-            // get the currencies
-            getAllCurrencies().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of currencies, then we fill our state with them
-                    if (response.data) {
-                        setCurrencies(response.data);
-                    }
                 }
             });
         }

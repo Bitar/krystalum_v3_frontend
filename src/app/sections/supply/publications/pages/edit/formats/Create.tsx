@@ -18,11 +18,9 @@ import {
 } from '../../../../../../helpers/form';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
-import {Format} from '../../../../../../models/misc/Format';
 import {FormatType} from '../../../../../../models/supply/Options';
 
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getAllFormats} from '../../../../../../requests/misc/Format';
 import {getFormatTypes} from '../../../../../../requests/supply/Options';
 import {
     getPublicationFormats,
@@ -38,37 +36,20 @@ import {usePublication} from '../../../core/PublicationContext';
 
 
 const PublicationFormatCreate: React.FC = () => {
-    const {publication} = usePublication();
+    const {publication, formats} = usePublication();
+    const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationFormatFormFields>(defaultPublicationFormatFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-
-    const [formats, setFormats] = useState<Format[]>([]);
-    const [formatTypes, setFormatTypes] = useState<FormatType[]>([]);
-
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
+
+    const [formatTypes, setFormatTypes] = useState<FormatType[]>([]);
 
     const formatsSelectRef = useRef<any>(null);
     const formatTypesSelectRef = useRef<any>(null);
 
-    const krysApp = useKrysApp();
-
     useEffect(() => {
         if (publication) {
-            // get the formats
-            getAllFormats().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of formats, then we fill our state with them
-                    if (response.data) {
-                        setFormats(response.data);
-                    }
-                }
-            });
-
             // get the format types
             getFormatTypes().then(response => {
                 if (axios.isAxiosError(response)) {

@@ -20,7 +20,6 @@ import {Actions, KrysToastType} from '../../../../../../helpers/variables';
 import {AdServer} from '../../../../../../models/misc/AdServer';
 
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getAllAdServers} from '../../../../../../requests/misc/AdServer';
 import {
     getPublicationAdServers,
     storePublicationAdServer
@@ -35,37 +34,22 @@ import {usePublication} from '../../../core/PublicationContext';
 
 
 const PublicationAdServerCreate: React.FC = () => {
-    const {publication, setPublication} = usePublication();
+    const {publication, setPublication, adServers} = usePublication();
+    const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationAdServerFormFields>(defaultPublicationAdServerFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
-    const [adServers, setAdServers] = useState<AdServer[]>([]);
+    const [filteredAdServers, setFilteredAdServers] = useState<AdServer[]>([]);
 
     const adServersSelectRef = useRef<any>(null);
 
-    const krysApp = useKrysApp();
-
     useEffect(() => {
         if (publication) {
-            // get the adServers
-            getAllAdServers().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of adServers, then we fill our state with them
-                    if (response.data) {
-                        setAdServers(response.data);
-                        const excludedAdServersNames: string[] = publication.adServers ? publication.adServers?.map((adServer) => adServer.name) : [];
+            const excludedAdServersNames: string[] = publication.adServers ? publication.adServers?.map((adServer) => adServer.name) : [];
 
-                        setAdServers(filterData(response.data, 'name', excludedAdServersNames));
-                    }
-                }
-            });
+            setFilteredAdServers(filterData(adServers, 'name', excludedAdServersNames));
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -139,7 +123,7 @@ const PublicationAdServerCreate: React.FC = () => {
                                     <KrysFormLabel text="Ad servers" isRequired={true}/>
 
                                     <Select isMulti name="ad_server_ids"
-                                            options={adServers}
+                                            options={filteredAdServers}
                                             getOptionLabel={(adServer) => adServer.name}
                                             getOptionValue={(adServer) => adServer.id.toString()}
                                             onChange={(e) => {

@@ -14,11 +14,9 @@ import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {Sections} from '../../../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
-import {Format} from '../../../../../../models/misc/Format';
 import {FormatType} from '../../../../../../models/supply/Options';
 import {PublicationFormat} from '../../../../../../models/supply/publication/PublicationFormat';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getAllFormats} from '../../../../../../requests/misc/Format';
 import {getFormatTypes} from '../../../../../../requests/supply/Options';
 import {
     getPublicationFormat,
@@ -32,22 +30,19 @@ import {
 import {usePublication} from '../../../core/PublicationContext';
 
 const PublicationFormatEdit: React.FC = () => {
-    const {publication} = usePublication();
-
-    // get the publication and publication format id
     const {cid} = useParams();
 
+    const {publication, formats} = usePublication();
     const krysApp = useKrysApp();
+
     const navigate = useNavigate();
 
-    const [publicationFormat, setPublicationFormat] = useState<PublicationFormat | null>(null);
     const [form, setForm] = useState<PublicationFormatEditFormFields>(defaultPublicationFormatEditFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-
-    const [formats, setFormats] = useState<Format[]>([]);
-    const [formatTypes, setFormatTypes] = useState<FormatType[]>([]);
-
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
+
+    const [publicationFormat, setPublicationFormat] = useState<PublicationFormat | null>(null);
+    const [formatTypes, setFormatTypes] = useState<FormatType[]>([]);
 
     useEffect(() => {
         if (publication && cid) {
@@ -67,20 +62,6 @@ const PublicationFormatEdit: React.FC = () => {
                     const {format, type, ...currentPublicationFormat} = response;
 
                     setForm({...currentPublicationFormat, format_id: format.id, type: type.id});
-                }
-            });
-
-            // get the formats
-            getAllFormats().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of formats, then we fill our state with them
-                    if (response.data) {
-                        setFormats(response.data);
-                    }
                 }
             });
 

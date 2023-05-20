@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {Field, Form, Formik} from 'formik';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import Select from 'react-select';
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
@@ -12,7 +12,6 @@ import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton'
 import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
-import {filterData} from '../../../../../../helpers/dataManipulation';
 import {
     GenericErrorMessage,
     genericMultiSelectOnChangeHandler,
@@ -22,15 +21,8 @@ import {
 import {extractErrors} from '../../../../../../helpers/requests';
 import {DEFAULT_CURRENCY} from '../../../../../../helpers/settings';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
-import {Country} from '../../../../../../models/misc/Country';
-import {Currency} from '../../../../../../models/misc/Currency';
-import {Format} from '../../../../../../models/misc/Format';
-import {Region} from '../../../../../../models/misc/Region';
 
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getAllCountries, getAllCurrencies} from '../../../../../../requests/misc/Country';
-import {getAllFormats} from '../../../../../../requests/misc/Format';
-import {getAllRegions} from '../../../../../../requests/misc/Region';
 import {
     getPublicationMinimumEcpms,
     storePublicationMinimumEcpm
@@ -45,84 +37,16 @@ import {usePublication} from '../../../core/PublicationContext';
 
 
 const PublicationMinimumEcpmCreate: React.FC = () => {
-    const {publication} = usePublication();
+    const {publication, formats, regions, countries, currencies} = usePublication();
+
+    const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationMinimumEcpmFormFields>(defaultPublicationMinimumEcpmFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-
-    const [formats, setFormats] = useState<Format[]>([]);
-    const [regions, setRegions] = useState<Region[]>([]);
-    const [countries, setCountries] = useState<Country[]>([]);
-    const [currencies, setCurrencies] = useState<Currency[]>([]);
-
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
     const formatsSelectRef = useRef<any>(null);
     const geosSelectRef = useRef<any>(null);
-
-    const krysApp = useKrysApp();
-
-    useEffect(() => {
-        if (publication) {
-            // get the formats
-            getAllFormats().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of formats, then we fill our state with them
-                    if (response.data) {
-                        setFormats(response.data);
-                    }
-                }
-            });
-
-            // get the regions
-            getAllRegions().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of regions, then we fill our state with them
-                    if (response.data) {
-                        setRegions(filterData(response.data, 'name', ['All Regions', 'Rest of the world']));
-                    }
-                }
-            });
-
-            // get the countries
-            getAllCountries().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of countries, then we fill our state with them
-                    if (response.data) {
-                        setCountries(filterData(response.data, 'name', ['All Countries']));
-                    }
-                }
-            });
-
-            // get the currencies
-            getAllCurrencies().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of currencies, then we fill our state with them
-                    if (response.data) {
-                        setCurrencies(response.data);
-                    }
-                }
-            });
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [publication]);
 
     const selectChangeHandler = (e: any, key: string) => {
         genericSingleSelectOnChangeHandler(e, form, setForm, key);
