@@ -23,7 +23,7 @@ const PublicationAdServersColumns: ReadonlyArray<Column<AdServer>> = [
         ),
         id: 'actions',
         Cell: ({...props}) => {
-            const {publication} = usePublication();
+            const {publication, handleRefresh} = usePublication();
 
             return (
                 <Restricted to={'manage-supply'}>
@@ -36,6 +36,7 @@ const PublicationAdServersColumns: ReadonlyArray<Column<AdServer>> = [
                         showDelete={true}
                         title="Delete Publication Ad Server"
                         text={`Are you sure you want to delete this publication ad server that has the ad server name '${props.data[props.row.index].name}'?`}
+                        callBackFn={handleRefresh}
                     />
                 </Restricted>
             )

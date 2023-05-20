@@ -19,6 +19,7 @@ import PublicationVerticalEdit from '../../sections/supply/publications/pages/ed
 
 const PublicationEditRoutes: React.FC = () => {
     const [publication, setPublication] = useState<Publication | null>(null);
+    const [refresh, setRefresh] = useState<boolean | null>(null);
 
     let {id} = useParams();
 
@@ -42,7 +43,11 @@ const PublicationEditRoutes: React.FC = () => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id]);
+    }, [id, refresh]);
+
+    const handleRefresh = () => {
+        setRefresh(!refresh);
+    }
 
     const publicationEditBreadcrumbs: Array<PageLink> = [
         {
@@ -74,7 +79,10 @@ const PublicationEditRoutes: React.FC = () => {
     return (
         <PublicationContext.Provider value={{
             publication: publication,
-            setPublication: setPublication
+            setPublication: setPublication,
+            refresh: refresh,
+            setRefresh: setRefresh,
+            handleRefresh: handleRefresh
         }}>
             <Routes>
                 <Route

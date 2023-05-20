@@ -30,7 +30,7 @@ const PublicationVerticalsColumns: ReadonlyArray<Column<PublicationVertical>> = 
         ),
         id: 'actions',
         Cell: ({...props}) => {
-            const {publication} = usePublication();
+            const {publication, handleRefresh} = usePublication();
 
             const publicationVerticalSummary = `vertical: ${props.data[props.row.index].vertical.name} 
             and ${props.data[props.row.index].is_primary ? 'it is primary' : 'it is not primary'}`;
@@ -46,6 +46,7 @@ const PublicationVerticalsColumns: ReadonlyArray<Column<PublicationVertical>> = 
                         showDelete={!props.data[props.row.index].is_primary}
                         title="Delete Publication Vertical"
                         text={`Are you sure you want to delete the publication vertical that includes the following details: '${publicationVerticalSummary}'?`}
+                        callBackFn={handleRefresh}
                     />
                 </Restricted>
             )

@@ -22,7 +22,7 @@ const PublicationTechnologiesColumns: ReadonlyArray<Column<Technology>> = [
         ),
         id: 'actions',
         Cell: ({...props}) => {
-            const {publication} = usePublication();
+            const {publication, handleRefresh} = usePublication();
 
             return (
                 <Restricted to={'manage-supply'}>
@@ -35,6 +35,7 @@ const PublicationTechnologiesColumns: ReadonlyArray<Column<Technology>> = [
                         showDelete={true}
                         title="Delete Publication Technology"
                         text={`Are you sure you want to delete this publication technology that has the technology name '${props.data[props.row.index].name}'?`}
+                        callBackFn={handleRefresh}
                     />
                 </Restricted>
             )

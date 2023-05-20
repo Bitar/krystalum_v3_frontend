@@ -36,7 +36,7 @@ import {usePublication} from '../../../core/PublicationContext';
 
 
 const PublicationVerticalCreate: React.FC = () => {
-    const {publication, setPublication} = usePublication();
+    const {publication, setPublication, refresh, setRefresh} = usePublication();
 
     const [form, setForm] = useState<PublicationVerticalFormFields>(defaultPublicationVerticalFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);

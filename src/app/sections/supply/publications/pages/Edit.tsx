@@ -11,6 +11,7 @@ import {PageTypes} from '../../../../helpers/variables';
 import {Publication} from '../../../../models/supply/publication/Publication';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {getPublication} from '../../../../requests/supply/publication/Publication';
+import {usePublication} from '../core/PublicationContext';
 import PublicationOverview from '../partials/Overview';
 import PublicationAdServerCreate from './edit/ad-servers/Create';
 import PublicationAdTechnologyIndex from './edit/ad-technologies/Index';
