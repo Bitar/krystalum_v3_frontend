@@ -1,7 +1,7 @@
 import axios, {AxiosError, AxiosResponse} from 'axios';
 import {
     AnalyticTypeList,
-    ApplicationTypeList,
+    ApplicationTypeList, CampaignRestrictionTypeList,
     ContactTypeList,
     FormatTypeList,
     GeoTypeList,
@@ -64,6 +64,14 @@ export const getRevenueTypes = async (): Promise<RevenueTypeList | AxiosError | 
     let url = `${ENDPOINT}/revenue-types`;
 
     return axios.get(url).then((response: AxiosResponse<RevenueTypeList>) => response.data).catch((error) => {
+        return error;
+    });
+}
+
+export const getCampaignRestrictionTypes = async (): Promise<CampaignRestrictionTypeList | AxiosError | undefined> => {
+    let url = `${ENDPOINT}/campaign-restriction-types`;
+
+    return axios.get(url).then((response: AxiosResponse<CampaignRestrictionTypeList>) => response.data).catch((error) => {
         return error;
     });
 }

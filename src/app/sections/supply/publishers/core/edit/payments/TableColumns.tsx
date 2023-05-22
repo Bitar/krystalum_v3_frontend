@@ -16,12 +16,12 @@ const PublisherPaymentsColumns: ReadonlyArray<Column<PublisherPayment>> = [
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Account number" className="min-w-125px"/>,
-        id: 'account_number',
+        id: 'account-number',
         Cell: ({...props}) => <TextCell text={props.data[props.row.index].account_number}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Swift code" className="min-w-125px"/>,
-        id: 'swift_code',
+        id: 'swift-code',
         Cell: ({...props}) => <TextCell text={props.data[props.row.index].swift_code}/>,
     },
     {
@@ -31,12 +31,12 @@ const PublisherPaymentsColumns: ReadonlyArray<Column<PublisherPayment>> = [
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Bank name" className="min-w-125px"/>,
-        id: 'bank_name',
+        id: 'bank-name',
         Cell: ({...props}) => <TextCell text={props.data[props.row.index].bank_name}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Bank address" className="min-w-125px"/>,
-        id: 'bank_address',
+        id: 'bank-address',
         Cell: ({...props}) => <TextCell text={props.data[props.row.index].bank_address}/>,
     },
     {

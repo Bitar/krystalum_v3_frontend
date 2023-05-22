@@ -2,7 +2,9 @@ import React from 'react';
 import {Column} from 'react-table'
 import {QUERIES} from '../../../../../../../_metronic/helpers';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
-import {PublicationFixedCpm} from '../../../../../../models/supply/publication/PublicationFixedCpm';
+import {
+    PublicationCampaignRestriction
+} from '../../../../../../models/supply/publication/PublicationCampaignRestriction';
 import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
@@ -10,11 +12,11 @@ import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader
 import {TextCell} from '../../../../../../modules/table/columns/TextCell';
 import {usePublication} from '../../PublicationContext';
 
-const PublicationFixedCpmColumns: ReadonlyArray<Column<PublicationFixedCpm>> = [
+const PublicationCampaignRestrictionsColumns: ReadonlyArray<Column<PublicationCampaignRestriction>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Format" className="min-w-125px"/>,
         id: 'format',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].format.name}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].format?.name}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Geo Type" className="min-w-125px"/>,
@@ -26,13 +28,23 @@ const PublicationFixedCpmColumns: ReadonlyArray<Column<PublicationFixedCpm>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Geo" className="min-w-125px"/>,
         id: 'geo',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].geo.name}/>,
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].geo?.name}/>,
     },
     {
-        Header: (props) => <CustomHeader tableProps={props} title="Price" className="min-w-125px"/>,
-        id: 'price',
-        Cell: ({...props}) => <TextCell
-            text={`${props.data[props.row.index].price} ${props.data[props.row.index].currency.currency}`}/>,
+        Header: (props) => <CustomHeader tableProps={props} title="Campaign type" className="min-w-125px"/>,
+        id: 'campaign-type',
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].campaignType?.name}/>,
+    },
+    {
+        Header: (props) => <CustomHeader tableProps={props} title="Website page" className="min-w-125px"/>,
+        id: 'website-page',
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].websitePage?.name}/>,
+    },
+    {
+        Header: (props) => <CustomHeader tableProps={props} title="Campaign restriction requirement"
+                                         className="min-w-125px"/>,
+        id: 'campaign-restriction-requirement',
+        Cell: ({...props}) => <TextCell text={props.data[props.row.index].campaignRestrictionRequirement?.name}/>,
     },
     {
         Header: (props) => (
@@ -44,22 +56,25 @@ const PublicationFixedCpmColumns: ReadonlyArray<Column<PublicationFixedCpm>> = [
         Cell: ({...props}) => {
             const {publication} = usePublication();
 
-            const publicationFixedCpmSummary = `format: ${props.data[props.row.index].format.name} | 
+            const publicationCampaignRestrictionSummary = `type: ${props.data[props.row.index].type.name} | 
+            format: ${props.data[props.row.index].format.name} | 
             geo type: ${props.data[props.row.index].geoType.name} | 
             geo: ${props.data[props.row.index].geo.name} | 
-            price: ${props.data[props.row.index].price} ${props.data[props.row.index].currency.currency}`;
+            campaign type: ${props.data[props.row.index].campaignType.name} | 
+            website page: ${props.data[props.row.index].websitePage.name} | 
+            campaign restriction requirement: ${props.data[props.row.index].campaignRestrictionRequirement.name} `;
 
             return (
                 <Restricted to={'manage-supply'}>
                     <ActionsCell
                         id={props.data[props.row.index].id}
-                        path={`supply/publications/${publication?.id}/fixed-cpms`}
-                        queryKey={QUERIES.PUBLICATION_FIXED_CPMS_LIST}
+                        path={`supply/publications/${publication?.id}/campaign-restrictions`}
+                        queryKey={QUERIES.PUBLICATION_CAMPAIGN_RESTRICTIONS_LIST}
                         showView={false}
                         showEdit={true}
                         showDelete={true}
-                        title="Delete Publication Fixed CPM"
-                        text={`Are you sure you want to delete the publication fixed CPM that includes the following details: '${publicationFixedCpmSummary}'?`}
+                        title="Delete Publication Campaign Restriction"
+                        text={`Are you sure you want to delete the publication campaign restriction that includes the following details: '${publicationCampaignRestrictionSummary}'?`}
                     />
                 </Restricted>
             )
@@ -67,4 +82,4 @@ const PublicationFixedCpmColumns: ReadonlyArray<Column<PublicationFixedCpm>> = [
     },
 ]
 
-export {PublicationFixedCpmColumns}
+export {PublicationCampaignRestrictionsColumns}

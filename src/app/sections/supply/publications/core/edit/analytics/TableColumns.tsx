@@ -15,7 +15,7 @@ import {usePublication} from '../../PublicationContext';
 const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Geo Type" className="min-w-125px"/>,
-        id: 'geo_type',
+        id: 'geo-type',
         Cell: ({...props}) => <BadgeCell status={props.data[props.row.index].geoType.name}
                                          color={props.data[props.row.index].geoType.id === GEO_TYPE.REGION ? 'light-primary' : 'light-info'}
                                          align="left"/>,

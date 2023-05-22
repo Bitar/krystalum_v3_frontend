@@ -38,5 +38,6 @@ export enum Sections {
     SUPPLY_PUBLICATION_AD_SERVERS = 'Publications ad servers',
     SUPPLY_PUBLICATION_TECHNOLOGIES = 'Publications technologies',
     SUPPLY_PUBLICATION_FIXED_CPM = 'Publications fixed CPM',
-    SUPPLY_PUBLICATION_MINIMUM_ECPM = 'Publications minimum ECPM'
+    SUPPLY_PUBLICATION_MINIMUM_ECPM = 'Publications minimum ECPM',
+    SUPPLY_PUBLICATION_CAMPAIGN_RESTRICTION = 'Publications campaign restriction'
 }

@@ -148,7 +148,6 @@ const PublicationFixedCpmCreate: React.FC = () => {
                                                 onChange={(e) => {
                                                     multiSelectChangeHandler(e, 'geo_ids')
                                                 }}
-                                                formatOptionLabel={indentOptions}
                                                 placeholder="Select one or more region"
                                                 ref={geosSelectRef}/>
 
@@ -170,7 +169,6 @@ const PublicationFixedCpmCreate: React.FC = () => {
                                                 onChange={(e) => {
                                                     multiSelectChangeHandler(e, 'geo_ids')
                                                 }}
-                                                formatOptionLabel={indentOptions}
                                                 placeholder="Select one or more country"
                                                 ref={geosSelectRef}/>
 

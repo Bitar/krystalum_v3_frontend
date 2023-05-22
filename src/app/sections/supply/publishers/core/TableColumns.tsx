@@ -33,7 +33,7 @@ const PublishersColumns: ReadonlyArray<Column<Publisher>> = [
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Account Manager" className="min-w-125px"/>,
-        id: 'accountManager',
+        id: 'account-manager',
         Cell: ({...props}) => <TextCell
             text={(props.data[props.row.index].accountManager ? props.data[props.row.index].accountManager?.name : 'N/A')}/>,
     },

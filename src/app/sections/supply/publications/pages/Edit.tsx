@@ -13,6 +13,7 @@ import PublicationAdServerCreate from './edit/ad-servers/Create';
 import PublicationAdTechnologyIndex from './edit/ad-technologies/Index';
 import PublicationAnalyticCreate from './edit/analytics/Create';
 import PublicationBasicInformationEdit from './edit/BasicInformation';
+import PublicationCampaignRestrictionCreate from './edit/campaign-restrictions/Create';
 import PublicationFixedCpmCreate from './edit/fixed-cpms/Create';
 import PublicationFormatCreate from './edit/formats/Create';
 import PublicationMinimumEcpmCreate from './edit/minimum-ecpms/Create';
@@ -152,6 +153,10 @@ const PublicationEdit: React.FC = () => {
 
                                     <Tab.Pane eventKey="settingsNav-8">
                                         <PublicationAdTechnologyIndex/>
+                                    </Tab.Pane>
+
+                                    <Tab.Pane eventKey="settingsNav-9">
+                                        <PublicationCampaignRestrictionCreate/>
                                     </Tab.Pane>
                                 </Tab.Content>
                             </div>

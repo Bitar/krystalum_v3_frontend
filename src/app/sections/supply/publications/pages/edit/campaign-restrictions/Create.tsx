@@ -1,6 +1,6 @@
 import axios from 'axios';
-import {Field, Form, Formik} from 'formik';
-import React, {useRef, useState} from 'react';
+import {Form, Formik} from 'formik';
+import React, {useEffect, useRef, useState} from 'react';
 import Select from 'react-select';
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
@@ -9,6 +9,7 @@ import {indentOptions} from '../../../../../../components/forms/IndentOptions';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton';
+import {SelectCardAction} from '../../../../../../components/misc/CardAction';
 import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
@@ -19,37 +20,87 @@ import {
     genericSingleSelectOnChangeHandler
 } from '../../../../../../helpers/form';
 import {extractErrors} from '../../../../../../helpers/requests';
-import {DEFAULT_CURRENCY} from '../../../../../../helpers/settings';
+import {DEFAULT_CAMPAIGN_RESTRICTION_TYPE} from '../../../../../../helpers/settings';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
+import {CampaignRestrictionType} from '../../../../../../models/supply/Options';
 
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
+import {getCampaignRestrictionTypes} from '../../../../../../requests/supply/Options';
 import {
-    getPublicationMinimumEcpms,
-    storePublicationMinimumEcpm
-} from '../../../../../../requests/supply/publication/PublisherMinimumEcpm';
+    getPublicationCampaignRestrictions,
+    storePublicationCampaignRestriction
+} from '../../../../../../requests/supply/publication/PublisherCampaignRestriction';
 import {
-    defaultPublicationMinimumEcpmFormFields,
-    PublicationMinimumEcpmFormFields,
-    publicationMinimumEcpmSchema
-} from '../../../core/edit/minimum-ecpms/form';
-import {PublicationMinimumEcpmColumns} from '../../../core/edit/minimum-ecpms/TableColumns';
+    CampaignRestrictionsFilterFields,
+    defaultCampaignRestrictionsFilterFields,
+    defaultPublicationCampaignRestrictionFormFields,
+    PublicationCampaignRestrictionFormFields,
+    publicationCampaignRestrictionSchema
+} from '../../../core/edit/campaign-restrictions/form';
+import {PublicationCampaignRestrictionsColumns} from '../../../core/edit/campaign-restrictions/TableColumns';
 import {usePublication} from '../../../core/PublicationContext';
 
 
-const PublicationMinimumEcpmCreate: React.FC = () => {
-    const {publication, formats, regions, countries, currencies} = usePublication();
-
+const PublicationCampaignRestrictionCreate: React.FC = () => {
+    const {
+        publication,
+        regions,
+        countries,
+        formats,
+        campaignTypes,
+        websitePages,
+        campaignRestrictionRequirements
+    } = usePublication();
     const krysApp = useKrysApp();
 
-    const [form, setForm] = useState<PublicationMinimumEcpmFormFields>(defaultPublicationMinimumEcpmFormFields);
+    const [form, setForm] = useState<PublicationCampaignRestrictionFormFields>(defaultPublicationCampaignRestrictionFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
+    const [filters, setFilters] = useState<CampaignRestrictionsFilterFields>(defaultCampaignRestrictionsFilterFields);
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
-    const formatsSelectRef = useRef<any>(null);
+    const [campaignRestrictionTypes, setCampaignRestrictionType] = useState<CampaignRestrictionType[]>([]);
+    const [currentCampaignRestrictionTypeFormatted, setCurrentCampaignRestrictionTypeFormatted] = useState<string>(DEFAULT_CAMPAIGN_RESTRICTION_TYPE.name);
+
     const geosSelectRef = useRef<any>(null);
+    const formatsSelectRef = useRef<any>(null);
+    const campaignTypesSelectRef = useRef<any>(null);
+    const websitePagesSelectRef = useRef<any>(null);
+    const campaignRestrictionRequirementsSelectRef = useRef<any>(null);
+
+    useEffect(() => {
+        if (publication) {
+            // get publication campaign restrictions types options
+            getCampaignRestrictionTypes().then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFormErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFormErrors([GenericErrorMessage])
+                } else {
+                    // if we were able to get the list of campaign restriction types, then we fill our state with them
+                    if (response.data) {
+                        setCampaignRestrictionType(response.data);
+                    }
+                }
+            });
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [publication]);
 
     const selectChangeHandler = (e: any, key: string) => {
         genericSingleSelectOnChangeHandler(e, form, setForm, key);
+
+        if (key === 'type' && e) {
+            const type = campaignRestrictionTypes.find(campaignRestrictionType => campaignRestrictionType.id === e.id);
+
+            if (type) {
+                setCurrentCampaignRestrictionTypeFormatted(type.name)
+                setFilters({...filters, 'type': e.id})
+            }
+
+            // as long as we are updating the create form, we should set the table refresh to false
+            setRefreshTable(true);
+        }
     };
 
     const multiSelectChangeHandler = (e: any, key: string) => {
@@ -65,8 +116,8 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
 
     const handleCreate = () => {
         if (publication) {
-            // send API request to create the publication minimum ecpm
-            storePublicationMinimumEcpm(publication, form).then(response => {
+            // send API request to create the publication campaign restrictions
+            storePublicationCampaignRestriction(publication, form).then(response => {
                     if (axios.isAxiosError(response)) {
                         // we need to show the errors
                         setFormErrors(extractErrors(response));
@@ -74,9 +125,9 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
                         // show generic error message
                         setFormErrors([GenericErrorMessage])
                     } else {
-                        // we were able to store the publication minimum ecpm
+                        // we were able to store the publisher analytics
                         krysApp.setAlert({
-                            message: new AlertMessageGenerator('publication minimum ecpm', Actions.CREATE, KrysToastType.SUCCESS).message,
+                            message: new AlertMessageGenerator('publication campaign restriction', Actions.CREATE, KrysToastType.SUCCESS).message,
                             type: KrysToastType.SUCCESS
                         });
 
@@ -84,11 +135,14 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
                         setRefreshTable(true);
 
                         // clear the selected values from dropdown
-                        formatsSelectRef.current?.clearValue();
                         geosSelectRef.current?.clearValue();
+                        formatsSelectRef.current?.clearValue();
+                        campaignTypesSelectRef.current?.clearValue();
+                        websitePagesSelectRef.current?.clearValue();
+                        campaignRestrictionRequirementsSelectRef.current?.clearValue();
 
                         // we need to clear the form data
-                        setForm(defaultPublicationMinimumEcpmFormFields);
+                        setForm(defaultPublicationCampaignRestrictionFormFields);
 
                         // we need to clear the form data
                         setFormErrors([]);
@@ -100,12 +154,21 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
 
     return (
         <KTCard className="card-bordered border-1">
-            <KTCardHeader text="Add New Minimum ECPM (NET)"/>
+            <KTCardHeader text="Add New Campaign Restriction"
+                          actions={[new SelectCardAction('manage-supply', campaignRestrictionTypes, 'Select campaign restriction type', selectChangeHandler, 'type', DEFAULT_CAMPAIGN_RESTRICTION_TYPE)]}/>
 
             <KTCardBody>
+                <div className="mb-4">
+                            <span
+                                className="fs-5 text-gray-700 d-flex fw-medium">New Campaign Restriction Record Creation Form</span>
+                    <span className="text-muted">This form provides guidelines and limitations for advertising campaigns within a specific publication.
+                        Please submit the form below if you require additional restrictions to be linked for your advertising campaigns within a specific publication.
+                    </span>
+                </div>
+
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={publicationMinimumEcpmSchema(false)}
+                <Formik initialValues={form} validationSchema={publicationCampaignRestrictionSchema(false)}
                         onSubmit={handleCreate}
                         enableReinitialize>
                     {
@@ -201,32 +264,57 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
                                 </div>
 
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Rate" isRequired={true}/>
+                                    <KrysFormLabel text="Campaign types" isRequired={false}/>
 
-                                    <Field className="form-control fs-base" type="number"
-                                           placeholder="Enter the rate"
-                                           name="rate"/>
+                                    <Select isMulti name="campaign_type_ids"
+                                            options={campaignTypes}
+                                            getOptionLabel={(campaignType) => campaignType.name}
+                                            getOptionValue={(campaignType) => campaignType.id.toString()}
+                                            onChange={(e) => {
+                                                multiSelectChangeHandler(e, 'campaign_type_ids')
+                                            }}
+                                            placeholder="Select one or more campaign types"
+                                            ref={campaignTypesSelectRef}/>
 
                                     <div className="mt-1 text-danger">
-                                        {errors?.rate ? errors?.rate : null}
+                                        {errors?.campaign_type_ids ? errors?.campaign_type_ids : null}
                                     </div>
                                 </div>
 
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Currency" isRequired={true}/>
+                                    <KrysFormLabel text="Website pages" isRequired={false}/>
 
-                                    <Select name="currency_id"
-                                            options={currencies}
-                                            getOptionLabel={(currency) => currency.currency}
-                                            getOptionValue={(currency) => currency.id.toString()}
+                                    <Select isMulti name="website_page_ids"
+                                            options={websitePages}
+                                            getOptionLabel={(websitePage) => websitePage.name}
+                                            getOptionValue={(websitePage) => websitePage.id.toString()}
                                             onChange={(e) => {
-                                                selectChangeHandler(e, 'currency_id')
+                                                multiSelectChangeHandler(e, 'website_page_ids')
                                             }}
-                                            value={DEFAULT_CURRENCY}
-                                            placeholder="Select a currency"/>
+                                            placeholder="Select one or more website pages"
+                                            ref={websitePagesSelectRef}/>
 
                                     <div className="mt-1 text-danger">
-                                        {errors?.currency_id ? errors?.currency_id : null}
+                                        {errors?.website_page_ids ? errors?.website_page_ids : null}
+                                    </div>
+                                </div>
+
+                                <div className="mb-7">
+                                    <KrysFormLabel text="Campaign restriction requirements" isRequired={false}/>
+
+                                    <Select isMulti name="campaign_restriction_requirement_ids"
+                                            options={campaignRestrictionRequirements}
+                                            getOptionLabel={(campaignRestrictionRequirement) => campaignRestrictionRequirement.name}
+                                            getOptionValue={(campaignRestrictionRequirement) => campaignRestrictionRequirement.id.toString()}
+                                            onChange={(e) => {
+                                                multiSelectChangeHandler(e, 'campaign_restriction_requirement_ids')
+                                            }}
+                                            formatOptionLabel={indentOptions}
+                                            placeholder="Select one or more campaign restriction requirements"
+                                            ref={campaignRestrictionRequirementsSelectRef}/>
+
+                                    <div className="mt-1 text-danger">
+                                        {errors?.campaign_restriction_requirement_ids ? errors?.campaign_restriction_requirement_ids : null}
                                     </div>
                                 </div>
 
@@ -237,15 +325,23 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
 
                 <div className="separator separator-dashed my-10"></div>
 
+                <div className="mb-4">
+                            <span
+                                className="fs-5 text-gray-700 d-flex fw-medium">{currentCampaignRestrictionTypeFormatted}</span>
+                    <span
+                        className="text-muted">This table displays a list of '{currentCampaignRestrictionTypeFormatted}' records:</span>
+                </div>
+
                 {
                     publication &&
                     <KrysInnerTable
                         doRefetch={refreshTable}
-                        slug="publication-minimum-ecpms"
-                        queryId={QUERIES.PUBLICATION_MINIMUM_ECPMS_LIST}
-                        requestFunction={getPublicationMinimumEcpms}
+                        slug="publication-campaign-restrictions"
+                        queryId={QUERIES.PUBLICATION_CAMPAIGN_RESTRICTIONS_LIST}
+                        requestFunction={getPublicationCampaignRestrictions}
                         requestId={publication.id}
-                        columnsArray={PublicationMinimumEcpmColumns}
+                        columnsArray={PublicationCampaignRestrictionsColumns}
+                        filters={filters}
                     ></KrysInnerTable>
                 }
             </KTCardBody>
@@ -253,4 +349,4 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
     );
 }
 
-export default PublicationMinimumEcpmCreate;
+export default PublicationCampaignRestrictionCreate;

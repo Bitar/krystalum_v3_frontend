@@ -62,3 +62,12 @@ export type RevenueType = {
 export type RevenueTypeList = {
     data: RevenueType[]
 }
+
+export type CampaignRestrictionType = {
+    id: string, // this column is of type string because the enum we receive from the API is represented as a string
+    name: string
+};
+
+export type CampaignRestrictionTypeList = {
+    data: CampaignRestrictionType[]
+}

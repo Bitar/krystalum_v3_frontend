@@ -17,7 +17,7 @@ const PublicationVerticalsColumns: ReadonlyArray<Column<PublicationVertical>> = 
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Is Primary?" className="min-w-125px"/>,
-        id: 'is_primary',
+        id: 'is-primary',
         Cell: ({...props}) => <BadgeCell status={props.data[props.row.index].is_primary ? 'Yes' : 'No'}
                                          color={props.data[props.row.index].is_primary ? 'light-success' : 'light-danger'}
                                          align="left"/>

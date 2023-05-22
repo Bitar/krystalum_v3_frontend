@@ -43,4 +43,5 @@ export const QUERIES = {
     PUBLICATION_AD_TECHNOLOGIES_LIST: 'publication-ad-technologies-list',
     PUBLICATION_FIXED_CPMS_LIST: 'publication-fixed-cpms-list',
     PUBLICATION_MINIMUM_ECPMS_LIST: 'publication-minimum-ecpms-list',
+    PUBLICATION_CAMPAIGN_RESTRICTIONS_LIST: 'publication-campaign-restrictions-list',
 }

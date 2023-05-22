@@ -12,7 +12,7 @@ import {usePublication} from '../../PublicationContext';
 const PublicationAdServersColumns: ReadonlyArray<Column<AdServer>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Ad Server" className="min-w-125px"/>,
-        id: 'ad_server',
+        id: 'ad-server',
         Cell: ({...props}) => <TextCell text={props.data[props.row.index].name}/>,
     },
     {

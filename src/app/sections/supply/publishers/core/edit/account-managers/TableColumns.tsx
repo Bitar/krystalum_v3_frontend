@@ -19,7 +19,7 @@ const PublisherAccountManagersColumns: ReadonlyArray<Column<PublisherAccountMana
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Assignment date" className="min-w-125px"/>,
-        id: 'assignment_date',
+        id: 'assignment-date',
         Cell: ({...props}) => <TextCell
             text={props.data[props.row.index].assignment_date ? toDateTimeString(new Date(props.data[props.row.index].assignment_date)) : ''}/>,
     },

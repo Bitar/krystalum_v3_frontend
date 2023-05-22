@@ -16,7 +16,7 @@ const PublicationsColumns: ReadonlyArray<Column<Publication>> = [
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Unique Identifier" className="min-w-125px"/>,
-        id: 'unique_identifier',
+        id: 'unique-identifier',
         Cell: ({...props}) => <BadgeCell status={props.data[props.row.index].unique_identifier}
                                          color={'light-info'}
                                          align="left"/>,

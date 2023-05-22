@@ -3,6 +3,8 @@ import {createContext, Dispatch, FC, SetStateAction, useContext, useEffect, useS
 import {WithChildren} from '../../../../../_metronic/helpers';
 import {filterData} from '../../../../helpers/dataManipulation';
 import {AdServer} from '../../../../models/misc/AdServer';
+import {CampaignRestrictionRequirement} from '../../../../models/misc/CampaignRestrictionRequirement';
+import {CampaignType} from '../../../../models/misc/CampaignType';
 import {Country} from '../../../../models/misc/Country';
 import {Currency} from '../../../../models/misc/Currency';
 import {Format} from '../../../../models/misc/Format';
@@ -10,15 +12,19 @@ import {Language} from '../../../../models/misc/Language';
 import {Region} from '../../../../models/misc/Region';
 import {Technology} from '../../../../models/misc/Technology';
 import {Vertical} from '../../../../models/misc/Vertical';
+import {WebsitePage} from '../../../../models/misc/WebsitePage';
 import {Publication} from '../../../../models/supply/publication/Publication';
 import {Publisher} from '../../../../models/supply/publisher/Publisher';
 import {getAllAdServers} from '../../../../requests/misc/AdServer';
+import {getAllCampaignRestrictionRequirements} from '../../../../requests/misc/CampaignRestrictionRequirement';
+import {getAllCampaignTypes} from '../../../../requests/misc/CampaignType';
 import {getAllCountries, getAllCurrencies} from '../../../../requests/misc/Country';
 import {getAllFormats} from '../../../../requests/misc/Format';
 import {getAllLanguages} from '../../../../requests/misc/Language';
 import {getAllRegions} from '../../../../requests/misc/Region';
 import {getAllTechnologies} from '../../../../requests/misc/Technology';
 import {getAllVerticals} from '../../../../requests/misc/Vertical';
+import {getAllWebsitePages} from '../../../../requests/misc/WebsitePage';
 import {getAllPublishers} from '../../../../requests/supply/publisher/Publisher';
 
 interface Props {
@@ -45,6 +51,12 @@ interface Props {
     setCountries: Dispatch<SetStateAction<Country[]>>;
     currencies: Currency[],
     setCurrencies: Dispatch<SetStateAction<Currency[]>>;
+    campaignTypes: CampaignType[],
+    setCampaignTypes: Dispatch<SetStateAction<CampaignType[]>>;
+    websitePages: WebsitePage[],
+    setWebsitePages: Dispatch<SetStateAction<WebsitePage[]>>;
+    campaignRestrictionRequirements: CampaignRestrictionRequirement[],
+    setCampaignRestrictionRequirements: Dispatch<SetStateAction<CampaignRestrictionRequirement[]>>;
 }
 
 const defaultPublicationContext = {
@@ -82,6 +94,15 @@ const defaultPublicationContext = {
     },
     currencies: [],
     setCurrencies: () => {
+    },
+    campaignTypes: [],
+    setCampaignTypes: () => {
+    },
+    websitePages: [],
+    setWebsitePages: () => {
+    },
+    campaignRestrictionRequirements: [],
+    setCampaignRestrictionRequirements: () => {
     }
 }
 
@@ -103,6 +124,9 @@ export const PublicationProvider: FC<WithChildren> = ({children}) => {
     const [regions, setRegions] = useState<Region[]>([]);
     const [countries, setCountries] = useState<Country[]>([]);
     const [currencies, setCurrencies] = useState<Currency[]>([]);
+    const [campaignTypes, setCampaignTypes] = useState<CampaignType[]>([]);
+    const [websitePages, setWebsitePages] = useState<WebsitePage[]>([]);
+    const [campaignRestrictionRequirements, setCampaignRestrictionRequirements] = useState<CampaignRestrictionRequirement[]>([]);
 
     const handleRefresh = () => {
         setRefresh(!refresh);
@@ -249,6 +273,48 @@ export const PublicationProvider: FC<WithChildren> = ({children}) => {
             }
         });
 
+        // get the list of all campaign types
+        getAllCampaignTypes().then(response => {
+            if (axios.isAxiosError(response)) {
+                //
+            } else if (response === undefined) {
+                //
+            } else {
+                // if we were able to get the list of campaign types, then we fill our state with them
+                if (response.data) {
+                    setCampaignTypes(response.data);
+                }
+            }
+        });
+
+        // get the list of all website pages
+        getAllWebsitePages().then(response => {
+            if (axios.isAxiosError(response)) {
+                //
+            } else if (response === undefined) {
+                //
+            } else {
+                // if we were able to get the list of website pages, then we fill our state with them
+                if (response.data) {
+                    setWebsitePages(response.data);
+                }
+            }
+        });
+
+        // get the list of all campaign restriction requirements
+        getAllCampaignRestrictionRequirements().then(response => {
+            if (axios.isAxiosError(response)) {
+                //
+            } else if (response === undefined) {
+                //
+            } else {
+                // if we were able to get the list of campaign restriction requirements, then we fill our state with them
+                if (response.data) {
+                    setCampaignRestrictionRequirements(response.data);
+                }
+            }
+        });
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -265,6 +331,9 @@ export const PublicationProvider: FC<WithChildren> = ({children}) => {
             regions, setRegions,
             countries, setCountries,
             currencies, setCurrencies,
+            campaignTypes, setCampaignTypes,
+            websitePages, setWebsitePages,
+            campaignRestrictionRequirements, setCampaignRestrictionRequirements,
             handleRefresh
         }}>
             {children}

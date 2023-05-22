@@ -131,7 +131,6 @@ const PublicationTechnologyCreate: React.FC = () => {
                                             onChange={(e) => {
                                                 multiSelectChangeHandler(e, 'technology_ids')
                                             }}
-                                            formatOptionLabel={indentOptions}
                                             placeholder="Select one or more technologies"
                                             ref={technologiesSelectRef}/>
 
