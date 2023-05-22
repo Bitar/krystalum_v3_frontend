@@ -140,6 +140,7 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
 
         setReset(false);
 
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reset]);
 
@@ -226,7 +227,10 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
                                                              className="krys-datepicker krys-daterangepicker"
                                                              block
                                                              isoWeek
-                                                             onChange={(date) => dateRangeChangeHandler(date, 'integration_date_range')}
+                                                             onChange={(date) => {
+                                                                 dateRangeChangeHandler(date, 'integration_date_range')
+                                                             }}
+                                                             value={filters.integration_date_range ? [new Date(filters.integration_date_range.split(',')[0]), new Date(filters.integration_date_range.split(',')[1])] : null}
                                                              ref={integrationDateRangeRef}
                                             />
                                         </Col>
