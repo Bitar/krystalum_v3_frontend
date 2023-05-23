@@ -27,11 +27,13 @@ import {
     publicationAdServerSchema
 } from '../../../core/edit/ad-servers/form';
 import {usePublication} from '../../../core/PublicationContext';
+import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 const PublicationAdServerEdit: React.FC = () => {
     const {cid} = useParams();
 
-    const {publication, adServers} = usePublication();
+    const {adServers} = usePublication();
+    const {publication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const navigate = useNavigate();

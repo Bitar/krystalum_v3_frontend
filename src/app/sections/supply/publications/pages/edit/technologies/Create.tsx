@@ -5,7 +5,6 @@ import Select from 'react-select';
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../../../components/forms/FormErrors';
-import {indentOptions} from '../../../../../../components/forms/IndentOptions';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
@@ -32,10 +31,12 @@ import {
 } from '../../../core/edit/technologies/form';
 import {PublicationTechnologiesColumns} from '../../../core/edit/technologies/TableColumns';
 import {usePublication} from '../../../core/PublicationContext';
+import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 
 const PublicationTechnologyCreate: React.FC = () => {
-    const {publication, setPublication, technologies} = usePublication();
+    const {technologies} = usePublication();
+    const {publication, setPublication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationTechnologyFormFields>(defaultPublicationTechnologyFormFields);

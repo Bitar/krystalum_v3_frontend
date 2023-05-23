@@ -56,7 +56,7 @@ const PublicationIndex: React.FC = () => {
                                 title={'Archived Publications'}
                                 text={'Browse through the list of publications that currently are not receiving inventory'}
                                 ctaText={'Go to Archived Publications'}
-                                ctaUrl={'supply/publications/archived'}
+                                ctaUrl={'/supply/publications/archived'}
                                 ctaClasses={'btn-primary fw-semibold px-6 py-3'}
                             />
                         </div>

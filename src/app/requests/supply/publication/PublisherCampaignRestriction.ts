@@ -1,7 +1,10 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
 import {createFormData} from '../../../helpers/requests';
 import {Publication} from '../../../models/supply/publication/Publication';
-import {PublicationCampaignRestriction, PublicationCampaignRestrictionPaginate} from '../../../models/supply/publication/PublicationCampaignRestriction';
+import {
+    PublicationCampaignRestriction,
+    PublicationCampaignRestrictionPaginate
+} from '../../../models/supply/publication/PublicationCampaignRestriction';
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publications`

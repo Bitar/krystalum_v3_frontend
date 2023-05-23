@@ -7,7 +7,7 @@ import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
 import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
 import {TextCell} from '../../../../../../modules/table/columns/TextCell';
-import {usePublication} from '../../PublicationContext';
+import {usePublicationEdit} from '../../PublicationEditContext';
 
 const PublicationFormatsColumns: ReadonlyArray<Column<PublicationFormat>> = [
     {
@@ -30,7 +30,7 @@ const PublicationFormatsColumns: ReadonlyArray<Column<PublicationFormat>> = [
         ),
         id: 'actions',
         Cell: ({...props}) => {
-            const {publication} = usePublication();
+            const {publication} = usePublicationEdit();
 
             return (
                 <Restricted to={'manage-supply'}>

@@ -39,10 +39,12 @@ import {
 } from '../../../core/edit/analytics/form';
 import {PublicationAnalyticsColumns} from '../../../core/edit/analytics/TableColumns';
 import {usePublication} from '../../../core/PublicationContext';
+import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 
 const PublicationAnalyticCreate: React.FC = () => {
-    const {publication, regions, countries} = usePublication();
+    const {regions, countries} = usePublication();
+    const {publication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationAnalyticFormFields>(defaultPublicationAnalyticFormFields);

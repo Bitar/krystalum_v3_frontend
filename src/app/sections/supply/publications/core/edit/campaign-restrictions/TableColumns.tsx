@@ -10,7 +10,7 @@ import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
 import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
 import {TextCell} from '../../../../../../modules/table/columns/TextCell';
-import {usePublication} from '../../PublicationContext';
+import {usePublicationEdit} from '../../PublicationEditContext';
 
 const PublicationCampaignRestrictionsColumns: ReadonlyArray<Column<PublicationCampaignRestriction>> = [
     {
@@ -54,7 +54,7 @@ const PublicationCampaignRestrictionsColumns: ReadonlyArray<Column<PublicationCa
         ),
         id: 'actions',
         Cell: ({...props}) => {
-            const {publication} = usePublication();
+            const {publication} = usePublicationEdit();
 
             const publicationCampaignRestrictionSummary = `type: ${props.data[props.row.index].type.name} | 
             format: ${props.data[props.row.index].format.name} | 

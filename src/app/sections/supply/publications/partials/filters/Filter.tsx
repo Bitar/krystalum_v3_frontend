@@ -7,7 +7,6 @@ import {DateRangePicker} from 'rsuite';
 import {DateRange} from 'rsuite/DateRangePicker';
 import {initialQueryState} from '../../../../../../_metronic/helpers';
 import FilterFormFooter from '../../../../../components/forms/FilterFormFooter';
-import FormErrors from '../../../../../components/forms/FormErrors';
 import {indentOptions} from '../../../../../components/forms/IndentOptions';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysSwitch from '../../../../../components/forms/KrysSwitch';
@@ -32,7 +31,6 @@ interface Props {
 const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, setFilters}) => {
     const {updateState} = useQueryRequest();
 
-    const [filterErrors, setFilterErrors] = useState<string[]>([]);
     const [reset, setReset] = useState<boolean>(false);
 
     const {
@@ -115,8 +113,6 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
             <Row id="#publications-list-filter">
                 <Col>
                     <div className="card card-rounded bg-primary bg-opacity-5 p-10 mb-15">
-                        <FormErrors errorMessages={filterErrors}/>
-
                         <Formik initialValues={defaultFilterFields} validationSchema={FilterSchema}
                                 onSubmit={handleFilter}
                                 enableReinitialize>

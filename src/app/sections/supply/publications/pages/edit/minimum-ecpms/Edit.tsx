@@ -29,13 +29,15 @@ import {
     publicationMinimumEcpmSchema
 } from '../../../core/edit/minimum-ecpms/form';
 import {usePublication} from '../../../core/PublicationContext';
+import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 const PublicationMinimumEcpmEdit: React.FC = () => {
     const {cid} = useParams();
 
-    const {publication, formats, regions, countries, currencies} = usePublication();
-
+    const {formats, regions, countries, currencies} = usePublication();
+    const {publication} = usePublicationEdit();
     const krysApp = useKrysApp();
+
     const navigate = useNavigate();
 
     const [form, setForm] = useState<PublicationMinimumEcpmEditFormFields>(defaultPublicationMinimumEcpmEditFormFields);

@@ -29,11 +29,13 @@ import {
     publicationFixedCpmSchema
 } from '../../../core/edit/fixed-cpms/form';
 import {usePublication} from '../../../core/PublicationContext';
+import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 const PublicationFixedCpmEdit: React.FC = () => {
     const {cid} = useParams();
 
-    const {publication, formats, regions, countries, currencies} = usePublication();
+    const {formats, regions, countries, currencies} = usePublication();
+    const {publication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const navigate = useNavigate();

@@ -4,10 +4,10 @@ import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KT
 import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
 import {getPublicationAdTechnologies} from '../../../../../../requests/supply/publication/PublicationAdTechnology';
 import {PublicationAdTechnologiesColumns} from '../../../core/edit/ad-technologies/TableColumns';
-import {usePublication} from '../../../core/PublicationContext';
+import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 const PublicationAdTechnologyIndex: React.FC = () => {
-    const {publication} = usePublication();
+    const {publication} = usePublicationEdit();
 
     return (
         <KTCard className="card-bordered border-1">

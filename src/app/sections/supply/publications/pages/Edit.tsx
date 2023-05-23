@@ -7,7 +7,7 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {usePublication} from '../core/PublicationContext';
+import {usePublicationEdit} from '../core/PublicationEditContext';
 import PublicationOverview from '../partials/Overview';
 import PublicationAdServerCreate from './edit/ad-servers/Create';
 import PublicationAdTechnologyIndex from './edit/ad-technologies/Index';
@@ -23,7 +23,7 @@ import PublicationVerticalCreate from './edit/verticals/Create';
 const PublicationEdit: React.FC = () => {
     const {id} = useParams();
 
-    const {publication} = usePublication();
+    const {publication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     useEffect(() => {

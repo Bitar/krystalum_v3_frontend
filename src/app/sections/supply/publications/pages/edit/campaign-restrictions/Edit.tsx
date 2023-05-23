@@ -31,13 +31,13 @@ import {
     publicationCampaignRestrictionSchema
 } from '../../../core/edit/campaign-restrictions/form';
 import {usePublication} from '../../../core/PublicationContext';
+import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 const PublicationCampaignRestrictionEdit: React.FC = () => {
     const {cid} = useParams();
     const navigate = useNavigate();
 
     const {
-        publication,
         regions,
         countries,
         formats,
@@ -45,6 +45,9 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
         websitePages,
         campaignRestrictionRequirements
     } = usePublication();
+    const {
+        publication
+    } = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationCampaignRestrictionEditFormFields>(defaultPublicationCampaignRestrictionEditFormFields);

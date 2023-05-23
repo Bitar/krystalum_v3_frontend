@@ -4,6 +4,7 @@ import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections';
 import {PublicationProvider} from '../../sections/supply/publications/core/PublicationContext';
+import {PublicationEditProvider} from '../../sections/supply/publications/core/PublicationEditContext';
 import PublicationArchived from '../../sections/supply/publications/pages/Archived';
 import PublicationCreate from '../../sections/supply/publications/pages/Create';
 import PublicationIndex from '../../sections/supply/publications/pages/Index';
@@ -48,7 +49,9 @@ const PublicationRoutes: React.FC = () => {
                     element={
                         <SuspenseView>
                             <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>{'Edit'}</PageTitle>
-                            <PublicationEditRoutes/>
+                            <PublicationEditProvider>
+                                <PublicationEditRoutes/>
+                            </PublicationEditProvider>
                         </SuspenseView>
                     }
                 />

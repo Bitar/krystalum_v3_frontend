@@ -31,11 +31,13 @@ import {
     PublicationAnalyticSchema
 } from '../../../core/edit/analytics/form';
 import {usePublication} from '../../../core/PublicationContext';
+import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 const PublicationAnalyticEdit: React.FC = () => {
     const {cid} = useParams();
 
-    const {publication, regions, countries} = usePublication();
+    const {regions, countries} = usePublication();
+    const {publication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const navigate = useNavigate();

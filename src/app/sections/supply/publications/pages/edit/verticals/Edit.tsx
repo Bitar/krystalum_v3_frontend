@@ -29,11 +29,13 @@ import {
     publicationVerticalSchema
 } from '../../../core/edit/verticals/form';
 import {usePublication} from '../../../core/PublicationContext';
+import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 const PublicationVerticalEdit: React.FC = () => {
     const {cid} = useParams();
 
-    const {publication, verticals} = usePublication();
+    const {verticals} = usePublication();
+    const {publication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const navigate = useNavigate();

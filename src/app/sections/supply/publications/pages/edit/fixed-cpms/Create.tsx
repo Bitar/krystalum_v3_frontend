@@ -33,10 +33,12 @@ import {
 } from '../../../core/edit/fixed-cpms/form';
 import {PublicationFixedCpmColumns} from '../../../core/edit/fixed-cpms/TableColumns';
 import {usePublication} from '../../../core/PublicationContext';
+import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 
 const PublicationFixedCpmCreate: React.FC = () => {
-    const {publication, formats, regions, countries, currencies} = usePublication();
+    const {formats, regions, countries, currencies} = usePublication();
+    const {publication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationFixedCpmFormFields>(defaultPublicationFixedCpmFormFields);

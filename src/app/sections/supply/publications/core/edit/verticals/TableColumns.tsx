@@ -7,7 +7,7 @@ import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
 import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
 import {TextCell} from '../../../../../../modules/table/columns/TextCell';
-import {usePublication} from '../../PublicationContext';
+import {usePublicationEdit} from '../../PublicationEditContext';
 
 const PublicationVerticalsColumns: ReadonlyArray<Column<PublicationVertical>> = [
     {
@@ -30,7 +30,7 @@ const PublicationVerticalsColumns: ReadonlyArray<Column<PublicationVertical>> = 
         ),
         id: 'actions',
         Cell: ({...props}) => {
-            const {publication, handleRefresh} = usePublication();
+            const {publication, handleRefresh} = usePublicationEdit();
 
             const publicationVerticalSummary = `vertical: ${props.data[props.row.index].vertical.name} 
             and ${props.data[props.row.index].is_primary ? 'it is primary' : 'it is not primary'}`;

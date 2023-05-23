@@ -33,10 +33,12 @@ import {
 } from '../../../core/edit/formats/form';
 import {PublicationFormatsColumns} from '../../../core/edit/formats/TableColumns';
 import {usePublication} from '../../../core/PublicationContext';
+import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 
 const PublicationFormatCreate: React.FC = () => {
-    const {publication, formats} = usePublication();
+    const {formats} = usePublication();
+    const {publication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationFormatFormFields>(defaultPublicationFormatFormFields);

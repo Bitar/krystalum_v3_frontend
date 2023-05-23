@@ -10,7 +10,7 @@ import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
 import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
 import {TextCell} from '../../../../../../modules/table/columns/TextCell';
-import {usePublication} from '../../PublicationContext';
+import {usePublicationEdit} from '../../PublicationEditContext';
 
 const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = [
     {
@@ -48,7 +48,7 @@ const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = 
         ),
         id: 'actions',
         Cell: ({...props}) => {
-            const {publication} = usePublication();
+            const {publication} = usePublicationEdit();
 
             const publicationAnalyticSummary = `type: ${props.data[props.row.index].type.name} | 
             geo type: ${props.data[props.row.index].geoType.name} | 

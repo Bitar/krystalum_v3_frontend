@@ -13,7 +13,6 @@ import {Region} from '../../../../models/misc/Region';
 import {Technology} from '../../../../models/misc/Technology';
 import {Vertical} from '../../../../models/misc/Vertical';
 import {WebsitePage} from '../../../../models/misc/WebsitePage';
-import {Publication} from '../../../../models/supply/publication/Publication';
 import {Publisher} from '../../../../models/supply/publisher/Publisher';
 import {getAllAdServers} from '../../../../requests/misc/AdServer';
 import {getAllCampaignRestrictionRequirements} from '../../../../requests/misc/CampaignRestrictionRequirement';
@@ -28,11 +27,6 @@ import {getAllWebsitePages} from '../../../../requests/misc/WebsitePage';
 import {getAllPublishers} from '../../../../requests/supply/publisher/Publisher';
 
 interface Props {
-    publication: Publication | null;
-    setPublication: Dispatch<SetStateAction<Publication | null>>;
-    refresh: boolean | null;
-    setRefresh: Dispatch<SetStateAction<boolean>>;
-    handleRefresh: () => void,
     publishers: Publisher[],
     setPublishers: Dispatch<SetStateAction<Publisher[]>>;
     languages: Language[],
@@ -60,14 +54,6 @@ interface Props {
 }
 
 const defaultPublicationContext = {
-    publication: null,
-    setPublication: () => {
-    },
-    refresh: false,
-    setRefresh: () => {
-    },
-    handleRefresh: () => {
-    },
     publishers: [],
     setPublishers: () => {
     },
@@ -113,8 +99,6 @@ export const usePublication = () => {
 }
 
 export const PublicationProvider: FC<WithChildren> = ({children}) => {
-    const [publication, setPublication] = useState<Publication | null>(null);
-    const [refresh, setRefresh] = useState<boolean>(false);
     const [publishers, setPublishers] = useState<Publisher[]>([]);
     const [languages, setLanguages] = useState<Language[]>([]);
     const [formats, setFormats] = useState<Format[]>([]);
@@ -127,10 +111,6 @@ export const PublicationProvider: FC<WithChildren> = ({children}) => {
     const [campaignTypes, setCampaignTypes] = useState<CampaignType[]>([]);
     const [websitePages, setWebsitePages] = useState<WebsitePage[]>([]);
     const [campaignRestrictionRequirements, setCampaignRestrictionRequirements] = useState<CampaignRestrictionRequirement[]>([]);
-
-    const handleRefresh = () => {
-        setRefresh(!refresh);
-    }
 
     useEffect(() => {
         // get the list of all publishers
@@ -320,8 +300,6 @@ export const PublicationProvider: FC<WithChildren> = ({children}) => {
 
     return (
         <PublicationContext.Provider value={{
-            publication, setPublication,
-            refresh, setRefresh,
             publishers, setPublishers,
             languages, setLanguages,
             formats, setFormats,
@@ -333,8 +311,7 @@ export const PublicationProvider: FC<WithChildren> = ({children}) => {
             currencies, setCurrencies,
             campaignTypes, setCampaignTypes,
             websitePages, setWebsitePages,
-            campaignRestrictionRequirements, setCampaignRestrictionRequirements,
-            handleRefresh
+            campaignRestrictionRequirements, setCampaignRestrictionRequirements
         }}>
             {children}
         </PublicationContext.Provider>

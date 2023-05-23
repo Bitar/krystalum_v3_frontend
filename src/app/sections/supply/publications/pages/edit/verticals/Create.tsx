@@ -32,10 +32,12 @@ import {
 } from '../../../core/edit/verticals/form';
 import {PublicationVerticalsColumns} from '../../../core/edit/verticals/TableColumns';
 import {usePublication} from '../../../core/PublicationContext';
+import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 
 const PublicationVerticalCreate: React.FC = () => {
-    const {publication, setPublication, verticals} = usePublication();
+    const {verticals} = usePublication();
+    const {publication, setPublication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationVerticalFormFields>(defaultPublicationVerticalFormFields);
@@ -47,6 +49,7 @@ const PublicationVerticalCreate: React.FC = () => {
     const verticalsSelectRef = useRef<any>(null);
 
     useEffect(() => {
+        console.log(publication)
         if (publication) {
             const excludedVerticalsNames: string[] = publication.verticals ? publication.verticals?.map((vertical) => vertical.vertical.name) : [];
 

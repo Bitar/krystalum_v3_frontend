@@ -31,10 +31,12 @@ import {
 } from '../../../core/edit/ad-servers/form';
 import {PublicationAdServersColumns} from '../../../core/edit/ad-servers/TableColumns';
 import {usePublication} from '../../../core/PublicationContext';
+import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 
 const PublicationAdServerCreate: React.FC = () => {
-    const {publication, setPublication, adServers} = usePublication();
+    const {adServers} = usePublication();
+    const {publication, setPublication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationAdServerFormFields>(defaultPublicationAdServerFormFields);

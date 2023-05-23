@@ -5,9 +5,7 @@ import {PageLink, PageTitle} from '../../../_metronic/layout/core';
 import {SuspenseView} from '../../components/misc/SuspenseView';
 import {Sections} from '../../helpers/sections';
 import {getPublication} from '../../requests/supply/publication/Publication';
-import {
-    usePublication
-} from '../../sections/supply/publications/core/PublicationContext';
+import {usePublicationEdit} from '../../sections/supply/publications/core/PublicationEditContext';
 import PublicationEdit from '../../sections/supply/publications/pages/Edit';
 import PublicationAdServerEdit from '../../sections/supply/publications/pages/edit/ad-servers/Edit';
 import PublicationAnalyticEdit from '../../sections/supply/publications/pages/edit/analytics/Edit';
@@ -18,7 +16,8 @@ import PublicationTechnologyEdit from '../../sections/supply/publications/pages/
 import PublicationVerticalEdit from '../../sections/supply/publications/pages/edit/verticals/Edit';
 
 const PublicationEditRoutes: React.FC = () => {
-    const {publication, setPublication, refresh} = usePublication();
+    const {publication, setPublication, refresh} = usePublicationEdit();
+
     const {id} = useParams();
     const navigate = useNavigate();
 

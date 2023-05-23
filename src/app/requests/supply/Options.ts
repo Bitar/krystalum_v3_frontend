@@ -1,7 +1,8 @@
 import axios, {AxiosError, AxiosResponse} from 'axios';
 import {
     AnalyticTypeList,
-    ApplicationTypeList, CampaignRestrictionTypeList,
+    ApplicationTypeList,
+    CampaignRestrictionTypeList,
     ContactTypeList,
     FormatTypeList,
     GeoTypeList,

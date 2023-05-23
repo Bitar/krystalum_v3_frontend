@@ -5,10 +5,10 @@ import {REVENUE_TYPE} from '../../../../enums/Supply/RevenueType';
 import {formatDateToMonthDayYear} from '../../../../helpers/dateFormatter';
 import {Language} from '../../../../models/misc/Language';
 import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
-import {usePublication} from '../core/PublicationContext';
+import {usePublicationEdit} from '../core/PublicationEditContext';
 
 const PublisherOverview: React.FC = () => {
-    const {publication} = usePublication();
+    const {publication} = usePublicationEdit();
 
     return (
         <KTCard className="mb-5">

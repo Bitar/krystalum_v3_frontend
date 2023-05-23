@@ -34,11 +34,12 @@ import {
 } from '../../../core/edit/minimum-ecpms/form';
 import {PublicationMinimumEcpmColumns} from '../../../core/edit/minimum-ecpms/TableColumns';
 import {usePublication} from '../../../core/PublicationContext';
+import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 
 const PublicationMinimumEcpmCreate: React.FC = () => {
-    const {publication, formats, regions, countries, currencies} = usePublication();
-
+    const {formats, regions, countries, currencies} = usePublication();
+    const {publication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationMinimumEcpmFormFields>(defaultPublicationMinimumEcpmFormFields);

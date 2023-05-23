@@ -23,9 +23,11 @@ import {useKrysApp} from '../../../../../modules/general/KrysApp';
 import {updatePublication} from '../../../../../requests/supply/publication/Publication';
 import {defaultFormFields, fillEditForm, FormFields, publicationSchema} from '../../core/form';
 import {usePublication} from '../../core/PublicationContext';
+import {usePublicationEdit} from '../../core/PublicationEditContext';
 
 const PublicationBasicInformationEdit: React.FC = () => {
-    const {publication, setPublication, publishers, languages} = usePublication();
+    const {publishers, languages} = usePublication();
+    const {publication, setPublication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);

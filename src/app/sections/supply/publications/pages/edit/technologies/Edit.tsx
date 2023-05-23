@@ -27,11 +27,13 @@ import {
     publicationTechnologySchema
 } from '../../../core/edit/technologies/form';
 import {usePublication} from '../../../core/PublicationContext';
+import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 const PublicationTechnologyEdit: React.FC = () => {
     const {cid} = useParams();
 
-    const {publication, technologies} = usePublication();
+    const {technologies} = usePublication();
+    const {publication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const navigate = useNavigate();

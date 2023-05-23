@@ -2,7 +2,7 @@ import axios from 'axios';
 import {Form, Formik} from 'formik';
 import React, {useEffect, useRef, useState} from 'react';
 import Select from 'react-select';
-import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
+import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../../../components/forms/FormErrors';
 import {indentOptions} from '../../../../../../components/forms/IndentOptions';
@@ -10,7 +10,6 @@ import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton';
 import {SelectCardAction} from '../../../../../../components/misc/CardAction';
-import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
 import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {
@@ -25,9 +24,7 @@ import {Actions, KrysToastType} from '../../../../../../helpers/variables';
 import {CampaignRestrictionType} from '../../../../../../models/supply/Options';
 
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getCampaignRestrictionTypes} from '../../../../../../requests/supply/Options';
 import {
-    getPublicationCampaignRestrictions,
     storePublicationCampaignRestriction
 } from '../../../../../../requests/supply/publication/PublisherCampaignRestriction';
 import {
@@ -37,13 +34,12 @@ import {
     PublicationCampaignRestrictionFormFields,
     publicationCampaignRestrictionSchema
 } from '../../../core/edit/campaign-restrictions/form';
-import {PublicationCampaignRestrictionsColumns} from '../../../core/edit/campaign-restrictions/TableColumns';
 import {usePublication} from '../../../core/PublicationContext';
+import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 
 const PublicationCampaignRestrictionCreate: React.FC = () => {
     const {
-        publication,
         regions,
         countries,
         formats,
@@ -51,6 +47,9 @@ const PublicationCampaignRestrictionCreate: React.FC = () => {
         websitePages,
         campaignRestrictionRequirements
     } = usePublication();
+    const {
+        publication
+    } = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationCampaignRestrictionFormFields>(defaultPublicationCampaignRestrictionFormFields);
@@ -70,18 +69,18 @@ const PublicationCampaignRestrictionCreate: React.FC = () => {
     useEffect(() => {
         if (publication) {
             // get publication campaign restrictions types options
-            getCampaignRestrictionTypes().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of campaign restriction types, then we fill our state with them
-                    if (response.data) {
-                        setCampaignRestrictionType(response.data);
-                    }
-                }
-            });
+            // getCampaignRestrictionTypes().then(response => {
+            //     if (axios.isAxiosError(response)) {
+            //         setFormErrors(extractErrors(response));
+            //     } else if (response === undefined) {
+            //         setFormErrors([GenericErrorMessage])
+            //     } else {
+            //         // if we were able to get the list of campaign restriction types, then we fill our state with them
+            //         if (response.data) {
+            //             setCampaignRestrictionType(response.data);
+            //         }
+            //     }
+            // });
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -332,18 +331,18 @@ const PublicationCampaignRestrictionCreate: React.FC = () => {
                         className="text-muted">This table displays a list of '{currentCampaignRestrictionTypeFormatted}' records:</span>
                 </div>
 
-                {
-                    publication &&
-                    <KrysInnerTable
-                        doRefetch={refreshTable}
-                        slug="publication-campaign-restrictions"
-                        queryId={QUERIES.PUBLICATION_CAMPAIGN_RESTRICTIONS_LIST}
-                        requestFunction={getPublicationCampaignRestrictions}
-                        requestId={publication.id}
-                        columnsArray={PublicationCampaignRestrictionsColumns}
-                        filters={filters}
-                    ></KrysInnerTable>
-                }
+                {/*{*/}
+                {/*    publication &&*/}
+                {/*    <KrysInnerTable*/}
+                {/*        doRefetch={refreshTable}*/}
+                {/*        slug="publication-campaign-restrictions"*/}
+                {/*        queryId={QUERIES.PUBLICATION_CAMPAIGN_RESTRICTIONS_LIST}*/}
+                {/*        requestFunction={getPublicationCampaignRestrictions}*/}
+                {/*        requestId={publication.id}*/}
+                {/*        columnsArray={PublicationCampaignRestrictionsColumns}*/}
+                {/*        filters={filters}*/}
+                {/*    ></KrysInnerTable>*/}
+                {/*}*/}
             </KTCardBody>
         </KTCard>
     );

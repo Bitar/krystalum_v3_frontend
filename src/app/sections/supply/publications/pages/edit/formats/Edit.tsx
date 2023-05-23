@@ -28,11 +28,13 @@ import {
     publicationFormatSchema,
 } from '../../../core/edit/formats/form';
 import {usePublication} from '../../../core/PublicationContext';
+import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 const PublicationFormatEdit: React.FC = () => {
     const {cid} = useParams();
 
-    const {publication, formats} = usePublication();
+    const {formats} = usePublication();
+    const {publication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const navigate = useNavigate();

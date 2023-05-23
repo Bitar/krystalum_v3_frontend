@@ -6,7 +6,7 @@ import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
 import {TextCell} from '../../../../../../modules/table/columns/TextCell';
-import {usePublication} from '../../PublicationContext';
+import {usePublicationEdit} from '../../PublicationEditContext';
 
 const PublicationTechnologiesColumns: ReadonlyArray<Column<Technology>> = [
     {
@@ -22,7 +22,7 @@ const PublicationTechnologiesColumns: ReadonlyArray<Column<Technology>> = [
         ),
         id: 'actions',
         Cell: ({...props}) => {
-            const {publication, handleRefresh} = usePublication();
+            const {publication, handleRefresh} = usePublicationEdit();
 
             return (
                 <Restricted to={'manage-supply'}>
