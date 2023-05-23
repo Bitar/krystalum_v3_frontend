@@ -4,10 +4,12 @@ import {Nav, Tab} from 'react-bootstrap';
 import {useNavigate, useParams} from 'react-router-dom';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import {RoleEnum} from '../../../../enums/RoleEnum';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {PageTypes} from '../../../../helpers/variables';
 import {Publisher} from '../../../../models/supply/publisher/Publisher';
+import {useAuth} from '../../../../modules/auth';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {getPublisher} from '../../../../requests/supply/publisher/Publisher';
 import PublisherOverview from '../partials/Overview';
@@ -20,8 +22,10 @@ import PublisherPublication from './edit/Publication';
 const PublisherEdit: React.FC = () => {
     let {id} = useParams();
 
-    const navigate = useNavigate();
+    const {currentUser, hasRoles} = useAuth();
     const krysApp = useKrysApp();
+
+    const navigate = useNavigate();
 
     const [publisher, setPublisher] = useState<Publisher | null>(null);
 
@@ -54,33 +58,63 @@ const PublisherEdit: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [publisher]);
 
-    const settingsNav = [
-        {
-            title: 'Basic information',
-            description: 'Update the publisher\'s details',
-            icon: 'fa-duotone fa-gears'
-        },
-        {
-            title: 'Contact details',
-            description: 'Enter the contacts\'s details',
-            icon: 'fa-duotone fa-address-book'
-        },
-        {
-            title: 'Payment details',
-            description: 'Input bank account details',
-            icon: 'fa-duotone fa-bank'
-        },
-        {
-            title: 'Publications',
-            description: 'Associated publications',
-            icon: 'fa-duotone fa-browser'
-        },
-        {
-            title: 'Account managers',
-            description: 'Point of contacts',
-            icon: 'fa-duotone fa-user-tie'
-        }
-    ]
+    let settingsNav = []
+
+    if (hasRoles(currentUser, [RoleEnum.PUBLISHER])) {
+        settingsNav = [
+            {
+                key: 'basic-information',
+                title: 'Basic information',
+                description: 'Update the publisher\'s details',
+                icon: 'fa-duotone fa-gears'
+            },
+            {
+                key: 'payment-details',
+                title: 'Payment details',
+                description: 'Input bank account details',
+                icon: 'fa-duotone fa-bank'
+            },
+            {
+                key: 'publications',
+                title: 'Publications',
+                description: 'Associated publications',
+                icon: 'fa-duotone fa-browser'
+            }
+        ]
+    } else {
+        settingsNav = [
+            {
+                key: 'basic-information',
+                title: 'Basic information',
+                description: 'Update the publisher\'s details',
+                icon: 'fa-duotone fa-gears'
+            },
+            {
+                key: 'contact-details',
+                title: 'Contact details',
+                description: 'Enter the contacts\'s details',
+                icon: 'fa-duotone fa-address-book'
+            },
+            {
+                key: 'payment-details',
+                title: 'Payment details',
+                description: 'Input bank account details',
+                icon: 'fa-duotone fa-bank'
+            },
+            {
+                key: 'publications',
+                title: 'Publications',
+                description: 'Associated publications',
+                icon: 'fa-duotone fa-browser'
+            },
+            {
+                key: 'account-managers',
+                title: 'Account managers',
+                description: 'Point of contacts',
+                icon: 'fa-duotone fa-user-tie'
+            }
+        ]
+    }
 
     return (
         <>
@@ -90,13 +124,13 @@ const PublisherEdit: React.FC = () => {
                 <KTCardHeader text="Edit Publisher"/>
 
                 <KTCardBody>
-                    <Tab.Container defaultActiveKey="settingsNav-0">
+                    <Tab.Container defaultActiveKey="settingsNav-basic-information">
                         <div className="row">
                             <div className="col-lg-4 col-xl-3">
                                 <Nav variant="pills" className="flex-column settings-nav">
                                     {settingsNav.map((settings, index) => (
                                         <Nav.Item key={`settings-nav-${index}`} className="mb-5">
-                                            <Nav.Link className="settings-nav-item" eventKey={`settingsNav-${index}`}>
+                                            <Nav.Link className="settings-nav-item" eventKey={`settingsNav-${settings.key}`}>
                                                 <div className="settings-nav-icon w-25px h-25px bg-transparent">
                                                     <i className={`${settings.icon}`}></i>
                                                 </div>
@@ -113,23 +147,23 @@ const PublisherEdit: React.FC = () => {
                             </div>
                             <div className="col-lg-8 col-xl-9">
                                 <Tab.Content>
-                                    <Tab.Pane eventKey="settingsNav-0">
+                                    <Tab.Pane eventKey="settingsNav-basic-information">
                                         <PublisherBasicInformationEdit/>
                                     </Tab.Pane>
 
-                                    <Tab.Pane eventKey="settingsNav-1">
+                                    <Tab.Pane eventKey="settingsNav-contact-details">
                                         <PublisherContactCreate/>
                                     </Tab.Pane>
 
-                                    <Tab.Pane eventKey="settingsNav-2">
+                                    <Tab.Pane eventKey="settingsNav-payment-details">
                                         <PublisherPaymentCreate/>
                                     </Tab.Pane>
 
-                                    <Tab.Pane eventKey="settingsNav-3">
+                                    <Tab.Pane eventKey="settingsNav-publications">
                                         <PublisherPublication/>
                                     </Tab.Pane>
 
-                                    <Tab.Pane eventKey="settingsNav-4">
+                                    <Tab.Pane eventKey="settingsNav-account-managers">
                                         <PublisherAccountManager/>
                                     </Tab.Pane>
                                 </Tab.Content>

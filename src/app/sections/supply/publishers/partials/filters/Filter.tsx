@@ -9,6 +9,7 @@ import {initialQueryState} from '../../../../../../_metronic/helpers';
 import FilterFormFooter from '../../../../../components/forms/FilterFormFooter';
 import FormErrors from '../../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
+import {RoleEnum} from '../../../../../enums/RoleEnum';
 import {filterData} from '../../../../../helpers/dataManipulation';
 import {
     genericDateRangeOnChangeHandler,
@@ -21,6 +22,7 @@ import {User} from '../../../../../models/iam/User';
 import {Country} from '../../../../../models/misc/Country';
 import {Region} from '../../../../../models/misc/Region';
 import {Tier} from '../../../../../models/misc/Tier';
+import {useAuth} from '../../../../../modules/auth';
 import {useQueryRequest} from '../../../../../modules/table/QueryRequestProvider';
 import {getAllUsers} from '../../../../../requests/iam/User';
 import {getAllCountries} from '../../../../../requests/misc/Country';
@@ -36,6 +38,7 @@ interface Props {
 }
 
 const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, setFilters}) => {
+    const {currentUser, hasAnyRoles} = useAuth();
     const {updateState} = useQueryRequest();
 
     const [countries, setCountries] = useState<Country[]>([]);
@@ -235,17 +238,21 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
                                             />
                                         </Col>
 
-                                        <Col md={4}>
-                                            <KrysFormLabel text="Account Manager(s)" isRequired={false}/>
+                                        {
+                                            !hasAnyRoles(currentUser, [RoleEnum.PUBLISHER]) &&
 
-                                            <Select isMulti name="account_managers_ids"
-                                                    options={accountManagers}
-                                                    getOptionLabel={(accountManager) => accountManager?.name}
-                                                    getOptionValue={(accountManager) => accountManager?.id.toString()}
-                                                    onChange={(e) => multiSelectChangeHandler(e, 'account_managers_ids')}
-                                                    ref={accountManagersSelectRef}
-                                                    placeholder="Filter by account manager(s)"/>
-                                        </Col>
+                                            <Col md={4}>
+                                                <KrysFormLabel text="Account Manager(s)" isRequired={false}/>
+
+                                                <Select isMulti name="account_managers_ids"
+                                                        options={accountManagers}
+                                                        getOptionLabel={(accountManager) => accountManager?.name}
+                                                        getOptionValue={(accountManager) => accountManager?.id.toString()}
+                                                        onChange={(e) => multiSelectChangeHandler(e, 'account_managers_ids')}
+                                                        ref={accountManagersSelectRef}
+                                                        placeholder="Filter by account manager(s)"/>
+                                            </Col>
+                                        }
                                     </Row>
 
                                     <FilterFormFooter resetFilter={resetFilter}/>
