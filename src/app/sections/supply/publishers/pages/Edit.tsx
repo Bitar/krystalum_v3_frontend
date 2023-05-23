@@ -130,7 +130,8 @@ const PublisherEdit: React.FC = () => {
                                 <Nav variant="pills" className="flex-column settings-nav">
                                     {settingsNav.map((settings, index) => (
                                         <Nav.Item key={`settings-nav-${index}`} className="mb-5">
-                                            <Nav.Link className="settings-nav-item" eventKey={`settingsNav-${settings.key}`}>
+                                            <Nav.Link className="settings-nav-item"
+                                                      eventKey={`settingsNav-${settings.key}`}>
                                                 <div className="settings-nav-icon w-25px h-25px bg-transparent">
                                                     <i className={`${settings.icon}`}></i>
                                                 </div>

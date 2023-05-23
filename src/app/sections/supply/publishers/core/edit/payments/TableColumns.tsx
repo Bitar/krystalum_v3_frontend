@@ -5,7 +5,7 @@ import {PermissionEnum} from '../../../../../../enums/PermissionEnum';
 import {RoleEnum} from '../../../../../../enums/RoleEnum';
 import {PublisherPayment} from '../../../../../../models/supply/publisher/PublisherPayment';
 import {useAuth} from '../../../../../../modules/auth';
-import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
+import {Restricted, useAccessControl} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
 import {TextCell} from '../../../../../../modules/table/columns/TextCell';
@@ -48,7 +48,8 @@ const PublisherPaymentsColumns: ReadonlyArray<Column<PublisherPayment>> = [
         ),
         id: 'actions',
         Cell: ({...props}) => {
-            const {currentUser, hasRoles, hasPermissions} = useAuth();
+            const {currentUser, hasRoles} = useAuth();
+            const accessControl = useAccessControl();
             const {publisher} = usePublisher();
 
             const publisherPaymentSummary = `beneficiary: ${props.data[props.row.index].beneficiary} | 
@@ -65,8 +66,8 @@ const PublisherPaymentsColumns: ReadonlyArray<Column<PublisherPayment>> = [
                         path={`supply/publishers/${publisher?.id}/payments`}
                         queryKey={QUERIES.PUBLISHER_PAYMENTS_LIST}
                         showView={false}
-                        showEdit={(hasRoles(currentUser, [RoleEnum.PUBLISHER]) || hasPermissions(currentUser, [PermissionEnum.MANAGE_SUPPLY]))}
-                        showDelete={hasPermissions(currentUser, [PermissionEnum.MANAGE_SUPPLY])}
+                        showEdit={(hasRoles(currentUser, [RoleEnum.PUBLISHER]) || accessControl.userCan(PermissionEnum.MANAGE_SUPPLY))}
+                        showDelete={accessControl.userCan(PermissionEnum.MANAGE_SUPPLY)}
                         title="Delete Publisher Payment"
                         text={`Are you sure you want to delete the publisher payment that includes the following details: '${publisherPaymentSummary}'?`}
                     />

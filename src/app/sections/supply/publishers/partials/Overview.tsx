@@ -1,11 +1,17 @@
 import React from 'react';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 import {KTCard, KTCardBody, KTSVG} from '../../../../../_metronic/helpers';
+import {RoleEnum} from '../../../../enums/RoleEnum';
 import {REVENUE_TYPE} from '../../../../enums/Supply/RevenueType';
 import {formatDateToMonthDayYear} from '../../../../helpers/dateFormatter';
+import {useAuth} from '../../../../modules/auth';
+import {useAccessControl} from '../../../../modules/auth/AuthAccessControl';
 import {usePublisher} from '../core/PublisherContext';
 
 const PublisherOverview: React.FC = () => {
+    const {currentUser, hasRoles} = useAuth();
+    const accessControl = useAccessControl();
+
     const {publisher} = usePublisher();
 
     return (
@@ -113,7 +119,7 @@ const PublisherOverview: React.FC = () => {
                                     }
 
                                     {
-                                        publisher?.tier &&
+                                        !hasRoles(currentUser, [RoleEnum.PUBLISHER]) && publisher?.tier &&
                                         <div
                                             className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                                             <div className="d-flex align-items-center">

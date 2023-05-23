@@ -7,7 +7,7 @@ import {truncateText} from '../../../../helpers/stringGenerator';
 import {Publication} from '../../../../models/supply/publication/Publication';
 import {Publisher} from '../../../../models/supply/publisher/Publisher';
 import {useAuth} from '../../../../modules/auth';
-import {Restricted} from '../../../../modules/auth/AuthAccessControl';
+import {Restricted, useAccessControl} from '../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
 import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
@@ -51,11 +51,12 @@ const PublishersColumns: ReadonlyArray<Column<Publisher>> = [
         Header: (props) => (
             <Restricted to="manage-supply">
                 <CustomHeader tableProps={props} title="Actions" className="text-end min-w-100px"/>
-            // </Restricted>
+            </Restricted>
         ),
         id: 'actions',
         Cell: ({...props}) => {
-            const {currentUser, hasRoles, hasPermissions} = useAuth();
+            const {currentUser, hasRoles} = useAuth();
+            const accessControl = useAccessControl();
 
             return (
                 <ActionsCell
@@ -63,8 +64,8 @@ const PublishersColumns: ReadonlyArray<Column<Publisher>> = [
                     path={'supply/publishers'}
                     queryKey={QUERIES.PUBLISHERS_LIST}
                     showView={false}
-                    showEdit={(hasRoles(currentUser, [RoleEnum.PUBLISHER]) || hasPermissions(currentUser, [PermissionEnum.MANAGE_SUPPLY]))}
-                    showDelete={hasPermissions(currentUser, [PermissionEnum.MANAGE_SUPPLY])}
+                    showEdit={(hasRoles(currentUser, [RoleEnum.PUBLISHER]) || accessControl.userCan(PermissionEnum.MANAGE_SUPPLY))}
+                    showDelete={accessControl.userCan(PermissionEnum.MANAGE_SUPPLY)}
                     title="Delete Publisher"
                     text={`Are you sure you want to delete the publisher '${props.data[props.row.index].name}'?`}
                 />

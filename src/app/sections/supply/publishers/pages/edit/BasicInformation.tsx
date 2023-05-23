@@ -10,6 +10,7 @@ import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysRadioButton from '../../../../../components/forms/KrysRadioButton';
 import SingleSelect from '../../../../../components/forms/SingleSelect';
+import {RoleEnum} from '../../../../../enums/RoleEnum';
 import {REVENUE_TYPE} from '../../../../../enums/Supply/RevenueType';
 import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
 import {filterData} from '../../../../../helpers/dataManipulation';
@@ -18,6 +19,7 @@ import {extractErrors} from '../../../../../helpers/requests';
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
 import {Country} from '../../../../../models/misc/Country';
 import {Tier} from '../../../../../models/misc/Tier';
+import {useAuth} from '../../../../../modules/auth';
 import {useKrysApp} from '../../../../../modules/general/KrysApp';
 import {getAllCountries} from '../../../../../requests/misc/Country';
 import {getAllTiers} from '../../../../../requests/misc/Tier';
@@ -26,6 +28,7 @@ import {defaultFormFields, fillEditForm, FormFields, PublisherSchema} from '../.
 import {usePublisher} from '../../core/PublisherContext';
 
 const PublisherBasicInformationEdit: React.FC = () => {
+    const {currentUser, hasAnyRoles} = useAuth();
     const {publisher, setPublisher} = usePublisher();
     const krysApp = useKrysApp();
 
@@ -138,90 +141,103 @@ const PublisherBasicInformationEdit: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Tier" isRequired={false}/>
-
-                                    <SingleSelect isResourceLoaded={isResourceLoaded}
-                                                  options={tiers}
-                                                  defaultValue={publisher?.tier}
-                                                  form={form} setForm={setForm}
-                                                  name="tier_id" isClearable={true}/>
-
-                                    <div className="mt-1 text-danger">
-                                        {errors?.tier_id ? errors?.tier_id : null}
-                                    </div>
-                                </div>
-
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Integration date" isRequired={false}/>
-
-                                    <DatePicker name="integration_date"
-                                                value={(form.integration_date ? new Date(form.integration_date) : null)}
-                                                className="krys-datepicker"
-                                                oneTap={true}
-                                                block
-                                                isoWeek
-                                                preventOverflow={false}
-                                                placeholder="Select publisher integration date"
-                                                onChange={(date) => dateChangeHandler(date, 'integration_date')}
-                                    />
-
-                                    <div className="mt-1 text-danger">
-                                        {errors?.integration_date ? errors?.integration_date : null}
-                                    </div>
-                                </div>
-
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Revenue type" isRequired={true}/>
-
-                                    <KrysRadioButton name="revenue_type" label={'Revenue Share'}
-                                                     onChangeHandler={(e) => {
-                                                         e.stopPropagation();
-                                                         setForm({...form, revenue_type: REVENUE_TYPE.REVENUE_SHARE});
-                                                     }}
-                                                     defaultValue={form.revenue_type === REVENUE_TYPE.REVENUE_SHARE}/>
-
-                                    <KrysRadioButton name="revenue_type" label={'Amount Commitment'}
-                                                     onChangeHandler={(e) => {
-                                                         e.stopPropagation();
-                                                         setForm({...form, revenue_type: REVENUE_TYPE.COMMITMENT});
-                                                     }} defaultValue={form.revenue_type === REVENUE_TYPE.COMMITMENT}/>
-
-                                    <div className="mt-1 text-danger">
-                                        {errors?.revenue_type ? errors?.revenue_type : null}
-                                    </div>
-                                </div>
-
                                 {
-                                    form.revenue_type === REVENUE_TYPE.REVENUE_SHARE &&
-                                    <div className="mb-7">
-                                        <KrysFormLabel text="Revenue share" isRequired={true}/>
+                                    !hasAnyRoles(currentUser, [RoleEnum.PUBLISHER]) &&
+                                    <>
+                                        <div className="mb-7">
+                                            <KrysFormLabel text="Tier" isRequired={false}/>
 
-                                        <InputGroup className="mb-3">
-                                            <Field className="form-control fs-base" type="number"
-                                                   placeholder="Enter publisher revenue share"
-                                                   name="revenue_value"/>
-                                            <InputGroup.Text id="basic-addon1">%</InputGroup.Text>
-                                        </InputGroup>
+                                            <SingleSelect isResourceLoaded={isResourceLoaded}
+                                                          options={tiers}
+                                                          defaultValue={publisher?.tier}
+                                                          form={form} setForm={setForm}
+                                                          name="tier_id" isClearable={true}/>
 
-                                        <div className="mt-1 text-danger">
-                                            {errors?.revenue_value ? errors?.revenue_value : null}
+                                            <div className="mt-1 text-danger">
+                                                {errors?.tier_id ? errors?.tier_id : null}
+                                            </div>
                                         </div>
-                                    </div>
-                                }
 
-                                {
-                                    form.revenue_type === REVENUE_TYPE.COMMITMENT &&
-                                    <div className="mb-7">
-                                        <KrysFormLabel text="Commitment" isRequired={true}/>
+                                        <div className="mb-7">
+                                            <KrysFormLabel text="Integration date" isRequired={false}/>
 
-                                        <Field className="form-control fs-base" type="text"
-                                               placeholder="Enter publisher commitment amount" name="revenue_value"/>
+                                            <DatePicker name="integration_date"
+                                                        value={(form.integration_date ? new Date(form.integration_date) : null)}
+                                                        className="krys-datepicker"
+                                                        oneTap={true}
+                                                        block
+                                                        isoWeek
+                                                        preventOverflow={false}
+                                                        placeholder="Select publisher integration date"
+                                                        onChange={(date) => dateChangeHandler(date, 'integration_date')}
+                                            />
 
-                                        <div className="mt-1 text-danger">
-                                            {errors?.revenue_value ? errors?.revenue_value : null}
+                                            <div className="mt-1 text-danger">
+                                                {errors?.integration_date ? errors?.integration_date : null}
+                                            </div>
                                         </div>
-                                    </div>
+
+                                        <div className="mb-7">
+                                            <KrysFormLabel text="Revenue type" isRequired={true}/>
+
+                                            <KrysRadioButton name="revenue_type" label={'Revenue Share'}
+                                                             onChangeHandler={(e) => {
+                                                                 e.stopPropagation();
+                                                                 setForm({
+                                                                     ...form,
+                                                                     revenue_type: REVENUE_TYPE.REVENUE_SHARE
+                                                                 });
+                                                             }}
+                                                             defaultValue={form.revenue_type === REVENUE_TYPE.REVENUE_SHARE}/>
+
+                                            <KrysRadioButton name="revenue_type" label={'Amount Commitment'}
+                                                             onChangeHandler={(e) => {
+                                                                 e.stopPropagation();
+                                                                 setForm({
+                                                                     ...form,
+                                                                     revenue_type: REVENUE_TYPE.COMMITMENT
+                                                                 });
+                                                             }}
+                                                             defaultValue={form.revenue_type === REVENUE_TYPE.COMMITMENT}/>
+
+                                            <div className="mt-1 text-danger">
+                                                {errors?.revenue_type ? errors?.revenue_type : null}
+                                            </div>
+                                        </div>
+
+                                        {
+                                            form.revenue_type === REVENUE_TYPE.REVENUE_SHARE &&
+                                            <div className="mb-7">
+                                                <KrysFormLabel text="Revenue share" isRequired={true}/>
+
+                                                <InputGroup className="mb-3">
+                                                    <Field className="form-control fs-base" type="number"
+                                                           placeholder="Enter publisher revenue share"
+                                                           name="revenue_value"/>
+                                                    <InputGroup.Text id="basic-addon1">%</InputGroup.Text>
+                                                </InputGroup>
+
+                                                <div className="mt-1 text-danger">
+                                                    {errors?.revenue_value ? errors?.revenue_value : null}
+                                                </div>
+                                            </div>
+                                        }
+
+                                        {
+                                            form.revenue_type === REVENUE_TYPE.COMMITMENT &&
+                                            <div className="mb-7">
+                                                <KrysFormLabel text="Commitment" isRequired={true}/>
+
+                                                <Field className="form-control fs-base" type="text"
+                                                       placeholder="Enter publisher commitment amount"
+                                                       name="revenue_value"/>
+
+                                                <div className="mt-1 text-danger">
+                                                    {errors?.revenue_value ? errors?.revenue_value : null}
+                                                </div>
+                                            </div>
+                                        }
+                                    </>
                                 }
 
                                 <div className="separator border-2 my-10"></div>

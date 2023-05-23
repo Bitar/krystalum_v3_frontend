@@ -33,8 +33,8 @@ import {storePublisher} from '../../../../requests/supply/publisher/Publisher';
 import {defaultFormFields, FormFields, PublisherSchema} from '../core/form';
 
 const PublisherCreate: React.FC = () => {
-    const navigate = useNavigate();
     const krysApp = useKrysApp();
+    const navigate = useNavigate();
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -193,7 +193,8 @@ const PublisherCreate: React.FC = () => {
                                     </div>
                                 </div>
 
-                                {form.revenue_type === REVENUE_TYPE.REVENUE_SHARE &&
+                                {
+                                    form.revenue_type === REVENUE_TYPE.REVENUE_SHARE &&
                                     <div className="mb-7">
                                         <KrysFormLabel text="Revenue share" isRequired={true}/>
 
@@ -210,7 +211,8 @@ const PublisherCreate: React.FC = () => {
                                     </div>
                                 }
 
-                                {form.revenue_type === REVENUE_TYPE.COMMITMENT &&
+                                {
+                                    form.revenue_type === REVENUE_TYPE.COMMITMENT &&
                                     <div className="mb-7">
                                         <KrysFormLabel text="Commitment" isRequired={true}/>
 
@@ -275,8 +277,8 @@ const PublisherCreate: React.FC = () => {
 
                                 <KrysFormFooter cancelUrl={'/supply/publishers'}/>
                             </Form>
-
-                        )}
+                        )
+                    }
                 </Formik>
             </KTCardBody>
         </KTCard>

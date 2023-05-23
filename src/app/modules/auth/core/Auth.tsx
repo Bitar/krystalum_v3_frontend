@@ -24,9 +24,7 @@ type AuthContextProps = {
   setCurrentUser: Dispatch<SetStateAction<User | undefined>>
   logout: () => void,
   hasRoles: (user: User | undefined, roles: string[]) => boolean,
-  hasAnyRoles: (user: User | undefined, roles: string[]) => boolean,
-  hasPermissions: (user: User | undefined, permissions: string[]) => boolean,
-  hasAnyPermissions: (user: User | undefined, permissions: string[]) => boolean,
+  hasAnyRoles: (user: User | undefined, roles: string[]) => boolean
 }
 
 const initAuthContextPropsState = {
@@ -39,9 +37,7 @@ const initAuthContextPropsState = {
   logout: () => {
   },
   hasRoles: () => false,
-  hasAnyRoles: () => false,
-  hasPermissions: () => false,
-  hasAnyPermissions: () => false,
+  hasAnyRoles: () => false
 }
 
 const AuthContext = createContext<AuthContextProps>(initAuthContextPropsState)
@@ -106,40 +102,8 @@ const AuthProvider: FC<WithChildren> = ({children}) => {
     return exist;
   }
 
-  const hasPermissions = (user: User | undefined, permissions: string[]): boolean => {
-    // if user is undefined, hence, the user doesn't have any permissions
-    if (!user) return false;
-
-    // extract all the permissions from the user's roles
-    const userPermissions: Permission[] = user.roles.flatMap(role => role.permissions);
-
-    // extract names of the user permissions
-    const userPermissionNames: string[] = userPermissions.map(permission => permission.name);
-
-    // iterate over each permission in the permissions array and check if it's included in the userPermissionNames array
-    // if any of the permissions is not found in userPermissionNames, we return false
-    // otherwise, we return true
-    // `every` method returns a boolean value indicating whether all elements meet the specified condition
-    return permissions.every(permission => userPermissionNames.includes(permission));
-  }
-
-  const hasAnyPermissions = (user: User | undefined, permissions: string[]): boolean => {
-    // if user is undefined, hence, the user doesn't have any permissions
-    if (!user) return false;
-
-    // extract all the permissions from the user's roles
-    const userPermissions: Permission[] = user.roles.flatMap(role => role.permissions);
-
-    // iterate over each permission in userPermissions and check if it exists in the permissions array
-    // if any of the permissions is found in permissions, we return true
-    // otherwise, we return false
-    // some function allows us to exit the iteration as soon as a matching permission is found,
-    // providing early termination when a match is detected
-    return userPermissions.some(permission => permissions.includes(permission.name));
-  }
-
   return (
-      <AuthContext.Provider value={{auth, saveAuth, currentUser, setCurrentUser, logout, hasRoles, hasAnyRoles, hasPermissions, hasAnyPermissions}}>
+      <AuthContext.Provider value={{auth, saveAuth, currentUser, setCurrentUser, logout, hasRoles, hasAnyRoles}}>
         {children}
       </AuthContext.Provider>
   )
