@@ -35,7 +35,7 @@ import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 
 const PublicationAdServerCreate: React.FC = () => {
-    const {adServers} = usePublication();
+    const {options} = usePublication();
     const {publication, setPublication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
@@ -46,6 +46,8 @@ const PublicationAdServerCreate: React.FC = () => {
     const [filteredAdServers, setFilteredAdServers] = useState<AdServer[]>([]);
 
     const adServersSelectRef = useRef<any>(null);
+
+    const {adServers} = options;
 
     useEffect(() => {
         if (publication) {

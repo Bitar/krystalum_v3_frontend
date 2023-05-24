@@ -37,17 +37,8 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
     const {cid} = useParams();
     const navigate = useNavigate();
 
-    const {
-        regions,
-        countries,
-        formats,
-        campaignTypes,
-        websitePages,
-        campaignRestrictionRequirements
-    } = usePublication();
-    const {
-        publication
-    } = usePublicationEdit();
+    const {options} = usePublication();
+    const {publication, editOptions} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationCampaignRestrictionEditFormFields>(defaultPublicationCampaignRestrictionEditFormFields);
@@ -55,6 +46,9 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
     const [publicationCampaignRestriction, setPublicationCampaignRestriction] = useState<PublicationCampaignRestriction | null>(null);
+
+    const {formats, regions, countries} = options;
+    const {campaignTypes, websitePages, campaignRestrictionRequirements} = editOptions;
 
     useEffect(() => {
         if (publication && cid) {

@@ -12,7 +12,6 @@ import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
 import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
 import {TextCell} from '../../../../modules/table/columns/TextCell'
-import {usePublicationEdit} from '../../publications/core/PublicationEditContext';
 
 const PublishersColumns: ReadonlyArray<Column<Publisher>> = [
     {

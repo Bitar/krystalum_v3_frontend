@@ -34,8 +34,8 @@ import {usePublicationEdit} from '../../../core/PublicationEditContext';
 const PublicationFixedCpmEdit: React.FC = () => {
     const {cid} = useParams();
 
-    const {formats, regions, countries, currencies} = usePublication();
-    const {publication} = usePublicationEdit();
+    const {options} = usePublication();
+    const {publication, editOptions} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const navigate = useNavigate();
@@ -45,6 +45,9 @@ const PublicationFixedCpmEdit: React.FC = () => {
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
     const [publicationFixedCpm, setPublicationFixedCpm] = useState<PublicationFixedCpm | null>(null);
+
+    const {formats, regions, countries} = options;
+    const {currencies} = editOptions;
 
     useEffect(() => {
         if (publication && cid) {

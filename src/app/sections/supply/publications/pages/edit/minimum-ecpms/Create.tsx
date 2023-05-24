@@ -38,8 +38,8 @@ import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 
 const PublicationMinimumEcpmCreate: React.FC = () => {
-    const {formats, regions, countries, currencies} = usePublication();
-    const {publication} = usePublicationEdit();
+    const {options} = usePublication();
+    const {publication, editOptions} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationMinimumEcpmFormFields>(defaultPublicationMinimumEcpmFormFields);
@@ -48,6 +48,9 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
 
     const formatsSelectRef = useRef<any>(null);
     const geosSelectRef = useRef<any>(null);
+
+    const {formats, regions, countries} = options;
+    const {currencies} = editOptions;
 
     const selectChangeHandler = (e: any, key: string) => {
         genericSingleSelectOnChangeHandler(e, form, setForm, key);

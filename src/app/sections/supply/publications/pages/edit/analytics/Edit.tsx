@@ -16,10 +16,8 @@ import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {Sections} from '../../../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
-import {Device} from '../../../../../../models/misc/Device';
 import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getAllDevices} from '../../../../../../requests/misc/Device';
 import {
     getPublicationAnalytic,
     updatePublicationAnalytic
@@ -36,8 +34,8 @@ import {usePublicationEdit} from '../../../core/PublicationEditContext';
 const PublicationAnalyticEdit: React.FC = () => {
     const {cid} = useParams();
 
-    const {regions, countries} = usePublication();
-    const {publication} = usePublicationEdit();
+    const {options} = usePublication();
+    const {publication, editOptions} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const navigate = useNavigate();
@@ -47,7 +45,9 @@ const PublicationAnalyticEdit: React.FC = () => {
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
     const [publicationAnalytic, setPublicationAnalytic] = useState<PublicationAnalytic | null>(null);
-    const [devices, setDevices] = useState<Device[]>([]);
+
+    const {regions, countries} = options;
+    const {devices} = editOptions;
 
     useEffect(() => {
         if (publication && cid) {
@@ -65,20 +65,6 @@ const PublicationAnalyticEdit: React.FC = () => {
 
                     // we also set the form to be the publication's analytics details
                     setForm(fillEditForm(response));
-                }
-            });
-
-            // get the devices
-            getAllDevices().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of devices, then we fill our state with them
-                    if (response.data) {
-                        setDevices(response.data);
-                    }
                 }
             });
         }

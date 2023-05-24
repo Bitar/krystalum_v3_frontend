@@ -39,17 +39,8 @@ import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 
 const PublicationCampaignRestrictionCreate: React.FC = () => {
-    const {
-        regions,
-        countries,
-        formats,
-        campaignTypes,
-        websitePages,
-        campaignRestrictionRequirements
-    } = usePublication();
-    const {
-        publication
-    } = usePublicationEdit();
+    const {options} = usePublication();
+    const {publication, editOptions} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationCampaignRestrictionFormFields>(defaultPublicationCampaignRestrictionFormFields);
@@ -65,6 +56,9 @@ const PublicationCampaignRestrictionCreate: React.FC = () => {
     const campaignTypesSelectRef = useRef<any>(null);
     const websitePagesSelectRef = useRef<any>(null);
     const campaignRestrictionRequirementsSelectRef = useRef<any>(null);
+
+    const {formats, regions, countries} = options;
+    const {campaignTypes, websitePages, campaignRestrictionRequirements} = editOptions;
 
     useEffect(() => {
         if (publication) {

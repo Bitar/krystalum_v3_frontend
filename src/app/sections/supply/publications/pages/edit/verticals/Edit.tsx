@@ -34,7 +34,7 @@ import {usePublicationEdit} from '../../../core/PublicationEditContext';
 const PublicationVerticalEdit: React.FC = () => {
     const {cid} = useParams();
 
-    const {verticals} = usePublication();
+    const {options} = usePublication();
     const {publication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
@@ -46,6 +46,8 @@ const PublicationVerticalEdit: React.FC = () => {
 
     const [publicationVertical, setPublicationVertical] = useState<PublicationVertical | null>(null);
     const [filteredVerticals, setFilteredVerticals] = useState<Vertical[]>([]);
+
+    const {verticals} = options;
 
     useEffect(() => {
         if (publication && cid) {

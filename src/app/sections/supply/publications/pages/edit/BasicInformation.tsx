@@ -26,13 +26,15 @@ import {usePublication} from '../../core/PublicationContext';
 import {usePublicationEdit} from '../../core/PublicationEditContext';
 
 const PublicationBasicInformationEdit: React.FC = () => {
-    const {publishers, languages} = usePublication();
+    const {publishers, options} = usePublication();
     const {publication, setPublication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false);
+
+    const {languages} = options;
 
     useEffect(() => {
         if (publication) {

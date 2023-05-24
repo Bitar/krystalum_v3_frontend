@@ -36,7 +36,7 @@ import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 
 const PublicationVerticalCreate: React.FC = () => {
-    const {verticals} = usePublication();
+    const {options} = usePublication();
     const {publication, setPublication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
@@ -48,8 +48,9 @@ const PublicationVerticalCreate: React.FC = () => {
 
     const verticalsSelectRef = useRef<any>(null);
 
+    const {verticals} = options;
+
     useEffect(() => {
-        console.log(publication)
         if (publication) {
             const excludedVerticalsNames: string[] = publication.verticals ? publication.verticals?.map((vertical) => vertical.vertical.name) : [];
 

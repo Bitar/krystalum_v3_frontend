@@ -60,6 +60,7 @@ const KrysApp: FC<WithChildren> = ({children}) => {
 
     useEffect(() => {
         if (alert !== undefined) {
+            console.log(alert.type)
             const options: ToastOptions = {
                 id: `alert-${alert.type}`,
                 duration: 4000 ,
@@ -76,7 +77,7 @@ const KrysApp: FC<WithChildren> = ({children}) => {
                 ...(alert.type in icon ? { icon: (icon as any)[alert.type] } : {}),
             };
 
-            (toast as any)[(type as any)[alert.type]](alert.message, options)
+            (toast as any)[(type as any)[(alert.type)]](alert.message, options)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [alert]);

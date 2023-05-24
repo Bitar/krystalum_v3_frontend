@@ -33,7 +33,7 @@ import {defaultFormFields, FormFields, publicationSchema} from '../core/form';
 import {usePublication} from '../core/PublicationContext';
 
 const PublicationCreate: React.FC = () => {
-    const {publishers, languages} = usePublication();
+    const {publishers, options} = usePublication();
 
     const krysApp = useKrysApp();
 
@@ -41,6 +41,8 @@ const PublicationCreate: React.FC = () => {
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
+
+    const {languages} = options;
 
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATIONS, PageTypes.CREATE))

@@ -20,11 +20,9 @@ import {
 import {extractErrors} from '../../../../../../helpers/requests';
 import {DEFAULT_ANALYTIC_TYPE} from '../../../../../../helpers/settings';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
-import {Device} from '../../../../../../models/misc/Device';
 import {AnalyticType} from '../../../../../../models/supply/Options';
 
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getAllDevices} from '../../../../../../requests/misc/Device';
 import {getAnalyticsTypes} from '../../../../../../requests/supply/Options';
 import {
     getPublicationAnalytics,
@@ -43,8 +41,8 @@ import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 
 const PublicationAnalyticCreate: React.FC = () => {
-    const {regions, countries} = usePublication();
-    const {publication} = usePublicationEdit();
+    const {options} = usePublication();
+    const {publication, editOptions} = usePublicationEdit();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublicationAnalyticFormFields>(defaultPublicationAnalyticFormFields);
@@ -52,12 +50,14 @@ const PublicationAnalyticCreate: React.FC = () => {
     const [filters, setFilters] = useState<AnalyticsFilterFields>(defaultAnalyticsFilterFields);
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
-    const [devices, setDevices] = useState<Device[]>([]);
     const [analyticsTypes, setAnalyticsType] = useState<AnalyticType[]>([]);
     const [currentAnalyticTypeFormatted, setCurrentAnalyticTypeFormatted] = useState<string>(DEFAULT_ANALYTIC_TYPE.name);
 
     const geosSelectRef = useRef<any>(null);
     const devicesSelectRef = useRef<any>(null);
+
+    const {regions, countries} = options;
+    const {devices} = editOptions;
 
     useEffect(() => {
         if (publication) {
@@ -71,20 +71,6 @@ const PublicationAnalyticCreate: React.FC = () => {
                     // if we were able to get the list of analytics types, then we fill our state with them
                     if (response.data) {
                         setAnalyticsType(response.data);
-                    }
-                }
-            });
-
-            // get the devices
-            getAllDevices().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of devices, then we fill our state with them
-                    if (response.data) {
-                        setDevices(response.data);
                     }
                 }
             });

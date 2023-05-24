@@ -32,7 +32,7 @@ import {usePublicationEdit} from '../../../core/PublicationEditContext';
 const PublicationAdServerEdit: React.FC = () => {
     const {cid} = useParams();
 
-    const {adServers} = usePublication();
+    const {options} = usePublication();
     const {publication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
@@ -44,6 +44,8 @@ const PublicationAdServerEdit: React.FC = () => {
 
     const [publicationAdServer, setPublicationAdServer] = useState<AdServer | null>(null);
     const [filteredAdServers, setFilteredAdServers] = useState<AdServer[]>([]);
+
+    const {adServers} = options;
 
     useEffect(() => {
         if (publication && cid) {

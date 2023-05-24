@@ -31,18 +31,11 @@ interface Props {
 const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, setFilters}) => {
     const {updateState} = useQueryRequest();
 
+    const {publishers, options} = usePublication();
+
     const [reset, setReset] = useState<boolean>(false);
 
-    const {
-        publishers,
-        languages,
-        formats,
-        adServers,
-        technologies,
-        verticals,
-        regions,
-        countries
-    } = usePublication();
+    const {languages, formats, adServers, technologies, verticals, regions, countries} = options;
 
     const multiSelectChangeHandler = (e: any, key: string) => {
         if (key === 'countries_ids') {

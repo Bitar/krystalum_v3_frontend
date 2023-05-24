@@ -5,7 +5,7 @@ import {
     CampaignRestrictionTypeList,
     ContactTypeList,
     FormatTypeList,
-    GeoTypeList,
+    GeoTypeList, PublicationEditOptions, PublicationOptions,
     RevenueTypeList,
     TypeList
 } from '../../models/supply/Options';
@@ -73,6 +73,22 @@ export const getCampaignRestrictionTypes = async (): Promise<CampaignRestriction
     let url = `${ENDPOINT}/campaign-restriction-types`;
 
     return axios.get(url).then((response: AxiosResponse<CampaignRestrictionTypeList>) => response.data).catch((error) => {
+        return error;
+    });
+}
+
+export const getPublicationOptions = async (): Promise<PublicationOptions | AxiosError | undefined> => {
+    let url = `${ENDPOINT}/publication`;
+
+    return axios.get(url).then((response: AxiosResponse<PublicationOptions>) => response.data).catch((error) => {
+        return error;
+    });
+}
+
+export const getPublicationEditOptions = async (): Promise<PublicationEditOptions | AxiosError | undefined> => {
+    let url = `${ENDPOINT}/publication-edit`;
+
+    return axios.get(url).then((response: AxiosResponse<PublicationEditOptions>) => response.data).catch((error) => {
         return error;
     });
 }

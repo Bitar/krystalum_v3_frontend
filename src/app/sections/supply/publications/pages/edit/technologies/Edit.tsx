@@ -32,7 +32,7 @@ import {usePublicationEdit} from '../../../core/PublicationEditContext';
 const PublicationTechnologyEdit: React.FC = () => {
     const {cid} = useParams();
 
-    const {technologies} = usePublication();
+    const {options} = usePublication();
     const {publication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
@@ -44,6 +44,8 @@ const PublicationTechnologyEdit: React.FC = () => {
 
     const [publicationTechnology, setPublicationTechnology] = useState<Technology | null>(null);
     const [filteredTechnologies, setFilteredTechnologies] = useState<Technology[]>([]);
+
+    const {technologies} = options;
 
     useEffect(() => {
         if (publication && cid) {

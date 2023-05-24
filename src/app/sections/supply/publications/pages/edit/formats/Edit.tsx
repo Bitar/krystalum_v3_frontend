@@ -33,7 +33,7 @@ import {usePublicationEdit} from '../../../core/PublicationEditContext';
 const PublicationFormatEdit: React.FC = () => {
     const {cid} = useParams();
 
-    const {formats} = usePublication();
+    const {options} = usePublication();
     const {publication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
@@ -45,6 +45,8 @@ const PublicationFormatEdit: React.FC = () => {
 
     const [publicationFormat, setPublicationFormat] = useState<PublicationFormat | null>(null);
     const [formatTypes, setFormatTypes] = useState<FormatType[]>([]);
+
+    const {formats} = options;
 
     useEffect(() => {
         if (publication && cid) {
@@ -110,6 +112,7 @@ const PublicationFormatEdit: React.FC = () => {
                     // show generic error
                     setFormErrors([GenericErrorMessage]);
                 } else {
+                    console.log(response)
                     // we got the updated publication formats so we're good
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('publication format', Actions.EDIT, KrysToastType.SUCCESS).message,

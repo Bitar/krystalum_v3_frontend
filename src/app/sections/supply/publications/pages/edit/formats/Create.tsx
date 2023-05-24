@@ -37,7 +37,7 @@ import {usePublicationEdit} from '../../../core/PublicationEditContext';
 
 
 const PublicationFormatCreate: React.FC = () => {
-    const {formats} = usePublication();
+    const {options} = usePublication();
     const {publication} = usePublicationEdit();
     const krysApp = useKrysApp();
 
@@ -49,6 +49,8 @@ const PublicationFormatCreate: React.FC = () => {
 
     const formatsSelectRef = useRef<any>(null);
     const formatTypesSelectRef = useRef<any>(null);
+
+    const {formats} = options;
 
     useEffect(() => {
         if (publication) {
@@ -99,9 +101,18 @@ const PublicationFormatCreate: React.FC = () => {
                         // show generic error message
                         setFormErrors([GenericErrorMessage])
                     } else {
-                        // we were able to store the publication formats
+                        let message;
+
+                        console.log(response)
+
+                        if ('data' in response && 'message' in response.data) {
+                            message = response.data.message;
+                        } else {
+                            message = new AlertMessageGenerator('publication format', Actions.CREATE, KrysToastType.SUCCESS).message;
+                        }
+
                         krysApp.setAlert({
-                            message: new AlertMessageGenerator('publication format', Actions.CREATE, KrysToastType.SUCCESS).message,
+                            message: message,
                             type: KrysToastType.SUCCESS
                         });
 

@@ -1,5 +1,6 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
 import {createFormData} from '../../../helpers/requests';
+import {PublicationUpdateMessage} from '../../../models/supply/Other';
 import {Publication} from '../../../models/supply/publication/Publication';
 import {PublicationFormat, PublicationFormatPaginate} from '../../../models/supply/publication/PublicationFormat';
 
@@ -24,29 +25,29 @@ export const getPublicationFormat = async (publication: Publication, id: number)
     let url = `${ENDPOINT}/${publication.id}/${FORMATS_ENDPOINT}`;
 
     return await axios.get(url + '/' + id)
-        .then(res => res.data.data).catch((error) => {
+        .then(response => response.data.data).catch((error) => {
             return error;
         });
 }
 
-export const storePublicationFormat = async (publication: Publication, form: any): Promise<PublicationFormat | AxiosError | undefined> => {
+export const storePublicationFormat = async (publication: Publication, form: any): Promise<PublicationFormat | PublicationUpdateMessage | AxiosError | undefined> => {
     let url = `${ENDPOINT}/${publication.id}/${FORMATS_ENDPOINT}`;
 
     let formData = createFormData(form);
 
-    return await axios.post(url, formData).then(res => res.data).catch((error) => {
+    return await axios.post(url, formData).then(response => response.data).catch((error) => {
         return error;
     });
 }
 
-export const updatePublicationFormat = async (publication: Publication, id: number, publicationFormat: any): Promise<PublicationFormat | AxiosError | undefined> => {
+export const updatePublicationFormat = async (publication: Publication, id: number, publicationFormat: any): Promise<PublicationFormat | PublicationUpdateMessage | AxiosError | undefined> => {
     let url = `${ENDPOINT}/${publication.id}/${FORMATS_ENDPOINT}`;
 
     let formData = createFormData(publicationFormat);
 
     formData.append('_method', 'put');
 
-    return await axios.post(url + '/' + id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(url + '/' + id, formData).then(response => response.data.data).catch((error) => {
         return error;
     });
 }
