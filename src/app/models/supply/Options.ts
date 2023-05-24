@@ -1,4 +1,3 @@
-/* Types */
 import {AdServer} from '../misc/AdServer';
 import {CampaignRestrictionRequirement} from '../misc/CampaignRestrictionRequirement';
 import {CampaignType} from '../misc/CampaignType';
@@ -9,6 +8,7 @@ import {Format} from '../misc/Format';
 import {Language} from '../misc/Language';
 import {Region} from '../misc/Region';
 import {Technology} from '../misc/Technology';
+import {Tier} from '../misc/Tier';
 import {Vertical} from '../misc/Vertical';
 import {WebsitePage} from '../misc/WebsitePage';
 
@@ -51,6 +51,12 @@ export type RevenueType = {
 export type CampaignRestrictionType = {
     id: string, // this column is of type string because the enum we receive from the API is represented as a string
     name: string
+};
+
+export type PublisherOptions = {
+    countries: Country[]
+    regions: Region[],
+    tiers: Tier[]
 };
 
 export type PublicationOptions = {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {Field, Form, Formik} from 'formik';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../../../components/forms/FormErrors';
@@ -22,10 +22,10 @@ import {
     PublisherPaymentSchema
 } from '../../../core/edit/payments/form';
 import {PublisherPaymentsColumns} from '../../../core/edit/payments/TableColumns';
-import {usePublisher} from '../../../core/PublisherContext';
+import {usePublisherEdit} from '../../../core/PublisherEditContext';
 
 const PublisherPaymentCreate: React.FC = () => {
-    const {publisher} = usePublisher();
+    const {publisher} = usePublisherEdit();
 
     const [form, setForm] = useState<PublisherPaymentFormFields>(defaultPublisherPaymentFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -33,14 +33,6 @@ const PublisherPaymentCreate: React.FC = () => {
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
     const krysApp = useKrysApp();
-
-    useEffect(() => {
-        if (publisher) {
-
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [publisher]);
 
     const onChangeHandler = (e: any) => {
         // as long as we are updating the create form, we should set the table refresh to false

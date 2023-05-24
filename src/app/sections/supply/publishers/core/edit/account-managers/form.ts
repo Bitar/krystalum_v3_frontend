@@ -4,7 +4,7 @@ export interface PublisherAccountManagerFormFields {
     user_id: number;
 }
 
-export const defaultPublisherAccountManagerFormFields = {
+export const defaultPublisherAccountManagerFormFields: PublisherAccountManagerFormFields = {
     user_id: 0
 };
 

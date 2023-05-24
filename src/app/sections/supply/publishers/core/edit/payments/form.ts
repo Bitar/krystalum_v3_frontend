@@ -10,7 +10,7 @@ export interface PublisherPaymentFormFields {
     bank_address?: string | null;
 }
 
-export const defaultPublisherPaymentFormFields = {
+export const defaultPublisherPaymentFormFields: PublisherPaymentFormFields = {
     beneficiary: '',
     account_number: '',
     swift_code: '',

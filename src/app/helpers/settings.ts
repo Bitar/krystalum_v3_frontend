@@ -3,7 +3,7 @@ import {
     AnalyticType,
     CampaignRestrictionType,
     PublicationEditOptions,
-    PublicationOptions
+    PublicationOptions, PublisherOptions
 } from '../models/supply/Options';
 
 export const DEFAULT_CURRENCY: Currency = {
@@ -18,6 +18,10 @@ export const DEFAULT_ANALYTIC_TYPE: AnalyticType = {
 export const DEFAULT_CAMPAIGN_RESTRICTION_TYPE: CampaignRestrictionType = {
     id: 'requires_creative_approval',
     name: 'Required creative approval'
+}
+
+export const DEFAULT_PUBLISHER_OPTIONS: PublisherOptions = {
+    countries: [], regions: [], tiers: []
 }
 
 export const DEFAULT_PUBLICATION_OPTIONS: PublicationOptions = {

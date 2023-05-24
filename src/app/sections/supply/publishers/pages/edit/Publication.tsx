@@ -7,11 +7,11 @@ import {RoleEnum} from '../../../../../enums/RoleEnum';
 import {useAuth} from '../../../../../modules/auth';
 import {getPublisherPublications} from '../../../../../requests/supply/publisher/PublisherPublication';
 import {PublisherPublicationsColumns} from '../../core/edit/publications/TableColumns';
-import {usePublisher} from '../../core/PublisherContext';
+import {usePublisherEdit} from '../../core/PublisherEditContext';
 
 const PublisherPublication: React.FC = () => {
     const {currentUser, hasRoles} = useAuth();
-    const {publisher} = usePublisher();
+    const {publisher} = usePublisherEdit();
 
     const [refreshTable] = useState<boolean>(false);
 

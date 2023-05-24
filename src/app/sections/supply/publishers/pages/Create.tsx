@@ -13,7 +13,6 @@ import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysRadioButton from '../../../../components/forms/KrysRadioButton';
 import {RevenueTypeEnum} from '../../../../enums/Supply/RevenueTypeEnum';
 import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
-import {filterData} from '../../../../helpers/dataManipulation';
 import {
     genericDateOnChangeHandler,
     GenericErrorMessage,
@@ -25,53 +24,23 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {extractErrors} from '../../../../helpers/requests';
 import {Sections} from '../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {Country} from '../../../../models/misc/Country';
-import {Tier} from '../../../../models/misc/Tier';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {getAllCountries} from '../../../../requests/misc/Country';
-import {getAllTiers} from '../../../../requests/misc/Tier';
 import {storePublisher} from '../../../../requests/supply/publisher/Publisher';
 import {defaultFormFields, FormFields, PublisherSchema} from '../core/form';
+import {usePublisher} from '../core/PublisherContext';
 
 const PublisherCreate: React.FC = () => {
+    const {options} = usePublisher();
     const krysApp = useKrysApp();
     const navigate = useNavigate();
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-    const [tiers, setTiers] = useState<Tier[]>([]);
-    const [countries, setCountries] = useState<Country[]>([]);
+
+    const {countries, tiers} = options
 
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLISHERS, PageTypes.CREATE))
-
-        // get the tiers
-        getAllTiers().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFormErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of tiers, then we fill our state with them
-                if (response.data) {
-                    setTiers(response.data);
-                }
-            }
-        });
-
-        // get the countries
-        getAllCountries().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFormErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of countries, then we fill our state with them
-                if (response.data) {
-                    setCountries(filterData(response.data, 'name', ['All Countries']));
-                }
-            }
-        });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

@@ -13,24 +13,21 @@ import SingleSelect from '../../../../../components/forms/SingleSelect';
 import {RoleEnum} from '../../../../../enums/RoleEnum';
 import {RevenueTypeEnum} from '../../../../../enums/Supply/RevenueTypeEnum';
 import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
-import {filterData} from '../../../../../helpers/dataManipulation';
 import {genericDateOnChangeHandler, GenericErrorMessage, genericOnChangeHandler} from '../../../../../helpers/form';
 import {scrollToTop} from '../../../../../helpers/general';
 import {extractErrors} from '../../../../../helpers/requests';
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
-import {Country} from '../../../../../models/misc/Country';
-import {Tier} from '../../../../../models/misc/Tier';
 import {useAuth} from '../../../../../modules/auth';
 import {useKrysApp} from '../../../../../modules/general/KrysApp';
-import {getAllCountries} from '../../../../../requests/misc/Country';
-import {getAllTiers} from '../../../../../requests/misc/Tier';
 import {updatePublisher} from '../../../../../requests/supply/publisher/Publisher';
 import {defaultFormFields, fillEditForm, FormFields, PublisherSchema} from '../../core/form';
 import {usePublisher} from '../../core/PublisherContext';
+import {usePublisherEdit} from '../../core/PublisherEditContext';
 
 const PublisherBasicInformationEdit: React.FC = () => {
     const {currentUser, hasAnyRoles} = useAuth();
-    const {publisher, setPublisher} = usePublisher();
+    const {publisher, setPublisher} = usePublisherEdit();
+    const {options} = usePublisher();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -38,50 +35,13 @@ const PublisherBasicInformationEdit: React.FC = () => {
 
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false);
 
-    const [tiers, setTiers] = useState<Tier[]>([]);
-    const [countries, setCountries] = useState<Country[]>([]);
+    const {countries, tiers} = options
 
     useEffect(() => {
         if (publisher) {
             setIsResourceLoaded(true);
 
             setForm(fillEditForm(publisher));
-
-            // get the tiers
-            getAllTiers().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-
-                    scrollToTop();
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage]);
-
-                    scrollToTop();
-                } else {
-                    // if we were able to get the list of tiers, then we fill our state with them
-                    if (response.data) {
-                        setTiers(response.data);
-                    }
-                }
-            });
-
-            // get the countries
-            getAllCountries().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-
-                    scrollToTop();
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage]);
-
-                    scrollToTop();
-                } else {
-                    // if we were able to get the list of countries, then we fill our state with them
-                    if (response.data) {
-                        setCountries(filterData(response.data, 'name', ['All Countries']));
-                    }
-                }
-            });
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

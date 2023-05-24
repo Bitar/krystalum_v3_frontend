@@ -30,10 +30,10 @@ import {
     PublisherAccountManagerSchema
 } from '../../core/edit/account-managers/form';
 import {PublisherAccountManagersColumns} from '../../core/edit/account-managers/TableColumns';
-import {usePublisher} from '../../core/PublisherContext';
+import {usePublisherEdit} from '../../core/PublisherEditContext';
 
 const PublisherAccountManager: React.FC = () => {
-    const {publisher} = usePublisher();
+    const {publisher} = usePublisherEdit();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublisherAccountManagerFormFields>(defaultPublisherAccountManagerFormFields);

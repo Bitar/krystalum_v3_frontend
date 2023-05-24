@@ -25,11 +25,10 @@ import {
     PublisherPaymentFormFields,
     PublisherPaymentSchema
 } from '../../../core/edit/payments/form';
-import {usePublisher} from '../../../core/PublisherContext';
+import {usePublisherEdit} from '../../../core/PublisherEditContext';
 
 const PublisherPaymentEdit: React.FC = () => {
-    const {publisher} = usePublisher();
-    // get the publisher and publisher payments id
+    const {publisher} = usePublisherEdit();
     const {cid} = useParams();
 
     const [publisherPayment, setPublisherPayment] = useState<PublisherPayment | null>(null);

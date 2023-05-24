@@ -13,7 +13,7 @@ export interface FormFields {
     hq_country_id?: number | null;
 }
 
-export const defaultFormFields = {
+export const defaultFormFields: FormFields = {
     name: '',
     revenue_type: '',
     revenue_value: '',

@@ -27,14 +27,13 @@ import {
     PublisherContactFormFields,
     PublisherContactSchema
 } from '../../../core/edit/contacts/form';
-import {usePublisher} from '../../../core/PublisherContext';
+import {usePublisherEdit} from '../../../core/PublisherEditContext';
 
 const PublisherContactEdit: React.FC = () => {
-    const {publisher} = usePublisher();
-    // get the publisher and publisher contacts id
-    const {cid} = useParams();
-
+    const {publisher} = usePublisherEdit();
     const krysApp = useKrysApp();
+
+    const {cid} = useParams();
     const navigate = useNavigate();
 
     const [publisherContact, setPublisherContact] = useState<PublisherContact | null>(null);

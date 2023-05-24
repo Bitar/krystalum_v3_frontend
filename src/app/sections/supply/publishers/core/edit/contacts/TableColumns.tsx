@@ -6,7 +6,7 @@ import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
 import {TextCell} from '../../../../../../modules/table/columns/TextCell';
-import {usePublisher} from '../../PublisherContext';
+import {usePublisherEdit} from '../../PublisherEditContext';
 
 const PublisherContactsColumns: ReadonlyArray<Column<PublisherContact>> = [
     {
@@ -27,7 +27,7 @@ const PublisherContactsColumns: ReadonlyArray<Column<PublisherContact>> = [
         ),
         id: 'actions',
         Cell: ({...props}) => {
-            const {publisher} = usePublisher();
+            const {publisher} = usePublisherEdit();
 
             const publisherContactSummary = `type: ${props.data[props.row.index].contactType.name} | 
             detail: ${props.data[props.row.index].detail}`;

@@ -13,10 +13,10 @@ export const enumToArray = <T extends string>(
 ): Array<{ id: T; name: string }> => {
     return Object.keys(enumObject).map((key) => ({
         id: key as T,
-        name: enumObject[key as keyof typeof enumObject]
+        name: enumObject[key as keyof typeof enumObject].charAt(0).toUpperCase() + enumObject[key as keyof typeof enumObject].slice(1)
     }));
 };
 
 export const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({top: 0, behavior: 'smooth'});
 };

@@ -29,10 +29,10 @@ import {
     PublisherContactSchema
 } from '../../../core/edit/contacts/form';
 import {PublisherContactsColumns} from '../../../core/edit/contacts/TableColumns';
-import {usePublisher} from '../../../core/PublisherContext';
+import {usePublisherEdit} from '../../../core/PublisherEditContext';
 
 const PublisherContactCreate: React.FC = () => {
-    const {publisher} = usePublisher();
+    const {publisher} = usePublisherEdit();
     const krysApp = useKrysApp();
 
     const [form, setForm] = useState<PublisherContactFormFields>(defaultPublisherContactFormFields);

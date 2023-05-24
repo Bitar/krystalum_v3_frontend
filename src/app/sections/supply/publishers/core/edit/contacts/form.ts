@@ -5,7 +5,7 @@ export interface PublisherContactFormFields {
     detail: string;
 }
 
-export const defaultPublisherContactFormFields = {
+export const defaultPublisherContactFormFields: PublisherContactFormFields = {
     type: '',
     detail: ''
 };

@@ -6,7 +6,7 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publishers`
 
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
-export const ARCHIVED_EXPORT_ENDPOINT = `${ENDPOINT}/export`;
+
 export const INCLUDES = 'include[]=tier&include[]=info&include[]=accountManager&include[]=publications';
 
 export const getAllPublishers = async (): Promise<PublisherList | AxiosError | undefined> => {

@@ -10,7 +10,6 @@ import FilterFormFooter from '../../../../../components/forms/FilterFormFooter';
 import FormErrors from '../../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import {RoleEnum} from '../../../../../enums/RoleEnum';
-import {filterData} from '../../../../../helpers/dataManipulation';
 import {
     genericDateRangeOnChangeHandler,
     GenericErrorMessage,
@@ -19,16 +18,11 @@ import {
 } from '../../../../../helpers/form';
 import {createFilterQueryParam, extractErrors} from '../../../../../helpers/requests';
 import {User} from '../../../../../models/iam/User';
-import {Country} from '../../../../../models/misc/Country';
-import {Region} from '../../../../../models/misc/Region';
-import {Tier} from '../../../../../models/misc/Tier';
 import {useAuth} from '../../../../../modules/auth';
 import {useQueryRequest} from '../../../../../modules/table/QueryRequestProvider';
 import {getAllUsers} from '../../../../../requests/iam/User';
-import {getAllCountries} from '../../../../../requests/misc/Country';
-import {getAllRegions} from '../../../../../requests/misc/Region';
-import {getAllTiers} from '../../../../../requests/misc/Tier';
 import {defaultFilterFields, FilterSchema} from '../../core/filterForm';
+import {usePublisher} from '../../core/PublisherContext';
 
 interface Props {
     showFilter: boolean;
@@ -41,57 +35,16 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
     const {currentUser, hasAnyRoles} = useAuth();
     const {updateState} = useQueryRequest();
 
-    const [countries, setCountries] = useState<Country[]>([]);
-    const [regions, setRegions] = useState<Region[]>([]);
-    const [tiers, setTiers] = useState<Tier[]>([]);
+    const {options} = usePublisher();
+
     const [accountManagers, setAccountManagers] = useState<User[]>([]);
 
     const [filterErrors, setFilterErrors] = useState<string[]>([]);
     const [reset, setReset] = useState<boolean>(false);
 
+    const {countries, regions, tiers} = options
+
     useEffect(() => {
-        // get the countries
-        getAllCountries().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of countries, then we fill our state with them
-                if (response.data) {
-                    setCountries(filterData(response.data, 'name', ['All Countries']));
-                }
-            }
-        });
-
-        // get the regions
-        getAllRegions().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of regions, then we fill our state with them
-                if (response.data) {
-                    setRegions(filterData(response.data, 'name', ['All Regions', 'Rest of the world']));
-                }
-            }
-        });
-
-        // get the tiers
-        getAllTiers().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of tiers, then we fill our state with them
-                if (response.data) {
-                    setTiers(response.data);
-                }
-            }
-        });
-
         // get all the account manager users
         getAllUsers('filter[roles][]=12&filter[roles][]=5').then(response => {
             if (axios.isAxiosError(response)) {

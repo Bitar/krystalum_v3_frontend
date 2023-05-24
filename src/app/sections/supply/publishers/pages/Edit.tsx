@@ -1,17 +1,14 @@
-import axios from 'axios';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Nav, Tab} from 'react-bootstrap';
-import {useNavigate, useParams} from 'react-router-dom';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {RoleEnum} from '../../../../enums/RoleEnum';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {PageTypes} from '../../../../helpers/variables';
-import {Publisher} from '../../../../models/supply/publisher/Publisher';
 import {useAuth} from '../../../../modules/auth';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {getPublisher} from '../../../../requests/supply/publisher/Publisher';
+import {usePublisherEdit} from '../core/PublisherEditContext';
 import PublisherOverview from '../partials/Overview';
 import PublisherAccountManager from './edit/AccountManager';
 import PublisherBasicInformationEdit from './edit/BasicInformation';
@@ -20,34 +17,9 @@ import PublisherPaymentCreate from './edit/payments/Create';
 import PublisherPublication from './edit/Publication';
 
 const PublisherEdit: React.FC = () => {
-    let {id} = useParams();
-
+    const {publisher} = usePublisherEdit();
     const {currentUser, hasRoles} = useAuth();
     const krysApp = useKrysApp();
-
-    const navigate = useNavigate();
-
-    const [publisher, setPublisher] = useState<Publisher | null>(null);
-
-    useEffect(() => {
-        if (id) {
-            // get the publisher we need to edit from the database
-            getPublisher(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the publisher to edit so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    // unknown error occurred
-                    navigate('/error/400');
-                } else {
-                    setPublisher(response);
-                }
-            });
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id]);
 
     useEffect(() => {
         // when we're here it means our publisher object is loaded from the API

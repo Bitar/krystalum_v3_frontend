@@ -6,7 +6,8 @@ import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {ARCHIVED_EXPORT_ENDPOINT, getArchivedPublishers} from '../../../../requests/supply/publisher/Publisher';
+import {EXPORT_ENDPOINT} from '../../../../requests/supply/publication/Publication';
+import {getArchivedPublishers} from '../../../../requests/supply/publisher/Publisher';
 import {PublishersColumns} from '../core/TableColumns';
 import PublisherArchivedFilter from '../partials/filters/ArchivedFilter';
 
@@ -32,7 +33,7 @@ const PublisherArchived: React.FC = () => {
                        cardHeader={
                            {
                                text: 'All Archived Publishers',
-                               actions: [new ExportCardAction(exportQuery, ARCHIVED_EXPORT_ENDPOINT),
+                               actions: [new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                    new FilterCardAction('publishers-list-filter', showFilter, setShowFilter)],
                            }}
                        showFilter={showFilter}
