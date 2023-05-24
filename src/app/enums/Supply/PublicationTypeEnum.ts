@@ -1,5 +1,5 @@
 /* This Enum defines the possible publication types that can be used in the project. */
-export enum PUBLICATION_TYPE {
+export enum PublicationTypeEnum {
     WEBSITE = 'website',
     MOBILE_APPLICATION = 'mobile_application',
     IOS_APPLICATION = 'ios_application',

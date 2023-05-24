@@ -2,16 +2,13 @@ import React from 'react';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 import {KTCard, KTCardBody, KTSVG} from '../../../../../_metronic/helpers';
 import {RoleEnum} from '../../../../enums/RoleEnum';
-import {REVENUE_TYPE} from '../../../../enums/Supply/RevenueType';
+import {RevenueTypeEnum} from '../../../../enums/Supply/RevenueTypeEnum';
 import {formatDateToMonthDayYear} from '../../../../helpers/dateFormatter';
 import {useAuth} from '../../../../modules/auth';
-import {useAccessControl} from '../../../../modules/auth/AuthAccessControl';
 import {usePublisher} from '../core/PublisherContext';
 
 const PublisherOverview: React.FC = () => {
     const {currentUser, hasRoles} = useAuth();
-    const accessControl = useAccessControl();
-
     const {publisher} = usePublisher();
 
     return (
@@ -89,7 +86,7 @@ const PublisherOverview: React.FC = () => {
                             <div className="d-flex flex-column flex-grow-1 pe-8">
                                 <div className="d-flex flex-wrap">
                                     {
-                                        publisher?.revenue_type === REVENUE_TYPE.REVENUE_SHARE &&
+                                        publisher?.revenueType.id === RevenueTypeEnum.REVENUE_SHARE &&
                                         <div
                                             className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                                             <div className="d-flex align-items-center">
@@ -104,7 +101,7 @@ const PublisherOverview: React.FC = () => {
                                     }
 
                                     {
-                                        publisher?.revenue_type === REVENUE_TYPE.COMMITMENT &&
+                                        publisher?.revenueType.id === RevenueTypeEnum.COMMITMENT &&
                                         <div
                                             className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                                             <div className="d-flex align-items-center">

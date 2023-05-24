@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {Form, Formik} from 'formik';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import Select from 'react-select';
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
@@ -9,6 +9,7 @@ import {indentOptions} from '../../../../../../components/forms/IndentOptions';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
+import {PublicationFormatTypeEnum} from '../../../../../../enums/Supply/PublicationFormatTypeEnum';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {
     GenericErrorMessage,
@@ -16,12 +17,11 @@ import {
     genericOnChangeHandler,
     genericSingleSelectOnChangeHandler
 } from '../../../../../../helpers/form';
+import {enumToArray} from '../../../../../../helpers/general';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
-import {FormatType} from '../../../../../../models/supply/Options';
 
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getFormatTypes} from '../../../../../../requests/supply/Options';
 import {
     getPublicationFormats,
     storePublicationFormat
@@ -45,32 +45,10 @@ const PublicationFormatCreate: React.FC = () => {
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
-    const [formatTypes, setFormatTypes] = useState<FormatType[]>([]);
-
     const formatsSelectRef = useRef<any>(null);
     const formatTypesSelectRef = useRef<any>(null);
 
     const {formats} = options;
-
-    useEffect(() => {
-        if (publication) {
-            // get the format types
-            getFormatTypes().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of format types, then we fill our state with them
-                    if (response.data) {
-                        setFormatTypes(response.data)
-                    }
-                }
-            });
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [publication]);
 
     const multiSelectChangeHandler = (e: any, key: string) => {
         genericMultiSelectOnChangeHandler(e, form, setForm, key);
@@ -170,7 +148,7 @@ const PublicationFormatCreate: React.FC = () => {
 
                                     <Select name="type"
                                             menuPlacement={'top'}
-                                            options={formatTypes}
+                                            options={enumToArray(PublicationFormatTypeEnum)}
                                             getOptionLabel={(formatType) => formatType?.name}
                                             getOptionValue={(formatType) => formatType?.id.toString()}
                                             onChange={(e) => {

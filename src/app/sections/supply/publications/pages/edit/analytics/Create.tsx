@@ -10,20 +10,21 @@ import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton';
 import {SelectCardAction} from '../../../../../../components/misc/CardAction';
 import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
-import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum';
+import {PublicationAnalyticTypeEnum} from '../../../../../../enums/Supply/PublicationAnalyticTypeEnum';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {
     GenericErrorMessage,
     genericOnChangeHandler,
     genericSingleSelectOnChangeHandler
 } from '../../../../../../helpers/form';
+import {enumToArray} from '../../../../../../helpers/general';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {DEFAULT_ANALYTIC_TYPE} from '../../../../../../helpers/settings';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
 import {AnalyticType} from '../../../../../../models/supply/Options';
 
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getAnalyticsTypes} from '../../../../../../requests/supply/Options';
 import {
     getPublicationAnalytics,
     storePublicationAnalytic
@@ -61,19 +62,7 @@ const PublicationAnalyticCreate: React.FC = () => {
 
     useEffect(() => {
         if (publication) {
-            // get publication analytics types options
-            getAnalyticsTypes().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of analytics types, then we fill our state with them
-                    if (response.data) {
-                        setAnalyticsType(response.data);
-                    }
-                }
-            });
+            setAnalyticsType(enumToArray(PublicationAnalyticTypeEnum))
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -164,22 +153,22 @@ const PublicationAnalyticCreate: React.FC = () => {
                                                          e.stopPropagation();
                                                          setForm({
                                                              ...form,
-                                                             geo_type: GEO_TYPE.REGION,
+                                                             geo_type: GeoTypeEnum.REGION,
                                                              geo_id: 0
                                                          });
                                                      }}
-                                                     defaultValue={form.geo_type === GEO_TYPE.REGION}/>
+                                                     defaultValue={form.geo_type === GeoTypeEnum.REGION}/>
 
                                     <KrysRadioButton name="geo_type" label={'Countries'}
                                                      onChangeHandler={(e) => {
                                                          e.stopPropagation();
                                                          setForm({
                                                              ...form,
-                                                             geo_type: GEO_TYPE.COUNTRY,
+                                                             geo_type: GeoTypeEnum.COUNTRY,
                                                              geo_id: 0
                                                          });
                                                      }}
-                                                     defaultValue={form.geo_type === GEO_TYPE.COUNTRY}/>
+                                                     defaultValue={form.geo_type === GeoTypeEnum.COUNTRY}/>
 
                                     <div className="mt-1 text-danger">
                                         {errors?.geo_type ? errors?.geo_type : null}
@@ -187,7 +176,7 @@ const PublicationAnalyticCreate: React.FC = () => {
                                 </div>
 
                                 {
-                                    form.geo_type === GEO_TYPE.REGION &&
+                                    form.geo_type === GeoTypeEnum.REGION &&
                                     <div className="mb-7">
                                         <KrysFormLabel text="Region" isRequired={true}/>
 
@@ -210,7 +199,7 @@ const PublicationAnalyticCreate: React.FC = () => {
                                 }
 
                                 {
-                                    form.geo_type === GEO_TYPE.COUNTRY &&
+                                    form.geo_type === GeoTypeEnum.COUNTRY &&
                                     <div className="mb-7">
                                         <KrysFormLabel text="Country" isRequired={true}/>
 

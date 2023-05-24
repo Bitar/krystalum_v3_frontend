@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import {Nav, Tab} from 'react-bootstrap';
-import {useParams} from 'react-router-dom';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
@@ -21,8 +20,6 @@ import PublicationTechnologyCreate from './edit/technologies/Create';
 import PublicationVerticalCreate from './edit/verticals/Create';
 
 const PublicationEdit: React.FC = () => {
-    const {id} = useParams();
-
     const {publication} = usePublicationEdit();
     const krysApp = useKrysApp();
 

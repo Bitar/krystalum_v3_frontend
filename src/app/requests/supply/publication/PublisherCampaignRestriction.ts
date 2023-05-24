@@ -26,7 +26,7 @@ export const getPublicationCampaignRestriction = async (publication: Publication
     let url = `${ENDPOINT}/${publication.id}/${CAMPAIGN_RESTRICTIONS_ENDPOINT}`;
 
     return await axios.get(url + '/' + id)
-        .then(res => res.data.data).catch((error) => {
+        .then(response => response.data.data).catch((error) => {
             return error;
         });
 }
@@ -36,7 +36,7 @@ export const storePublicationCampaignRestriction = async (publication: Publicati
 
     let formData = createFormData(form);
 
-    return await axios.post(url, formData).then(res => res.data).catch((error) => {
+    return await axios.post(url, formData).then(response => response.data).catch((error) => {
         return error;
     });
 }
@@ -48,7 +48,7 @@ export const updatePublicationCampaignRestriction = async (publication: Publicat
 
     formData.append('_method', 'put');
 
-    return await axios.post(url + '/' + id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(url + '/' + id, formData).then(response => response.data.data).catch((error) => {
         return error;
     });
 }

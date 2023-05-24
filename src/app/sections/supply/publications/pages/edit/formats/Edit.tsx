@@ -8,16 +8,16 @@ import FormErrors from '../../../../../../components/forms/FormErrors';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import SingleSelect from '../../../../../../components/forms/SingleSelect';
+import {PublicationFormatTypeEnum} from '../../../../../../enums/Supply/PublicationFormatTypeEnum';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
+import {enumToArray} from '../../../../../../helpers/general';
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {Sections} from '../../../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
-import {FormatType} from '../../../../../../models/supply/Options';
 import {PublicationFormat} from '../../../../../../models/supply/publication/PublicationFormat';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getFormatTypes} from '../../../../../../requests/supply/Options';
 import {
     getPublicationFormat,
     updatePublicationFormat
@@ -44,7 +44,6 @@ const PublicationFormatEdit: React.FC = () => {
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
     const [publicationFormat, setPublicationFormat] = useState<PublicationFormat | null>(null);
-    const [formatTypes, setFormatTypes] = useState<FormatType[]>([]);
 
     const {formats} = options;
 
@@ -66,20 +65,6 @@ const PublicationFormatEdit: React.FC = () => {
                     const {format, type, ...currentPublicationFormat} = response;
 
                     setForm({...currentPublicationFormat, format_id: format.id, type: type.id});
-                }
-            });
-
-            // get the format types
-            getFormatTypes().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of format types, then we fill our state with them
-                    if (response.data) {
-                        setFormatTypes(response.data)
-                    }
                 }
             });
         }
@@ -162,7 +147,8 @@ const PublicationFormatEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Type" isRequired={true}/>
 
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={formatTypes}
+                                    <SingleSelect isResourceLoaded={isResourceLoaded}
+                                                  options={enumToArray(PublicationFormatTypeEnum)}
                                                   defaultValue={publicationFormat?.type} form={form}
                                                   setForm={setForm} name="type" isClearable={true}/>
 

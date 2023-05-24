@@ -11,7 +11,7 @@ import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysRadioButton from '../../../../components/forms/KrysRadioButton';
-import {REVENUE_TYPE} from '../../../../enums/Supply/RevenueType';
+import {RevenueTypeEnum} from '../../../../enums/Supply/RevenueTypeEnum';
 import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 import {filterData} from '../../../../helpers/dataManipulation';
 import {
@@ -20,6 +20,7 @@ import {
     genericOnChangeHandler,
     genericSingleSelectOnChangeHandler
 } from '../../../../helpers/form';
+import {scrollToTop} from '../../../../helpers/general';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {extractErrors} from '../../../../helpers/requests';
 import {Sections} from '../../../../helpers/sections';
@@ -93,17 +94,21 @@ const PublisherCreate: React.FC = () => {
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
                     setFormErrors(extractErrors(response));
+
+                    scrollToTop();
                 } else if (response === undefined) {
                     // show generic error message
-                    setFormErrors([GenericErrorMessage])
+                    setFormErrors([GenericErrorMessage]);
+
+                    scrollToTop();
                 } else {
                     // it's publisher for sure
                     krysApp.setAlert({
-                        message: new AlertMessageGenerator('publisher', Actions.CREATE, KrysToastType.SUCCESS).message,
+                        message: new AlertMessageGenerator('publisher', Actions.CREATE, KrysToastType.SUCCESS).message + ' Please fill out the form below to create publications related to the created publisher.',
                         type: KrysToastType.SUCCESS
                     })
 
-                    navigate(`/supply/publishers`);
+                    navigate(`/supply/publications/create`);
                 }
             }
         );
@@ -178,15 +183,19 @@ const PublisherCreate: React.FC = () => {
                                     <KrysRadioButton name="revenue_type" label={'Revenue Share'}
                                                      onChangeHandler={(e) => {
                                                          e.stopPropagation();
-                                                         setForm({...form, revenue_type: REVENUE_TYPE.REVENUE_SHARE});
+                                                         setForm({
+                                                             ...form,
+                                                             revenue_type: RevenueTypeEnum.REVENUE_SHARE
+                                                         });
                                                      }}
-                                                     defaultValue={form.revenue_type === REVENUE_TYPE.REVENUE_SHARE}/>
+                                                     defaultValue={form.revenue_type === RevenueTypeEnum.REVENUE_SHARE}/>
 
                                     <KrysRadioButton name="revenue_type" label={'Amount Commitment'}
                                                      onChangeHandler={(e) => {
                                                          e.stopPropagation();
-                                                         setForm({...form, revenue_type: REVENUE_TYPE.COMMITMENT});
-                                                     }} defaultValue={form.revenue_type === REVENUE_TYPE.COMMITMENT}/>
+                                                         setForm({...form, revenue_type: RevenueTypeEnum.COMMITMENT});
+                                                     }}
+                                                     defaultValue={form.revenue_type === RevenueTypeEnum.COMMITMENT}/>
 
                                     <div className="mt-1 text-danger">
                                         {errors?.revenue_type ? errors?.revenue_type : null}
@@ -194,7 +203,7 @@ const PublisherCreate: React.FC = () => {
                                 </div>
 
                                 {
-                                    form.revenue_type === REVENUE_TYPE.REVENUE_SHARE &&
+                                    form.revenue_type === RevenueTypeEnum.REVENUE_SHARE &&
                                     <div className="mb-7">
                                         <KrysFormLabel text="Revenue share" isRequired={true}/>
 
@@ -212,7 +221,7 @@ const PublisherCreate: React.FC = () => {
                                 }
 
                                 {
-                                    form.revenue_type === REVENUE_TYPE.COMMITMENT &&
+                                    form.revenue_type === RevenueTypeEnum.COMMITMENT &&
                                     <div className="mb-7">
                                         <KrysFormLabel text="Commitment" isRequired={true}/>
 

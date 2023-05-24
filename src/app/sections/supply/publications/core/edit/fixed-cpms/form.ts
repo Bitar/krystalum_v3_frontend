@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum';
 import {DEFAULT_CURRENCY} from '../../../../../../helpers/settings';
 import {PublicationFixedCpm} from '../../../../../../models/supply/publication/PublicationFixedCpm';
 
@@ -36,7 +36,7 @@ export const publicationFixedCpmSchema = (isEdit: boolean) => {
     let schema = {
         geo_type: Yup
             .string()
-            .oneOf(Object.values(GEO_TYPE))
+            .oneOf(Object.values(GeoTypeEnum))
             .required(),
         ...(isEdit ? {
             format_id: Yup.number().required().min(1, 'format is a required field'),

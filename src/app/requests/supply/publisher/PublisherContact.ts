@@ -24,7 +24,7 @@ export const getPublisherContact = async (publisher: Publisher, id: number): Pro
     let url = `${ENDPOINT}/${publisher.id}/${CONTACTS_ENDPOINT}`;
 
     return await axios.get(url + '/' + id)
-        .then(res => res.data.data).catch((error) => {
+        .then(response => response.data.data).catch((error) => {
             return error;
         });
 }
@@ -34,7 +34,7 @@ export const storePublisherContact = async (publisher: Publisher, form: any): Pr
 
     let formData = createFormData(form);
 
-    return await axios.post(url, formData).then(res => res.data).catch((error) => {
+    return await axios.post(url, formData).then(response => response.data).catch((error) => {
         return error;
     });
 }
@@ -46,7 +46,7 @@ export const updatePublisherContact = async (publisher: Publisher, id: number, p
 
     formData.append('_method', 'put');
 
-    return await axios.post(url + '/' + id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(url + '/' + id, formData).then(response => response.data.data).catch((error) => {
         return error;
     });
 }

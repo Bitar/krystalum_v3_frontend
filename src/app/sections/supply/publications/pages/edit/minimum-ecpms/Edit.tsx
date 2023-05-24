@@ -9,7 +9,7 @@ import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton';
 import SingleSelect from '../../../../../../components/forms/SingleSelect';
-import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
@@ -126,22 +126,22 @@ const PublicationMinimumEcpmEdit: React.FC = () => {
                                                          e.stopPropagation();
                                                          setForm({
                                                              ...form,
-                                                             geo_type: GEO_TYPE.REGION,
+                                                             geo_type: GeoTypeEnum.REGION,
                                                              geo_id: 0
                                                          });
                                                      }}
-                                                     defaultValue={form.geo_type === GEO_TYPE.REGION}/>
+                                                     defaultValue={form.geo_type === GeoTypeEnum.REGION}/>
 
                                     <KrysRadioButton name="geo_type" label={'Countries'}
                                                      onChangeHandler={(e) => {
                                                          e.stopPropagation();
                                                          setForm({
                                                              ...form,
-                                                             geo_type: GEO_TYPE.COUNTRY,
+                                                             geo_type: GeoTypeEnum.COUNTRY,
                                                              geo_id: 0
                                                          });
                                                      }}
-                                                     defaultValue={form.geo_type === GEO_TYPE.COUNTRY}/>
+                                                     defaultValue={form.geo_type === GeoTypeEnum.COUNTRY}/>
 
                                     <div className="mt-1 text-danger">
                                         {errors?.geo_type ? errors?.geo_type : null}
@@ -149,7 +149,7 @@ const PublicationMinimumEcpmEdit: React.FC = () => {
                                 </div>
 
                                 {
-                                    form.geo_type === GEO_TYPE.REGION &&
+                                    form.geo_type === GeoTypeEnum.REGION &&
                                     <div className="mb-7">
                                         <KrysFormLabel text="Region" isRequired={true}/>
 
@@ -164,7 +164,7 @@ const PublicationMinimumEcpmEdit: React.FC = () => {
                                 }
 
                                 {
-                                    form.geo_type === GEO_TYPE.COUNTRY &&
+                                    form.geo_type === GeoTypeEnum.COUNTRY &&
                                     <div className="mb-7">
                                         <KrysFormLabel text="Country" isRequired={true}/>
 

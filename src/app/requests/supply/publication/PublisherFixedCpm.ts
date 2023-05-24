@@ -23,7 +23,7 @@ export const getPublicationFixedCpm = async (publication: Publication, id: numbe
     let url = `${ENDPOINT}/${publication.id}/${FIXED_CPMS_ENDPOINT}`;
 
     return await axios.get(url + '/' + id)
-        .then(res => res.data.data).catch((error) => {
+        .then(response => response.data.data).catch((error) => {
             return error;
         });
 }
@@ -33,7 +33,7 @@ export const storePublicationFixedCpm = async (publication: Publication, form: a
 
     let formData = createFormData(form);
 
-    return await axios.post(url, formData).then(res => res.data).catch((error) => {
+    return await axios.post(url, formData).then(response => response.data).catch((error) => {
         return error;
     });
 }
@@ -45,7 +45,7 @@ export const updatePublicationFixedCpm = async (publication: Publication, id: nu
 
     formData.append('_method', 'put');
 
-    return await axios.post(url + '/' + id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(url + '/' + id, formData).then(response => response.data.data).catch((error) => {
         return error;
     });
 }

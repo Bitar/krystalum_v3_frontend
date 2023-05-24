@@ -24,7 +24,7 @@ export const getPublicationTechnology = async (publication: Publication, id: num
     let url = `${ENDPOINT}/${publication.id}/${TECHNOLOGIES_ENDPOINT}`;
 
     return await axios.get(url + '/' + id)
-        .then(res => res.data.data).catch((error) => {
+        .then(response => response.data.data).catch((error) => {
             return error;
         });
 }
@@ -34,7 +34,7 @@ export const storePublicationTechnology = async (publication: Publication, form:
 
     let formData = createFormData(form);
 
-    return await axios.post(url, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(url, formData).then(response => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -46,7 +46,7 @@ export const updatePublicationTechnology = async (publication: Publication, id: 
 
     formData.append('_method', 'put');
 
-    return await axios.post(url + '/' + id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(url + '/' + id, formData).then(response => response.data.data).catch((error) => {
         return error;
     });
 }

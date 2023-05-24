@@ -1,8 +1,9 @@
-import {PUBLICATION_TYPE} from '../../../enums/Supply/PublicationType';
+import {PublicationTypeEnum} from '../../../enums/Supply/PublicationTypeEnum';
+import {Type} from '../Options';
 
 export type PublicationInfo = {
     id: number,
-    type: PUBLICATION_TYPE,
+    type: Type,
     description: string | null,
     url: string | null, // this will be filled in case the type is `website`
     ios_store_url: string | null, // this will be filled in case the type is `mobile application` and is `ios`

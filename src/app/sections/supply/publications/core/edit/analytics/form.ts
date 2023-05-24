@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
-import {ANALYTIC_TYPE} from '../../../../../../enums/Supply/AnalyticType';
-import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum';
+import {PublicationAnalyticTypeEnum} from '../../../../../../enums/Supply/PublicationAnalyticTypeEnum';
 import {DEFAULT_ANALYTIC_TYPE} from '../../../../../../helpers/settings';
 import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic';
 
@@ -30,11 +30,11 @@ export const defaultAnalyticsFilterFields = {
 export const PublicationAnalyticSchema = Yup.object().shape({
     geo_type: Yup
         .string()
-        .oneOf(Object.values(GEO_TYPE))
+        .oneOf(Object.values(GeoTypeEnum))
         .required(),
     geo_id: Yup.number().min(1, 'geo is a required field').required(),
     value: Yup.number().when('type', {
-        is: (type: string) => type === ANALYTIC_TYPE.UNIQUE_USERS || type === ANALYTIC_TYPE.PAGE_VIEWS,
+        is: (type: string) => type === PublicationAnalyticTypeEnum.UNIQUE_USERS || type === PublicationAnalyticTypeEnum.PAGE_VIEWS,
         then: Yup.number().integer().min(1, 'value must be greater than 0').required(),
         otherwise: Yup.number().min(1, 'value must be greater than 0').required(),
     }),

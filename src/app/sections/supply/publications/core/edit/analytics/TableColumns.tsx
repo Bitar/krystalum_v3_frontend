@@ -1,8 +1,8 @@
 import React from 'react';
 import {Column} from 'react-table'
 import {QUERIES} from '../../../../../../../_metronic/helpers';
-import {ANALYTIC_TYPE} from '../../../../../../enums/Supply/AnalyticType';
-import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum';
+import {PublicationAnalyticTypeEnum} from '../../../../../../enums/Supply/PublicationAnalyticTypeEnum';
 import {formatNumberWithSuffix} from '../../../../../../helpers/stringGenerator';
 import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic';
 import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
@@ -17,7 +17,7 @@ const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = 
         Header: (props) => <CustomHeader tableProps={props} title="Geo Type" className="min-w-125px"/>,
         id: 'geo-type',
         Cell: ({...props}) => <BadgeCell status={props.data[props.row.index].geoType.name}
-                                         color={props.data[props.row.index].geoType.id === GEO_TYPE.REGION ? 'light-primary' : 'light-info'}
+                                         color={props.data[props.row.index].geoType.id === GeoTypeEnum.REGION ? 'light-primary' : 'light-info'}
                                          align="left"/>,
     },
     {
@@ -35,8 +35,8 @@ const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = 
         Header: (props) => <CustomHeader tableProps={props} title="Value" className="min-w-125px"/>,
         id: 'value',
         Cell: ({...props}) => <TextCell text={
-            props.data[props.row.index].type.id === ANALYTIC_TYPE.UNIQUE_USERS ||
-            props.data[props.row.index].type.id === ANALYTIC_TYPE.PAGE_VIEWS ?
+            props.data[props.row.index].type.id === PublicationAnalyticTypeEnum.UNIQUE_USERS ||
+            props.data[props.row.index].type.id === PublicationAnalyticTypeEnum.PAGE_VIEWS ?
                 formatNumberWithSuffix(props.data[props.row.index].value) : props.data[props.row.index].value
         }/>,
     },
@@ -54,8 +54,8 @@ const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = 
             geo type: ${props.data[props.row.index].geoType.name} | 
             geo: ${props.data[props.row.index].geo.name} | 
             device: ${props.data[props.row.index].device ? props.data[props.row.index].device.name : 'N/A'} | 
-            value: ${props.data[props.row.index].type.id === ANALYTIC_TYPE.UNIQUE_USERS ||
-            props.data[props.row.index].type.id === ANALYTIC_TYPE.PAGE_VIEWS ?
+            value: ${props.data[props.row.index].type.id === PublicationAnalyticTypeEnum.UNIQUE_USERS ||
+            props.data[props.row.index].type.id === PublicationAnalyticTypeEnum.PAGE_VIEWS ?
                 formatNumberWithSuffix(props.data[props.row.index].value) : props.data[props.row.index].value}`;
 
             return (

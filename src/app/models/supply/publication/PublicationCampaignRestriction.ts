@@ -1,4 +1,5 @@
 import {Response} from '../../../../_metronic/helpers';
+import {GeoTypeEnum} from '../../../enums/Supply/GeoTypeEnum';
 import {CampaignRestrictionRequirement} from '../../misc/CampaignRestrictionRequirement';
 import {CampaignType} from '../../misc/CampaignType';
 import {Country} from '../../misc/Country';

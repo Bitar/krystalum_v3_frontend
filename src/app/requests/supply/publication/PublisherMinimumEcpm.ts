@@ -26,7 +26,7 @@ export const getPublicationMinimumEcpm = async (publication: Publication, id: nu
     let url = `${ENDPOINT}/${publication.id}/${MINIMUM_ECPMS_ENDPOINT}`;
 
     return await axios.get(url + '/' + id)
-        .then(res => res.data.data).catch((error) => {
+        .then(response => response.data.data).catch((error) => {
             return error;
         });
 }
@@ -36,7 +36,7 @@ export const storePublicationMinimumEcpm = async (publication: Publication, form
 
     let formData = createFormData(form);
 
-    return await axios.post(url, formData).then(res => res.data).catch((error) => {
+    return await axios.post(url, formData).then(response => response.data).catch((error) => {
         return error;
     });
 }
@@ -48,7 +48,7 @@ export const updatePublicationMinimumEcpm = async (publication: Publication, id:
 
     formData.append('_method', 'put');
 
-    return await axios.post(url + '/' + id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(url + '/' + id, formData).then(response => response.data.data).catch((error) => {
         return error;
     });
 }

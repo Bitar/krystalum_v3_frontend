@@ -25,7 +25,7 @@ const PublicationsColumns: ReadonlyArray<Column<Publication>> = [
         Header: (props) => <CustomHeader tableProps={props} title="Type" className="min-w-125px"/>,
         id: 'type',
         Cell: ({...props}) => <TextCell
-            text={props.data[props.row.index].info?.type ? props.data[props.row.index].info?.type.charAt(0).toUpperCase() + props.data[props.row.index].info?.type.slice(1) : 'N/A'}/>,
+            text={props.data[props.row.index].info?.type.id ? props.data[props.row.index].info?.type.id.charAt(0).toUpperCase() + props.data[props.row.index].info?.type.id.slice(1) : 'N/A'}/>,
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Publisher" className="min-w-125px"/>,

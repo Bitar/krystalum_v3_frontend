@@ -1,7 +1,7 @@
 import React from 'react';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 import {KTCard, KTCardBody, KTSVG} from '../../../../../_metronic/helpers';
-import {REVENUE_TYPE} from '../../../../enums/Supply/RevenueType';
+import {RevenueTypeEnum} from '../../../../enums/Supply/RevenueTypeEnum';
 import {formatDateToMonthDayYear} from '../../../../helpers/dateFormatter';
 import {Language} from '../../../../models/misc/Language';
 import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
@@ -119,7 +119,7 @@ const PublisherOverview: React.FC = () => {
                             <div className="d-flex flex-column flex-grow-1 pe-8">
                                 <div className="d-flex flex-wrap">
                                     {
-                                        (publication?.revenue_type === REVENUE_TYPE.REVENUE_SHARE || (publication?.revenue_type === REVENUE_TYPE.SAME_AS_PUBLISHER && publication?.publisher?.revenue_type === REVENUE_TYPE.REVENUE_SHARE)) &&
+                                        (publication?.revenueType.id === RevenueTypeEnum.REVENUE_SHARE || (publication?.revenueType.id === RevenueTypeEnum.SAME_AS_PUBLISHER && publication?.publisher?.revenueType.id === RevenueTypeEnum.REVENUE_SHARE)) &&
                                         <div
                                             className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                                             <div className="d-flex align-items-center">
@@ -132,14 +132,14 @@ const PublisherOverview: React.FC = () => {
                                                 </div>
                                             </div>
                                             <div className="fw-bold fs-6 text-gray-400">Revenue
-                                                share {publication?.revenue_type === REVENUE_TYPE.SAME_AS_PUBLISHER &&
+                                                share {publication?.revenueType.id === RevenueTypeEnum.SAME_AS_PUBLISHER &&
                                                     <small
                                                         className="fw-normal">(same as publisher)</small>}</div>
                                         </div>
                                     }
 
                                     {
-                                        (publication?.revenue_type === REVENUE_TYPE.COMMITMENT || (publication?.revenue_type === REVENUE_TYPE.SAME_AS_PUBLISHER && publication?.publisher?.revenue_type === REVENUE_TYPE.COMMITMENT)) &&
+                                        (publication?.revenueType.id === RevenueTypeEnum.COMMITMENT || (publication?.revenueType.id === RevenueTypeEnum.SAME_AS_PUBLISHER && publication?.publisher?.revenueType.id === RevenueTypeEnum.COMMITMENT)) &&
                                         <div
                                             className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                                             <div className="d-flex align-items-center">
@@ -151,7 +151,7 @@ const PublisherOverview: React.FC = () => {
                                                     className="fs-5 fw-bold">{publication?.revenue_value ? publication?.revenue_value : publication?.publisher?.revenue_value}</div>
                                             </div>
                                             <div
-                                                className="fw-bold fs-6 text-gray-400">Commitment {publication?.revenue_type === REVENUE_TYPE.SAME_AS_PUBLISHER &&
+                                                className="fw-bold fs-6 text-gray-400">Commitment {publication?.revenueType.id === RevenueTypeEnum.SAME_AS_PUBLISHER &&
                                                 <small
                                                     className="fw-normal">(same as publisher)</small>}</div>
                                         </div>

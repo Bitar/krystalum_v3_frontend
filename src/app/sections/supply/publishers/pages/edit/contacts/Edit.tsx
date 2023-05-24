@@ -8,16 +8,16 @@ import FormErrors from '../../../../../../components/forms/FormErrors';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import SingleSelect from '../../../../../../components/forms/SingleSelect';
+import {PublisherContactTypeEnum} from '../../../../../../enums/Supply/PublisherContactTypeEnum';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
+import {enumToArray} from '../../../../../../helpers/general';
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {Sections} from '../../../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables';
-import {ContactType} from '../../../../../../models/supply/Options';
 import {PublisherContact} from '../../../../../../models/supply/publisher/PublisherContact';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getContactTypes} from '../../../../../../requests/supply/Options';
 import {
     getPublisherContact,
     updatePublisherContact
@@ -43,8 +43,6 @@ const PublisherContactEdit: React.FC = () => {
 
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
-    const [contactTypes, setContactTypes] = useState<ContactType[]>([]);
-
     useEffect(() => {
         if (publisher && cid) {
             // get the publisher contacts we need to edit from the database
@@ -63,20 +61,6 @@ const PublisherContactEdit: React.FC = () => {
                     const {contactType, ...currentPublisherContact} = response;
 
                     setForm({...currentPublisherContact, type: contactType?.id});
-                }
-            });
-
-            // get the contacts types
-            getContactTypes().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of contacts types, then we fill our state with them
-                    if (response.data) {
-                        setContactTypes(response.data);
-                    }
                 }
             });
         }
@@ -136,7 +120,8 @@ const PublisherContactEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Contact type" isRequired={true}/>
 
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={contactTypes}
+                                    <SingleSelect isResourceLoaded={isResourceLoaded}
+                                                  options={enumToArray(PublisherContactTypeEnum)}
                                                   defaultValue={publisherContact?.contactType} form={form}
                                                   setForm={setForm} name="type" isClearable={true}/>
 

@@ -1,8 +1,8 @@
 import {createContext, Dispatch, FC, SetStateAction, useContext, useEffect, useState} from 'react'
+import toast, {Toaster, ToastOptions} from 'react-hot-toast';
 import {WithChildren} from '../../../_metronic/helpers';
-import toast, {Toaster, ToastOptions, ToastType} from 'react-hot-toast';
-import {KrysToastType} from '../../helpers/variables';
 import PendingIcon from '../../components/icons/Pending';
+import {KrysToastType} from '../../helpers/variables';
 
 type Alert = {
     message: string;

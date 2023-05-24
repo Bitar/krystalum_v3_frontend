@@ -20,7 +20,6 @@ export const getPublicationFormats = (publicationId: number, query?: String): Pr
     });
 }
 
-
 export const getPublicationFormat = async (publication: Publication, id: number): Promise<PublicationFormat | AxiosError | undefined> => {
     let url = `${ENDPOINT}/${publication.id}/${FORMATS_ENDPOINT}`;
 

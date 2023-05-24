@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
-import {PUBLICATION_TYPE} from '../../../../enums/Supply/PublicationType';
-import {REVENUE_TYPE} from '../../../../enums/Supply/RevenueType';
+import {PublicationTypeEnum} from '../../../../enums/Supply/PublicationTypeEnum';
+import {RevenueTypeEnum} from '../../../../enums/Supply/RevenueTypeEnum';
 import {Publication} from '../../../../models/supply/publication/Publication';
 
 export interface FormFields {
@@ -39,7 +39,7 @@ export const defaultFormFields = {
     live_date: null,
     is_archived: 0,
     is_deal_pmp: 0,
-    revenue_type: REVENUE_TYPE.SAME_AS_PUBLISHER,
+    revenue_type: RevenueTypeEnum.SAME_AS_PUBLISHER,
     revenue_value: '',
     has_hi10: 1,
     hi10_to_display: 0,
@@ -90,55 +90,55 @@ export const publicationSchema = (isEdit: boolean) => {
             .min(1, 'select at least one publication type')
             .required(),
         url: Yup.string().when('types', {
-            is: (types: string[]) => types.includes(PUBLICATION_TYPE.WEBSITE),
+            is: (types: string[]) => types.includes(PublicationTypeEnum.WEBSITE),
             then: Yup.string().url().required('publication url is required when the publication type is website'),
             otherwise: Yup.string().notRequired(),
         }),
         android_store_url: Yup.string().when('types', {
-            is: (types: string[]) => types.includes(PUBLICATION_TYPE.ANDROID_APPLICATION),
+            is: (types: string[]) => types.includes(PublicationTypeEnum.ANDROID_APPLICATION),
             then: Yup.string().url().required('android store url is required when the publication type is android application'),
             otherwise: Yup.string().notRequired(),
         }),
         android_bundle_id: Yup.string().when('types', {
-            is: (types: string[]) => types.includes(PUBLICATION_TYPE.ANDROID_APPLICATION),
+            is: (types: string[]) => types.includes(PublicationTypeEnum.ANDROID_APPLICATION),
             then: Yup.string().required('android bundle id is required when the publication type is android application'),
             otherwise: Yup.string().notRequired(),
         }),
         android_version: Yup.string().when('types', {
-            is: (types: string[]) => types.includes(PUBLICATION_TYPE.ANDROID_APPLICATION),
+            is: (types: string[]) => types.includes(PublicationTypeEnum.ANDROID_APPLICATION),
             then: Yup.string().required('android version is required when the publication type is android application'),
             otherwise: Yup.string().notRequired(),
         }),
         android_application_type: Yup.string().when('types', {
-            is: (types: string[]) => types.includes(PUBLICATION_TYPE.ANDROID_APPLICATION),
+            is: (types: string[]) => types.includes(PublicationTypeEnum.ANDROID_APPLICATION),
             then: Yup.string().required('android application type is required when the publication type is android application'),
             otherwise: Yup.string().notRequired(),
         }),
         ios_store_url: Yup.string().when('types', {
-            is: (types: string[]) => types.includes(PUBLICATION_TYPE.IOS_APPLICATION),
+            is: (types: string[]) => types.includes(PublicationTypeEnum.IOS_APPLICATION),
             then: Yup.string().url().required('ios store url is required when the publication type is ios application'),
             otherwise: Yup.string().notRequired(),
         }),
         ios_bundle_id: Yup.string().when('types', {
-            is: (types: string[]) => types.includes(PUBLICATION_TYPE.IOS_APPLICATION),
+            is: (types: string[]) => types.includes(PublicationTypeEnum.IOS_APPLICATION),
             then: Yup.string().required('ios bundle id is required when the publication type is ios application'),
             otherwise: Yup.string().notRequired(),
         }),
         ios_version: Yup.string().when('types', {
-            is: (types: string[]) => types.includes(PUBLICATION_TYPE.IOS_APPLICATION),
+            is: (types: string[]) => types.includes(PublicationTypeEnum.IOS_APPLICATION),
             then: Yup.string().required('ios version is required when the publication type is ios application'),
             otherwise: Yup.string().notRequired(),
         }),
         ios_application_type: Yup.string().when('types', {
-            is: (types: string[]) => types.includes(PUBLICATION_TYPE.IOS_APPLICATION),
+            is: (types: string[]) => types.includes(PublicationTypeEnum.IOS_APPLICATION),
             then: Yup.string().required('ios application type is required when the publication type is ios application'),
             otherwise: Yup.string().notRequired(),
         }),
         revenue_type: Yup.string().required(),
         revenue_value: Yup.mixed().when('revenue_type', (revenueType) =>
-            revenueType === REVENUE_TYPE.REVENUE_SHARE
+            revenueType === RevenueTypeEnum.REVENUE_SHARE
                 ? Yup.number().min(1, 'revenue share must be greater than 0').max(100, 'revenue share must be less than or equal to 100').required()
-                : (revenueType === REVENUE_TYPE.COMMITMENT ? Yup.string().required() : Yup.string().notRequired())
+                : (revenueType === RevenueTypeEnum.COMMITMENT ? Yup.string().required() : Yup.string().notRequired())
         )
     };
 
@@ -158,25 +158,26 @@ export function fillEditForm(publication: Publication) {
     // to the types array. If it is an Android application, then the android_application value should
     // be added to the types array. If it is both, then the website and mobile application (ios or android or both)
     // values should be added to the types array.
-    if (info.type === PUBLICATION_TYPE.WEBSITE) {
-        types.push(info.type);
+    if (info.type.id === PublicationTypeEnum.WEBSITE) {
+        types.push(info.type.id);
     } else {
         if (info.ios_store_url) {
-            types.push(PUBLICATION_TYPE.IOS_APPLICATION);
+            types.push(PublicationTypeEnum.IOS_APPLICATION);
         }
 
         if (info.android_store_url) {
-            types.push(PUBLICATION_TYPE.ANDROID_APPLICATION);
+            types.push(PublicationTypeEnum.ANDROID_APPLICATION);
         }
 
-        if (info.type === PUBLICATION_TYPE.BOTH) {
-            types.push(PUBLICATION_TYPE.WEBSITE);
+        if (info.type.id === PublicationTypeEnum.BOTH) {
+            types.push(PublicationTypeEnum.WEBSITE);
         }
     }
 
     const form: FormFields = {
         ...currentPublication,
         publisher_id: publisher.id,
+        revenue_type: publication.revenueType.id,
         revenue_value: publication.revenue_value || '',
         is_archived: Number(publication.is_archived),
         is_deal_pmp: Number(publication.is_deal_pmp),

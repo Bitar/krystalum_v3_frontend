@@ -12,9 +12,9 @@ import KrysCheckbox from '../../../../components/forms/KrysCheckbox';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysRadioButton from '../../../../components/forms/KrysRadioButton';
-import {APPLICATION_TYPE} from '../../../../enums/Supply/ApplicationType';
-import {PUBLICATION_TYPE} from '../../../../enums/Supply/PublicationType';
-import {REVENUE_TYPE} from '../../../../enums/Supply/RevenueType';
+import {PublicationApplicationEnum} from '../../../../enums/Supply/PublicationApplicationTypeEnum';
+import {PublicationTypeEnum} from '../../../../enums/Supply/PublicationTypeEnum';
+import {RevenueTypeEnum} from '../../../../enums/Supply/RevenueTypeEnum';
 import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
 import {
     genericDateOnChangeHandler,
@@ -23,6 +23,7 @@ import {
     genericOnChangeHandler,
     genericSingleSelectOnChangeHandler
 } from '../../../../helpers/form';
+import {scrollToTop} from '../../../../helpers/general';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {extractErrors} from '../../../../helpers/requests';
 import {Sections} from '../../../../helpers/sections';
@@ -109,17 +110,31 @@ const PublicationCreate: React.FC = () => {
                 if (axios.isAxiosError(response)) {
                     // we need to show the errors
                     setFormErrors(extractErrors(response));
+
+                    scrollToTop();
                 } else if (response === undefined) {
                     // show generic error message
-                    setFormErrors([GenericErrorMessage])
+                    setFormErrors([GenericErrorMessage]);
+
+                    scrollToTop();
                 } else {
+                    let message, url;
+
+                    if (response.is_archived) {
+                        message = new AlertMessageGenerator('publication', Actions.CREATE, KrysToastType.SUCCESS).message + ' It is considered an archived publication since it is not sending inventory.';
+                        url = '/supply/publications/archived';
+                    } else {
+                        message = new AlertMessageGenerator('publication', Actions.CREATE, KrysToastType.SUCCESS).message;
+                        url = '/supply/publications';
+                    }
+
                     // it's publication for sure
                     krysApp.setAlert({
-                        message: new AlertMessageGenerator('publication', Actions.CREATE, KrysToastType.SUCCESS).message,
+                        message: message,
                         type: KrysToastType.SUCCESS
-                    })
+                    });
 
-                    navigate(`/supply/publications`);
+                    navigate(url);
                 }
             }
         );
@@ -231,16 +246,16 @@ const PublicationCreate: React.FC = () => {
                                     <KrysFormLabel text="Publication type" isRequired={true}/>
 
                                     <KrysCheckbox name="types[]" label={'Website'}
-                                                  onChangeHandler={(e) => checkboxChangeHandler(e, 'types', PUBLICATION_TYPE.WEBSITE, true)}
-                                                  defaultValue={form.types.includes(PUBLICATION_TYPE.WEBSITE)}/>
+                                                  onChangeHandler={(e) => checkboxChangeHandler(e, 'types', PublicationTypeEnum.WEBSITE, true)}
+                                                  defaultValue={form.types.includes(PublicationTypeEnum.WEBSITE)}/>
 
                                     <KrysCheckbox name="types[]" label={'iOS Application'}
-                                                  onChangeHandler={(e) => checkboxChangeHandler(e, 'types', PUBLICATION_TYPE.IOS_APPLICATION, true)}
-                                                  defaultValue={form.types.includes(PUBLICATION_TYPE.IOS_APPLICATION)}/>
+                                                  onChangeHandler={(e) => checkboxChangeHandler(e, 'types', PublicationTypeEnum.IOS_APPLICATION, true)}
+                                                  defaultValue={form.types.includes(PublicationTypeEnum.IOS_APPLICATION)}/>
 
                                     <KrysCheckbox name="types[]" label={'Android Application'}
-                                                  onChangeHandler={(e) => checkboxChangeHandler(e, 'types', PUBLICATION_TYPE.ANDROID_APPLICATION, true)}
-                                                  defaultValue={form.types.includes(PUBLICATION_TYPE.ANDROID_APPLICATION)}/>
+                                                  onChangeHandler={(e) => checkboxChangeHandler(e, 'types', PublicationTypeEnum.ANDROID_APPLICATION, true)}
+                                                  defaultValue={form.types.includes(PublicationTypeEnum.ANDROID_APPLICATION)}/>
 
                                     <div className="mt-1 text-danger">
                                         {errors?.types ? errors?.types : null}
@@ -248,7 +263,7 @@ const PublicationCreate: React.FC = () => {
                                 </div>
 
                                 {
-                                    form.types.includes(PUBLICATION_TYPE.WEBSITE) &&
+                                    form.types.includes(PublicationTypeEnum.WEBSITE) &&
                                     <div className="mb-7">
                                         <KrysFormLabel text="URL" isRequired={true}/>
 
@@ -263,7 +278,7 @@ const PublicationCreate: React.FC = () => {
                                 }
 
                                 {
-                                    form.types.includes(PUBLICATION_TYPE.ANDROID_APPLICATION) &&
+                                    form.types.includes(PublicationTypeEnum.ANDROID_APPLICATION) &&
 
                                     <div className="d-block">
                                         <div
@@ -328,20 +343,20 @@ const PublicationCreate: React.FC = () => {
                                                                  e.stopPropagation();
                                                                  setForm({
                                                                      ...form,
-                                                                     android_application_type: APPLICATION_TYPE.FREE
+                                                                     android_application_type: PublicationApplicationEnum.FREE
                                                                  });
                                                              }}
-                                                             defaultValue={form.android_application_type === APPLICATION_TYPE.FREE}/>
+                                                             defaultValue={form.android_application_type === PublicationApplicationEnum.FREE}/>
 
                                             <KrysRadioButton name="android_application_type" label={'Paid'}
                                                              onChangeHandler={(e) => {
                                                                  e.stopPropagation();
                                                                  setForm({
                                                                      ...form,
-                                                                     android_application_type: APPLICATION_TYPE.PAID
+                                                                     android_application_type: PublicationApplicationEnum.PAID
                                                                  });
                                                              }}
-                                                             defaultValue={form.android_application_type === APPLICATION_TYPE.PAID}/>
+                                                             defaultValue={form.android_application_type === PublicationApplicationEnum.PAID}/>
 
                                             <div className="mt-1 text-danger">
                                                 {errors?.android_application_type ? errors?.android_application_type : null}
@@ -351,7 +366,7 @@ const PublicationCreate: React.FC = () => {
                                 }
 
                                 {
-                                    form.types.includes(PUBLICATION_TYPE.IOS_APPLICATION) &&
+                                    form.types.includes(PublicationTypeEnum.IOS_APPLICATION) &&
 
                                     <div className="d-block">
                                         <div
@@ -415,20 +430,20 @@ const PublicationCreate: React.FC = () => {
                                                                  e.stopPropagation();
                                                                  setForm({
                                                                      ...form,
-                                                                     ios_application_type: APPLICATION_TYPE.FREE
+                                                                     ios_application_type: PublicationApplicationEnum.FREE
                                                                  });
                                                              }}
-                                                             defaultValue={form.ios_application_type === APPLICATION_TYPE.FREE}/>
+                                                             defaultValue={form.ios_application_type === PublicationApplicationEnum.FREE}/>
 
                                             <KrysRadioButton name="ios_application_type" label={'Paid'}
                                                              onChangeHandler={(e) => {
                                                                  e.stopPropagation();
                                                                  setForm({
                                                                      ...form,
-                                                                     ios_application_type: APPLICATION_TYPE.PAID
+                                                                     ios_application_type: PublicationApplicationEnum.PAID
                                                                  });
                                                              }}
-                                                             defaultValue={form.ios_application_type === APPLICATION_TYPE.PAID}/>
+                                                             defaultValue={form.ios_application_type === PublicationApplicationEnum.PAID}/>
 
                                             <div className="mt-1 text-danger">
                                                 {errors?.ios_application_type ? errors?.ios_application_type : null}
@@ -469,30 +484,31 @@ const PublicationCreate: React.FC = () => {
                                                          e.stopPropagation();
                                                          setForm({
                                                              ...form,
-                                                             revenue_type: REVENUE_TYPE.SAME_AS_PUBLISHER,
+                                                             revenue_type: RevenueTypeEnum.SAME_AS_PUBLISHER,
                                                              revenue_value: ''
                                                          });
                                                      }}
-                                                     defaultValue={form.revenue_type === REVENUE_TYPE.SAME_AS_PUBLISHER}/>
+                                                     defaultValue={form.revenue_type === RevenueTypeEnum.SAME_AS_PUBLISHER}/>
 
                                     <KrysRadioButton name="revenue_type" label={'Revenue Share'}
                                                      onChangeHandler={(e) => {
                                                          e.stopPropagation();
                                                          setForm({
                                                              ...form,
-                                                             revenue_type: REVENUE_TYPE.REVENUE_SHARE,
+                                                             revenue_type: RevenueTypeEnum.REVENUE_SHARE,
                                                          });
                                                      }}
-                                                     defaultValue={form.revenue_type === REVENUE_TYPE.REVENUE_SHARE}/>
+                                                     defaultValue={form.revenue_type === RevenueTypeEnum.REVENUE_SHARE}/>
 
                                     <KrysRadioButton name="revenue_type" label={'Amount Commitment'}
                                                      onChangeHandler={(e) => {
                                                          e.stopPropagation();
                                                          setForm({
                                                              ...form,
-                                                             revenue_type: REVENUE_TYPE.COMMITMENT,
+                                                             revenue_type: RevenueTypeEnum.COMMITMENT,
                                                          });
-                                                     }} defaultValue={form.revenue_type === REVENUE_TYPE.COMMITMENT}/>
+                                                     }}
+                                                     defaultValue={form.revenue_type === RevenueTypeEnum.COMMITMENT}/>
 
                                     <div className="mt-1 text-danger">
                                         {errors?.revenue_type ? errors?.revenue_type : null}
@@ -500,7 +516,7 @@ const PublicationCreate: React.FC = () => {
                                 </div>
 
                                 {
-                                    form.revenue_type === REVENUE_TYPE.REVENUE_SHARE &&
+                                    form.revenue_type === RevenueTypeEnum.REVENUE_SHARE &&
                                     <div className="mb-7">
                                         <KrysFormLabel text="Revenue share" isRequired={true}/>
 
@@ -518,7 +534,7 @@ const PublicationCreate: React.FC = () => {
                                 }
 
                                 {
-                                    form.revenue_type === REVENUE_TYPE.COMMITMENT &&
+                                    form.revenue_type === RevenueTypeEnum.COMMITMENT &&
                                     <div className="mb-7">
                                         <KrysFormLabel text="Commitment" isRequired={true}/>
 

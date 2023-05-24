@@ -59,7 +59,7 @@ export const getArchivedPublishers = (query?: String): Promise<PublisherPaginate
 
 export const getPublisher = async (id: number): Promise<Publisher | AxiosError | undefined> => {
     return await axios.get(`${ENDPOINT}/${id}?${INCLUDES}`)
-        .then(res => res.data.data).catch((error) => {
+        .then(response => response.data.data).catch((error) => {
             return error;
         });
 }
@@ -68,7 +68,7 @@ export const storePublisher = async (publisher: any): Promise<Publisher | AxiosE
     let formData = createFormData(publisher);
 
     return await axios.post(ENDPOINT + '/', formData)
-        .then(res => res.data.data)
+        .then(response => response.data.data)
         .catch((error) => {
             return error;
         });
@@ -79,7 +79,7 @@ export const updatePublisher = async (id: number, publisher: any): Promise<Publi
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(response => response.data.data).catch((error) => {
         return error;
     });
 }

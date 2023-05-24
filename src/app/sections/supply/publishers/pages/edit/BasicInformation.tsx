@@ -11,10 +11,11 @@ import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysRadioButton from '../../../../../components/forms/KrysRadioButton';
 import SingleSelect from '../../../../../components/forms/SingleSelect';
 import {RoleEnum} from '../../../../../enums/RoleEnum';
-import {REVENUE_TYPE} from '../../../../../enums/Supply/RevenueType';
+import {RevenueTypeEnum} from '../../../../../enums/Supply/RevenueTypeEnum';
 import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
 import {filterData} from '../../../../../helpers/dataManipulation';
 import {genericDateOnChangeHandler, GenericErrorMessage, genericOnChangeHandler} from '../../../../../helpers/form';
+import {scrollToTop} from '../../../../../helpers/general';
 import {extractErrors} from '../../../../../helpers/requests';
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
 import {Country} from '../../../../../models/misc/Country';
@@ -50,8 +51,12 @@ const PublisherBasicInformationEdit: React.FC = () => {
             getAllTiers().then(response => {
                 if (axios.isAxiosError(response)) {
                     setFormErrors(extractErrors(response));
+
+                    scrollToTop();
                 } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
+                    setFormErrors([GenericErrorMessage]);
+
+                    scrollToTop();
                 } else {
                     // if we were able to get the list of tiers, then we fill our state with them
                     if (response.data) {
@@ -64,8 +69,12 @@ const PublisherBasicInformationEdit: React.FC = () => {
             getAllCountries().then(response => {
                 if (axios.isAxiosError(response)) {
                     setFormErrors(extractErrors(response));
+
+                    scrollToTop();
                 } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
+                    setFormErrors([GenericErrorMessage]);
+
+                    scrollToTop();
                 } else {
                     // if we were able to get the list of countries, then we fill our state with them
                     if (response.data) {
@@ -93,9 +102,13 @@ const PublisherBasicInformationEdit: React.FC = () => {
                     if (axios.isAxiosError(response)) {
                         // we need to show the errors
                         setFormErrors(extractErrors(response));
+
+                        scrollToTop();
                     } else if (response === undefined) {
                         // show generic error message
-                        setFormErrors([GenericErrorMessage])
+                        setFormErrors([GenericErrorMessage]);
+
+                        scrollToTop();
                     } else {
                         // we were able to store the publisher
                         krysApp.setAlert({
@@ -185,20 +198,20 @@ const PublisherBasicInformationEdit: React.FC = () => {
                                                                  e.stopPropagation();
                                                                  setForm({
                                                                      ...form,
-                                                                     revenue_type: REVENUE_TYPE.REVENUE_SHARE
+                                                                     revenue_type: RevenueTypeEnum.REVENUE_SHARE
                                                                  });
                                                              }}
-                                                             defaultValue={form.revenue_type === REVENUE_TYPE.REVENUE_SHARE}/>
+                                                             defaultValue={form.revenue_type === RevenueTypeEnum.REVENUE_SHARE}/>
 
                                             <KrysRadioButton name="revenue_type" label={'Amount Commitment'}
                                                              onChangeHandler={(e) => {
                                                                  e.stopPropagation();
                                                                  setForm({
                                                                      ...form,
-                                                                     revenue_type: REVENUE_TYPE.COMMITMENT
+                                                                     revenue_type: RevenueTypeEnum.COMMITMENT
                                                                  });
                                                              }}
-                                                             defaultValue={form.revenue_type === REVENUE_TYPE.COMMITMENT}/>
+                                                             defaultValue={form.revenue_type === RevenueTypeEnum.COMMITMENT}/>
 
                                             <div className="mt-1 text-danger">
                                                 {errors?.revenue_type ? errors?.revenue_type : null}
@@ -206,7 +219,7 @@ const PublisherBasicInformationEdit: React.FC = () => {
                                         </div>
 
                                         {
-                                            form.revenue_type === REVENUE_TYPE.REVENUE_SHARE &&
+                                            form.revenue_type === RevenueTypeEnum.REVENUE_SHARE &&
                                             <div className="mb-7">
                                                 <KrysFormLabel text="Revenue share" isRequired={true}/>
 
@@ -224,7 +237,7 @@ const PublisherBasicInformationEdit: React.FC = () => {
                                         }
 
                                         {
-                                            form.revenue_type === REVENUE_TYPE.COMMITMENT &&
+                                            form.revenue_type === RevenueTypeEnum.COMMITMENT &&
                                             <div className="mb-7">
                                                 <KrysFormLabel text="Commitment" isRequired={true}/>
 

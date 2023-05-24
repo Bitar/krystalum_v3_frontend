@@ -59,7 +59,7 @@ export const getArchivedPublications = (query?: String): Promise<PublicationPagi
 
 export const getPublication = async (id: number): Promise<Publication | AxiosError | undefined> => {
     return await axios.get(`${ENDPOINT}/${id}?${SHOW_INCLUDES}`)
-        .then(res => res.data.data).catch((error) => {
+        .then(response => response.data.data).catch((error) => {
             return error;
         });
 }
@@ -68,7 +68,7 @@ export const storePublication = async (publication: any): Promise<Publication | 
     let formData = createFormData(publication);
 
     return await axios.post(ENDPOINT + '/', formData)
-        .then(res => res.data.data)
+        .then(response => response.data.data)
         .catch((error) => {
             return error;
         });
@@ -79,7 +79,7 @@ export const updatePublication = async (id: number, publication: any): Promise<P
 
     formData.append('_method', 'put');
 
-    return await axios.post(ENDPOINT + '/' + id, formData).then(res => res.data.data).catch((error) => {
+    return await axios.post(ENDPOINT + '/' + id, formData).then(response => response.data.data).catch((error) => {
         return error;
     });
 }

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {Field, Form, Formik} from 'formik';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import Select from 'react-select';
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
@@ -8,17 +8,17 @@ import FormErrors from '../../../../../../components/forms/FormErrors';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
+import {PublisherContactTypeEnum} from '../../../../../../enums/Supply/PublisherContactTypeEnum';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {
     GenericErrorMessage,
     genericOnChangeHandler,
     genericSingleSelectOnChangeHandler
 } from '../../../../../../helpers/form';
+import {enumToArray} from '../../../../../../helpers/general';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
-import {ContactType} from '../../../../../../models/supply/Options';
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
-import {getContactTypes} from '../../../../../../requests/supply/Options';
 import {
     getPublisherContacts,
     storePublisherContact
@@ -38,31 +38,9 @@ const PublisherContactCreate: React.FC = () => {
     const [form, setForm] = useState<PublisherContactFormFields>(defaultPublisherContactFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
-    const [contactTypes, setContactTypes] = useState<ContactType[]>([]);
-
     const [refreshTable, setRefreshTable] = useState<boolean>(false);
 
     const contactTypesSelectRef = useRef<any>(null);
-
-    useEffect(() => {
-        if (publisher) {
-            // get the contacts types
-            getContactTypes().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of contacts types, then we fill our state with them
-                    if (response.data) {
-                        setContactTypes(response.data);
-                    }
-                }
-            });
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [publisher]);
 
     const onChangeHandler = (e: any) => {
         // as long as we are updating the create form, we should set the table refresh to false
@@ -125,7 +103,7 @@ const PublisherContactCreate: React.FC = () => {
                                     <KrysFormLabel text="Contact type" isRequired={true}/>
 
                                     <Select name="type"
-                                            options={contactTypes}
+                                            options={enumToArray(PublisherContactTypeEnum)}
                                             getOptionLabel={(contactType) => contactType.name}
                                             getOptionValue={(contactType) => contactType.id.toString()}
                                             onChange={(e) => {

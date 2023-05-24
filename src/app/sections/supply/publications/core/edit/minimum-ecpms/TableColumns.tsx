@@ -1,7 +1,7 @@
 import React from 'react';
 import {Column} from 'react-table'
 import {QUERIES} from '../../../../../../../_metronic/helpers';
-import {GEO_TYPE} from '../../../../../../enums/Supply/GeoType';
+import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum';
 import {PublicationMinimumEcpm} from '../../../../../../models/supply/publication/PublicationMinimumEcpm';
 import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
@@ -20,7 +20,7 @@ const PublicationMinimumEcpmColumns: ReadonlyArray<Column<PublicationMinimumEcpm
         Header: (props) => <CustomHeader tableProps={props} title="Geo Type" className="min-w-125px"/>,
         id: 'geo-type',
         Cell: ({...props}) => <BadgeCell status={props.data[props.row.index].geoType.name}
-                                         color={props.data[props.row.index].geoType.id === GEO_TYPE.REGION ? 'light-primary' : 'light-info'}
+                                         color={props.data[props.row.index].geoType.id === GeoTypeEnum.REGION ? 'light-primary' : 'light-info'}
                                          align="left"/>,
     },
     {
