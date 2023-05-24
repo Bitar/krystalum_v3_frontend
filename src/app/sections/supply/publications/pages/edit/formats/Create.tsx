@@ -101,19 +101,19 @@ const PublicationFormatCreate: React.FC = () => {
                         // show generic error message
                         setFormErrors([GenericErrorMessage])
                     } else {
-                        let message;
-
-                        console.log(response)
+                        let message, type;
 
                         if ('data' in response && 'message' in response.data) {
                             message = response.data.message;
+                            type = KrysToastType.WARNING;
                         } else {
                             message = new AlertMessageGenerator('publication format', Actions.CREATE, KrysToastType.SUCCESS).message;
+                            type = KrysToastType.SUCCESS;
                         }
 
                         krysApp.setAlert({
                             message: message,
-                            type: KrysToastType.SUCCESS
+                            type: type
                         });
 
                         // now that we have a new record successfully we need to refresh the table

@@ -112,15 +112,24 @@ const PublicationFormatEdit: React.FC = () => {
                     // show generic error
                     setFormErrors([GenericErrorMessage]);
                 } else {
-                    console.log(response)
-                    // we got the updated publication formats so we're good
+                    let message, type;
+
+                    if ('data' in response && 'message' in response.data) {
+                        message = response.data.message;
+                        type = KrysToastType.WARNING;
+                    } else {
+                        message = new AlertMessageGenerator('publication format', Actions.EDIT, KrysToastType.SUCCESS).message;
+                        type = KrysToastType.SUCCESS;
+                    }
+
                     krysApp.setAlert({
-                        message: new AlertMessageGenerator('publication format', Actions.EDIT, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    })
+                        message: message,
+                        type: type
+                    });
 
                     navigate(`/supply/publications/${publication.id}/edit`);
                 }
+
             });
         }
     }

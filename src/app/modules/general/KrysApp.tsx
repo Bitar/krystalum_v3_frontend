@@ -1,6 +1,6 @@
 import {createContext, Dispatch, FC, SetStateAction, useContext, useEffect, useState} from 'react'
 import {WithChildren} from '../../../_metronic/helpers';
-import toast, {Toaster, ToastOptions} from 'react-hot-toast';
+import toast, {Toaster, ToastOptions, ToastType} from 'react-hot-toast';
 import {KrysToastType} from '../../helpers/variables';
 import PendingIcon from "../../components/icons/Pending";
 
@@ -60,7 +60,6 @@ const KrysApp: FC<WithChildren> = ({children}) => {
 
     useEffect(() => {
         if (alert !== undefined) {
-            console.log(alert.type)
             const options: ToastOptions = {
                 id: `alert-${alert.type}`,
                 duration: 4000 ,
@@ -77,8 +76,13 @@ const KrysApp: FC<WithChildren> = ({children}) => {
                 ...(alert.type in icon ? { icon: (icon as any)[alert.type] } : {}),
             };
 
-            (toast as any)[(type as any)[(alert.type)]](alert.message, options)
+            if(['success', 'error', 'loading', 'blank', 'custom'].includes(alert.type)) {
+                (toast as any)[(type as any)[(alert.type)]](alert.message, options)
+            } else {
+                (toast as any)(alert.message, options)
+            }
         }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [alert]);
 
