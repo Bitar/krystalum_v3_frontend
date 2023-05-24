@@ -1,5 +1,4 @@
 import {Response} from '../../../../_metronic/helpers';
-import {PublisherContactTypeEnum} from '../../../enums/Supply/PublisherContactTypeEnum';
 import {ContactType} from '../Options';
 
 export type PublisherContact = {

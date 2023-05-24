@@ -1,5 +1,4 @@
 import {Response} from '../../../../_metronic/helpers';
-import {GeoTypeEnum} from '../../../enums/Supply/GeoTypeEnum';
 import {Country} from '../../misc/Country';
 import {Currency} from '../../misc/Currency';
 import {Format} from '../../misc/Format';

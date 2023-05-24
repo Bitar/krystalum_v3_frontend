@@ -1,5 +1,4 @@
 import {Response} from '../../../../_metronic/helpers';
-import {RevenueTypeEnum} from '../../../enums/Supply/RevenueTypeEnum';
 import {Tier} from '../../misc/Tier';
 import {RevenueType} from '../Options';
 import {Publication} from '../publication/Publication';

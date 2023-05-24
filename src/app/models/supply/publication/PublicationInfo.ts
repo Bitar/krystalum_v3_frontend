@@ -1,4 +1,3 @@
-import {PublicationTypeEnum} from '../../../enums/Supply/PublicationTypeEnum';
 import {Type} from '../Options';
 
 export type PublicationInfo = {
