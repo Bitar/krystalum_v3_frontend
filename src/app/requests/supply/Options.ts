@@ -5,7 +5,9 @@ import {
     CampaignRestrictionTypeList,
     ContactTypeList,
     FormatTypeList,
-    GeoTypeList, PublicationEditOptions, PublicationOptions,
+    GeoTypeList,
+    PublicationEditOptions,
+    PublicationOptions,
     RevenueTypeList,
     TypeList
 } from '../../models/supply/Options';

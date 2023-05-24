@@ -165,7 +165,8 @@ const PublicationBasicInformationEdit: React.FC = () => {
                                     <KrysFormLabel text="Unique identifier" isRequired={true}/>
 
                                     <Field className="form-control fs-base" type="text"
-                                           placeholder="Enter publication unique identifier" name="unique_identifier" disabled={true}/>
+                                           placeholder="Enter publication unique identifier" name="unique_identifier"
+                                           disabled={true}/>
 
                                     <div className="mt-1 text-danger">
                                         {errors?.unique_identifier ? errors?.unique_identifier : null}
