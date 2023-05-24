@@ -2,7 +2,7 @@ import {createContext, Dispatch, FC, SetStateAction, useContext, useEffect, useS
 import {WithChildren} from '../../../_metronic/helpers';
 import toast, {Toaster, ToastOptions, ToastType} from 'react-hot-toast';
 import {KrysToastType} from '../../helpers/variables';
-import PendingIcon from "../../components/icons/Pending";
+import PendingIcon from '../../components/icons/Pending';
 
 type Alert = {
     message: string;
@@ -62,7 +62,7 @@ const KrysApp: FC<WithChildren> = ({children}) => {
         if (alert !== undefined) {
             const options: ToastOptions = {
                 id: `alert-${alert.type}`,
-                duration: 4000 ,
+                duration: 4000,
                 position: 'top-center',
                 style: {
                     border: '1px solid ' + (color as any)[alert.type],
@@ -73,10 +73,10 @@ const KrysApp: FC<WithChildren> = ({children}) => {
                     primary: (color as any)[alert.type],
                     secondary: '',
                 },
-                ...(alert.type in icon ? { icon: (icon as any)[alert.type] } : {}),
+                ...(alert.type in icon ? {icon: (icon as any)[alert.type]} : {}),
             };
 
-            if(['success', 'error', 'loading', 'blank', 'custom'].includes(alert.type)) {
+            if (['success', 'error', 'loading', 'blank', 'custom'].includes(alert.type)) {
                 (toast as any)[(type as any)[(alert.type)]](alert.message, options)
             } else {
                 (toast as any)(alert.message, options)
