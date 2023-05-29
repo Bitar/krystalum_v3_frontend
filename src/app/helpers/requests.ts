@@ -20,26 +20,30 @@ export const createFormData = (form: any) => {
     let formData = new FormData();
 
     for (const key in form) {
-        if(form[key] !== null && form[key] !== undefined) {
-            if (form[key] instanceof Array) {
-                if (form[key].length > 0) {
-                    for (const item in form[key]) {
-                        formData.append(`${key}[]`, form[key][item]);
-                    }
-                }
-            } else if ((form[key] instanceof String || typeof form[key] === 'string')) {
-                // this condition needs to be inside the String check because we don't
-                // want strings who fail the length check to end up in the last `else`
-                if(form[key].length !== 0) {
-                    formData.append(key, form[key]);
-                }
-            } else {
-                formData.append(key, form[key]);
-            }
-        }
+        insertInForm(formData, key, form[key]);
     }
 
     return formData;
+}
+
+export const insertInForm = (formData: FormData, formDataKey: string, formItem: any) => {
+    if (formItem !== null && formItem !== undefined && formItem !== '') {
+        if (formItem instanceof Array) {
+            if (formItem.length > 0) {
+                for (const itemKey in formItem) {
+                    if (formItem[itemKey] instanceof Object && !(formItem[itemKey] instanceof File) && !(formItem[itemKey] instanceof Date)) {
+                        Object.keys(formItem[itemKey]).forEach((key: string) => {
+                            insertInForm(formData, `${formDataKey}[${itemKey}][${key}]`, formItem[itemKey][key])
+                        })
+                    } else {
+                        formData.append(`${formDataKey}[]`, formItem[itemKey]);
+                    }
+                }
+            }
+        } else {
+            formData.append(formDataKey, formItem);
+        }
+    }
 }
 
 export const deleteObject = async (link: string): Promise<void> => {
