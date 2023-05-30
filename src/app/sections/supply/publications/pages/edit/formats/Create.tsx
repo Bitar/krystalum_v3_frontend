@@ -9,7 +9,6 @@ import {indentOptions} from '../../../../../../components/forms/IndentOptions';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
-import {PublicationFormatTypeEnum} from '../../../../../../enums/Supply/PublicationFormatTypeEnum';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {
     GenericErrorMessage,
@@ -17,10 +16,8 @@ import {
     genericOnChangeHandler,
     genericSingleSelectOnChangeHandler
 } from '../../../../../../helpers/form';
-import {enumToArray} from '../../../../../../helpers/general';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
-
 import {useKrysApp} from '../../../../../../modules/general/KrysApp';
 import {
     getPublicationFormats,
@@ -48,7 +45,7 @@ const PublicationFormatCreate: React.FC = () => {
     const formatsSelectRef = useRef<any>(null);
     const formatTypesSelectRef = useRef<any>(null);
 
-    const {formats} = options;
+    const {formats, formatTypes} = options;
 
     const multiSelectChangeHandler = (e: any, key: string) => {
         genericMultiSelectOnChangeHandler(e, form, setForm, key);
@@ -148,7 +145,7 @@ const PublicationFormatCreate: React.FC = () => {
 
                                     <Select name="type"
                                             menuPlacement={'top'}
-                                            options={enumToArray(PublicationFormatTypeEnum)}
+                                            options={formatTypes}
                                             getOptionLabel={(formatType) => formatType?.name}
                                             getOptionValue={(formatType) => formatType?.id.toString()}
                                             onChange={(e) => {

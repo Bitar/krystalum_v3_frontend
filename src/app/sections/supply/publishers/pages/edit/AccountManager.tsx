@@ -9,6 +9,7 @@ import FormErrors from '../../../../../components/forms/FormErrors';
 import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysInnerTable from '../../../../../components/tables/KrysInnerTable';
+import {RoleEnum} from '../../../../../enums/RoleEnum';
 import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
 import {
     GenericErrorMessage,
@@ -18,6 +19,7 @@ import {
 import {extractErrors} from '../../../../../helpers/requests';
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
 import {User} from '../../../../../models/iam/User';
+import {useAuth} from '../../../../../modules/auth';
 import {useKrysApp} from '../../../../../modules/general/KrysApp';
 import {getAllUsers} from '../../../../../requests/iam/User';
 import {
@@ -33,6 +35,7 @@ import {PublisherAccountManagersColumns} from '../../core/edit/account-managers/
 import {usePublisherEdit} from '../../core/PublisherEditContext';
 
 const PublisherAccountManager: React.FC = () => {
+    const {currentUser, hasAnyRoles} = useAuth();
     const {publisher} = usePublisherEdit();
     const krysApp = useKrysApp();
 
@@ -47,7 +50,7 @@ const PublisherAccountManager: React.FC = () => {
     const accountManagersSelectRef = useRef<any>(null);
 
     useEffect(() => {
-        if (publisher) {
+        if (publisher && !hasAnyRoles(currentUser, [RoleEnum.PUBLISHER])) {
             // get all the account manager users
             getAllUsers('filter[roles][]=12&filter[roles][]=5').then(response => {
                 if (axios.isAxiosError(response)) {

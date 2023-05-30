@@ -56,7 +56,9 @@ export type CampaignRestrictionType = {
 export type PublisherOptions = {
     countries: Country[]
     regions: Region[],
-    tiers: Tier[]
+    tiers: Tier[],
+    revenueTypes: RevenueType[],
+    contactTypes: ContactType[]
 };
 
 export type PublicationOptions = {
@@ -67,6 +69,13 @@ export type PublicationOptions = {
     technologies: Technology[],
     regions: Region[],
     verticals: Vertical[],
+    revenueTypes: RevenueType[],
+    analyticTypes: AnalyticType[],
+    applicationTypes: ApplicationType[],
+    formatTypes: FormatType[],
+    geoTypes: GeoType[],
+    types: Type[],
+    restrictionTypes: CampaignRestrictionType[]
 };
 
 export type PublicationEditOptions = {

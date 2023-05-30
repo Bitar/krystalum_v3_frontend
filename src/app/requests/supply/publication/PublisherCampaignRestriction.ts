@@ -8,7 +8,7 @@ import {
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publications`
-const CAMPAIGN_RESTRICTIONS_ENDPOINT = 'campaign-restrictions'
+const CAMPAIGN_RESTRICTIONS_ENDPOINT = 'restrictions'
 
 export const getPublicationCampaignRestrictions = (publicationId: number, query?: String): Promise<PublicationCampaignRestrictionPaginate> => {
     let url = `${ENDPOINT}/${publicationId}/${CAMPAIGN_RESTRICTIONS_ENDPOINT}`;

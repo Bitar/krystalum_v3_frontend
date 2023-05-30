@@ -8,15 +8,6 @@ export const downloadOnClick = (href: string | null | undefined) => {
     }
 };
 
-export const enumToArray = <T extends string>(
-    enumObject: Record<T, string>
-): Array<{ id: T; name: string }> => {
-    return Object.keys(enumObject).map((key) => ({
-        id: key as T,
-        name: enumObject[key as keyof typeof enumObject].charAt(0).toUpperCase() + enumObject[key as keyof typeof enumObject].slice(1)
-    }));
-};
-
 export const scrollToTop = () => {
     window.scrollTo({top: 0, behavior: 'smooth'});
 };

@@ -8,10 +8,8 @@ import FormErrors from '../../../../../../components/forms/FormErrors';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import SingleSelect from '../../../../../../components/forms/SingleSelect';
-import {PublisherContactTypeEnum} from '../../../../../../enums/Supply/PublisherContactTypeEnum';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
-import {enumToArray} from '../../../../../../helpers/general';
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {Sections} from '../../../../../../helpers/sections';
@@ -27,9 +25,11 @@ import {
     PublisherContactFormFields,
     PublisherContactSchema
 } from '../../../core/edit/contacts/form';
+import {usePublisher} from '../../../core/PublisherContext';
 import {usePublisherEdit} from '../../../core/PublisherEditContext';
 
 const PublisherContactEdit: React.FC = () => {
+    const {options} = usePublisher();
     const {publisher} = usePublisherEdit();
     const krysApp = useKrysApp();
 
@@ -41,6 +41,8 @@ const PublisherContactEdit: React.FC = () => {
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
+
+    const {contactTypes} = options
 
     useEffect(() => {
         if (publisher && cid) {
@@ -120,7 +122,7 @@ const PublisherContactEdit: React.FC = () => {
                                     <KrysFormLabel text="Contact type" isRequired={true}/>
 
                                     <SingleSelect isResourceLoaded={isResourceLoaded}
-                                                  options={enumToArray(PublisherContactTypeEnum)}
+                                                  options={contactTypes}
                                                   defaultValue={publisherContact?.contactType} form={form}
                                                   setForm={setForm} name="type" isClearable={true}/>
 

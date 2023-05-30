@@ -45,18 +45,20 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
     const {countries, regions, tiers} = options
 
     useEffect(() => {
-        // get all the account manager users
-        getAllUsers('filter[roles][]=12&filter[roles][]=5').then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else {
-                if (response.data) {
-                    setAccountManagers(response.data);
+        if (!hasAnyRoles(currentUser, [RoleEnum.PUBLISHER])) {
+            // get all the account manager users
+            getAllUsers('filter[roles][]=12&filter[roles][]=5').then(response => {
+                if (axios.isAxiosError(response)) {
+                    setFilterErrors(extractErrors(response));
+                } else if (response === undefined) {
+                    setFilterErrors([GenericErrorMessage])
+                } else {
+                    if (response.data) {
+                        setAccountManagers(response.data);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

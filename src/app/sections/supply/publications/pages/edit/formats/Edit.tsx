@@ -8,10 +8,8 @@ import FormErrors from '../../../../../../components/forms/FormErrors';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import SingleSelect from '../../../../../../components/forms/SingleSelect';
-import {PublicationFormatTypeEnum} from '../../../../../../enums/Supply/PublicationFormatTypeEnum';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form';
-import {enumToArray} from '../../../../../../helpers/general';
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {Sections} from '../../../../../../helpers/sections';
@@ -45,7 +43,7 @@ const PublicationFormatEdit: React.FC = () => {
 
     const [publicationFormat, setPublicationFormat] = useState<PublicationFormat | null>(null);
 
-    const {formats} = options;
+    const {formats, formatTypes} = options;
 
     useEffect(() => {
         if (publication && cid) {
@@ -148,7 +146,7 @@ const PublicationFormatEdit: React.FC = () => {
                                     <KrysFormLabel text="Type" isRequired={true}/>
 
                                     <SingleSelect isResourceLoaded={isResourceLoaded}
-                                                  options={enumToArray(PublicationFormatTypeEnum)}
+                                                  options={formatTypes}
                                                   defaultValue={publicationFormat?.type} form={form}
                                                   setForm={setForm} name="type" isClearable={true}/>
 

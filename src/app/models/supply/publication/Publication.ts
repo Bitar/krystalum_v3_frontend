@@ -25,7 +25,6 @@ export type Publication = {
     hi10_to_video: number,
     info: PublicationInfo,
     languages: Language[],
-
     formats?: PublicationFormat[],
     verticals?: PublicationVertical[],
     adServers?: AdServer[],

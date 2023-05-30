@@ -21,11 +21,24 @@ export const DEFAULT_CAMPAIGN_RESTRICTION_TYPE: CampaignRestrictionType = {
 }
 
 export const DEFAULT_PUBLISHER_OPTIONS: PublisherOptions = {
-    countries: [], regions: [], tiers: []
+    contactTypes: [], countries: [], regions: [], revenueTypes: [], tiers: []
 }
 
 export const DEFAULT_PUBLICATION_OPTIONS: PublicationOptions = {
-    adServers: [], countries: [], formats: [], languages: [], regions: [], technologies: [], verticals: []
+    adServers: [],
+    analyticTypes: [],
+    applicationTypes: [],
+    countries: [],
+    formatTypes: [],
+    formats: [],
+    geoTypes: [],
+    languages: [],
+    regions: [],
+    restrictionTypes: [],
+    revenueTypes: [],
+    technologies: [],
+    types: [],
+    verticals: []
 }
 
 export const DEFAULT_PUBLICATION_EDIT_OPTIONS: PublicationEditOptions = {

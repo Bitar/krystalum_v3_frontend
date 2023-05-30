@@ -11,14 +11,12 @@ import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton'
 import {SelectCardAction} from '../../../../../../components/misc/CardAction';
 import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
 import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum';
-import {PublicationAnalyticTypeEnum} from '../../../../../../enums/Supply/PublicationAnalyticTypeEnum';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
 import {
     GenericErrorMessage,
     genericOnChangeHandler,
     genericSingleSelectOnChangeHandler
 } from '../../../../../../helpers/form';
-import {enumToArray} from '../../../../../../helpers/general';
 import {extractErrors} from '../../../../../../helpers/requests';
 import {DEFAULT_ANALYTIC_TYPE} from '../../../../../../helpers/settings';
 import {Actions, KrysToastType} from '../../../../../../helpers/variables';
@@ -57,12 +55,12 @@ const PublicationAnalyticCreate: React.FC = () => {
     const geosSelectRef = useRef<any>(null);
     const devicesSelectRef = useRef<any>(null);
 
-    const {regions, countries} = options;
+    const {regions, countries, analyticTypes} = options;
     const {devices} = editOptions;
 
     useEffect(() => {
         if (publication) {
-            setAnalyticsType(enumToArray(PublicationAnalyticTypeEnum))
+            setAnalyticsType(analyticTypes)
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
