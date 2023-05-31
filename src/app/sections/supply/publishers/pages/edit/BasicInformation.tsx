@@ -41,6 +41,8 @@ const PublisherBasicInformationEdit: React.FC = () => {
         if (publisher) {
             setIsResourceLoaded(true);
 
+            console.log(publisher)
+
             setForm(fillEditForm(publisher));
         }
 
