@@ -5,7 +5,7 @@ import {Publisher} from '../../../../models/supply/publisher/Publisher';
 export interface FormFields {
     name: string;
     tier_id?: number | null;
-    integration_date?: Date | null;
+    integration_date?: string;
     revenue_type: string;
     revenue_value: string | null;
     email?: string | null;

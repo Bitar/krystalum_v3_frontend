@@ -10,6 +10,7 @@ import FilterFormFooter from '../../../../../components/forms/FilterFormFooter';
 import {indentOptions} from '../../../../../components/forms/IndentOptions';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysSwitch from '../../../../../components/forms/KrysSwitch';
+import {createDateFromString} from '../../../../../helpers/dateFormatter';
 import {
     genericDateRangeOnChangeHandler,
     genericMultiSelectOnChangeHandler,
@@ -153,7 +154,7 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                                                              block
                                                              isoWeek
                                                              onChange={(date) => dateRangeChangeHandler(date, 'live_date_range')}
-                                                             value={filters.live_date_range ? [new Date(filters.live_date_range.split(',')[0]), new Date(filters.live_date_range.split(',')[1])] : null}
+                                                             value={filters.live_date_range ? [createDateFromString(filters.live_date_range.split(',')[0]), createDateFromString(filters.live_date_range.split(',')[1])] : null}
                                             />
                                         </Col>
 
@@ -166,7 +167,7 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                                                              block
                                                              isoWeek
                                                              onChange={(date) => dateRangeChangeHandler(date, 'creation_date_range')}
-                                                             value={filters.creation_date_range ? [new Date(filters.creation_date_range.split(',')[0]), new Date(filters.creation_date_range.split(',')[1])] : null}
+                                                             value={filters.creation_date_range ? [createDateFromString(filters.creation_date_range.split(',')[0]), createDateFromString(filters.creation_date_range.split(',')[1])] : null}
                                             />
                                         </Col>
 

@@ -13,6 +13,7 @@ import SingleSelect from '../../../../../components/forms/SingleSelect';
 import {RoleEnum} from '../../../../../enums/RoleEnum';
 import {RevenueTypeEnum} from '../../../../../enums/Supply/RevenueTypeEnum';
 import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
+import {createDateFromString} from '../../../../../helpers/dateFormatter';
 import {genericDateOnChangeHandler, GenericErrorMessage, genericOnChangeHandler} from '../../../../../helpers/form';
 import {scrollToTop} from '../../../../../helpers/general';
 import {extractErrors} from '../../../../../helpers/requests';
@@ -135,7 +136,7 @@ const PublisherBasicInformationEdit: React.FC = () => {
                                             <KrysFormLabel text="Integration date" isRequired={false}/>
 
                                             <DatePicker name="integration_date"
-                                                        value={(form.integration_date ? new Date(form.integration_date) : null)}
+                                                        defaultValue={form.integration_date ? createDateFromString(form.integration_date) : undefined}
                                                         className="krys-datepicker"
                                                         oneTap={true}
                                                         block

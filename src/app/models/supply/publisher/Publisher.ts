@@ -9,7 +9,7 @@ export type Publisher = {
     id: number,
     name: string,
     tier: Tier | null,
-    integration_date: Date | null,
+    integration_date: string,
     revenueType: RevenueType,
     revenue_value: string,
     info: PublisherInfo | null,

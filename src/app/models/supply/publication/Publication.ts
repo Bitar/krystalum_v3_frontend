@@ -13,7 +13,7 @@ export type Publication = {
     unique_identifier: string,
     name: string,
     publisher: Publisher,
-    live_date: Date,
+    live_date: string,
     is_archived: number, // i.e. not sending inventory
     is_deal_pmp: number, // if 1 => deal based, else if 0 => tag based
     revenueType: RevenueType,

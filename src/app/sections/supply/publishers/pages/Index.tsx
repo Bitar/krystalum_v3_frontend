@@ -10,7 +10,7 @@ import {PageTypes} from '../../../../helpers/variables';
 import {useAuth} from '../../../../modules/auth';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {EXPORT_ENDPOINT, getPublishers} from '../../../../requests/supply/publisher/Publisher';
-import {PublishersColumns} from '../core/TableColumns';
+import {getPublisherColumns} from '../core/TableColumns';
 import PublisherIndexFilter from '../partials/filters/IndexFilter';
 
 const PublisherIndex: React.FC = () => {
@@ -30,7 +30,7 @@ const PublisherIndex: React.FC = () => {
         <>
             <KrysIndex queryId={QUERIES.PUBLISHERS_LIST}
                        requestFunction={getPublishers}
-                       columnsArray={PublishersColumns}
+                       columnsArray={getPublisherColumns(hasRoles(currentUser, [RoleEnum.PUBLISHER]))}
                        cardHeader={
                            {
                                text: 'All Publishers',

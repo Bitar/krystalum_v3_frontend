@@ -5,13 +5,11 @@ import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum';
 import {truncateText} from '../../../../../../helpers/stringGenerator';
 import {CampaignRestrictionRequirement} from '../../../../../../models/misc/CampaignRestrictionRequirement';
 import {CampaignType} from '../../../../../../models/misc/CampaignType';
-import {Country} from '../../../../../../models/misc/Country';
 import {Format} from '../../../../../../models/misc/Format';
-import {Region} from '../../../../../../models/misc/Region';
 import {WebsitePage} from '../../../../../../models/misc/WebsitePage';
-import {Publication} from '../../../../../../models/supply/publication/Publication';
 import {
-    PublicationCampaignRestriction, PublicationCampaignRestrictionGeo
+    PublicationCampaignRestriction,
+    PublicationCampaignRestrictionGeo
 } from '../../../../../../models/supply/publication/PublicationCampaignRestriction';
 import {Restricted} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
@@ -64,7 +62,7 @@ const PublicationCampaignRestrictionsColumns: ReadonlyArray<Column<PublicationCa
                                          className="min-w-125px"/>,
         id: 'campaign-restriction-requirements',
         Cell: ({...props}) => <TextCell
-            text={props.data[props.row.index].requirements?.length > 0 ? truncateText(props.data[props.row.index].campaignRestrictionRequirements?.map((campaignRestrictionRequirement: CampaignRestrictionRequirement) => campaignRestrictionRequirement.name).join(', '))
+            text={props.data[props.row.index].requirements?.length > 0 ? truncateText(props.data[props.row.index].requirements?.map((requirement: CampaignRestrictionRequirement) => requirement.name).join(', '))
                 : 'N/A'}/>,
     },
     {
@@ -78,22 +76,18 @@ const PublicationCampaignRestrictionsColumns: ReadonlyArray<Column<PublicationCa
             const {publication} = usePublicationEdit();
 
             const publicationCampaignRestrictionSummary = `type: ${props.data[props.row.index].type.name} |
+            geo type: ${props.data[props.row.index].geos[0].geoType.name} |
+            geos: ${truncateText(props.data[props.row.index].formats?.map((format: Format) => format.name).join(', '))} | 
             formats: ${truncateText(props.data[props.row.index].formats?.map((format: Format) => format.name).join(', '))} |
             campaign types: ${truncateText(props.data[props.row.index].campaignTypes?.map((campaignType: CampaignType) => campaignType.name).join(', '))} |
             website pages: ${truncateText(props.data[props.row.index].websitePages?.map((websitePage: WebsitePage) => websitePage.name).join(', '))} |
             campaign restriction requirements: ${truncateText(props.data[props.row.index].requirements?.map((campaignRestrictionRequirement: CampaignRestrictionRequirement) => campaignRestrictionRequirement.name).join(', '))} `;
 
-            props.data.map((datum: PublicationCampaignRestriction) => {
-                if (datum.geos.length > 0){
-                    console.log(datum.geos[0].geo.name)
-                }
-            })
-
             return (
                 <Restricted to={'manage-supply'}>
                     <ActionsCell
                         id={props.data[props.row.index].id}
-                        path={`supply/publications/${publication?.id}/campaign-restrictions`}
+                        path={`supply/publications/${publication?.id}/restrictions`}
                         queryKey={QUERIES.PUBLICATION_CAMPAIGN_RESTRICTIONS_LIST}
                         showView={false}
                         showEdit={true}

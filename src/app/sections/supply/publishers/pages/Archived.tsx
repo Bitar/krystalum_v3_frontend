@@ -8,7 +8,7 @@ import {PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {EXPORT_ENDPOINT} from '../../../../requests/supply/publication/Publication';
 import {getArchivedPublishers} from '../../../../requests/supply/publisher/Publisher';
-import {PublishersColumns} from '../core/TableColumns';
+import {getPublisherColumns} from '../core/TableColumns';
 import PublisherArchivedFilter from '../partials/filters/ArchivedFilter';
 
 
@@ -29,7 +29,7 @@ const PublisherArchived: React.FC = () => {
         <>
             <KrysIndex queryId={QUERIES.PUBLISHERS_ARCHIVED_LIST}
                        requestFunction={getArchivedPublishers}
-                       columnsArray={PublishersColumns}
+                       columnsArray={getPublisherColumns(false)}
                        cardHeader={
                            {
                                text: 'All Archived Publishers',

@@ -10,6 +10,7 @@ import FilterFormFooter from '../../../../../components/forms/FilterFormFooter';
 import FormErrors from '../../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import {RoleEnum} from '../../../../../enums/RoleEnum';
+import {createDateFromString} from '../../../../../helpers/dateFormatter';
 import {
     genericDateRangeOnChangeHandler,
     GenericErrorMessage,
@@ -187,7 +188,7 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
                                                              onChange={(date) => {
                                                                  dateRangeChangeHandler(date, 'integration_date_range')
                                                              }}
-                                                             value={filters.integration_date_range ? [new Date(filters.integration_date_range.split(',')[0]), new Date(filters.integration_date_range.split(',')[1])] : null}
+                                                             value={filters.integration_date_range ? [createDateFromString(filters.integration_date_range.split(',')[0]), createDateFromString(filters.integration_date_range.split(',')[1])] : null}
                                                              ref={integrationDateRangeRef}
                                             />
                                         </Col>

@@ -16,6 +16,7 @@ import {PublicationApplicationEnum} from '../../../../../enums/Supply/Publicatio
 import {PublicationTypeEnum} from '../../../../../enums/Supply/PublicationTypeEnum';
 import {RevenueTypeEnum} from '../../../../../enums/Supply/RevenueTypeEnum';
 import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
+import {createDateFromString} from '../../../../../helpers/dateFormatter';
 import {genericDateOnChangeHandler, GenericErrorMessage, genericOnChangeHandler} from '../../../../../helpers/form';
 import {scrollToTop} from '../../../../../helpers/general';
 import {extractErrors} from '../../../../../helpers/requests';
@@ -194,7 +195,7 @@ const PublicationBasicInformationEdit: React.FC = () => {
                                     <KrysFormLabel text="Live date" isRequired={true}/>
 
                                     <DatePicker name="live_date"
-                                                value={(form.live_date ? new Date(form.live_date) : null)}
+                                                defaultValue={form.live_date ? createDateFromString(form.live_date) : undefined}
                                                 className="krys-datepicker"
                                                 oneTap={true}
                                                 block

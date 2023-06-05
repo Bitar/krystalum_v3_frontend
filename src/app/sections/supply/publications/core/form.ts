@@ -8,7 +8,7 @@ export interface FormFields {
     unique_identifier: string;
     publisher_id: number;
     languages_ids: number[];
-    live_date: Date | null;
+    live_date: string;
     is_archived: number; // i.e. not sending inventory
     is_deal_pmp: number; // if 1 => deal based, else if 0 => tag based
     revenue_type: string;
@@ -36,7 +36,7 @@ export const defaultFormFields = {
     unique_identifier: '',
     publisher_id: 0,
     languages_ids: [],
-    live_date: null,
+    live_date: '',
     is_archived: 0,
     is_deal_pmp: 0,
     revenue_type: RevenueTypeEnum.SAME_AS_PUBLISHER,

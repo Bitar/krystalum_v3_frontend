@@ -286,19 +286,19 @@ const PublicationCampaignRestrictionCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Campaign restriction requirements" isRequired={false}/>
 
-                                    <Select isMulti name="campaign_restriction_requirement_ids"
+                                    <Select isMulti name="requirement_ids"
                                             options={campaignRestrictionRequirements}
                                             getOptionLabel={(campaignRestrictionRequirement) => campaignRestrictionRequirement.name}
                                             getOptionValue={(campaignRestrictionRequirement) => campaignRestrictionRequirement.id.toString()}
                                             onChange={(e) => {
-                                                multiSelectChangeHandler(e, 'campaign_restriction_requirement_ids')
+                                                multiSelectChangeHandler(e, 'requirement_ids')
                                             }}
                                             formatOptionLabel={indentOptions}
                                             placeholder="Select one or more campaign restriction requirements"
                                             ref={campaignRestrictionRequirementsSelectRef}/>
 
                                     <div className="mt-1 text-danger">
-                                        {errors?.campaign_restriction_requirement_ids ? errors?.campaign_restriction_requirement_ids : null}
+                                        {errors?.requirement_ids ? errors?.requirement_ids : null}
                                     </div>
                                 </div>
 

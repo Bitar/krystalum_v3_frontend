@@ -1,6 +1,6 @@
-export const formatDateToMonthDayYear = (date: Date) => {
+export const formatDateToMonthDayYear = (date: string) => {
     // F d, Y => March, 7 2023
-    const fullDate = new Date(date);
+    const fullDate = createDateFromString(date);
 
     return `${fullDate.toLocaleString('default', {month: 'long'})} ${fullDate.getDate()}, ${fullDate.getFullYear()}`;
 }
