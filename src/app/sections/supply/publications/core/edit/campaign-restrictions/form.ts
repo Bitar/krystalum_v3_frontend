@@ -47,7 +47,7 @@ export interface CampaignRestrictionsFilterFields {
 }
 
 export const defaultCampaignRestrictionsFilterFields = {
-    type: DEFAULT_ANALYTIC_TYPE.id
+    type: DEFAULT_CAMPAIGN_RESTRICTION_TYPE.id
 }
 
 export const publicationCampaignRestrictionSchema = (isEdit: boolean) => {
@@ -68,17 +68,17 @@ export const publicationCampaignRestrictionSchema = (isEdit: boolean) => {
     return Yup.object().shape(schema);
 }
 
-export function fillEditForm(publicationCampaignRestriction: PublicationCampaignRestriction) {
-    const form: PublicationCampaignRestrictionEditFormFields = {
-        ...publicationCampaignRestriction,
-        type: publicationCampaignRestriction.type.id,
-        geo_type: publicationCampaignRestriction.geoType.id,
-        geo_id: publicationCampaignRestriction.geo.id,
-        format_id: publicationCampaignRestriction.format.id,
-        campaign_type_id: publicationCampaignRestriction.campaignType?.id,
-        website_page_id: publicationCampaignRestriction.websitePage?.id,
-        campaign_restriction_requirement_id: publicationCampaignRestriction.campaignRestrictionRequirement?.id,
-    };
-
-    return form;
-}
+// export function fillEditForm(publicationCampaignRestriction: PublicationCampaignRestriction) {
+//     const form: PublicationCampaignRestrictionEditFormFields = {
+//         ...publicationCampaignRestriction,
+//         type: publicationCampaignRestriction.type.id,
+//         geo_type: publicationCampaignRestriction.geoType.id,
+//         geo_id: publicationCampaignRestriction.geo.id,
+//         format_id: publicationCampaignRestriction.format.id,
+//         campaign_type_id: publicationCampaignRestriction.campaignType?.id,
+//         website_page_id: publicationCampaignRestriction.websitePage?.id,
+//         campaign_restriction_requirement_id: publicationCampaignRestriction.campaignRestrictionRequirement?.id,
+//     };
+//
+//     return form;
+// }

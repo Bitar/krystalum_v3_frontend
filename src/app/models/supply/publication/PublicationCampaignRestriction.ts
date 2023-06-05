@@ -10,12 +10,16 @@ import {CampaignRestrictionType, GeoType} from '../Options';
 export type PublicationCampaignRestriction = {
     id: number,
     type: CampaignRestrictionType,
-    geoType: GeoType,
-    geo: Region | Country,
-    format: Format,
-    campaignType: CampaignType | null,
-    websitePage: WebsitePage | null,
-    campaignRestrictionRequirement: CampaignRestrictionRequirement | null,
+    geos: PublicationCampaignRestrictionGeo[],
+    formats: Format[],
+    campaignTypes: CampaignType[] | null,
+    websitePages: WebsitePage[] | null,
+    requirements: CampaignRestrictionRequirement[] | null,
 };
 
 export type PublicationCampaignRestrictionPaginate = Response<PublicationCampaignRestriction[]>;
+
+export type PublicationCampaignRestrictionGeo = {
+    geoType: GeoType,
+    geo: Region | Country
+}

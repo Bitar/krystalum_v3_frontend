@@ -26,7 +26,7 @@ import {
 } from '../../../../../../requests/supply/publication/PublisherCampaignRestriction';
 import {
     defaultPublicationCampaignRestrictionEditFormFields,
-    fillEditForm,
+    // fillEditForm,
     PublicationCampaignRestrictionEditFormFields,
     publicationCampaignRestrictionSchema
 } from '../../../core/edit/campaign-restrictions/form';
@@ -65,7 +65,7 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
                     setPublicationCampaignRestriction(response);
 
                     // we also set the form to be the publication's campaign restriction details
-                    setForm(fillEditForm(response));
+                    // setForm(fillEditForm(response));
                 }
             });
         }
@@ -123,115 +123,115 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
                     {
                         ({errors}) => (
                             <Form onChange={onChangeHandler}>
-                                <div className="mb-7">
-                                    <KrysRadioButton name="geo_type" label={'Regions'}
-                                                     onChangeHandler={(e) => {
-                                                         e.stopPropagation();
-                                                         setForm({
-                                                             ...form,
-                                                             geo_type: GeoTypeEnum.REGION,
-                                                             geo_id: 0
-                                                         });
-                                                     }}
-                                                     defaultValue={form.geo_type === GeoTypeEnum.REGION}/>
-
-                                    <KrysRadioButton name="geo_type" label={'Countries'}
-                                                     onChangeHandler={(e) => {
-                                                         e.stopPropagation();
-                                                         setForm({
-                                                             ...form,
-                                                             geo_type: GeoTypeEnum.COUNTRY,
-                                                             geo_id: 0
-                                                         });
-                                                     }}
-                                                     defaultValue={form.geo_type === GeoTypeEnum.COUNTRY}/>
-
-                                    <div className="mt-1 text-danger">
-                                        {errors?.geo_type ? errors?.geo_type : null}
-                                    </div>
-                                </div>
-
-                                {
-                                    form.geo_type === GeoTypeEnum.REGION &&
-                                    <div className="mb-7">
-                                        <KrysFormLabel text="Region" isRequired={true}/>
-
-                                        <SingleSelect isResourceLoaded={isResourceLoaded} options={regions}
-                                                      defaultValue={publicationCampaignRestriction?.geo} form={form}
-                                                      setForm={setForm} name="geo_id" isClearable={true}/>
-
-                                        <div className="mt-1 text-danger">
-                                            {errors?.geo_id ? errors?.geo_id : null}
-                                        </div>
-                                    </div>
-                                }
-
-                                {
-                                    form.geo_type === GeoTypeEnum.COUNTRY &&
-                                    <div className="mb-7">
-                                        <KrysFormLabel text="Country" isRequired={true}/>
-
-                                        <SingleSelect isResourceLoaded={isResourceLoaded} options={countries}
-                                                      defaultValue={publicationCampaignRestriction?.geo} form={form}
-                                                      setForm={setForm} name="geo_id" isClearable={true}/>
-
-                                        <div className="mt-1 text-danger">
-                                            {errors?.geo_id ? errors?.geo_id : null}
-                                        </div>
-                                    </div>
-                                }
-
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Formats" isRequired={false}/>
-
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={formats}
-                                                  defaultValue={publicationCampaignRestriction?.format} form={form}
-                                                  setForm={setForm} name="format_id" isClearable={true}/>
-
-                                    <div className="mt-1 text-danger">
-                                        {errors?.format_id ? errors?.format_id : null}
-                                    </div>
-                                </div>
-
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Campaign types" isRequired={false}/>
-
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={campaignTypes}
-                                                  defaultValue={publicationCampaignRestriction?.campaignType}
-                                                  form={form}
-                                                  setForm={setForm} name="campaign_type_id" isClearable={true}/>
-
-                                    <div className="mt-1 text-danger">
-                                        {errors?.campaign_type_id ? errors?.campaign_type_id : null}
-                                    </div>
-                                </div>
-
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Website pages" isRequired={false}/>
-
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={websitePages}
-                                                  defaultValue={publicationCampaignRestriction?.websitePage} form={form}
-                                                  setForm={setForm} name="website_page_id" isClearable={true}/>
-
-                                    <div className="mt-1 text-danger">
-                                        {errors?.website_page_id ? errors?.website_page_id : null}
-                                    </div>
-                                </div>
-
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Campaign restriction requirements" isRequired={false}/>
-
-                                    <SingleSelect isResourceLoaded={isResourceLoaded}
-                                                  options={campaignRestrictionRequirements}
-                                                  defaultValue={publicationCampaignRestriction?.campaignRestrictionRequirement}
-                                                  form={form}
-                                                  setForm={setForm} name="campaign_restriction_requirement_id"
-                                                  isClearable={true}/>
-
-                                    <div className="mt-1 text-danger">
-                                        {errors?.campaign_restriction_requirement_id ? errors?.campaign_restriction_requirement_id : null}
-                                    </div>
-                                </div>
+                                {/*<div className="mb-7">*/}
+                                {/*    <KrysRadioButton name="geo_type" label={'Regions'}*/}
+                                {/*                     onChangeHandler={(e) => {*/}
+                                {/*                         e.stopPropagation();*/}
+                                {/*                         setForm({*/}
+                                {/*                             ...form,*/}
+                                {/*                             geo_type: GeoTypeEnum.REGION,*/}
+                                {/*                             geo_id: 0*/}
+                                {/*                         });*/}
+                                {/*                     }}*/}
+                                {/*                     defaultValue={form.geo_type === GeoTypeEnum.REGION}/>*/}
+                                
+                                {/*    <KrysRadioButton name="geo_type" label={'Countries'}*/}
+                                {/*                     onChangeHandler={(e) => {*/}
+                                {/*                         e.stopPropagation();*/}
+                                {/*                         setForm({*/}
+                                {/*                             ...form,*/}
+                                {/*                             geo_type: GeoTypeEnum.COUNTRY,*/}
+                                {/*                             geo_id: 0*/}
+                                {/*                         });*/}
+                                {/*                     }}*/}
+                                {/*                     defaultValue={form.geo_type === GeoTypeEnum.COUNTRY}/>*/}
+                                
+                                {/*    <div className="mt-1 text-danger">*/}
+                                {/*        {errors?.geo_type ? errors?.geo_type : null}*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
+                                
+                                {/*{*/}
+                                {/*    form.geo_type === GeoTypeEnum.REGION &&*/}
+                                {/*    <div className="mb-7">*/}
+                                {/*        <KrysFormLabel text="Region" isRequired={true}/>*/}
+                                
+                                {/*        <SingleSelect isResourceLoaded={isResourceLoaded} options={regions}*/}
+                                {/*                      defaultValue={publicationCampaignRestriction?.geo} form={form}*/}
+                                {/*                      setForm={setForm} name="geo_id" isClearable={true}/>*/}
+                                
+                                {/*        <div className="mt-1 text-danger">*/}
+                                {/*            {errors?.geo_id ? errors?.geo_id : null}*/}
+                                {/*        </div>*/}
+                                {/*    </div>*/}
+                                {/*}*/}
+                                
+                                {/*{*/}
+                                {/*    form.geo_type === GeoTypeEnum.COUNTRY &&*/}
+                                {/*    <div className="mb-7">*/}
+                                {/*        <KrysFormLabel text="Country" isRequired={true}/>*/}
+                                
+                                {/*        <SingleSelect isResourceLoaded={isResourceLoaded} options={countries}*/}
+                                {/*                      defaultValue={publicationCampaignRestriction?.geo} form={form}*/}
+                                {/*                      setForm={setForm} name="geo_id" isClearable={true}/>*/}
+                                
+                                {/*        <div className="mt-1 text-danger">*/}
+                                {/*            {errors?.geo_id ? errors?.geo_id : null}*/}
+                                {/*        </div>*/}
+                                {/*    </div>*/}
+                                {/*}*/}
+                                
+                                {/*<div className="mb-7">*/}
+                                {/*    <KrysFormLabel text="Formats" isRequired={false}/>*/}
+                                
+                                {/*    <SingleSelect isResourceLoaded={isResourceLoaded} options={formats}*/}
+                                {/*                  defaultValue={publicationCampaignRestriction?.format} form={form}*/}
+                                {/*                  setForm={setForm} name="format_id" isClearable={true}/>*/}
+                                
+                                {/*    <div className="mt-1 text-danger">*/}
+                                {/*        {errors?.format_id ? errors?.format_id : null}*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
+                                
+                                {/*<div className="mb-7">*/}
+                                {/*    <KrysFormLabel text="Campaign types" isRequired={false}/>*/}
+                                
+                                {/*    <SingleSelect isResourceLoaded={isResourceLoaded} options={campaignTypes}*/}
+                                {/*                  defaultValue={publicationCampaignRestriction?.campaignType}*/}
+                                {/*                  form={form}*/}
+                                {/*                  setForm={setForm} name="campaign_type_id" isClearable={true}/>*/}
+                                
+                                {/*    <div className="mt-1 text-danger">*/}
+                                {/*        {errors?.campaign_type_id ? errors?.campaign_type_id : null}*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
+                                
+                                {/*<div className="mb-7">*/}
+                                {/*    <KrysFormLabel text="Website pages" isRequired={false}/>*/}
+                                
+                                {/*    <SingleSelect isResourceLoaded={isResourceLoaded} options={websitePages}*/}
+                                {/*                  defaultValue={publicationCampaignRestriction?.websitePage} form={form}*/}
+                                {/*                  setForm={setForm} name="website_page_id" isClearable={true}/>*/}
+                                
+                                {/*    <div className="mt-1 text-danger">*/}
+                                {/*        {errors?.website_page_id ? errors?.website_page_id : null}*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
+                                
+                                {/*<div className="mb-7">*/}
+                                {/*    <KrysFormLabel text="Campaign restriction requirements" isRequired={false}/>*/}
+                                
+                                {/*    <SingleSelect isResourceLoaded={isResourceLoaded}*/}
+                                {/*                  options={campaignRestrictionRequirements}*/}
+                                {/*                  defaultValue={publicationCampaignRestriction?.campaignRestrictionRequirement}*/}
+                                {/*                  form={form}*/}
+                                {/*                  setForm={setForm} name="campaign_restriction_requirement_id"*/}
+                                {/*                  isClearable={true}/>*/}
+                                
+                                {/*    <div className="mt-1 text-danger">*/}
+                                {/*        {errors?.campaign_restriction_requirement_id ? errors?.campaign_restriction_requirement_id : null}*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
 
                                 <KrysFormFooter cancelUrl={`/supply/publications/${publication?.id}/edit`}/>
                             </Form>

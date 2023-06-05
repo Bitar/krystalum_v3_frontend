@@ -9,6 +9,7 @@ import {indentOptions} from '../../../../../../components/forms/IndentOptions';
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
 import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton';
+import SingleSelect from '../../../../../../components/forms/SingleSelect';
 import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
 import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum';
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
@@ -217,15 +218,20 @@ const PublicationFixedCpmCreate: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Currency" isRequired={true}/>
 
-                                    <Select name="currency_id"
-                                            options={currencies}
-                                            getOptionLabel={(currency) => currency.currency}
-                                            getOptionValue={(currency) => currency.id.toString()}
-                                            onChange={(e) => {
-                                                selectChangeHandler(e, 'currency_id')
-                                            }}
-                                            value={DEFAULT_CURRENCY}
-                                            placeholder="Select a currency"/>
+                                    <SingleSelect isResourceLoaded={true} options={currencies}
+                                                  defaultValue={DEFAULT_CURRENCY} form={form}
+                                                  setForm={setForm} name="currency_id" label="currency"
+                                                  isClearable={true}/>
+
+                                    {/*<Select name="currency_id"*/}
+                                    {/*        options={currencies}*/}
+                                    {/*        getOptionLabel={(currency) => currency.currency}*/}
+                                    {/*        getOptionValue={(currency) => currency.id.toString()}*/}
+                                    {/*        onChange={(e) => {*/}
+                                    {/*            selectChangeHandler(e, 'currency_id')*/}
+                                    {/*        }}*/}
+                                    {/*        value={DEFAULT_CURRENCY}*/}
+                                    {/*        placeholder="Select a currency"/>*/}
 
                                     <div className="mt-1 text-danger">
                                         {errors?.currency_id ? errors?.currency_id : null}

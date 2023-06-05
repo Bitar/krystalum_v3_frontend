@@ -98,7 +98,6 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
 
         setReset(false);
 
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reset]);
 
