@@ -1,4 +1,6 @@
 import axios, {AxiosError, AxiosResponse} from 'axios';
+import React from 'react';
+import {GenericErrorMessage} from './form';
 
 export const extractErrors = (error: any) => {
     if (error.response && error.response.data && error.response.data.errors) {
@@ -91,4 +93,29 @@ export type ExportUrl = {
         status: string,
         url?: string
     }
+}
+
+export const submitRequest = (apiRequest: (...params: any[]) => Promise<any>, params: any[], callback: (response: any) => void, setErrors?: React.Dispatch<SetStateAction<any>>) => {
+    apiRequest(...params).then(response => {
+            if (axios.isAxiosError(response) && setErrors) {
+                // we need to show the errors
+                setErrors(extractErrors(response));
+            } else if (response === undefined && setErrors) {
+                // show generic error message
+                setErrors([GenericErrorMessage])
+            } else {
+                callback(response);
+            }
+        }
+    );
+}
+
+export const getErrorPage = (response: any) => {
+    if (axios.isAxiosError(response)) {
+        return '/error/404';
+    } else if (response === undefined) {
+        return '/error/400';
+    }
+
+    return null;
 }
