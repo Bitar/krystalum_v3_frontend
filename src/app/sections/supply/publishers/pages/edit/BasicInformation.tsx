@@ -136,7 +136,7 @@ const PublisherBasicInformationEdit: React.FC = () => {
                                             <KrysFormLabel text="Integration date" isRequired={false}/>
 
                                             <DatePicker name="integration_date"
-                                                        defaultValue={form.integration_date ? createDateFromString(form.integration_date) : undefined}
+                                                        value={(form.integration_date ? createDateFromString(form.integration_date) : null)}
                                                         className="krys-datepicker"
                                                         oneTap={true}
                                                         block

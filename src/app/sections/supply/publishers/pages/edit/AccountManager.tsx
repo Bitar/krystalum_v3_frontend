@@ -156,7 +156,7 @@ const PublisherAccountManager: React.FC = () => {
                 <div className="separator separator-dashed my-10"></div>
 
                 {
-                    publisher &&
+                    !hasAnyRoles(currentUser, [RoleEnum.PUBLISHER]) && publisher &&
                     <KrysInnerTable
                         doRefetch={refreshTable}
                         slug="publisher-account-managers"

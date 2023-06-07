@@ -10,6 +10,7 @@ import FilterFormFooter from '../../../../../components/forms/FilterFormFooter';
 import {indentOptions} from '../../../../../components/forms/IndentOptions';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysSwitch from '../../../../../components/forms/KrysSwitch';
+import {RoleEnum} from '../../../../../enums/RoleEnum';
 import {createDateFromString} from '../../../../../helpers/dateFormatter';
 import {
     genericDateRangeOnChangeHandler,
@@ -17,6 +18,7 @@ import {
     genericOnChangeHandler
 } from '../../../../../helpers/form';
 import {createFilterQueryParam} from '../../../../../helpers/requests';
+import {useAuth} from '../../../../../modules/auth';
 
 import {useQueryRequest} from '../../../../../modules/table/QueryRequestProvider';
 import {defaultFilterFields, FilterSchema} from '../../core/filterForm';
@@ -30,6 +32,7 @@ interface Props {
 }
 
 const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, setFilters}) => {
+    const {currentUser, hasRoles} = useAuth();
     const {updateState} = useQueryRequest();
 
     const {publishers, options} = usePublication();
@@ -275,14 +278,18 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                                             />
                                         </Col>
 
-                                        <Col md={4}>
-                                            <KrysFormLabel text="Deal PMP" isRequired={false}/>
+                                        {
+                                            !hasRoles(currentUser, [RoleEnum.PUBLISHER]) &&
 
-                                            <KrysSwitch name="is_deal_pmp" onChangeHandler={(e) => {
-                                                e.stopPropagation();
-                                                setFilters({...filters, is_deal_pmp: Number(!filters.is_deal_pmp)});
-                                            }} defaultValue={Boolean(filters.is_deal_pmp)}/>
-                                        </Col>
+                                            <Col md={4}>
+                                                <KrysFormLabel text="Deal PMP" isRequired={false}/>
+
+                                                <KrysSwitch name="is_deal_pmp" onChangeHandler={(e) => {
+                                                    e.stopPropagation();
+                                                    setFilters({...filters, is_deal_pmp: Number(!filters.is_deal_pmp)});
+                                                }} defaultValue={Boolean(filters.is_deal_pmp)}/>
+                                            </Col>
+                                        }
                                     </Row>
 
                                     <FilterFormFooter resetFilter={resetFilter}/>

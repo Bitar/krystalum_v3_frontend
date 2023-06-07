@@ -4,6 +4,9 @@ import {DEFAULT_CAMPAIGN_RESTRICTION_TYPE} from '../../../../../../helpers/setti
 import {
     PublicationCampaignRestriction
 } from '../../../../../../models/supply/publication/PublicationCampaignRestriction';
+import {
+    PublicationCampaignRestrictionMeta
+} from '../../../../../../models/supply/publication/PublicationCampaignRestrictionMeta';
 
 export interface PublicationCampaignRestrictionFormFields {
     type: string;
@@ -15,11 +18,19 @@ export interface PublicationCampaignRestrictionFormFields {
     requirement_ids?: number[];
 }
 
-export const defaultPublicationCampaignRestrictionFormFields = {
+export const defaultPublicationCampaignRestrictionFormFields: PublicationCampaignRestrictionFormFields = {
     type: DEFAULT_CAMPAIGN_RESTRICTION_TYPE.id,
     geo_type: '',
     geo_ids: [],
     format_ids: []
+};
+
+export interface PublicationCampaignRestrictionMetaFormFields {
+    campaign_restriction_meta: string;
+}
+
+export const defaultPublicationCampaignRestrictionMetaFormFields: PublicationCampaignRestrictionMetaFormFields = {
+    campaign_restriction_meta: ''
 };
 
 
@@ -43,6 +54,10 @@ export const publicationCampaignRestrictionSchema = (isEdit: boolean) => {
 
     return Yup.object().shape(schema);
 }
+
+export const PublicationCampaignRestrictionMetaSchema = Yup.object().shape({
+    campaign_restriction_meta: Yup.string().required()
+});
 
 export function fillEditForm(publicationCampaignRestriction: PublicationCampaignRestriction) {
     const form: PublicationCampaignRestrictionFormFields = {

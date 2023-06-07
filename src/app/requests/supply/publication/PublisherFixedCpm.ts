@@ -5,10 +5,10 @@ import {PublicationFixedCpm, PublicationFixedCpmPaginate} from '../../../models/
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publications`
-const FIXED_CPMS_ENDPOINT = 'fixed-cpms'
+const ENDPOINT_ADDITION = 'fixed-cpms'
 
 export const getPublicationFixedCpms = (publicationId: number, query?: String): Promise<PublicationFixedCpmPaginate> => {
-    let url = `${ENDPOINT}/${publicationId}/${FIXED_CPMS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publicationId}/${ENDPOINT_ADDITION}`;
 
     if (query) {
         url += `?${query}`;
@@ -20,7 +20,7 @@ export const getPublicationFixedCpms = (publicationId: number, query?: String): 
 }
 
 export const getPublicationFixedCpm = async (publication: Publication, id: number): Promise<PublicationFixedCpm | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publication.id}/${FIXED_CPMS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`;
 
     return await axios.get(url + '/' + id)
         .then(response => response.data.data).catch((error) => {
@@ -29,7 +29,7 @@ export const getPublicationFixedCpm = async (publication: Publication, id: numbe
 }
 
 export const storePublicationFixedCpm = async (publication: Publication, form: any): Promise<PublicationFixedCpm | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publication.id}/${FIXED_CPMS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`;
 
     let formData = createFormData(form);
 
@@ -39,7 +39,7 @@ export const storePublicationFixedCpm = async (publication: Publication, form: a
 }
 
 export const updatePublicationFixedCpm = async (publication: Publication, id: number, publicationFixedCpm: any): Promise<PublicationFixedCpm | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publication.id}/${FIXED_CPMS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`;
 
     let formData = createFormData(publicationFixedCpm);
 

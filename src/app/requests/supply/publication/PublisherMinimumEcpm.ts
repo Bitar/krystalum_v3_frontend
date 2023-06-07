@@ -8,10 +8,10 @@ import {
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publications`
-const MINIMUM_ECPMS_ENDPOINT = 'minimum-ecpms'
+const ENDPOINT_ADDITION = 'minimum-ecpms'
 
 export const getPublicationMinimumEcpms = (publicationId: number, query?: String): Promise<PublicationMinimumEcpmPaginate> => {
-    let url = `${ENDPOINT}/${publicationId}/${MINIMUM_ECPMS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publicationId}/${ENDPOINT_ADDITION}`;
 
     if (query) {
         url += `?${query}`;
@@ -23,7 +23,7 @@ export const getPublicationMinimumEcpms = (publicationId: number, query?: String
 }
 
 export const getPublicationMinimumEcpm = async (publication: Publication, id: number): Promise<PublicationMinimumEcpm | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publication.id}/${MINIMUM_ECPMS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`;
 
     return await axios.get(url + '/' + id)
         .then(response => response.data.data).catch((error) => {
@@ -32,7 +32,7 @@ export const getPublicationMinimumEcpm = async (publication: Publication, id: nu
 }
 
 export const storePublicationMinimumEcpm = async (publication: Publication, form: any): Promise<PublicationMinimumEcpm | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publication.id}/${MINIMUM_ECPMS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`;
 
     let formData = createFormData(form);
 
@@ -42,7 +42,7 @@ export const storePublicationMinimumEcpm = async (publication: Publication, form
 }
 
 export const updatePublicationMinimumEcpm = async (publication: Publication, id: number, publicationMinimumEcpm: any): Promise<PublicationMinimumEcpm | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publication.id}/${MINIMUM_ECPMS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`;
 
     let formData = createFormData(publicationMinimumEcpm);
 

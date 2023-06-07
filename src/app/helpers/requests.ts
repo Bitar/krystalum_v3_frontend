@@ -11,6 +11,10 @@ export const extractErrors = (error: any) => {
         }
 
         return errorMessages;
+    } else if (error.response && error.response.data && error.response.data.error) {
+        const {message} = error.response.data.error;
+
+        return [message];
     } else {
         return [];
     }

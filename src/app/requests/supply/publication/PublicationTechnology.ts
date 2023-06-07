@@ -5,10 +5,10 @@ import {Publication} from '../../../models/supply/publication/Publication';
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publications`
-const TECHNOLOGIES_ENDPOINT = 'technologies'
+const ENDPOINT_ADDITION = 'technologies'
 
 export const getPublicationTechnologies = (publicationId: number, query?: String): Promise<TechnologyPaginate> => {
-    let url = `${ENDPOINT}/${publicationId}/${TECHNOLOGIES_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publicationId}/${ENDPOINT_ADDITION}`;
 
     if (query) {
         url += `?${query}`;
@@ -21,7 +21,7 @@ export const getPublicationTechnologies = (publicationId: number, query?: String
 
 
 export const getPublicationTechnology = async (publication: Publication, id: number): Promise<Technology | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publication.id}/${TECHNOLOGIES_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`;
 
     return await axios.get(url + '/' + id)
         .then(response => response.data.data).catch((error) => {
@@ -30,7 +30,7 @@ export const getPublicationTechnology = async (publication: Publication, id: num
 }
 
 export const storePublicationTechnology = async (publication: Publication, form: any): Promise<Publication | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publication.id}/${TECHNOLOGIES_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`;
 
     let formData = createFormData(form);
 
@@ -40,7 +40,7 @@ export const storePublicationTechnology = async (publication: Publication, form:
 }
 
 export const updatePublicationTechnology = async (publication: Publication, id: number, publicationTechnology: any): Promise<Technology | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publication.id}/${TECHNOLOGIES_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`;
 
     let formData = createFormData(publicationTechnology);
 

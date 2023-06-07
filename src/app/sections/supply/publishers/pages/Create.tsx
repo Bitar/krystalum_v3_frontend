@@ -26,10 +26,12 @@ import {Sections} from '../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {storePublisher} from '../../../../requests/supply/publisher/Publisher';
+import {useSupply} from '../../shared/SupplyContext';
 import {defaultFormFields, FormFields, PublisherSchema} from '../core/form';
 import {usePublisher} from '../core/PublisherContext';
 
 const PublisherCreate: React.FC = () => {
+    const {setPublisher} = useSupply();
     const {options} = usePublisher();
     const krysApp = useKrysApp();
     const navigate = useNavigate();
@@ -72,10 +74,13 @@ const PublisherCreate: React.FC = () => {
                     scrollToTop();
                 } else {
                     // it's publisher for sure
+                    // redirect the user to the create publications page
                     krysApp.setAlert({
                         message: new AlertMessageGenerator('publisher', Actions.CREATE, KrysToastType.SUCCESS).message + ' Please fill out the form below to create publications related to the created publisher.',
                         type: KrysToastType.SUCCESS
-                    })
+                    });
+
+                    setPublisher(response);
 
                     navigate(`/supply/publications/create`);
                 }

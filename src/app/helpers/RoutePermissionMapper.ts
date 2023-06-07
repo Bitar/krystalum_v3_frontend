@@ -27,8 +27,7 @@ export class RoutePermissionMapper {
 
         this.regexMap.set(/^\/supply\/[a-z-]+\/create\/?$/, 'manage-supply');
 
-        // this.regexMap.set(/^\/supply\/[a-z-]+\/\d+\/edit\/?$/, 'manage-supply');
-        this.regexMap.set(/^\/supply\/publication\/\d+\/edit\/?$/, 'manage-supply');
+        this.regexMap.set(/^\/supply\/publications\/\d+\/edit\/?$/, 'manage-supply');
 
         this.regexMap.set(/^\/supply\/[a-z-]+\/archived\/?$/, 'manage-supply');
     }

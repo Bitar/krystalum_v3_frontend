@@ -8,10 +8,10 @@ import {
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publications`
-const CAMPAIGN_RESTRICTIONS_ENDPOINT = 'restrictions'
+const ENDPOINT_ADDITION = 'restrictions'
 
 export const getPublicationCampaignRestrictions = (publicationId: number, query?: String): Promise<PublicationCampaignRestrictionPaginate> => {
-    let url = `${ENDPOINT}/${publicationId}/${CAMPAIGN_RESTRICTIONS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publicationId}/${ENDPOINT_ADDITION}`;
 
     if (query) {
         url += `?${query}`;
@@ -23,7 +23,7 @@ export const getPublicationCampaignRestrictions = (publicationId: number, query?
 }
 
 export const getPublicationCampaignRestriction = async (publication: Publication, id: number): Promise<PublicationCampaignRestriction | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publication.id}/${CAMPAIGN_RESTRICTIONS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`;
 
     return await axios.get(url + '/' + id)
         .then(response => response.data.data).catch((error) => {
@@ -32,7 +32,7 @@ export const getPublicationCampaignRestriction = async (publication: Publication
 }
 
 export const storePublicationCampaignRestriction = async (publication: Publication, form: any): Promise<PublicationCampaignRestriction | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publication.id}/${CAMPAIGN_RESTRICTIONS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`;
 
     let formData = createFormData(form);
 
@@ -42,7 +42,7 @@ export const storePublicationCampaignRestriction = async (publication: Publicati
 }
 
 export const updatePublicationCampaignRestriction = async (publication: Publication, id: number, publicationCampaignRestriction: any): Promise<PublicationCampaignRestriction | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publication.id}/${CAMPAIGN_RESTRICTIONS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`;
 
     let formData = createFormData(publicationCampaignRestriction);
 

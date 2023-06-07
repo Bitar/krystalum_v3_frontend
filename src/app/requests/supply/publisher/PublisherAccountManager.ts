@@ -8,10 +8,10 @@ import {
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publishers`
-const ACCOUNT_MANAGERS_ENDPOINT = 'account-managers'
+const ENDPOINT_ADDITION = 'account-managers'
 
 export const getPublisherAccountManagers = (publisherId: number, query?: String): Promise<PublisherAccountManagerPaginate> => {
-    let url = `${ENDPOINT}/${publisherId}/${ACCOUNT_MANAGERS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publisherId}/${ENDPOINT_ADDITION}`;
 
     if (query) {
         url += `?${query}`;
@@ -23,7 +23,7 @@ export const getPublisherAccountManagers = (publisherId: number, query?: String)
 }
 
 export const storePublisherAccountManager = async (publisher: Publisher, form: any): Promise<PublisherAccountManager | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publisher.id}/${ACCOUNT_MANAGERS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publisher.id}/${ENDPOINT_ADDITION}`;
 
     let formData = createFormData(form);
 

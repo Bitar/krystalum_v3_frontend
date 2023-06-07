@@ -3,10 +3,10 @@ import {PublicationAdTechnologyPaginate} from '../../../models/supply/publicatio
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publications`
-const AD_TECHNOLOGIES_ENDPOINT = 'ad-technologies'
+const ENDPOINT_ADDITION = 'ad-technologies'
 
 export const getPublicationAdTechnologies = (publicationId: number, query?: String): Promise<PublicationAdTechnologyPaginate> => {
-    let url = `${ENDPOINT}/${publicationId}/${AD_TECHNOLOGIES_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publicationId}/${ENDPOINT_ADDITION}`;
 
     if (query) {
         url += `?${query}`;

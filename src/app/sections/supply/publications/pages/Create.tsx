@@ -30,10 +30,12 @@ import {Sections} from '../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {storePublication} from '../../../../requests/supply/publication/Publication';
+import {useSupply} from '../../shared/SupplyContext';
 import {defaultFormFields, FormFields, publicationSchema} from '../core/form';
 import {usePublication} from '../core/PublicationContext';
 
 const PublicationCreate: React.FC = () => {
+    const {setPublisher, publisher} = useSupply();
     const {publishers, options} = usePublication();
 
     const krysApp = useKrysApp();
@@ -47,6 +49,10 @@ const PublicationCreate: React.FC = () => {
 
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATIONS, PageTypes.CREATE))
+
+        if (publisher) {
+            setForm({...form, publisher_id: publisher.id});
+        }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -120,7 +126,7 @@ const PublicationCreate: React.FC = () => {
                 } else {
                     let message, url;
 
-                    if (response.is_archived) {
+                    if (response.is_archived && response.is_archived === 1) {
                         message = new AlertMessageGenerator('publication', Actions.CREATE, KrysToastType.SUCCESS).message + ' It is considered an archived publication since it is not sending inventory.';
                         url = '/supply/publications/archived';
                     } else {
@@ -135,6 +141,8 @@ const PublicationCreate: React.FC = () => {
                     });
 
                     navigate(url);
+
+                    setPublisher(null);
                 }
             }
         );
@@ -173,6 +181,7 @@ const PublicationCreate: React.FC = () => {
                                     <KrysFormLabel text="Publisher" isRequired={true}/>
 
                                     <Select name="publisher_id"
+                                            defaultValue={publisher}
                                             options={publishers}
                                             getOptionLabel={(publisher) => publisher.name}
                                             getOptionValue={(publisher) => publisher.id.toString()}

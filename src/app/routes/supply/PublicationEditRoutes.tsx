@@ -10,7 +10,7 @@ import PublicationEdit from '../../sections/supply/publications/pages/Edit';
 import PublicationAdServerEdit from '../../sections/supply/publications/pages/edit/ad-servers/Edit';
 import PublicationAnalyticEdit from '../../sections/supply/publications/pages/edit/analytics/Edit';
 import PublicationCampaignRestrictionEdit
-    from '../../sections/supply/publications/pages/edit/campaign-restrictions/Edit';
+    from '../../sections/supply/publications/pages/edit/restrictions/Edit';
 import PublicationFixedCpmEdit from '../../sections/supply/publications/pages/edit/fixed-cpms/Edit';
 import PublicationFormatEdit from '../../sections/supply/publications/pages/edit/formats/Edit';
 import PublicationMinimumEcpmEdit from '../../sections/supply/publications/pages/edit/minimum-ecpms/Edit';

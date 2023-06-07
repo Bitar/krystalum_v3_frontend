@@ -91,12 +91,24 @@ export const publicationSchema = (isEdit: boolean) => {
             .required(),
         url: Yup.string().when('types', {
             is: (types: string[]) => types.includes(PublicationTypeEnum.WEBSITE),
-            then: Yup.string().url().required('publication url is required when the publication type is website'),
+            then: Yup.string()
+                .url()
+                .test('trailing-slash', 'URL should end with a forward slash', (value: string | undefined) => {
+                    // Check if the URL ends with a forward slash
+                    return value ? value.endsWith('/') : true;
+                })
+                .required('publication url is required when the publication type is website'),
             otherwise: Yup.string().notRequired(),
         }),
         android_store_url: Yup.string().when('types', {
             is: (types: string[]) => types.includes(PublicationTypeEnum.ANDROID_APPLICATION),
-            then: Yup.string().url().required('android store url is required when the publication type is android application'),
+            then: Yup.string()
+                .url()
+                .test('trailing-slash', 'URL should end with a forward slash', (value: string | undefined) => {
+                    // Check if the URL ends with a forward slash
+                    return value ? value.endsWith('/') : true;
+                })
+                .required('android store url is required when the publication type is android application'),
             otherwise: Yup.string().notRequired(),
         }),
         android_bundle_id: Yup.string().when('types', {
@@ -116,7 +128,13 @@ export const publicationSchema = (isEdit: boolean) => {
         }),
         ios_store_url: Yup.string().when('types', {
             is: (types: string[]) => types.includes(PublicationTypeEnum.IOS_APPLICATION),
-            then: Yup.string().url().required('ios store url is required when the publication type is ios application'),
+            then: Yup.string()
+                .test('trailing-slash', 'URL should end with a forward slash', (value: string | undefined) => {
+                    // Check if the URL ends with a forward slash
+                    return value ? value.endsWith('/') : true;
+                })
+                .url()
+                .required('ios store url is required when the publication type is ios application'),
             otherwise: Yup.string().notRequired(),
         }),
         ios_bundle_id: Yup.string().when('types', {

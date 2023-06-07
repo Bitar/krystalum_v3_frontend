@@ -195,7 +195,7 @@ const PublicationBasicInformationEdit: React.FC = () => {
                                     <KrysFormLabel text="Live date" isRequired={true}/>
 
                                     <DatePicker name="live_date"
-                                                defaultValue={form.live_date ? createDateFromString(form.live_date) : undefined}
+                                                value={(form.live_date ? createDateFromString(form.live_date) : null)}
                                                 className="krys-datepicker"
                                                 oneTap={true}
                                                 block

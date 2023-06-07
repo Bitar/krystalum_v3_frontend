@@ -8,13 +8,21 @@ import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {BadgeCell} from '../../../../../../modules/table/columns/BadgeCell';
 import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
 import {TextCell} from '../../../../../../modules/table/columns/TextCell';
+import {TextCellWithHelper} from '../../../../../../modules/table/columns/TextCellWithHelper';
 import {usePublicationEdit} from '../../PublicationEditContext';
 
 const PublicationFixedCpmColumns: ReadonlyArray<Column<PublicationFixedCpm>> = [
     {
         Header: (props) => <CustomHeader tableProps={props} title="Format" className="min-w-125px"/>,
         id: 'format',
-        Cell: ({...props}) => <TextCell text={props.data[props.row.index].format.name}/>,
+        Cell: ({...props}) => {
+            if (props.data[props.row.index].format.parent) {
+                return <TextCellWithHelper text={props.data[props.row.index].format.parent.name}
+                                           helperText={props.data[props.row.index].format.name}/>
+            } else {
+                return <TextCell text={props.data[props.row.index].format.name}/>
+            }
+        },
     },
     {
         Header: (props) => <CustomHeader tableProps={props} title="Geo Type" className="min-w-125px"/>,

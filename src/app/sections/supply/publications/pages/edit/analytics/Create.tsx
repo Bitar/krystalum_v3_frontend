@@ -101,7 +101,7 @@ const PublicationAnalyticCreate: React.FC = () => {
                         // show generic error message
                         setFormErrors([GenericErrorMessage])
                     } else {
-                        // we were able to store the publisher analytics
+                        // we were able to store the publication analytics
                         krysApp.setAlert({
                             message: new AlertMessageGenerator('publication google analytics data', Actions.CREATE, KrysToastType.SUCCESS).message,
                             type: KrysToastType.SUCCESS

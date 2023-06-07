@@ -3,10 +3,10 @@ import {PublicationPaginate} from '../../../models/supply/publication/Publicatio
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publishers`
-const PUBLICATIONS_ENDPOINT = 'publications'
+const ENDPOINT_ADDITION = 'publications'
 
 export const getPublisherPublications = (publisherId: number, query?: String): Promise<PublicationPaginate> => {
-    let url = `${ENDPOINT}/${publisherId}/${PUBLICATIONS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publisherId}/${ENDPOINT_ADDITION}`;
 
     if (query) {
         url += `?${query}`;

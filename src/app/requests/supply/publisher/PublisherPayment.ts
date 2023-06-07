@@ -5,10 +5,10 @@ import {PublisherPayment, PublisherPaymentPaginate} from '../../../models/supply
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publishers`
-const PAYMENTS_ENDPOINT = 'payments'
+const ENDPOINT_ADDITION = 'payments'
 
 export const getPublisherPayments = (publisherId: number, query?: String): Promise<PublisherPaymentPaginate> => {
-    let url = `${ENDPOINT}/${publisherId}/${PAYMENTS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publisherId}/${ENDPOINT_ADDITION}`;
 
     if (query) {
         url += `?${query}`;
@@ -21,7 +21,7 @@ export const getPublisherPayments = (publisherId: number, query?: String): Promi
 
 
 export const getPublisherPayment = async (publisher: Publisher, id: number): Promise<PublisherPayment | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publisher.id}/${PAYMENTS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publisher.id}/${ENDPOINT_ADDITION}`;
 
     return await axios.get(url + '/' + id)
         .then(response => response.data.data).catch((error) => {
@@ -30,7 +30,7 @@ export const getPublisherPayment = async (publisher: Publisher, id: number): Pro
 }
 
 export const storePublisherPayment = async (publisher: Publisher, form: any): Promise<PublisherPayment | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publisher.id}/${PAYMENTS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publisher.id}/${ENDPOINT_ADDITION}`;
 
     let formData = createFormData(form);
 
@@ -40,7 +40,7 @@ export const storePublisherPayment = async (publisher: Publisher, form: any): Pr
 }
 
 export const updatePublisherPayment = async (publisher: Publisher, id: number, publisherPayment: any): Promise<PublisherPayment | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publisher.id}/${PAYMENTS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publisher.id}/${ENDPOINT_ADDITION}`;
 
     let formData = createFormData(publisherPayment);
 

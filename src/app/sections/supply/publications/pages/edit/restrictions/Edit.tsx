@@ -29,7 +29,7 @@ import {
     fillEditForm,
     PublicationCampaignRestrictionFormFields,
     publicationCampaignRestrictionSchema
-} from '../../../core/edit/campaign-restrictions/form';
+} from '../../../core/edit/restrictions/form';
 import {usePublication} from '../../../core/PublicationContext';
 import {usePublicationEdit} from '../../../core/PublicationEditContext';
 

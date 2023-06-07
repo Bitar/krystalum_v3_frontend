@@ -51,18 +51,13 @@ const getPublisherColumns = (isPublisher: boolean) => {
         },
     ]);
 
-    if (!isPublisher) {
-        publisherColumns = publisherColumns.concat([
-            {
-                Header: (props) => <CustomHeader tableProps={props} title="Account Manager" className="min-w-125px"/>,
-                id: 'account-manager',
-                Cell: ({...props}) => <TextCell
-                    text={(props.data[props.row.index].accountManager ? props.data[props.row.index].accountManager?.name : 'N/A')}/>,
-            }
-        ]);
-    }
-
     publisherColumns = publisherColumns.concat([
+        {
+            Header: (props) => <CustomHeader tableProps={props} title="Account Manager" className="min-w-125px"/>,
+            id: 'account-manager',
+            Cell: ({...props}) => <TextCell
+                text={(props.data[props.row.index].accountManager ? props.data[props.row.index].accountManager?.name : 'N/A')}/>,
+        },
         {
             Header: (props) => (
                 <Restricted to="manage-supply">

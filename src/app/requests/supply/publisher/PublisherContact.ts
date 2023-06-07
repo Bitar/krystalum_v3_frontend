@@ -5,10 +5,10 @@ import {PublisherContact, PublisherContactPaginate} from '../../../models/supply
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publishers`
-const CONTACTS_ENDPOINT = 'contacts'
+const ENDPOINT_ADDITION = 'contacts'
 
 export const getPublisherContacts = (publisherId: number, query?: String): Promise<PublisherContactPaginate> => {
-    let url = `${ENDPOINT}/${publisherId}/${CONTACTS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publisherId}/${ENDPOINT_ADDITION}`;
 
     if (query) {
         url += `?${query}`;
@@ -21,7 +21,7 @@ export const getPublisherContacts = (publisherId: number, query?: String): Promi
 
 
 export const getPublisherContact = async (publisher: Publisher, id: number): Promise<PublisherContact | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publisher.id}/${CONTACTS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publisher.id}/${ENDPOINT_ADDITION}`;
 
     return await axios.get(url + '/' + id)
         .then(response => response.data.data).catch((error) => {
@@ -30,7 +30,7 @@ export const getPublisherContact = async (publisher: Publisher, id: number): Pro
 }
 
 export const storePublisherContact = async (publisher: Publisher, form: any): Promise<PublisherContact | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publisher.id}/${CONTACTS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publisher.id}/${ENDPOINT_ADDITION}`;
 
     let formData = createFormData(form);
 
@@ -40,7 +40,7 @@ export const storePublisherContact = async (publisher: Publisher, form: any): Pr
 }
 
 export const updatePublisherContact = async (publisher: Publisher, id: number, publisherContact: any): Promise<PublisherContact | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publisher.id}/${CONTACTS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publisher.id}/${ENDPOINT_ADDITION}`;
 
     let formData = createFormData(publisherContact);
 

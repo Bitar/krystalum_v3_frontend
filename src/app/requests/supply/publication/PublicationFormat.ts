@@ -6,10 +6,10 @@ import {PublicationFormat, PublicationFormatPaginate} from '../../../models/supp
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publications`
-const FORMATS_ENDPOINT = 'formats'
+const ENDPOINT_ADDITION = 'formats'
 
 export const getPublicationFormats = (publicationId: number, query?: String): Promise<PublicationFormatPaginate> => {
-    let url = `${ENDPOINT}/${publicationId}/${FORMATS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publicationId}/${ENDPOINT_ADDITION}`;
 
     if (query) {
         url += `?${query}`;
@@ -21,7 +21,7 @@ export const getPublicationFormats = (publicationId: number, query?: String): Pr
 }
 
 export const getPublicationFormat = async (publication: Publication, id: number): Promise<PublicationFormat | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publication.id}/${FORMATS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`;
 
     return await axios.get(url + '/' + id)
         .then(response => response.data.data).catch((error) => {
@@ -30,7 +30,7 @@ export const getPublicationFormat = async (publication: Publication, id: number)
 }
 
 export const storePublicationFormat = async (publication: Publication, form: any): Promise<PublicationFormat | PublicationUpdateMessage | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publication.id}/${FORMATS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`;
 
     let formData = createFormData(form);
 
@@ -40,7 +40,7 @@ export const storePublicationFormat = async (publication: Publication, form: any
 }
 
 export const updatePublicationFormat = async (publication: Publication, id: number, publicationFormat: any): Promise<PublicationFormat | PublicationUpdateMessage | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publication.id}/${FORMATS_ENDPOINT}`;
+    let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`;
 
     let formData = createFormData(publicationFormat);
 

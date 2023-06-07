@@ -5,7 +5,7 @@ import {PermissionEnum} from '../../../../../../enums/PermissionEnum';
 import {RoleEnum} from '../../../../../../enums/RoleEnum';
 import {PublisherPayment} from '../../../../../../models/supply/publisher/PublisherPayment';
 import {useAuth} from '../../../../../../modules/auth';
-import {Restricted, useAccessControl} from '../../../../../../modules/auth/AuthAccessControl';
+import {useAccessControl} from '../../../../../../modules/auth/AuthAccessControl';
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell';
 import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader';
 import {TextCell} from '../../../../../../modules/table/columns/TextCell';
@@ -60,18 +60,16 @@ const PublisherPaymentsColumns: ReadonlyArray<Column<PublisherPayment>> = [
             bank address: ${props.data[props.row.index].bank_address}`;
 
             return (
-                <Restricted to={'manage-supply'}>
-                    <ActionsCell
-                        id={props.data[props.row.index].id}
-                        path={`supply/publishers/${publisher?.id}/payments`}
-                        queryKey={QUERIES.PUBLISHER_PAYMENTS_LIST}
-                        showView={false}
-                        showEdit={(hasRoles(currentUser, [RoleEnum.PUBLISHER]) || accessControl.userCan(PermissionEnum.MANAGE_SUPPLY))}
-                        showDelete={accessControl.userCan(PermissionEnum.MANAGE_SUPPLY)}
-                        title="Delete Publisher Payment"
-                        text={`Are you sure you want to delete the publisher payment that includes the following details: '${publisherPaymentSummary}'?`}
-                    />
-                </Restricted>
+                <ActionsCell
+                    id={props.data[props.row.index].id}
+                    path={`supply/publishers/${publisher?.id}/payments`}
+                    queryKey={QUERIES.PUBLISHER_PAYMENTS_LIST}
+                    showView={false}
+                    showEdit={(hasRoles(currentUser, [RoleEnum.PUBLISHER]) || accessControl.userCan(PermissionEnum.MANAGE_SUPPLY))}
+                    showDelete={accessControl.userCan(PermissionEnum.MANAGE_SUPPLY)}
+                    title="Delete Publisher Payment"
+                    text={`Are you sure you want to delete the publisher payment that includes the following details: '${publisherPaymentSummary}'?`}
+                />
             )
         }
     },

@@ -11,7 +11,7 @@ interface Props {
     publishers: Publisher[];
     setPublishers: Dispatch<SetStateAction<Publisher[]>>;
     options: PublicationOptions;
-    setOptions: Dispatch<SetStateAction<PublicationOptions>>;
+    setOptions: Dispatch<SetStateAction<PublicationOptions>>
 }
 
 const defaultPublicationContext = {

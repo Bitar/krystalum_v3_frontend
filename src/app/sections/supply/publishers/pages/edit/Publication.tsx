@@ -37,7 +37,8 @@ const PublisherPublication: React.FC = () => {
                     <EngageWidget title={'Keep track of your publications'}
                                   text={'Ensure to keep track of all the publications by adding them to the platform. By doing so, you can conveniently monitor their details and access their reports.'}
                                   ctaText={'Add New Publication'}
-                                  ctaUrl={'/supply/publications/create'}/>}
+                                  ctaUrl={'/supply/publications/create'}/>
+                }
             </KTCardBody>
         </KTCard>
     );
