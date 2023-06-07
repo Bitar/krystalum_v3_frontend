@@ -1,28 +1,23 @@
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import Select from "react-select";
+import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
+import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import FormErrors from '../../../../components/forms/FormErrors';
+import {indentOptions} from '../../../../components/forms/IndentOptions';
+import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {genericOnChangeHandler, genericSingleSelectOnChangeHandler} from '../../../../helpers/form';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {submitRequest} from '../../../../helpers/requests';
 import {Sections} from '../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {defaultFormFields, FormFields, VerticalSchema} from '../core/form';
-import {
-    GenericErrorMessage,
-    genericOnChangeHandler,
-    genericSingleSelectOnChangeHandler
-} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
-import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-import FormErrors from '../../../../components/forms/FormErrors';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {getAllVerticals, storeVertical} from '../../../../requests/misc/Vertical';
-import Select from "react-select";
 import {Vertical} from "../../../../models/misc/Vertical";
-import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import {indentOptions} from '../../../../components/forms/IndentOptions';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {getAllVerticals, storeVertical} from '../../../../requests/misc/Vertical';
+import {defaultFormFields, FormFields, VerticalSchema} from '../core/form';
 
 
 const VerticalCreate: React.FC = () => {
@@ -37,18 +32,9 @@ const VerticalCreate: React.FC = () => {
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_VERTICALS, PageTypes.CREATE))
 
-        getAllVerticals().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // if we were able to get the list of roles, then we fill our state with them
-                if (response.data) {
-                    setVerticals(response.data);
-                }
-            }
-        });
+        submitRequest(getAllVerticals, [], (response) => {
+            setVerticals(response);
+        }, setFormErrors);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -58,30 +44,20 @@ const VerticalCreate: React.FC = () => {
 
     const handleCreate = (e: any) => {
         // send API request to create the vertical
-        storeVertical(form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // it's vertical for sure
+        submitRequest(storeVertical, [form], (response) => {
+            // it's vertical for sure
+            krysApp.setAlert({
+                message: new AlertMessageGenerator('vertical', Actions.CREATE, KrysToastType.SUCCESS).message,
+                type: KrysToastType.SUCCESS
+            });
 
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('vertical', Actions.CREATE, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    })
-
-                    navigate(`/misc/verticals`);
-                }
-            }
-        );
+            navigate(`/misc/verticals`);
+        }, setFormErrors);
     };
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New Vertical" />
+            <KTCardHeader text="Create New Vertical"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

@@ -1,28 +1,26 @@
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
 
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {getBookingType, updateBookingType} from '../../../../requests/misc/BookingType';
-import {BookingTypeSchema} from '../core/form';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import {defaultFormFields, FormFields} from "../core/form";
+import {genericOnChangeHandler} from '../../../../helpers/form';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
+import {Sections} from '../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {BookingType} from '../../../../models/misc/BookingType';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {getBookingType, updateBookingType} from '../../../../requests/misc/BookingType';
+import {BookingTypeSchema, defaultFormFields, FormFields} from '../core/form';
 
 
 const BookingTypeEdit: React.FC = () => {
-    const [bookingType, setBookingType] = useState<BookingType|null>(null);
+    const [bookingType, setBookingType] = useState<BookingType | null>(null);
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -36,13 +34,11 @@ const BookingTypeEdit: React.FC = () => {
     useEffect(() => {
         if (id) {
             // get the booking type we need to edit from the database
-            getBookingType(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the booking type to edit, so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    navigate('/error/400');
+            submitRequest(getBookingType, [parseInt(id)], (response) => {
+                let errorPage = getErrorPage(response);
+
+                if (errorPage) {
+                    navigate(errorPage);
                 } else {
                     // we were able to fetch current booking type to edit
                     setBookingType(response);
@@ -54,7 +50,7 @@ const BookingTypeEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        if(bookingType) {
+        if (bookingType) {
             krysApp.setPageTitle(generatePageTitle(Sections.MISC_BOOKING_TYPES, PageTypes.EDIT, bookingType.name));
         }
 
@@ -66,27 +62,23 @@ const BookingTypeEdit: React.FC = () => {
     };
 
     const handleEdit = () => {
-        if(bookingType) {
+        if (bookingType) {
             // we need to update the booking type's data by doing API call with form
-            updateBookingType(bookingType.id, form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // show errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error
-                    setFormErrors([GenericErrorMessage]);
-                } else {
-                    // we got the booking type so we're good
-                    krysApp.setAlert({message: new AlertMessageGenerator('booking type', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                    navigate(`/misc/booking-types`);
-                }
-            });
+            submitRequest(updateBookingType, [bookingType.id, form], (response) => {
+                // we got the booking type so we're good
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('booking type', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                });
+
+                navigate(`/misc/booking-types`);
+            }, setFormErrors);
         }
     }
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Booking Type" />
+            <KTCardHeader text="Edit Booking Type"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -108,7 +100,7 @@ const BookingTypeEdit: React.FC = () => {
                                 </div>
 
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Code" isRequired={true} />
+                                    <KrysFormLabel text="Code" isRequired={true}/>
 
                                     <Field className="form-control fs-base" type="text"
                                            placeholder="Enter booking type code" name="code"/>

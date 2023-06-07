@@ -1,22 +1,21 @@
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
+import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import FormErrors from '../../../../components/forms/FormErrors';
+import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {genericOnChangeHandler} from '../../../../helpers/form';
 
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {submitRequest} from '../../../../helpers/requests';
 import {Sections} from '../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {AdvertiserIndustrySchema, defaultFormFields, FormFields} from '../core/form';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
-import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-import FormErrors from '../../../../components/forms/FormErrors';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeAdvertiserIndustry} from '../../../../requests/misc/AdvertiserIndustry';
-import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {AdvertiserIndustrySchema, defaultFormFields, FormFields} from '../core/form';
 
 const AdvertiserIndustryCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -36,24 +35,15 @@ const AdvertiserIndustryCreate: React.FC = () => {
 
     const handleCreate = (e: any) => {
         // send API request to create the advertiser industry
-        storeAdvertiserIndustry(form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // it's advertiser industry for sure
+        submitRequest(storeAdvertiserIndustry, [form], (response) => {
+            // it's advertiser industry for sure
+            krysApp.setAlert({
+                message: new AlertMessageGenerator('advertiser industry', Actions.CREATE, KrysToastType.SUCCESS).message,
+                type: KrysToastType.SUCCESS
+            });
 
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('advertiser industry', Actions.CREATE, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    })
-                    navigate(`/misc/advertiser-industries`);
-                }
-            }
-        );
+            navigate(`/misc/advertiser-industries`);
+        }, setFormErrors);
     };
 
     return (

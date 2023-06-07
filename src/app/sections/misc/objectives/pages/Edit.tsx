@@ -1,27 +1,26 @@
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
-import {defaultFormFields, FormFields, ObjectiveSchema} from '../core/form';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {useNavigate, useParams} from 'react-router-dom';
-import axios from 'axios';
-
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {getObjective, updateObjective} from '../../../../requests/misc/Objective';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {genericOnChangeHandler} from '../../../../helpers/form';
+
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
+import {Sections} from '../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {Objective} from '../../../../models/misc/Objective';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {getObjective, updateObjective} from '../../../../requests/misc/Objective';
+import {defaultFormFields, FormFields, ObjectiveSchema} from '../core/form';
 
 
 const ObjectiveEdit: React.FC = () => {
-    const [objective, setObjective] = useState<Objective|null>(null);
+    const [objective, setObjective] = useState<Objective | null>(null);
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -35,13 +34,11 @@ const ObjectiveEdit: React.FC = () => {
     useEffect(() => {
         if (id) {
             // get the objective we need to edit from the database
-            getObjective(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the objective to edit so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    navigate('/error/400');
+            submitRequest(getObjective, [parseInt(id)], (response) => {
+                let errorPage = getErrorPage(response);
+
+                if (errorPage) {
+                    navigate(errorPage);
                 } else {
                     // we were able to fetch current objective to edit
                     setObjective(response);
@@ -53,7 +50,7 @@ const ObjectiveEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        if(objective) {
+        if (objective) {
             krysApp.setPageTitle(generatePageTitle(Sections.MISC_OBJECTIVES, PageTypes.EDIT, objective.name))
         }
 
@@ -65,32 +62,23 @@ const ObjectiveEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        if(objective) {
+        if (objective) {
             // we need to update the objective's data by doing API call with form
-            updateObjective(objective.id, form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // show errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error
-                    setFormErrors([GenericErrorMessage]);
-                } else {
-                    // we got the updated objective so we're good
+            submitRequest(updateObjective, [objective.id, form], (response) => {
+                // we got the updated objective so we're good
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('objectives', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                });
 
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('objectives', Actions.EDIT, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    });
-
-                    navigate(`/misc/objectives`);
-                }
-            });
+                navigate(`/misc/objectives`);
+            }, setFormErrors);
         }
     }
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Objective" />
+            <KTCardHeader text="Edit Objective"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

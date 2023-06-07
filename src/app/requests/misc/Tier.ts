@@ -6,8 +6,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/tiers`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllTiers = async (): Promise<TierList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<TierList>) => response.data).catch((error) => {
+export const getAllTiers = async (): Promise<Tier[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<TierList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -19,9 +19,7 @@ export const getTiers = (query?: String): Promise<TierPaginate> => {
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<TierPaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<TierPaginate>) => response.data);
 }
 
 export const getTier = async (id: number): Promise<Tier | AxiosError | undefined> => {

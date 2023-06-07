@@ -1,26 +1,25 @@
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
-import {AdvertiserIndustrySchema, defaultFormFields, FormFields} from '../core/form';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {useNavigate, useParams} from 'react-router-dom';
-import axios from 'axios';
-
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {getAdvertiserIndustry, updateAdvertiserIndustry} from '../../../../requests/misc/AdvertiserIndustry';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {genericOnChangeHandler} from '../../../../helpers/form';
+
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
+import {Sections} from '../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {AdvertiserIndustry} from '../../../../models/misc/AdvertiserIndustry';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {getAdvertiserIndustry, updateAdvertiserIndustry} from '../../../../requests/misc/AdvertiserIndustry';
+import {AdvertiserIndustrySchema, defaultFormFields, FormFields} from '../core/form';
 
 const AdvertiserIndustryEdit: React.FC = () => {
-    const [advertiserIndustry, setAdvertiserIndustry] = useState<AdvertiserIndustry|null>(null);
+    const [advertiserIndustry, setAdvertiserIndustry] = useState<AdvertiserIndustry | null>(null);
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -34,13 +33,11 @@ const AdvertiserIndustryEdit: React.FC = () => {
     useEffect(() => {
         if (id) {
             // get the advertiser industry we need to edit from the database
-            getAdvertiserIndustry(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the advertiser industry to edit so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    navigate('/error/400');
+            submitRequest(getAdvertiserIndustry, [parseInt(id)], (response) => {
+                let errorPage = getErrorPage(response);
+
+                if (errorPage) {
+                    navigate(errorPage);
                 } else {
                     setAdvertiserIndustry(response);
 
@@ -53,7 +50,7 @@ const AdvertiserIndustryEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        if(advertiserIndustry) {
+        if (advertiserIndustry) {
             krysApp.setPageTitle(generatePageTitle(Sections.MISC_ADVERTISER_INDUSTRIES, PageTypes.EDIT, advertiserIndustry.name))
         }
 
@@ -65,30 +62,23 @@ const AdvertiserIndustryEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        if(advertiserIndustry) {
+        if (advertiserIndustry) {
             // we need to update the advertiser industry's data by doing API call with form
-            updateAdvertiserIndustry(advertiserIndustry.id, form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // show errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error
-                    setFormErrors([GenericErrorMessage]);
-                } else {
-                    // we got the updated advertiser industries so we're good
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('advertiser industry', Actions.EDIT, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    })
-                    navigate(`/misc/advertiser-industries`);
-                }
-            });
+            submitRequest(updateAdvertiserIndustry, [advertiserIndustry.id, form], (response) => {
+                // we got the updated advertiser industries so we're good
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('advertiser industry', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                });
+
+                navigate(`/misc/advertiser-industries`);
+            }, setFormErrors);
         }
     }
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Advertiser Industry" />
+            <KTCardHeader text="Edit Advertiser Industry"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

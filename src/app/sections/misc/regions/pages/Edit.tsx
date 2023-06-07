@@ -1,29 +1,24 @@
+import {ErrorMessage, Field, Form, Formik} from "formik";
 import React, {useEffect, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 import {KTCard, KTCardBody} from "../../../../../_metronic/helpers";
 import {KTCardHeader} from "../../../../../_metronic/helpers/components/KTCardHeader";
 import FormErrors from "../../../../components/forms/FormErrors";
-import {ErrorMessage, Field, Form, Formik} from "formik";
-import {defaultFormFields, FormFields, RegionSchema} from "../core/form";
-import KrysFormLabel from "../../../../components/forms/KrysFormLabel";
 import KrysFormFooter from "../../../../components/forms/KrysFormFooter";
+import KrysFormLabel from "../../../../components/forms/KrysFormLabel";
+import MultiSelect from "../../../../components/forms/MultiSelect";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {genericOnChangeHandler,} from "../../../../helpers/form";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
+import {getErrorPage, submitRequest} from "../../../../helpers/requests";
 import {Sections} from "../../../../helpers/sections";
-import {Actions, PageTypes} from "../../../../helpers/variables";
-import {getRegion, updateRegion} from "../../../../requests/misc/Region";
-import axios from "axios";
-import {extractErrors} from "../../../../helpers/requests";
-import {
-    GenericErrorMessage,
-    genericOnChangeHandler,
-} from "../../../../helpers/form";
-import {getAllCountries} from "../../../../requests/misc/Country";
+import {Actions, KrysToastType, PageTypes} from "../../../../helpers/variables";
 import {Country} from "../../../../models/misc/Country";
 import {Region} from "../../../../models/misc/Region";
-import {useNavigate, useParams} from "react-router-dom";
 import {useKrysApp} from "../../../../modules/general/KrysApp";
-import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import {KrysToastType} from '../../../../helpers/variables';
-import MultiSelect from "../../../../components/forms/MultiSelect";
+import {getAllCountries} from "../../../../requests/misc/Country";
+import {getRegion, updateRegion} from "../../../../requests/misc/Region";
+import {defaultFormFields, FormFields, RegionSchema} from "../core/form";
 
 const RegionEdit: React.FC = () => {
     const [region, setRegion] = useState<Region | null>(null);
@@ -38,28 +33,17 @@ const RegionEdit: React.FC = () => {
 
     useEffect(() => {
         if (id) {
-            getAllCountries().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of countries, then we fill our state with them
-                    if (response.data) {
-                        setCountries(response.data);
-                    }
-                }
-            });
+            submitRequest(getAllCountries, [], (response) => {
+                setCountries(response);
+            }, setFormErrors);
 
 
             // get the permission we need to edit from the database
-            getRegion(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the permission to edit so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    navigate('/error/400');
+            submitRequest(getRegion, [parseInt(id)], (response) => {
+                let errorPage = getErrorPage(response);
+
+                if (errorPage) {
+                    navigate(errorPage);
                 } else {
                     // we were able to fetch current regions to edit
                     setRegion(response);
@@ -68,7 +52,7 @@ const RegionEdit: React.FC = () => {
 
                     setForm({
                         ...currentRegion,
-                        countries: response.countries.map(country => country.id),
+                        countries: countries.map((country: Country) => country.id),
                     });
                 }
             });
@@ -89,22 +73,15 @@ const RegionEdit: React.FC = () => {
 
     const handleEdit = () => {
         if (region) {
-            updateRegion(region.id, form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // show errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error
-                    setFormErrors([GenericErrorMessage]);
-                } else {
-                    // we update the region
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('region', Actions.EDIT, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    })
-                    navigate(`/misc/regions`);
-                }
-            });
+            submitRequest(updateRegion, [region.id, form], (response) => {
+                // we update the region
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('region', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                });
+
+                navigate(`/misc/regions`);
+            }, setFormErrors);
         }
     }
 
@@ -115,7 +92,7 @@ const RegionEdit: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Region" />
+            <KTCardHeader text="Edit Region"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

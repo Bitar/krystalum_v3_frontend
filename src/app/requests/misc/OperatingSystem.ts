@@ -6,8 +6,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/operating-systems`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllOperatingSystems = async (): Promise<OperatingSystemList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<OperatingSystemList>) => response.data).catch((error) => {
+export const getAllOperatingSystems = async (): Promise<OperatingSystem[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<OperatingSystemList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -19,9 +19,7 @@ export const getOperatingSystems = (query?: String): Promise<OperatingSystemPagi
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<OperatingSystemPaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<OperatingSystemPaginate>) => response.data);
 }
 
 export const getOperatingSystem = async (id: number): Promise<OperatingSystem | AxiosError | undefined> => {

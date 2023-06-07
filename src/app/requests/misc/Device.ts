@@ -6,8 +6,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/devices`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllDevices = async (): Promise<DeviceList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<DeviceList>) => response.data).catch((error) => {
+export const getAllDevices = async (): Promise<Device[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<DeviceList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -19,9 +19,7 @@ export const getDevices = (query?: String): Promise<DevicePaginate> => {
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<DevicePaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<DevicePaginate>) => response.data);
 }
 
 export const getDevice = async (id: number): Promise<Device | AxiosError | undefined> => {

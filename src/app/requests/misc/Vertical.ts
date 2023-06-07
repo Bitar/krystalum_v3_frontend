@@ -7,8 +7,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/verticals`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllVerticals = async (): Promise<VerticalList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<VerticalList>) => response.data).catch((error) => {
+export const getAllVerticals = async (): Promise<Vertical[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<VerticalList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -21,9 +21,7 @@ export const getVerticals = (query?: String): Promise<VerticalPaginate> => {
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<VerticalPaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<VerticalPaginate>) => response.data);
 }
 
 export const getVertical = async (id: number): Promise<Vertical | AxiosError | undefined> => {

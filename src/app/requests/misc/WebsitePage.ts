@@ -6,8 +6,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/website-pages`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllWebsitePages = async (): Promise<WebsitePageList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<WebsitePageList>) => response.data).catch((error) => {
+export const getAllWebsitePages = async (): Promise<WebsitePage[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<WebsitePageList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -19,9 +19,7 @@ export const getWebsitePages = (query?: String): Promise<WebsitePagePaginate> =>
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<WebsitePagePaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<WebsitePagePaginate>) => response.data);
 }
 
 export const getWebsitePage = async (id: number): Promise<WebsitePage | AxiosError | undefined> => {

@@ -1,28 +1,23 @@
+import {ErrorMessage, Field, Form, Formik} from "formik";
 import React, {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import Select from "react-select";
 import {KTCard, KTCardBody} from "../../../../../_metronic/helpers";
 import {KTCardHeader} from "../../../../../_metronic/helpers/components/KTCardHeader";
 import FormErrors from "../../../../components/forms/FormErrors";
-import {ErrorMessage, Field, Form, Formik} from "formik";
-import {defaultFormFields, RegionSchema, FormFields} from "../core/form";
-import KrysFormLabel from "../../../../components/forms/KrysFormLabel";
 import KrysFormFooter from "../../../../components/forms/KrysFormFooter";
-import {useNavigate} from "react-router-dom";
-import {useKrysApp} from "../../../../modules/general/KrysApp";
+import KrysFormLabel from "../../../../components/forms/KrysFormLabel";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {genericMultiSelectOnChangeHandler, genericOnChangeHandler,} from "../../../../helpers/form";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
+import {submitRequest} from "../../../../helpers/requests";
 import {Sections} from "../../../../helpers/sections";
 import {Actions, KrysToastType, PageTypes} from "../../../../helpers/variables";
-import {
-    GenericErrorMessage,
-    genericMultiSelectOnChangeHandler,
-    genericOnChangeHandler,
-} from "../../../../helpers/form";
-import axios from "axios";
-import {extractErrors} from "../../../../helpers/requests";
-import {storeRegion} from "../../../../requests/misc/Region";
-import Select from "react-select";
 import {Country} from "../../../../models/misc/Country";
+import {useKrysApp} from "../../../../modules/general/KrysApp";
 import {getAllCountries} from "../../../../requests/misc/Country";
-import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {storeRegion} from "../../../../requests/misc/Region";
+import {defaultFormFields, FormFields, RegionSchema} from "../core/form";
 
 const RegionCreate: React.FC = () => {
 
@@ -36,18 +31,9 @@ const RegionCreate: React.FC = () => {
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_REGIONS, PageTypes.CREATE))
 
-        getAllCountries().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFormErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of countries, then we fill our state with them
-                if (response.data) {
-                    setCountries(response.data);
-                }
-            }
-        });
+        submitRequest(getAllCountries, [], (response) => {
+            setCountries(response);
+        }, setFormErrors);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -58,22 +44,14 @@ const RegionCreate: React.FC = () => {
 
     const handleCreate = (e: any) => {
         // send API request to create the region
-        storeRegion(form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('region', Actions.CREATE, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    })
-                    navigate(`/misc/regions`);
-                }
-            }
-        );
+        submitRequest(storeRegion, [form], (response) => {
+            krysApp.setAlert({
+                message: new AlertMessageGenerator('region', Actions.CREATE, KrysToastType.SUCCESS).message,
+                type: KrysToastType.SUCCESS
+            });
+
+            navigate(`/misc/regions`);
+        }, setFormErrors);
     };
 
     const multiSelectChangeHandler = (e: any, key: any) => {
@@ -82,7 +60,7 @@ const RegionCreate: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New Region" />
+            <KTCardHeader text="Create New Region"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

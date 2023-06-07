@@ -7,8 +7,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/iam/roles`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllRoles = async (): Promise<RoleList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<RoleList>) => response.data).catch((error) => {
+export const getAllRoles = async (): Promise<Role[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<RoleList>) => response.data.data).catch((error) => {
         return error;
     });
 }

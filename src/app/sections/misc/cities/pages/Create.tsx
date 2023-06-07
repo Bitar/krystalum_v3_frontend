@@ -1,29 +1,25 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
-
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {defaultFormFields, FormFields, CitySchema} from '../core/form';
-import {
-    GenericErrorMessage,
-    genericOnChangeHandler, genericSingleSelectOnChangeHandler
-} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
-import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-import FormErrors from '../../../../components/forms/FormErrors';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {storeCity} from '../../../../requests/misc/City';
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import Select from 'react-select';
-import {Country} from '../../../../models/misc/Country';
-import {getAllCountries} from '../../../../requests/misc/Country';
+import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
+import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import FormErrors from '../../../../components/forms/FormErrors';
+import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {filterData} from '../../../../helpers/dataManipulation';
+import {genericOnChangeHandler, genericSingleSelectOnChangeHandler} from '../../../../helpers/form';
+
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {submitRequest} from '../../../../helpers/requests';
+import {Sections} from '../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
+import {Country} from '../../../../models/misc/Country';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {storeCity} from '../../../../requests/misc/City';
+import {getAllCountries} from '../../../../requests/misc/Country';
+import {CitySchema, defaultFormFields, FormFields} from '../core/form';
 
 const CityCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -38,18 +34,9 @@ const CityCreate: React.FC = () => {
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_CITIES, PageTypes.CREATE))
 
         // get the countries
-        getAllCountries().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFormErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of countries, then we fill our state with them
-                if (response.data) {
-                    setCountries(filterData(response.data, 'name', ['All Countries']));
-                }
-            }
-        });
+        submitRequest(getAllCountries, [], (response) => {
+            setCountries(filterData(response, 'name', ['All Countries']));
+        }, setFormErrors);
         //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -59,25 +46,20 @@ const CityCreate: React.FC = () => {
 
     const handleCreate = (e: any) => {
         // send API request to create the city
-        storeCity(form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // it's city for sure
-                    krysApp.setAlert({message: new AlertMessageGenerator('city', Actions.CREATE, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                    navigate(`/misc/cities`);
-                }
-            }
-        );
+        submitRequest(storeCity, [form], (response) => {
+            // it's city for sure
+            krysApp.setAlert({
+                message: new AlertMessageGenerator('city', Actions.CREATE, KrysToastType.SUCCESS).message,
+                type: KrysToastType.SUCCESS
+            });
+
+            navigate(`/misc/cities`);
+        }, setFormErrors);
     };
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New City" />
+            <KTCardHeader text="Create New City"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

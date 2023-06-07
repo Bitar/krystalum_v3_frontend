@@ -1,27 +1,26 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
-
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {defaultFormFields, FormFields, KpiSchema} from '../core/form';
-import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
-
-import {extractErrors} from '../../../../helpers/requests';
-import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import Select from "react-select";
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
+import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {storeKpi} from '../../../../requests/misc/Kpi';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysSwitch from '../../../../components/forms/KrysSwitch';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import {getAllPerformanceMetrics} from "../../../../requests/misc/PerformanceMetric";
+import {genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
+
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+
+import {submitRequest} from '../../../../helpers/requests';
+import {Sections} from '../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {PerformanceMetric} from "../../../../models/misc/PerformanceMetric";
-import Select from "react-select";
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {storeKpi} from '../../../../requests/misc/Kpi';
+import {getAllPerformanceMetrics} from "../../../../requests/misc/PerformanceMetric";
+import {defaultFormFields, FormFields, KpiSchema} from '../core/form';
 
 
 const KpiCreate: React.FC = () => {
@@ -35,16 +34,9 @@ const KpiCreate: React.FC = () => {
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_KPIS, PageTypes.CREATE));
 
-        getAllPerformanceMetrics().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFormErrors([GenericErrorMessage])
-            } else if (response.data) {
-                // if we were able to get the list of performance metrics, then we fill our state with them
-                setPerformanceMetrics(response.data);
-            }
-        });
+        submitRequest(getAllPerformanceMetrics, [], (response) => {
+            setPerformanceMetrics(response);
+        }, setFormErrors);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -54,25 +46,15 @@ const KpiCreate: React.FC = () => {
 
     const handleCreate = (e: any) => {
         // send API request to create the kpi
-        storeKpi(form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // it's kpi for sure
+        submitRequest(storeKpi, [form], (response) => {
+            // it's kpi for sure
+            krysApp.setAlert({
+                message: new AlertMessageGenerator('kpi', Actions.CREATE, KrysToastType.SUCCESS).message,
+                type: KrysToastType.SUCCESS
+            });
 
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('kpi', Actions.CREATE, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    });
-
-                    navigate(`/misc/kpis`);
-                }
-            }
-        );
+            navigate(`/misc/kpis`);
+        }, setFormErrors);
     };
 
     const multiSelectChangeHandler = (e: any) => {
@@ -81,7 +63,7 @@ const KpiCreate: React.FC = () => {
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New KPI" />
+            <KTCardHeader text="Create New KPI"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -106,9 +88,9 @@ const KpiCreate: React.FC = () => {
 
                                     <KrysSwitch name="is_rate"
                                                 onChangeHandler={(e) => {
-                                                      e.stopPropagation();
-                                                      setForm({...form, is_rate: Number(!form.is_rate)});
-                                                  }}
+                                                    e.stopPropagation();
+                                                    setForm({...form, is_rate: Number(!form.is_rate)});
+                                                }}
                                                 defaultValue={Boolean(form.is_rate)}/>
 
                                     <div className="mt-1 text-danger">

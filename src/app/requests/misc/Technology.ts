@@ -6,8 +6,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/technologies`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllTechnologies = async (): Promise<TechnologyList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<TechnologyList>) => response.data).catch((error) => {
+export const getAllTechnologies = async (): Promise<Technology[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<TechnologyList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -19,9 +19,7 @@ export const getTechnologies = (query?: String): Promise<TechnologyPaginate> => 
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<TechnologyPaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<TechnologyPaginate>) => response.data);
 }
 
 export const getTechnology = async (id: number): Promise<Technology | AxiosError | undefined> => {

@@ -1,23 +1,22 @@
-import React, {useEffect, useRef, useState} from 'react';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
+import React, {useEffect, useRef, useState} from 'react';
 import {Col, Collapse, Row} from 'react-bootstrap';
+import Select from 'react-select';
+import {initialQueryState} from '../../../../../_metronic/helpers';
+import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
+import FormErrors from '../../../../components/forms/FormErrors';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import {
+    genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler,
+    genericSingleSelectOnChangeHandler
+} from '../../../../helpers/form';
+import {createFilterQueryParam, submitRequest} from "../../../../helpers/requests";
+import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
 
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
-import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
-import {
-    GenericErrorMessage,
-    genericMultiSelectOnChangeHandler,
-    genericOnChangeHandler, genericSingleSelectOnChangeHandler
-} from '../../../../helpers/form';
-import {initialQueryState} from '../../../../../_metronic/helpers';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
-import Select from 'react-select';
-import {createFilterQueryParam, extractErrors} from "../../../../helpers/requests";
-import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
 import {getAllPerformanceMetrics} from '../../../../requests/misc/PerformanceMetric';
-import axios from 'axios';
-import FormErrors from '../../../../components/forms/FormErrors';
+import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
 
 interface Props {
     showFilter: boolean,
@@ -33,16 +32,9 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetric[]>([]);
 
     useEffect(() => {
-        getAllPerformanceMetrics().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else if (response.data) {
-                // if we were able to get the list of performance metrics, then we fill our state with them
-                setPerformanceMetrics(response.data);
-            }
-        });
+        submitRequest(getAllPerformanceMetrics, [], (response) => {
+            setPerformanceMetrics(response);
+        }, setFilterErrors);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

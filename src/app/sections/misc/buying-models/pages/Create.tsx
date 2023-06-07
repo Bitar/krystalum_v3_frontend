@@ -1,25 +1,24 @@
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import Select from "react-select";
+import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
+import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import FormErrors from '../../../../components/forms/FormErrors';
+import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
 
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {submitRequest} from '../../../../helpers/requests';
 import {Sections} from '../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {defaultFormFields, FormFields, BuyingModelSchema} from '../core/form';
-import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
-import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-import FormErrors from '../../../../components/forms/FormErrors';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {storeBuyingModel} from '../../../../requests/misc/BuyingModel';
-import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import Select from "react-select";
 import {PerformanceMetric} from "../../../../models/misc/PerformanceMetric";
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {storeBuyingModel} from '../../../../requests/misc/BuyingModel';
 import {getAllPerformanceMetrics} from "../../../../requests/misc/PerformanceMetric";
+import {BuyingModelSchema, defaultFormFields, FormFields} from '../core/form';
 
 const BuyingModelCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -33,16 +32,9 @@ const BuyingModelCreate: React.FC = () => {
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUYING_MODELS, PageTypes.CREATE))
 
-        getAllPerformanceMetrics().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFormErrors([GenericErrorMessage])
-            } else if (response.data) {
-                // if we were able to get the list of performance metrics, then we fill our state with them
-                setPerformanceMetrics(response.data);
-            }
-        });
+        submitRequest(getAllPerformanceMetrics, [], (response) => {
+            setPerformanceMetrics(response);
+        }, setFormErrors);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -57,30 +49,26 @@ const BuyingModelCreate: React.FC = () => {
 
     const handleCreate = (e: any) => {
         // send API request to create the booking type
-        storeBuyingModel(form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // it's booking type for sure
-                    krysApp.setAlert({message: new AlertMessageGenerator('buying model', Actions.CREATE, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                    navigate(`/misc/buying-models`);
-                }
-            }
-        );
+        submitRequest(storeBuyingModel, [form], (response) => {
+            // it's booking type for sure
+            krysApp.setAlert({
+                message: new AlertMessageGenerator('buying model', Actions.CREATE, KrysToastType.SUCCESS).message,
+                type: KrysToastType.SUCCESS
+            });
+
+            navigate(`/misc/buying-models`);
+        }, setFormErrors);
     };
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New Buying Model" />
+            <KTCardHeader text="Create New Buying Model"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
 
-                <Formik initialValues={form} validationSchema={BuyingModelSchema} onSubmit={handleCreate} enableReinitialize>
+                <Formik initialValues={form} validationSchema={BuyingModelSchema} onSubmit={handleCreate}
+                        enableReinitialize>
                     {
                         () => (
                             <Form onChange={onChangeHandler}>

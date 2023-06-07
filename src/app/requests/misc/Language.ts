@@ -6,8 +6,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/languages`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllLanguages = async (): Promise<LanguageList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<LanguageList>) => response.data).catch((error) => {
+export const getAllLanguages = async (): Promise<Language[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<LanguageList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -19,9 +19,7 @@ export const getLanguages = (query?: String): Promise<LanguagePaginate> => {
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<LanguagePaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<LanguagePaginate>) => response.data);
 }
 
 export const getLanguage = async (id: number): Promise<Language | AxiosError | undefined> => {
@@ -41,7 +39,7 @@ export const storeLanguage = async (language: any): Promise<Language | AxiosErro
         });
 }
 
-export const updateLanguage = async (id:number, language: any): Promise<Language | AxiosError | undefined> => {
+export const updateLanguage = async (id: number, language: any): Promise<Language | AxiosError | undefined> => {
     let formData = createFormData(language);
 
     formData.append('_method', 'put');

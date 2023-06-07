@@ -6,8 +6,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/audiences`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllAudiences = async (): Promise<AudienceList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<AudienceList>) => response.data).catch((error) => {
+export const getAllAudiences = async (): Promise<Audience[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<AudienceList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -19,9 +19,7 @@ export const getAudiences = (query?: String): Promise<AudiencePaginate> => {
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<AudiencePaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<AudiencePaginate>) => response.data);
 }
 
 export const getAudience = async (id: number): Promise<Audience | AxiosError | undefined> => {

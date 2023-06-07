@@ -6,8 +6,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/iam/permissions`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllPermissions = async (): Promise<PermissionList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<PermissionList>) => response.data).catch((error) => {
+export const getAllPermissions = async (): Promise<Permission[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<PermissionList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -19,9 +19,7 @@ export const getPermissions = (query?: String): Promise<PermissionPaginate> => {
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<PermissionPaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<PermissionPaginate>) => response.data);
 }
 
 export const getPermission = async (id: number): Promise<Permission | AxiosError | undefined> => {

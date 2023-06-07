@@ -1,18 +1,17 @@
+import {ErrorMessage, Field, Form, Formik} from "formik";
 import React, {useEffect, useRef, useState} from "react";
 import {Col, Collapse, Row} from "react-bootstrap";
-import {ErrorMessage, Field, Form, Formik} from "formik";
-import KrysFormLabel from "../../../../components/forms/KrysFormLabel";
-import FilterFormFooter from "../../../../components/forms/FilterFormFooter";
-import {useQueryRequest} from "../../../../modules/table/QueryRequestProvider";
-import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from "../../../../helpers/form";
-import {createFilterQueryParam, extractErrors} from "../../../../helpers/requests";
-import {initialQueryState} from "../../../../../_metronic/helpers";
-import {defaultFilterFields, FilterFields, FilterSchema} from "../core/filterForm";
 import Select from "react-select";
-import {Country} from "../../../../models/misc/Country";
-import {getAllCountries} from "../../../../requests/misc/Country";
-import axios from "axios";
+import {initialQueryState} from "../../../../../_metronic/helpers";
+import FilterFormFooter from "../../../../components/forms/FilterFormFooter";
 import FormErrors from "../../../../components/forms/FormErrors";
+import KrysFormLabel from "../../../../components/forms/KrysFormLabel";
+import {genericMultiSelectOnChangeHandler, genericOnChangeHandler} from "../../../../helpers/form";
+import {createFilterQueryParam, submitRequest} from "../../../../helpers/requests";
+import {Country} from "../../../../models/misc/Country";
+import {useQueryRequest} from "../../../../modules/table/QueryRequestProvider";
+import {getAllCountries} from "../../../../requests/misc/Country";
+import {defaultFilterFields, FilterFields, FilterSchema} from "../core/filterForm";
 
 interface Props {
     showFilter: boolean,
@@ -29,18 +28,9 @@ const RegionIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
 
     useEffect(() => {
         // get the countries
-        getAllCountries().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of countries, then we fill our state with them
-                if (response.data) {
-                    setCountries(response.data);
-                }
-            }
-        });
+        submitRequest(getAllCountries, [], (response) => {
+            setCountries(response);
+        }, setFilterErrors);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

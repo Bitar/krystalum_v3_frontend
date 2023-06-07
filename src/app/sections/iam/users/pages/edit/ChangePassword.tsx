@@ -1,19 +1,18 @@
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useState} from 'react';
-import {User} from '../../../../../models/iam/User';
 import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers';
 import FormErrors from '../../../../../components/forms/FormErrors';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
-import {ChangePasswordSchema, defaultFormFields, FormFields} from '../../core/changePasswordForm';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../helpers/form';
-import {changePassword} from '../../../../../requests/iam/User';
-import axios from 'axios';
-import {extractErrors} from '../../../../../helpers/requests';
+import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
 import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
+import {genericOnChangeHandler} from '../../../../../helpers/form';
+import {submitRequest} from '../../../../../helpers/requests';
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
-import {useKrysApp} from '../../../../../modules/general/KrysApp';
+import {User} from '../../../../../models/iam/User';
 import {useAuth} from '../../../../../modules/auth';
+import {useKrysApp} from '../../../../../modules/general/KrysApp';
+import {changePassword} from '../../../../../requests/iam/User';
+import {ChangePasswordSchema, defaultFormFields, FormFields} from '../../core/changePasswordForm';
 
 interface Props {
     user: User | null
@@ -32,28 +31,18 @@ const ChangePassword: React.FC<Props> = ({user}) => {
 
     const handleChangePassword = (e: any) => {
         // send API request to create the user
-        changePassword(user, form).then(response => {
-            console.log(response);
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // we were able to store the user
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('user', Actions.EDIT, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    });
+        submitRequest(changePassword, [user, form], (response) => {
+            // we were able to store the user
+            krysApp.setAlert({
+                message: new AlertMessageGenerator('user', Actions.EDIT, KrysToastType.SUCCESS).message,
+                type: KrysToastType.SUCCESS
+            });
 
-                    // timeout and then logout
-                    setTimeout(() => {
-                        logout();
-                    }, 3000)
-                }
-            }
-        );
+            // timeout and then logout
+            setTimeout(() => {
+                logout();
+            }, 3000);
+        }, setFormErrors);
     };
 
     return (

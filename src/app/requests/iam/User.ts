@@ -7,8 +7,8 @@ const API_URL = process.env.REACT_APP_API_URL;
 const ENDPOINT = `${API_URL}/iam/users`;
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllUsers = async (): Promise<UserList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<UserList>) => response.data).catch((error) => {
+export const getAllUsers = async (): Promise<User[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<UserList>) => response.data.data).catch((error) => {
         return error;
     });
 }

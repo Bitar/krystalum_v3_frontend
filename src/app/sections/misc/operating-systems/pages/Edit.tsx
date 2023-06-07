@@ -1,27 +1,26 @@
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
 
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {getOperatingSystem, updateOperatingSystem} from '../../../../requests/misc/OperatingSystem';
-import {OperatingSystemSchema} from '../core/form';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import {defaultFormFields, FormFields} from "../../audiences/core/form";
+import {genericOnChangeHandler} from '../../../../helpers/form';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
+import {Sections} from '../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {OperatingSystem} from '../../../../models/misc/OperatingSystem';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {getOperatingSystem, updateOperatingSystem} from '../../../../requests/misc/OperatingSystem';
+import {defaultFormFields, FormFields} from "../../audiences/core/form";
+import {OperatingSystemSchema} from '../core/form';
 
 const OperatingSystemEdit: React.FC = () => {
-    const [operatingSystem, setOperatingSystem] = useState<OperatingSystem|null>(null);
+    const [operatingSystem, setOperatingSystem] = useState<OperatingSystem | null>(null);
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -35,13 +34,11 @@ const OperatingSystemEdit: React.FC = () => {
     useEffect(() => {
         if (id) {
             // get the operating system we need to edit from the database
-            getOperatingSystem(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the operating system to edit, so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    navigate('/error/400');
+            submitRequest(getOperatingSystem, [parseInt(id)], (response) => {
+                let errorPage = getErrorPage(response);
+
+                if (errorPage) {
+                    navigate(errorPage);
                 } else {
                     // we were able to fetch current operating system to edit
                     setOperatingSystem(response);
@@ -53,7 +50,7 @@ const OperatingSystemEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        if(operatingSystem) {
+        if (operatingSystem) {
             krysApp.setPageTitle(generatePageTitle(Sections.MISC_OPERATING_SYSTEMS, PageTypes.EDIT, operatingSystem.name))
         }
 
@@ -65,27 +62,23 @@ const OperatingSystemEdit: React.FC = () => {
     };
 
     const handleEdit = () => {
-        if(operatingSystem) {
+        if (operatingSystem) {
             // we need to update the operating system's data by doing API call with form
-            updateOperatingSystem(operatingSystem.id, form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // show errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error
-                    setFormErrors([GenericErrorMessage]);
-                } else {
-                    // we got the operating system so we're good
-                    krysApp.setAlert({message: new AlertMessageGenerator('operating system', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                    navigate(`/misc/operating-systems`);
-                }
-            });
+            submitRequest(updateOperatingSystem, [operatingSystem.id, form], (response) => {
+                // we got the operating system so we're good
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('operating system', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                });
+
+                navigate(`/misc/operating-systems`);
+            }, setFormErrors);
         }
     }
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Operating System" />
+            <KTCardHeader text="Edit Operating System"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

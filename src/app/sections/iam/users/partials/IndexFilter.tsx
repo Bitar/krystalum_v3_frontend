@@ -1,19 +1,18 @@
-import Select from 'react-select';
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useRef, useState} from 'react';
 import {Col, Collapse, Row} from 'react-bootstrap';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-import axios from 'axios';
+import Select from 'react-select';
+import {initialQueryState} from '../../../../../_metronic/helpers';
+import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
+import FormErrors from '../../../../components/forms/FormErrors';
 
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import FormErrors from '../../../../components/forms/FormErrors';
-import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
+import {genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
+import {createFilterQueryParam, submitRequest} from '../../../../helpers/requests';
 import {Role} from '../../../../models/iam/Role';
-import {getAllRoles} from '../../../../requests/iam/Role';
-import {createFilterQueryParam, extractErrors} from '../../../../helpers/requests';
-import {initialQueryState} from '../../../../../_metronic/helpers';
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
+import {getAllRoles} from '../../../../requests/iam/Role';
 import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
-import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
 
 interface Props {
     showFilter: boolean,
@@ -30,18 +29,9 @@ const UserIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
 
     useEffect(() => {
         // get the roles so we can edit the user's roles
-        getAllRoles().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of roles, then we fill our state with them
-                if (response.data) {
-                    setRoles(response.data);
-                }
-            }
-        });
+        submitRequest(getAllRoles, [], (response) => {
+            setRoles(response);
+        }, setFilterErrors);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -130,7 +120,7 @@ const UserIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                             </Col>
                                         </Row>
 
-                                        <FilterFormFooter resetFilter={resetFilter} />
+                                        <FilterFormFooter resetFilter={resetFilter}/>
                                     </Form>
                                 )
                             }

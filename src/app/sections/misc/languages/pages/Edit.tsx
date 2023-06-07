@@ -1,27 +1,26 @@
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
 
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {getLanguage, updateLanguage} from '../../../../requests/misc/Language';
-import {LanguageSchema} from '../core/form';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import {defaultFormFields, FormFields} from "../../audiences/core/form";
+import {genericOnChangeHandler} from '../../../../helpers/form';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
+import {Sections} from '../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {Language} from '../../../../models/misc/Language';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {getLanguage, updateLanguage} from '../../../../requests/misc/Language';
+import {defaultFormFields, FormFields} from "../../audiences/core/form";
+import {LanguageSchema} from '../core/form';
 
 const LanguageEdit: React.FC = () => {
-    const [language, setLanguage] = useState<Language|null>(null);
+    const [language, setLanguage] = useState<Language | null>(null);
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -35,13 +34,11 @@ const LanguageEdit: React.FC = () => {
     useEffect(() => {
         if (id) {
             // get the language we need to edit from the database
-            getLanguage(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the language to edit, so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    navigate('/error/400');
+            submitRequest(getLanguage, [parseInt(id)], (response) => {
+                let errorPage = getErrorPage(response);
+
+                if (errorPage) {
+                    navigate(errorPage);
                 } else {
                     // we were able to fetch current language to edit
                     setLanguage(response);
@@ -53,7 +50,7 @@ const LanguageEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        if(language) {
+        if (language) {
             krysApp.setPageTitle(generatePageTitle(Sections.MISC_LANGUAGES, PageTypes.EDIT, language.name))
         }
 
@@ -65,27 +62,23 @@ const LanguageEdit: React.FC = () => {
     };
 
     const handleEdit = () => {
-        if(language) {
+        if (language) {
             // we need to update the language's data by doing API call with form
-            updateLanguage(language.id, form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // show errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error
-                    setFormErrors([GenericErrorMessage]);
-                } else {
-                    // we got the language so we're good
-                    krysApp.setAlert({message: new AlertMessageGenerator('language', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                    navigate(`/misc/languages`);
-                }
-            });
+            submitRequest(updateLanguage, [language.id, form], (response) => {
+                // we got the language so we're good
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('language', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                });
+
+                navigate(`/misc/languages`);
+            }, setFormErrors);
         }
     }
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Language" />
+            <KTCardHeader text="Edit Language"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

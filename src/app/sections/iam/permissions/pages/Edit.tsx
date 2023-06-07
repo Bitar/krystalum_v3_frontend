@@ -1,15 +1,14 @@
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
 
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
+import {genericOnChangeHandler} from '../../../../helpers/form';
 import {defaultPermission, Permission} from '../../../../models/iam/Permission';
 import {getPermission, updatePermission} from '../../../../requests/iam/Permission';
-import {extractErrors} from '../../../../helpers/requests';
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
@@ -33,13 +32,11 @@ const PermissionEdit: React.FC = () => {
     useEffect(() => {
         if (id) {
             // get the permission we need to edit from the database
-            getPermission(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the permission to edit so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    navigate('/error/400');
+            submitRequest(getPermission, [parseInt(id)], (response) => {
+                let errorPage = getErrorPage(response);
+
+                if (errorPage) {
+                    navigate(errorPage);
                 } else {
                     // we were able to fetch current permission to edit
                     setPermission(response);
@@ -64,24 +61,20 @@ const PermissionEdit: React.FC = () => {
 
     const handleEdit = (e: any) => {
         // we need to update the permission's data by doing API call with form
-        updatePermission(permission.id, permission).then(response => {
-            if (axios.isAxiosError(response)) {
-                // show errors
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                // show generic error
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // we got the updated permission so we're good
-                krysApp.setAlert({message: new AlertMessageGenerator('permission', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                navigate(`/iam/permissions`);
-            }
-        });
+        submitRequest(updatePermission, [permission.id, permission], (response) => {
+            // we got the updated permission so we're good
+            krysApp.setAlert({
+                message: new AlertMessageGenerator('permission', Actions.EDIT, KrysToastType.SUCCESS).message,
+                type: KrysToastType.SUCCESS
+            })
+
+            navigate(`/iam/permissions`);
+        }, setFormErrors);
     }
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Permission" />
+            <KTCardHeader text="Edit Permission"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
