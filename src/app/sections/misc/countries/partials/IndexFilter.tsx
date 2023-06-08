@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {Dispatch, useEffect, useState} from 'react';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import {Col, Collapse, Row} from 'react-bootstrap';
 
@@ -12,7 +12,7 @@ import {createFilterQueryParam} from '../../../../helpers/requests';
 
 interface Props {
     showFilter: boolean,
-    setExportQuery: React.Dispatch<React.SetStateAction<string>>
+    setExportQuery: Dispatch<React.SetStateAction<string>>
 }
 
 const CountryIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {

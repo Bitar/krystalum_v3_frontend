@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Dispatch} from 'react';
 import Select from 'react-select';
 import {Actions} from '../../helpers/variables';
 import CreateButton from '../buttons/Create';
@@ -62,9 +62,9 @@ export class EditCardAction extends CardAction {
 export class FilterCardAction extends CardAction {
     target: string;
     showFilter: boolean;
-    setShowFilter: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowFilter: Dispatch<React.SetStateAction<boolean>>;
 
-    constructor(target: string, showFilter: boolean, setShowFilter: React.Dispatch<React.SetStateAction<boolean>>) {
+    constructor(target: string, showFilter: boolean, setShowFilter: Dispatch<React.SetStateAction<boolean>>) {
         super(Actions.FILTER);
 
         this.target = target;

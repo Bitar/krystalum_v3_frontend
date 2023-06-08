@@ -1,5 +1,5 @@
 import {ErrorMessage, Field, Form, Formik} from "formik";
-import React, {useEffect, useRef, useState} from "react";
+import React, {Dispatch, useEffect, useRef, useState} from "react";
 import {Col, Collapse, Row} from "react-bootstrap";
 import Select from "react-select";
 import {initialQueryState} from "../../../../../_metronic/helpers";
@@ -15,7 +15,7 @@ import {defaultFilterFields, FilterFields, FilterSchema} from "../core/filterFor
 
 interface Props {
     showFilter: boolean,
-    setExportQuery: React.Dispatch<React.SetStateAction<string>>
+    setExportQuery: Dispatch<React.SetStateAction<string>>
 }
 
 const RegionIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {

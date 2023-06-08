@@ -1,5 +1,5 @@
 import axios, {AxiosError, AxiosResponse} from 'axios';
-import React, {SetStateAction} from 'react';
+import {Dispatch, SetStateAction} from 'react';
 import {GenericErrorMessage} from './form';
 
 export const extractErrors = (error: any) => {
@@ -95,7 +95,7 @@ export type ExportUrl = {
     }
 }
 
-export const submitRequest = (apiRequest: (...params: any[]) => Promise<any>, params: any[], callback: (response: any) => void, setErrors?: React.Dispatch<SetStateAction<any>>) => {
+export const submitRequest = (apiRequest: (...params: any[]) => Promise<any>, params: any[], callback: (response: any) => void, setErrors?: Dispatch<SetStateAction<any>>) => {
     apiRequest(...params).then(response => {
             if (axios.isAxiosError(response) && setErrors) {
                 // we need to show the errors

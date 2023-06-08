@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {Dispatch, useMemo} from 'react';
 import {Column} from 'react-table';
 
 import {KTCard, KTCardBody} from '../../../_metronic/helpers';
@@ -19,8 +19,8 @@ type Props = {
     columnsArray: readonly Column<any>[],
     cardHeader: KTCardHeaderProps,
     showFilter: boolean,
-    setExportQuery: React.Dispatch<React.SetStateAction<string>>,
-    FilterComponent: React.FC<{ showFilter: boolean, setExportQuery: React.Dispatch<React.SetStateAction<string>> }>
+    setExportQuery: Dispatch<React.SetStateAction<string>>,
+    FilterComponent: React.FC<{ showFilter: boolean, setExportQuery: Dispatch<React.SetStateAction<string>> }>
 }
 
 type TableProps = {
