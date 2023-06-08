@@ -1,15 +1,16 @@
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
+import Select from 'react-select';
 
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
+import {indentOptions} from '../../../../components/forms/IndentOptions';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import SingleSelect from '../../../../components/forms/SingleSelect';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import {genericOnChangeHandler} from '../../../../helpers/form';
+import {genericOnChangeHandler, genericSingleSelectOnChangeHandler} from '../../../../helpers/form';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {getErrorPage, submitRequest} from '../../../../helpers/requests';
 import {Sections} from '../../../../helpers/sections';
@@ -22,10 +23,9 @@ import {defaultFormFields, FormFields, VerticalSchema} from '../core/form';
 const VerticalEdit: React.FC = () => {
     const [vertical, setVertical] = useState<Vertical | null>(null);
 
-    const [form, setForm] = useState<FormFields>(defaultFormFields)
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
+    const [selectedParent, setSelectedParent] = useState<Vertical|null>(null);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-
-    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
     const [verticals, setVerticals] = useState<Vertical[]>([]);
 
@@ -47,10 +47,13 @@ const VerticalEdit: React.FC = () => {
                     // we were able to fetch current vertical to edit
                     setVertical(response);
 
+                    krysApp.setPageTitle(generatePageTitle(Sections.MISC_VERTICALS, PageTypes.EDIT, response.name));
+
                     const {parent, ...currentVertical} = response;
 
                     if (parent) {
                         setForm({...currentVertical, parent_id: parent.id})
+                        setSelectedParent(parent);
                     } else {
                         setForm({...currentVertical})
                     }
@@ -64,16 +67,6 @@ const VerticalEdit: React.FC = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
-
-    useEffect(() => {
-        if (vertical) {
-            krysApp.setPageTitle(generatePageTitle(Sections.MISC_VERTICALS, PageTypes.EDIT, vertical.name));
-
-            setIsResourceLoaded(true);
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [vertical]);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
@@ -119,9 +112,19 @@ const VerticalEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Vertical Parent" isRequired={false}/>
 
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={verticals}
-                                                  defaultValue={vertical?.parent} form={form} setForm={setForm}
-                                                  name='parent_id' isClearable={true} showHierarchy={true}/>
+                                    <Select name={'parent_id'} value={selectedParent}
+                                            options={verticals}
+                                            getOptionLabel={(instance) => instance.name}
+                                            getOptionValue={(instance) => instance.id.toString()}
+                                            placeholder={'Select parent vertical'}
+                                            isClearable={true}
+                                            formatOptionLabel={indentOptions}
+                                            onChange={(e) => {
+                                                genericSingleSelectOnChangeHandler(e, form, setForm, 'parent_id');
+
+                                                setSelectedParent(e as Vertical);
+                                            }
+                                            }/>
 
                                     <div className="mt-3 text-danger">
                                         {errors?.parent_id ? errors?.parent_id : null}

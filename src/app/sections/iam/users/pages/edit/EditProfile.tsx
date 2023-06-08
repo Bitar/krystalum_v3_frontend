@@ -1,12 +1,16 @@
 import {ErrorMessage, Field, Form, Formik, FormikProps} from 'formik';
 import React, {useEffect, useState} from 'react';
+import Select from 'react-select';
 import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers';
 import FormErrors from '../../../../../components/forms/FormErrors';
 import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
-import MultiSelect from '../../../../../components/forms/MultiSelect';
 import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
-import {genericHandleSingleFile, genericOnChangeHandler} from '../../../../../helpers/form';
+import {
+    genericHandleSingleFile,
+    genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler
+} from '../../../../../helpers/form';
 import {submitRequest} from '../../../../../helpers/requests';
 import {Actions, KrysToastType} from '../../../../../helpers/variables';
 import {Role} from '../../../../../models/iam/Role';
@@ -23,7 +27,7 @@ interface Props {
 const EditProfile: React.FC<Props> = ({user}) => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false);
+    const [selectedRoles, setSelectedRoles] = useState<Role[]>([]);
 
     const [roles, setRoles] = useState<Role[]>([]);
 
@@ -31,13 +35,13 @@ const EditProfile: React.FC<Props> = ({user}) => {
 
     useEffect(() => {
         if (user) {
-            setIsResourceLoaded(true);
-
             const {image, roles, ...currentUser} = user
 
             // was able to get the user we want to edit
             // the form is the same as user but without the image
-            setForm({...currentUser, roles: user.roles.map((role: { id: any; }) => role.id)});
+            setForm({...currentUser, roles: roles.map((role: { id: any; }) => role.id)});
+
+            setSelectedRoles(roles);
 
             // get the roles so we can edit the user's roles
             submitRequest(getAllRoles, [], (response) => {
@@ -125,9 +129,18 @@ const EditProfile: React.FC<Props> = ({user}) => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Roles" isRequired={true}/>
 
-                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={roles}
-                                                 defaultValue={user?.roles} form={form} setForm={setForm}
-                                                 name={'roles'}/>
+                                    <Select isMulti name={'roles'} value={selectedRoles}
+                                            options={roles}
+                                            getOptionLabel={(instance) => instance.name}
+                                            getOptionValue={(instance) => instance.id.toString()}
+                                            placeholder={`Select one or more roles`}
+                                            onChange={(e) => {
+                                                genericMultiSelectOnChangeHandler(e, form, setForm, 'roles');
+
+                                                let newRoles: Role[] = e as Role[];
+
+                                                setSelectedRoles(newRoles);
+                                            }}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="roles" className="mt-2"/>

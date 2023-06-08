@@ -1,14 +1,14 @@
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
+import Select from 'react-select';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import MultiSelect from '../../../../components/forms/MultiSelect';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import {genericOnChangeHandler} from '../../../../helpers/form';
+import {genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {getErrorPage, submitRequest} from '../../../../helpers/requests';
 import {Sections} from "../../../../helpers/sections";
@@ -23,14 +23,13 @@ import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
 
 const RoleEdit: React.FC = () => {
     const [role, setRole] = useState<Role | null>(null);
-    const [form, setForm] = useState<FormFields>(defaultFormFields)
-    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false);
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
+    const [selectedPermissions, setSelectedPermissions] = useState<Permission[]>([]);
 
     const [permissions, setPermissions] = useState<Permission[]>([]);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
-
     const navigate = useNavigate();
 
     let {id} = useParams();
@@ -53,25 +52,18 @@ const RoleEdit: React.FC = () => {
                     // we were able to fetch current permission to edit
                     setRole(response);
 
+                    krysApp.setPageTitle(generatePageTitle(Sections.IAM_ROLES, PageTypes.EDIT, response.name));
+
                     const {permissions, ...currentRole} = response
 
                     setForm({...currentRole, permissions: permissions.map((permission: Permission) => permission.id)});
+                    setSelectedPermissions(permissions);
                 }
             })
 
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
-
-    useEffect(() => {
-        if (role) {
-            setIsResourceLoaded(true);
-
-            krysApp.setPageTitle(generatePageTitle(Sections.IAM_ROLES, PageTypes.EDIT, role.name))
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [role]);
 
     const onChangeHandler = (e: any) => {
         // in case of multi select, the element doesn't have a name because
@@ -119,9 +111,17 @@ const RoleEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Permissions" isRequired={true}/>
 
-                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={permissions}
-                                                 defaultValue={role?.permissions} form={form} setForm={setForm}
-                                                 name={'permissions'}/>
+                                    <Select isMulti name={'permissions'} value={selectedPermissions}
+                                            options={permissions}
+                                            getOptionLabel={(instance) => instance.name}
+                                            getOptionValue={(instance) => instance.id.toString()}
+                                            placeholder={`Select one or more permissions`}
+                                            onChange={(e) => {
+                                                genericMultiSelectOnChangeHandler(e, form, setForm, 'permissions');
+
+                                                let newPermissions : Permission[] = e as Permission[];
+                                                setSelectedPermissions(newPermissions);
+                                            }}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="permissions" className="mt-2"/>

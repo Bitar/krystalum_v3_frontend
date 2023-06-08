@@ -1,14 +1,14 @@
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
+import Select from 'react-select';
 import {KTCard, KTCardBody} from "../../../../../_metronic/helpers";
 import {KTCardHeader} from "../../../../../_metronic/helpers/components/KTCardHeader";
 import FormErrors from "../../../../components/forms/FormErrors";
 import KrysFormFooter from "../../../../components/forms/KrysFormFooter";
 import KrysFormLabel from "../../../../components/forms/KrysFormLabel";
-import MultiSelect from "../../../../components/forms/MultiSelect";
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import {genericOnChangeHandler,} from "../../../../helpers/form";
+import {genericMultiSelectOnChangeHandler, genericOnChangeHandler,} from "../../../../helpers/form";
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
 import {getErrorPage, submitRequest} from "../../../../helpers/requests";
 import {Sections} from "../../../../helpers/sections";
@@ -25,7 +25,7 @@ const RegionEdit: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [countries, setCountries] = useState<Country[]>([]);
-    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false);
+    const [selectedCountries, setSelectedCountries] = useState<Country[]>([]);
 
     const navigate = useNavigate();
     const krysApp = useKrysApp();
@@ -48,28 +48,21 @@ const RegionEdit: React.FC = () => {
                     // we were able to fetch current regions to edit
                     setRegion(response);
 
+                    krysApp.setPageTitle(generatePageTitle(Sections.MISC_REGIONS, PageTypes.EDIT, response.name));
+
                     const {countries, ...currentRegion} = response
 
                     setForm({
                         ...currentRegion,
                         countries: countries.map((country: Country) => country.id),
                     });
+
+                    setSelectedCountries(countries);
                 }
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
-
-    useEffect(() => {
-        if (region) {
-            setIsResourceLoaded(true);
-
-            krysApp.setPageTitle(generatePageTitle(Sections.MISC_REGIONS, PageTypes.EDIT, region.name))
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [region]);
-
 
     const handleEdit = () => {
         if (region) {
@@ -114,9 +107,17 @@ const RegionEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Countries" isRequired={false}/>
 
-                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={countries}
-                                                 defaultValue={region?.countries} form={form} setForm={setForm}
-                                                 name={'countries'}/>
+                                    <Select isMulti name={'countries'} value={selectedCountries}
+                                            options={countries}
+                                            getOptionLabel={(instance) => instance.name}
+                                            getOptionValue={(instance) => instance.id.toString()}
+                                            placeholder={`Select one or more countries`}
+                                            isClearable={true}
+                                            onChange={(e) => {
+                                                genericMultiSelectOnChangeHandler(e, form, setForm, 'countries');
+                                                setSelectedCountries(e as Country[]);
+                                            }
+                                            }/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="countries" className="mt-2"/>

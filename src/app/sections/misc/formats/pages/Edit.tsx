@@ -1,18 +1,22 @@
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
+import Select from 'react-select';
 
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
+import {indentOptions} from '../../../../components/forms/IndentOptions';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysSwitch from "../../../../components/forms/KrysSwitch";
-import MultiSelect from "../../../../components/forms/MultiSelect";
-import SingleSelect from '../../../../components/forms/SingleSelect';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {filterData} from '../../../../helpers/dataManipulation';
-import {genericOnChangeHandler} from '../../../../helpers/form';
+import {
+    genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler,
+    genericSingleSelectOnChangeHandler
+} from '../../../../helpers/form';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {getErrorPage, submitRequest} from '../../../../helpers/requests';
 import {Sections} from '../../../../helpers/sections';
@@ -27,12 +31,13 @@ import {defaultFormFields, FormatSchema, FormFields} from '../core/form';
 const FormatEdit: React.FC = () => {
     const [format, setFormat] = useState<Format | null>(null);
 
-    const [form, setForm] = useState<FormFields>(defaultFormFields)
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
+    const [selectedParent, setSelectedParent] = useState<Format | null>(null);
+    const [selectedBuyingModels, setSelectedBuyingModels] = useState<BuyingModel[]>([]);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const [formats, setFormats] = useState<Format[]>([]);
     const [buyingModels, setBuyingModels] = useState<BuyingModel[]>([]);
-    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
     const krysApp = useKrysApp();
 
@@ -52,19 +57,26 @@ const FormatEdit: React.FC = () => {
                     // we were able to fetch current format to edit
                     setFormat(response);
 
+                    krysApp.setPageTitle(generatePageTitle(Sections.MISC_FORMATS, PageTypes.EDIT, response.name));
+
                     const {buyingModels, parent, ...currentFormat} = response
 
                     if (parent) {
                         setForm({
                             ...currentFormat,
-                            buying_model_ids: response.buyingModels.map((buyingModel: BuyingModel) => buyingModel.id),
+                            buying_model_ids: buyingModels.map((buyingModel: BuyingModel) => buyingModel.id),
                             parent_id: parent.id
                         });
+
+                        setSelectedBuyingModels(buyingModels);
+                        setSelectedParent(parent);
                     } else {
                         setForm({
                             ...currentFormat,
-                            buying_model_ids: response.buyingModels.map((buyingModel: BuyingModel) => buyingModel.id)
+                            buying_model_ids: buyingModels.map((buyingModel: BuyingModel) => buyingModel.id)
                         });
+
+                        setSelectedBuyingModels(buyingModels);
                     }
                 }
             });
@@ -80,15 +92,6 @@ const FormatEdit: React.FC = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
-
-    useEffect(() => {
-        if (format) {
-            setIsResourceLoaded(true);
-
-            krysApp.setPageTitle(generatePageTitle(Sections.MISC_FORMATS, PageTypes.EDIT, format.name))
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [format]);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
@@ -158,9 +161,17 @@ const FormatEdit: React.FC = () => {
                                 {form.has_buying_model > 0 && <div className="mb-7">
                                     <KrysFormLabel text="Buying models" isRequired={true}/>
 
-                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={buyingModels}
-                                                 defaultValue={format?.buyingModels} form={form} setForm={setForm}
-                                                 name={'buying_model_ids'}/>
+                                    <Select isMulti name={'buying_model_ids'} value={selectedBuyingModels}
+                                            options={buyingModels}
+                                            getOptionLabel={(instance) => instance.name}
+                                            getOptionValue={(instance) => instance.id.toString()}
+                                            placeholder={`Select one or more buying models`}
+                                            onChange={(e) => {
+                                                genericMultiSelectOnChangeHandler(e, form, setForm, 'buying_model_ids');
+
+                                                setSelectedBuyingModels(e as BuyingModel[]);
+                                            }
+                                            }/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="buying_model_ids" className="mt-2"/>
@@ -170,9 +181,19 @@ const FormatEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Format Parent" isRequired={false}/>
 
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={formats}
-                                                  defaultValue={format?.parent} form={form} setForm={setForm}
-                                                  name='parent_id' showHierarchy={true}/>
+                                    <Select name={'parent_id'} value={selectedParent}
+                                            options={formats}
+                                            getOptionLabel={(instance) => instance.name}
+                                            getOptionValue={(instance) => instance.id.toString()}
+                                            placeholder={'Select parent format'}
+                                            isClearable={true}
+                                            formatOptionLabel={indentOptions}
+                                            onChange={(e) => {
+                                                genericSingleSelectOnChangeHandler(e, form, setForm, 'parent_id');
+
+                                                setSelectedParent(e as Format);
+                                            }
+                                            }/>
 
                                     <div className="mt-3 text-danger">
                                         {errors?.parent_id ? errors?.parent_id : null}

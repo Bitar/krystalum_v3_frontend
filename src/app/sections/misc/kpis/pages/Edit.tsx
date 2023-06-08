@@ -1,15 +1,15 @@
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
+import Select from 'react-select';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysSwitch from '../../../../components/forms/KrysSwitch';
-import MultiSelect from '../../../../components/forms/MultiSelect';
 import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
-import {genericOnChangeHandler} from '../../../../helpers/form';
+import {genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {getErrorPage, submitRequest} from '../../../../helpers/requests';
 import {Sections} from '../../../../helpers/sections';
@@ -24,10 +24,10 @@ import {defaultFormFields, FormFields, KpiSchema} from '../core/form';
 const KpiEdit: React.FC = () => {
     const [kpi, setKpi] = useState<Kpi | null>(null);
 
-    const [form, setForm] = useState<FormFields>(defaultFormFields)
-    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
 
     const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetric[]>([]);
+    const [selectedPerformanceMetrics, setSelectedPerformanceMetrics] = useState<PerformanceMetric[]>([]);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -51,27 +51,21 @@ const KpiEdit: React.FC = () => {
                     // we were able to fetch current kpi to edit
                     setKpi(response);
 
-                    const {performanceMetrics, ...currentKpi} = response
+                    krysApp.setPageTitle(generatePageTitle(Sections.MISC_KPIS, PageTypes.EDIT, response.name))
+
+                    const {performanceMetrics, ...currentKpi} = response;
 
                     setForm({
                         ...currentKpi,
                         performance_metric_ids: performanceMetrics.map((metric: PerformanceMetric) => metric.id)
                     });
+
+                    setSelectedPerformanceMetrics(performanceMetrics);
                 }
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
-
-    useEffect(() => {
-        if (kpi) {
-            setIsResourceLoaded(true);
-
-            krysApp.setPageTitle(generatePageTitle(Sections.MISC_KPIS, PageTypes.EDIT, kpi.name))
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [kpi]);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
@@ -145,9 +139,16 @@ const KpiEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Corresponding metric" isRequired={true}/>
 
-                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={performanceMetrics}
-                                                 defaultValue={kpi?.performanceMetrics} form={form} setForm={setForm}
-                                                 name={'performance_metric_ids'}/>
+                                    <Select isMulti name={'performance_metric_ids'} value={selectedPerformanceMetrics}
+                                            options={performanceMetrics}
+                                            getOptionLabel={(instance) => instance.name}
+                                            getOptionValue={(instance) => instance.id.toString()}
+                                            placeholder={`Select one or more performance metrics`}
+                                            onChange={(e) => {
+                                                genericMultiSelectOnChangeHandler(e, form, setForm, 'performance_metric_ids');
+                                                setSelectedPerformanceMetrics(e as PerformanceMetric[]);
+                                            }
+                                            }/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="performance_metric_ids" className="mt-2"/>

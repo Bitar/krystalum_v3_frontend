@@ -1,15 +1,15 @@
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
+import Select from 'react-select';
 
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import MultiSelect from "../../../../components/forms/MultiSelect";
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import {genericOnChangeHandler} from '../../../../helpers/form';
+import {genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {getErrorPage, submitRequest} from '../../../../helpers/requests';
 import {Sections} from '../../../../helpers/sections';
@@ -22,15 +22,14 @@ import {getAllPerformanceMetrics} from "../../../../requests/misc/PerformanceMet
 import {BuyingModelSchema, defaultFormFields, FormFields} from '../core/form';
 
 const BuyingModelEdit: React.FC = () => {
-    const [buyingModel, setBuyingModel] = useState<BuyingModel | null>(null)
-    const [form, setForm] = useState<FormFields>(defaultFormFields)
+    const [buyingModel, setBuyingModel] = useState<BuyingModel | null>(null);
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
+    const [selectedPerformanceMetrics, setSelectedPerformanceMetrics] = useState<PerformanceMetric[]>([]);
 
     const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetric[]>([]);
 
     const krysApp = useKrysApp();
-
     const navigate = useNavigate();
 
     let {id} = useParams();
@@ -47,12 +46,16 @@ const BuyingModelEdit: React.FC = () => {
                     // we were able to fetch current buying model to edit
                     setBuyingModel(response);
 
+                    krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUYING_MODELS, PageTypes.EDIT, response.name))
+
                     const {performanceMetrics, ...currentBuyingModel} = response
 
                     setForm({
                         ...currentBuyingModel,
                         performance_metric_ids: performanceMetrics.map((metric: PerformanceMetric) => metric.id)
                     });
+
+                    setSelectedPerformanceMetrics(performanceMetrics);
                 }
             });
 
@@ -64,15 +67,6 @@ const BuyingModelEdit: React.FC = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
-
-    useEffect(() => {
-        if (buyingModel) {
-            setIsResourceLoaded(true);
-
-            krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUYING_MODELS, PageTypes.EDIT, buyingModel.name))
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [buyingModel]);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
@@ -119,9 +113,17 @@ const BuyingModelEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Corresponding metrics" isRequired={true}/>
 
-                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={performanceMetrics}
-                                                 defaultValue={buyingModel?.performanceMetrics} form={form}
-                                                 setForm={setForm} name={'performance_metric_ids'}/>
+                                    <Select isMulti name={'performance_metric_ids'} value={selectedPerformanceMetrics}
+                                            options={performanceMetrics}
+                                            getOptionLabel={(instance) => instance.name}
+                                            getOptionValue={(instance) => instance.id.toString()}
+                                            placeholder={`Select one or more metrics`}
+                                            onChange={(e) => {
+                                                genericMultiSelectOnChangeHandler(e, form, setForm, 'performance_metric_ids');
+
+                                                setSelectedPerformanceMetrics(e as PerformanceMetric[]);
+                                            }
+                                            }/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="performance_metric_ids" className="mt-2"/>

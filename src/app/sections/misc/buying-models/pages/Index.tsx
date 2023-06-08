@@ -29,7 +29,7 @@ const BuyingModelIndex = () => {
                    columnsArray={BuyingModelsColumns}
                    cardHeader={
                        {
-                           text: 'All Buy Types',
+                           text: 'All Buying Models',
 
                            actions: [new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                new FilterCardAction('buying-models-list-filter', showFilter, setShowFilter),
