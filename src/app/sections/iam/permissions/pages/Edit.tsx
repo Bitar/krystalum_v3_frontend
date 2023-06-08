@@ -1,22 +1,22 @@
 import {ErrorMessage, Field, Form, Formik} from 'formik';
-import * as Yup from 'yup';
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
+import * as Yup from 'yup';
 
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {genericOnChangeHandler} from '../../../../helpers/form';
-import {defaultPermission, Permission} from '../../../../models/iam/Permission';
-import {getPermission, updatePermission} from '../../../../requests/iam/Permission';
-import {getErrorPage, submitRequest} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from "../../../../modules/general/KrysApp";
-import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {genericOnChangeHandler} from '../../../../helpers/form';
+import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
 import {Sections} from "../../../../helpers/sections";
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
+import {defaultPermission, Permission} from '../../../../models/iam/Permission';
+import {useKrysApp} from "../../../../modules/general/KrysApp";
+import {getPermission, updatePermission} from '../../../../requests/iam/Permission';
 
 
 const PermissionEdit: React.FC = () => {

@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
-import {getErrorPage, submitRequest} from '../../../../helpers/requests';
-
-import {User} from '../../../../models/iam/User';
-import {getUser} from '../../../../requests/iam/User';
 import {KTCard, KTCardBody, KTSVG} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from "../../../../modules/general/KrysApp";
-import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {Sections} from "../../../../helpers/sections";
 import {EditCardAction} from '../../../../components/misc/CardAction';
+import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
+import {Sections} from "../../../../helpers/sections";
+import {PageTypes} from '../../../../helpers/variables';
+
+import {User} from '../../../../models/iam/User';
+import {useKrysApp} from "../../../../modules/general/KrysApp";
+import {getUser} from '../../../../requests/iam/User';
 
 const UserShow: React.FC = () => {
     const [user, setUser] = useState<User|null>(null);

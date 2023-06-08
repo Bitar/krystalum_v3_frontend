@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react'
 
 import {QUERIES} from '../../../../../_metronic/helpers'
-import {PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import KrysIndex from '../../../../components/tables/KrysIndex';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
+import {PageTypes} from '../../../../helpers/variables';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {EXPORT_ENDPOINT, getCities} from '../../../../requests/misc/City';
 import {CitiesColumns} from '../core/TableColumns';
 import CityIndexFilter from '../partials/IndexFilter';
-import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
-import KrysIndex from '../../../../components/tables/KrysIndex';
 
 const CityIndex = () => {
     const krysApp = useKrysApp();

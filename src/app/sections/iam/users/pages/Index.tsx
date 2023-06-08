@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react'
 
 import {QUERIES} from '../../../../../_metronic/helpers'
-import {EXPORT_ENDPOINT, getUsers} from '../../../../requests/iam/User'
-import {TableColumns} from '../core/TableColumns'
-import {PageTypes} from '../../../../helpers/variables';
-import UserIndexFilter from '../partials/IndexFilter';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {Sections} from '../../../../helpers/sections';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 import KrysIndex from '../../../../components/tables/KrysIndex';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {Sections} from '../../../../helpers/sections';
+import {PageTypes} from '../../../../helpers/variables';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {EXPORT_ENDPOINT, getUsers} from '../../../../requests/iam/User'
+import {TableColumns} from '../core/TableColumns'
+import UserIndexFilter from '../partials/IndexFilter';
 
 const UserIndex = () => {
     const krysApp = useKrysApp();

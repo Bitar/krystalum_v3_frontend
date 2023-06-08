@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react'
 
 import {QUERIES} from '../../../../../_metronic/helpers'
-import {RolesColumns} from '../core/TableColumns';
-import {EXPORT_ENDPOINT, getRoles} from '../../../../requests/iam/Role';
-import {PageTypes} from '../../../../helpers/variables';
-import RoleIndexFilter from '../partials/IndexFilter';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 import KrysIndex from '../../../../components/tables/KrysIndex';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {Sections} from '../../../../helpers/sections';
+import {PageTypes} from '../../../../helpers/variables';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {EXPORT_ENDPOINT, getRoles} from '../../../../requests/iam/Role';
+import {RolesColumns} from '../core/TableColumns';
+import RoleIndexFilter from '../partials/IndexFilter';
 
 const RoleIndex = () => {
     const krysApp = useKrysApp();

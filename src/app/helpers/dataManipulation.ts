@@ -13,3 +13,7 @@ export const listGroupBy = function (arr: any[], key: any) {
 export const formatNumber = (amount: number) => {
     return amount.toLocaleString(undefined, {maximumFractionDigits: 2});
 }
+
+export const removeEmptyFromObject = (obj: Object) => {
+    return Object.fromEntries(Object.entries(obj).filter(([, value]) => typeof value !== undefined && value !== null && value.length !== 0));
+}

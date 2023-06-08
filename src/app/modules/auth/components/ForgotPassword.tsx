@@ -1,42 +1,24 @@
-import React, {useState} from 'react'
 import {ErrorMessage, Field, Form, Formik} from 'formik'
-import axios from 'axios';
+import React, {useState} from 'react'
+import FormErrors from '../../../components/forms/FormErrors';
+import FormSuccess from '../../../components/forms/FormSuccess';
+import KrysFormFooter from '../../../components/forms/KrysFormFooter';
+import {genericOnChangeHandler} from '../../../helpers/form';
+import {submitRequest} from '../../../helpers/requests';
+import {defaultForgotPasswordFormFields, ForgotPasswordFormFields, forgotPasswordSchema} from '../core/_forms';
 
 import {requestPassword} from '../core/_requests'
-import {
-  defaultForgotPasswordFormFields, ForgotPasswordFormFields, forgotPasswordSchema
-} from '../core/_forms';
-import FormErrors from '../../../components/forms/FormErrors';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../helpers/form';
-import KrysFormFooter from '../../../components/forms/KrysFormFooter';
-import {extractErrors} from '../../../helpers/requests';
-import FormSuccess from '../../../components/forms/FormSuccess';
 
 export function ForgotPassword() {
     const [form, setForm] = useState<ForgotPasswordFormFields>(defaultForgotPasswordFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
-    const [loading, setLoading] = useState(false);
-
     const handleForgotPassword = (e: any) => {
-        setLoading(true);
-
-        requestPassword(form).then(response => {
-                setLoading(false);
-
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // we sent the request to reset password so we need to show success message
-                    setIsSuccess(true);
-                }
-            }
-        );
+        submitRequest(requestPassword, [form], (response) => {
+            // we sent the request to reset password so we need to show success message
+            setIsSuccess(true);
+        }, setFormErrors);
     };
 
     const onChangeHandler = (e: any) => {
@@ -77,7 +59,7 @@ export function ForgotPassword() {
                                 </div>
                             </div>
 
-                            <KrysFormFooter loading={loading} cancelUrl={'/auth/login'} useSeparator={false}/>
+                            <KrysFormFooter cancelUrl={'/auth/login'} useSeparator={false}/>
                         </Form>
                     )
                 }

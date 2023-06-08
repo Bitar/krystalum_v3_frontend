@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
 
 import {QUERIES} from '../../../../../_metronic/helpers'
-import {ObjectivesColumns} from '../core/TableColumns';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import KrysIndex from '../../../../components/tables/KrysIndex';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {PageTypes} from '../../../../helpers/variables';
-import ObjectiveIndexFilter from '../partials/IndexFilter';
-import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {EXPORT_ENDPOINT, getObjectives} from '../../../../requests/misc/Objective';
-import KrysIndex from '../../../../components/tables/KrysIndex';
+import {ObjectivesColumns} from '../core/TableColumns';
+import ObjectiveIndexFilter from '../partials/IndexFilter';
 
 
 const ObjectiveIndex: React.FC = () => {

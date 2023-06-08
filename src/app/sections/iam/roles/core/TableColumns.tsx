@@ -1,12 +1,12 @@
 import {Column} from 'react-table'
-import {TextCell} from '../../../../modules/table/columns/TextCell'
-import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
-import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {QUERIES} from '../../../../../_metronic/helpers'
-import {Role} from '../../../../models/iam/Role';
-import {Permission} from '../../../../models/iam/Permission';
 import {truncateText} from '../../../../helpers/stringGenerator';
+import {Permission} from '../../../../models/iam/Permission';
+import {Role} from '../../../../models/iam/Role';
 import {Restricted} from '../../../../modules/auth/AuthAccessControl';
+import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
+import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
+import {TextCell} from '../../../../modules/table/columns/TextCell'
 
 const RolesColumns: ReadonlyArray<Column<Role>> = [
     {

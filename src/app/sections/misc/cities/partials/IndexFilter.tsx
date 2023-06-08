@@ -2,13 +2,16 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {Dispatch, useEffect, useRef, useState} from 'react';
 import {Col, Collapse, Row} from 'react-bootstrap';
 import Select from 'react-select';
-import {initialQueryState} from '../../../../../_metronic/helpers';
 import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import {filterData} from '../../../../helpers/dataManipulation';
-import {genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
-import {createFilterQueryParam, submitRequest} from '../../../../helpers/requests';
+import {
+    genericFilterHandler,
+    genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler
+} from '../../../../helpers/form';
+import {submitRequest} from '../../../../helpers/requests';
 import {Country} from '../../../../models/misc/Country';
 
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
@@ -45,12 +48,7 @@ const CityIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     };
 
     const handleFilter = () => {
-        setExportQuery(createFilterQueryParam(filters));
-
-        updateState({
-            filter: reset ? undefined : filters,
-            ...initialQueryState,
-        });
+        genericFilterHandler(setExportQuery, filters, updateState, reset);
     }
 
     useEffect(() => {

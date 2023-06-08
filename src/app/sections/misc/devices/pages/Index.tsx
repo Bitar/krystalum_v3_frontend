@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react'
 
 import {QUERIES} from '../../../../../_metronic/helpers'
-import {PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {EXPORT_ENDPOINT, getDevices} from '../../../../requests/misc/Device';
-import DeviceIndexFilter from '../partials/IndexFilter';
-import {DevicesColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 import KrysIndex from '../../../../components/tables/KrysIndex';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {Sections} from '../../../../helpers/sections';
+import {PageTypes} from '../../../../helpers/variables';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {EXPORT_ENDPOINT, getDevices} from '../../../../requests/misc/Device';
+import {DevicesColumns} from '../core/TableColumns';
+import DeviceIndexFilter from '../partials/IndexFilter';
 
 const DeviceIndex = () => {
     const krysApp = useKrysApp();

@@ -1,13 +1,13 @@
 import {Column} from 'react-table';
-import {TextCell} from '../../../../modules/table/columns/TextCell';
-import {CustomHeader} from '../../../../modules/table/columns/CustomHeader';
-import {ActionsCell} from '../../../../modules/table/columns/ActionsCell';
 import {QUERIES} from '../../../../../_metronic/helpers';
-import {User} from '../../../../models/iam/User';
-import {UserInfoCell} from '../../../../modules/table/columns/UserInfoCell';
-import {Role} from '../../../../models/iam/Role';
 import {truncateText} from '../../../../helpers/stringGenerator';
+import {Role} from '../../../../models/iam/Role';
+import {User} from '../../../../models/iam/User';
 import {useAccessControl} from '../../../../modules/auth/AuthAccessControl';
+import {ActionsCell} from '../../../../modules/table/columns/ActionsCell';
+import {CustomHeader} from '../../../../modules/table/columns/CustomHeader';
+import {TextCell} from '../../../../modules/table/columns/TextCell';
+import {UserInfoCell} from '../../../../modules/table/columns/UserInfoCell';
 
 const TableColumns: ReadonlyArray<Column<User>> = [
     {

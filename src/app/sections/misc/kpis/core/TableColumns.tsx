@@ -1,14 +1,14 @@
 import {Column} from 'react-table';
-
-import {TextCell} from '../../../../modules/table/columns/TextCell';
-import {CustomHeader} from '../../../../modules/table/columns/CustomHeader';
-import {ActionsCell} from '../../../../modules/table/columns/ActionsCell';
 import {QUERIES} from '../../../../../_metronic/helpers';
 import {Kpi} from '../../../../models/misc/Kpi';
-import {BadgeCell} from '../../../../modules/table/columns/BadgeCell';
-import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
 import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
 import {Restricted} from '../../../../modules/auth/AuthAccessControl';
+import {ActionsCell} from '../../../../modules/table/columns/ActionsCell';
+import {BadgeCell} from '../../../../modules/table/columns/BadgeCell';
+import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
+import {CustomHeader} from '../../../../modules/table/columns/CustomHeader';
+
+import {TextCell} from '../../../../modules/table/columns/TextCell';
 
 const KpisColumns: ReadonlyArray<Column<Kpi>> = [
     {

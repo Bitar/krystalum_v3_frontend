@@ -1,14 +1,12 @@
-import React, {Dispatch, useEffect, useState} from 'react';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
+import React, {Dispatch, useEffect, useState} from 'react';
 import {Col, Collapse, Row} from 'react-bootstrap';
+import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import {genericFilterHandler, genericOnChangeHandler} from '../../../../helpers/form';
 
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
 import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
-import {genericOnChangeHandler} from '../../../../helpers/form';
-import {initialQueryState} from '../../../../../_metronic/helpers';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
-import {createFilterQueryParam} from "../../../../helpers/requests";
 
 interface Props {
     showFilter: boolean,
@@ -26,12 +24,7 @@ const CampaignRestrictionRequirementIndexFilter: React.FC<Props> = ({showFilter,
     };
 
     const handleFilter = () => {
-        setExportQuery(createFilterQueryParam(filters));
-
-        updateState({
-            filter: reset ? undefined : filters,
-            ...initialQueryState,
-        });
+        genericFilterHandler(setExportQuery, filters, updateState, reset);
     }
 
     useEffect(() => {

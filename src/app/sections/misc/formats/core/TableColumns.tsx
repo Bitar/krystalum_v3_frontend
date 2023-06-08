@@ -1,13 +1,13 @@
 import {Column} from 'react-table'
-
-import {TextCell} from '../../../../modules/table/columns/TextCell';
-import {CustomHeader} from '../../../../modules/table/columns/CustomHeader';
-import {ActionsCell} from '../../../../modules/table/columns/ActionsCell';
 import {QUERIES} from '../../../../../_metronic/helpers';
+import {BuyingModel} from '../../../../models/misc/BuyingModel';
 import {Format} from '../../../../models/misc/Format';
 import {Restricted} from '../../../../modules/auth/AuthAccessControl';
+import {ActionsCell} from '../../../../modules/table/columns/ActionsCell';
 import {BadgesCell} from '../../../../modules/table/columns/BadgesCell';
-import {BuyingModel} from '../../../../models/misc/BuyingModel';
+import {CustomHeader} from '../../../../modules/table/columns/CustomHeader';
+
+import {TextCell} from '../../../../modules/table/columns/TextCell';
 
 const FormatsColumns: ReadonlyArray<Column<Format>> = [
     {

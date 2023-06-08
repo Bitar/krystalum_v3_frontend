@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {QUERIES} from '../../../../../_metronic/helpers';
-import {PageTypes} from '../../../../helpers/variables';
-import {VerticalsColumns} from '../core/TableColumns';
-import {EXPORT_ENDPOINT, getVerticals} from '../../../../requests/misc/Vertical';
-import VerticalIndexFilter from '../partials/IndexFilter';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 import KrysIndex from '../../../../components/tables/KrysIndex';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {Sections} from '../../../../helpers/sections';
+import {PageTypes} from '../../../../helpers/variables';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {EXPORT_ENDPOINT, getVerticals} from '../../../../requests/misc/Vertical';
+import {VerticalsColumns} from '../core/TableColumns';
+import VerticalIndexFilter from '../partials/IndexFilter';
 
 const VerticalIndex: React.FC = () => {
     const krysApp = useKrysApp();

@@ -2,16 +2,16 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {Dispatch, useEffect, useRef, useState} from 'react';
 import {Col, Collapse, Row} from 'react-bootstrap';
 import Select from 'react-select';
-import {initialQueryState} from '../../../../../_metronic/helpers';
 import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import {
+    genericFilterHandler,
     genericMultiSelectOnChangeHandler,
     genericOnChangeHandler,
     genericSingleSelectOnChangeHandler
 } from '../../../../helpers/form';
-import {createFilterQueryParam, submitRequest} from "../../../../helpers/requests";
+import {submitRequest} from "../../../../helpers/requests";
 import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
 
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
@@ -48,12 +48,7 @@ const KpiIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     };
 
     const handleFilter = () => {
-        setExportQuery(createFilterQueryParam(filters));
-
-        updateState({
-            filter: reset ? undefined : filters,
-            ...initialQueryState,
-        });
+        genericFilterHandler(setExportQuery, filters, updateState, reset);
     }
 
     useEffect(() => {

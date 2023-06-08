@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
-
-import {VideoPlayersColumns} from '../core/TableColumns';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {QUERIES} from '../../../../../_metronic/helpers';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import KrysIndex from '../../../../components/tables/KrysIndex';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {PageTypes} from '../../../../helpers/variables';
-import {QUERIES} from '../../../../../_metronic/helpers';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {EXPORT_ENDPOINT, getVideoPlayers} from '../../../../requests/misc/VideoPlayer';
+
+import {VideoPlayersColumns} from '../core/TableColumns';
 import VideoPlayerIndexFilter from '../partials/IndexFilter';
-import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
-import KrysIndex from '../../../../components/tables/KrysIndex';
 
 const VideoPlayerIndex: React.FC = () => {
     const krysApp = useKrysApp();

@@ -1,6 +1,9 @@
 import React, {Dispatch} from 'react';
 import {FormikProps} from 'formik';
 import {DateRange} from 'rsuite/DateRangePicker';
+import {initialQueryState, QueryState} from '../../_metronic/helpers';
+import {removeEmptyFromObject} from './dataManipulation';
+import {createFilterQueryParam} from './requests';
 
 export const genericOnChangeHandler = (e: any, form: any, setForm: Dispatch<React.SetStateAction<any>>) => {
     const value = e.target.value;
@@ -82,3 +85,14 @@ export const genericDateRangeOnChangeHandler = (dateRange: DateRange | null, for
         setForm({...form, [key]: dateRange});
     }
 };
+
+export const genericFilterHandler = (setExportQuery: Dispatch<React.SetStateAction<string>>, filters: Object, updateState: (updates: Partial<QueryState>) => void, reset: boolean) => {
+    setExportQuery(createFilterQueryParam(filters));
+
+    let cleanFilters = removeEmptyFromObject(filters);
+
+    updateState({
+        filter: reset ? undefined : cleanFilters,
+        ...initialQueryState,
+    });
+}

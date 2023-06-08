@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react'
 
 import {QUERIES} from '../../../../../_metronic/helpers'
-import {PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {EXPORT_ENDPOINT, getLanguages} from '../../../../requests/misc/Language';
-import LanguageIndexFilter from '../partials/IndexFilter';
-import {LanguagesColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 import KrysIndex from '../../../../components/tables/KrysIndex';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {Sections} from '../../../../helpers/sections';
+import {PageTypes} from '../../../../helpers/variables';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {EXPORT_ENDPOINT, getLanguages} from '../../../../requests/misc/Language';
+import {LanguagesColumns} from '../core/TableColumns';
+import LanguageIndexFilter from '../partials/IndexFilter';
 
 const LanguageIndex = () => {
     const krysApp = useKrysApp();
