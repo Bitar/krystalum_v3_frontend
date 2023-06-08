@@ -1,159 +1,165 @@
-import axios from 'axios';
-import {Field, Form, Formik} from 'formik';
-import React, {useRef, useState} from 'react';
-import Select from 'react-select';
-import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers';
-import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader';
-import FormErrors from '../../../../../../components/forms/FormErrors';
-import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter';
-import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel';
-import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable';
-import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator';
+import axios from 'axios'
+import {Field, Form, Formik} from 'formik'
+import React, {useRef, useState} from 'react'
+import Select from 'react-select'
+import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers'
+import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader'
+import FormErrors from '../../../../../../components/forms/FormErrors'
+import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter'
+import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel'
+import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable'
+import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
 import {
-    GenericErrorMessage,
-    genericOnChangeHandler,
-    genericSingleSelectOnChangeHandler
-} from '../../../../../../helpers/form';
-import {extractErrors} from '../../../../../../helpers/requests';
-import {Actions, KrysToastType} from '../../../../../../helpers/variables';
-import {useKrysApp} from '../../../../../../modules/general/KrysApp';
+  GenericErrorMessage,
+  genericOnChangeHandler,
+  genericSingleSelectOnChangeHandler,
+} from '../../../../../../helpers/form'
+import {extractErrors} from '../../../../../../helpers/requests'
+import {Actions, KrysToastType} from '../../../../../../helpers/variables'
+import {useKrysApp} from '../../../../../../modules/general/KrysApp'
 import {
-    getPublisherContacts,
-    storePublisherContact
-} from '../../../../../../requests/supply/publisher/PublisherContact';
+  getPublisherContacts,
+  storePublisherContact,
+} from '../../../../../../requests/supply/publisher/PublisherContact'
 import {
-    defaultPublisherContactFormFields,
-    PublisherContactFormFields,
-    PublisherContactSchema
-} from '../../../core/edit/contacts/form';
-import {PublisherContactsColumns} from '../../../core/edit/contacts/TableColumns';
-import {usePublisher} from '../../../core/PublisherContext';
-import {usePublisherEdit} from '../../../core/PublisherEditContext';
+  defaultPublisherContactFormFields,
+  PublisherContactFormFields,
+  PublisherContactSchema,
+} from '../../../core/edit/contacts/form'
+import {PublisherContactsColumns} from '../../../core/edit/contacts/TableColumns'
+import {usePublisher} from '../../../core/PublisherContext'
+import {usePublisherEdit} from '../../../core/PublisherEditContext'
 
 const PublisherContactCreate: React.FC = () => {
-    const {options} = usePublisher();
-    const {publisher} = usePublisherEdit();
-    const krysApp = useKrysApp();
+  const {options} = usePublisher()
+  const {publisher} = usePublisherEdit()
+  const krysApp = useKrysApp()
 
-    const [form, setForm] = useState<PublisherContactFormFields>(defaultPublisherContactFormFields);
-    const [formErrors, setFormErrors] = useState<string[]>([]);
+  const [form, setForm] = useState<PublisherContactFormFields>(defaultPublisherContactFormFields)
+  const [formErrors, setFormErrors] = useState<string[]>([])
 
-    const [refreshTable, setRefreshTable] = useState<boolean>(false);
+  const [refreshTable, setRefreshTable] = useState<boolean>(false)
 
-    const contactTypesSelectRef = useRef<any>(null);
+  const contactTypesSelectRef = useRef<any>(null)
 
-    const {contactTypes} = options
+  const {contactTypes} = options
 
-    const onChangeHandler = (e: any) => {
-        // as long as we are updating the create form, we should set the table refresh to false
-        setRefreshTable(false);
+  const onChangeHandler = (e: any) => {
+    // as long as we are updating the create form, we should set the table refresh to false
+    setRefreshTable(false)
 
-        genericOnChangeHandler(e, form, setForm);
-    };
+    genericOnChangeHandler(e, form, setForm)
+  }
 
-    const selectChangeHandler = (e: any, key: string) => {
-        genericSingleSelectOnChangeHandler(e, form, setForm, key);
-    };
+  const selectChangeHandler = (e: any, key: string) => {
+    genericSingleSelectOnChangeHandler(e, form, setForm, key)
+  }
 
-    const handleCreate = () => {
-        if (publisher) {
-            // send API request to create the publisher contacts
-            storePublisherContact(publisher, form).then(response => {
-                    if (axios.isAxiosError(response)) {
-                        // we need to show the errors
-                        setFormErrors(extractErrors(response));
-                    } else if (response === undefined) {
-                        // show generic error message
-                        setFormErrors([GenericErrorMessage])
-                    } else {
-                        // we were able to store the publisher contacts
-                        krysApp.setAlert({
-                            message: new AlertMessageGenerator('publisher contacts details', Actions.CREATE, KrysToastType.SUCCESS).message,
-                            type: KrysToastType.SUCCESS
-                        });
+  const handleCreate = () => {
+    if (publisher) {
+      // send API request to create the publisher contacts
+      storePublisherContact(publisher, form).then((response) => {
+        if (axios.isAxiosError(response)) {
+          // we need to show the errors
+          setFormErrors(extractErrors(response))
+        } else if (response === undefined) {
+          // show generic error message
+          setFormErrors([GenericErrorMessage])
+        } else {
+          // we were able to store the publisher contacts
+          krysApp.setAlert({
+            message: new AlertMessageGenerator(
+              'publisher contacts details',
+              Actions.CREATE,
+              KrysToastType.SUCCESS
+            ).message,
+            type: KrysToastType.SUCCESS,
+          })
 
-                        // now that we have a new record successfully we need to refresh the table
-                        setRefreshTable(true);
+          // now that we have a new record successfully we need to refresh the table
+          setRefreshTable(true)
 
-                        // clear the selected values from dropdown
-                        contactTypesSelectRef.current?.clearValue();
+          // clear the selected values from dropdown
+          contactTypesSelectRef.current?.clearValue()
 
-                        // we need to clear the form data
-                        setForm(defaultPublisherContactFormFields);
+          // we need to clear the form data
+          setForm(defaultPublisherContactFormFields)
 
-                        // we need to clear the form error
-                        setFormErrors([]);
-                    }
-                }
-            );
+          // we need to clear the form error
+          setFormErrors([])
         }
-    };
+      })
+    }
+  }
 
-    return (
-        <KTCard className="card-bordered border-1">
-            <KTCardHeader text="Add New Contact"/>
+  return (
+    <KTCard className='card-bordered border-1'>
+      <KTCardHeader text='Add New Contact' />
 
-            <KTCardBody>
-                <FormErrors errorMessages={formErrors}/>
+      <KTCardBody>
+        <FormErrors errorMessages={formErrors} />
 
-                <Formik initialValues={form} validationSchema={PublisherContactSchema} onSubmit={handleCreate}
-                        enableReinitialize>
-                    {
-                        ({errors}) => (
-                            <Form onChange={onChangeHandler}>
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Contact type" isRequired={true}/>
+        <Formik
+          initialValues={form}
+          validationSchema={PublisherContactSchema}
+          onSubmit={handleCreate}
+          enableReinitialize
+        >
+          {({errors}) => (
+            <Form onChange={onChangeHandler}>
+              <div className='mb-7'>
+                <KrysFormLabel text='Contact type' isRequired={true} />
 
-                                    <Select name="type"
-                                            options={contactTypes}
-                                            getOptionLabel={(contactType) => contactType.name}
-                                            getOptionValue={(contactType) => contactType.id.toString()}
-                                            onChange={(e) => {
-                                                selectChangeHandler(e, 'type')
-                                            }}
-                                            placeholder="Select a contact type"
-                                            isClearable={true}
-                                            ref={contactTypesSelectRef}/>
+                <Select
+                  name='type'
+                  options={contactTypes}
+                  getOptionLabel={(contactType) => contactType.name}
+                  getOptionValue={(contactType) => contactType.id.toString()}
+                  onChange={(e) => {
+                    selectChangeHandler(e, 'type')
+                  }}
+                  placeholder='Select a contact type'
+                  isClearable={true}
+                  ref={contactTypesSelectRef}
+                />
 
-                                    <div className="mt-1 text-danger">
-                                        {errors?.type ? errors?.type : null}
-                                    </div>
-                                </div>
+                <div className='mt-1 text-danger'>{errors?.type ? errors?.type : null}</div>
+              </div>
 
-                                <div className="mb-7">
-                                    <KrysFormLabel text="Contact detail" isRequired={true}/>
+              <div className='mb-7'>
+                <KrysFormLabel text='Contact detail' isRequired={true} />
 
-                                    <Field className="form-control fs-base" type="text"
-                                           placeholder="Enter contact detail (address, email address or phone)"
-                                           name="detail"/>
+                <Field
+                  className='form-control fs-base'
+                  type='text'
+                  placeholder='Enter contact detail (address, email address or phone)'
+                  name='detail'
+                />
 
-                                    <div className="mt-1 text-danger">
-                                        {errors?.detail ? errors?.detail : null}
-                                    </div>
-                                </div>
+                <div className='mt-1 text-danger'>{errors?.detail ? errors?.detail : null}</div>
+              </div>
 
-                                <KrysFormFooter cancelUrl={'/supply/publishers'}/>
-                            </Form>
-                        )}
-                </Formik>
+              <KrysFormFooter cancelUrl={'/supply/publishers'} />
+            </Form>
+          )}
+        </Formik>
 
-                <div className="separator separator-dashed my-10"></div>
+        <div className='separator separator-dashed my-10'></div>
 
-                {
-                    publisher &&
-                    <KrysInnerTable
-                        doRefetch={refreshTable}
-                        slug="publisher-contacts"
-                        queryId={QUERIES.PUBLISHER_CONTACTS_LIST}
-                        requestFunction={getPublisherContacts}
-                        requestId={publisher.id}
-                        columnsArray={PublisherContactsColumns}
-                        showSearchFilter={true}
-                    ></KrysInnerTable>
-                }
-            </KTCardBody>
-        </KTCard>
-    );
+        {publisher && (
+          <KrysInnerTable
+            doRefetch={refreshTable}
+            slug='publisher-contacts'
+            queryId={QUERIES.PUBLISHER_CONTACTS_LIST}
+            requestFunction={getPublisherContacts}
+            requestId={publisher.id}
+            columnsArray={PublisherContactsColumns}
+            showSearchFilter={true}
+          ></KrysInnerTable>
+        )}
+      </KTCardBody>
+    </KTCard>
+  )
 }
 
-export default PublisherContactCreate;
+export default PublisherContactCreate

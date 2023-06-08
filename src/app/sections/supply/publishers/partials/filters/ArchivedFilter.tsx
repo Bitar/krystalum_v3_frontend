@@ -1,19 +1,23 @@
-import React, {useState} from 'react';
-import {fillFilterFields, FilterFields} from '../../core/filterForm';
-import PublisherFilter from './Filter';
+import React, {Dispatch, SetStateAction, useState} from 'react'
+import {FilterFields} from '../../core/filterForm'
+import PublisherFilter from './Filter'
 
 interface Props {
-    showFilter: boolean;
-    setExportQuery: React.Dispatch<React.SetStateAction<string>>;
+  showFilter: boolean
+  setExportQuery: Dispatch<SetStateAction<string>>
 }
 
 const PublisherArchivedFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
-    const [filters, setFilters] = useState<FilterFields>(fillFilterFields('is_archived', 1));
+  const [filters, setFilters] = useState<FilterFields>({is_archived: 1})
 
-    return (
-        <PublisherFilter showFilter={showFilter} setExportQuery={setExportQuery} filters={filters}
-                         setFilters={setFilters}/>
-    );
+  return (
+    <PublisherFilter
+      showFilter={showFilter}
+      setExportQuery={setExportQuery}
+      filters={filters}
+      setFilters={setFilters}
+    />
+  )
 }
 
-export default PublisherArchivedFilter;
+export default PublisherArchivedFilter

@@ -1,5 +1,5 @@
 export type PublicationUpdateMessage = {
-    data: {
-        message: string
-    }
+  data: {
+    message: string
+  }
 }

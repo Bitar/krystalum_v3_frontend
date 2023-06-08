@@ -1,9 +1,9 @@
-import {Response} from '../../../../_metronic/helpers';
+import {Response} from '../../../../_metronic/helpers'
 
 export type PublicationAdTechnology = {
-    id: number,
-    technology: string,
-    type: string,
-};
+  id: number
+  technology: string
+  type: string
+}
 
-export type PublicationAdTechnologyPaginate = Response<PublicationAdTechnology[]>;
+export type PublicationAdTechnologyPaginate = Response<PublicationAdTechnology[]>

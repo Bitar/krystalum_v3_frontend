@@ -1,52 +1,79 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
-import {createFormData} from '../../../helpers/requests';
-import {PublicationUpdateMessage} from '../../../models/supply/Other';
-import {Publication} from '../../../models/supply/publication/Publication';
-import {PublicationFormat, PublicationFormatPaginate} from '../../../models/supply/publication/PublicationFormat';
+import {createFormData} from '../../../helpers/requests'
+import {PublicationUpdateMessage} from '../../../models/supply/Other'
+import {Publication} from '../../../models/supply/publication/Publication'
+import {
+  PublicationFormat,
+  PublicationFormatPaginate,
+} from '../../../models/supply/publication/PublicationFormat'
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publications`
 const ENDPOINT_ADDITION = 'formats'
 
-export const getPublicationFormats = (publicationId: number, query?: String): Promise<PublicationFormatPaginate> => {
-    let url = `${ENDPOINT}/${publicationId}/${ENDPOINT_ADDITION}`;
+export const getPublicationFormats = (
+  publicationId: number,
+  query?: String
+): Promise<PublicationFormatPaginate> => {
+  let url = `${ENDPOINT}/${publicationId}/${ENDPOINT_ADDITION}`
 
-    if (query) {
-        url += `?${query}`;
-    }
+  if (query) {
+    url += `?${query}`
+  }
 
-    return axios.get(url).then((response: AxiosResponse<PublicationFormatPaginate>) => response.data).catch((error) => {
-        return error;
-    });
+  return axios
+    .get(url)
+    .then((response: AxiosResponse<PublicationFormatPaginate>) => response.data)
+    .catch((error) => {
+      return error
+    })
 }
 
-export const getPublicationFormat = async (publication: Publication, id: number): Promise<PublicationFormat | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`;
+export const getPublicationFormat = async (
+  publication: Publication,
+  id: number
+): Promise<PublicationFormat | AxiosError | undefined> => {
+  let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`
 
-    return await axios.get(url + '/' + id)
-        .then(response => response.data.data).catch((error) => {
-            return error;
-        });
+  return await axios
+    .get(url + '/' + id)
+    .then((response) => response.data.data)
+    .catch((error) => {
+      return error
+    })
 }
 
-export const storePublicationFormat = async (publication: Publication, form: any): Promise<PublicationFormat | PublicationUpdateMessage | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`;
+export const storePublicationFormat = async (
+  publication: Publication,
+  form: any
+): Promise<PublicationFormat | PublicationUpdateMessage | AxiosError | undefined> => {
+  let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`
 
-    let formData = createFormData(form);
+  let formData = createFormData(form)
 
-    return await axios.post(url, formData).then(response => response.data).catch((error) => {
-        return error;
-    });
+  return await axios
+    .post(url, formData)
+    .then((response) => response.data)
+    .catch((error) => {
+      return error
+    })
 }
 
-export const updatePublicationFormat = async (publication: Publication, id: number, publicationFormat: any): Promise<PublicationFormat | PublicationUpdateMessage | AxiosError | undefined> => {
-    let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`;
+export const updatePublicationFormat = async (
+  publication: Publication,
+  id: number,
+  publicationFormat: any
+): Promise<PublicationFormat | PublicationUpdateMessage | AxiosError | undefined> => {
+  let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`
 
-    let formData = createFormData(publicationFormat);
+  let formData = createFormData(publicationFormat)
 
-    formData.append('_method', 'put');
+  formData.append('_method', 'put')
 
-    return await axios.post(url + '/' + id, formData).then(response => response.data.data).catch((error) => {
-        return error;
-    });
+  return await axios
+    .post(url + '/' + id, formData)
+    .then((response) => response.data.data)
+    .catch((error) => {
+      return error
+    })
 }

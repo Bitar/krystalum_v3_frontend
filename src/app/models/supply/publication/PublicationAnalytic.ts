@@ -1,16 +1,16 @@
-import {Response} from '../../../../_metronic/helpers';
-import {Country} from '../../misc/Country';
-import {Device} from '../../misc/Device';
-import {Region} from '../../misc/Region';
-import {AnalyticType, GeoType} from '../Options';
+import {Response} from '../../../../_metronic/helpers'
+import {Country} from '../../misc/Country'
+import {Device} from '../../misc/Device'
+import {Region} from '../../misc/Region'
+import {AnalyticType, GeoType} from '../Options'
 
 export type PublicationAnalytic = {
-    id: number,
-    type: AnalyticType,
-    geoType: GeoType,
-    geo: Region | Country,
-    device: Device,
-    value: number
-};
+  id: number
+  type: AnalyticType
+  geoType: GeoType
+  geo: Region | Country
+  device: Device
+  value: number
+}
 
-export type PublicationAnalyticPaginate = Response<PublicationAnalytic[]>;
+export type PublicationAnalyticPaginate = Response<PublicationAnalytic[]>

@@ -1,16 +1,16 @@
-import * as Yup from 'yup';
+import * as Yup from 'yup'
 
 export interface PublisherContactFormFields {
-    type: string;
-    detail: string;
+  type: string
+  detail: string
 }
 
 export const defaultPublisherContactFormFields: PublisherContactFormFields = {
-    type: '',
-    detail: ''
-};
+  type: '',
+  detail: '',
+}
 
 export const PublisherContactSchema = Yup.object().shape({
-    type: Yup.string().required(),
-    detail: Yup.string().required(),
-});
+  type: Yup.string().required(),
+  detail: Yup.string().required(),
+})

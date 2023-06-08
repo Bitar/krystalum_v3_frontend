@@ -1,6 +1,6 @@
-import {Language} from '../../misc/Language';
+import {Language} from '../../misc/Language'
 
 export type PublicationLanguage = {
-    id: number,
-    language: Language
-};
+  id: number
+  language: Language
+}

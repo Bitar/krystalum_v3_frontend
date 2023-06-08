@@ -15,7 +15,7 @@ type Props = {
 }
 
 const EngageWidget: React.FC<Props> = ({
-                                                  cardClasses = 'h-200px mb-5 mb-xl-8',
+                                                  cardClasses = 'h-200px',
                                                   cardBodyClasses = '',
                                                   backgroundColor = '#1C325E',
                                                   backgroundPosition = 'right bottom',

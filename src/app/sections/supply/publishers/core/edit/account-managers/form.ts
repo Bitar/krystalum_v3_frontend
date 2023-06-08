@@ -1,13 +1,13 @@
-import * as Yup from 'yup';
+import * as Yup from 'yup'
 
 export interface PublisherAccountManagerFormFields {
-    user_id: number;
+  user_id: number
 }
 
 export const defaultPublisherAccountManagerFormFields: PublisherAccountManagerFormFields = {
-    user_id: 0
-};
+  user_id: 0,
+}
 
 export const PublisherAccountManagerSchema = Yup.object().shape({
-    user_id: Yup.number().min(1, 'account manager is required').required(),
-});
+  user_id: Yup.number().min(1, 'account manager is required').required(),
+})
