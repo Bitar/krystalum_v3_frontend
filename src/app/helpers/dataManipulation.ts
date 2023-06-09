@@ -15,5 +15,5 @@ export const formatNumber = (amount: number) => {
 }
 
 export const removeEmptyFromObject = (obj: Object) => {
-    return Object.fromEntries(Object.entries(obj).filter(([, value]) => typeof value !== undefined && value !== null && value.length !== 0));
+    return Object.fromEntries(Object.entries(obj).filter(([, value]) => value !== undefined && value !== null && value.length !== 0));
 }
