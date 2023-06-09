@@ -1,4 +1,3 @@
-import axios from 'axios'
 import {Field, Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
 import {InputGroup} from 'react-bootstrap'
@@ -15,13 +14,12 @@ import {RevenueTypeEnum} from '../../../../enums/Supply/RevenueTypeEnum'
 import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator'
 import {
   genericDateOnChangeHandler,
-  GenericErrorMessage,
   genericOnChangeHandler,
   genericSingleSelectOnChangeHandler,
 } from '../../../../helpers/form'
 import {scrollToTop} from '../../../../helpers/general'
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator'
-import {extractErrors} from '../../../../helpers/requests'
+import {submitRequest} from '../../../../helpers/requests'
 import {Sections} from '../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables'
 import {useKrysApp} from '../../../../modules/general/KrysApp'
@@ -61,32 +59,26 @@ const PublisherCreate: React.FC = () => {
 
   const handleCreate = () => {
     // send API request to create the publisher
-    storePublisher(form).then((response) => {
-      if (axios.isAxiosError(response)) {
-        // we need to show the errors
-        setFormErrors(extractErrors(response))
-
-        scrollToTop()
-      } else if (response === undefined) {
-        // show generic error message
-        setFormErrors([GenericErrorMessage])
-
-        scrollToTop()
-      } else {
+    submitRequest(
+      storePublisher,
+      [form],
+      (response) => {
         // it's publisher for sure
         // redirect the user to the create publications page
         krysApp.setAlert({
-          message:
-            new AlertMessageGenerator('publisher', Actions.CREATE, KrysToastType.SUCCESS).message +
-            ' Please fill out the form below to create publications related to the created publisher.',
+          message: new AlertMessageGenerator('publisher', Actions.CREATE, KrysToastType.SUCCESS)
+            .message,
           type: KrysToastType.SUCCESS,
         })
 
         setPublisher(response)
 
         navigate(`/supply/publications/create`)
-      }
-    })
+      },
+      setFormErrors
+    )
+
+    scrollToTop()
   }
 
   return (
@@ -128,8 +120,8 @@ const PublisherCreate: React.FC = () => {
                 <Select
                   name='tier_id'
                   options={tiers}
-                  getOptionLabel={(tier) => tier.name}
-                  getOptionValue={(tier) => tier.id.toString()}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
                   onChange={(e) => {
                     selectChangeHandler(e, 'tier_id')
                   }}
@@ -271,8 +263,8 @@ const PublisherCreate: React.FC = () => {
                   name='hq_country_id'
                   menuPlacement={'top'}
                   options={countries}
-                  getOptionLabel={(country) => country?.name}
-                  getOptionValue={(country) => country?.id.toString()}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
                   onChange={(e) => {
                     selectChangeHandler(e, 'hq_country_id')
                   }}

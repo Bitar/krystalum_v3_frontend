@@ -16,11 +16,12 @@ import {
   genericMultiSelectOnChangeHandler,
   genericOnChangeHandler,
 } from '../../../../../../helpers/form'
-import {extractErrors} from '../../../../../../helpers/requests'
+import {extractErrors, submitRequest} from '../../../../../../helpers/requests'
 import {Actions, KrysToastType} from '../../../../../../helpers/variables'
 import {Vertical} from '../../../../../../models/misc/Vertical'
 
 import {useKrysApp} from '../../../../../../modules/general/KrysApp'
+import {updatePublicationTechnology} from '../../../../../../requests/supply/publication/PublicationTechnology'
 import {
   getPublicationVerticals,
   storePublicationVertical,
@@ -80,14 +81,10 @@ const PublicationVerticalCreate: React.FC = () => {
       setRefreshTable(false)
 
       // send API request to create the publication verticals
-      storePublicationVertical(publication, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we need to show the errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error message
-          setFormErrors([GenericErrorMessage])
-        } else {
+      submitRequest(
+        storePublicationVertical,
+        [publication, form],
+        (response) => {
           // we were able to store the publication verticals
           krysApp.setAlert({
             message: new AlertMessageGenerator(
@@ -113,8 +110,9 @@ const PublicationVerticalCreate: React.FC = () => {
 
           // we need to clear the form errors
           setFormErrors([])
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 
@@ -140,8 +138,8 @@ const PublicationVerticalCreate: React.FC = () => {
                   isMulti
                   name='vertical_ids'
                   options={filteredVerticals}
-                  getOptionLabel={(vertical) => vertical.name}
-                  getOptionValue={(vertical) => vertical.id.toString()}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
                   onChange={(e) => {
                     multiSelectChangeHandler(e, 'vertical_ids')
                   }}

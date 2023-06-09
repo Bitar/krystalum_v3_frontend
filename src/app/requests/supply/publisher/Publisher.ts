@@ -14,10 +14,10 @@ export const EXPORT_ENDPOINT = `${ENDPOINT}/export`
 export const INCLUDES =
   'include[]=tier&include[]=info&include[]=accountManager&include[]=publications'
 
-export const getAllPublishers = async (): Promise<PublisherList | AxiosError | undefined> => {
+export const getAllPublishers = async (): Promise<Publisher[] | AxiosError | undefined> => {
   return axios
     .get(ENDPOINT + '/all?sort[]=name')
-    .then((response: AxiosResponse<PublisherList>) => response.data)
+    .then((response: AxiosResponse<PublisherList>) => response.data.data)
     .catch((error) => {
       return error
     })
@@ -65,7 +65,7 @@ export const getArchivedPublishers = (query?: String): Promise<PublisherPaginate
 
   return axios
     .get(url)
-    .then((response: AxiosResponse<PublisherPaginate>) => response.data)
+    .then((response: AxiosResponse<PublisherPaginate>) => response.data.data)
     .catch((error) => {
       return error
     })

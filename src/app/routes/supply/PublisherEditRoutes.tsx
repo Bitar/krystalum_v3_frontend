@@ -4,7 +4,9 @@ import {Outlet, Route, Routes, useNavigate, useParams} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 
 import {SuspenseView} from '../../components/misc/SuspenseView'
+import {submitRequest} from '../../helpers/requests'
 import {Sections} from '../../helpers/sections'
+import {getPublicationEditOptions} from '../../requests/supply/Options'
 import {getPublisher} from '../../requests/supply/publisher/Publisher'
 import PublisherEdit from '../../sections/supply/publishers/pages/Edit'
 import PublisherContactEdit from '../../sections/supply/publishers/pages/edit/contacts/Edit'
@@ -22,17 +24,9 @@ const PublisherEditRoutes: React.FC = () => {
   useEffect(() => {
     if (id) {
       // get the publisher we need to edit from the database
-      getPublisher(parseInt(id)).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we were not able to fetch the publisher to edit, so we need to redirect
-          // to error page
-          navigate('/error/404')
-        } else if (response === undefined) {
-          // unknown error occurred
-          navigate('/error/400')
-        } else {
-          setPublisher(response)
-        }
+      submitRequest(getPublisher, [id], (response) => {
+        console.log(response)
+        setPublisher(response)
       })
     }
 
@@ -71,7 +65,7 @@ const PublisherEditRoutes: React.FC = () => {
       <Route
         element={
           <SuspenseView>
-            <PublisherOverview />
+            {/*<PublisherOverview />*/}
             <Outlet />
           </SuspenseView>
         }

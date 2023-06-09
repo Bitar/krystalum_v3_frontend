@@ -1,18 +1,20 @@
-import axios from 'axios'
 import {Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
+import Select from 'react-select'
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader'
 import FormErrors from '../../../../../../components/forms/FormErrors'
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter'
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel'
-import SingleSelect from '../../../../../../components/forms/SingleSelect'
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
 import {filterData} from '../../../../../../helpers/dataManipulation'
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form'
+import {
+  genericOnChangeHandler,
+  genericSingleSelectOnChangeHandler,
+} from '../../../../../../helpers/form'
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator'
-import {extractErrors} from '../../../../../../helpers/requests'
+import {submitRequest} from '../../../../../../helpers/requests'
 import {Sections} from '../../../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables'
 import {AdServer} from '../../../../../../models/misc/AdServer'
@@ -36,13 +38,10 @@ const PublicationAdServerEdit: React.FC = () => {
   const {publication} = usePublicationEdit()
   const krysApp = useKrysApp()
 
-  const navigate = useNavigate()
-
   const [form, setForm] = useState<PublicationAdServerEditFormFields>(
     defaultPublicationAdServerEditFormFields
   )
   const [formErrors, setFormErrors] = useState<string[]>([])
-  const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
   const [publicationAdServer, setPublicationAdServer] = useState<AdServer | null>(null)
   const [filteredAdServers, setFilteredAdServers] = useState<AdServer[]>([])
@@ -52,22 +51,19 @@ const PublicationAdServerEdit: React.FC = () => {
   useEffect(() => {
     if (publication && cid) {
       // get the publication ad server we need to edit from the database
-      getPublicationAdServer(publication, parseInt(cid)).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we were not able to fetch to edit so we need to redirect
-          // to error page
-          navigate('/error/404')
-        } else if (response === undefined) {
-          navigate('/error/400')
-        } else {
+      submitRequest(
+        getPublicationAdServer,
+        [publication, parseInt(cid)],
+        (response) => {
           // we were able to fetch current publication ad server to edit
           setPublicationAdServer(response)
 
           // we are getting the response as ad sever and not publication ad server
           // response is: {id, name}
           setForm({ad_server_id: response.id})
-        }
-      })
+        },
+        setFormErrors
+      )
 
       const excludedAdServersNames: string[] = publication.adServers
         ? publication.adServers?.map((adServer) => adServer.name)
@@ -81,8 +77,6 @@ const PublicationAdServerEdit: React.FC = () => {
 
   useEffect(() => {
     if (publicationAdServer) {
-      setIsResourceLoaded(true)
-
       krysApp.setPageTitle(
         generatePageTitle(
           Sections.SUPPLY_PUBLICATION_AD_SERVERS,
@@ -102,14 +96,10 @@ const PublicationAdServerEdit: React.FC = () => {
   const handleEdit = () => {
     if (publication && publicationAdServer) {
       // we need to update the publication ad server's data by doing API call with form
-      updatePublicationAdServer(publication, publicationAdServer.id, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // show errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error
-          setFormErrors([GenericErrorMessage])
-        } else {
+      submitRequest(
+        updatePublicationAdServer,
+        [publication, publicationAdServer.id, form],
+        (response) => {
           // we got the updated publication ad server so we're good
           krysApp.setAlert({
             message: new AlertMessageGenerator(
@@ -119,8 +109,9 @@ const PublicationAdServerEdit: React.FC = () => {
             ).message,
             type: KrysToastType.SUCCESS,
           })
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 
@@ -142,15 +133,16 @@ const PublicationAdServerEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysFormLabel text='Ad Server' isRequired={true} />
 
-                <SingleSelect
-                  isResourceLoaded={isResourceLoaded}
+                <Select
+                  name={'ad_server_id'}
+                  value={filteredAdServers.find((adServer) => adServer.id === form.ad_server_id)}
                   options={filteredAdServers}
-                  defaultValue={publicationAdServer}
-                  form={form}
-                  setForm={setForm}
-                  name='ad_server_id'
-                  isClearable={true}
-                  showHierarchy={true}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
+                  placeholder={'Select ad server'}
+                  onChange={(e) => {
+                    genericSingleSelectOnChangeHandler(e, form, setForm, 'ad_server_id')
+                  }}
                 />
 
                 <div className='mt-1 text-danger'>

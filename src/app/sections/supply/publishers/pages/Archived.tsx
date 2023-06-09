@@ -26,23 +26,21 @@ const PublisherArchived: React.FC = () => {
   }, [])
 
   return (
-    <>
-      <KrysIndex
-        queryId={QUERIES.PUBLISHERS_ARCHIVED_LIST}
-        requestFunction={getArchivedPublishers}
-        columnsArray={getPublisherColumns(false)}
-        cardHeader={{
-          text: 'All Archived Publishers',
-          actions: [
-            new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
-            new FilterCardAction('publishers-list-filter', showFilter, setShowFilter),
-          ],
-        }}
-        showFilter={showFilter}
-        setExportQuery={setExportQuery}
-        FilterComponent={PublisherArchivedFilter}
-      ></KrysIndex>
-    </>
+    <KrysIndex
+      queryId={QUERIES.PUBLISHERS_ARCHIVED_LIST}
+      requestFunction={getArchivedPublishers}
+      columnsArray={getPublisherColumns(false)}
+      cardHeader={{
+        text: 'All Archived Publishers',
+        actions: [
+          new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
+          new FilterCardAction('publishers-list-filter', showFilter, setShowFilter),
+        ],
+      }}
+      showFilter={showFilter}
+      setExportQuery={setExportQuery}
+      FilterComponent={PublisherArchivedFilter}
+    />
   )
 }
 

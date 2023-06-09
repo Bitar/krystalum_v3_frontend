@@ -1,4 +1,3 @@
-import axios from 'axios'
 import {Form, Formik} from 'formik'
 import React, {useEffect, useRef, useState} from 'react'
 import Select from 'react-select'
@@ -12,16 +11,15 @@ import KrysInnerTable from '../../../../../components/tables/KrysInnerTable'
 import {RoleEnum} from '../../../../../enums/RoleEnum'
 import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator'
 import {
-  GenericErrorMessage,
   genericOnChangeHandler,
   genericSingleSelectOnChangeHandler,
 } from '../../../../../helpers/form'
-import {extractErrors} from '../../../../../helpers/requests'
+import {submitRequest} from '../../../../../helpers/requests'
 import {Actions, KrysToastType} from '../../../../../helpers/variables'
 import {User} from '../../../../../models/iam/User'
 import {useAuth} from '../../../../../modules/auth'
 import {useKrysApp} from '../../../../../modules/general/KrysApp'
-import {getAllUsers} from '../../../../../requests/iam/User'
+import {getAllPerformanceMetrics} from '../../../../../requests/misc/PerformanceMetric'
 import {
   getPublisherAccountManagers,
   storePublisherAccountManager,
@@ -54,20 +52,17 @@ const PublisherAccountManager: React.FC = () => {
   useEffect(() => {
     if (publisher && !hasAnyRoles(currentUser, [RoleEnum.PUBLISHER])) {
       // get all the account manager users
-      getAllUsers('filter[roles][]=12&filter[roles][]=5').then((response) => {
-        if (axios.isAxiosError(response)) {
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          setFormErrors([GenericErrorMessage])
-        } else {
-          if (response.data) {
-            setAllAccountManagers(response.data)
-            setAccountManagers(
-              response.data.filter((user) => user.id !== publisher.accountManager?.id)
-            )
-          }
-        }
-      })
+      submitRequest(
+        getAllPerformanceMetrics,
+        ['filter[roles][]=12&filter[roles][]=5'],
+        (response) => {
+          setAllAccountManagers(response.data)
+          setAccountManagers(
+            response.data.filter((user: User) => user.id !== publisher.accountManager?.id)
+          )
+        },
+        setFormErrors
+      )
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -87,14 +82,10 @@ const PublisherAccountManager: React.FC = () => {
   const handleCreate = () => {
     if (publisher) {
       // send API request to create the publisher account manager
-      storePublisherAccountManager(publisher, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we need to show the errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error message
-          setFormErrors([GenericErrorMessage])
-        } else {
+      submitRequest(
+        storePublisherAccountManager,
+        [publisher, form],
+        (response) => {
           // we were able to store the publisher account manager
           krysApp.setAlert({
             message: new AlertMessageGenerator(
@@ -119,8 +110,9 @@ const PublisherAccountManager: React.FC = () => {
 
           // we need to clear the form data
           setFormErrors([])
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 
@@ -143,16 +135,14 @@ const PublisherAccountManager: React.FC = () => {
                 <KrysFormLabel text='Account manager' isRequired={true} />
 
                 <Select
-                  name='user_id'
+                  name={'user_id'}
                   options={accountManagers}
-                  getOptionLabel={(accountManager) => accountManager.name}
-                  getOptionValue={(accountManager) => accountManager.id.toString()}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
+                  placeholder={'Select an account manager'}
                   onChange={(e) => {
-                    selectChangeHandler(e, 'user_id')
+                    genericSingleSelectOnChangeHandler(e, form, setForm, 'user_id')
                   }}
-                  placeholder='Select an account manager'
-                  isClearable={true}
-                  ref={accountManagersSelectRef}
                 />
 
                 <div className='mt-1 text-danger'>{errors?.user_id ? errors?.user_id : null}</div>

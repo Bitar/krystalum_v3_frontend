@@ -1,18 +1,21 @@
-import axios from 'axios'
 import {Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
+import Select from 'react-select'
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader'
 import Alert from '../../../../../../components/alerts/Alert'
 import FormErrors from '../../../../../../components/forms/FormErrors'
+import {indentOptions} from '../../../../../../components/forms/IndentOptions'
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter'
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel'
-import SingleSelect from '../../../../../../components/forms/SingleSelect'
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form'
+import {
+  genericOnChangeHandler,
+  genericSingleSelectOnChangeHandler,
+} from '../../../../../../helpers/form'
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator'
-import {extractErrors} from '../../../../../../helpers/requests'
+import {submitRequest} from '../../../../../../helpers/requests'
 import {Sections} from '../../../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables'
 import {PublicationFormat} from '../../../../../../models/supply/publication/PublicationFormat'
@@ -37,13 +40,10 @@ const PublicationFormatEdit: React.FC = () => {
   const {publication} = usePublicationEdit()
   const krysApp = useKrysApp()
 
-  const navigate = useNavigate()
-
   const [form, setForm] = useState<PublicationFormatEditFormFields>(
     defaultPublicationFormatEditFormFields
   )
   const [formErrors, setFormErrors] = useState<string[]>([])
-  const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
   const [alertMessages, setAlertMessages] = useState<string[]>([])
 
   const [publicationFormat, setPublicationFormat] = useState<PublicationFormat | null>(null)
@@ -53,14 +53,10 @@ const PublicationFormatEdit: React.FC = () => {
   useEffect(() => {
     if (publication && cid) {
       // get the publication format we need to edit from the database
-      getPublicationFormat(publication, parseInt(cid)).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we were not able to fetch to edit so we need to redirect
-          // to error page
-          navigate('/error/404')
-        } else if (response === undefined) {
-          navigate('/error/400')
-        } else {
+      submitRequest(
+        getPublicationFormat,
+        [publication, parseInt(cid)],
+        (response) => {
           // we were able to fetch current publication format to edit
           setPublicationFormat(response)
 
@@ -68,8 +64,9 @@ const PublicationFormatEdit: React.FC = () => {
           const {format, type, ...currentPublicationFormat} = response
 
           setForm({...currentPublicationFormat, format_id: format.id, type: type.id})
-        }
-      })
+        },
+        setFormErrors
+      )
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -77,8 +74,6 @@ const PublicationFormatEdit: React.FC = () => {
 
   useEffect(() => {
     if (publicationFormat) {
-      setIsResourceLoaded(true)
-
       krysApp.setPageTitle(
         generatePageTitle(
           Sections.SUPPLY_PUBLICATION_FORMATS,
@@ -103,14 +98,10 @@ const PublicationFormatEdit: React.FC = () => {
         setAlertMessages((prevMessage) => [...prevMessage, message])
       } else {
         // we need to update the publication format's data by doing API call with form
-        updatePublicationFormat(publication, publicationFormat.id, form).then((response) => {
-          if (axios.isAxiosError(response)) {
-            // show errors
-            setFormErrors(extractErrors(response))
-          } else if (response === undefined) {
-            // show generic error
-            setFormErrors([GenericErrorMessage])
-          } else {
+        submitRequest(
+          updatePublicationFormat,
+          [publication, publicationFormat.id, form],
+          (response) => {
             krysApp.setAlert({
               message: new AlertMessageGenerator(
                 'publication format',
@@ -119,8 +110,9 @@ const PublicationFormatEdit: React.FC = () => {
               ).message,
               type: KrysToastType.SUCCESS,
             })
-          }
-        })
+          },
+          setFormErrors
+        )
       }
     }
   }
@@ -147,15 +139,17 @@ const PublicationFormatEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysFormLabel text='Format' isRequired={true} />
 
-                <SingleSelect
-                  isResourceLoaded={isResourceLoaded}
+                <Select
+                  name={'format_id'}
+                  value={formats.find((format) => format.id === form.format_id)}
                   options={formats}
-                  defaultValue={publicationFormat?.format}
-                  form={form}
-                  setForm={setForm}
-                  name='format_id'
-                  isClearable={true}
-                  showHierarchy={true}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
+                  placeholder={'Select a format'}
+                  onChange={(e) => {
+                    genericSingleSelectOnChangeHandler(e, form, setForm, 'format_id')
+                  }}
+                  formatOptionLabel={indentOptions}
                 />
 
                 <div className='mt-1 text-danger'>
@@ -166,14 +160,16 @@ const PublicationFormatEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysFormLabel text='Type' isRequired={true} />
 
-                <SingleSelect
-                  isResourceLoaded={isResourceLoaded}
+                <Select
+                  name={'type'}
+                  value={formatTypes.find((formatType) => formatType.id === form.type)}
                   options={formatTypes}
-                  defaultValue={publicationFormat?.type}
-                  form={form}
-                  setForm={setForm}
-                  name='type'
-                  isClearable={true}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
+                  placeholder={'Select a type'}
+                  onChange={(e) => {
+                    genericSingleSelectOnChangeHandler(e, form, setForm, 'type')
+                  }}
                 />
 
                 <div className='mt-1 text-danger'>{errors?.type ? errors?.type : null}</div>

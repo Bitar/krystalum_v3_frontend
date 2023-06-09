@@ -15,7 +15,7 @@ import {
   genericMultiSelectOnChangeHandler,
   genericOnChangeHandler,
 } from '../../../../../../helpers/form'
-import {extractErrors} from '../../../../../../helpers/requests'
+import {extractErrors, submitRequest} from '../../../../../../helpers/requests'
 import {Actions, KrysToastType} from '../../../../../../helpers/variables'
 import {Technology} from '../../../../../../models/misc/Technology'
 
@@ -24,6 +24,7 @@ import {
   getPublicationTechnologies,
   storePublicationTechnology,
 } from '../../../../../../requests/supply/publication/PublicationTechnology'
+import {updatePublicationCampaignRestriction} from '../../../../../../requests/supply/publication/PublisherCampaignRestriction'
 import {
   defaultPublicationTechnologyFormFields,
   PublicationTechnologyFormFields,
@@ -79,14 +80,10 @@ const PublicationTechnologyCreate: React.FC = () => {
       setRefreshTable(false)
 
       // send API request to create the publication technologies
-      storePublicationTechnology(publication, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we need to show the errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error message
-          setFormErrors([GenericErrorMessage])
-        } else {
+      submitRequest(
+        storePublicationTechnology,
+        [publication, form],
+        (response) => {
           // we were able to store the publication technologies0
           krysApp.setAlert({
             message: new AlertMessageGenerator(
@@ -112,8 +109,9 @@ const PublicationTechnologyCreate: React.FC = () => {
 
           // we need to clear the form data
           setFormErrors([])
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 
@@ -139,8 +137,8 @@ const PublicationTechnologyCreate: React.FC = () => {
                   isMulti
                   name='technology_ids'
                   options={filteredTechnologies}
-                  getOptionLabel={(technology) => technology.name}
-                  getOptionValue={(technology) => technology.id.toString()}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
                   onChange={(e) => {
                     multiSelectChangeHandler(e, 'technology_ids')
                   }}

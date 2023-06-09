@@ -1,4 +1,3 @@
-import axios from 'axios'
 import {Form, Formik} from 'formik'
 import React, {Dispatch, SetStateAction, useRef, useState} from 'react'
 import Select from 'react-select'
@@ -12,11 +11,10 @@ import KrysInnerTable from '../../../../../../../components/tables/KrysInnerTabl
 import {GeoTypeEnum} from '../../../../../../../enums/Supply/GeoTypeEnum'
 import {AlertMessageGenerator} from '../../../../../../../helpers/AlertMessageGenerator'
 import {
-  GenericErrorMessage,
   genericMultiSelectOnChangeHandler,
   genericOnChangeHandler,
 } from '../../../../../../../helpers/form'
-import {extractErrors} from '../../../../../../../helpers/requests'
+import {submitRequest} from '../../../../../../../helpers/requests'
 import {Actions, KrysToastType} from '../../../../../../../helpers/variables'
 import {useKrysApp} from '../../../../../../../modules/general/KrysApp'
 import {
@@ -78,14 +76,10 @@ const PublicationCampaignRestrictionCreate: React.FC<Props> = ({
   const handleCreate = () => {
     if (publication) {
       // send API request to create the publication campaign restrictions
-      storePublicationCampaignRestriction(publication, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we need to show the errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error message
-          setFormErrors([GenericErrorMessage])
-        } else {
+      submitRequest(
+        storePublicationCampaignRestriction,
+        [publication, form],
+        (response) => {
           // we were able to store the publication campaign restrictions
           krysApp.setAlert({
             message: new AlertMessageGenerator(
@@ -111,8 +105,9 @@ const PublicationCampaignRestrictionCreate: React.FC<Props> = ({
 
           // we need to clear the form data
           setFormErrors([])
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 
@@ -179,8 +174,8 @@ const PublicationCampaignRestrictionCreate: React.FC<Props> = ({
                   isMulti
                   name='geo_ids'
                   options={regions}
-                  getOptionLabel={(region) => region.name}
-                  getOptionValue={(region) => region.id.toString()}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
                   onChange={(e) => {
                     multiSelectChangeHandler(e, 'geo_ids')
                   }}
@@ -200,8 +195,8 @@ const PublicationCampaignRestrictionCreate: React.FC<Props> = ({
                   isMulti
                   name='geo_ids'
                   options={countries}
-                  getOptionLabel={(country) => country.name}
-                  getOptionValue={(country) => country.id.toString()}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
                   onChange={(e) => {
                     multiSelectChangeHandler(e, 'geo_ids')
                   }}
@@ -220,8 +215,8 @@ const PublicationCampaignRestrictionCreate: React.FC<Props> = ({
                 isMulti
                 name='format_ids'
                 options={formats}
-                getOptionLabel={(format) => format.name}
-                getOptionValue={(format) => format.id.toString()}
+                getOptionLabel={(instance) => instance.name}
+                getOptionValue={(instance) => instance.id.toString()}
                 onChange={(e) => {
                   multiSelectChangeHandler(e, 'format_ids')
                 }}
@@ -242,8 +237,8 @@ const PublicationCampaignRestrictionCreate: React.FC<Props> = ({
                 isMulti
                 name='campaign_type_ids'
                 options={campaignTypes}
-                getOptionLabel={(campaignType) => campaignType.name}
-                getOptionValue={(campaignType) => campaignType.id.toString()}
+                getOptionLabel={(instance) => instance.name}
+                getOptionValue={(instance) => instance.id.toString()}
                 onChange={(e) => {
                   multiSelectChangeHandler(e, 'campaign_type_ids')
                 }}
@@ -263,8 +258,8 @@ const PublicationCampaignRestrictionCreate: React.FC<Props> = ({
                 isMulti
                 name='website_page_ids'
                 options={websitePages}
-                getOptionLabel={(websitePage) => websitePage.name}
-                getOptionValue={(websitePage) => websitePage.id.toString()}
+                getOptionLabel={(instance) => instance.name}
+                getOptionValue={(instance) => instance.id.toString()}
                 onChange={(e) => {
                   multiSelectChangeHandler(e, 'website_page_ids')
                 }}
@@ -284,12 +279,8 @@ const PublicationCampaignRestrictionCreate: React.FC<Props> = ({
                 isMulti
                 name='requirement_ids'
                 options={campaignRestrictionRequirements}
-                getOptionLabel={(campaignRestrictionRequirement) =>
-                  campaignRestrictionRequirement.name
-                }
-                getOptionValue={(campaignRestrictionRequirement) =>
-                  campaignRestrictionRequirement.id.toString()
-                }
+                getOptionLabel={(instance) => instance.name}
+                getOptionValue={(instance) => instance.id.toString()}
                 onChange={(e) => {
                   multiSelectChangeHandler(e, 'requirement_ids')
                 }}

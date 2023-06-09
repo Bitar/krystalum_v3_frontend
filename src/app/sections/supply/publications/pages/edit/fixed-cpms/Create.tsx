@@ -19,10 +19,12 @@ import {
   genericOnChangeHandler,
   genericSingleSelectOnChangeHandler,
 } from '../../../../../../helpers/form'
-import {extractErrors} from '../../../../../../helpers/requests'
+import {extractErrors, submitRequest} from '../../../../../../helpers/requests'
 import {DEFAULT_CURRENCY} from '../../../../../../helpers/settings'
 import {Actions, KrysToastType} from '../../../../../../helpers/variables'
+import {Currency} from '../../../../../../models/misc/Currency'
 import {useKrysApp} from '../../../../../../modules/general/KrysApp'
+import {updatePublicationAnalytic} from '../../../../../../requests/supply/publication/PublisherAnalytic'
 import {
   getPublicationFixedCpms,
   storePublicationFixedCpm,
@@ -46,6 +48,7 @@ const PublicationFixedCpmCreate: React.FC = () => {
   )
   const [formErrors, setFormErrors] = useState<string[]>([])
   const [refreshTable, setRefreshTable] = useState<boolean>(false)
+  const [selectedCurrency, setSelectedCurrency] = useState<Currency | null>(DEFAULT_CURRENCY)
 
   const formatsSelectRef = useRef<any>(null)
   const geosSelectRef = useRef<any>(null)
@@ -71,14 +74,10 @@ const PublicationFixedCpmCreate: React.FC = () => {
   const handleCreate = () => {
     if (publication) {
       // send API request to create the publication fixed cpm
-      storePublicationFixedCpm(publication, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we need to show the errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error message
-          setFormErrors([GenericErrorMessage])
-        } else {
+      submitRequest(
+        storePublicationFixedCpm,
+        [publication, form],
+        (response) => {
           // we were able to store the publication fixed cpm
           krysApp.setAlert({
             message: new AlertMessageGenerator(
@@ -101,8 +100,9 @@ const PublicationFixedCpmCreate: React.FC = () => {
 
           // we need to clear the form data
           setFormErrors([])
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 
@@ -161,8 +161,8 @@ const PublicationFixedCpmCreate: React.FC = () => {
                     isMulti
                     name='geo_ids'
                     options={regions}
-                    getOptionLabel={(region) => region.name}
-                    getOptionValue={(region) => region.id.toString()}
+                    getOptionLabel={(instance) => instance.name}
+                    getOptionValue={(instance) => instance.id.toString()}
                     onChange={(e) => {
                       multiSelectChangeHandler(e, 'geo_ids')
                     }}
@@ -182,8 +182,8 @@ const PublicationFixedCpmCreate: React.FC = () => {
                     isMulti
                     name='geo_ids'
                     options={countries}
-                    getOptionLabel={(country) => country.name}
-                    getOptionValue={(country) => country.id.toString()}
+                    getOptionLabel={(instance) => instance.name}
+                    getOptionValue={(instance) => instance.id.toString()}
                     onChange={(e) => {
                       multiSelectChangeHandler(e, 'geo_ids')
                     }}
@@ -202,8 +202,8 @@ const PublicationFixedCpmCreate: React.FC = () => {
                   isMulti
                   name='format_ids'
                   options={formats}
-                  getOptionLabel={(format) => format.name}
-                  getOptionValue={(format) => format.id.toString()}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
                   onChange={(e) => {
                     multiSelectChangeHandler(e, 'format_ids')
                   }}
@@ -233,26 +233,19 @@ const PublicationFixedCpmCreate: React.FC = () => {
               <div className='mb-7'>
                 <KrysFormLabel text='Currency' isRequired={true} />
 
-                <SingleSelect
-                  isResourceLoaded={true}
+                <Select
+                  name={'currency_id'}
+                  value={selectedCurrency}
                   options={currencies}
-                  defaultValue={DEFAULT_CURRENCY}
-                  form={form}
-                  setForm={setForm}
-                  name='currency_id'
-                  label='currency'
-                  isClearable={true}
-                />
+                  getOptionLabel={(instance) => instance.currency}
+                  getOptionValue={(instance) => instance.id.toString()}
+                  placeholder={'Select a currency'}
+                  onChange={(e) => {
+                    genericSingleSelectOnChangeHandler(e, form, setForm, 'currency_id')
 
-                {/*<Select name="currency_id"*/}
-                {/*        options={currencies}*/}
-                {/*        getOptionLabel={(currency) => currency.currency}*/}
-                {/*        getOptionValue={(currency) => currency.id.toString()}*/}
-                {/*        onChange={(e) => {*/}
-                {/*            selectChangeHandler(e, 'currency_id')*/}
-                {/*        }}*/}
-                {/*        value={DEFAULT_CURRENCY}*/}
-                {/*        placeholder="Select a currency"/>*/}
+                    setSelectedCurrency(e as Currency)
+                  }}
+                />
 
                 <div className='mt-1 text-danger'>
                   {errors?.currency_id ? errors?.currency_id : null}

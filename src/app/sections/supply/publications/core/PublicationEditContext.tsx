@@ -1,10 +1,11 @@
 import axios from 'axios'
 import {createContext, Dispatch, FC, SetStateAction, useContext, useEffect, useState} from 'react'
 import {WithChildren} from '../../../../../_metronic/helpers'
+import {submitRequest} from '../../../../helpers/requests'
 import {DEFAULT_PUBLICATION_EDIT_OPTIONS} from '../../../../helpers/settings'
 import {PublicationEditOptions} from '../../../../models/supply/Options'
 import {Publication} from '../../../../models/supply/publication/Publication'
-import {getPublicationEditOptions} from '../../../../requests/supply/Options'
+import {getPublicationEditOptions, getPublicationOptions} from '../../../../requests/supply/Options'
 
 interface Props {
   publication: Publication | null
@@ -46,11 +47,8 @@ export const PublicationEditProvider: FC<WithChildren> = ({children}) => {
 
   useEffect(() => {
     // get the list of all publication edit options
-    getPublicationEditOptions().then((response) => {
-      // if we were able to get the list of publication edit options, then we fill our state with them
-      if (!axios.isAxiosError(response) && response !== undefined) {
-        setEditOptions(response)
-      }
+    submitRequest(getPublicationEditOptions, [], (response) => {
+      setEditOptions(response)
     })
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,21 +1,28 @@
-import axios from 'axios'
 import {Field, Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
+import Select from 'react-select'
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader'
 import FormErrors from '../../../../../../components/forms/FormErrors'
+import {indentOptions} from '../../../../../../components/forms/IndentOptions'
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter'
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel'
 import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton'
-import SingleSelect from '../../../../../../components/forms/SingleSelect'
 import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum'
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form'
+import {
+  genericOnChangeHandler,
+  genericSingleSelectOnChangeHandler,
+} from '../../../../../../helpers/form'
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator'
-import {extractErrors} from '../../../../../../helpers/requests'
+import {submitRequest} from '../../../../../../helpers/requests'
 import {Sections} from '../../../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables'
+import {Country} from '../../../../../../models/misc/Country'
+import {Currency} from '../../../../../../models/misc/Currency'
+import {Format} from '../../../../../../models/misc/Format'
+import {Region} from '../../../../../../models/misc/Region'
 import {PublicationFixedCpm} from '../../../../../../models/supply/publication/PublicationFixedCpm'
 import {useKrysApp} from '../../../../../../modules/general/KrysApp'
 import {
@@ -38,13 +45,10 @@ const PublicationFixedCpmEdit: React.FC = () => {
   const {publication, editOptions} = usePublicationEdit()
   const krysApp = useKrysApp()
 
-  const navigate = useNavigate()
-
   const [form, setForm] = useState<PublicationFixedCpmEditFormFields>(
     defaultPublicationFixedCpmEditFormFields
   )
   const [formErrors, setFormErrors] = useState<string[]>([])
-  const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
   const [publicationFixedCpm, setPublicationFixedCpm] = useState<PublicationFixedCpm | null>(null)
 
@@ -54,20 +58,17 @@ const PublicationFixedCpmEdit: React.FC = () => {
   useEffect(() => {
     if (publication && cid) {
       // get the publication fixed cpm we need to edit from the database
-      getPublicationFixedCpm(publication, parseInt(cid)).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we were not able to fetch the publication fixed cpm to edit so we need to redirect
-          // to error page
-          navigate('/error/404')
-        } else if (response === undefined) {
-          navigate('/error/400')
-        } else {
+      submitRequest(
+        getPublicationFixedCpm,
+        [publication, parseInt(cid)],
+        (response) => {
           // we were able to fetch current publication fixed cpm to edit
           setPublicationFixedCpm(response)
           // we also set the form to be the publication's fixed cpm details
           setForm(fillEditForm(response))
-        }
-      })
+        },
+        setFormErrors
+      )
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -75,8 +76,6 @@ const PublicationFixedCpmEdit: React.FC = () => {
 
   useEffect(() => {
     if (publicationFixedCpm) {
-      setIsResourceLoaded(true)
-
       krysApp.setPageTitle(
         generatePageTitle(
           Sections.SUPPLY_PUBLICATION_FIXED_CPM,
@@ -96,14 +95,10 @@ const PublicationFixedCpmEdit: React.FC = () => {
   const handleEdit = () => {
     if (publication && publicationFixedCpm) {
       // we need to update the fixed cpm data by doing API call with form
-      updatePublicationFixedCpm(publication, publicationFixedCpm.id, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // show errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error
-          setFormErrors([GenericErrorMessage])
-        } else {
+      submitRequest(
+        updatePublicationFixedCpm,
+        [publication, publicationFixedCpm.id, form],
+        (response) => {
           // we got the updated publication fixed cpm so we're good
           krysApp.setAlert({
             message: new AlertMessageGenerator(
@@ -113,8 +108,9 @@ const PublicationFixedCpmEdit: React.FC = () => {
             ).message,
             type: KrysToastType.SUCCESS,
           })
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 
@@ -169,14 +165,18 @@ const PublicationFixedCpmEdit: React.FC = () => {
                 <div className='mb-7'>
                   <KrysFormLabel text='Region' isRequired={true} />
 
-                  <SingleSelect
-                    isResourceLoaded={isResourceLoaded}
+                  <Select
+                    name={'geo_id'}
+                    value={regions.find(
+                      (region) => form.geo_type === GeoTypeEnum.REGION && region.id === form.geo_id
+                    )}
                     options={regions}
-                    defaultValue={publicationFixedCpm?.geo}
-                    form={form}
-                    setForm={setForm}
-                    name='geo_id'
-                    isClearable={true}
+                    getOptionLabel={(instance) => instance.name}
+                    getOptionValue={(instance) => instance.id.toString()}
+                    placeholder={'Select a region'}
+                    onChange={(e) => {
+                      genericSingleSelectOnChangeHandler(e, form, setForm, 'geo_id')
+                    }}
                   />
 
                   <div className='mt-1 text-danger'>{errors?.geo_id ? errors?.geo_id : null}</div>
@@ -187,14 +187,19 @@ const PublicationFixedCpmEdit: React.FC = () => {
                 <div className='mb-7'>
                   <KrysFormLabel text='Country' isRequired={true} />
 
-                  <SingleSelect
-                    isResourceLoaded={isResourceLoaded}
+                  <Select
+                    name={'geo_id'}
+                    value={countries.find(
+                      (country) =>
+                        form.geo_type === GeoTypeEnum.COUNTRY && country.id === form.geo_id
+                    )}
                     options={countries}
-                    defaultValue={publicationFixedCpm?.geo}
-                    form={form}
-                    setForm={setForm}
-                    name='geo_id'
-                    isClearable={true}
+                    getOptionLabel={(instance) => instance.name}
+                    getOptionValue={(instance) => instance.id.toString()}
+                    placeholder={'Select a country'}
+                    onChange={(e) => {
+                      genericSingleSelectOnChangeHandler(e, form, setForm, 'geo_id')
+                    }}
                   />
 
                   <div className='mt-1 text-danger'>{errors?.geo_id ? errors?.geo_id : null}</div>
@@ -204,14 +209,17 @@ const PublicationFixedCpmEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysFormLabel text='Formats' isRequired={false} />
 
-                <SingleSelect
-                  isResourceLoaded={isResourceLoaded}
+                <Select
+                  name={'format_id'}
+                  value={formats.find((format) => format.id === form.format_id)}
                   options={formats}
-                  defaultValue={publicationFixedCpm?.format}
-                  form={form}
-                  setForm={setForm}
-                  name='format_id'
-                  isClearable={true}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
+                  placeholder={'Select a format'}
+                  onChange={(e) => {
+                    genericSingleSelectOnChangeHandler(e, form, setForm, 'format_id')
+                  }}
+                  formatOptionLabel={indentOptions}
                 />
 
                 <div className='mt-1 text-danger'>
@@ -235,15 +243,16 @@ const PublicationFixedCpmEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysFormLabel text='Currency' isRequired={true} />
 
-                <SingleSelect
-                  isResourceLoaded={isResourceLoaded}
+                <Select
+                  name={'currency_id'}
+                  value={currencies.find((currency) => currency.id === form.currency_id)}
                   options={currencies}
-                  defaultValue={publicationFixedCpm?.currency}
-                  form={form}
-                  setForm={setForm}
-                  name='currency_id'
-                  label='currency'
-                  isClearable={true}
+                  getOptionLabel={(instance) => instance.currency}
+                  getOptionValue={(instance) => instance.id.toString()}
+                  placeholder={'Select a currency'}
+                  onChange={(e) => {
+                    genericSingleSelectOnChangeHandler(e, form, setForm, 'currency_id')
+                  }}
                 />
 
                 <div className='mt-1 text-danger'>

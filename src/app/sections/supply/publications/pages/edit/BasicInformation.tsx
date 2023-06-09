@@ -1,7 +1,7 @@
-import axios from 'axios'
 import {Field, Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
 import {FormControl, FormGroup, InputGroup} from 'react-bootstrap'
+import Select from 'react-select'
 import {DatePicker} from 'rsuite'
 import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader'
@@ -10,8 +10,6 @@ import KrysCheckbox from '../../../../../components/forms/KrysCheckbox'
 import KrysFormFooter from '../../../../../components/forms/KrysFormFooter'
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel'
 import KrysRadioButton from '../../../../../components/forms/KrysRadioButton'
-import MultiSelect from '../../../../../components/forms/MultiSelect'
-import SingleSelect from '../../../../../components/forms/SingleSelect'
 import {PublicationApplicationEnum} from '../../../../../enums/Supply/PublicationApplicationTypeEnum'
 import {PublicationTypeEnum} from '../../../../../enums/Supply/PublicationTypeEnum'
 import {RevenueTypeEnum} from '../../../../../enums/Supply/RevenueTypeEnum'
@@ -19,11 +17,12 @@ import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerato
 import {createDateFromString} from '../../../../../helpers/dateFormatter'
 import {
   genericDateOnChangeHandler,
-  GenericErrorMessage,
+  genericMultiSelectOnChangeHandler,
   genericOnChangeHandler,
+  genericSingleSelectOnChangeHandler,
 } from '../../../../../helpers/form'
 import {scrollToTop} from '../../../../../helpers/general'
-import {extractErrors} from '../../../../../helpers/requests'
+import {submitRequest} from '../../../../../helpers/requests'
 import {Actions, KrysToastType} from '../../../../../helpers/variables'
 import {useKrysApp} from '../../../../../modules/general/KrysApp'
 import {updatePublication} from '../../../../../requests/supply/publication/Publication'
@@ -38,14 +37,11 @@ const PublicationBasicInformationEdit: React.FC = () => {
 
   const [form, setForm] = useState<FormFields>(defaultFormFields)
   const [formErrors, setFormErrors] = useState<string[]>([])
-  const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
   const {languages} = options
 
   useEffect(() => {
     if (publication) {
-      setIsResourceLoaded(true)
-
       setForm(fillEditForm(publication))
     }
 
@@ -100,18 +96,10 @@ const PublicationBasicInformationEdit: React.FC = () => {
   const handleEdit = () => {
     if (publication) {
       // send API request to update the publication
-      updatePublication(publication.id, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we need to show the errors
-          setFormErrors(extractErrors(response))
-
-          scrollToTop()
-        } else if (response === undefined) {
-          // show generic error message
-          setFormErrors([GenericErrorMessage])
-
-          scrollToTop()
-        } else {
+      submitRequest(
+        updatePublication,
+        [publication.id, form],
+        (response) => {
           // we were able to store the publication
           krysApp.setAlert({
             message: new AlertMessageGenerator('publication', Actions.EDIT, KrysToastType.SUCCESS)
@@ -123,10 +111,11 @@ const PublicationBasicInformationEdit: React.FC = () => {
           setPublication(response)
 
           setFormErrors([])
+        },
+        setFormErrors
+      )
 
-          scrollToTop()
-        }
-      })
+      scrollToTop()
     }
   }
 
@@ -168,14 +157,16 @@ const PublicationBasicInformationEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysFormLabel text='Publisher' isRequired={true} />
 
-                <SingleSelect
-                  isResourceLoaded={isResourceLoaded}
+                <Select
+                  name={'publisher_id'}
+                  value={publishers.find((publisher) => publisher.id === form.publisher_id)}
                   options={publishers}
-                  defaultValue={publication?.publisher}
-                  form={form}
-                  setForm={setForm}
-                  name='publisher_id'
-                  isClearable={true}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
+                  placeholder={'Select a publisher'}
+                  onChange={(e) => {
+                    genericSingleSelectOnChangeHandler(e, form, setForm, 'publisher_id')
+                  }}
                 />
 
                 <div className='mt-1 text-danger'>
@@ -202,13 +193,17 @@ const PublicationBasicInformationEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysFormLabel text='Language(s)' isRequired={true} />
 
-                <MultiSelect
-                  isResourceLoaded={isResourceLoaded}
-                  options={languages}
-                  defaultValue={publication?.languages}
-                  form={form}
-                  setForm={setForm}
+                <Select
+                  isMulti
                   name={'languages_ids'}
+                  value={languages.filter((language) => form.languages_ids.includes(language.id))}
+                  options={languages}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
+                  placeholder={`Select one or more languages`}
+                  onChange={(e) => {
+                    genericMultiSelectOnChangeHandler(e, form, setForm, 'languages_ids')
+                  }}
                 />
 
                 <div className='mt-1 text-danger'>

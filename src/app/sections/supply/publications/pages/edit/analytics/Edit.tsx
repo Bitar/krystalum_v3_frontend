@@ -1,19 +1,21 @@
-import axios from 'axios'
 import {Field, Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
+import Select from 'react-select'
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader'
 import FormErrors from '../../../../../../components/forms/FormErrors'
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter'
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel'
 import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton'
-import SingleSelect from '../../../../../../components/forms/SingleSelect'
 import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum'
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form'
+import {
+  genericOnChangeHandler,
+  genericSingleSelectOnChangeHandler,
+} from '../../../../../../helpers/form'
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator'
-import {extractErrors} from '../../../../../../helpers/requests'
+import {submitRequest} from '../../../../../../helpers/requests'
 import {Sections} from '../../../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables'
 import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic'
@@ -38,13 +40,10 @@ const PublicationAnalyticEdit: React.FC = () => {
   const {publication, editOptions} = usePublicationEdit()
   const krysApp = useKrysApp()
 
-  const navigate = useNavigate()
-
   const [form, setForm] = useState<PublicationAnalyticFormFields>(
     defaultPublicationAnalyticFormFields
   )
   const [formErrors, setFormErrors] = useState<string[]>([])
-  const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
   const [publicationAnalytic, setPublicationAnalytic] = useState<PublicationAnalytic | null>(null)
 
@@ -54,21 +53,18 @@ const PublicationAnalyticEdit: React.FC = () => {
   useEffect(() => {
     if (publication && cid) {
       // get the publication analytics we need to edit from the database
-      getPublicationAnalytic(publication, parseInt(cid)).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we were not able to fetch the publication analytics to edit so we need to redirect
-          // to error page
-          navigate('/error/404')
-        } else if (response === undefined) {
-          navigate('/error/400')
-        } else {
+      submitRequest(
+        getPublicationAnalytic,
+        [publication, parseInt(cid)],
+        (response) => {
           // we were able to fetch current publication analytics to edit
           setPublicationAnalytic(response)
 
           // we also set the form to be the publication's analytics details
           setForm(fillEditForm(response))
-        }
-      })
+        },
+        setFormErrors
+      )
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -76,8 +72,6 @@ const PublicationAnalyticEdit: React.FC = () => {
 
   useEffect(() => {
     if (publicationAnalytic) {
-      setIsResourceLoaded(true)
-
       krysApp.setPageTitle(
         generatePageTitle(
           Sections.SUPPLY_PUBLICATION_ANALYTICS,
@@ -97,14 +91,10 @@ const PublicationAnalyticEdit: React.FC = () => {
   const handleEdit = () => {
     if (publication && publicationAnalytic) {
       // we need to update the analytic's data by doing API call with form
-      updatePublicationAnalytic(publication, publicationAnalytic.id, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // show errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error
-          setFormErrors([GenericErrorMessage])
-        } else {
+      submitRequest(
+        updatePublicationAnalytic,
+        [publication, publicationAnalytic.id, form],
+        (response) => {
           // we got the updated publication analytics so we're good
           krysApp.setAlert({
             message: new AlertMessageGenerator(
@@ -114,8 +104,9 @@ const PublicationAnalyticEdit: React.FC = () => {
             ).message,
             type: KrysToastType.SUCCESS,
           })
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 
@@ -168,14 +159,18 @@ const PublicationAnalyticEdit: React.FC = () => {
                 <div className='mb-7'>
                   <KrysFormLabel text='Region' isRequired={true} />
 
-                  <SingleSelect
-                    isResourceLoaded={isResourceLoaded}
+                  <Select
+                    name={'geo_id'}
+                    value={regions.find(
+                      (region) => form.geo_type === GeoTypeEnum.REGION && region.id === form.geo_id
+                    )}
                     options={regions}
-                    defaultValue={publicationAnalytic?.geo}
-                    form={form}
-                    setForm={setForm}
-                    name='geo_id'
-                    isClearable={true}
+                    getOptionLabel={(instance) => instance.name}
+                    getOptionValue={(instance) => instance.id.toString()}
+                    placeholder={'Select a region'}
+                    onChange={(e) => {
+                      genericSingleSelectOnChangeHandler(e, form, setForm, 'geo_id')
+                    }}
                   />
 
                   <div className='mt-1 text-danger'>{errors?.geo_id ? errors?.geo_id : null}</div>
@@ -186,14 +181,19 @@ const PublicationAnalyticEdit: React.FC = () => {
                 <div className='mb-7'>
                   <KrysFormLabel text='Country' isRequired={true} />
 
-                  <SingleSelect
-                    isResourceLoaded={isResourceLoaded}
+                  <Select
+                    name={'geo_id'}
+                    value={countries.find(
+                      (country) =>
+                        form.geo_type === GeoTypeEnum.COUNTRY && country.id === form.geo_id
+                    )}
                     options={countries}
-                    defaultValue={publicationAnalytic?.geo}
-                    form={form}
-                    setForm={setForm}
-                    name='geo_id'
-                    isClearable={true}
+                    getOptionLabel={(instance) => instance.name}
+                    getOptionValue={(instance) => instance.id.toString()}
+                    placeholder={'Select a country'}
+                    onChange={(e) => {
+                      genericSingleSelectOnChangeHandler(e, form, setForm, 'geo_id')
+                    }}
                   />
 
                   <div className='mt-1 text-danger'>{errors?.geo_id ? errors?.geo_id : null}</div>
@@ -203,14 +203,16 @@ const PublicationAnalyticEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysFormLabel text='Device' isRequired={false} />
 
-                <SingleSelect
-                  isResourceLoaded={isResourceLoaded}
+                <Select
+                  name={'device_id'}
+                  value={devices.find((device) => device.id === form.device_id)}
                   options={devices}
-                  defaultValue={publicationAnalytic?.device}
-                  form={form}
-                  setForm={setForm}
-                  name='device_id'
-                  isClearable={true}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
+                  placeholder={'Select a device'}
+                  onChange={(e) => {
+                    genericSingleSelectOnChangeHandler(e, form, setForm, 'device_id')
+                  }}
                 />
 
                 <div className='mt-1 text-danger'>

@@ -1,4 +1,3 @@
-import axios from 'axios'
 import {Field, Form, Formik} from 'formik'
 import React, {useEffect, useRef, useState} from 'react'
 import Select from 'react-select'
@@ -13,11 +12,10 @@ import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable'
 import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum'
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
 import {
-  GenericErrorMessage,
   genericOnChangeHandler,
   genericSingleSelectOnChangeHandler,
 } from '../../../../../../helpers/form'
-import {extractErrors} from '../../../../../../helpers/requests'
+import {submitRequest} from '../../../../../../helpers/requests'
 import {DEFAULT_ANALYTIC_TYPE} from '../../../../../../helpers/settings'
 import {Actions, KrysToastType} from '../../../../../../helpers/variables'
 import {AnalyticType} from '../../../../../../models/supply/Options'
@@ -95,14 +93,10 @@ const PublicationAnalyticCreate: React.FC = () => {
   const handleCreate = () => {
     if (publication) {
       // send API request to create the publication analytics
-      storePublicationAnalytic(publication, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we need to show the errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error message
-          setFormErrors([GenericErrorMessage])
-        } else {
+      submitRequest(
+        storePublicationAnalytic,
+        [publication, form],
+        (response) => {
           // we were able to store the publication analytics
           krysApp.setAlert({
             message: new AlertMessageGenerator(
@@ -125,8 +119,9 @@ const PublicationAnalyticCreate: React.FC = () => {
 
           // we need to clear the form data
           setFormErrors([])
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 
@@ -207,8 +202,8 @@ const PublicationAnalyticCreate: React.FC = () => {
                     name='geo_id'
                     menuPlacement={'top'}
                     options={regions}
-                    getOptionLabel={(region) => region?.name}
-                    getOptionValue={(region) => region?.id.toString()}
+                    getOptionLabel={(instance) => instance.name}
+                    getOptionValue={(instance) => instance.id.toString()}
                     onChange={(e) => {
                       selectChangeHandler(e, 'geo_id')
                     }}
@@ -229,8 +224,8 @@ const PublicationAnalyticCreate: React.FC = () => {
                     name='geo_id'
                     menuPlacement={'top'}
                     options={countries}
-                    getOptionLabel={(country) => country?.name}
-                    getOptionValue={(country) => country?.id.toString()}
+                    getOptionLabel={(instance) => instance.name}
+                    getOptionValue={(instance) => instance.id.toString()}
                     onChange={(e) => {
                       selectChangeHandler(e, 'geo_id')
                     }}
@@ -250,8 +245,8 @@ const PublicationAnalyticCreate: React.FC = () => {
                   name='device_id'
                   menuPlacement={'top'}
                   options={devices}
-                  getOptionLabel={(device) => device?.name}
-                  getOptionValue={(device) => device?.id.toString()}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
                   onChange={(e) => {
                     selectChangeHandler(e, 'device_id')
                   }}

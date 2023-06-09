@@ -1,16 +1,15 @@
-import axios from 'axios'
 import {Field, Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader'
 import FormErrors from '../../../../../../components/forms/FormErrors'
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter'
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel'
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form'
+import {genericOnChangeHandler} from '../../../../../../helpers/form'
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator'
-import {extractErrors} from '../../../../../../helpers/requests'
+import {submitRequest} from '../../../../../../helpers/requests'
 import {Sections} from '../../../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables'
 import {PublisherPayment} from '../../../../../../models/supply/publisher/PublisherPayment'
@@ -36,26 +35,22 @@ const PublisherPaymentEdit: React.FC = () => {
   const [formErrors, setFormErrors] = useState<string[]>([])
 
   const krysApp = useKrysApp()
-  const navigate = useNavigate()
 
   useEffect(() => {
     if (publisher && cid) {
       // get the publisher payments we need to edit from the database
-      getPublisherPayment(publisher, parseInt(cid)).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we were not able to fetch the publisher contacts to edit, so we need to redirect
-          // to error page
-          navigate('/error/404')
-        } else if (response === undefined) {
-          navigate('/error/400')
-        } else {
+      submitRequest(
+        getPublisherPayment,
+        [publisher, parseInt(cid)],
+        (response) => {
           // we were able to fetch current publisher payments to edit
           setPublisherPayment(response)
 
           // we also set the form to be the publisher's payments details
           setForm(fillEditForm(response))
-        }
-      })
+        },
+        setFormErrors
+      )
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,14 +77,10 @@ const PublisherPaymentEdit: React.FC = () => {
   const handleEdit = () => {
     if (publisher && publisherPayment) {
       // we need to update the payment's data by doing API call with form
-      updatePublisherPayment(publisher, publisherPayment.id, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // show errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error
-          setFormErrors([GenericErrorMessage])
-        } else {
+      submitRequest(
+        updatePublisherPayment,
+        [publisher, publisherPayment.id, form],
+        (response) => {
           // we got the updated publisher contacts so we're good
           krysApp.setAlert({
             message: new AlertMessageGenerator(
@@ -99,8 +90,9 @@ const PublisherPaymentEdit: React.FC = () => {
             ).message,
             type: KrysToastType.SUCCESS,
           })
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 

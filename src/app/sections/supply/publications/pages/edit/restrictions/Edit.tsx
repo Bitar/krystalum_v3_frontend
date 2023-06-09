@@ -1,27 +1,27 @@
-import axios from 'axios'
 import {Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
+import Select from 'react-select'
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader'
 import FormErrors from '../../../../../../components/forms/FormErrors'
+import {indentOptions} from '../../../../../../components/forms/IndentOptions'
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter'
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel'
 import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton'
-import MultiSelect from '../../../../../../components/forms/MultiSelect'
 import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum'
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form'
+import {
+  genericMultiSelectOnChangeHandler,
+  genericOnChangeHandler,
+} from '../../../../../../helpers/form'
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator'
-import {extractErrors} from '../../../../../../helpers/requests'
+import {submitRequest} from '../../../../../../helpers/requests'
 import {Sections} from '../../../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables'
 import {PublicationCampaignRestriction} from '../../../../../../models/supply/publication/PublicationCampaignRestriction'
 import {useKrysApp} from '../../../../../../modules/general/KrysApp'
-import {
-  getPublicationCampaignRestriction,
-  updatePublicationCampaignRestriction,
-} from '../../../../../../requests/supply/publication/PublisherCampaignRestriction'
+import {updatePublicationCampaignRestriction} from '../../../../../../requests/supply/publication/PublisherCampaignRestriction'
 import {
   defaultPublicationCampaignRestrictionFormFields,
   fillEditForm,
@@ -33,7 +33,6 @@ import {usePublicationEdit} from '../../../core/PublicationEditContext'
 
 const PublicationCampaignRestrictionEdit: React.FC = () => {
   const {cid} = useParams()
-  const navigate = useNavigate()
 
   const {options} = usePublication()
   const {publication, editOptions} = usePublicationEdit()
@@ -43,7 +42,6 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
     defaultPublicationCampaignRestrictionFormFields
   )
   const [formErrors, setFormErrors] = useState<string[]>([])
-  const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
   const [publicationCampaignRestriction, setPublicationCampaignRestriction] =
     useState<PublicationCampaignRestriction | null>(null)
@@ -54,21 +52,18 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
   useEffect(() => {
     if (publication && cid) {
       // get the publication campaign restriction we need to edit from the database
-      getPublicationCampaignRestriction(publication, parseInt(cid)).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we were not able to fetch the publication campaign restriction to edit so we need to redirect
-          // to error page
-          navigate('/error/404')
-        } else if (response === undefined) {
-          navigate('/error/400')
-        } else {
+      submitRequest(
+        updatePublicationCampaignRestriction,
+        [publication, parseInt(cid)],
+        (response) => {
           // we were able to fetch current publication campaign restriction to edit
           setPublicationCampaignRestriction(response)
 
           // we also set the form to be the publication's campaign restriction details
           setForm(fillEditForm(response))
-        }
-      })
+        },
+        setFormErrors
+      )
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -76,8 +71,6 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
 
   useEffect(() => {
     if (publicationCampaignRestriction) {
-      setIsResourceLoaded(true)
-
       krysApp.setPageTitle(
         generatePageTitle(
           Sections.SUPPLY_PUBLICATION_CAMPAIGN_RESTRICTION,
@@ -97,18 +90,10 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
   const handleEdit = () => {
     if (publication && publicationCampaignRestriction) {
       // we need to update the campaign restriction data by doing API call with form
-      updatePublicationCampaignRestriction(
-        publication,
-        publicationCampaignRestriction.id,
-        form
-      ).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // show errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error
-          setFormErrors([GenericErrorMessage])
-        } else {
+      submitRequest(
+        updatePublicationCampaignRestriction,
+        [publication, publicationCampaignRestriction.id, form],
+        (response) => {
           // we got the updated publication campaign restriction so we're good
           krysApp.setAlert({
             message: new AlertMessageGenerator(
@@ -118,8 +103,9 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
             ).message,
             type: KrysToastType.SUCCESS,
           })
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 
@@ -174,13 +160,20 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
                 <div className='mb-7'>
                   <KrysFormLabel text='Region' isRequired={true} />
 
-                  <MultiSelect
-                    isResourceLoaded={isResourceLoaded}
-                    options={regions}
-                    defaultValue={publicationCampaignRestriction?.geos.map((geo) => geo.geo)}
-                    form={form}
-                    setForm={setForm}
+                  <Select
+                    isMulti
                     name={'geo_ids'}
+                    value={regions.filter(
+                      (region) =>
+                        form.geo_type === GeoTypeEnum.REGION && form.geo_ids.includes(region.id)
+                    )}
+                    options={regions}
+                    getOptionLabel={(instance) => instance.name}
+                    getOptionValue={(instance) => instance.id.toString()}
+                    placeholder={`Select one or more regions`}
+                    onChange={(e) => {
+                      genericMultiSelectOnChangeHandler(e, form, setForm, 'geo_ids')
+                    }}
                   />
 
                   <div className='mt-1 text-danger'>{errors?.geo_ids ? errors?.geo_ids : null}</div>
@@ -191,13 +184,20 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
                 <div className='mb-7'>
                   <KrysFormLabel text='Country' isRequired={true} />
 
-                  <MultiSelect
-                    isResourceLoaded={isResourceLoaded}
-                    options={countries}
-                    defaultValue={publicationCampaignRestriction?.geos.map((geo) => geo.geo)}
-                    form={form}
-                    setForm={setForm}
+                  <Select
+                    isMulti
                     name={'geo_ids'}
+                    value={countries.filter(
+                      (country) =>
+                        form.geo_type === GeoTypeEnum.COUNTRY && form.geo_ids.includes(country.id)
+                    )}
+                    options={countries}
+                    getOptionLabel={(instance) => instance.name}
+                    getOptionValue={(instance) => instance.id.toString()}
+                    placeholder={`Select one or more countries`}
+                    onChange={(e) => {
+                      genericMultiSelectOnChangeHandler(e, form, setForm, 'geo_ids')
+                    }}
                   />
 
                   <div className='mt-1 text-danger'>{errors?.geo_ids ? errors?.geo_ids : null}</div>
@@ -207,13 +207,18 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysFormLabel text='Formats' isRequired={false} />
 
-                <MultiSelect
-                  isResourceLoaded={isResourceLoaded}
-                  options={formats}
-                  defaultValue={publicationCampaignRestriction?.formats}
-                  form={form}
-                  setForm={setForm}
+                <Select
+                  isMulti
                   name={'format_ids'}
+                  value={formats.filter((format) => form.format_ids.includes(format.id))}
+                  options={formats}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
+                  placeholder={`Select one or more formats`}
+                  onChange={(e) => {
+                    genericMultiSelectOnChangeHandler(e, form, setForm, 'format_ids')
+                  }}
+                  formatOptionLabel={indentOptions}
                 />
 
                 <div className='mt-1 text-danger'>
@@ -224,13 +229,19 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysFormLabel text='Campaign types' isRequired={false} />
 
-                <MultiSelect
-                  isResourceLoaded={isResourceLoaded}
-                  options={campaignTypes}
-                  defaultValue={publicationCampaignRestriction?.campaignTypes}
-                  form={form}
-                  setForm={setForm}
+                <Select
+                  isMulti
                   name={'campaign_type_ids'}
+                  value={campaignTypes.filter((campaignType) =>
+                    form.campaign_type_ids?.includes(campaignType.id)
+                  )}
+                  options={campaignTypes}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
+                  placeholder={`Select one or more campaign types`}
+                  onChange={(e) => {
+                    genericMultiSelectOnChangeHandler(e, form, setForm, 'campaign_type_ids')
+                  }}
                 />
 
                 <div className='mt-1 text-danger'>
@@ -241,13 +252,19 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysFormLabel text='Website pages' isRequired={false} />
 
-                <MultiSelect
-                  isResourceLoaded={isResourceLoaded}
-                  options={websitePages}
-                  defaultValue={publicationCampaignRestriction?.websitePages}
-                  form={form}
-                  setForm={setForm}
+                <Select
+                  isMulti
                   name={'website_page_ids'}
+                  value={websitePages.filter((websitePage) =>
+                    form.website_page_ids?.includes(websitePage.id)
+                  )}
+                  options={websitePages}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
+                  placeholder={`Select one or more website pages`}
+                  onChange={(e) => {
+                    genericMultiSelectOnChangeHandler(e, form, setForm, 'website_page_ids')
+                  }}
                 />
 
                 <div className='mt-1 text-danger'>
@@ -258,13 +275,19 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysFormLabel text='Campaign restriction requirements' isRequired={false} />
 
-                <MultiSelect
-                  isResourceLoaded={isResourceLoaded}
-                  options={campaignRestrictionRequirements}
-                  defaultValue={publicationCampaignRestriction?.requirements}
-                  form={form}
-                  setForm={setForm}
+                <Select
+                  isMulti
                   name={'requirement_ids'}
+                  value={campaignRestrictionRequirements.filter((campaignRestrictionRequirement) =>
+                    form.requirement_ids?.includes(campaignRestrictionRequirement.id)
+                  )}
+                  options={campaignRestrictionRequirements}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
+                  placeholder={`Select one or more campaign restriction ids`}
+                  onChange={(e) => {
+                    genericMultiSelectOnChangeHandler(e, form, setForm, 'requirement_ids')
+                  }}
                 />
 
                 <div className='mt-1 text-danger'>

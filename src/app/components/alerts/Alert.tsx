@@ -4,13 +4,13 @@ import {KTSVG} from '../../../_metronic/helpers'
 type Props = {
   title: string
   messages: string[]
-  setMessages: Dispatch<SetStateAction<string[]>>
+  setMessages?: Dispatch<SetStateAction<string[]>>
   color?: string
 }
 
 const Alert: React.FC<Props> = ({title, messages, setMessages, color = 'warning'}) => {
   const onClose = () => {
-    setMessages([])
+    if (setMessages) setMessages([])
   }
 
   return (
@@ -22,7 +22,7 @@ const Alert: React.FC<Props> = ({title, messages, setMessages, color = 'warning'
 
       <div className='d-flex flex-column'>
         <h5 className='fw-semibold mb-1'>{title}</h5>
-        <span className='text-warning-emphasis'>
+        <span className={`text-${color}-emphasis`}>
           {messages.length > 0 && (
             <ul className='m-0'>
               {messages.map((message, index) => {

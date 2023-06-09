@@ -1,4 +1,3 @@
-import axios from 'axios'
 import {Field, Form, Formik} from 'formik'
 import React, {useRef, useState} from 'react'
 import Select from 'react-select'
@@ -10,11 +9,10 @@ import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel'
 import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable'
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
 import {
-  GenericErrorMessage,
   genericOnChangeHandler,
   genericSingleSelectOnChangeHandler,
 } from '../../../../../../helpers/form'
-import {extractErrors} from '../../../../../../helpers/requests'
+import {submitRequest} from '../../../../../../helpers/requests'
 import {Actions, KrysToastType} from '../../../../../../helpers/variables'
 import {useKrysApp} from '../../../../../../modules/general/KrysApp'
 import {
@@ -58,14 +56,10 @@ const PublisherContactCreate: React.FC = () => {
   const handleCreate = () => {
     if (publisher) {
       // send API request to create the publisher contacts
-      storePublisherContact(publisher, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we need to show the errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error message
-          setFormErrors([GenericErrorMessage])
-        } else {
+      submitRequest(
+        storePublisherContact,
+        [publisher, form],
+        (response) => {
           // we were able to store the publisher contacts
           krysApp.setAlert({
             message: new AlertMessageGenerator(
@@ -87,8 +81,9 @@ const PublisherContactCreate: React.FC = () => {
 
           // we need to clear the form error
           setFormErrors([])
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 
@@ -113,8 +108,8 @@ const PublisherContactCreate: React.FC = () => {
                 <Select
                   name='type'
                   options={contactTypes}
-                  getOptionLabel={(contactType) => contactType.name}
-                  getOptionValue={(contactType) => contactType.id.toString()}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
                   onChange={(e) => {
                     selectChangeHandler(e, 'type')
                   }}

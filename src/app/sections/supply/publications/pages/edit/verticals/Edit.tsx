@@ -1,19 +1,21 @@
-import axios from 'axios'
 import {Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
+import Select from 'react-select'
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader'
 import FormErrors from '../../../../../../components/forms/FormErrors'
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter'
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel'
 import KrysSwitch from '../../../../../../components/forms/KrysSwitch'
-import SingleSelect from '../../../../../../components/forms/SingleSelect'
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
 import {filterData} from '../../../../../../helpers/dataManipulation'
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form'
+import {
+  genericOnChangeHandler,
+  genericSingleSelectOnChangeHandler,
+} from '../../../../../../helpers/form'
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator'
-import {extractErrors} from '../../../../../../helpers/requests'
+import {submitRequest} from '../../../../../../helpers/requests'
 import {Sections} from '../../../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables'
 import {Vertical} from '../../../../../../models/misc/Vertical'
@@ -44,7 +46,6 @@ const PublicationVerticalEdit: React.FC = () => {
     defaultPublicationVerticalEditFormFields
   )
   const [formErrors, setFormErrors] = useState<string[]>([])
-  const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
   const [publicationVertical, setPublicationVertical] = useState<PublicationVertical | null>(null)
   const [filteredVerticals, setFilteredVerticals] = useState<Vertical[]>([])
@@ -54,14 +55,10 @@ const PublicationVerticalEdit: React.FC = () => {
   useEffect(() => {
     if (publication && cid) {
       // get the publication vertical we need to edit from the database
-      getPublicationVertical(publication, parseInt(cid)).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we were not able to fetch to edit so we need to redirect
-          // to error page
-          navigate('/error/404')
-        } else if (response === undefined) {
-          navigate('/error/400')
-        } else {
+      submitRequest(
+        getPublicationVertical,
+        [publication, parseInt(cid)],
+        (response) => {
           // we were able to fetch current publication vertical to edit
           setPublicationVertical(response)
 
@@ -69,8 +66,9 @@ const PublicationVerticalEdit: React.FC = () => {
           const {vertical, ...currentPublicationVertical} = response
 
           setForm({...currentPublicationVertical, vertical_id: vertical.id})
-        }
-      })
+        },
+        setFormErrors
+      )
 
       const excludedVerticalsNames: string[] = publication.verticals
         ? publication.verticals?.map((vertical) => vertical.vertical.name)
@@ -84,8 +82,6 @@ const PublicationVerticalEdit: React.FC = () => {
 
   useEffect(() => {
     if (publicationVertical) {
-      setIsResourceLoaded(true)
-
       krysApp.setPageTitle(
         generatePageTitle(
           Sections.SUPPLY_PUBLICATION_VERTICALS,
@@ -105,14 +101,10 @@ const PublicationVerticalEdit: React.FC = () => {
   const handleEdit = () => {
     if (publication && publicationVertical) {
       // we need to update the publication vertical's data by doing API call with form
-      updatePublicationVertical(publication, publicationVertical.id, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // show errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error
-          setFormErrors([GenericErrorMessage])
-        } else {
+      submitRequest(
+        updatePublicationVertical,
+        [publication, publicationVertical.id, form],
+        (response) => {
           // we got the updated publication vertical so we're good
           krysApp.setAlert({
             message: new AlertMessageGenerator(
@@ -122,8 +114,9 @@ const PublicationVerticalEdit: React.FC = () => {
             ).message,
             type: KrysToastType.SUCCESS,
           })
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 
@@ -145,15 +138,16 @@ const PublicationVerticalEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysFormLabel text='Vertical' isRequired={true} />
 
-                <SingleSelect
-                  isResourceLoaded={isResourceLoaded}
+                <Select
+                  name={'vertical_id'}
+                  value={filteredVerticals.find((vertical) => vertical.id === form.vertical_id)}
                   options={filteredVerticals}
-                  defaultValue={publicationVertical?.vertical}
-                  form={form}
-                  setForm={setForm}
-                  name='vertical_id'
-                  isClearable={true}
-                  showHierarchy={true}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
+                  placeholder={'Select a vertical'}
+                  onChange={(e) => {
+                    genericSingleSelectOnChangeHandler(e, form, setForm, 'vertical_id')
+                  }}
                 />
 
                 <div className='mt-1 text-danger'>

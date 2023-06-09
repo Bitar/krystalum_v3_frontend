@@ -1,11 +1,9 @@
-import axios from 'axios'
 import {Field, Form, Formik} from 'formik'
 import React, {Dispatch, SetStateAction, useEffect, useRef, useState} from 'react'
 import {Col, Collapse, Row} from 'react-bootstrap'
 import Select from 'react-select'
 import {DateRangePicker} from 'rsuite'
 import {DateRange} from 'rsuite/DateRangePicker'
-import {initialQueryState} from '../../../../../../_metronic/helpers'
 import FilterFormFooter from '../../../../../components/forms/FilterFormFooter'
 import FormErrors from '../../../../../components/forms/FormErrors'
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel'
@@ -13,15 +11,15 @@ import {RoleEnum} from '../../../../../enums/RoleEnum'
 import {createDateFromString} from '../../../../../helpers/dateFormatter'
 import {
   genericDateRangeOnChangeHandler,
-  GenericErrorMessage,
+  genericFilterHandler,
   genericMultiSelectOnChangeHandler,
   genericOnChangeHandler,
 } from '../../../../../helpers/form'
-import {createFilterQueryParam, extractErrors} from '../../../../../helpers/requests'
+import {submitRequest} from '../../../../../helpers/requests'
 import {User} from '../../../../../models/iam/User'
 import {useAuth} from '../../../../../modules/auth'
 import {useQueryRequest} from '../../../../../modules/table/QueryRequestProvider'
-import {getAllUsers} from '../../../../../requests/iam/User'
+import {getAllPerformanceMetrics} from '../../../../../requests/misc/PerformanceMetric'
 import {FilterSchema} from '../../../publications/core/filterForm'
 import {usePublisher} from '../../core/PublisherContext'
 
@@ -48,17 +46,14 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
   useEffect(() => {
     if (!hasAnyRoles(currentUser, [RoleEnum.PUBLISHER])) {
       // get all the account manager users
-      getAllUsers('filter[roles][]=12&filter[roles][]=5').then((response) => {
-        if (axios.isAxiosError(response)) {
-          setFilterErrors(extractErrors(response))
-        } else if (response === undefined) {
-          setFilterErrors([GenericErrorMessage])
-        } else {
-          if (response.data) {
-            setAccountManagers(response.data)
-          }
-        }
-      })
+      submitRequest(
+        getAllPerformanceMetrics,
+        ['filter[roles][]=12&filter[roles][]=5'],
+        (response) => {
+          setAccountManagers(response)
+        },
+        setFilterErrors
+      )
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,12 +78,7 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
   }
 
   const handleFilter = () => {
-    setExportQuery(createFilterQueryParam(filters))
-
-    updateState({
-      filter: reset ? undefined : filters,
-      ...initialQueryState,
-    })
+    genericFilterHandler(setExportQuery, filters, updateState, reset)
   }
 
   useEffect(() => {
@@ -156,8 +146,8 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
                         isMulti
                         name='countries_ids'
                         options={countries}
-                        getOptionLabel={(country) => country?.name}
-                        getOptionValue={(country) => country?.id.toString()}
+                        getOptionLabel={(instance) => instance.name}
+                        getOptionValue={(instance) => instance.id.toString()}
                         onChange={(e) => multiSelectChangeHandler(e, 'countries_ids')}
                         ref={countriesSelectRef}
                         placeholder='Filter by country(ies)'
@@ -171,8 +161,8 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
                         isMulti
                         name='regions_ids'
                         options={regions}
-                        getOptionLabel={(region) => region?.name}
-                        getOptionValue={(region) => region?.id.toString()}
+                        getOptionLabel={(instance) => instance.name}
+                        getOptionValue={(instance) => instance.id.toString()}
                         onChange={(e) => multiSelectChangeHandler(e, 'regions_ids')}
                         ref={regionsSelectRef}
                         placeholder='Filter by region(s)'
@@ -188,8 +178,8 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
                         isMulti
                         name='tiers_ids'
                         options={tiers}
-                        getOptionLabel={(tier) => tier?.name}
-                        getOptionValue={(tier) => tier?.id.toString()}
+                        getOptionLabel={(instance) => instance.name}
+                        getOptionValue={(instance) => instance.id.toString()}
                         onChange={(e) => multiSelectChangeHandler(e, 'tiers_ids')}
                         ref={tiersSelectRef}
                         placeholder='Filter by tier(s)'
@@ -228,8 +218,8 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
                           isMulti
                           name='account_managers_ids'
                           options={accountManagers}
-                          getOptionLabel={(accountManager) => accountManager?.name}
-                          getOptionValue={(accountManager) => accountManager?.id.toString()}
+                          getOptionLabel={(instance) => instance.name}
+                          getOptionValue={(instance) => instance.id.toString()}
                           onChange={(e) => multiSelectChangeHandler(e, 'account_managers_ids')}
                           ref={accountManagersSelectRef}
                           placeholder='Filter by account manager(s)'

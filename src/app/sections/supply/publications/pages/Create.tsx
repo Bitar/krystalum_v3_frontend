@@ -1,4 +1,3 @@
-import axios from 'axios'
 import {Field, Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
 import {FormControl, FormGroup, InputGroup} from 'react-bootstrap'
@@ -7,6 +6,7 @@ import Select from 'react-select'
 import {DatePicker} from 'rsuite'
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader'
+import Alert from '../../../../components/alerts/Alert'
 import FormErrors from '../../../../components/forms/FormErrors'
 import KrysCheckbox from '../../../../components/forms/KrysCheckbox'
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter'
@@ -18,14 +18,13 @@ import {RevenueTypeEnum} from '../../../../enums/Supply/RevenueTypeEnum'
 import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator'
 import {
   genericDateOnChangeHandler,
-  GenericErrorMessage,
   genericMultiSelectOnChangeHandler,
   genericOnChangeHandler,
   genericSingleSelectOnChangeHandler,
 } from '../../../../helpers/form'
 import {scrollToTop} from '../../../../helpers/general'
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator'
-import {extractErrors} from '../../../../helpers/requests'
+import {submitRequest} from '../../../../helpers/requests'
 import {Sections} from '../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables'
 import {useKrysApp} from '../../../../modules/general/KrysApp'
@@ -112,29 +111,18 @@ const PublicationCreate: React.FC = () => {
 
   const handleCreate = () => {
     // send API request to create the publication
-    storePublication(form).then((response) => {
-      if (axios.isAxiosError(response)) {
-        // we need to show the errors
-        setFormErrors(extractErrors(response))
-
-        scrollToTop()
-      } else if (response === undefined) {
-        // show generic error message
-        setFormErrors([GenericErrorMessage])
-
-        scrollToTop()
-      } else {
+    submitRequest(
+      storePublication,
+      [form],
+      (response) => {
         let message, url
 
+        message = new AlertMessageGenerator('publication', Actions.CREATE, KrysToastType.SUCCESS)
+          .message
+
         if (response.is_archived && response.is_archived === 1) {
-          message =
-            new AlertMessageGenerator('publication', Actions.CREATE, KrysToastType.SUCCESS)
-              .message +
-            ' It is considered an archived publication since it is not sending inventory.'
           url = '/supply/publications/archived'
         } else {
-          message = new AlertMessageGenerator('publication', Actions.CREATE, KrysToastType.SUCCESS)
-            .message
           url = '/supply/publications'
         }
 
@@ -147,8 +135,11 @@ const PublicationCreate: React.FC = () => {
         navigate(url)
 
         setPublisher(null)
-      }
-    })
+      },
+      setFormErrors
+    )
+
+    scrollToTop()
   }
 
   return (
@@ -157,6 +148,16 @@ const PublicationCreate: React.FC = () => {
 
       <KTCardBody>
         <FormErrors errorMessages={formErrors} />
+
+        {publisher && (
+          <Alert
+            color='success'
+            title={'Success!'}
+            messages={[
+              `Please fill out the form below to create a publication related to the publisher you have created '${publisher.name}'.`,
+            ]}
+          />
+        )}
 
         <Formik
           initialValues={form}
@@ -191,10 +192,10 @@ const PublicationCreate: React.FC = () => {
 
                 <Select
                   name='publisher_id'
-                  defaultValue={publisher}
+                  value={publisher}
                   options={publishers}
-                  getOptionLabel={(publisher) => publisher.name}
-                  getOptionValue={(publisher) => publisher.id.toString()}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
                   onChange={(e) => {
                     selectChangeHandler(e, 'publisher_id')
                   }}
@@ -225,15 +226,15 @@ const PublicationCreate: React.FC = () => {
                 <KrysFormLabel text='Language(s)' isRequired={true} />
 
                 <Select
+                  isMulti
                   name='languages_ids'
                   options={languages}
-                  getOptionLabel={(language) => language.name}
-                  getOptionValue={(language) => language.id.toString()}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
                   onChange={(e) => {
                     multiSelectChangeHandler(e, 'languages_ids')
                   }}
                   placeholder='Select a language(s)'
-                  isMulti={true}
                 />
 
                 <div className='mt-1 text-danger'>

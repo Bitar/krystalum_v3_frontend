@@ -1,4 +1,3 @@
-import axios from 'axios'
 import {Form, Formik} from 'formik'
 import React, {useRef, useState} from 'react'
 import Select from 'react-select'
@@ -12,12 +11,11 @@ import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel'
 import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable'
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
 import {
-  GenericErrorMessage,
   genericMultiSelectOnChangeHandler,
   genericOnChangeHandler,
   genericSingleSelectOnChangeHandler,
 } from '../../../../../../helpers/form'
-import {extractErrors} from '../../../../../../helpers/requests'
+import {submitRequest} from '../../../../../../helpers/requests'
 import {Actions, KrysToastType} from '../../../../../../helpers/variables'
 import {useKrysApp} from '../../../../../../modules/general/KrysApp'
 import {
@@ -87,30 +85,25 @@ const PublicationFormatCreate: React.FC = () => {
 
       if (updatedFormatIds.length > 0) {
         // send API request to create the publication formats
-        storePublicationFormat(publication, {...form, format_ids: updatedFormatIds}).then(
+        submitRequest(
+          storePublicationFormat,
+          [publication, {...form, format_ids: updatedFormatIds}],
           (response) => {
-            if (axios.isAxiosError(response)) {
-              // we need to show the errors
-              setFormErrors(extractErrors(response))
-            } else if (response === undefined) {
-              // show generic error message
-              setFormErrors([GenericErrorMessage])
-            } else {
-              krysApp.setAlert({
-                message: new AlertMessageGenerator(
-                  'publication format',
-                  Actions.CREATE,
-                  KrysToastType.SUCCESS
-                ).message,
-                type: KrysToastType.SUCCESS,
-              })
+            krysApp.setAlert({
+              message: new AlertMessageGenerator(
+                'publication format',
+                Actions.CREATE,
+                KrysToastType.SUCCESS
+              ).message,
+              type: KrysToastType.SUCCESS,
+            })
 
-              // now that we have a new record successfully we need to refresh the table
-              setRefreshTable(true)
+            // now that we have a new record successfully we need to refresh the table
+            setRefreshTable(true)
 
-              setPublication(response)
-            }
-          }
+            setPublication(response)
+          },
+          setFormErrors
         )
       }
 
@@ -152,8 +145,8 @@ const PublicationFormatCreate: React.FC = () => {
                   isMulti
                   name='format_ids'
                   options={formats}
-                  getOptionLabel={(format) => format.name}
-                  getOptionValue={(format) => format.id.toString()}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
                   onChange={(e) => {
                     multiSelectChangeHandler(e, 'format_ids')
                   }}
@@ -174,8 +167,8 @@ const PublicationFormatCreate: React.FC = () => {
                   name='type'
                   menuPlacement={'top'}
                   options={formatTypes}
-                  getOptionLabel={(formatType) => formatType?.name}
-                  getOptionValue={(formatType) => formatType?.id.toString()}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
                   onChange={(e) => {
                     selectChangeHandler(e, 'type')
                   }}

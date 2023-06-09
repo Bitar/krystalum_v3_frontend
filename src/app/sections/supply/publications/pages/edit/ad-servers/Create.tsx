@@ -15,7 +15,7 @@ import {
   genericMultiSelectOnChangeHandler,
   genericOnChangeHandler,
 } from '../../../../../../helpers/form'
-import {extractErrors} from '../../../../../../helpers/requests'
+import {extractErrors, submitRequest} from '../../../../../../helpers/requests'
 import {Actions, KrysToastType} from '../../../../../../helpers/variables'
 import {AdServer} from '../../../../../../models/misc/AdServer'
 
@@ -24,12 +24,14 @@ import {
   getPublicationAdServers,
   storePublicationAdServer,
 } from '../../../../../../requests/supply/publication/PublicationAdServer'
+import {storePublicationAnalytic} from '../../../../../../requests/supply/publication/PublisherAnalytic'
 import {
   defaultPublicationAdServerFormFields,
   PublicationAdServerFormFields,
   publicationAdServerSchema,
 } from '../../../core/edit/ad-servers/form'
 import {PublicationAdServersColumns} from '../../../core/edit/ad-servers/TableColumns'
+import {defaultPublicationAnalyticFormFields} from '../../../core/edit/analytics/form'
 import {usePublication} from '../../../core/PublicationContext'
 import {usePublicationEdit} from '../../../core/PublicationEditContext'
 
@@ -78,15 +80,10 @@ const PublicationAdServerCreate: React.FC = () => {
       // as long as we are updating the create form, we should set the table refresh to false
       setRefreshTable(false)
 
-      // send API request to create the publication ad servers
-      storePublicationAdServer(publication, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we need to show the errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error message
-          setFormErrors([GenericErrorMessage])
-        } else {
+      submitRequest(
+        storePublicationAdServer,
+        [publication, form],
+        (response) => {
           // we were able to store the publication ad servers
           krysApp.setAlert({
             message: new AlertMessageGenerator(
@@ -112,8 +109,9 @@ const PublicationAdServerCreate: React.FC = () => {
 
           // we need to clear the form data
           setFormErrors([])
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 
@@ -139,8 +137,8 @@ const PublicationAdServerCreate: React.FC = () => {
                   isMulti
                   name='ad_server_ids'
                   options={filteredAdServers}
-                  getOptionLabel={(adServer) => adServer.name}
-                  getOptionValue={(adServer) => adServer.id.toString()}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
                   onChange={(e) => {
                     multiSelectChangeHandler(e, 'ad_server_ids')
                   }}

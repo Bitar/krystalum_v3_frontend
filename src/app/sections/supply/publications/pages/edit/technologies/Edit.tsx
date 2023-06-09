@@ -1,18 +1,20 @@
-import axios from 'axios'
 import {Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
+import Select from 'react-select'
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader'
 import FormErrors from '../../../../../../components/forms/FormErrors'
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter'
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel'
-import SingleSelect from '../../../../../../components/forms/SingleSelect'
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
 import {filterData} from '../../../../../../helpers/dataManipulation'
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form'
+import {
+  genericOnChangeHandler,
+  genericSingleSelectOnChangeHandler,
+} from '../../../../../../helpers/form'
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator'
-import {extractErrors} from '../../../../../../helpers/requests'
+import {submitRequest} from '../../../../../../helpers/requests'
 import {Sections} from '../../../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables'
 import {Technology} from '../../../../../../models/misc/Technology'
@@ -36,13 +38,10 @@ const PublicationTechnologyEdit: React.FC = () => {
   const {publication} = usePublicationEdit()
   const krysApp = useKrysApp()
 
-  const navigate = useNavigate()
-
   const [form, setForm] = useState<PublicationTechnologyEditFormFields>(
     defaultPublicationTechnologyEditFormFields
   )
   const [formErrors, setFormErrors] = useState<string[]>([])
-  const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
   const [publicationTechnology, setPublicationTechnology] = useState<Technology | null>(null)
   const [filteredTechnologies, setFilteredTechnologies] = useState<Technology[]>([])
@@ -52,22 +51,19 @@ const PublicationTechnologyEdit: React.FC = () => {
   useEffect(() => {
     if (publication && cid) {
       // get the publication technology we need to edit from the database
-      getPublicationTechnology(publication, parseInt(cid)).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we were not able to fetch to edit so we need to redirect
-          // to error page
-          navigate('/error/404')
-        } else if (response === undefined) {
-          navigate('/error/400')
-        } else {
+      submitRequest(
+        getPublicationTechnology,
+        [publication, parseInt(cid)],
+        (response) => {
           // we were able to fetch current publication technology to edit
           setPublicationTechnology(response)
 
           // we are getting the response as technology and not publication technology
           // response is: {id, name}
           setForm({technology_id: response.id})
-        }
-      })
+        },
+        setFormErrors
+      )
 
       const excludedTechnologiesNames: string[] = publication.technologies
         ? publication.technologies?.map((technology) => technology.name)
@@ -81,8 +77,6 @@ const PublicationTechnologyEdit: React.FC = () => {
 
   useEffect(() => {
     if (publicationTechnology) {
-      setIsResourceLoaded(true)
-
       krysApp.setPageTitle(
         generatePageTitle(
           Sections.SUPPLY_PUBLICATION_TECHNOLOGIES,
@@ -102,14 +96,10 @@ const PublicationTechnologyEdit: React.FC = () => {
   const handleEdit = () => {
     if (publication && publicationTechnology) {
       // we need to update the publication technology's data by doing API call with form
-      updatePublicationTechnology(publication, publicationTechnology.id, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // show errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error
-          setFormErrors([GenericErrorMessage])
-        } else {
+      submitRequest(
+        updatePublicationTechnology,
+        [publication, publicationTechnology.id, form],
+        (response) => {
           // we got the updated publication technology so we're good
           krysApp.setAlert({
             message: new AlertMessageGenerator(
@@ -119,8 +109,9 @@ const PublicationTechnologyEdit: React.FC = () => {
             ).message,
             type: KrysToastType.SUCCESS,
           })
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 
@@ -142,15 +133,18 @@ const PublicationTechnologyEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysFormLabel text='Technology' isRequired={true} />
 
-                <SingleSelect
-                  isResourceLoaded={isResourceLoaded}
+                <Select
+                  name={'technology_id'}
+                  value={filteredTechnologies.find(
+                    (technology) => technology.id === form.technology_id
+                  )}
                   options={filteredTechnologies}
-                  defaultValue={publicationTechnology}
-                  form={form}
-                  setForm={setForm}
-                  name='technology_id'
-                  isClearable={true}
-                  showHierarchy={true}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
+                  placeholder={'Select a technology'}
+                  onChange={(e) => {
+                    genericSingleSelectOnChangeHandler(e, form, setForm, 'technology_id')
+                  }}
                 />
 
                 <div className='mt-1 text-danger'>

@@ -1,17 +1,19 @@
-import axios from 'axios'
 import {Field, Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
+import Select from 'react-select'
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader'
 import FormErrors from '../../../../../../components/forms/FormErrors'
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter'
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel'
-import SingleSelect from '../../../../../../components/forms/SingleSelect'
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../helpers/form'
+import {
+  genericOnChangeHandler,
+  genericSingleSelectOnChangeHandler,
+} from '../../../../../../helpers/form'
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator'
-import {extractErrors} from '../../../../../../helpers/requests'
+import {submitRequest} from '../../../../../../helpers/requests'
 import {Sections} from '../../../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables'
 import {PublisherContact} from '../../../../../../models/supply/publisher/PublisherContact'
@@ -34,27 +36,20 @@ const PublisherContactEdit: React.FC = () => {
   const krysApp = useKrysApp()
 
   const {cid} = useParams()
-  const navigate = useNavigate()
 
   const [publisherContact, setPublisherContact] = useState<PublisherContact | null>(null)
   const [form, setForm] = useState<PublisherContactFormFields>(defaultPublisherContactFormFields)
   const [formErrors, setFormErrors] = useState<string[]>([])
-
-  const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
   const {contactTypes} = options
 
   useEffect(() => {
     if (publisher && cid) {
       // get the publisher contacts we need to edit from the database
-      getPublisherContact(publisher, parseInt(cid)).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we were not able to fetch the publisher contacts to edit so we need to redirect
-          // to error page
-          navigate('/error/404')
-        } else if (response === undefined) {
-          navigate('/error/400')
-        } else {
+      submitRequest(
+        getPublisherContact,
+        [publisher, parseInt(cid)],
+        (response) => {
           // we were able to fetch current publisher contacts to edit
           setPublisherContact(response)
 
@@ -62,8 +57,9 @@ const PublisherContactEdit: React.FC = () => {
           const {contactType, ...currentPublisherContact} = response
 
           setForm({...currentPublisherContact, type: contactType?.id})
-        }
-      })
+        },
+        setFormErrors
+      )
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,8 +67,6 @@ const PublisherContactEdit: React.FC = () => {
 
   useEffect(() => {
     if (publisherContact) {
-      setIsResourceLoaded(true)
-
       krysApp.setPageTitle(
         generatePageTitle(
           Sections.SUPPLY_PUBLISHER_CONTACTS,
@@ -92,14 +86,10 @@ const PublisherContactEdit: React.FC = () => {
   const handleEdit = () => {
     if (publisher && publisherContact) {
       // we need to update the contact's data by doing API call with form
-      updatePublisherContact(publisher, publisherContact.id, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // show errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error
-          setFormErrors([GenericErrorMessage])
-        } else {
+      submitRequest(
+        updatePublisherContact,
+        [publisher, publisherContact.id, form],
+        (response) => {
           // we got the updated publisher contacts so we're good
           krysApp.setAlert({
             message: new AlertMessageGenerator(
@@ -109,8 +99,9 @@ const PublisherContactEdit: React.FC = () => {
             ).message,
             type: KrysToastType.SUCCESS,
           })
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 
@@ -132,14 +123,16 @@ const PublisherContactEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysFormLabel text='Contact type' isRequired={true} />
 
-                <SingleSelect
-                  isResourceLoaded={isResourceLoaded}
+                <Select
+                  name={'type'}
+                  value={contactTypes.find((contactType) => contactType.id === form.type)}
                   options={contactTypes}
-                  defaultValue={publisherContact?.contactType}
-                  form={form}
-                  setForm={setForm}
-                  name='type'
-                  isClearable={true}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
+                  placeholder={'Select type'}
+                  onChange={(e) => {
+                    genericSingleSelectOnChangeHandler(e, form, setForm, 'type')
+                  }}
                 />
 
                 <div className='mt-1 text-danger'>{errors?.type ? errors?.type : null}</div>

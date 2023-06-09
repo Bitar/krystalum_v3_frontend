@@ -1,7 +1,7 @@
-import axios from 'axios'
 import {Field, Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
 import {InputGroup} from 'react-bootstrap'
+import Select from 'react-select'
 import {DatePicker} from 'rsuite'
 import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader'
@@ -9,18 +9,16 @@ import FormErrors from '../../../../../components/forms/FormErrors'
 import KrysFormFooter from '../../../../../components/forms/KrysFormFooter'
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel'
 import KrysRadioButton from '../../../../../components/forms/KrysRadioButton'
-import SingleSelect from '../../../../../components/forms/SingleSelect'
 import {RoleEnum} from '../../../../../enums/RoleEnum'
 import {RevenueTypeEnum} from '../../../../../enums/Supply/RevenueTypeEnum'
 import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator'
 import {createDateFromString} from '../../../../../helpers/dateFormatter'
 import {
   genericDateOnChangeHandler,
-  GenericErrorMessage,
   genericOnChangeHandler,
+  genericSingleSelectOnChangeHandler,
 } from '../../../../../helpers/form'
-import {scrollToTop} from '../../../../../helpers/general'
-import {extractErrors} from '../../../../../helpers/requests'
+import {submitRequest} from '../../../../../helpers/requests'
 import {Actions, KrysToastType} from '../../../../../helpers/variables'
 import {useAuth} from '../../../../../modules/auth'
 import {useKrysApp} from '../../../../../modules/general/KrysApp'
@@ -38,14 +36,10 @@ const PublisherBasicInformationEdit: React.FC = () => {
   const [form, setForm] = useState<FormFields>(defaultFormFields)
   const [formErrors, setFormErrors] = useState<string[]>([])
 
-  const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
-
   const {countries, tiers} = options
 
   useEffect(() => {
     if (publisher) {
-      setIsResourceLoaded(true)
-
       setForm(fillEditForm(publisher))
     }
 
@@ -63,18 +57,10 @@ const PublisherBasicInformationEdit: React.FC = () => {
   const handleEdit = () => {
     if (publisher) {
       // send API request to update the publisher
-      updatePublisher(publisher.id, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we need to show the errors
-          setFormErrors(extractErrors(response))
-
-          scrollToTop()
-        } else if (response === undefined) {
-          // show generic error message
-          setFormErrors([GenericErrorMessage])
-
-          scrollToTop()
-        } else {
+      submitRequest(
+        updatePublisher,
+        [publisher.id, form],
+        (response) => {
           // we were able to store the publisher
           krysApp.setAlert({
             message: new AlertMessageGenerator('publisher', Actions.EDIT, KrysToastType.SUCCESS)
@@ -86,8 +72,9 @@ const PublisherBasicInformationEdit: React.FC = () => {
           setPublisher(response)
 
           setFormErrors([])
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 
@@ -129,14 +116,16 @@ const PublisherBasicInformationEdit: React.FC = () => {
                   <div className='mb-7'>
                     <KrysFormLabel text='Tier' isRequired={false} />
 
-                    <SingleSelect
-                      isResourceLoaded={isResourceLoaded}
+                    <Select
+                      name={'tier_id'}
+                      value={tiers.find((tier) => tier.id === form.tier_id)}
                       options={tiers}
-                      defaultValue={publisher?.tier}
-                      form={form}
-                      setForm={setForm}
-                      name='tier_id'
-                      isClearable={true}
+                      getOptionLabel={(instance) => instance.name}
+                      getOptionValue={(instance) => instance.id.toString()}
+                      placeholder={'Select tier'}
+                      onChange={(e) => {
+                        genericSingleSelectOnChangeHandler(e, form, setForm, 'tier_id')
+                      }}
                     />
 
                     <div className='mt-1 text-danger'>
@@ -280,14 +269,16 @@ const PublisherBasicInformationEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysFormLabel text='HQ country' isRequired={false} />
 
-                <SingleSelect
-                  isResourceLoaded={isResourceLoaded}
+                <Select
+                  name={'hq_country_id'}
+                  value={countries.find((country) => country.id === form.hq_country_id)}
                   options={countries}
-                  defaultValue={publisher?.info?.hq_country}
-                  form={form}
-                  setForm={setForm}
-                  name='hq_country_id'
-                  isClearable={true}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
+                  placeholder={'Select hq country'}
+                  onChange={(e) => {
+                    genericSingleSelectOnChangeHandler(e, form, setForm, 'hq_country_id')
+                  }}
                 />
 
                 <div className='mt-1 text-danger'>

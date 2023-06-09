@@ -3,8 +3,10 @@ import React, {useEffect} from 'react'
 import {Outlet, Route, Routes, useNavigate, useParams} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
+import {submitRequest} from '../../helpers/requests'
 import {Sections} from '../../helpers/sections'
 import {getPublication} from '../../requests/supply/publication/Publication'
+import {getPublisher} from '../../requests/supply/publisher/Publisher'
 import {usePublicationEdit} from '../../sections/supply/publications/core/PublicationEditContext'
 import PublicationEdit from '../../sections/supply/publications/pages/Edit'
 import PublicationAdServerEdit from '../../sections/supply/publications/pages/edit/ad-servers/Edit'
@@ -21,22 +23,12 @@ const PublicationEditRoutes: React.FC = () => {
   const {publication, setPublication, refresh} = usePublicationEdit()
 
   const {id} = useParams()
-  const navigate = useNavigate()
 
   useEffect(() => {
     if (id) {
       // get the publication we need to edit from the database
-      getPublication(parseInt(id)).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we were not able to fetch the publication to edit, so we need to redirect
-          // to error page
-          navigate('/error/404')
-        } else if (response === undefined) {
-          // unknown error occurred
-          navigate('/error/400')
-        } else {
-          setPublication(response)
-        }
+      submitRequest(getPublication, [id], (response) => {
+        setPublication(response)
       })
     }
 

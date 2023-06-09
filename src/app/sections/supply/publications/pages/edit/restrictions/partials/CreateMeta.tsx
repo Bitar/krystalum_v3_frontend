@@ -1,14 +1,12 @@
-import axios from 'axios'
 import {Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
 import {FormControl, FormGroup} from 'react-bootstrap'
-import {useNavigate} from 'react-router-dom'
 import FormErrors from '../../../../../../../components/forms/FormErrors'
 import KrysFormFooter from '../../../../../../../components/forms/KrysFormFooter'
 import KrysFormLabel from '../../../../../../../components/forms/KrysFormLabel'
 import {AlertMessageGenerator} from '../../../../../../../helpers/AlertMessageGenerator'
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../../../../helpers/form'
-import {extractErrors} from '../../../../../../../helpers/requests'
+import {genericOnChangeHandler} from '../../../../../../../helpers/form'
+import {submitRequest} from '../../../../../../../helpers/requests'
 import {Actions, KrysToastType} from '../../../../../../../helpers/variables'
 import {useKrysApp} from '../../../../../../../modules/general/KrysApp'
 import {
@@ -26,8 +24,6 @@ const PublicationCampaignRestrictionMetaCreate: React.FC = () => {
   const {publication} = usePublicationEdit()
   const krysApp = useKrysApp()
 
-  const navigate = useNavigate()
-
   const [form, setForm] = useState<PublicationCampaignRestrictionMetaFormFields>(
     defaultPublicationCampaignRestrictionMetaFormFields
   )
@@ -36,14 +32,17 @@ const PublicationCampaignRestrictionMetaCreate: React.FC = () => {
   useEffect(() => {
     if (publication) {
       // get the publication restriction meta
-      getPublicationCampaignRestrictionMeta(publication).then((response) => {
-        if (!axios.isAxiosError(response) && response !== undefined) {
+      submitRequest(
+        getPublicationCampaignRestrictionMeta,
+        [publication],
+        (response) => {
           // set the form to be the publication's restriction meta details
           const {campaign_restriction_meta} = response
 
           setForm({campaign_restriction_meta: campaign_restriction_meta})
-        }
-      })
+        },
+        setFormErrors
+      )
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -56,14 +55,10 @@ const PublicationCampaignRestrictionMetaCreate: React.FC = () => {
   const handleCreate = () => {
     if (publication) {
       // send API request to create the publication campaign restriction meta
-      storePublicationCampaignRestrictionMeta(publication, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we need to show the errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error message
-          setFormErrors([GenericErrorMessage])
-        } else {
+      submitRequest(
+        storePublicationCampaignRestrictionMeta,
+        [publication, form],
+        (response) => {
           // we were able to store the publication campaign restriction meta
           krysApp.setAlert({
             message: new AlertMessageGenerator(
@@ -81,8 +76,9 @@ const PublicationCampaignRestrictionMetaCreate: React.FC = () => {
 
           // we need to clear the form data
           setFormErrors([])
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 

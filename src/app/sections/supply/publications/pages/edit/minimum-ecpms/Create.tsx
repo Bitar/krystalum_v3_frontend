@@ -1,4 +1,3 @@
-import axios from 'axios'
 import {Field, Form, Formik} from 'formik'
 import React, {useRef, useState} from 'react'
 import Select from 'react-select'
@@ -13,12 +12,11 @@ import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable'
 import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum'
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
 import {
-  GenericErrorMessage,
   genericMultiSelectOnChangeHandler,
   genericOnChangeHandler,
   genericSingleSelectOnChangeHandler,
 } from '../../../../../../helpers/form'
-import {extractErrors} from '../../../../../../helpers/requests'
+import {submitRequest} from '../../../../../../helpers/requests'
 import {DEFAULT_CURRENCY} from '../../../../../../helpers/settings'
 import {Actions, KrysToastType} from '../../../../../../helpers/variables'
 
@@ -71,14 +69,10 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
   const handleCreate = () => {
     if (publication) {
       // send API request to create the publication minimum ecpm
-      storePublicationMinimumEcpm(publication, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // we need to show the errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error message
-          setFormErrors([GenericErrorMessage])
-        } else {
+      submitRequest(
+        storePublicationMinimumEcpm,
+        [publication, form],
+        (response) => {
           // we were able to store the publication minimum ecpm
           krysApp.setAlert({
             message: new AlertMessageGenerator(
@@ -101,8 +95,9 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
 
           // we need to clear the form data
           setFormErrors([])
-        }
-      })
+        },
+        setFormErrors
+      )
     }
   }
 
@@ -161,8 +156,8 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
                     isMulti
                     name='geo_ids'
                     options={regions}
-                    getOptionLabel={(region) => region.name}
-                    getOptionValue={(region) => region.id.toString()}
+                    getOptionLabel={(instance) => instance.name}
+                    getOptionValue={(instance) => instance.id.toString()}
                     onChange={(e) => {
                       multiSelectChangeHandler(e, 'geo_ids')
                     }}
@@ -182,8 +177,8 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
                     isMulti
                     name='geo_ids'
                     options={countries}
-                    getOptionLabel={(country) => country.name}
-                    getOptionValue={(country) => country.id.toString()}
+                    getOptionLabel={(instance) => instance.name}
+                    getOptionValue={(instance) => instance.id.toString()}
                     onChange={(e) => {
                       multiSelectChangeHandler(e, 'geo_ids')
                     }}
@@ -202,8 +197,8 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
                   isMulti
                   name='format_ids'
                   options={formats}
-                  getOptionLabel={(format) => format.name}
-                  getOptionValue={(format) => format.id.toString()}
+                  getOptionLabel={(instance) => instance.name}
+                  getOptionValue={(instance) => instance.id.toString()}
                   onChange={(e) => {
                     multiSelectChangeHandler(e, 'format_ids')
                   }}
@@ -236,8 +231,8 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
                 <Select
                   name='currency_id'
                   options={currencies}
-                  getOptionLabel={(currency) => currency.currency}
-                  getOptionValue={(currency) => currency.id.toString()}
+                  getOptionLabel={(instance) => instance.currency}
+                  getOptionValue={(instance) => instance.id.toString()}
                   onChange={(e) => {
                     selectChangeHandler(e, 'currency_id')
                   }}

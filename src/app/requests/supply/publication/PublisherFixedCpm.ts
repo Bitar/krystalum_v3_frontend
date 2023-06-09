@@ -52,7 +52,7 @@ export const storePublicationFixedCpm = async (
 
   return await axios
     .post(url, formData)
-    .then((response) => response.data)
+    .then((response) => response.data.data)
     .catch((error) => {
       return error
     })

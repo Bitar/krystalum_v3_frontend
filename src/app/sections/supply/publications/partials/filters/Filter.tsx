@@ -14,6 +14,7 @@ import {RoleEnum} from '../../../../../enums/RoleEnum'
 import {createDateFromString} from '../../../../../helpers/dateFormatter'
 import {
   genericDateRangeOnChangeHandler,
+  genericFilterHandler,
   genericMultiSelectOnChangeHandler,
   genericOnChangeHandler,
 } from '../../../../../helpers/form'
@@ -62,12 +63,7 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
   }
 
   const handleFilter = () => {
-    setExportQuery(createFilterQueryParam(filters))
-
-    updateState({
-      filter: reset ? undefined : filters,
-      ...initialQueryState,
-    })
+    genericFilterHandler(setExportQuery, filters, updateState, reset)
   }
 
   useEffect(() => {
@@ -151,8 +147,8 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                         isMulti
                         name='publishers_ids'
                         options={publishers}
-                        getOptionLabel={(publisher) => publisher?.name}
-                        getOptionValue={(publisher) => publisher?.id.toString()}
+                        getOptionLabel={(instance) => instance.name}
+                        getOptionValue={(instance) => instance.id.toString()}
                         onChange={(e) => multiSelectChangeHandler(e, 'publishers_ids')}
                         ref={publishersSelectRef}
                         placeholder='Filter by publisher(s)'
@@ -223,8 +219,8 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                         isMulti
                         name='languages_ids'
                         options={languages}
-                        getOptionLabel={(language) => language?.name}
-                        getOptionValue={(language) => language?.id.toString()}
+                        getOptionLabel={(instance) => instance.name}
+                        getOptionValue={(instance) => instance.id.toString()}
                         onChange={(e) => multiSelectChangeHandler(e, 'languages_ids')}
                         ref={languagesSelectRef}
                         placeholder='Filter by language(s)'
@@ -238,8 +234,8 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                         isMulti
                         name='formats_ids'
                         options={formats}
-                        getOptionLabel={(format) => format?.name}
-                        getOptionValue={(format) => format?.id.toString()}
+                        getOptionLabel={(instance) => instance.name}
+                        getOptionValue={(instance) => instance.id.toString()}
                         onChange={(e) => multiSelectChangeHandler(e, 'formats_ids')}
                         ref={formatsSelectRef}
                         placeholder='Filter by format(s)'
@@ -254,8 +250,8 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                         isMulti
                         name='ad_servers_ids'
                         options={adServers}
-                        getOptionLabel={(adServer) => adServer?.name}
-                        getOptionValue={(adServer) => adServer?.id.toString()}
+                        getOptionLabel={(instance) => instance.name}
+                        getOptionValue={(instance) => instance.id.toString()}
                         onChange={(e) => multiSelectChangeHandler(e, 'ad_servers_ids')}
                         ref={adServersSelectRef}
                         placeholder='Filter by ad server(s)'
@@ -270,8 +266,8 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                         isMulti
                         name='technologies_ids'
                         options={technologies}
-                        getOptionLabel={(technology) => technology?.name}
-                        getOptionValue={(technology) => technology?.id.toString()}
+                        getOptionLabel={(instance) => instance.name}
+                        getOptionValue={(instance) => instance.id.toString()}
                         onChange={(e) => multiSelectChangeHandler(e, 'technologies_ids')}
                         ref={technologiesSelectRef}
                         placeholder='Filter by technology(s)'
@@ -285,8 +281,8 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                         isMulti
                         name='verticals_ids'
                         options={verticals}
-                        getOptionLabel={(vertical) => vertical?.name}
-                        getOptionValue={(vertical) => vertical?.id.toString()}
+                        getOptionLabel={(instance) => instance.name}
+                        getOptionValue={(instance) => instance.id.toString()}
                         onChange={(e) => multiSelectChangeHandler(e, 'verticals_ids')}
                         ref={verticalsSelectRef}
                         placeholder='Filter by vertical(s)'
@@ -301,8 +297,8 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                         isMulti
                         name='countries_ids'
                         options={countries}
-                        getOptionLabel={(country) => country?.name}
-                        getOptionValue={(country) => country?.id.toString()}
+                        getOptionLabel={(instance) => instance.name}
+                        getOptionValue={(instance) => instance.id.toString()}
                         onChange={(e) => multiSelectChangeHandler(e, 'countries_ids')}
                         ref={countriesSelectRef}
                         placeholder='Filter by country(ies)'
@@ -318,8 +314,8 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                         isMulti
                         name='regions_ids'
                         options={regions}
-                        getOptionLabel={(region) => region?.name}
-                        getOptionValue={(region) => region?.id.toString()}
+                        getOptionLabel={(instance) => instance.name}
+                        getOptionValue={(instance) => instance.id.toString()}
                         onChange={(e) => multiSelectChangeHandler(e, 'regions_ids')}
                         ref={regionsSelectRef}
                         placeholder='Filter by region(s)'

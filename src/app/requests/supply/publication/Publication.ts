@@ -15,10 +15,10 @@ export const INCLUDES = 'include[]=info&include[]=languages'
 export const SHOW_INCLUDES =
   'include[]=info&include[]=languages&include[]=formats&include[]=verticals&include[]=adServers&include[]=technologies'
 
-export const getAllPublications = async (): Promise<PublicationList | AxiosError | undefined> => {
+export const getAllPublications = async (): Promise<PublicationList[] | AxiosError | undefined> => {
   return axios
     .get(ENDPOINT + '/all?sort[]=name')
-    .then((response: AxiosResponse<PublicationList>) => response.data)
+    .then((response: AxiosResponse<PublicationList>) => response.data.data)
     .catch((error) => {
       return error
     })
@@ -64,7 +64,7 @@ export const getArchivedPublications = (query?: String): Promise<PublicationPagi
 
   return axios
     .get(url)
-    .then((response: AxiosResponse<PublicationPaginate>) => response.data)
+    .then((response: AxiosResponse<PublicationPaginate>) => response.data.data)
     .catch((error) => {
       return error
     })
@@ -73,7 +73,7 @@ export const getArchivedPublications = (query?: String): Promise<PublicationPagi
 export const getPublication = async (id: number): Promise<Publication | AxiosError | undefined> => {
   return await axios
     .get(`${ENDPOINT}/${id}?${SHOW_INCLUDES}`)
-    .then((response) => response.data.data)
+    .then((response) => response.data.data.data)
     .catch((error) => {
       return error
     })
@@ -86,7 +86,7 @@ export const storePublication = async (
 
   return await axios
     .post(ENDPOINT + '/', formData)
-    .then((response) => response.data.data)
+    .then((response) => response.data.data.data)
     .catch((error) => {
       return error
     })
@@ -102,7 +102,7 @@ export const updatePublication = async (
 
   return await axios
     .post(ENDPOINT + '/' + id, formData)
-    .then((response) => response.data.data)
+    .then((response) => response.data.data.data)
     .catch((error) => {
       return error
     })
