@@ -335,7 +335,10 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                           name='is_deal_pmp'
                           onChangeHandler={(e) => {
                             e.stopPropagation()
-                            setFilters({...filters, is_deal_pmp: Number(!filters.is_deal_pmp)})
+                            setFilters({
+                              ...filters,
+                              is_deal_pmp: Number(!filters.is_deal_pmp),
+                            })
                           }}
                           defaultValue={Boolean(filters.is_deal_pmp)}
                         />

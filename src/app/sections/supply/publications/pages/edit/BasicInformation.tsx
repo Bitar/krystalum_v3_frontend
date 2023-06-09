@@ -123,6 +123,8 @@ const PublicationBasicInformationEdit: React.FC = () => {
           setPublication(response)
 
           setFormErrors([])
+
+          scrollToTop()
         }
       })
     }

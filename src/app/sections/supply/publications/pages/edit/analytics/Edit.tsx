@@ -114,8 +114,6 @@ const PublicationAnalyticEdit: React.FC = () => {
             ).message,
             type: KrysToastType.SUCCESS,
           })
-
-          navigate(`/supply/publications/${publication.id}/edit`)
         }
       })
     }

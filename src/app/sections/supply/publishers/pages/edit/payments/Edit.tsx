@@ -99,8 +99,6 @@ const PublisherPaymentEdit: React.FC = () => {
             ).message,
             type: KrysToastType.SUCCESS,
           })
-
-          navigate(`/supply/publishers/${publisher.id}/edit`)
         }
       })
     }

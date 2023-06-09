@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader'
+import Alert from '../../../../../../components/alerts/Alert'
 import FormErrors from '../../../../../../components/forms/FormErrors'
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter'
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel'
@@ -25,6 +26,7 @@ import {
   PublicationFormatEditFormFields,
   publicationFormatSchema,
 } from '../../../core/edit/formats/form'
+import {checkFormats} from '../../../core/helpers'
 import {usePublication} from '../../../core/PublicationContext'
 import {usePublicationEdit} from '../../../core/PublicationEditContext'
 
@@ -42,6 +44,7 @@ const PublicationFormatEdit: React.FC = () => {
   )
   const [formErrors, setFormErrors] = useState<string[]>([])
   const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
+  const [alertMessages, setAlertMessages] = useState<string[]>([])
 
   const [publicationFormat, setPublicationFormat] = useState<PublicationFormat | null>(null)
 
@@ -94,27 +97,31 @@ const PublicationFormatEdit: React.FC = () => {
 
   const handleEdit = () => {
     if (publication && publicationFormat) {
-      // we need to update the publication format's data by doing API call with form
-      updatePublicationFormat(publication, publicationFormat.id, form).then((response) => {
-        if (axios.isAxiosError(response)) {
-          // show errors
-          setFormErrors(extractErrors(response))
-        } else if (response === undefined) {
-          // show generic error
-          setFormErrors([GenericErrorMessage])
-        } else {
-          krysApp.setAlert({
-            message: new AlertMessageGenerator(
-              'publication format',
-              Actions.EDIT,
-              KrysToastType.SUCCESS
-            ).message,
-            type: KrysToastType.SUCCESS,
-          })
+      const message: string = checkFormats(publication, formats, form.format_id, form.type)
 
-          navigate(`/supply/publications/${publication.id}/edit`)
-        }
-      })
+      if (message !== '') {
+        setAlertMessages((prevMessage) => [...prevMessage, message])
+      } else {
+        // we need to update the publication format's data by doing API call with form
+        updatePublicationFormat(publication, publicationFormat.id, form).then((response) => {
+          if (axios.isAxiosError(response)) {
+            // show errors
+            setFormErrors(extractErrors(response))
+          } else if (response === undefined) {
+            // show generic error
+            setFormErrors([GenericErrorMessage])
+          } else {
+            krysApp.setAlert({
+              message: new AlertMessageGenerator(
+                'publication format',
+                Actions.EDIT,
+                KrysToastType.SUCCESS
+              ).message,
+              type: KrysToastType.SUCCESS,
+            })
+          }
+        })
+      }
     }
   }
 
@@ -124,6 +131,10 @@ const PublicationFormatEdit: React.FC = () => {
 
       <KTCardBody>
         <FormErrors errorMessages={formErrors} />
+
+        {alertMessages.length > 0 && (
+          <Alert title={'Warning!'} messages={alertMessages} setMessages={setAlertMessages} />
+        )}
 
         <Formik
           initialValues={form}

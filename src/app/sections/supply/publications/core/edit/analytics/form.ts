@@ -45,6 +45,11 @@ export function fillEditForm(publicationAnalytic: PublicationAnalytic) {
     type: publicationAnalytic.type.id,
     geo_type: publicationAnalytic.geoType.id,
     geo_id: publicationAnalytic.geo.id,
+    value:
+      publicationAnalytic.type.id === PublicationAnalyticTypeEnum.UNIQUE_USERS ||
+      publicationAnalytic.type.id === PublicationAnalyticTypeEnum.PAGE_VIEWS
+        ? Math.floor(publicationAnalytic.value)
+        : publicationAnalytic.value,
   }
 
   return form
