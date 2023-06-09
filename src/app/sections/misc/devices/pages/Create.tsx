@@ -1,22 +1,21 @@
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
+import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import FormErrors from '../../../../components/forms/FormErrors';
+import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {genericOnChangeHandler} from '../../../../helpers/form';
 
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {submitRequest} from '../../../../helpers/requests';
 import {Sections} from '../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {defaultFormFields, FormFields, DeviceSchema} from '../core/form';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
-import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-import FormErrors from '../../../../components/forms/FormErrors';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeDevice} from '../../../../requests/misc/Device';
-import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {defaultFormFields, DeviceSchema, FormFields} from '../core/form';
 
 const DeviceCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -36,25 +35,20 @@ const DeviceCreate: React.FC = () => {
 
     const handleCreate = (e: any) => {
         // send API request to create the device
-        storeDevice(form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // it's device for sure
-                    krysApp.setAlert({message: new AlertMessageGenerator('device', Actions.CREATE, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                    navigate(`/misc/devices`);
-                }
-            }
-        );
+        submitRequest(storeDevice, [form], (response) => {
+            // it's device for sure
+            krysApp.setAlert({
+                message: new AlertMessageGenerator('device', Actions.CREATE, KrysToastType.SUCCESS).message,
+                type: KrysToastType.SUCCESS
+            });
+
+            navigate(`/misc/devices`);
+        }, setFormErrors);
     };
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New Device" />
+            <KTCardHeader text="Create New Device"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -64,7 +58,7 @@ const DeviceCreate: React.FC = () => {
                         () => (
                             <Form onChange={onChangeHandler}>
                                 <div className="mb-7">
-                                    <KrysFormLabel text="Name" isRequired={true} />
+                                    <KrysFormLabel text="Name" isRequired={true}/>
 
                                     <Field className="form-control fs-base" type="text"
                                            placeholder="Enter device name" name="name"/>

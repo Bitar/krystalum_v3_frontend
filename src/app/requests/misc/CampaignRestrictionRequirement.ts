@@ -11,8 +11,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/campaign-restriction-requirements`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllCampaignRestrictionRequirements = async (): Promise<CampaignRestrictionRequirementList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<CampaignRestrictionRequirementList>) => response.data).catch((error) => {
+export const getAllCampaignRestrictionRequirements = async (): Promise<CampaignRestrictionRequirement[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<CampaignRestrictionRequirementList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -24,9 +24,7 @@ export const getCampaignRestrictionRequirements = (query?: String): Promise<Camp
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<CampaignRestrictionRequirementPaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<CampaignRestrictionRequirementPaginate>) => response.data);
 }
 
 export const getCampaignRestrictionRequirement = async (id: number): Promise<CampaignRestrictionRequirement | AxiosError | undefined> => {

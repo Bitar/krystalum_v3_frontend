@@ -1,27 +1,26 @@
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import axios from 'axios';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-
-import {AdServerSchema, defaultFormFields, FormFields} from '../core/form';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {getAdServer, updateAdServer} from '../../../../requests/misc/AdServer';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {genericOnChangeHandler} from '../../../../helpers/form';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
+import {Sections} from '../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {AdServer} from '../../../../models/misc/AdServer';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {getAdServer, updateAdServer} from '../../../../requests/misc/AdServer';
+
+import {AdServerSchema, defaultFormFields, FormFields} from '../core/form';
 
 
 const AdServerEdit: React.FC = () => {
-    const [adServer, setAdServer] = useState<AdServer|null>(null);
+    const [adServer, setAdServer] = useState<AdServer | null>(null);
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -35,13 +34,11 @@ const AdServerEdit: React.FC = () => {
     useEffect(() => {
         if (id) {
             // get the ad server we need to edit from the database
-            getAdServer(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the ad server to edit so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    navigate('/error/400');
+            submitRequest(getAdServer, [parseInt(id)], (response) => {
+                let errorPage = getErrorPage(response);
+
+                if (errorPage) {
+                    navigate(errorPage);
                 } else {
                     // we were able to fetch current ad server to edit
                     setAdServer(response);
@@ -53,7 +50,7 @@ const AdServerEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        if(adServer) {
+        if (adServer) {
             krysApp.setPageTitle(generatePageTitle(Sections.MISC_AD_SERVERS, PageTypes.EDIT, adServer.name))
         }
 
@@ -65,32 +62,23 @@ const AdServerEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        if(adServer) {
+        if (adServer) {
             // we need to update the ad server's data by doing API call with form
-            updateAdServer(adServer.id, form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // show errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error
-                    setFormErrors([GenericErrorMessage]);
-                } else {
-                    // we got the updated ad server so we're good
+            submitRequest(updateAdServer, [adServer.id, form], (response) => {
+                // we got the updated ad server so we're good
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('ad server', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                });
 
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('ad server', Actions.EDIT, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    })
-
-                    navigate(`/misc/ad-servers`);
-                }
-            });
+                navigate(`/misc/ad-servers`);
+            }, setFormErrors);
         }
     }
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Ad Server" />
+            <KTCardHeader text="Edit Ad Server"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

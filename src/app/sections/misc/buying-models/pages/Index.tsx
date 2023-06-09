@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react'
 
 import {QUERIES} from '../../../../../_metronic/helpers'
-import {PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {EXPORT_ENDPOINT, getBuyingModels} from '../../../../requests/misc/BuyingModel';
-import BuyingModelIndexFilter from '../partials/IndexFilter';
-import {BuyingModelsColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 import KrysIndex from '../../../../components/tables/KrysIndex';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {Sections} from '../../../../helpers/sections';
+import {PageTypes} from '../../../../helpers/variables';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {EXPORT_ENDPOINT, getBuyingModels} from '../../../../requests/misc/BuyingModel';
+import {BuyingModelsColumns} from '../core/TableColumns';
+import BuyingModelIndexFilter from '../partials/IndexFilter';
 
 const BuyingModelIndex = () => {
     const krysApp = useKrysApp();
@@ -29,7 +29,7 @@ const BuyingModelIndex = () => {
                    columnsArray={BuyingModelsColumns}
                    cardHeader={
                        {
-                           text: 'All Buy Types',
+                           text: 'All Buying Models',
 
                            actions: [new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
                                new FilterCardAction('buying-models-list-filter', showFilter, setShowFilter),

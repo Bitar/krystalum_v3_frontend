@@ -1,37 +1,35 @@
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
+import Select from 'react-select';
 
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {getBuyingModel, updateBuyingModel} from '../../../../requests/misc/BuyingModel';
-import {BuyingModelSchema, defaultFormFields, FormFields} from '../core/form';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import {PerformanceMetric} from "../../../../models/misc/PerformanceMetric";
-import {getAllPerformanceMetrics} from "../../../../requests/misc/PerformanceMetric";
-import MultiSelect from "../../../../components/forms/MultiSelect";
+import {genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
+import {Sections} from '../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {BuyingModel} from "../../../../models/misc/BuyingModel";
+import {PerformanceMetric} from "../../../../models/misc/PerformanceMetric";
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {getBuyingModel, updateBuyingModel} from '../../../../requests/misc/BuyingModel';
+import {getAllPerformanceMetrics} from "../../../../requests/misc/PerformanceMetric";
+import {BuyingModelSchema, defaultFormFields, FormFields} from '../core/form';
 
 const BuyingModelEdit: React.FC = () => {
-    const [buyingModel, setBuyingModel] = useState<BuyingModel|null>(null)
-    const [form, setForm] = useState<FormFields>(defaultFormFields)
+    const [buyingModel, setBuyingModel] = useState<BuyingModel | null>(null);
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
+    const [selectedPerformanceMetrics, setSelectedPerformanceMetrics] = useState<PerformanceMetric[]>([]);
 
     const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetric[]>([]);
 
     const krysApp = useKrysApp();
-
     const navigate = useNavigate();
 
     let {id} = useParams();
@@ -39,80 +37,59 @@ const BuyingModelEdit: React.FC = () => {
     useEffect(() => {
         if (id) {
             // get the buying model we need to edit from the database
-            getBuyingModel(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the buying model to edit, so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    navigate('/error/400');
+            submitRequest(getBuyingModel, [parseInt(id)], (response) => {
+                let errorPage = getErrorPage(response);
+
+                if (errorPage) {
+                    navigate(errorPage);
                 } else {
                     // we were able to fetch current buying model to edit
                     setBuyingModel(response);
 
+                    krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUYING_MODELS, PageTypes.EDIT, response.name))
 
                     const {performanceMetrics, ...currentBuyingModel} = response
 
                     setForm({
                         ...currentBuyingModel,
-                        performance_metric_ids: response.performanceMetrics.map(metric => metric.id)
+                        performance_metric_ids: performanceMetrics.map((metric: PerformanceMetric) => metric.id)
                     });
+
+                    setSelectedPerformanceMetrics(performanceMetrics);
                 }
             });
 
             // get the performance metrics, so we can edit the kpi's metrics
-            getAllPerformanceMetrics().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else if (response.data) {
-                    // if we were able to get the list of performance metrics, then we fill our state with them
-                    setPerformanceMetrics(response.data);
-                }
-            });
+            submitRequest(getAllPerformanceMetrics, [], (response) => {
+                // if we were able to get the list of performance metrics, then we fill our state with them
+                setPerformanceMetrics(response);
+            }, setFormErrors);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
-
-    useEffect(() => {
-        if(buyingModel) {
-            setIsResourceLoaded(true);
-
-            krysApp.setPageTitle(generatePageTitle(Sections.MISC_BUYING_MODELS, PageTypes.EDIT, buyingModel.name))
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [buyingModel]);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
     };
 
     const handleEdit = () => {
-        if(buyingModel) {
+        if (buyingModel) {
             // we need to update the buying model's data by doing API call with form
-            updateBuyingModel(buyingModel.id, form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // show errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error
-                    setFormErrors([GenericErrorMessage]);
-                } else {
-                    // we got the buying model so we're good
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('buying model', Actions.EDIT, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    })
-                    navigate(`/misc/buying-models`);
-                }
-            });
+            submitRequest(updateBuyingModel, [buyingModel.id, form], (response) => {
+                // we got the buying model so we're good
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('buying model', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                });
+
+                navigate(`/misc/buying-models`);
+            }, setFormErrors);
         }
     }
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Buying Model" />
+            <KTCardHeader text="Edit Buying Model"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -136,9 +113,17 @@ const BuyingModelEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Corresponding metrics" isRequired={true}/>
 
-                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={performanceMetrics}
-                                                 defaultValue={buyingModel?.performanceMetrics} form={form}
-                                                 setForm={setForm} name={'performance_metric_ids'}/>
+                                    <Select isMulti name={'performance_metric_ids'} value={selectedPerformanceMetrics}
+                                            options={performanceMetrics}
+                                            getOptionLabel={(instance) => instance.name}
+                                            getOptionValue={(instance) => instance.id.toString()}
+                                            placeholder={`Select one or more metrics`}
+                                            onChange={(e) => {
+                                                genericMultiSelectOnChangeHandler(e, form, setForm, 'performance_metric_ids');
+
+                                                setSelectedPerformanceMetrics(e as PerformanceMetric[]);
+                                            }
+                                            }/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="performance_metric_ids" className="mt-2"/>

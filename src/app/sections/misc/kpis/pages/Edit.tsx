@@ -1,34 +1,33 @@
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
-import {defaultFormFields, FormFields, KpiSchema} from '../core/form';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {useNavigate, useParams} from 'react-router-dom';
-import axios from 'axios';
-import {extractErrors} from '../../../../helpers/requests';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
+import Select from 'react-select';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Kpi} from '../../../../models/misc/Kpi';
-import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
-import {getAllPerformanceMetrics} from '../../../../requests/misc/PerformanceMetric';
-import {getKpi, updateKpi} from '../../../../requests/misc/Kpi';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysSwitch from '../../../../components/forms/KrysSwitch';
 import {AlertMessageGenerator} from '../../../../helpers/AlertMessageGenerator';
-import MultiSelect from '../../../../components/forms/MultiSelect';
+import {genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
+import {Sections} from '../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
+import {Kpi} from '../../../../models/misc/Kpi';
+import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {getKpi, updateKpi} from '../../../../requests/misc/Kpi';
+import {getAllPerformanceMetrics} from '../../../../requests/misc/PerformanceMetric';
+import {defaultFormFields, FormFields, KpiSchema} from '../core/form';
 
 const KpiEdit: React.FC = () => {
-    const [kpi, setKpi] = useState<Kpi|null>(null);
+    const [kpi, setKpi] = useState<Kpi | null>(null);
 
-    const [form, setForm] = useState<FormFields>(defaultFormFields)
-    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
 
     const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetric[]>([]);
+    const [selectedPerformanceMetrics, setSelectedPerformanceMetrics] = useState<PerformanceMetric[]>([]);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
@@ -37,77 +36,59 @@ const KpiEdit: React.FC = () => {
     let {id} = useParams();
 
     useEffect(() => {
-        if(id) {
+        if (id) {
             // get the performance metrics so we can edit the kpi's metrics
-            getAllPerformanceMetrics().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else if (response.data) {
-                    // if we were able to get the list of performance metrics, then we fill our state with them
-                    setPerformanceMetrics(response.data);
-                }
-            });
+            submitRequest(getAllPerformanceMetrics, [], (response) => {
+                setPerformanceMetrics(response);
+            }, setFormErrors);
 
-            // get the kpi we need to edit from the database
-            getKpi(parseInt(id)).then(response => {
-                if(axios.isAxiosError(response)) {
-                    // we were not able to fetch the kpi to edit so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if(response === undefined) {
-                    navigate('/error/400');
+            submitRequest(getKpi, [parseInt(id)], (response) => {
+                let errorPage = getErrorPage(response);
+
+                if (errorPage) {
+                    navigate(errorPage);
                 } else {
                     // we were able to fetch current kpi to edit
                     setKpi(response);
 
-                    const {performanceMetrics, ...currentKpi} = response
+                    krysApp.setPageTitle(generatePageTitle(Sections.MISC_KPIS, PageTypes.EDIT, response.name))
 
-                    setForm({...currentKpi, performance_metric_ids: response.performanceMetrics.map(metric => metric.id)});
+                    const {performanceMetrics, ...currentKpi} = response;
+
+                    setForm({
+                        ...currentKpi,
+                        performance_metric_ids: performanceMetrics.map((metric: PerformanceMetric) => metric.id)
+                    });
+
+                    setSelectedPerformanceMetrics(performanceMetrics);
                 }
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
-    useEffect(() => {
-        if(kpi) {
-            setIsResourceLoaded(true);
-
-            krysApp.setPageTitle(generatePageTitle(Sections.MISC_KPIS, PageTypes.EDIT, kpi.name))
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [kpi]);
-
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
     };
 
     const handleEdit = (e: any) => {
-        if(kpi) {
+        if (kpi) {
             // we need to update the kpi's data by doing API call with form
-            updateKpi(kpi.id, form).then(response => {
-                if(axios.isAxiosError(response)) {
-                    // show errors
-                    setFormErrors(extractErrors(response));
-                } else if(response === undefined) {
-                    // show generic error
-                    setFormErrors([GenericErrorMessage]);
-                } else {
-                    // we got the updated kpi so we're good
-                    krysApp.setAlert({message: new AlertMessageGenerator('kpi', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS});
+            submitRequest(updateKpi, [kpi.id, form], (response) => {
+                // we got the updated kpi so we're good
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('kpi', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                });
 
-                    navigate(`/misc/kpis`);
-                }
-            });
+                navigate(`/misc/kpis`);
+            }, setFormErrors);
         }
     }
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Kpi" />
+            <KTCardHeader text="Edit Kpi"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -132,9 +113,9 @@ const KpiEdit: React.FC = () => {
 
                                     <KrysSwitch name="is_rate"
                                                 onChangeHandler={(e) => {
-                                                      e.stopPropagation();
-                                                      setForm({...form, is_rate: Number(!form.is_rate)});
-                                                  }}
+                                                    e.stopPropagation();
+                                                    setForm({...form, is_rate: Number(!form.is_rate)});
+                                                }}
                                                 defaultValue={Boolean(form.is_rate)}/>
 
                                     <div className="mt-1 text-danger">
@@ -158,7 +139,16 @@ const KpiEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Corresponding metric" isRequired={true}/>
 
-                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={performanceMetrics} defaultValue={kpi?.performanceMetrics} form={form} setForm={setForm} name={'performance_metric_ids'} />
+                                    <Select isMulti name={'performance_metric_ids'} value={selectedPerformanceMetrics}
+                                            options={performanceMetrics}
+                                            getOptionLabel={(instance) => instance.name}
+                                            getOptionValue={(instance) => instance.id.toString()}
+                                            placeholder={`Select one or more performance metrics`}
+                                            onChange={(e) => {
+                                                genericMultiSelectOnChangeHandler(e, form, setForm, 'performance_metric_ids');
+                                                setSelectedPerformanceMetrics(e as PerformanceMetric[]);
+                                            }
+                                            }/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="performance_metric_ids" className="mt-2"/>

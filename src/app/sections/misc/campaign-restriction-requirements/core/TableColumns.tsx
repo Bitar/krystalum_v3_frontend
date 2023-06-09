@@ -1,11 +1,11 @@
 import {Column} from 'react-table'
+import {QUERIES} from '../../../../../_metronic/helpers'
+import {CampaignRestrictionRequirement} from '../../../../models/misc/CampaignRestrictionRequirement';
+import {Restricted} from '../../../../modules/auth/AuthAccessControl';
+import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
+import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
 
 import {TextCell} from '../../../../modules/table/columns/TextCell'
-import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
-import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
-import {QUERIES} from '../../../../../_metronic/helpers'
-import {Restricted} from '../../../../modules/auth/AuthAccessControl';
-import {CampaignRestrictionRequirement} from '../../../../models/misc/CampaignRestrictionRequirement';
 
 const CampaignRestrictionRequirementsColumns: ReadonlyArray<Column<CampaignRestrictionRequirement>> = [
     {

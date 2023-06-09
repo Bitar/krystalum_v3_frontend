@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {Dispatch} from 'react';
 import {FormikProps} from 'formik';
 import {DateRange} from 'rsuite/DateRangePicker';
+import {initialQueryState, QueryState} from '../../_metronic/helpers';
+import {removeEmptyFromObject} from './dataManipulation';
+import {createFilterQueryParam} from './requests';
 
-export const genericOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>) => {
+export const genericOnChangeHandler = (e: any, form: any, setForm: Dispatch<React.SetStateAction<any>>) => {
     const value = e.target.value;
     const name = e.target.name;
 
@@ -16,7 +19,7 @@ export const genericOnChangeHandler = (e: any, form: any, setForm: React.Dispatc
 
 export const GenericErrorMessage: string = 'Oops! Something went wrong. Try again later.';
 
-export const genericMultiSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
+export const genericMultiSelectOnChangeHandler = (e: any, form: any, setForm: Dispatch<React.SetStateAction<any>>, key: string) => {
     if (e.length > 0) {
         setForm({...form, [key]: e.map((entity: any) => entity.id)});
     } else {
@@ -24,7 +27,7 @@ export const genericMultiSelectOnChangeHandler = (e: any, form: any, setForm: Re
     }
 };
 
-export const genericSingleSelectOnChangeHandler = (e: any, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
+export const genericSingleSelectOnChangeHandler = (e: any, form: any, setForm: Dispatch<React.SetStateAction<any>>, key: string) => {
     if (e) {
         setForm({...form, [key]: e.id})
     } else {
@@ -42,7 +45,7 @@ export const SUPPORTED_IMAGE_FORMATS = [
     'image/gif',
     'image/png'
 ];
-export const genericHandleSingleFile = (e: any, formik: FormikProps<any>, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
+export const genericHandleSingleFile = (e: any, formik: FormikProps<any>, form: any, setForm: Dispatch<React.SetStateAction<any>>, key: string) => {
     let file = e.target.files[0];
 
     setForm({...form, [key]: file});
@@ -50,7 +53,7 @@ export const genericHandleSingleFile = (e: any, formik: FormikProps<any>, form: 
     formik.setFieldValue(key, file);
 };
 
-export const genericDateOnChangeHandler = (date: Date | null, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
+export const genericDateOnChangeHandler = (date: Date | null, form: any, setForm: Dispatch<React.SetStateAction<any>>, key: string) => {
     if (date) {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -65,7 +68,7 @@ export const genericDateOnChangeHandler = (date: Date | null, form: any, setForm
     }
 };
 
-export const genericDateRangeOnChangeHandler = (dateRange: DateRange | null, form: any, setForm: React.Dispatch<React.SetStateAction<any>>, key: string) => {
+export const genericDateRangeOnChangeHandler = (dateRange: DateRange | null, form: any, setForm: Dispatch<React.SetStateAction<any>>, key: string) => {
     if (dateRange) {
         const startDate = dateRange[0];
         const endDate = dateRange[1];
@@ -82,3 +85,14 @@ export const genericDateRangeOnChangeHandler = (dateRange: DateRange | null, for
         setForm({...form, [key]: dateRange});
     }
 };
+
+export const genericFilterHandler = (setExportQuery: Dispatch<React.SetStateAction<string>>, filters: Object, updateState: (updates: Partial<QueryState>) => void, reset: boolean) => {
+    setExportQuery(createFilterQueryParam(filters));
+
+    let cleanFilters = removeEmptyFromObject(filters);
+
+    updateState({
+        filter: reset ? undefined : cleanFilters,
+        ...initialQueryState,
+    });
+}

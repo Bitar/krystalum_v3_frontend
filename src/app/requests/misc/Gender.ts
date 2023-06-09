@@ -6,8 +6,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/genders`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllGenders = async (): Promise<GenderList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<GenderList>) => response.data).catch((error) => {
+export const getAllGenders = async (): Promise<Gender[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<GenderList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -19,9 +19,7 @@ export const getGenders = (query?: String): Promise<GenderPaginate> => {
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<GenderPaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<GenderPaginate>) => response.data);
 }
 
 export const getGender = async (id: number): Promise<Gender | AxiosError | undefined> => {

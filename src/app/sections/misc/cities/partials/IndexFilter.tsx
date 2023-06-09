@@ -1,24 +1,26 @@
-import React, {useEffect, useRef, useState} from 'react';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
+import React, {Dispatch, useEffect, useRef, useState} from 'react';
 import {Col, Collapse, Row} from 'react-bootstrap';
+import Select from 'react-select';
+import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
+import FormErrors from '../../../../components/forms/FormErrors';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import {filterData} from '../../../../helpers/dataManipulation';
+import {
+    genericFilterHandler,
+    genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler
+} from '../../../../helpers/form';
+import {submitRequest} from '../../../../helpers/requests';
+import {Country} from '../../../../models/misc/Country';
 
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
-import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
-import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
-import {initialQueryState} from '../../../../../_metronic/helpers';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
-import Select from 'react-select';
 import {getAllCountries} from '../../../../requests/misc/Country';
-import axios from 'axios';
-import {createFilterQueryParam, extractErrors} from '../../../../helpers/requests';
-import {Country} from '../../../../models/misc/Country';
-import FormErrors from '../../../../components/forms/FormErrors';
-import {filterData} from '../../../../helpers/dataManipulation';
+import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
 
 interface Props {
     showFilter: boolean,
-    setExportQuery: React.Dispatch<React.SetStateAction<string>>
+    setExportQuery: Dispatch<React.SetStateAction<string>>
 }
 
 const CityIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
@@ -31,18 +33,9 @@ const CityIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
 
     useEffect(() => {
         // get the countries
-        getAllCountries().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of countries, then we fill our state with them
-                if (response.data) {
-                    setCountries(filterData(response.data, 'name', ['All Countries']));
-                }
-            }
-        });
+        submitRequest(getAllCountries, [], (response) => {
+            setCountries(filterData(response, 'name', ['All Countries']));
+        }, setFilterErrors);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -55,12 +48,7 @@ const CityIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     };
 
     const handleFilter = () => {
-        setExportQuery(createFilterQueryParam(filters));
-
-        updateState({
-            filter: reset ? undefined : filters,
-            ...initialQueryState,
-        });
+        genericFilterHandler(setExportQuery, filters, updateState, reset);
     }
 
     useEffect(() => {
@@ -118,7 +106,7 @@ const CityIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                             </Col>
                                         </Row>
 
-                                        <FilterFormFooter resetFilter={resetFilter} />
+                                        <FilterFormFooter resetFilter={resetFilter}/>
                                     </Form>
                                 )
                             }

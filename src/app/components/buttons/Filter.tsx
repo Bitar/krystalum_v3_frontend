@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {Dispatch} from 'react';
 import clsx from 'clsx';
 import {Button} from 'react-bootstrap';
 
 type Props = {
     target: string,
     showFilter: boolean,
-    setShowFilter: React.Dispatch<React.SetStateAction<boolean>>,
+    setShowFilter: Dispatch<React.SetStateAction<boolean>>,
     className?: string
 }
 

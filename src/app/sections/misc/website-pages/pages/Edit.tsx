@@ -1,23 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import {useNavigate, useParams} from 'react-router-dom';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
-
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
+import React, {useEffect, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {defaultFormFields, FormFields, WebsitePageSchema} from '../core/form';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import {getWebsitePage, updateWebsitePage} from '../../../../requests/misc/WebsitePage';
+import {genericOnChangeHandler} from '../../../../helpers/form';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
+import {Sections} from '../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {WebsitePage} from '../../../../models/misc/WebsitePage';
+
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {getWebsitePage, updateWebsitePage} from '../../../../requests/misc/WebsitePage';
+import {defaultFormFields, FormFields, WebsitePageSchema} from '../core/form';
 
 
 const WebsitePageEdit: React.FC = () => {
@@ -35,13 +34,11 @@ const WebsitePageEdit: React.FC = () => {
     useEffect(() => {
         if (id) {
             // get the website page we need to edit from the database
-            getWebsitePage(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the website page to edit so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    navigate('/error/400');
+            submitRequest(getWebsitePage, [parseInt(id)], (response) => {
+                let errorPage = getErrorPage(response);
+
+                if (errorPage) {
+                    navigate(errorPage);
                 } else {
                     // we were able to fetch current website page to edit
                     setWebsitePage(response);
@@ -67,29 +64,21 @@ const WebsitePageEdit: React.FC = () => {
     const handleEdit = (e: any) => {
         if (websitePage) {
             // we need to update the website page's data by doing API call with form
-            updateWebsitePage(websitePage.id, form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // show errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error
-                    setFormErrors([GenericErrorMessage]);
-                } else {
-                    // we got the updated website page so we're good
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('website page', Actions.EDIT, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    });
+            submitRequest(updateWebsitePage, [websitePage.id, form], (response) => {
+                // we got the updated website page so we're good
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('website page', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                });
 
-                    navigate(`/misc/website-pages`);
-                }
-            });
+                navigate(`/misc/website-pages`);
+            }, setFormErrors);
         }
     }
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Website Page" />
+            <KTCardHeader text="Edit Website Page"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

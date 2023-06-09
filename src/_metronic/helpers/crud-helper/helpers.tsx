@@ -33,7 +33,9 @@ function stringifyRequestQuery(state: QueryState): string {
     includeParts.push(`include[]=${value}`)
   })
 
-  return [pagination, sort, search, filter, includeParts]
+  let include = includeParts.join('&')
+
+  return [pagination, sort, search, filter, include]
     .filter((f) => f)
     .join('&')
     .toLowerCase()

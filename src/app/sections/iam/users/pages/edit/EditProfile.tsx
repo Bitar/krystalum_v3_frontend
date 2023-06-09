@@ -1,21 +1,24 @@
-import React, {useEffect, useState} from 'react';
 import {ErrorMessage, Field, Form, Formik, FormikProps} from 'formik';
-import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
-import MultiSelect from '../../../../../components/forms/MultiSelect';
-import {defaultFormFields, EditUserSchema, FormFields} from '../../core/form';
-import {User} from '../../../../../models/iam/User';
-import {Role} from '../../../../../models/iam/Role';
-import {useKrysApp} from '../../../../../modules/general/KrysApp';
-import {updateUser} from '../../../../../requests/iam/User';
-import axios from 'axios';
-import {getAllRoles} from '../../../../../requests/iam/Role';
-import {extractErrors} from '../../../../../helpers/requests';
-import {GenericErrorMessage, genericHandleSingleFile, genericOnChangeHandler} from '../../../../../helpers/form';
-import {Actions, KrysToastType} from '../../../../../helpers/variables';
-import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
-import FormErrors from '../../../../../components/forms/FormErrors';
+import React, {useEffect, useState} from 'react';
+import Select from 'react-select';
 import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers';
+import FormErrors from '../../../../../components/forms/FormErrors';
+import KrysFormFooter from '../../../../../components/forms/KrysFormFooter';
+import KrysFormLabel from '../../../../../components/forms/KrysFormLabel';
+import {AlertMessageGenerator} from '../../../../../helpers/AlertMessageGenerator';
+import {
+    genericHandleSingleFile,
+    genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler
+} from '../../../../../helpers/form';
+import {submitRequest} from '../../../../../helpers/requests';
+import {Actions, KrysToastType} from '../../../../../helpers/variables';
+import {Role} from '../../../../../models/iam/Role';
+import {User} from '../../../../../models/iam/User';
+import {useKrysApp} from '../../../../../modules/general/KrysApp';
+import {getAllRoles} from '../../../../../requests/iam/Role';
+import {updateUser} from '../../../../../requests/iam/User';
+import {defaultFormFields, EditUserSchema, FormFields} from '../../core/form';
 
 interface Props {
     user: User | null
@@ -24,7 +27,7 @@ interface Props {
 const EditProfile: React.FC<Props> = ({user}) => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false);
+    const [selectedRoles, setSelectedRoles] = useState<Role[]>([]);
 
     const [roles, setRoles] = useState<Role[]>([]);
 
@@ -32,27 +35,18 @@ const EditProfile: React.FC<Props> = ({user}) => {
 
     useEffect(() => {
         if (user) {
-            setIsResourceLoaded(true);
-
             const {image, roles, ...currentUser} = user
 
             // was able to get the user we want to edit
             // the form is the same as user but without the image
-            setForm({...currentUser, roles: user.roles.map((role: { id: any; }) => role.id)});
+            setForm({...currentUser, roles: roles.map((role: { id: any; }) => role.id)});
+
+            setSelectedRoles(roles);
 
             // get the roles so we can edit the user's roles
-            getAllRoles().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of roles, then we fill our state with them
-                    if (response.data) {
-                        setRoles(response.data);
-                    }
-                }
-            });
+            submitRequest(getAllRoles, [], (response) => {
+                setRoles(response);
+            }, setFormErrors);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
@@ -70,24 +64,15 @@ const EditProfile: React.FC<Props> = ({user}) => {
     };
 
     const handleEdit = (e: any) => {
-        if(user) {
+        if (user) {
             // send API request to create the user
-            updateUser(user.id, form).then(response => {
-                    if (axios.isAxiosError(response)) {
-                        // we need to show the errors
-                        setFormErrors(extractErrors(response));
-                    } else if (response === undefined) {
-                        // show generic error message
-                        setFormErrors([GenericErrorMessage])
-                    } else {
-                        // we were able to store the user
-                        krysApp.setAlert({
-                            message: new AlertMessageGenerator('user', Actions.EDIT, KrysToastType.SUCCESS).message,
-                            type: KrysToastType.SUCCESS
-                        });
-                    }
-                }
-            );
+            submitRequest(updateUser, [user.id, form], (response) => {
+                // we were able to store the user
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('user', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                });
+            }, setFormErrors);
         }
     };
 
@@ -144,9 +129,18 @@ const EditProfile: React.FC<Props> = ({user}) => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Roles" isRequired={true}/>
 
-                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={roles}
-                                                 defaultValue={user?.roles} form={form} setForm={setForm}
-                                                 name={'roles'}/>
+                                    <Select isMulti name={'roles'} value={selectedRoles}
+                                            options={roles}
+                                            getOptionLabel={(instance) => instance.name}
+                                            getOptionValue={(instance) => instance.id.toString()}
+                                            placeholder={`Select one or more roles`}
+                                            onChange={(e) => {
+                                                genericMultiSelectOnChangeHandler(e, form, setForm, 'roles');
+
+                                                let newRoles: Role[] = e as Role[];
+
+                                                setSelectedRoles(newRoles);
+                                            }}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="roles" className="mt-2"/>

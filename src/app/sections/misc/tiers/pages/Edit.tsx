@@ -1,23 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import {useNavigate, useParams} from 'react-router-dom';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
-
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
+import React, {useEffect, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {defaultFormFields, FormFields, TierSchema} from '../core/form';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import {getTier, updateTier} from '../../../../requests/misc/Tier';
+import {genericOnChangeHandler} from '../../../../helpers/form';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
+import {Sections} from '../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {Tier} from '../../../../models/misc/Tier';
+
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {getTier, updateTier} from '../../../../requests/misc/Tier';
+import {defaultFormFields, FormFields, TierSchema} from '../core/form';
 
 const TierEdit: React.FC = () => {
     const [tier, setTier] = useState<Tier | null>(null);
@@ -34,13 +33,11 @@ const TierEdit: React.FC = () => {
     useEffect(() => {
         if (id) {
             // get the tier we need to edit from the database
-            getTier(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the tier to edit so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    navigate('/error/400');
+            submitRequest(getTier, [parseInt(id)], (response) => {
+                let errorPage = getErrorPage(response);
+
+                if (errorPage) {
+                    navigate(errorPage);
                 } else {
                     // we were able to fetch current tier to edit
                     setTier(response);
@@ -66,29 +63,21 @@ const TierEdit: React.FC = () => {
     const handleEdit = (e: any) => {
         if (tier) {
             // we need to update the tier's data by doing API call with form
-            updateTier(tier.id, form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // show errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error
-                    setFormErrors([GenericErrorMessage]);
-                } else {
-                    // we got the updated tier so we're good
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('tier', Actions.EDIT, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    })
+            submitRequest(updateTier, [tier.id, form], (response) => {
+                // we got the updated tier so we're good
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('tier', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                });
 
-                    navigate(`/misc/tiers`);
-                }
-            });
+                navigate(`/misc/tiers`);
+            }, setFormErrors);
         }
     }
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Tier" />
+            <KTCardHeader text="Edit Tier"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

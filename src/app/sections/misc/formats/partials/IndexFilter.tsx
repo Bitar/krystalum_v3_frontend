@@ -1,23 +1,25 @@
-import React, {useEffect, useRef, useState} from 'react';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
+import React, {Dispatch, useEffect, useRef, useState} from 'react';
 import {Col, Collapse, Row} from 'react-bootstrap';
+import Select from 'react-select';
+import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
+import FormErrors from '../../../../components/forms/FormErrors';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import {
+    genericFilterHandler,
+    genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler
+} from '../../../../helpers/form';
+import {submitRequest} from "../../../../helpers/requests";
+import {BuyingModel} from '../../../../models/misc/BuyingModel';
 
 import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
-import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
-import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
-import {initialQueryState} from '../../../../../_metronic/helpers';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
-import {createFilterQueryParam, extractErrors} from "../../../../helpers/requests";
-import Select from 'react-select';
-import axios from 'axios';
 import {getAllBuyingModels} from '../../../../requests/misc/BuyingModel';
-import {BuyingModel} from '../../../../models/misc/BuyingModel';
-import FormErrors from '../../../../components/forms/FormErrors';
+import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
 
 interface Props {
     showFilter: boolean,
-    setExportQuery: React.Dispatch<React.SetStateAction<string>>
+    setExportQuery: Dispatch<React.SetStateAction<string>>
 }
 
 const FormatIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
@@ -29,16 +31,9 @@ const FormatIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     const [buyingModels, setBuyingModels] = useState<BuyingModel[]>([]);
 
     useEffect(() => {
-        getAllBuyingModels().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else if (response.data) {
-                // if we were able to get the list of buying models, then we fill our state with them
-                setBuyingModels(response.data);
-            }
-        });
+        submitRequest(getAllBuyingModels, [], (response) => {
+            setBuyingModels(response);
+        }, setFilterErrors);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -52,12 +47,7 @@ const FormatIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     };
 
     const handleFilter = () => {
-        setExportQuery(createFilterQueryParam(filters));
-
-        updateState({
-            filter: reset ? undefined : filters,
-            ...initialQueryState,
-        });
+        genericFilterHandler(setExportQuery, filters, updateState, reset);
     }
 
     useEffect(() => {

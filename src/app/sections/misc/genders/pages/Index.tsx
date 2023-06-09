@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react'
 
 import {QUERIES} from '../../../../../_metronic/helpers'
-import {PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {EXPORT_ENDPOINT, getGenders} from '../../../../requests/misc/Gender';
-import GenderIndexFilter from '../partials/IndexFilter';
-import {GendersColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 import KrysIndex from '../../../../components/tables/KrysIndex';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {Sections} from '../../../../helpers/sections';
+import {PageTypes} from '../../../../helpers/variables';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {EXPORT_ENDPOINT, getGenders} from '../../../../requests/misc/Gender';
+import {GendersColumns} from '../core/TableColumns';
+import GenderIndexFilter from '../partials/IndexFilter';
 
 const GenderIndex = () => {
     const krysApp = useKrysApp();

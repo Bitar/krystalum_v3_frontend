@@ -1,12 +1,12 @@
 import {Column} from 'react-table'
-import {TextCell} from '../../../../modules/table/columns/TextCell'
-import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
-import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {QUERIES} from '../../../../../_metronic/helpers'
 import {BuyingModel} from '../../../../models/misc/BuyingModel';
-import {Restricted} from "../../../../modules/auth/AuthAccessControl";
-import {BadgesCell} from "../../../../modules/table/columns/BadgesCell";
 import {PerformanceMetric} from "../../../../models/misc/PerformanceMetric";
+import {Restricted} from "../../../../modules/auth/AuthAccessControl";
+import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
+import {BadgesCell} from "../../../../modules/table/columns/BadgesCell";
+import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
+import {TextCell} from '../../../../modules/table/columns/TextCell'
 
 const BuyingModelsColumns: ReadonlyArray<Column<BuyingModel>> = [
     {

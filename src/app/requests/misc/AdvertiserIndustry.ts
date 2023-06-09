@@ -11,8 +11,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/advertiser-industries`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllAdvertiserIndustries = async (): Promise<AdvertiserIndustryList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<AdvertiserIndustryList>) => response.data).catch((error) => {
+export const getAllAdvertiserIndustries = async (): Promise<AdvertiserIndustry[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<AdvertiserIndustryList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -24,9 +24,7 @@ export const getAdvertiserIndustries = (query?: String): Promise<AdvertiserIndus
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<AdvertiserIndustryPaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<AdvertiserIndustryPaginate>) => response.data);
 }
 
 export const getAdvertiserIndustry = async (id: number): Promise<AdvertiserIndustry | AxiosError | undefined> => {

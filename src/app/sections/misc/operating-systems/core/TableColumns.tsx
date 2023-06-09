@@ -1,10 +1,10 @@
 import {Column} from 'react-table'
-import {TextCell} from '../../../../modules/table/columns/TextCell'
-import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
-import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
 import {QUERIES} from '../../../../../_metronic/helpers'
 import {OperatingSystem} from '../../../../models/misc/OperatingSystem';
 import {Restricted} from "../../../../modules/auth/AuthAccessControl";
+import {ActionsCell} from '../../../../modules/table/columns/ActionsCell'
+import {CustomHeader} from '../../../../modules/table/columns/CustomHeader'
+import {TextCell} from '../../../../modules/table/columns/TextCell'
 
 const OperatingSystemsColumns: ReadonlyArray<Column<OperatingSystem>> = [
     {

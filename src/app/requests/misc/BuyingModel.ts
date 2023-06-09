@@ -6,8 +6,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/buying-models`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllBuyingModels = async (): Promise<BuyingModelList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<BuyingModelList>) => response.data).catch((error) => {
+export const getAllBuyingModels = async (): Promise<BuyingModel[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<BuyingModelList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -19,9 +19,7 @@ export const getBuyingModels = (query?: String): Promise<BuyingModelPaginate> =>
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<BuyingModelPaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<BuyingModelPaginate>) => response.data);
 }
 
 export const getBuyingModel = async (id: number): Promise<BuyingModel | AxiosError | undefined> => {

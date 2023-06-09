@@ -6,8 +6,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/buy-types`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllBuyTypes = async (): Promise<BuyTypeList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<BuyTypeList>) => response.data).catch((error) => {
+export const getAllBuyTypes = async (): Promise<BuyType[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<BuyTypeList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -19,9 +19,7 @@ export const getBuyTypes = (query?: String): Promise<BuyTypePaginate> => {
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<BuyTypePaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<BuyTypePaginate>) => response.data);
 }
 
 export const getBuyType = async (id: number): Promise<BuyType | AxiosError | undefined> => {

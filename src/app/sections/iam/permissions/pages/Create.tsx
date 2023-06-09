@@ -1,25 +1,22 @@
 import {ErrorMessage, Field, Form, Formik} from 'formik';
-import * as Yup from 'yup';
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import * as Yup from 'yup';
 
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
-import {defaultPermission, Permission} from '../../../../models/iam/Permission';
-import {storePermission} from '../../../../requests/iam/Permission';
-import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from "../../../../modules/general/KrysApp";
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {genericOnChangeHandler} from '../../../../helpers/form';
 import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {
-    AlertMessageGenerator
-} from "../../../../helpers/AlertMessageGenerator";
+import {submitRequest} from '../../../../helpers/requests';
 import {Sections} from "../../../../helpers/sections";
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
+import {defaultPermission, Permission} from '../../../../models/iam/Permission';
+import {useKrysApp} from "../../../../modules/general/KrysApp";
+import {storePermission} from '../../../../requests/iam/Permission';
 
 
 const PermissionCreate: React.FC = () => {
@@ -45,20 +42,12 @@ const PermissionCreate: React.FC = () => {
 
     const handleCreate = (e: any) => {
         // send API request to create the permission
-        storePermission(permission).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // it's permission for sure
-                    krysApp.setAlert({message: new AlertMessageGenerator('permission', Actions.CREATE, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                    navigate(`/iam/permissions`);
-                }
-            }
-        );
+        submitRequest(storePermission, [permission], (response) => {
+            // it's permission for sure
+            krysApp.setAlert({message: new AlertMessageGenerator('permission', Actions.CREATE, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+
+            navigate(`/iam/permissions`);
+        }, setFormErrors);
     };
 
     return (

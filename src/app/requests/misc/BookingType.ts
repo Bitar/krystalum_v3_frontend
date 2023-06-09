@@ -6,8 +6,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/booking-types`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllBookingTypes = async (): Promise<BookingTypeList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<BookingTypeList>) => response.data).catch((error) => {
+export const getAllBookingTypes = async (): Promise<BookingType[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<BookingTypeList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -19,9 +19,7 @@ export const getBookingTypes = (query?: String): Promise<BookingTypePaginate> =>
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<BookingTypePaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<BookingTypePaginate>) => response.data);
 }
 
 export const getBookingType = async (id: number): Promise<BookingType | AxiosError | undefined> => {

@@ -7,8 +7,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/video-players`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllVideoPlayers = async (): Promise<VideoPlayerList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<VideoPlayerList>) => response.data).catch((error) => {
+export const getAllVideoPlayers = async (): Promise<VideoPlayer[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<VideoPlayerList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -20,9 +20,7 @@ export const getVideoPlayers = (query?: String): Promise<VideoPlayerPaginate> =>
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<VideoPlayerPaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<VideoPlayerPaginate>) => response.data);
 }
 
 export const getVideoPlayer = async (id: number): Promise<VideoPlayer | AxiosError | undefined> => {

@@ -7,8 +7,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/formats`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllFormats = async (): Promise<FormatList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<FormatList>) => response.data).catch((error) => {
+export const getAllFormats = async (): Promise<Format[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<FormatList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -21,9 +21,7 @@ export const getFormats = (query?: String): Promise<FormatPaginate> => {
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<FormatPaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<FormatPaginate>) => response.data);
 }
 
 export const getFormat = async (id: number): Promise<Format | AxiosError | undefined> => {

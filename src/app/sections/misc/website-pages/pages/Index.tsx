@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
-
-import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {QUERIES} from '../../../../../_metronic/helpers';
+import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
+import KrysIndex from '../../../../components/tables/KrysIndex';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
 import {Sections} from '../../../../helpers/sections';
 import {PageTypes} from '../../../../helpers/variables';
-import {QUERIES} from '../../../../../_metronic/helpers';
+
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {EXPORT_ENDPOINT, getWebsitePages} from '../../../../requests/misc/WebsitePage';
 import {WebsitePagesColumns} from '../core/TableColumns';
 import WebsitePageIndexFilter from '../partials/IndexFilter';
-import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
-import {EXPORT_ENDPOINT, getWebsitePages} from '../../../../requests/misc/WebsitePage';
-import KrysIndex from '../../../../components/tables/KrysIndex';
 
 const WebsitePageIndex: React.FC = () => {
     const krysApp = useKrysApp();

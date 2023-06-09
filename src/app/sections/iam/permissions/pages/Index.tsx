@@ -1,15 +1,15 @@
 import {useEffect, useState} from 'react'
 
 import {QUERIES} from '../../../../../_metronic/helpers'
-import {EXPORT_ENDPOINT, getPermissions} from '../../../../requests/iam/Permission';
-import {PermissionsColumns} from '../core/TableColumns';
-import {PageTypes} from '../../../../helpers/variables';
-import PermissionIndexFilter from '../partials/IndexFilter';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 import KrysIndex from '../../../../components/tables/KrysIndex';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {Sections} from '../../../../helpers/sections';
+import {PageTypes} from '../../../../helpers/variables';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {EXPORT_ENDPOINT, getPermissions} from '../../../../requests/iam/Permission';
+import {PermissionsColumns} from '../core/TableColumns';
+import PermissionIndexFilter from '../partials/IndexFilter';
 
 const PermissionIndex = () => {
     const krysApp = useKrysApp();

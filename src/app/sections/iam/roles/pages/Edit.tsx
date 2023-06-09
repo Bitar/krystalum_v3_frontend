@@ -1,37 +1,35 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import {useNavigate, useParams} from 'react-router-dom';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
+import React, {useEffect, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
+import Select from 'react-select';
+import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
+import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import FormErrors from '../../../../components/forms/FormErrors';
+import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
+import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
+import {Sections} from "../../../../helpers/sections";
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
+import {Permission} from '../../../../models/iam/Permission';
 
 import {Role} from '../../../../models/iam/Role';
-import {Permission} from '../../../../models/iam/Permission';
-import {getAllPermissions} from '../../../../requests/iam/Permission';
-import {extractErrors} from '../../../../helpers/requests';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {getRole, updateRole} from '../../../../requests/iam/Role';
-import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
 import {useKrysApp} from "../../../../modules/general/KrysApp";
-import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import {Sections} from "../../../../helpers/sections";
-import MultiSelect from '../../../../components/forms/MultiSelect';
+import {getAllPermissions} from '../../../../requests/iam/Permission';
+import {getRole, updateRole} from '../../../../requests/iam/Role';
+import {defaultFormFields, FormFields, RoleSchema} from '../core/form';
 
 const RoleEdit: React.FC = () => {
-    const [role, setRole] = useState<Role|null>(null);
-    const [form, setForm] = useState<FormFields>(defaultFormFields)
-    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false);
+    const [role, setRole] = useState<Role | null>(null);
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
+    const [selectedPermissions, setSelectedPermissions] = useState<Permission[]>([]);
 
     const [permissions, setPermissions] = useState<Permission[]>([]);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const krysApp = useKrysApp();
-
     const navigate = useNavigate();
 
     let {id} = useParams();
@@ -39,47 +37,33 @@ const RoleEdit: React.FC = () => {
     useEffect(() => {
         if (id) {
             // get the permissions so we can edit the role's permissions
-            getAllPermissions().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else if (response.data) {
-                    // if we were able to get the list of permissions, then we fill our state with them
-                    setPermissions(response.data);
-                }
-            });
+            submitRequest(getAllPermissions, [], (response) => {
+                // if we were able to get the list of permissions, then we fill our state with them
+                setPermissions(response);
+            }, setFormErrors);
 
-            // get the permission we need to edit from the database
-            getRole(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the permission to edit so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    navigate('/error/400');
+            // get the role we need to edit from the database
+            submitRequest(getRole, [parseInt(id)], (response) => {
+                let errorPage = getErrorPage(response);
+
+                if (errorPage) {
+                    navigate(errorPage);
                 } else {
                     // we were able to fetch current permission to edit
                     setRole(response);
 
+                    krysApp.setPageTitle(generatePageTitle(Sections.IAM_ROLES, PageTypes.EDIT, response.name));
+
                     const {permissions, ...currentRole} = response
 
-                    setForm({...currentRole, permissions: response.permissions.map(permission => permission.id)});
+                    setForm({...currentRole, permissions: permissions.map((permission: Permission) => permission.id)});
+                    setSelectedPermissions(permissions);
                 }
-            });
+            })
+
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
-
-    useEffect(() => {
-        if(role) {
-            setIsResourceLoaded(true);
-
-            krysApp.setPageTitle(generatePageTitle(Sections.IAM_ROLES, PageTypes.EDIT, role.name))
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [role]);
 
     const onChangeHandler = (e: any) => {
         // in case of multi select, the element doesn't have a name because
@@ -88,27 +72,23 @@ const RoleEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        if(role) {
+        if (role) {
             // we need to update the permission's data by doing API call with form
-            updateRole(role.id, form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // show errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error
-                    setFormErrors([GenericErrorMessage]);
-                } else {
-                    // we got the updated permission so we're good
-                    krysApp.setAlert({message: new AlertMessageGenerator('role', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                    navigate(`/iam/roles`);
-                }
-            });
+            submitRequest(updateRole, [role.id, form], (response) => {
+                // we got the updated permission so we're good
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('role', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                });
+
+                navigate(`/iam/roles`);
+            }, setFormErrors);
         }
     }
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Role" />
+            <KTCardHeader text="Edit Role"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>
@@ -131,7 +111,17 @@ const RoleEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Permissions" isRequired={true}/>
 
-                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={permissions} defaultValue={role?.permissions} form={form} setForm={setForm} name={'permissions'} />
+                                    <Select isMulti name={'permissions'} value={selectedPermissions}
+                                            options={permissions}
+                                            getOptionLabel={(instance) => instance.name}
+                                            getOptionValue={(instance) => instance.id.toString()}
+                                            placeholder={`Select one or more permissions`}
+                                            onChange={(e) => {
+                                                genericMultiSelectOnChangeHandler(e, form, setForm, 'permissions');
+
+                                                let newPermissions : Permission[] = e as Permission[];
+                                                setSelectedPermissions(newPermissions);
+                                            }}/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="permissions" className="mt-2"/>

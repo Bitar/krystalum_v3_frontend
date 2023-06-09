@@ -7,8 +7,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/objectives`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllObjectives = async (): Promise<ObjectiveList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<ObjectiveList>) => response.data).catch((error) => {
+export const getAllObjectives = async (): Promise<Objective[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<ObjectiveList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -20,9 +20,7 @@ export const getObjectives = (query?: String): Promise<ObjectivePaginate> => {
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<ObjectivePaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<ObjectivePaginate>) => response.data);
 }
 
 export const getObjective = async (id: number): Promise<Objective | AxiosError | undefined> => {

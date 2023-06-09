@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react'
 
 import {QUERIES} from '../../../../../_metronic/helpers'
-import {PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {EXPORT_ENDPOINT, getAudiences} from '../../../../requests/misc/Audience';
-import AudienceIndexFilter from '../partials/IndexFilter';
-import {AudiencesColumns} from '../core/TableColumns';
 import {CreateCardAction, ExportCardAction, FilterCardAction} from '../../../../components/misc/CardAction';
 import KrysIndex from '../../../../components/tables/KrysIndex';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {Sections} from '../../../../helpers/sections';
+import {PageTypes} from '../../../../helpers/variables';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {EXPORT_ENDPOINT, getAudiences} from '../../../../requests/misc/Audience';
+import {AudiencesColumns} from '../core/TableColumns';
+import AudienceIndexFilter from '../partials/IndexFilter';
 
 const AudienceIndex = () => {
     const krysApp = useKrysApp();

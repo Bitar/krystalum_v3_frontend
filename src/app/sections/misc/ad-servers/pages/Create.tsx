@@ -1,22 +1,21 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
+import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import FormErrors from '../../../../components/forms/FormErrors';
+import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {genericOnChangeHandler} from '../../../../helpers/form';
 
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {submitRequest} from '../../../../helpers/requests';
 import {Sections} from '../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {AdServerSchema, defaultFormFields, FormFields} from '../core/form';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
-import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
 import {storeAdServer} from '../../../../requests/misc/AdServer';
-import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {AdServerSchema, defaultFormFields, FormFields} from '../core/form';
 
 const AdServerCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -36,29 +35,20 @@ const AdServerCreate: React.FC = () => {
 
     const handleCreate = (e: any) => {
         // send API request to create the ad server
-        storeAdServer(form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // it's ad server for sure
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('ad server', Actions.CREATE, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    })
+        submitRequest(storeAdServer, [form], (response) => {
+            // it's ad server for sure
+            krysApp.setAlert({
+                message: new AlertMessageGenerator('ad server', Actions.CREATE, KrysToastType.SUCCESS).message,
+                type: KrysToastType.SUCCESS
+            });
 
-                    navigate(`/misc/ad-servers`);
-                }
-            }
-        );
+            navigate(`/misc/ad-servers`);
+        }, setFormErrors);
     };
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New Ad Server" />
+            <KTCardHeader text="Create New Ad Server"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

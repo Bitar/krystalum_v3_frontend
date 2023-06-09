@@ -1,16 +1,15 @@
-import React, {useEffect, useState} from 'react'
-import axios from 'axios';
-import {useNavigate, useSearchParams} from 'react-router-dom'
 import {ErrorMessage, Field, Form, Formik} from 'formik'
+import React, {useEffect, useState} from 'react'
+import {useNavigate, useSearchParams} from 'react-router-dom'
+import FormErrors from '../../../components/forms/FormErrors';
+import FormSuccess from '../../../components/forms/FormSuccess';
+import KrysFormFooter from '../../../components/forms/KrysFormFooter';
+import KrysFormLabel from '../../../components/forms/KrysFormLabel';
+import {genericOnChangeHandler} from '../../../helpers/form';
+import {submitRequest} from '../../../helpers/requests';
+import {defaultResetPasswordFormFields, ResetPasswordFormFields, resetPasswordSchema} from '../core/_forms';
 
 import {resetPassword} from '../core/_requests'
-import KrysFormLabel from '../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../components/forms/KrysFormFooter';
-import {extractErrors} from '../../../helpers/requests';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../helpers/form';
-import FormErrors from '../../../components/forms/FormErrors';
-import {defaultResetPasswordFormFields, ResetPasswordFormFields, resetPasswordSchema} from '../core/_forms';
-import FormSuccess from '../../../components/forms/FormSuccess';
 
 export function ResetPassword() {
     const [searchParams] = useSearchParams();
@@ -19,7 +18,6 @@ export function ResetPassword() {
     const [email, setEmail] = useState<string>('');
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
-    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -60,28 +58,15 @@ export function ResetPassword() {
 
     const handlePasswordReset = (e: any) => {
         // do API call to reset user and send confirmation email
-        setLoading(true);
         // when done we need to redirect to login page
+        submitRequest(resetPassword, [form], (response) => {
+            setIsSuccess(true);
 
-        resetPassword(form).then(response => {
-                setLoading(false);
-
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    setIsSuccess(true);
-
-                    // we were able to store the user
-                    setTimeout(() => {
-                        navigate('/auth/login');
-                    }, 3000)
-                }
-            }
-        );
+            // we were able to store the user
+            setTimeout(() => {
+                navigate('/auth/login');
+            }, 3000)
+        }, setFormErrors);
     };
 
     return (
@@ -129,7 +114,7 @@ export function ResetPassword() {
                                 </div>
                             </div>
 
-                            <KrysFormFooter loading={loading} cancelUrl={'/auth/login'} useSeparator={false}/>
+                            <KrysFormFooter cancelUrl={'/auth/login'} useSeparator={false}/>
                         </Form>
                     )
                 }

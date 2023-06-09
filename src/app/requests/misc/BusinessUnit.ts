@@ -7,8 +7,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/business-units`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllBusinessUnits = async (): Promise<BusinessUnitList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<BusinessUnitList>) => response.data).catch((error) => {
+export const getAllBusinessUnits = async (): Promise<BusinessUnit[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<BusinessUnitList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -20,9 +20,7 @@ export const getBusinessUnits = (query?: String): Promise<BusinessUnitPaginate> 
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<BusinessUnitPaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<BusinessUnitPaginate>) => response.data);
 }
 
 export const getBusinessUnit = async (id: number): Promise<BusinessUnit | AxiosError | undefined> => {

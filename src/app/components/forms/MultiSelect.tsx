@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {Dispatch, useEffect, useRef} from 'react';
 import Select from 'react-select';
 import {genericMultiSelectOnChangeHandler} from '../../helpers/form';
 
@@ -7,7 +7,7 @@ interface Props {
     options: any[];
     defaultValue: any;
     form: any;
-    setForm: React.Dispatch<React.SetStateAction<any>>;
+    setForm: Dispatch<React.SetStateAction<any>>;
     name: string;
     doClear?: boolean;
 }

@@ -1,28 +1,28 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import Select from 'react-select';
-import {useNavigate} from 'react-router-dom';
 import {ErrorMessage, Field, Form, Formik, FormikProps} from 'formik';
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import Select from 'react-select';
+import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {
-    GenericErrorMessage, genericHandleSingleFile,
-    genericMultiSelectOnChangeHandler, genericOnChangeHandler
+    genericHandleSingleFile,
+    genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler
 } from '../../../../helpers/form';
-import {Role} from '../../../../models/iam/Role';
-import {getAllRoles} from '../../../../requests/iam/Role';
-import {extractErrors} from '../../../../helpers/requests';
+import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
+import {submitRequest} from '../../../../helpers/requests';
+import {Sections} from "../../../../helpers/sections";
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
+import {Role} from '../../../../models/iam/Role';
+import {useKrysApp} from "../../../../modules/general/KrysApp";
+import {getAllRoles} from '../../../../requests/iam/Role';
 import {storeUser} from '../../../../requests/iam/User';
 import {CreateUserSchema, defaultFormFields, FormFields} from '../core/form';
-import {useKrysApp} from "../../../../modules/general/KrysApp";
-import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import {Sections} from "../../../../helpers/sections";
 
 const UserCreate: React.FC = () => {
     const [form, setForm] = useState<FormFields>(defaultFormFields);
@@ -38,18 +38,9 @@ const UserCreate: React.FC = () => {
         krysApp.setPageTitle(generatePageTitle(Sections.IAM_USERS, PageTypes.CREATE));
 
         // get the roles so we can edit the user's roles
-        getAllRoles().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFormErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of roles, then we fill our state with them
-                if (response.data) {
-                    setRoles(response.data);
-                }
-            }
-        });
+        submitRequest(getAllRoles, [], (response) => {
+            setRoles(response);
+        }, setFormErrors);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -61,7 +52,7 @@ const UserCreate: React.FC = () => {
         // in case of multi select, the element doesn't have a name because
         // we get only a list of values from the select and not an element with target value and name
 
-        if(e.target.name !== 'image') {
+        if (e.target.name !== 'image') {
             genericOnChangeHandler(e, form, setForm);
         }
     };
@@ -72,25 +63,20 @@ const UserCreate: React.FC = () => {
 
     const handleCreate = (e: any) => {
         // send API request to create the user
-        storeUser(form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // we were able to store the user
-                    krysApp.setAlert({message: new AlertMessageGenerator('user', Actions.CREATE, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                    navigate(`/iam/users`);
-                }
-            }
-        );
+        submitRequest(storeUser, [form], (response) => {
+            // we were able to store the user
+            krysApp.setAlert({
+                message: new AlertMessageGenerator('user', Actions.CREATE, KrysToastType.SUCCESS).message,
+                type: KrysToastType.SUCCESS
+            });
+
+            navigate(`/iam/users`);
+        }, setFormErrors);
     };
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New User" />
+            <KTCardHeader text="Create New User"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

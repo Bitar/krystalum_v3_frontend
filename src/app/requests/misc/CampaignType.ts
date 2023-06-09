@@ -6,8 +6,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/campaign-types`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllCampaignTypes = async (): Promise<CampaignTypeList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all').then((response: AxiosResponse<CampaignTypeList>) => response.data).catch((error) => {
+export const getAllCampaignTypes = async (): Promise<CampaignType[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<CampaignTypeList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -19,9 +19,7 @@ export const getCampaignTypes = (query?: String): Promise<CampaignTypePaginate> 
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<CampaignTypePaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<CampaignTypePaginate>) => response.data);
 }
 
 export const getCampaignType = async (id: number): Promise<CampaignType | AxiosError | undefined> => {

@@ -1,23 +1,25 @@
-import React, {useEffect, useRef, useState} from 'react';
-import axios from 'axios';
-import Select from 'react-select';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
+import React, {Dispatch, useEffect, useRef, useState} from 'react';
 import {Col, Collapse, Row} from 'react-bootstrap';
-
-import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
-import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
-import {createFilterQueryParam, extractErrors} from '../../../../helpers/requests';
-import {GenericErrorMessage, genericMultiSelectOnChangeHandler, genericOnChangeHandler} from '../../../../helpers/form';
-import {initialQueryState} from '../../../../../_metronic/helpers';
+import Select from 'react-select';
+import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
 import FormErrors from '../../../../components/forms/FormErrors';
 import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import {
+    genericFilterHandler,
+    genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler
+} from '../../../../helpers/form';
+import {submitRequest} from '../../../../helpers/requests';
 import {Permission} from '../../../../models/iam/Permission';
+
+import {useQueryRequest} from '../../../../modules/table/QueryRequestProvider';
 import {getAllPermissions} from '../../../../requests/iam/Permission';
-import FilterFormFooter from '../../../../components/forms/FilterFormFooter';
+import {defaultFilterFields, FilterFields, FilterSchema} from '../core/filterForm';
 
 interface Props {
     showFilter: boolean,
-    setExportQuery: React.Dispatch<React.SetStateAction<string>>
+    setExportQuery: Dispatch<React.SetStateAction<string>>
 }
 
 const RoleIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
@@ -30,20 +32,9 @@ const RoleIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
 
     useEffect(() => {
         // get the permissions so we can add them to the filter dropdown
-        getAllPermissions().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFilterErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFilterErrors([GenericErrorMessage])
-            } else {
-                // if we were able to get the list of roles, then we fill our state with them
-                if (response.data) {
-                    setPermissions(response.data);
-                } else {
-                    setPermissions([]);
-                }
-            }
-        });
+        submitRequest(getAllPermissions, [], (response) => {
+            setPermissions(response);
+        }, setFilterErrors);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -58,12 +49,7 @@ const RoleIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
     };
 
     const handleFilter = () => {
-        setExportQuery(createFilterQueryParam(filters));
-
-        updateState({
-            filter: reset ? undefined : filters,
-            ...initialQueryState,
-        });
+        genericFilterHandler(setExportQuery, filters, updateState, reset);
     }
 
     useEffect(() => {
@@ -109,12 +95,12 @@ const RoleIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                                 <KrysFormLabel text="Permissions" isRequired={false}/>
 
                                                 <Select isMulti name="permissions"
-                                                         options={permissions}
-                                                         getOptionLabel={(permission) => permission.name}
-                                                         getOptionValue={(permission) => permission.id.toString()}
-                                                         onChange={multiSelectChangeHandler}
-                                                         ref={selectRef}
-                                                         placeholder='Filter by permission'/>
+                                                        options={permissions}
+                                                        getOptionLabel={(permission) => permission.name}
+                                                        getOptionValue={(permission) => permission.id.toString()}
+                                                        onChange={multiSelectChangeHandler}
+                                                        ref={selectRef}
+                                                        placeholder='Filter by permission'/>
 
                                                 <div className="mt-1 text-danger">
                                                     <ErrorMessage name="permissions" className="mt-2"/>
@@ -122,7 +108,7 @@ const RoleIndexFilter: React.FC<Props> = ({showFilter, setExportQuery}) => {
                                             </Col>
                                         </Row>
 
-                                        <FilterFormFooter resetFilter={resetFilter} />
+                                        <FilterFormFooter resetFilter={resetFilter}/>
                                     </Form>
                                 )
                             }

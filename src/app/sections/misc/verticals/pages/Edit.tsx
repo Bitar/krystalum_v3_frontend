@@ -1,35 +1,31 @@
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
+import Select from 'react-select';
 
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {
-    GenericErrorMessage,
-    genericOnChangeHandler
-} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import {indentOptions} from '../../../../components/forms/IndentOptions';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {defaultFormFields, FormFields, VerticalSchema} from '../core/form';
-import {getAllVerticals, getVertical, updateVertical} from "../../../../requests/misc/Vertical";
-import {Vertical} from "../../../../models/misc/Vertical";
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import SingleSelect from '../../../../components/forms/SingleSelect';
+import {genericOnChangeHandler, genericSingleSelectOnChangeHandler} from '../../../../helpers/form';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
+import {Sections} from '../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
+import {Vertical} from "../../../../models/misc/Vertical";
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {getAllVerticals, getVertical, updateVertical} from "../../../../requests/misc/Vertical";
+import {defaultFormFields, FormFields, VerticalSchema} from '../core/form';
 
 const VerticalEdit: React.FC = () => {
     const [vertical, setVertical] = useState<Vertical | null>(null);
 
-    const [form, setForm] = useState<FormFields>(defaultFormFields)
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
+    const [selectedParent, setSelectedParent] = useState<Vertical|null>(null);
     const [formErrors, setFormErrors] = useState<string[]>([]);
-
-    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
     const [verticals, setVerticals] = useState<Vertical[]>([]);
 
@@ -42,21 +38,22 @@ const VerticalEdit: React.FC = () => {
     useEffect(() => {
         if (id) {
             // get the vertical we need to edit from the database
-            getVertical(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the vertical to edit, so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    navigate('/error/400');
+            submitRequest(getVertical, [parseInt(id)], (response) => {
+                let errorPage = getErrorPage(response);
+
+                if (errorPage) {
+                    navigate(errorPage);
                 } else {
                     // we were able to fetch current vertical to edit
                     setVertical(response);
+
+                    krysApp.setPageTitle(generatePageTitle(Sections.MISC_VERTICALS, PageTypes.EDIT, response.name));
 
                     const {parent, ...currentVertical} = response;
 
                     if (parent) {
                         setForm({...currentVertical, parent_id: parent.id})
+                        setSelectedParent(parent);
                     } else {
                         setForm({...currentVertical})
                     }
@@ -64,31 +61,12 @@ const VerticalEdit: React.FC = () => {
             });
 
             // get the verticals
-            getAllVerticals().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of verticals, then we fill our state with them
-                    if (response.data) {
-                        setVerticals(response.data);
-                    }
-                }
-            });
+            submitRequest(getAllVerticals, [], (response) => {
+                setVerticals(response);
+            }, setFormErrors);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
-
-    useEffect(() => {
-        if (vertical) {
-            krysApp.setPageTitle(generatePageTitle(Sections.MISC_VERTICALS, PageTypes.EDIT, vertical.name));
-
-            setIsResourceLoaded(true);
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [vertical]);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
@@ -97,23 +75,15 @@ const VerticalEdit: React.FC = () => {
     const handleEdit = (e: any) => {
         if (vertical) {
             // we need to update the vertical's data by doing API call with form
-            updateVertical(vertical.id, form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // show errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error
-                    setFormErrors([GenericErrorMessage]);
-                } else {
-                    // we got the booking vertical so we're good
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('vertical', Actions.EDIT, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    });
+            submitRequest(updateVertical, [vertical.id, form], (response) => {
+                // we got the booking vertical so we're good
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('vertical', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                });
 
-                    navigate(`/misc/verticals`);
-                }
-            });
+                navigate(`/misc/verticals`);
+            }, setFormErrors);
         }
     }
 
@@ -142,9 +112,19 @@ const VerticalEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Vertical Parent" isRequired={false}/>
 
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={verticals}
-                                                  defaultValue={vertical?.parent} form={form} setForm={setForm}
-                                                  name='parent_id' isClearable={true} showHierarchy={true}/>
+                                    <Select name={'parent_id'} value={selectedParent}
+                                            options={verticals}
+                                            getOptionLabel={(instance) => instance.name}
+                                            getOptionValue={(instance) => instance.id.toString()}
+                                            placeholder={'Select parent vertical'}
+                                            isClearable={true}
+                                            formatOptionLabel={indentOptions}
+                                            onChange={(e) => {
+                                                genericSingleSelectOnChangeHandler(e, form, setForm, 'parent_id');
+
+                                                setSelectedParent(e as Vertical);
+                                            }
+                                            }/>
 
                                     <div className="mt-3 text-danger">
                                         {errors?.parent_id ? errors?.parent_id : null}

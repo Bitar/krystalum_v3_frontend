@@ -1,42 +1,43 @@
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
+import Select from 'react-select';
 
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {
-    GenericErrorMessage,
-    genericOnChangeHandler
-} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import {indentOptions} from '../../../../components/forms/IndentOptions';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {defaultFormFields, FormFields, FormatSchema} from '../core/form';
-import {getAllFormats, getFormat, updateFormat} from "../../../../requests/misc/Format";
-import {Format} from "../../../../models/misc/Format";
-import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import {getAllBuyingModels} from "../../../../requests/misc/BuyingModel";
-import {BuyingModel} from "../../../../models/misc/BuyingModel";
-import MultiSelect from "../../../../components/forms/MultiSelect";
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysSwitch from "../../../../components/forms/KrysSwitch";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
 import {filterData} from '../../../../helpers/dataManipulation';
-import SingleSelect from '../../../../components/forms/SingleSelect';
+import {
+    genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler,
+    genericSingleSelectOnChangeHandler
+} from '../../../../helpers/form';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
+import {Sections} from '../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
+import {BuyingModel} from "../../../../models/misc/BuyingModel";
+import {Format} from "../../../../models/misc/Format";
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {getAllBuyingModels} from "../../../../requests/misc/BuyingModel";
+import {getAllFormats, getFormat, updateFormat} from "../../../../requests/misc/Format";
+import {defaultFormFields, FormatSchema, FormFields} from '../core/form';
 
 const FormatEdit: React.FC = () => {
     const [format, setFormat] = useState<Format | null>(null);
 
-    const [form, setForm] = useState<FormFields>(defaultFormFields)
+    const [form, setForm] = useState<FormFields>(defaultFormFields);
+    const [selectedParent, setSelectedParent] = useState<Format | null>(null);
+    const [selectedBuyingModels, setSelectedBuyingModels] = useState<BuyingModel[]>([]);
     const [formErrors, setFormErrors] = useState<string[]>([]);
 
     const [formats, setFormats] = useState<Format[]>([]);
     const [buyingModels, setBuyingModels] = useState<BuyingModel[]>([]);
-    const [isResourceLoaded, setIsResourceLoaded] = useState<boolean>(false)
 
     const krysApp = useKrysApp();
 
@@ -47,97 +48,67 @@ const FormatEdit: React.FC = () => {
     useEffect(() => {
         if (id) {
             // get the format we need to edit from the database
-            getFormat(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the format to edit, so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    navigate('/error/400');
+            submitRequest(getFormat, [parseInt(id)], (response) => {
+                let errorPage = getErrorPage(response);
+
+                if (errorPage) {
+                    navigate(errorPage);
                 } else {
                     // we were able to fetch current format to edit
                     setFormat(response);
 
+                    krysApp.setPageTitle(generatePageTitle(Sections.MISC_FORMATS, PageTypes.EDIT, response.name));
+
                     const {buyingModels, parent, ...currentFormat} = response
 
-                    if(parent) {
+                    if (parent) {
                         setForm({
                             ...currentFormat,
-                            buying_model_ids: response.buyingModels.map(buyingModel => buyingModel.id),
+                            buying_model_ids: buyingModels.map((buyingModel: BuyingModel) => buyingModel.id),
                             parent_id: parent.id
                         });
+
+                        setSelectedBuyingModels(buyingModels);
+                        setSelectedParent(parent);
                     } else {
                         setForm({
                             ...currentFormat,
-                            buying_model_ids: response.buyingModels.map(buyingModel => buyingModel.id)
+                            buying_model_ids: buyingModels.map((buyingModel: BuyingModel) => buyingModel.id)
                         });
+
+                        setSelectedBuyingModels(buyingModels);
                     }
                 }
             });
 
             // get the formats
-            getAllFormats().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // if we were able to get the list of formats, then we fill our state with them
-                    if (response.data) {
-                        setFormats(filterData(response.data, 'name', ['All Formats']));
-                    }
-                }
-            });
+            submitRequest(getAllFormats, [], (response) => {
+                setFormats(filterData(response, 'name', ['All Formats']));
+            }, setFormErrors);
 
-            getAllBuyingModels().then(response => {
-                if (axios.isAxiosError(response)) {
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    setFormErrors([GenericErrorMessage]);
-                } else {
-                    // if we were able to get the list of buying models, then we fill our state with them
-                    if (response.data) {
-                        setBuyingModels(response.data);
-                    }
-                }
-            });
+            submitRequest(getAllBuyingModels, [], (response) => {
+                setBuyingModels(response);
+            }, setFormErrors);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
-
-    useEffect(() => {
-        if (format) {
-            setIsResourceLoaded(true);
-
-            krysApp.setPageTitle(generatePageTitle(Sections.MISC_FORMATS, PageTypes.EDIT, format.name))
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [format]);
 
     const onChangeHandler = (e: any) => {
         genericOnChangeHandler(e, form, setForm);
     };
 
     const handleEdit = (e: any) => {
-        if(format) {
+        if (format) {
             // we need to update the format's data by doing API call with form
-            updateFormat(format.id, form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // show errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error
-                    setFormErrors([GenericErrorMessage]);
-                } else {
-                    // we got the booking format so we're good
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('format', Actions.EDIT, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    });
+            submitRequest(updateFormat, [format.id, form], (response) => {
+                // we got the booking format so we're good
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('format', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                });
 
-                    navigate(`/misc/formats`);
-                }
-            });
+                navigate(`/misc/formats`);
+            }, setFormErrors);
         }
     }
 
@@ -190,9 +161,17 @@ const FormatEdit: React.FC = () => {
                                 {form.has_buying_model > 0 && <div className="mb-7">
                                     <KrysFormLabel text="Buying models" isRequired={true}/>
 
-                                    <MultiSelect isResourceLoaded={isResourceLoaded} options={buyingModels}
-                                                 defaultValue={format?.buyingModels} form={form} setForm={setForm}
-                                                 name={'buying_model_ids'}/>
+                                    <Select isMulti name={'buying_model_ids'} value={selectedBuyingModels}
+                                            options={buyingModels}
+                                            getOptionLabel={(instance) => instance.name}
+                                            getOptionValue={(instance) => instance.id.toString()}
+                                            placeholder={`Select one or more buying models`}
+                                            onChange={(e) => {
+                                                genericMultiSelectOnChangeHandler(e, form, setForm, 'buying_model_ids');
+
+                                                setSelectedBuyingModels(e as BuyingModel[]);
+                                            }
+                                            }/>
 
                                     <div className="mt-1 text-danger">
                                         <ErrorMessage name="buying_model_ids" className="mt-2"/>
@@ -202,7 +181,19 @@ const FormatEdit: React.FC = () => {
                                 <div className="mb-7">
                                     <KrysFormLabel text="Format Parent" isRequired={false}/>
 
-                                    <SingleSelect isResourceLoaded={isResourceLoaded} options={formats} defaultValue={format?.parent} form={form} setForm={setForm} name='parent_id' showHierarchy={true}/>
+                                    <Select name={'parent_id'} value={selectedParent}
+                                            options={formats}
+                                            getOptionLabel={(instance) => instance.name}
+                                            getOptionValue={(instance) => instance.id.toString()}
+                                            placeholder={'Select parent format'}
+                                            isClearable={true}
+                                            formatOptionLabel={indentOptions}
+                                            onChange={(e) => {
+                                                genericSingleSelectOnChangeHandler(e, form, setForm, 'parent_id');
+
+                                                setSelectedParent(e as Format);
+                                            }
+                                            }/>
 
                                     <div className="mt-3 text-danger">
                                         {errors?.parent_id ? errors?.parent_id : null}

@@ -1,28 +1,26 @@
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
 
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
 import FormErrors from '../../../../components/forms/FormErrors';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {getCountry, updateCountry} from '../../../../requests/misc/Country';
-import {CountrySchema} from '../core/form';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import {defaultFormFields, FormFields} from "../core/form";
+import {genericOnChangeHandler} from '../../../../helpers/form';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
+import {Sections} from '../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {Country} from '../../../../models/misc/Country';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {getCountry, updateCountry} from '../../../../requests/misc/Country';
+import {CountrySchema, defaultFormFields, FormFields} from '../core/form';
 
 
 const CountryEdit: React.FC = () => {
-    const [country, setCountry] = useState<Country|null>(null);
+    const [country, setCountry] = useState<Country | null>(null);
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -36,13 +34,11 @@ const CountryEdit: React.FC = () => {
     useEffect(() => {
         if (id) {
             // get the country we need to edit from the database
-            getCountry(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the country to edit, so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    navigate('/error/400');
+            submitRequest(getCountry, [parseInt(id)], (response) => {
+                let errorPage = getErrorPage(response);
+
+                if (errorPage) {
+                    navigate(errorPage);
                 } else {
                     // we were able to fetch current country to edit
                     setCountry(response);
@@ -54,7 +50,7 @@ const CountryEdit: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        if(country) {
+        if (country) {
             krysApp.setPageTitle(generatePageTitle(Sections.MISC_COUNTRIES, PageTypes.EDIT, country.name))
         }
 
@@ -66,27 +62,23 @@ const CountryEdit: React.FC = () => {
     };
 
     const handleEdit = () => {
-        if(country) {
+        if (country) {
             // we need to update the country's data by doing API call with form
-            updateCountry(country.id, form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // show errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error
-                    setFormErrors([GenericErrorMessage]);
-                } else {
-                    // we got the booking country so we're good
-                    krysApp.setAlert({message: new AlertMessageGenerator('country', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
-                    navigate(`/misc/countries`);
-                }
-            });
+            submitRequest(updateCountry, [country.id, form], (response) => {
+                // we got the booking country so we're good
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('country', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                });
+
+                navigate(`/misc/countries`);
+            }, setFormErrors);
         }
     }
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Country" />
+            <KTCardHeader text="Edit Country"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

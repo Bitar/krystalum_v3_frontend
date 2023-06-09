@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {Dispatch, useEffect, useRef} from 'react';
 import {genericSingleSelectOnChangeHandler} from '../../helpers/form';
 import Select from 'react-select';
 import {indentOptions} from './IndentOptions';
@@ -8,7 +8,7 @@ interface Props {
     options: any[];
     defaultValue: any;
     form: any;
-    setForm: React.Dispatch<React.SetStateAction<any>>;
+    setForm: Dispatch<React.SetStateAction<any>>;
     name: string;
     showHierarchy?: boolean;
     isClearable?: boolean;

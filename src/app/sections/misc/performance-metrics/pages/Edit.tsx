@@ -1,26 +1,25 @@
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
-import {defaultFormFields, FormFields, PerformanceMetricSchema} from '../core/form';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {useNavigate, useParams} from 'react-router-dom';
-import axios from 'axios';
-import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
-import {Sections} from '../../../../helpers/sections';
-import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {GenericErrorMessage, genericOnChangeHandler} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
 import FormErrors from '../../../../components/forms/FormErrors';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {getPerformanceMetric, updatePerformanceMetric} from '../../../../requests/misc/PerformanceMetric';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
 import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {genericOnChangeHandler} from '../../../../helpers/form';
+import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
+import {Sections} from '../../../../helpers/sections';
+import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
 import {PerformanceMetric} from '../../../../models/misc/PerformanceMetric';
+import {useKrysApp} from '../../../../modules/general/KrysApp';
+import {getPerformanceMetric, updatePerformanceMetric} from '../../../../requests/misc/PerformanceMetric';
+import {defaultFormFields, FormFields, PerformanceMetricSchema} from '../core/form';
 
 
 const PerformanceMetricEdit: React.FC = () => {
-    const [performanceMetric, setPerformanceMetric] = useState<PerformanceMetric|null>(null);
+    const [performanceMetric, setPerformanceMetric] = useState<PerformanceMetric | null>(null);
 
     const [form, setForm] = useState<FormFields>(defaultFormFields);
     const [formErrors, setFormErrors] = useState<string[]>([]);
@@ -34,32 +33,30 @@ const PerformanceMetricEdit: React.FC = () => {
     useEffect(() => {
         if (id) {
             // get the performance metric we need to edit from the database
-            getPerformanceMetric(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the performance metric to edit so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    navigate('/error/400');
+            submitRequest(getPerformanceMetric, [parseInt(id)], (response) => {
+                let errorPage = getErrorPage(response);
+
+                if (errorPage) {
+                    navigate(errorPage);
                 } else {
                     // we were able to fetch current performance metric to edit
                     setPerformanceMetric(response);
 
                     const {title, ...currentPerformanceMetric} = response
 
-                    if(title !== null) {
+                    if (title !== null) {
                         setForm({...currentPerformanceMetric, title: title});
                     } else {
                         setForm({...currentPerformanceMetric, title: ''});
                     }
                 }
-            });
+            })
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
     useEffect(() => {
-        if(performanceMetric) {
+        if (performanceMetric) {
             krysApp.setPageTitle(generatePageTitle(Sections.MISC_PERFORMANCE_METRICS, PageTypes.EDIT, performanceMetric.name))
         }
 
@@ -71,28 +68,23 @@ const PerformanceMetricEdit: React.FC = () => {
     };
 
     const handleEdit = (e: any) => {
-        if(performanceMetric) {
+        if (performanceMetric) {
             // we need to update the performance metrics data by doing API call with form
-            updatePerformanceMetric(performanceMetric.id, form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // show errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error
-                    setFormErrors([GenericErrorMessage]);
-                } else {
-                    // we got the updated performance metric so we're good
-                    krysApp.setAlert({message: new AlertMessageGenerator('performance metric', Actions.EDIT, KrysToastType.SUCCESS).message, type: KrysToastType.SUCCESS})
+            submitRequest(updatePerformanceMetric, [performanceMetric.id, form], (response) => {
+                // we got the updated performance metric so we're good
+                krysApp.setAlert({
+                    message: new AlertMessageGenerator('performance metric', Actions.EDIT, KrysToastType.SUCCESS).message,
+                    type: KrysToastType.SUCCESS
+                });
 
-                    navigate(`/misc/performance-metrics`);
-                }
-            });
+                navigate(`/misc/performance-metrics`);
+            }, setFormErrors);
         }
     }
 
     return (
         <KTCard>
-            <KTCardHeader text="Edit Performance Metric" />
+            <KTCardHeader text="Edit Performance Metric"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

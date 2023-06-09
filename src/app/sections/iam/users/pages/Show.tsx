@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react'
-import axios from 'axios';
-import { useNavigate, useParams} from 'react-router-dom'
-
-import {User} from '../../../../models/iam/User';
-import {getUser} from '../../../../requests/iam/User';
+import {useNavigate, useParams} from 'react-router-dom'
 import {KTCard, KTCardBody, KTSVG} from '../../../../../_metronic/helpers';
 import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from "../../../../modules/general/KrysApp";
-import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
-import {Sections} from "../../../../helpers/sections";
 import {EditCardAction} from '../../../../components/misc/CardAction';
+import {generatePageTitle} from "../../../../helpers/pageTitleGenerator";
+import {getErrorPage, submitRequest} from '../../../../helpers/requests';
+import {Sections} from "../../../../helpers/sections";
+import {PageTypes} from '../../../../helpers/variables';
+
+import {User} from '../../../../models/iam/User';
+import {useKrysApp} from "../../../../modules/general/KrysApp";
+import {getUser} from '../../../../requests/iam/User';
 
 const UserShow: React.FC = () => {
     const [user, setUser] = useState<User|null>(null);
@@ -24,14 +24,11 @@ const UserShow: React.FC = () => {
     useEffect(() => {
         if (id) {
             // get the user we need to edit from the database
-            getUser(parseInt(id)).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we were not able to fetch the user to edit so we need to redirect
-                    // to error page
-                    navigate('/error/404');
-                } else if (response === undefined) {
-                    // unknown error occurred
-                    navigate('/error/400');
+            submitRequest(getUser, [parseInt(id)], (response) => {
+                let errorPage = getErrorPage(response);
+
+                if(errorPage) {
+                    navigate(errorPage);
                 } else {
                     setUser(response);
                 }

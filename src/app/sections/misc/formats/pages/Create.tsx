@@ -1,32 +1,31 @@
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import Select from "react-select";
+import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
+import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
+import FormErrors from '../../../../components/forms/FormErrors';
+import {indentOptions} from '../../../../components/forms/IndentOptions';
+import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
+import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
+import KrysSwitch from "../../../../components/forms/KrysSwitch";
+import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
+import {filterData} from '../../../../helpers/dataManipulation';
+import {
+    genericMultiSelectOnChangeHandler,
+    genericOnChangeHandler,
+    genericSingleSelectOnChangeHandler
+} from '../../../../helpers/form';
 import {generatePageTitle} from '../../../../helpers/pageTitleGenerator';
+import {submitRequest} from '../../../../helpers/requests';
 import {Sections} from '../../../../helpers/sections';
 import {Actions, KrysToastType, PageTypes} from '../../../../helpers/variables';
-import {useKrysApp} from '../../../../modules/general/KrysApp';
-import {defaultFormFields, FormFields, FormatSchema} from '../core/form';
-import {
-    GenericErrorMessage,
-    genericMultiSelectOnChangeHandler,
-    genericOnChangeHandler, genericSingleSelectOnChangeHandler
-} from '../../../../helpers/form';
-import {extractErrors} from '../../../../helpers/requests';
-import {KTCardHeader} from '../../../../../_metronic/helpers/components/KTCardHeader';
-import {KTCard, KTCardBody} from '../../../../../_metronic/helpers';
-import FormErrors from '../../../../components/forms/FormErrors';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-import KrysFormLabel from '../../../../components/forms/KrysFormLabel';
-import KrysFormFooter from '../../../../components/forms/KrysFormFooter';
-import {getAllFormats, storeFormat} from '../../../../requests/misc/Format';
-import Select from "react-select";
-import {Format} from "../../../../models/misc/Format";
-import {AlertMessageGenerator} from "../../../../helpers/AlertMessageGenerator";
-import KrysSwitch from "../../../../components/forms/KrysSwitch";
 import {BuyingModel} from "../../../../models/misc/BuyingModel";
+import {Format} from "../../../../models/misc/Format";
+import {useKrysApp} from '../../../../modules/general/KrysApp';
 import {getAllBuyingModels} from "../../../../requests/misc/BuyingModel";
-import {filterData} from '../../../../helpers/dataManipulation';
-import {indentOptions} from '../../../../components/forms/IndentOptions';
+import {getAllFormats, storeFormat} from '../../../../requests/misc/Format';
+import {defaultFormFields, FormatSchema, FormFields} from '../core/form';
 
 
 const FormatCreate: React.FC = () => {
@@ -42,31 +41,13 @@ const FormatCreate: React.FC = () => {
     useEffect(() => {
         krysApp.setPageTitle(generatePageTitle(Sections.MISC_FORMATS, PageTypes.CREATE))
 
-        getAllFormats().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // if we were able to get the list of formats, then we fill our state with them
-                if (response.data) {
-                    setFormats(filterData(response.data, 'name', ['All Formats']));
-                }
-            }
-        });
+        submitRequest(getAllFormats, [], (response) => {
+            setFormats(filterData(response, 'name', ['All Formats']));
+        }, setFormErrors);
 
-        getAllBuyingModels().then(response => {
-            if (axios.isAxiosError(response)) {
-                setFormErrors(extractErrors(response));
-            } else if (response === undefined) {
-                setFormErrors([GenericErrorMessage]);
-            } else {
-                // if we were able to get the list of buying models, then we fill our state with them
-                if (response.data) {
-                    setBuyingModels(response.data);
-                }
-            }
-        });
+        submitRequest(getAllBuyingModels, [], (response) => {
+            setBuyingModels(response);
+        }, setFormErrors);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -80,29 +61,20 @@ const FormatCreate: React.FC = () => {
 
     const handleCreate = (e: any) => {
         // send API request to create the format
-        storeFormat(form).then(response => {
-                if (axios.isAxiosError(response)) {
-                    // we need to show the errors
-                    setFormErrors(extractErrors(response));
-                } else if (response === undefined) {
-                    // show generic error message
-                    setFormErrors([GenericErrorMessage])
-                } else {
-                    // it's format for sure
-                    krysApp.setAlert({
-                        message: new AlertMessageGenerator('format', Actions.CREATE, KrysToastType.SUCCESS).message,
-                        type: KrysToastType.SUCCESS
-                    })
+        submitRequest(storeFormat, [form], (response) => {
+            // it's format for sure
+            krysApp.setAlert({
+                message: new AlertMessageGenerator('format', Actions.CREATE, KrysToastType.SUCCESS).message,
+                type: KrysToastType.SUCCESS
+            });
 
-                    navigate(`/misc/formats`);
-                }
-            }
-        );
+            navigate(`/misc/formats`);
+        }, setFormErrors);
     };
 
     return (
         <KTCard>
-            <KTCardHeader text="Create New Format" />
+            <KTCardHeader text="Create New Format"/>
 
             <KTCardBody>
                 <FormErrors errorMessages={formErrors}/>

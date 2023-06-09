@@ -7,8 +7,8 @@ const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/misc/performance-metrics`
 export const EXPORT_ENDPOINT = `${ENDPOINT}/export`;
 
-export const getAllPerformanceMetrics = async (): Promise<PerformanceMetricList | AxiosError | undefined> => {
-    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<PerformanceMetricList>) => response.data).catch((error) => {
+export const getAllPerformanceMetrics = async (): Promise<PerformanceMetric[] | AxiosError | undefined> => {
+    return axios.get(ENDPOINT + '/all?sort[]=name').then((response: AxiosResponse<PerformanceMetricList>) => response.data.data).catch((error) => {
         return error;
     });
 }
@@ -20,9 +20,7 @@ export const getPerformanceMetrics = (query?: String): Promise<PerformanceMetric
         url += `?${query}`;
     }
 
-    return axios.get(url).then((response: AxiosResponse<PerformanceMetricPaginate>) => response.data).catch((error) => {
-        return error;
-    });
+    return axios.get(url).then((response: AxiosResponse<PerformanceMetricPaginate>) => response.data);
 }
 
 export const getPerformanceMetric = async (id: number): Promise<PerformanceMetric | AxiosError | undefined> => {
