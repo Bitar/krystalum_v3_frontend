@@ -4,7 +4,6 @@ import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections'
 import {PublisherProvider} from '../../sections/supply/publishers/core/PublisherContext'
-import {PublisherEditProvider} from '../../sections/supply/publishers/core/PublisherEditContext'
 import PublisherArchived from '../../sections/supply/publishers/pages/Archived'
 import PublisherCreate from '../../sections/supply/publishers/pages/Create'
 import PublisherIndex from '../../sections/supply/publishers/pages/Index'
@@ -52,14 +51,12 @@ const PublisherRoutes: React.FC = () => {
         <Route
           path='/:id/*'
           element={
-            <PublisherEditProvider>
-              <SuspenseView>
-                <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>
-                  {'Edit'}
-                </PageTitle>
-                <PublisherEditRoutes />
-              </SuspenseView>
-            </PublisherEditProvider>
+            <SuspenseView>
+              <PageTitle breadcrumbs={breadcrumbs} showPageTitle={false}>
+                {'Edit'}
+              </PageTitle>
+              <PublisherEditRoutes />
+            </SuspenseView>
           }
         />
         <Route

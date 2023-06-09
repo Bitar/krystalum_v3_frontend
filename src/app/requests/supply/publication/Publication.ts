@@ -26,7 +26,7 @@ export const getAllPublications = async (): Promise<PublicationList | AxiosError
 
 export const getPublications = (query?: String): Promise<PublicationPaginate> => {
   let url = `${ENDPOINT}`
-
+  console.log(query)
   if (query) {
     url += `?${query}`
 

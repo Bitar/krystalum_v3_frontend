@@ -1,6 +1,5 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
 import {createFormData} from '../../../helpers/requests'
-import {PublicationUpdateMessage} from '../../../models/supply/Other'
 import {Publication} from '../../../models/supply/publication/Publication'
 import {
   PublicationFormat,
@@ -46,14 +45,14 @@ export const getPublicationFormat = async (
 export const storePublicationFormat = async (
   publication: Publication,
   form: any
-): Promise<PublicationFormat | PublicationUpdateMessage | AxiosError | undefined> => {
+): Promise<Publication | AxiosError | undefined> => {
   let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`
 
   let formData = createFormData(form)
 
   return await axios
     .post(url, formData)
-    .then((response) => response.data)
+    .then((response) => response.data.data)
     .catch((error) => {
       return error
     })
@@ -63,7 +62,7 @@ export const updatePublicationFormat = async (
   publication: Publication,
   id: number,
   publicationFormat: any
-): Promise<PublicationFormat | PublicationUpdateMessage | AxiosError | undefined> => {
+): Promise<PublicationFormat | AxiosError | undefined> => {
   let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`
 
   let formData = createFormData(publicationFormat)

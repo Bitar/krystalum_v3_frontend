@@ -16,16 +16,16 @@ import {
   getPublisherPayments,
   storePublisherPayment,
 } from '../../../../../../requests/supply/publisher/PublisherPayment'
+import {useSupply} from '../../../../shared/SupplyContext'
 import {
   defaultPublisherPaymentFormFields,
   PublisherPaymentFormFields,
   PublisherPaymentSchema,
 } from '../../../core/edit/payments/form'
 import {PublisherPaymentsColumns} from '../../../core/edit/payments/TableColumns'
-import {usePublisherEdit} from '../../../core/PublisherEditContext'
 
 const PublisherPaymentCreate: React.FC = () => {
-  const {publisher} = usePublisherEdit()
+  const {publisher} = useSupply()
 
   const [form, setForm] = useState<PublisherPaymentFormFields>(defaultPublisherPaymentFormFields)
   const [formErrors, setFormErrors] = useState<string[]>([])

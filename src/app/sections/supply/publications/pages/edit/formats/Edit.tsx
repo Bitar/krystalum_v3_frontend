@@ -103,23 +103,13 @@ const PublicationFormatEdit: React.FC = () => {
           // show generic error
           setFormErrors([GenericErrorMessage])
         } else {
-          let message, type
-
-          if ('data' in response && 'message' in response.data) {
-            message = response.data.message
-            type = KrysToastType.WARNING
-          } else {
-            message = new AlertMessageGenerator(
+          krysApp.setAlert({
+            message: new AlertMessageGenerator(
               'publication format',
               Actions.EDIT,
               KrysToastType.SUCCESS
-            ).message
-            type = KrysToastType.SUCCESS
-          }
-
-          krysApp.setAlert({
-            message: message,
-            type: type,
+            ).message,
+            type: KrysToastType.SUCCESS,
           })
 
           navigate(`/supply/publications/${publication.id}/edit`)

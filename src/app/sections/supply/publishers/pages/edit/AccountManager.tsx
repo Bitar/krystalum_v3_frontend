@@ -26,17 +26,17 @@ import {
   getPublisherAccountManagers,
   storePublisherAccountManager,
 } from '../../../../../requests/supply/publisher/PublisherAccountManager'
+import {useSupply} from '../../../shared/SupplyContext'
 import {
   defaultPublisherAccountManagerFormFields,
   PublisherAccountManagerFormFields,
   PublisherAccountManagerSchema,
 } from '../../core/edit/account-managers/form'
 import {PublisherAccountManagersColumns} from '../../core/edit/account-managers/TableColumns'
-import {usePublisherEdit} from '../../core/PublisherEditContext'
 
 const PublisherAccountManager: React.FC = () => {
   const {currentUser, hasAnyRoles} = useAuth()
-  const {publisher} = usePublisherEdit()
+  const {publisher} = useSupply()
   const krysApp = useKrysApp()
 
   const [form, setForm] = useState<PublisherAccountManagerFormFields>(

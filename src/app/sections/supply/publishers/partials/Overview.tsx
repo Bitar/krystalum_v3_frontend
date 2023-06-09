@@ -5,11 +5,11 @@ import {RoleEnum} from '../../../../enums/RoleEnum'
 import {RevenueTypeEnum} from '../../../../enums/Supply/RevenueTypeEnum'
 import {formatDateToMonthDayYear} from '../../../../helpers/dateFormatter'
 import {useAuth} from '../../../../modules/auth'
-import {usePublisherEdit} from '../core/PublisherEditContext'
+import {useSupply} from '../../shared/SupplyContext'
 
 const PublisherOverview: React.FC = () => {
   const {currentUser, hasRoles} = useAuth()
-  const {publisher} = usePublisherEdit()
+  const {publisher} = useSupply()
 
   return (
     <KTCard className='mb-5'>

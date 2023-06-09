@@ -20,17 +20,17 @@ import {
   getPublisherContact,
   updatePublisherContact,
 } from '../../../../../../requests/supply/publisher/PublisherContact'
+import {useSupply} from '../../../../shared/SupplyContext'
 import {
   defaultPublisherContactFormFields,
   PublisherContactFormFields,
   PublisherContactSchema,
 } from '../../../core/edit/contacts/form'
 import {usePublisher} from '../../../core/PublisherContext'
-import {usePublisherEdit} from '../../../core/PublisherEditContext'
 
 const PublisherContactEdit: React.FC = () => {
   const {options} = usePublisher()
-  const {publisher} = usePublisherEdit()
+  const {publisher} = useSupply()
   const krysApp = useKrysApp()
 
   const {cid} = useParams()

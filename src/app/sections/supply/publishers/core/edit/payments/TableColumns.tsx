@@ -9,7 +9,7 @@ import {useAccessControl} from '../../../../../../modules/auth/AuthAccessControl
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell'
 import {CustomHeader} from '../../../../../../modules/table/columns/CustomHeader'
 import {TextCell} from '../../../../../../modules/table/columns/TextCell'
-import {usePublisherEdit} from '../../PublisherEditContext'
+import {useSupply} from '../../../../shared/SupplyContext'
 
 const PublisherPaymentsColumns: ReadonlyArray<Column<PublisherPayment>> = [
   {
@@ -60,7 +60,7 @@ const PublisherPaymentsColumns: ReadonlyArray<Column<PublisherPayment>> = [
     Cell: ({...props}) => {
       const {currentUser, hasRoles} = useAuth()
       const accessControl = useAccessControl()
-      const {publisher} = usePublisherEdit()
+      const {publisher} = useSupply()
 
       const publisherPaymentSummary = `beneficiary: ${props.data[props.row.index].beneficiary} | 
             account number: ${props.data[props.row.index].account_number} | 

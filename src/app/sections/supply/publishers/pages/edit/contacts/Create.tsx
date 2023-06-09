@@ -21,6 +21,7 @@ import {
   getPublisherContacts,
   storePublisherContact,
 } from '../../../../../../requests/supply/publisher/PublisherContact'
+import {useSupply} from '../../../../shared/SupplyContext'
 import {
   defaultPublisherContactFormFields,
   PublisherContactFormFields,
@@ -28,11 +29,10 @@ import {
 } from '../../../core/edit/contacts/form'
 import {PublisherContactsColumns} from '../../../core/edit/contacts/TableColumns'
 import {usePublisher} from '../../../core/PublisherContext'
-import {usePublisherEdit} from '../../../core/PublisherEditContext'
 
 const PublisherContactCreate: React.FC = () => {
   const {options} = usePublisher()
-  const {publisher} = usePublisherEdit()
+  const {publisher} = useSupply()
   const krysApp = useKrysApp()
 
   const [form, setForm] = useState<PublisherContactFormFields>(defaultPublisherContactFormFields)

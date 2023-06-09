@@ -6,12 +6,12 @@ import EngageWidget from '../../../../../components/widgets/EngageWidget'
 import {RoleEnum} from '../../../../../enums/RoleEnum'
 import {useAuth} from '../../../../../modules/auth'
 import {getPublisherPublications} from '../../../../../requests/supply/publisher/PublisherPublication'
+import {useSupply} from '../../../shared/SupplyContext'
 import {PublisherPublicationsColumns} from '../../core/edit/publications/TableColumns'
-import {usePublisherEdit} from '../../core/PublisherEditContext'
 
 const PublisherPublication: React.FC = () => {
   const {currentUser, hasRoles} = useAuth()
-  const {publisher} = usePublisherEdit()
+  const {publisher} = useSupply()
 
   const [refreshTable] = useState<boolean>(false)
 

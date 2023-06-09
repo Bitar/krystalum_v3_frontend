@@ -25,13 +25,13 @@ import {Actions, KrysToastType} from '../../../../../helpers/variables'
 import {useAuth} from '../../../../../modules/auth'
 import {useKrysApp} from '../../../../../modules/general/KrysApp'
 import {updatePublisher} from '../../../../../requests/supply/publisher/Publisher'
+import {useSupply} from '../../../shared/SupplyContext'
 import {defaultFormFields, fillEditForm, FormFields, PublisherSchema} from '../../core/form'
 import {usePublisher} from '../../core/PublisherContext'
-import {usePublisherEdit} from '../../core/PublisherEditContext'
 
 const PublisherBasicInformationEdit: React.FC = () => {
   const {currentUser, hasAnyRoles} = useAuth()
-  const {publisher, setPublisher} = usePublisherEdit()
+  const {publisher, setPublisher} = useSupply()
   const {options} = usePublisher()
   const krysApp = useKrysApp()
 

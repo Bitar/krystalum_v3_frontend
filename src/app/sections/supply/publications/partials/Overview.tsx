@@ -7,7 +7,7 @@ import {Language} from '../../../../models/misc/Language'
 import {BadgesCell} from '../../../../modules/table/columns/BadgesCell'
 import {usePublicationEdit} from '../core/PublicationEditContext'
 
-const PublisherOverview: React.FC = () => {
+const PublicationOverview: React.FC = () => {
   const {publication} = usePublicationEdit()
 
   return (
@@ -170,4 +170,4 @@ const PublisherOverview: React.FC = () => {
   )
 }
 
-export default PublisherOverview
+export default PublicationOverview

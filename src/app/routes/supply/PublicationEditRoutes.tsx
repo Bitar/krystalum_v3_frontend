@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, {useEffect} from 'react'
-import {Route, Routes, useNavigate, useParams} from 'react-router-dom'
+import {Outlet, Route, Routes, useNavigate, useParams} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections'
@@ -15,6 +15,7 @@ import PublicationMinimumEcpmEdit from '../../sections/supply/publications/pages
 import PublicationCampaignRestrictionEdit from '../../sections/supply/publications/pages/edit/restrictions/Edit'
 import PublicationTechnologyEdit from '../../sections/supply/publications/pages/edit/technologies/Edit'
 import PublicationVerticalEdit from '../../sections/supply/publications/pages/edit/verticals/Edit'
+import PublicationOverview from '../../sections/supply/publications/partials/Overview'
 
 const PublicationEditRoutes: React.FC = () => {
   const {publication, setPublication, refresh} = usePublicationEdit()
@@ -72,104 +73,113 @@ const PublicationEditRoutes: React.FC = () => {
   return (
     <Routes>
       <Route
-        path='/edit'
         element={
           <SuspenseView>
-            <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>
-              {'Edit'}
-            </PageTitle>
-            <PublicationEdit />
+            <PublicationOverview />
+            <Outlet />
           </SuspenseView>
         }
-      />
-      <Route
-        path='/analytics/:cid/edit'
-        element={
-          <SuspenseView>
-            <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>
-              {'Edit'}
-            </PageTitle>
-            <PublicationAnalyticEdit />
-          </SuspenseView>
-        }
-      />
-      <Route
-        path='/formats/:cid/edit'
-        element={
-          <SuspenseView>
-            <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>
-              {'Edit'}
-            </PageTitle>
-            <PublicationFormatEdit />
-          </SuspenseView>
-        }
-      />
-      <Route
-        path='/verticals/:cid/edit'
-        element={
-          <SuspenseView>
-            <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>
-              {'Edit'}
-            </PageTitle>
-            <PublicationVerticalEdit />
-          </SuspenseView>
-        }
-      />
-      <Route
-        path='/ad-servers/:cid/edit'
-        element={
-          <SuspenseView>
-            <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>
-              {'Edit'}
-            </PageTitle>
-            <PublicationAdServerEdit />
-          </SuspenseView>
-        }
-      />
-      <Route
-        path='/technologies/:cid/edit'
-        element={
-          <SuspenseView>
-            <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>
-              {'Edit'}
-            </PageTitle>
-            <PublicationTechnologyEdit />
-          </SuspenseView>
-        }
-      />
-      <Route
-        path='/fixed-cpms/:cid/edit'
-        element={
-          <SuspenseView>
-            <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>
-              {'Edit'}
-            </PageTitle>
-            <PublicationFixedCpmEdit />
-          </SuspenseView>
-        }
-      />
-      <Route
-        path='/minimum-ecpms/:cid/edit'
-        element={
-          <SuspenseView>
-            <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>
-              {'Edit'}
-            </PageTitle>
-            <PublicationMinimumEcpmEdit />
-          </SuspenseView>
-        }
-      />
-      <Route
-        path='/restrictions/:cid/edit'
-        element={
-          <SuspenseView>
-            <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>
-              {'Edit'}
-            </PageTitle>
-            <PublicationCampaignRestrictionEdit />
-          </SuspenseView>
-        }
-      />
+      >
+        <Route
+          path='/edit'
+          element={
+            <SuspenseView>
+              <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>
+                {'Edit'}
+              </PageTitle>
+              <PublicationEdit />
+            </SuspenseView>
+          }
+        />
+        <Route
+          path='/analytics/:cid/edit'
+          element={
+            <SuspenseView>
+              <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>
+                {'Edit'}
+              </PageTitle>
+              <PublicationAnalyticEdit />
+            </SuspenseView>
+          }
+        />
+        <Route
+          path='/formats/:cid/edit'
+          element={
+            <SuspenseView>
+              <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>
+                {'Edit'}
+              </PageTitle>
+              <PublicationFormatEdit />
+            </SuspenseView>
+          }
+        />
+        <Route
+          path='/verticals/:cid/edit'
+          element={
+            <SuspenseView>
+              <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>
+                {'Edit'}
+              </PageTitle>
+              <PublicationVerticalEdit />
+            </SuspenseView>
+          }
+        />
+        <Route
+          path='/ad-servers/:cid/edit'
+          element={
+            <SuspenseView>
+              <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>
+                {'Edit'}
+              </PageTitle>
+              <PublicationAdServerEdit />
+            </SuspenseView>
+          }
+        />
+        <Route
+          path='/technologies/:cid/edit'
+          element={
+            <SuspenseView>
+              <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>
+                {'Edit'}
+              </PageTitle>
+              <PublicationTechnologyEdit />
+            </SuspenseView>
+          }
+        />
+        <Route
+          path='/fixed-cpms/:cid/edit'
+          element={
+            <SuspenseView>
+              <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>
+                {'Edit'}
+              </PageTitle>
+              <PublicationFixedCpmEdit />
+            </SuspenseView>
+          }
+        />
+        <Route
+          path='/minimum-ecpms/:cid/edit'
+          element={
+            <SuspenseView>
+              <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>
+                {'Edit'}
+              </PageTitle>
+              <PublicationMinimumEcpmEdit />
+            </SuspenseView>
+          }
+        />
+        <Route
+          path='/restrictions/:cid/edit'
+          element={
+            <SuspenseView>
+              <PageTitle breadcrumbs={publicationEditBreadcrumbs} showPageTitle={false}>
+                {'Edit'}
+              </PageTitle>
+              <PublicationCampaignRestrictionEdit />
+            </SuspenseView>
+          }
+        />
+      </Route>
     </Routes>
   )
 }

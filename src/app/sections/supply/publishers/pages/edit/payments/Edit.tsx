@@ -19,16 +19,16 @@ import {
   getPublisherPayment,
   updatePublisherPayment,
 } from '../../../../../../requests/supply/publisher/PublisherPayment'
+import {useSupply} from '../../../../shared/SupplyContext'
 import {
   defaultPublisherPaymentFormFields,
   fillEditForm,
   PublisherPaymentFormFields,
   PublisherPaymentSchema,
 } from '../../../core/edit/payments/form'
-import {usePublisherEdit} from '../../../core/PublisherEditContext'
 
 const PublisherPaymentEdit: React.FC = () => {
-  const {publisher} = usePublisherEdit()
+  const {publisher} = useSupply()
   const {cid} = useParams()
 
   const [publisherPayment, setPublisherPayment] = useState<PublisherPayment | null>(null)

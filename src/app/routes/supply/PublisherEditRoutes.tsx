@@ -1,18 +1,19 @@
 import axios from 'axios'
 import React, {useEffect} from 'react'
-import {Route, Routes, useNavigate, useParams} from 'react-router-dom'
+import {Outlet, Route, Routes, useNavigate, useParams} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {Sections} from '../../helpers/sections'
 import {getPublisher} from '../../requests/supply/publisher/Publisher'
-import {usePublisherEdit} from '../../sections/supply/publishers/core/PublisherEditContext'
 import PublisherEdit from '../../sections/supply/publishers/pages/Edit'
 import PublisherContactEdit from '../../sections/supply/publishers/pages/edit/contacts/Edit'
 import PublisherPaymentEdit from '../../sections/supply/publishers/pages/edit/payments/Edit'
+import PublisherOverview from '../../sections/supply/publishers/partials/Overview'
+import {useSupply} from '../../sections/supply/shared/SupplyContext'
 
 const PublisherEditRoutes: React.FC = () => {
-  const {publisher, setPublisher} = usePublisherEdit()
+  const {publisher, setPublisher} = useSupply()
 
   let {id} = useParams()
 
@@ -68,38 +69,47 @@ const PublisherEditRoutes: React.FC = () => {
   return (
     <Routes>
       <Route
-        path='/edit'
         element={
           <SuspenseView>
-            <PageTitle breadcrumbs={publisherEditBreadcrumbs} showPageTitle={false}>
-              {'Edit'}
-            </PageTitle>
-            <PublisherEdit />
+            <PublisherOverview />
+            <Outlet />
           </SuspenseView>
         }
-      />
-      <Route
-        path='/contacts/:cid/edit'
-        element={
-          <SuspenseView>
-            <PageTitle breadcrumbs={publisherEditBreadcrumbs} showPageTitle={false}>
-              {'Edit'}
-            </PageTitle>
-            <PublisherContactEdit />
-          </SuspenseView>
-        }
-      />
-      <Route
-        path='/payments/:cid/edit'
-        element={
-          <SuspenseView>
-            <PageTitle breadcrumbs={publisherEditBreadcrumbs} showPageTitle={false}>
-              {'Edit'}
-            </PageTitle>
-            <PublisherPaymentEdit />
-          </SuspenseView>
-        }
-      />
+      >
+        <Route
+          path='/edit'
+          element={
+            <SuspenseView>
+              <PageTitle breadcrumbs={publisherEditBreadcrumbs} showPageTitle={false}>
+                {'Edit'}
+              </PageTitle>
+              <PublisherEdit />
+            </SuspenseView>
+          }
+        />
+        <Route
+          path='/contacts/:cid/edit'
+          element={
+            <SuspenseView>
+              <PageTitle breadcrumbs={publisherEditBreadcrumbs} showPageTitle={false}>
+                {'Edit'}
+              </PageTitle>
+              <PublisherContactEdit />
+            </SuspenseView>
+          }
+        />
+        <Route
+          path='/payments/:cid/edit'
+          element={
+            <SuspenseView>
+              <PageTitle breadcrumbs={publisherEditBreadcrumbs} showPageTitle={false}>
+                {'Edit'}
+              </PageTitle>
+              <PublisherPaymentEdit />
+            </SuspenseView>
+          }
+        />
+      </Route>
     </Routes>
   )
 }
