@@ -114,7 +114,6 @@ const PublisherContactCreate: React.FC = () => {
                     selectChangeHandler(e, 'type')
                   }}
                   placeholder='Select a contact type'
-                  isClearable={true}
                   ref={contactTypesSelectRef}
                 />
 
@@ -134,7 +133,7 @@ const PublisherContactCreate: React.FC = () => {
                 <div className='mt-1 text-danger'>{errors?.detail ? errors?.detail : null}</div>
               </div>
 
-              <KrysFormFooter cancelUrl={'/supply/publishers'} />
+              <KrysFormFooter cancelUrl='/supply/publishers' />
             </Form>
           )}
         </Formik>

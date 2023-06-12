@@ -1,4 +1,3 @@
-import axios from 'axios'
 import {Form, Formik} from 'formik'
 import React, {useEffect, useRef, useState} from 'react'
 import Select from 'react-select'
@@ -11,11 +10,10 @@ import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable'
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
 import {filterData} from '../../../../../../helpers/dataManipulation'
 import {
-  GenericErrorMessage,
   genericMultiSelectOnChangeHandler,
   genericOnChangeHandler,
 } from '../../../../../../helpers/form'
-import {extractErrors, submitRequest} from '../../../../../../helpers/requests'
+import {submitRequest} from '../../../../../../helpers/requests'
 import {Actions, KrysToastType} from '../../../../../../helpers/variables'
 import {AdServer} from '../../../../../../models/misc/AdServer'
 
@@ -24,14 +22,12 @@ import {
   getPublicationAdServers,
   storePublicationAdServer,
 } from '../../../../../../requests/supply/publication/PublicationAdServer'
-import {storePublicationAnalytic} from '../../../../../../requests/supply/publication/PublisherAnalytic'
 import {
   defaultPublicationAdServerFormFields,
   PublicationAdServerFormFields,
   publicationAdServerSchema,
 } from '../../../core/edit/ad-servers/form'
 import {PublicationAdServersColumns} from '../../../core/edit/ad-servers/TableColumns'
-import {defaultPublicationAnalyticFormFields} from '../../../core/edit/analytics/form'
 import {usePublication} from '../../../core/PublicationContext'
 import {usePublicationEdit} from '../../../core/PublicationEditContext'
 
@@ -151,7 +147,7 @@ const PublicationAdServerCreate: React.FC = () => {
                 </div>
               </div>
 
-              <KrysFormFooter cancelUrl={'/supply/publications'} />
+              <KrysFormFooter cancelUrl='/supply/publications' />
             </Form>
           )}
         </Formik>

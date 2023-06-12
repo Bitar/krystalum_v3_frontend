@@ -24,21 +24,11 @@ export const getAllPublishers = async (): Promise<Publisher[] | AxiosError | und
 }
 
 export const getPublishers = (query?: String): Promise<PublisherPaginate> => {
-  let url = `${ENDPOINT}`
+  let url = `${ENDPOINT}?${INCLUDES}&filter[is_archived]=0`
 
   if (query) {
-    url += `?${query}`
-
-    if (query.charAt(query.length - 1) === '&') {
-      url += `${INCLUDES}`
-    } else {
-      url += `&${INCLUDES}`
-    }
-  } else {
-    url += `?${INCLUDES}`
+    url += `&${query}`
   }
-
-  url += `&filter[is_archived]=0`
 
   return axios
     .get(url)
@@ -49,18 +39,10 @@ export const getPublishers = (query?: String): Promise<PublisherPaginate> => {
 }
 
 export const getArchivedPublishers = (query?: String): Promise<PublisherPaginate> => {
-  let url = `${ENDPOINT}/archived`
+  let url = `${ENDPOINT}/archived?${INCLUDES}`
 
   if (query) {
-    url += `?${query}`
-
-    if (query.charAt(query.length - 1) === '&') {
-      url += `${INCLUDES}`
-    } else {
-      url += `&${INCLUDES}`
-    }
-  } else {
-    url += `?${INCLUDES}`
+    url += `&${query}`
   }
 
   return axios

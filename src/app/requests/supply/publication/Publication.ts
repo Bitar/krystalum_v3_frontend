@@ -25,18 +25,10 @@ export const getAllPublications = async (): Promise<PublicationList[] | AxiosErr
 }
 
 export const getPublications = (query?: String): Promise<PublicationPaginate> => {
-  let url = `${ENDPOINT}`
+  let url = `${ENDPOINT}?${INCLUDES}`
 
   if (query) {
-    url += `?${query}`
-
-    if (query.charAt(query.length - 1) === '&') {
-      url += `${INCLUDES}`
-    } else {
-      url += `&${INCLUDES}`
-    }
-  } else {
-    url += `?${INCLUDES}`
+    url += `&${query}`
   }
 
   return axios
@@ -48,18 +40,10 @@ export const getPublications = (query?: String): Promise<PublicationPaginate> =>
 }
 
 export const getArchivedPublications = (query?: String): Promise<PublicationPaginate> => {
-  let url = `${ENDPOINT}/archived`
+  let url = `${ENDPOINT}/archived?${INCLUDES}`
 
   if (query) {
-    url += `?${query}`
-
-    if (query.charAt(query.length - 1) === '&') {
-      url += `${INCLUDES}`
-    } else {
-      url += `&${INCLUDES}`
-    }
-  } else {
-    url += `?${INCLUDES}`
+    url += `&${query}`
   }
 
   return axios

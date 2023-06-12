@@ -126,6 +126,7 @@ const PublisherCreate: React.FC = () => {
                     selectChangeHandler(e, 'tier_id')
                   }}
                   placeholder='Select a tier'
+                  isClearable={true}
                 />
 
                 <div className='mt-1 text-danger'>{errors?.tier_id ? errors?.tier_id : null}</div>
@@ -155,7 +156,7 @@ const PublisherCreate: React.FC = () => {
 
                 <KrysRadioButton
                   name='revenue_type'
-                  label={'Revenue Share'}
+                  label='Revenue Share'
                   onChangeHandler={(e) => {
                     e.stopPropagation()
                     setForm({
@@ -168,7 +169,7 @@ const PublisherCreate: React.FC = () => {
 
                 <KrysRadioButton
                   name='revenue_type'
-                  label={'Amount Commitment'}
+                  label='Amount Commitment'
                   onChangeHandler={(e) => {
                     e.stopPropagation()
                     setForm({...form, revenue_type: RevenueTypeEnum.COMMITMENT})
@@ -261,7 +262,7 @@ const PublisherCreate: React.FC = () => {
 
                 <Select
                   name='hq_country_id'
-                  menuPlacement={'top'}
+                  menuPlacement='top'
                   options={countries}
                   getOptionLabel={(instance) => instance.name}
                   getOptionValue={(instance) => instance.id.toString()}
@@ -277,7 +278,7 @@ const PublisherCreate: React.FC = () => {
                 </div>
               </div>
 
-              <KrysFormFooter cancelUrl={'/supply/publishers'} />
+              <KrysFormFooter cancelUrl='/supply/publishers' />
             </Form>
           )}
         </Formik>

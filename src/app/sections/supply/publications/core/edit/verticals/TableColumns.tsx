@@ -42,7 +42,7 @@ const PublicationVerticalsColumns: ReadonlyArray<Column<PublicationVertical>> = 
             and ${props.data[props.row.index].is_primary ? 'it is primary' : 'it is not primary'}`
 
       return (
-        <Restricted to={'manage-supply'}>
+        <Restricted to='manage-supply'>
           <ActionsCell
             id={props.data[props.row.index].id}
             path={`supply/publications/${publication?.id}/verticals`}

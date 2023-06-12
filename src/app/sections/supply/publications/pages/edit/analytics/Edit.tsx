@@ -128,7 +128,7 @@ const PublicationAnalyticEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysRadioButton
                   name='geo_type'
-                  label={'Regions'}
+                  label='Regions'
                   onChangeHandler={(e) => {
                     e.stopPropagation()
                     setForm({
@@ -141,7 +141,7 @@ const PublicationAnalyticEdit: React.FC = () => {
 
                 <KrysRadioButton
                   name='geo_type'
-                  label={'Countries'}
+                  label='Countries'
                   onChangeHandler={(e) => {
                     e.stopPropagation()
                     setForm({
@@ -160,14 +160,14 @@ const PublicationAnalyticEdit: React.FC = () => {
                   <KrysFormLabel text='Region' isRequired={true} />
 
                   <Select
-                    name={'geo_id'}
+                    name='geo_id'
                     value={regions.find(
                       (region) => form.geo_type === GeoTypeEnum.REGION && region.id === form.geo_id
                     )}
                     options={regions}
                     getOptionLabel={(instance) => instance.name}
                     getOptionValue={(instance) => instance.id.toString()}
-                    placeholder={'Select a region'}
+                    placeholder='Select a region'
                     onChange={(e) => {
                       genericSingleSelectOnChangeHandler(e, form, setForm, 'geo_id')
                     }}
@@ -182,7 +182,7 @@ const PublicationAnalyticEdit: React.FC = () => {
                   <KrysFormLabel text='Country' isRequired={true} />
 
                   <Select
-                    name={'geo_id'}
+                    name='geo_id'
                     value={countries.find(
                       (country) =>
                         form.geo_type === GeoTypeEnum.COUNTRY && country.id === form.geo_id
@@ -190,7 +190,7 @@ const PublicationAnalyticEdit: React.FC = () => {
                     options={countries}
                     getOptionLabel={(instance) => instance.name}
                     getOptionValue={(instance) => instance.id.toString()}
-                    placeholder={'Select a country'}
+                    placeholder='Select a country'
                     onChange={(e) => {
                       genericSingleSelectOnChangeHandler(e, form, setForm, 'geo_id')
                     }}
@@ -204,15 +204,16 @@ const PublicationAnalyticEdit: React.FC = () => {
                 <KrysFormLabel text='Device' isRequired={false} />
 
                 <Select
-                  name={'device_id'}
+                  name='device_id'
                   value={devices.find((device) => device.id === form.device_id)}
                   options={devices}
                   getOptionLabel={(instance) => instance.name}
                   getOptionValue={(instance) => instance.id.toString()}
-                  placeholder={'Select a device'}
+                  placeholder='Select a device'
                   onChange={(e) => {
                     genericSingleSelectOnChangeHandler(e, form, setForm, 'device_id')
                   }}
+                  isClearable={true}
                 />
 
                 <div className='mt-1 text-danger'>

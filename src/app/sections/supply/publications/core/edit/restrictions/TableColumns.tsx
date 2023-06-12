@@ -36,7 +36,7 @@ const PublicationCampaignRestrictionsColumns: ReadonlyArray<
           align='left'
         />
       ) : (
-        <TextCell text={'N/A'}></TextCell>
+        <TextCell text='N/A'></TextCell>
       )
     },
   },
@@ -174,7 +174,7 @@ const PublicationCampaignRestrictionsColumns: ReadonlyArray<
             )} `
 
       return (
-        <Restricted to={'manage-supply'}>
+        <Restricted to='manage-supply'>
           <ActionsCell
             id={props.data[props.row.index].id}
             path={`supply/publications/${publication?.id}/restrictions`}

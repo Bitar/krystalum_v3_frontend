@@ -19,10 +19,6 @@ import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator'
 import {submitRequest} from '../../../../../../helpers/requests'
 import {Sections} from '../../../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables'
-import {Country} from '../../../../../../models/misc/Country'
-import {Currency} from '../../../../../../models/misc/Currency'
-import {Format} from '../../../../../../models/misc/Format'
-import {Region} from '../../../../../../models/misc/Region'
 import {PublicationFixedCpm} from '../../../../../../models/supply/publication/PublicationFixedCpm'
 import {useKrysApp} from '../../../../../../modules/general/KrysApp'
 import {
@@ -132,7 +128,7 @@ const PublicationFixedCpmEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysRadioButton
                   name='geo_type'
-                  label={'Regions'}
+                  label='Regions'
                   onChangeHandler={(e) => {
                     e.stopPropagation()
                     setForm({
@@ -146,7 +142,7 @@ const PublicationFixedCpmEdit: React.FC = () => {
 
                 <KrysRadioButton
                   name='geo_type'
-                  label={'Countries'}
+                  label='Countries'
                   onChangeHandler={(e) => {
                     e.stopPropagation()
                     setForm({
@@ -166,14 +162,14 @@ const PublicationFixedCpmEdit: React.FC = () => {
                   <KrysFormLabel text='Region' isRequired={true} />
 
                   <Select
-                    name={'geo_id'}
+                    name='geo_id'
                     value={regions.find(
                       (region) => form.geo_type === GeoTypeEnum.REGION && region.id === form.geo_id
                     )}
                     options={regions}
                     getOptionLabel={(instance) => instance.name}
                     getOptionValue={(instance) => instance.id.toString()}
-                    placeholder={'Select a region'}
+                    placeholder='Select a region'
                     onChange={(e) => {
                       genericSingleSelectOnChangeHandler(e, form, setForm, 'geo_id')
                     }}
@@ -188,7 +184,7 @@ const PublicationFixedCpmEdit: React.FC = () => {
                   <KrysFormLabel text='Country' isRequired={true} />
 
                   <Select
-                    name={'geo_id'}
+                    name='geo_id'
                     value={countries.find(
                       (country) =>
                         form.geo_type === GeoTypeEnum.COUNTRY && country.id === form.geo_id
@@ -196,7 +192,7 @@ const PublicationFixedCpmEdit: React.FC = () => {
                     options={countries}
                     getOptionLabel={(instance) => instance.name}
                     getOptionValue={(instance) => instance.id.toString()}
-                    placeholder={'Select a country'}
+                    placeholder='Select a country'
                     onChange={(e) => {
                       genericSingleSelectOnChangeHandler(e, form, setForm, 'geo_id')
                     }}
@@ -207,15 +203,15 @@ const PublicationFixedCpmEdit: React.FC = () => {
               )}
 
               <div className='mb-7'>
-                <KrysFormLabel text='Formats' isRequired={false} />
+                <KrysFormLabel text='Formats' isRequired={true} />
 
                 <Select
-                  name={'format_id'}
+                  name='format_id'
                   value={formats.find((format) => format.id === form.format_id)}
                   options={formats}
                   getOptionLabel={(instance) => instance.name}
                   getOptionValue={(instance) => instance.id.toString()}
-                  placeholder={'Select a format'}
+                  placeholder='Select a format'
                   onChange={(e) => {
                     genericSingleSelectOnChangeHandler(e, form, setForm, 'format_id')
                   }}
@@ -244,12 +240,12 @@ const PublicationFixedCpmEdit: React.FC = () => {
                 <KrysFormLabel text='Currency' isRequired={true} />
 
                 <Select
-                  name={'currency_id'}
+                  name='currency_id'
                   value={currencies.find((currency) => currency.id === form.currency_id)}
                   options={currencies}
                   getOptionLabel={(instance) => instance.currency}
                   getOptionValue={(instance) => instance.id.toString()}
-                  placeholder={'Select a currency'}
+                  placeholder='Select a currency'
                   onChange={(e) => {
                     genericSingleSelectOnChangeHandler(e, form, setForm, 'currency_id')
                   }}

@@ -124,12 +124,12 @@ const PublisherContactEdit: React.FC = () => {
                 <KrysFormLabel text='Contact type' isRequired={true} />
 
                 <Select
-                  name={'type'}
+                  name='type'
                   value={contactTypes.find((contactType) => contactType.id === form.type)}
                   options={contactTypes}
                   getOptionLabel={(instance) => instance.name}
                   getOptionValue={(instance) => instance.id.toString()}
-                  placeholder={'Select type'}
+                  placeholder='Select type'
                   onChange={(e) => {
                     genericSingleSelectOnChangeHandler(e, form, setForm, 'type')
                   }}

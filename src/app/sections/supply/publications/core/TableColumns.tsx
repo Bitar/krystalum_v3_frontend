@@ -22,7 +22,7 @@ const PublicationsColumns: ReadonlyArray<Column<Publication>> = [
     Cell: ({...props}) => (
       <BadgeCell
         status={props.data[props.row.index].unique_identifier}
-        color={'light-info'}
+        color='light-info'
         align='left'
       />
     ),
@@ -65,10 +65,10 @@ const PublicationsColumns: ReadonlyArray<Column<Publication>> = [
     ),
     id: 'actions',
     Cell: ({...props}) => (
-      <Restricted to={'manage-supply'}>
+      <Restricted to='manage-supply'>
         <ActionsCell
           id={props.data[props.row.index].id}
-          path={'supply/publications'}
+          path='supply/publications'
           queryKey={QUERIES.PUBLICATIONS_LIST}
           showView={false}
           showEdit={true}

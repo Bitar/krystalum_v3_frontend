@@ -1,4 +1,3 @@
-import axios from 'axios'
 import {Form, Formik} from 'formik'
 import React, {useEffect, useRef, useState} from 'react'
 import Select from 'react-select'
@@ -11,11 +10,10 @@ import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable'
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
 import {filterData} from '../../../../../../helpers/dataManipulation'
 import {
-  GenericErrorMessage,
   genericMultiSelectOnChangeHandler,
   genericOnChangeHandler,
 } from '../../../../../../helpers/form'
-import {extractErrors, submitRequest} from '../../../../../../helpers/requests'
+import {submitRequest} from '../../../../../../helpers/requests'
 import {Actions, KrysToastType} from '../../../../../../helpers/variables'
 import {Technology} from '../../../../../../models/misc/Technology'
 
@@ -24,7 +22,6 @@ import {
   getPublicationTechnologies,
   storePublicationTechnology,
 } from '../../../../../../requests/supply/publication/PublicationTechnology'
-import {updatePublicationCampaignRestriction} from '../../../../../../requests/supply/publication/PublisherCampaignRestriction'
 import {
   defaultPublicationTechnologyFormFields,
   PublicationTechnologyFormFields,
@@ -151,7 +148,7 @@ const PublicationTechnologyCreate: React.FC = () => {
                 </div>
               </div>
 
-              <KrysFormFooter cancelUrl={'/supply/publications'} />
+              <KrysFormFooter cancelUrl='/supply/publications' />
             </Form>
           )}
         </Formik>

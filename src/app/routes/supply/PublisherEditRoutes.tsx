@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, {useEffect} from 'react'
 import {Outlet, Route, Routes, useNavigate, useParams} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
@@ -6,12 +5,10 @@ import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {submitRequest} from '../../helpers/requests'
 import {Sections} from '../../helpers/sections'
-import {getPublicationEditOptions} from '../../requests/supply/Options'
 import {getPublisher} from '../../requests/supply/publisher/Publisher'
 import PublisherEdit from '../../sections/supply/publishers/pages/Edit'
 import PublisherContactEdit from '../../sections/supply/publishers/pages/edit/contacts/Edit'
 import PublisherPaymentEdit from '../../sections/supply/publishers/pages/edit/payments/Edit'
-import PublisherOverview from '../../sections/supply/publishers/partials/Overview'
 import {useSupply} from '../../sections/supply/shared/SupplyContext'
 
 const PublisherEditRoutes: React.FC = () => {

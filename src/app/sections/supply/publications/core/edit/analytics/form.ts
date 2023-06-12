@@ -1,7 +1,6 @@
 import * as Yup from 'yup'
 import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum'
 import {PublicationAnalyticTypeEnum} from '../../../../../../enums/Supply/PublicationAnalyticTypeEnum'
-import {getEnumValues} from '../../../../../../helpers/dataManipulation'
 import {DEFAULT_ANALYTIC_TYPE} from '../../../../../../helpers/settings'
 import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic'
 

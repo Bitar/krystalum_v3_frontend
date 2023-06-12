@@ -5,7 +5,6 @@ import Select from 'react-select'
 import {TagsInput} from 'react-tag-input-component'
 import {DateRangePicker} from 'rsuite'
 import {DateRange} from 'rsuite/DateRangePicker'
-import {initialQueryState} from '../../../../../../_metronic/helpers'
 import FilterFormFooter from '../../../../../components/forms/FilterFormFooter'
 import {indentOptions} from '../../../../../components/forms/IndentOptions'
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel'
@@ -18,7 +17,6 @@ import {
   genericMultiSelectOnChangeHandler,
   genericOnChangeHandler,
 } from '../../../../../helpers/form'
-import {createFilterQueryParam} from '../../../../../helpers/requests'
 import {useAuth} from '../../../../../modules/auth'
 
 import {useQueryRequest} from '../../../../../modules/table/QueryRequestProvider'
@@ -152,6 +150,7 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                         onChange={(e) => multiSelectChangeHandler(e, 'publishers_ids')}
                         ref={publishersSelectRef}
                         placeholder='Filter by publisher(s)'
+                        isClearable={true}
                       />
                     </Col>
                   </Row>
@@ -224,6 +223,7 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                         onChange={(e) => multiSelectChangeHandler(e, 'languages_ids')}
                         ref={languagesSelectRef}
                         placeholder='Filter by language(s)'
+                        isClearable={true}
                       />
                     </Col>
 
@@ -240,6 +240,7 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                         ref={formatsSelectRef}
                         placeholder='Filter by format(s)'
                         formatOptionLabel={indentOptions}
+                        isClearable={true}
                       />
                     </Col>
 
@@ -255,6 +256,7 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                         onChange={(e) => multiSelectChangeHandler(e, 'ad_servers_ids')}
                         ref={adServersSelectRef}
                         placeholder='Filter by ad server(s)'
+                        isClearable={true}
                       />
                     </Col>
                   </Row>
@@ -271,6 +273,7 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                         onChange={(e) => multiSelectChangeHandler(e, 'technologies_ids')}
                         ref={technologiesSelectRef}
                         placeholder='Filter by technology(s)'
+                        isClearable={true}
                       />
                     </Col>
 
@@ -287,6 +290,7 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                         ref={verticalsSelectRef}
                         placeholder='Filter by vertical(s)'
                         formatOptionLabel={indentOptions}
+                        isClearable={true}
                       />
                     </Col>
 
@@ -302,6 +306,7 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                         onChange={(e) => multiSelectChangeHandler(e, 'countries_ids')}
                         ref={countriesSelectRef}
                         placeholder='Filter by country(ies)'
+                        isClearable={true}
                       />
                     </Col>
                   </Row>
@@ -320,6 +325,7 @@ const PublicationFilter: React.FC<Props> = ({showFilter, setExportQuery, filters
                         ref={regionsSelectRef}
                         placeholder='Filter by region(s)'
                         isDisabled={!!(filters?.countries_ids && filters?.countries_ids.length > 0)}
+                        isClearable={true}
                       />
                     </Col>
 

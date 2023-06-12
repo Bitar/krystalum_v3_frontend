@@ -139,12 +139,12 @@ const PublicationVerticalEdit: React.FC = () => {
                 <KrysFormLabel text='Vertical' isRequired={true} />
 
                 <Select
-                  name={'vertical_id'}
+                  name='vertical_id'
                   value={filteredVerticals.find((vertical) => vertical.id === form.vertical_id)}
                   options={filteredVerticals}
                   getOptionLabel={(instance) => instance.name}
                   getOptionValue={(instance) => instance.id.toString()}
-                  placeholder={'Select a vertical'}
+                  placeholder='Select a vertical'
                   onChange={(e) => {
                     genericSingleSelectOnChangeHandler(e, form, setForm, 'vertical_id')
                   }}

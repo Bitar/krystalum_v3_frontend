@@ -108,7 +108,7 @@ const getPublisherColumns = (isPublisher: boolean) => {
         return (
           <ActionsCell
             id={props.data[props.row.index].id}
-            path={'supply/publishers'}
+            path='supply/publishers'
             queryKey={QUERIES.PUBLISHERS_LIST}
             showView={false}
             showEdit={

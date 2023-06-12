@@ -135,11 +135,11 @@ const PublisherAccountManager: React.FC = () => {
                 <KrysFormLabel text='Account manager' isRequired={true} />
 
                 <Select
-                  name={'user_id'}
+                  name='user_id'
                   options={accountManagers}
                   getOptionLabel={(instance) => instance.name}
                   getOptionValue={(instance) => instance.id.toString()}
-                  placeholder={'Select an account manager'}
+                  placeholder='Select an account manager'
                   onChange={(e) => {
                     genericSingleSelectOnChangeHandler(e, form, setForm, 'user_id')
                   }}
@@ -148,7 +148,7 @@ const PublisherAccountManager: React.FC = () => {
                 <div className='mt-1 text-danger'>{errors?.user_id ? errors?.user_id : null}</div>
               </div>
 
-              <KrysFormFooter cancelUrl={'/supply/publishers'} />
+              <KrysFormFooter cancelUrl='/supply/publishers' />
             </Form>
           )}
         </Formik>

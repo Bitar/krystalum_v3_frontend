@@ -17,11 +17,7 @@ export const formatNumber = (amount: number) => {
 export const removeEmptyFromObject = (obj: Object) => {
   return Object.fromEntries(
     Object.entries(obj).filter(
-      ([, value]) => typeof value !== undefined && value !== null && value.length !== 0
+      ([, value]) => value !== undefined && value !== null && value.length !== 0
     )
   )
-}
-
-export const getEnumValues = (enumObject: any) => {
-  return Object.values(enumObject).filter((value) => Number.isInteger(value))
 }

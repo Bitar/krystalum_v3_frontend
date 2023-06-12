@@ -165,7 +165,7 @@ const PublicationAnalyticCreate: React.FC = () => {
               <div className='mb-7'>
                 <KrysRadioButton
                   name='geo_type'
-                  label={'Regions'}
+                  label='Regions'
                   onChangeHandler={(e) => {
                     e.stopPropagation()
                     setForm({
@@ -179,7 +179,7 @@ const PublicationAnalyticCreate: React.FC = () => {
 
                 <KrysRadioButton
                   name='geo_type'
-                  label={'Countries'}
+                  label='Countries'
                   onChangeHandler={(e) => {
                     e.stopPropagation()
                     setForm({
@@ -200,7 +200,6 @@ const PublicationAnalyticCreate: React.FC = () => {
 
                   <Select
                     name='geo_id'
-                    menuPlacement={'top'}
                     options={regions}
                     getOptionLabel={(instance) => instance.name}
                     getOptionValue={(instance) => instance.id.toString()}
@@ -222,7 +221,6 @@ const PublicationAnalyticCreate: React.FC = () => {
 
                   <Select
                     name='geo_id'
-                    menuPlacement={'top'}
                     options={countries}
                     getOptionLabel={(instance) => instance.name}
                     getOptionValue={(instance) => instance.id.toString()}
@@ -243,7 +241,6 @@ const PublicationAnalyticCreate: React.FC = () => {
 
                 <Select
                   name='device_id'
-                  menuPlacement={'top'}
                   options={devices}
                   getOptionLabel={(instance) => instance.name}
                   getOptionValue={(instance) => instance.id.toString()}
@@ -273,7 +270,7 @@ const PublicationAnalyticCreate: React.FC = () => {
                 <div className='mt-1 text-danger'>{errors?.value ? errors?.value : null}</div>
               </div>
 
-              <KrysFormFooter cancelUrl={'/supply/publications'} />
+              <KrysFormFooter cancelUrl='/supply/publications' />
             </Form>
           )}
         </Formik>

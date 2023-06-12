@@ -11,7 +11,6 @@ import {genericOnChangeHandler} from '../../../../../../helpers/form'
 import {submitRequest} from '../../../../../../helpers/requests'
 import {Actions, KrysToastType} from '../../../../../../helpers/variables'
 import {useKrysApp} from '../../../../../../modules/general/KrysApp'
-import {updatePublisherContact} from '../../../../../../requests/supply/publisher/PublisherContact'
 import {
   getPublisherPayments,
   storePublisherPayment,
@@ -175,7 +174,7 @@ const PublisherPaymentCreate: React.FC = () => {
                 </div>
               </div>
 
-              <KrysFormFooter cancelUrl={'/supply/publishers'} />
+              <KrysFormFooter cancelUrl='/supply/publishers' />
             </Form>
           )}
         </Formik>

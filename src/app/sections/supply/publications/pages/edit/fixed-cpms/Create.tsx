@@ -1,4 +1,3 @@
-import axios from 'axios'
 import {Field, Form, Formik} from 'formik'
 import React, {useRef, useState} from 'react'
 import Select from 'react-select'
@@ -9,22 +8,17 @@ import {indentOptions} from '../../../../../../components/forms/IndentOptions'
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter'
 import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel'
 import KrysRadioButton from '../../../../../../components/forms/KrysRadioButton'
-import SingleSelect from '../../../../../../components/forms/SingleSelect'
 import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable'
 import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum'
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
 import {
-  GenericErrorMessage,
   genericMultiSelectOnChangeHandler,
   genericOnChangeHandler,
   genericSingleSelectOnChangeHandler,
 } from '../../../../../../helpers/form'
-import {extractErrors, submitRequest} from '../../../../../../helpers/requests'
-import {DEFAULT_CURRENCY} from '../../../../../../helpers/settings'
+import {submitRequest} from '../../../../../../helpers/requests'
 import {Actions, KrysToastType} from '../../../../../../helpers/variables'
-import {Currency} from '../../../../../../models/misc/Currency'
 import {useKrysApp} from '../../../../../../modules/general/KrysApp'
-import {updatePublicationAnalytic} from '../../../../../../requests/supply/publication/PublisherAnalytic'
 import {
   getPublicationFixedCpms,
   storePublicationFixedCpm,
@@ -48,17 +42,12 @@ const PublicationFixedCpmCreate: React.FC = () => {
   )
   const [formErrors, setFormErrors] = useState<string[]>([])
   const [refreshTable, setRefreshTable] = useState<boolean>(false)
-  const [selectedCurrency, setSelectedCurrency] = useState<Currency | null>(DEFAULT_CURRENCY)
 
   const formatsSelectRef = useRef<any>(null)
   const geosSelectRef = useRef<any>(null)
 
   const {formats, regions, countries} = options
   const {currencies} = editOptions
-
-  const selectChangeHandler = (e: any, key: string) => {
-    genericSingleSelectOnChangeHandler(e, form, setForm, key)
-  }
 
   const multiSelectChangeHandler = (e: any, key: string) => {
     genericMultiSelectOnChangeHandler(e, form, setForm, key)
@@ -124,7 +113,7 @@ const PublicationFixedCpmCreate: React.FC = () => {
               <div className='mb-7'>
                 <KrysRadioButton
                   name='geo_type'
-                  label={'Regions'}
+                  label='Regions'
                   onChangeHandler={(e) => {
                     e.stopPropagation()
                     setForm({
@@ -138,7 +127,7 @@ const PublicationFixedCpmCreate: React.FC = () => {
 
                 <KrysRadioButton
                   name='geo_type'
-                  label={'Countries'}
+                  label='Countries'
                   onChangeHandler={(e) => {
                     e.stopPropagation()
                     setForm({
@@ -234,16 +223,14 @@ const PublicationFixedCpmCreate: React.FC = () => {
                 <KrysFormLabel text='Currency' isRequired={true} />
 
                 <Select
-                  name={'currency_id'}
-                  value={selectedCurrency}
+                  name='currency_id'
+                  value={currencies.find((currency) => currency.id === form.currency_id)}
                   options={currencies}
                   getOptionLabel={(instance) => instance.currency}
                   getOptionValue={(instance) => instance.id.toString()}
-                  placeholder={'Select a currency'}
+                  placeholder='Select a currency'
                   onChange={(e) => {
                     genericSingleSelectOnChangeHandler(e, form, setForm, 'currency_id')
-
-                    setSelectedCurrency(e as Currency)
                   }}
                 />
 
@@ -252,7 +239,7 @@ const PublicationFixedCpmCreate: React.FC = () => {
                 </div>
               </div>
 
-              <KrysFormFooter cancelUrl={'/supply/publications'} />
+              <KrysFormFooter cancelUrl='/supply/publications' />
             </Form>
           )}
         </Formik>

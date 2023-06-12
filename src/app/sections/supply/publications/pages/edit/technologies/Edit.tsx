@@ -134,14 +134,14 @@ const PublicationTechnologyEdit: React.FC = () => {
                 <KrysFormLabel text='Technology' isRequired={true} />
 
                 <Select
-                  name={'technology_id'}
+                  name='technology_id'
                   value={filteredTechnologies.find(
                     (technology) => technology.id === form.technology_id
                   )}
                   options={filteredTechnologies}
                   getOptionLabel={(instance) => instance.name}
                   getOptionValue={(instance) => instance.id.toString()}
-                  placeholder={'Select a technology'}
+                  placeholder='Select a technology'
                   onChange={(e) => {
                     genericSingleSelectOnChangeHandler(e, form, setForm, 'technology_id')
                   }}

@@ -127,7 +127,7 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
               <div className='mb-7'>
                 <KrysRadioButton
                   name='geo_type'
-                  label={'Regions'}
+                  label='Regions'
                   onChangeHandler={(e) => {
                     e.stopPropagation()
                     setForm({
@@ -141,7 +141,7 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
 
                 <KrysRadioButton
                   name='geo_type'
-                  label={'Countries'}
+                  label='Countries'
                   onChangeHandler={(e) => {
                     e.stopPropagation()
                     setForm({
@@ -162,7 +162,7 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
 
                   <Select
                     isMulti
-                    name={'geo_ids'}
+                    name='geo_ids'
                     value={regions.filter(
                       (region) =>
                         form.geo_type === GeoTypeEnum.REGION && form.geo_ids.includes(region.id)
@@ -186,7 +186,7 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
 
                   <Select
                     isMulti
-                    name={'geo_ids'}
+                    name='geo_ids'
                     value={countries.filter(
                       (country) =>
                         form.geo_type === GeoTypeEnum.COUNTRY && form.geo_ids.includes(country.id)
@@ -209,7 +209,7 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
 
                 <Select
                   isMulti
-                  name={'format_ids'}
+                  name='format_ids'
                   value={formats.filter((format) => form.format_ids.includes(format.id))}
                   options={formats}
                   getOptionLabel={(instance) => instance.name}
@@ -231,7 +231,7 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
 
                 <Select
                   isMulti
-                  name={'campaign_type_ids'}
+                  name='campaign_type_ids'
                   value={campaignTypes.filter((campaignType) =>
                     form.campaign_type_ids?.includes(campaignType.id)
                   )}
@@ -254,7 +254,7 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
 
                 <Select
                   isMulti
-                  name={'website_page_ids'}
+                  name='website_page_ids'
                   value={websitePages.filter((websitePage) =>
                     form.website_page_ids?.includes(websitePage.id)
                   )}
@@ -277,7 +277,7 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
 
                 <Select
                   isMulti
-                  name={'requirement_ids'}
+                  name='requirement_ids'
                   value={campaignRestrictionRequirements.filter((campaignRestrictionRequirement) =>
                     form.requirement_ids?.includes(campaignRestrictionRequirement.id)
                   )}

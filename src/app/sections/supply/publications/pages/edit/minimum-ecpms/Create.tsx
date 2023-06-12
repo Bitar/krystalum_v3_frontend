@@ -17,7 +17,6 @@ import {
   genericSingleSelectOnChangeHandler,
 } from '../../../../../../helpers/form'
 import {submitRequest} from '../../../../../../helpers/requests'
-import {DEFAULT_CURRENCY} from '../../../../../../helpers/settings'
 import {Actions, KrysToastType} from '../../../../../../helpers/variables'
 
 import {useKrysApp} from '../../../../../../modules/general/KrysApp'
@@ -119,7 +118,7 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
               <div className='mb-7'>
                 <KrysRadioButton
                   name='geo_type'
-                  label={'Regions'}
+                  label='Regions'
                   onChangeHandler={(e) => {
                     e.stopPropagation()
                     setForm({
@@ -133,7 +132,7 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
 
                 <KrysRadioButton
                   name='geo_type'
-                  label={'Countries'}
+                  label='Countries'
                   onChangeHandler={(e) => {
                     e.stopPropagation()
                     setForm({
@@ -230,14 +229,14 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
 
                 <Select
                   name='currency_id'
+                  value={currencies.find((currency) => currency.id === form.currency_id)}
                   options={currencies}
                   getOptionLabel={(instance) => instance.currency}
                   getOptionValue={(instance) => instance.id.toString()}
-                  onChange={(e) => {
-                    selectChangeHandler(e, 'currency_id')
-                  }}
-                  value={DEFAULT_CURRENCY}
                   placeholder='Select a currency'
+                  onChange={(e) => {
+                    genericSingleSelectOnChangeHandler(e, form, setForm, 'currency_id')
+                  }}
                 />
 
                 <div className='mt-1 text-danger'>
@@ -245,7 +244,7 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
                 </div>
               </div>
 
-              <KrysFormFooter cancelUrl={'/supply/publications'} />
+              <KrysFormFooter cancelUrl='/supply/publications' />
             </Form>
           )}
         </Formik>

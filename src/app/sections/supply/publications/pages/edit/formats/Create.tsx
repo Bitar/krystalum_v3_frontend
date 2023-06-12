@@ -127,7 +127,7 @@ const PublicationFormatCreate: React.FC = () => {
         <FormErrors errorMessages={formErrors} />
 
         {alertMessages.length > 0 && (
-          <Alert title={'Warning!'} messages={alertMessages} setMessages={setAlertMessages} />
+          <Alert title='Warning!' messages={alertMessages} setMessages={setAlertMessages} />
         )}
 
         <Formik
@@ -165,7 +165,6 @@ const PublicationFormatCreate: React.FC = () => {
 
                 <Select
                   name='type'
-                  menuPlacement={'top'}
                   options={formatTypes}
                   getOptionLabel={(instance) => instance.name}
                   getOptionValue={(instance) => instance.id.toString()}
@@ -180,7 +179,7 @@ const PublicationFormatCreate: React.FC = () => {
                 <div className='mt-1 text-danger'>{errors?.type ? errors?.type : null}</div>
               </div>
 
-              <KrysFormFooter cancelUrl={'/supply/publications'} />
+              <KrysFormFooter cancelUrl='/supply/publications' />
             </Form>
           )}
         </Formik>

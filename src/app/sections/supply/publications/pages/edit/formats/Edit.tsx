@@ -125,7 +125,7 @@ const PublicationFormatEdit: React.FC = () => {
         <FormErrors errorMessages={formErrors} />
 
         {alertMessages.length > 0 && (
-          <Alert title={'Warning!'} messages={alertMessages} setMessages={setAlertMessages} />
+          <Alert title='Warning!' messages={alertMessages} setMessages={setAlertMessages} />
         )}
 
         <Formik
@@ -140,12 +140,12 @@ const PublicationFormatEdit: React.FC = () => {
                 <KrysFormLabel text='Format' isRequired={true} />
 
                 <Select
-                  name={'format_id'}
+                  name='format_id'
                   value={formats.find((format) => format.id === form.format_id)}
                   options={formats}
                   getOptionLabel={(instance) => instance.name}
                   getOptionValue={(instance) => instance.id.toString()}
-                  placeholder={'Select a format'}
+                  placeholder='Select a format'
                   onChange={(e) => {
                     genericSingleSelectOnChangeHandler(e, form, setForm, 'format_id')
                   }}
@@ -161,12 +161,12 @@ const PublicationFormatEdit: React.FC = () => {
                 <KrysFormLabel text='Type' isRequired={true} />
 
                 <Select
-                  name={'type'}
+                  name='type'
                   value={formatTypes.find((formatType) => formatType.id === form.type)}
                   options={formatTypes}
                   getOptionLabel={(instance) => instance.name}
                   getOptionValue={(instance) => instance.id.toString()}
-                  placeholder={'Select a type'}
+                  placeholder='Select a type'
                   onChange={(e) => {
                     genericSingleSelectOnChangeHandler(e, form, setForm, 'type')
                   }}

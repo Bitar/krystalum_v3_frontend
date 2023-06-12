@@ -117,12 +117,12 @@ const PublisherBasicInformationEdit: React.FC = () => {
                     <KrysFormLabel text='Tier' isRequired={false} />
 
                     <Select
-                      name={'tier_id'}
+                      name='tier_id'
                       value={tiers.find((tier) => tier.id === form.tier_id)}
                       options={tiers}
                       getOptionLabel={(instance) => instance.name}
                       getOptionValue={(instance) => instance.id.toString()}
-                      placeholder={'Select tier'}
+                      placeholder='Select tier'
                       onChange={(e) => {
                         genericSingleSelectOnChangeHandler(e, form, setForm, 'tier_id')
                       }}
@@ -160,7 +160,7 @@ const PublisherBasicInformationEdit: React.FC = () => {
 
                     <KrysRadioButton
                       name='revenue_type'
-                      label={'Revenue Share'}
+                      label='Revenue Share'
                       onChangeHandler={(e) => {
                         e.stopPropagation()
                         setForm({
@@ -173,7 +173,7 @@ const PublisherBasicInformationEdit: React.FC = () => {
 
                     <KrysRadioButton
                       name='revenue_type'
-                      label={'Amount Commitment'}
+                      label='Amount Commitment'
                       onChangeHandler={(e) => {
                         e.stopPropagation()
                         setForm({
@@ -270,12 +270,12 @@ const PublisherBasicInformationEdit: React.FC = () => {
                 <KrysFormLabel text='HQ country' isRequired={false} />
 
                 <Select
-                  name={'hq_country_id'}
+                  name='hq_country_id'
                   value={countries.find((country) => country.id === form.hq_country_id)}
                   options={countries}
                   getOptionLabel={(instance) => instance.name}
                   getOptionValue={(instance) => instance.id.toString()}
-                  placeholder={'Select hq country'}
+                  placeholder='Select hq country'
                   onChange={(e) => {
                     genericSingleSelectOnChangeHandler(e, form, setForm, 'hq_country_id')
                   }}
@@ -286,7 +286,7 @@ const PublisherBasicInformationEdit: React.FC = () => {
                 </div>
               </div>
 
-              <KrysFormFooter cancelUrl={'/supply/publishers'} />
+              <KrysFormFooter cancelUrl='/supply/publishers' />
             </Form>
           )}
         </Formik>

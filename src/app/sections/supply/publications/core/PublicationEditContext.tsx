@@ -1,11 +1,10 @@
-import axios from 'axios'
 import {createContext, Dispatch, FC, SetStateAction, useContext, useEffect, useState} from 'react'
 import {WithChildren} from '../../../../../_metronic/helpers'
 import {submitRequest} from '../../../../helpers/requests'
 import {DEFAULT_PUBLICATION_EDIT_OPTIONS} from '../../../../helpers/settings'
 import {PublicationEditOptions} from '../../../../models/supply/Options'
 import {Publication} from '../../../../models/supply/publication/Publication'
-import {getPublicationEditOptions, getPublicationOptions} from '../../../../requests/supply/Options'
+import {getPublicationEditOptions} from '../../../../requests/supply/Options'
 
 interface Props {
   publication: Publication | null

@@ -1,4 +1,3 @@
-import axios from 'axios'
 import {Form, Formik} from 'formik'
 import React, {useEffect, useRef, useState} from 'react'
 import Select from 'react-select'
@@ -12,16 +11,14 @@ import KrysInnerTable from '../../../../../../components/tables/KrysInnerTable'
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
 import {filterData} from '../../../../../../helpers/dataManipulation'
 import {
-  GenericErrorMessage,
   genericMultiSelectOnChangeHandler,
   genericOnChangeHandler,
 } from '../../../../../../helpers/form'
-import {extractErrors, submitRequest} from '../../../../../../helpers/requests'
+import {submitRequest} from '../../../../../../helpers/requests'
 import {Actions, KrysToastType} from '../../../../../../helpers/variables'
 import {Vertical} from '../../../../../../models/misc/Vertical'
 
 import {useKrysApp} from '../../../../../../modules/general/KrysApp'
-import {updatePublicationTechnology} from '../../../../../../requests/supply/publication/PublicationTechnology'
 import {
   getPublicationVerticals,
   storePublicationVertical,
@@ -153,7 +150,7 @@ const PublicationVerticalCreate: React.FC = () => {
                 </div>
               </div>
 
-              <KrysFormFooter cancelUrl={'/supply/publications'} />
+              <KrysFormFooter cancelUrl='/supply/publications' />
             </Form>
           )}
         </Formik>

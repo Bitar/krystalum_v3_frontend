@@ -122,7 +122,7 @@ const PublicationCampaignRestrictionMetaCreate: React.FC = () => {
               </div>
             </div>
 
-            <KrysFormFooter cancelUrl={'/supply/publications'} />
+            <KrysFormFooter cancelUrl='/supply/publications' />
           </Form>
         )}
       </Formik>

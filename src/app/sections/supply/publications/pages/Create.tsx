@@ -152,7 +152,7 @@ const PublicationCreate: React.FC = () => {
         {publisher && (
           <Alert
             color='success'
-            title={'Success!'}
+            title='Success!'
             messages={[
               `Please fill out the form below to create a publication related to the publisher you have created '${publisher.name}'.`,
             ]}
@@ -278,7 +278,7 @@ const PublicationCreate: React.FC = () => {
 
                 <KrysCheckbox
                   name='types[]'
-                  label={'Website'}
+                  label='Website'
                   onChangeHandler={(e) =>
                     checkboxChangeHandler(e, 'types', PublicationTypeEnum.WEBSITE, true)
                   }
@@ -287,7 +287,7 @@ const PublicationCreate: React.FC = () => {
 
                 <KrysCheckbox
                   name='types[]'
-                  label={'iOS Application'}
+                  label='iOS Application'
                   onChangeHandler={(e) =>
                     checkboxChangeHandler(e, 'types', PublicationTypeEnum.IOS_APPLICATION, true)
                   }
@@ -296,7 +296,7 @@ const PublicationCreate: React.FC = () => {
 
                 <KrysCheckbox
                   name='types[]'
-                  label={'Android Application'}
+                  label='Android Application'
                   onChangeHandler={(e) =>
                     checkboxChangeHandler(e, 'types', PublicationTypeEnum.ANDROID_APPLICATION, true)
                   }
@@ -387,7 +387,7 @@ const PublicationCreate: React.FC = () => {
 
                     <KrysRadioButton
                       name='android_application_type'
-                      label={'Free'}
+                      label='Free'
                       onChangeHandler={(e) => {
                         e.stopPropagation()
                         setForm({
@@ -402,7 +402,7 @@ const PublicationCreate: React.FC = () => {
 
                     <KrysRadioButton
                       name='android_application_type'
-                      label={'Paid'}
+                      label='Paid'
                       onChangeHandler={(e) => {
                         e.stopPropagation()
                         setForm({
@@ -486,7 +486,7 @@ const PublicationCreate: React.FC = () => {
 
                     <KrysRadioButton
                       name='ios_application_type'
-                      label={'Free'}
+                      label='Free'
                       onChangeHandler={(e) => {
                         e.stopPropagation()
                         setForm({
@@ -499,7 +499,7 @@ const PublicationCreate: React.FC = () => {
 
                     <KrysRadioButton
                       name='ios_application_type'
-                      label={'Paid'}
+                      label='Paid'
                       onChangeHandler={(e) => {
                         e.stopPropagation()
                         setForm({
@@ -549,7 +549,7 @@ const PublicationCreate: React.FC = () => {
 
                 <KrysRadioButton
                   name='revenue_type'
-                  label={'Same as publisher'}
+                  label='Same as publisher'
                   onChangeHandler={(e) => {
                     e.stopPropagation()
                     setForm({
@@ -563,7 +563,7 @@ const PublicationCreate: React.FC = () => {
 
                 <KrysRadioButton
                   name='revenue_type'
-                  label={'Revenue Share'}
+                  label='Revenue Share'
                   onChangeHandler={(e) => {
                     e.stopPropagation()
                     setForm({
@@ -576,7 +576,7 @@ const PublicationCreate: React.FC = () => {
 
                 <KrysRadioButton
                   name='revenue_type'
-                  label={'Amount Commitment'}
+                  label='Amount Commitment'
                   onChangeHandler={(e) => {
                     e.stopPropagation()
                     setForm({
@@ -635,7 +635,7 @@ const PublicationCreate: React.FC = () => {
                 <span className='fs-5 text-gray-700 d-flex fw-medium'>Report Settings</span>
                 <span className='text-muted'>
                   Configure advertising-related settings for the publication, including Deal ID/PMP,
-                  temporary inventory restrictions{' '}
+                  temporary inventory restrictions
                   <small className='fw-bold text-muted'>
                     (if 'Temporarily Not Sending Inventory' is selected, then the publication will
                     be archived)
@@ -647,7 +647,7 @@ const PublicationCreate: React.FC = () => {
               <div className='mb-7'>
                 <KrysCheckbox
                   name='is_deal_pmp'
-                  label={'Deal ID / PMP'}
+                  label='Deal ID / PMP'
                   onChangeHandler={(e) =>
                     checkboxChangeHandler(e, 'is_deal_pmp', Number(!form.is_deal_pmp), false)
                   }
@@ -656,7 +656,7 @@ const PublicationCreate: React.FC = () => {
 
                 <KrysCheckbox
                   name='is_archived'
-                  label={'Temporarily Not Sending Inventory'}
+                  label='Temporarily Not Sending Inventory'
                   onChangeHandler={(e) =>
                     checkboxChangeHandler(e, 'is_archived', Number(!form.is_archived), false)
                   }
@@ -665,7 +665,7 @@ const PublicationCreate: React.FC = () => {
 
                 <KrysCheckbox
                   name='has_hi10'
-                  label={'Accept Hi10 Monetization'}
+                  label='Accept Hi10 Monetization'
                   onChangeHandler={(e) => {
                     e.stopPropagation()
                     setForm({
@@ -693,7 +693,7 @@ const PublicationCreate: React.FC = () => {
 
                   <KrysRadioButton
                     name='hi10_to_display'
-                    label={'Transfer Impressions to Display (default)'}
+                    label='Transfer Impressions to Display (default)'
                     onChangeHandler={(e) => {
                       e.stopPropagation()
                       setForm({
@@ -707,7 +707,7 @@ const PublicationCreate: React.FC = () => {
 
                   <KrysRadioButton
                     name='hi10_to_video'
-                    label={'Transfer Impressions to Video'}
+                    label='Transfer Impressions to Video'
                     onChangeHandler={(e) => {
                       e.stopPropagation()
                       setForm({
@@ -726,7 +726,7 @@ const PublicationCreate: React.FC = () => {
                 </div>
               )}
 
-              <KrysFormFooter cancelUrl={'/supply/publications'} />
+              <KrysFormFooter cancelUrl='/supply/publications' />
             </Form>
           )}
         </Formik>

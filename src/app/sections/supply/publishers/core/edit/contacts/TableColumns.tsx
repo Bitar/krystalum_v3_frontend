@@ -37,7 +37,7 @@ const PublisherContactsColumns: ReadonlyArray<Column<PublisherContact>> = [
             detail: ${props.data[props.row.index].detail}`
 
       return (
-        <Restricted to={'manage-supply'}>
+        <Restricted to='manage-supply'>
           <ActionsCell
             id={props.data[props.row.index].id}
             path={`supply/publishers/${publisher?.id}/contacts`}

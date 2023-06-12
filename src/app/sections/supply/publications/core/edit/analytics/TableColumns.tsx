@@ -82,7 +82,7 @@ const PublicationAnalyticsColumns: ReadonlyArray<Column<PublicationAnalytic>> = 
             }`
 
       return (
-        <Restricted to={'manage-supply'}>
+        <Restricted to='manage-supply'>
           <ActionsCell
             id={props.data[props.row.index].id}
             path={`supply/publications/${publication?.id}/analytics`}

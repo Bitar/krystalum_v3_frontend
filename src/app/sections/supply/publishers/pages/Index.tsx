@@ -57,16 +57,16 @@ const PublisherIndex: React.FC = () => {
               <div className='row'>
                 <div className='col-12'>
                   <EngageWidget
-                    backgroundColor={'rgb(102, 50, 89)'}
-                    backgroundPosition={'right center'}
-                    backgroundImage={'/media/illustrations/sigma-1/5.png'}
-                    title={'Archived Publishers'}
+                    backgroundColor='rgb(102, 50, 89)'
+                    backgroundPosition='right center'
+                    backgroundImage='/media/illustrations/sigma-1/5.png'
+                    title='Archived Publishers'
                     text={
                       "Browse through the list of publishers that don't have publications that are currently receiving inventory"
                     }
-                    ctaText={'Go to Archived Publishers'}
-                    ctaUrl={'/supply/publishers/archived'}
-                    ctaClasses={'btn-primary fw-semibold px-6 py-3'}
+                    ctaText='Go to Archived Publishers'
+                    ctaUrl='/supply/publishers/archived'
+                    ctaClasses='btn-primary fw-semibold px-6 py-3'
                   />
                 </div>
               </div>

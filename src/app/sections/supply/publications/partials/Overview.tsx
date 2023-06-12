@@ -90,7 +90,7 @@ const PublicationOverview: React.FC = () => {
                         path='/media/icons/duotune/general/gen005.svg'
                         className='svg-icon-4 me-1'
                       />
-                      Deal PMP: &nbsp;{' '}
+                      Deal PMP: &nbsp;' '
                       {publication?.is_deal_pmp ? (
                         <BadgesCell texts={['Yes']} color='light-success' align='left' />
                       ) : (
@@ -129,7 +129,7 @@ const PublicationOverview: React.FC = () => {
                         </div>
                       </div>
                       <div className='fw-bold fs-6 text-gray-400'>
-                        Revenue share{' '}
+                        Revenue share' '
                         {publication?.revenueType.id === RevenueTypeEnum.SAME_AS_PUBLISHER && (
                           <small className='fw-normal'>(same as publisher)</small>
                         )}
@@ -153,7 +153,7 @@ const PublicationOverview: React.FC = () => {
                         </div>
                       </div>
                       <div className='fw-bold fs-6 text-gray-400'>
-                        Commitment{' '}
+                        Commitment' '
                         {publication?.revenueType.id === RevenueTypeEnum.SAME_AS_PUBLISHER && (
                           <small className='fw-normal'>(same as publisher)</small>
                         )}

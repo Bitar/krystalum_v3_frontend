@@ -134,12 +134,12 @@ const PublicationAdServerEdit: React.FC = () => {
                 <KrysFormLabel text='Ad Server' isRequired={true} />
 
                 <Select
-                  name={'ad_server_id'}
+                  name='ad_server_id'
                   value={filteredAdServers.find((adServer) => adServer.id === form.ad_server_id)}
                   options={filteredAdServers}
                   getOptionLabel={(instance) => instance.name}
                   getOptionValue={(instance) => instance.id.toString()}
-                  placeholder={'Select ad server'}
+                  placeholder='Select ad server'
                   onChange={(e) => {
                     genericSingleSelectOnChangeHandler(e, form, setForm, 'ad_server_id')
                   }}

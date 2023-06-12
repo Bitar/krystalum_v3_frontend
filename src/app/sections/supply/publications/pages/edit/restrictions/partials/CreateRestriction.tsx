@@ -137,7 +137,7 @@ const PublicationCampaignRestrictionCreate: React.FC<Props> = ({
             <div className='mb-7'>
               <KrysRadioButton
                 name='geo_type'
-                label={'Regions'}
+                label='Regions'
                 onChangeHandler={(e) => {
                   e.stopPropagation()
                   setForm({
@@ -151,7 +151,7 @@ const PublicationCampaignRestrictionCreate: React.FC<Props> = ({
 
               <KrysRadioButton
                 name='geo_type'
-                label={'Countries'}
+                label='Countries'
                 onChangeHandler={(e) => {
                   e.stopPropagation()
                   setForm({
@@ -244,6 +244,7 @@ const PublicationCampaignRestrictionCreate: React.FC<Props> = ({
                 }}
                 placeholder='Select one or more campaign types'
                 ref={campaignTypesSelectRef}
+                isClearable={true}
               />
 
               <div className='mt-1 text-danger'>
@@ -265,6 +266,7 @@ const PublicationCampaignRestrictionCreate: React.FC<Props> = ({
                 }}
                 placeholder='Select one or more website pages'
                 ref={websitePagesSelectRef}
+                isClearable={true}
               />
 
               <div className='mt-1 text-danger'>
@@ -287,6 +289,7 @@ const PublicationCampaignRestrictionCreate: React.FC<Props> = ({
                 formatOptionLabel={indentOptions}
                 placeholder='Select one or more campaign restriction requirements'
                 ref={campaignRestrictionRequirementsSelectRef}
+                isClearable={true}
               />
 
               <div className='mt-1 text-danger'>
@@ -294,7 +297,7 @@ const PublicationCampaignRestrictionCreate: React.FC<Props> = ({
               </div>
             </div>
 
-            <KrysFormFooter cancelUrl={'/supply/publications'} />
+            <KrysFormFooter cancelUrl='/supply/publications' />
           </Form>
         )}
       </Formik>

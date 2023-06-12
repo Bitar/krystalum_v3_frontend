@@ -27,7 +27,7 @@ const PublicationTechnologiesColumns: ReadonlyArray<Column<Technology>> = [
       const {publication, handleRefresh} = usePublicationEdit()
 
       return (
-        <Restricted to={'manage-supply'}>
+        <Restricted to='manage-supply'>
           <ActionsCell
             id={props.data[props.row.index].id}
             path={`supply/publications/${publication?.id}/technologies`}

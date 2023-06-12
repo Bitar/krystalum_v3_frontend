@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, {useEffect} from 'react'
 import {Outlet, Route, Routes, useParams} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
