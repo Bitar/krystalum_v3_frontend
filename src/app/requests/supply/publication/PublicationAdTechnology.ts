@@ -17,7 +17,7 @@ export const getPublicationAdTechnologies = (
 
   return axios
     .get(url)
-    .then((response: AxiosResponse<PublicationAdTechnologyPaginate>) => response.data)
+    .then((response: AxiosResponse<PublicationAdTechnologyPaginate>) => response.data.data)
     .catch((error) => {
       return error
     })

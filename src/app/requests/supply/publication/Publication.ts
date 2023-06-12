@@ -73,7 +73,7 @@ export const getArchivedPublications = (query?: String): Promise<PublicationPagi
 export const getPublication = async (id: number): Promise<Publication | AxiosError | undefined> => {
   return await axios
     .get(`${ENDPOINT}/${id}?${SHOW_INCLUDES}`)
-    .then((response) => response.data.data.data)
+    .then((response) => response.data.data)
     .catch((error) => {
       return error
     })
@@ -86,7 +86,7 @@ export const storePublication = async (
 
   return await axios
     .post(ENDPOINT + '/', formData)
-    .then((response) => response.data.data.data)
+    .then((response) => response.data.data)
     .catch((error) => {
       return error
     })
@@ -102,7 +102,7 @@ export const updatePublication = async (
 
   return await axios
     .post(ENDPOINT + '/' + id, formData)
-    .then((response) => response.data.data.data)
+    .then((response) => response.data.data)
     .catch((error) => {
       return error
     })

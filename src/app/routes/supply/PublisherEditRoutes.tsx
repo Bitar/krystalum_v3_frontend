@@ -25,7 +25,6 @@ const PublisherEditRoutes: React.FC = () => {
     if (id) {
       // get the publisher we need to edit from the database
       submitRequest(getPublisher, [id], (response) => {
-        console.log(response)
         setPublisher(response)
       })
     }

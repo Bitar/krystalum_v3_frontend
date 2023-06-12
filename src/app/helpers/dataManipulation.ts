@@ -21,3 +21,7 @@ export const removeEmptyFromObject = (obj: Object) => {
     )
   )
 }
+
+export const getEnumValues = (enumObject: any) => {
+  return Object.values(enumObject).filter((value) => Number.isInteger(value))
+}

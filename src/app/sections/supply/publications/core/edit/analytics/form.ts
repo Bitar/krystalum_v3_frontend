@@ -1,6 +1,7 @@
 import * as Yup from 'yup'
 import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum'
 import {PublicationAnalyticTypeEnum} from '../../../../../../enums/Supply/PublicationAnalyticTypeEnum'
+import {getEnumValues} from '../../../../../../helpers/dataManipulation'
 import {DEFAULT_ANALYTIC_TYPE} from '../../../../../../helpers/settings'
 import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic'
 
@@ -28,7 +29,10 @@ export const defaultAnalyticsFilterFields = {
 }
 
 export const PublicationAnalyticSchema = Yup.object().shape({
-  geo_type: Yup.string().oneOf(Object.values(GeoTypeEnum)).required(),
+  geo_type: Yup.string()
+    .oneOf(Object.values(GeoTypeEnum))
+    // .oneOf(getEnumValues(GeoTypeEnum) as number[])
+    .required(),
   geo_id: Yup.number().min(1, 'geo is a required field').required(),
   value: Yup.number().when('type', {
     is: (type: string) =>
