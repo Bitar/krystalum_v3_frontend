@@ -54,6 +54,7 @@ const PublicationCampaignRestrictionMetaCreate: React.FC = () => {
 
   const handleCreate = () => {
     if (publication) {
+      console.log(form)
       // send API request to create the publication campaign restriction meta
       submitRequest(
         storePublicationCampaignRestrictionMeta,
@@ -113,7 +114,7 @@ const PublicationCampaignRestrictionMetaCreate: React.FC = () => {
                   name='campaign_restriction_meta'
                   className='form-control fs-base'
                   placeholder='Enter publication campaign restriction meta'
-                  value={form.campaign_restriction_meta}
+                  defaultValue={form.campaign_restriction_meta}
                 />
               </FormGroup>
 

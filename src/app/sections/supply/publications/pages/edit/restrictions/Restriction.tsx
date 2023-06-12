@@ -43,7 +43,7 @@ const PublicationCampaignRestriction: React.FC = () => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [publication])
+  }, [publication, options])
 
   const selectChangeHandler = (e: any, key: string) => {
     genericSingleSelectOnChangeHandler(e, form, setForm, key)

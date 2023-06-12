@@ -24,6 +24,7 @@ const PublicationEditRoutes: React.FC = () => {
 
   useEffect(() => {
     if (id) {
+      console.log(id)
       // get the publication we need to edit from the database
       submitRequest(getPublication, [id], (response) => {
         setPublication(response)

@@ -9,6 +9,7 @@ import {getPublisher} from '../../requests/supply/publisher/Publisher'
 import PublisherEdit from '../../sections/supply/publishers/pages/Edit'
 import PublisherContactEdit from '../../sections/supply/publishers/pages/edit/contacts/Edit'
 import PublisherPaymentEdit from '../../sections/supply/publishers/pages/edit/payments/Edit'
+import PublisherOverview from '../../sections/supply/publishers/partials/Overview'
 import {useSupply} from '../../sections/supply/shared/SupplyContext'
 
 const PublisherEditRoutes: React.FC = () => {
@@ -61,7 +62,7 @@ const PublisherEditRoutes: React.FC = () => {
       <Route
         element={
           <SuspenseView>
-            {/*<PublisherOverview />*/}
+            <PublisherOverview />
             <Outlet />
           </SuspenseView>
         }

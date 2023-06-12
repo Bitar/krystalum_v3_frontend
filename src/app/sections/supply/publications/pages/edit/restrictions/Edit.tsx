@@ -21,7 +21,10 @@ import {Sections} from '../../../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables'
 import {PublicationCampaignRestriction} from '../../../../../../models/supply/publication/PublicationCampaignRestriction'
 import {useKrysApp} from '../../../../../../modules/general/KrysApp'
-import {updatePublicationCampaignRestriction} from '../../../../../../requests/supply/publication/PublisherCampaignRestriction'
+import {
+  getPublicationCampaignRestriction,
+  updatePublicationCampaignRestriction,
+} from '../../../../../../requests/supply/publication/PublisherCampaignRestriction'
 import {
   defaultPublicationCampaignRestrictionFormFields,
   fillEditForm,
@@ -53,7 +56,7 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
     if (publication && cid) {
       // get the publication campaign restriction we need to edit from the database
       submitRequest(
-        updatePublicationCampaignRestriction,
+        getPublicationCampaignRestriction,
         [publication, parseInt(cid)],
         (response) => {
           // we were able to fetch current publication campaign restriction to edit

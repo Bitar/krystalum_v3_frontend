@@ -56,9 +56,9 @@ const PublisherAccountManager: React.FC = () => {
         getAllPerformanceMetrics,
         ['filter[roles][]=12&filter[roles][]=5'],
         (response) => {
-          setAllAccountManagers(response.data)
+          setAllAccountManagers(response)
           setAccountManagers(
-            response.data.filter((user: User) => user.id !== publisher.accountManager?.id)
+            response.filter((user: User) => user.id !== publisher.accountManager?.id)
           )
         },
         setFormErrors
