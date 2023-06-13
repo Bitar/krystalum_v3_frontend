@@ -93,7 +93,7 @@ const PublicationBasicInformationEdit: React.FC = () => {
     }
   }
 
-  const handleEdit = () => {
+  const handleEdit = (e: any, fns: any) => {
     if (publication) {
       // send API request to update the publication
       submitRequest(
@@ -112,7 +112,8 @@ const PublicationBasicInformationEdit: React.FC = () => {
 
           setFormErrors([])
         },
-        setFormErrors
+        setFormErrors,
+        fns
       )
 
       scrollToTop()

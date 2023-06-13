@@ -88,7 +88,7 @@ const PublicationAnalyticEdit: React.FC = () => {
     genericOnChangeHandler(e, form, setForm)
   }
 
-  const handleEdit = () => {
+  const handleEdit = (e: any, fns: any) => {
     if (publication && publicationAnalytic) {
       // we need to update the analytic's data by doing API call with form
       submitRequest(
@@ -105,7 +105,8 @@ const PublicationAnalyticEdit: React.FC = () => {
             type: KrysToastType.SUCCESS,
           })
         },
-        setFormErrors
+        setFormErrors,
+        fns
       )
     }
   }

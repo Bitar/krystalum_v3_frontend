@@ -93,7 +93,7 @@ const PublicationTechnologyEdit: React.FC = () => {
     genericOnChangeHandler(e, form, setForm)
   }
 
-  const handleEdit = () => {
+  const handleEdit = (e: any, fns: any) => {
     if (publication && publicationTechnology) {
       // we need to update the publication technology's data by doing API call with form
       submitRequest(
@@ -110,7 +110,8 @@ const PublicationTechnologyEdit: React.FC = () => {
             type: KrysToastType.SUCCESS,
           })
         },
-        setFormErrors
+        setFormErrors,
+        fns
       )
     }
   }

@@ -98,7 +98,7 @@ const PublicationVerticalEdit: React.FC = () => {
     genericOnChangeHandler(e, form, setForm)
   }
 
-  const handleEdit = () => {
+  const handleEdit = (e: any, fns: any) => {
     if (publication && publicationVertical) {
       // we need to update the publication vertical's data by doing API call with form
       submitRequest(
@@ -115,7 +115,8 @@ const PublicationVerticalEdit: React.FC = () => {
             type: KrysToastType.SUCCESS,
           })
         },
-        setFormErrors
+        setFormErrors,
+        fns
       )
     }
   }

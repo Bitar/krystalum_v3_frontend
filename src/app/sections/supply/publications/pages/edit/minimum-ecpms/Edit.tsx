@@ -89,7 +89,7 @@ const PublicationMinimumEcpmEdit: React.FC = () => {
     genericOnChangeHandler(e, form, setForm)
   }
 
-  const handleEdit = () => {
+  const handleEdit = (e: any, fns: any) => {
     if (publication && publicationMinimumEcpm) {
       // we need to update the minimum ecpm data by doing API call with form
       submitRequest(
@@ -106,7 +106,8 @@ const PublicationMinimumEcpmEdit: React.FC = () => {
             type: KrysToastType.SUCCESS,
           })
         },
-        setFormErrors
+        setFormErrors,
+        fns
       )
     }
   }

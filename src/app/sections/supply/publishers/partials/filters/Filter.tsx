@@ -19,7 +19,7 @@ import {submitRequest} from '../../../../../helpers/requests'
 import {User} from '../../../../../models/iam/User'
 import {useAuth} from '../../../../../modules/auth'
 import {useQueryRequest} from '../../../../../modules/table/QueryRequestProvider'
-import {getAllPerformanceMetrics} from '../../../../../requests/misc/PerformanceMetric'
+import {getAllUsers} from '../../../../../requests/iam/User'
 import {FilterSchema} from '../../../publications/core/filterForm'
 import {usePublisher} from '../../core/PublisherContext'
 
@@ -47,7 +47,7 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
     if (!hasAnyRoles(currentUser, [RoleEnum.PUBLISHER])) {
       // get all the account manager users
       submitRequest(
-        getAllPerformanceMetrics,
+        getAllUsers,
         ['filter[roles][]=12&filter[roles][]=5'],
         (response) => {
           setAccountManagers(response)

@@ -90,7 +90,7 @@ const PublicationFormatEdit: React.FC = () => {
     genericOnChangeHandler(e, form, setForm)
   }
 
-  const handleEdit = () => {
+  const handleEdit = (e: any, fns: any) => {
     if (publication && publicationFormat) {
       const message: string = checkFormats(publication, formats, form.format_id, form.type)
 
@@ -111,7 +111,8 @@ const PublicationFormatEdit: React.FC = () => {
               type: KrysToastType.SUCCESS,
             })
           },
-          setFormErrors
+          setFormErrors,
+          fns
         )
       }
     }

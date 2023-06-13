@@ -53,7 +53,7 @@ const PublisherContactCreate: React.FC = () => {
     genericSingleSelectOnChangeHandler(e, form, setForm, key)
   }
 
-  const handleCreate = () => {
+  const handleCreate = (e: any, fns: any) => {
     if (publisher) {
       // send API request to create the publisher contacts
       submitRequest(
@@ -82,7 +82,8 @@ const PublisherContactCreate: React.FC = () => {
           // we need to clear the form error
           setFormErrors([])
         },
-        setFormErrors
+        setFormErrors,
+        fns
       )
     }
   }

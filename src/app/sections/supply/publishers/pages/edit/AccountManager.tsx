@@ -19,7 +19,7 @@ import {Actions, KrysToastType} from '../../../../../helpers/variables'
 import {User} from '../../../../../models/iam/User'
 import {useAuth} from '../../../../../modules/auth'
 import {useKrysApp} from '../../../../../modules/general/KrysApp'
-import {getAllPerformanceMetrics} from '../../../../../requests/misc/PerformanceMetric'
+import {getAllUsers} from '../../../../../requests/iam/User'
 import {
   getPublisherAccountManagers,
   storePublisherAccountManager,
@@ -53,7 +53,7 @@ const PublisherAccountManager: React.FC = () => {
     if (publisher && !hasAnyRoles(currentUser, [RoleEnum.PUBLISHER])) {
       // get all the account manager users
       submitRequest(
-        getAllPerformanceMetrics,
+        getAllUsers,
         ['filter[roles][]=12&filter[roles][]=5'],
         (response) => {
           setAllAccountManagers(response)
@@ -79,7 +79,7 @@ const PublisherAccountManager: React.FC = () => {
     genericOnChangeHandler(e, form, setForm)
   }
 
-  const handleCreate = () => {
+  const handleCreate = (e: any, fns: any) => {
     if (publisher) {
       // send API request to create the publisher account manager
       submitRequest(
@@ -111,7 +111,8 @@ const PublisherAccountManager: React.FC = () => {
           // we need to clear the form data
           setFormErrors([])
         },
-        setFormErrors
+        setFormErrors,
+        fns
       )
     }
   }

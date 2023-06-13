@@ -74,7 +74,7 @@ const PublisherPaymentEdit: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [publisherPayment])
 
-  const handleEdit = () => {
+  const handleEdit = (e: any, fns: any) => {
     if (publisher && publisherPayment) {
       // we need to update the payment's data by doing API call with form
       submitRequest(
@@ -91,7 +91,8 @@ const PublisherPaymentEdit: React.FC = () => {
             type: KrysToastType.SUCCESS,
           })
         },
-        setFormErrors
+        setFormErrors,
+        fns
       )
     }
   }

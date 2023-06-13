@@ -65,7 +65,7 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
     genericOnChangeHandler(e, form, setForm)
   }
 
-  const handleCreate = () => {
+  const handleCreate = (e: any, fns: any) => {
     if (publication) {
       // send API request to create the publication minimum ecpm
       submitRequest(
@@ -95,7 +95,8 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
           // we need to clear the form data
           setFormErrors([])
         },
-        setFormErrors
+        setFormErrors,
+        fns
       )
     }
   }

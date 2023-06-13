@@ -90,7 +90,7 @@ const PublicationAnalyticCreate: React.FC = () => {
     genericOnChangeHandler(e, form, setForm)
   }
 
-  const handleCreate = () => {
+  const handleCreate = (e: any, fns: any) => {
     if (publication) {
       // send API request to create the publication analytics
       submitRequest(
@@ -120,7 +120,8 @@ const PublicationAnalyticCreate: React.FC = () => {
           // we need to clear the form data
           setFormErrors([])
         },
-        setFormErrors
+        setFormErrors,
+        fns
       )
     }
   }

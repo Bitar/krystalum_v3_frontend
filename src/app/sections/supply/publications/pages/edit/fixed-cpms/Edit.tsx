@@ -88,7 +88,7 @@ const PublicationFixedCpmEdit: React.FC = () => {
     genericOnChangeHandler(e, form, setForm)
   }
 
-  const handleEdit = () => {
+  const handleEdit = (e: any, fns: any) => {
     if (publication && publicationFixedCpm) {
       // we need to update the fixed cpm data by doing API call with form
       submitRequest(
@@ -105,7 +105,8 @@ const PublicationFixedCpmEdit: React.FC = () => {
             type: KrysToastType.SUCCESS,
           })
         },
-        setFormErrors
+        setFormErrors,
+        fns
       )
     }
   }

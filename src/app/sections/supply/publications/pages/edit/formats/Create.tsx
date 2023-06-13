@@ -62,7 +62,7 @@ const PublicationFormatCreate: React.FC = () => {
     genericOnChangeHandler(e, form, setForm)
   }
 
-  const handleCreate = () => {
+  const handleCreate = (e: any, fns: any) => {
     if (publication) {
       setAlertMessages([])
 
@@ -103,7 +103,8 @@ const PublicationFormatCreate: React.FC = () => {
 
             setPublication(response)
           },
-          setFormErrors
+          setFormErrors,
+          fns
         )
       }
 

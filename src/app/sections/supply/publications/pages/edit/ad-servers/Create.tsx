@@ -71,7 +71,7 @@ const PublicationAdServerCreate: React.FC = () => {
     genericOnChangeHandler(e, form, setForm)
   }
 
-  const handleCreate = () => {
+  const handleCreate = (e: any, fns: any) => {
     if (publication) {
       // as long as we are updating the create form, we should set the table refresh to false
       setRefreshTable(false)
@@ -106,7 +106,8 @@ const PublicationAdServerCreate: React.FC = () => {
           // we need to clear the form data
           setFormErrors([])
         },
-        setFormErrors
+        setFormErrors,
+        fns
       )
     }
   }

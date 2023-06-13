@@ -54,7 +54,7 @@ const PublisherBasicInformationEdit: React.FC = () => {
     genericDateOnChangeHandler(date, form, setForm, key)
   }
 
-  const handleEdit = () => {
+  const handleEdit = (e: any, fns: any) => {
     if (publisher) {
       // send API request to update the publisher
       submitRequest(
@@ -73,7 +73,8 @@ const PublisherBasicInformationEdit: React.FC = () => {
 
           setFormErrors([])
         },
-        setFormErrors
+        setFormErrors,
+        fns
       )
     }
   }

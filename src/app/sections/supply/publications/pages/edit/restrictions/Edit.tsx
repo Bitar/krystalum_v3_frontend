@@ -90,7 +90,7 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
     genericOnChangeHandler(e, form, setForm)
   }
 
-  const handleEdit = () => {
+  const handleEdit = (e: any, fns: any) => {
     if (publication && publicationCampaignRestriction) {
       // we need to update the campaign restriction data by doing API call with form
       submitRequest(
@@ -107,7 +107,8 @@ const PublicationCampaignRestrictionEdit: React.FC = () => {
             type: KrysToastType.SUCCESS,
           })
         },
-        setFormErrors
+        setFormErrors,
+        fns
       )
     }
   }

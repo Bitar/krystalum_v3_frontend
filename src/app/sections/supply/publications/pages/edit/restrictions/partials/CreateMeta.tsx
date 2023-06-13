@@ -52,9 +52,8 @@ const PublicationCampaignRestrictionMetaCreate: React.FC = () => {
     genericOnChangeHandler(e, form, setForm)
   }
 
-  const handleCreate = () => {
+  const handleCreate = (e: any, fns: any) => {
     if (publication) {
-      console.log(form)
       // send API request to create the publication campaign restriction meta
       submitRequest(
         storePublicationCampaignRestrictionMeta,
@@ -78,7 +77,8 @@ const PublicationCampaignRestrictionMetaCreate: React.FC = () => {
           // we need to clear the form data
           setFormErrors([])
         },
-        setFormErrors
+        setFormErrors,
+        fns
       )
     }
   }

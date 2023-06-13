@@ -93,7 +93,7 @@ const PublicationAdServerEdit: React.FC = () => {
     genericOnChangeHandler(e, form, setForm)
   }
 
-  const handleEdit = () => {
+  const handleEdit = (e: any, fns: any) => {
     if (publication && publicationAdServer) {
       // we need to update the publication ad server's data by doing API call with form
       submitRequest(
@@ -110,7 +110,8 @@ const PublicationAdServerEdit: React.FC = () => {
             type: KrysToastType.SUCCESS,
           })
         },
-        setFormErrors
+        setFormErrors,
+        fns
       )
     }
   }

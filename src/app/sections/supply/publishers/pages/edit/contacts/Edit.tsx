@@ -83,7 +83,7 @@ const PublisherContactEdit: React.FC = () => {
     genericOnChangeHandler(e, form, setForm)
   }
 
-  const handleEdit = () => {
+  const handleEdit = (e: any, fns: any) => {
     if (publisher && publisherContact) {
       // we need to update the contact's data by doing API call with form
       submitRequest(
@@ -100,7 +100,8 @@ const PublisherContactEdit: React.FC = () => {
             type: KrysToastType.SUCCESS,
           })
         },
-        setFormErrors
+        setFormErrors,
+        fns
       )
     }
   }

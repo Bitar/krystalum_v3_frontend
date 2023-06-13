@@ -60,7 +60,7 @@ const PublicationFixedCpmCreate: React.FC = () => {
     genericOnChangeHandler(e, form, setForm)
   }
 
-  const handleCreate = () => {
+  const handleCreate = (e: any, fns: any) => {
     if (publication) {
       // send API request to create the publication fixed cpm
       submitRequest(
@@ -90,7 +90,8 @@ const PublicationFixedCpmCreate: React.FC = () => {
           // we need to clear the form data
           setFormErrors([])
         },
-        setFormErrors
+        setFormErrors,
+        fns
       )
     }
   }
