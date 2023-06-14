@@ -1,45 +1,47 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
 import {
-  PublicationEditOptions,
-  PublicationOptions,
-  PublisherOptions,
+  PublicationEditOptionPaginate,
+  PublicationOptionPaginate,
+  PublisherOptionPaginate,
 } from '../../models/supply/Options'
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/options`
 
-export const getPublisherOptions = async (): Promise<PublisherOptions | AxiosError | undefined> => {
+export const getPublisherOptions = async (): Promise<
+  PublisherOptionPaginate | AxiosError | undefined
+> => {
   let url = `${ENDPOINT}/publisher`
 
   return axios
     .get(url)
-    .then((response: AxiosResponse<PublisherOptions>) => response.data)
+    .then((response: AxiosResponse<PublisherOptionPaginate>) => response.data.data)
     .catch((error) => {
       return error
     })
 }
 
 export const getPublicationOptions = async (): Promise<
-  PublicationOptions | AxiosError | undefined
+  PublicationOptionPaginate | AxiosError | undefined
 > => {
   let url = `${ENDPOINT}/publication`
 
   return axios
     .get(url)
-    .then((response: AxiosResponse<PublicationOptions>) => response.data)
+    .then((response: AxiosResponse<PublicationOptionPaginate>) => response.data.data)
     .catch((error) => {
       return error
     })
 }
 
 export const getPublicationEditOptions = async (): Promise<
-  PublicationEditOptions | AxiosError | undefined
+  PublicationEditOptionPaginate | AxiosError | undefined
 > => {
   let url = `${ENDPOINT}/publication-edit`
 
   return axios
     .get(url)
-    .then((response: AxiosResponse<PublicationEditOptions>) => response.data)
+    .then((response: AxiosResponse<PublicationEditOptionPaginate>) => response.data.data)
     .catch((error) => {
       return error
     })

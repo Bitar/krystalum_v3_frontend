@@ -1,3 +1,4 @@
+import {Response} from '../../../_metronic/helpers'
 import {AdServer} from '../misc/AdServer'
 import {CampaignRestrictionRequirement} from '../misc/CampaignRestrictionRequirement'
 import {CampaignType} from '../misc/CampaignType'
@@ -11,6 +12,7 @@ import {Technology} from '../misc/Technology'
 import {Tier} from '../misc/Tier'
 import {Vertical} from '../misc/Vertical'
 import {WebsitePage} from '../misc/WebsitePage'
+import {Publication} from './publication/Publication'
 
 export type ContactType = {
   id: string // this column is of type string because the enum we receive from the API is represented as a string
@@ -61,6 +63,8 @@ export type PublisherOptions = {
   contactTypes: ContactType[]
 }
 
+export type PublisherOptionPaginate = Response<PublisherOptions[]>
+
 export type PublicationOptions = {
   adServers: AdServer[]
   countries: Country[]
@@ -78,6 +82,8 @@ export type PublicationOptions = {
   restrictionTypes: CampaignRestrictionType[]
 }
 
+export type PublicationOptionPaginate = Response<PublicationOptions[]>
+
 export type PublicationEditOptions = {
   campaignRestrictionRequirements: CampaignRestrictionRequirement[]
   campaignTypes: CampaignType[]
@@ -85,3 +91,5 @@ export type PublicationEditOptions = {
   devices: Device[]
   websitePages: WebsitePage[]
 }
+
+export type PublicationEditOptionPaginate = Response<PublicationEditOptions[]>

@@ -14,7 +14,6 @@ import {PageTypes} from '../../../../helpers/variables'
 import {useAuth} from '../../../../modules/auth'
 import {useKrysApp} from '../../../../modules/general/KrysApp'
 import {EXPORT_ENDPOINT, getPublications} from '../../../../requests/supply/publication/Publication'
-import {useSupply} from '../../shared/SupplyContext'
 import {PublicationsColumns} from '../core/TableColumns'
 import PublicationIndexFilter from '../partials/filters/IndexFilter'
 
