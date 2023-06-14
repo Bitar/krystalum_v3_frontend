@@ -1,4 +1,4 @@
-import React, {lazy} from 'react'
+import React, {lazy, useEffect} from 'react'
 import {Route, Routes} from 'react-router-dom'
 import {SuspenseView} from '../../components/misc/SuspenseView'
 import {SupplyProvider} from '../../sections/supply/shared/SupplyContext'

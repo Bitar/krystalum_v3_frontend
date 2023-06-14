@@ -14,10 +14,12 @@ import {PageTypes} from '../../../../helpers/variables'
 import {useAuth} from '../../../../modules/auth'
 import {useKrysApp} from '../../../../modules/general/KrysApp'
 import {EXPORT_ENDPOINT, getPublications} from '../../../../requests/supply/publication/Publication'
+import {useSupply} from '../../shared/SupplyContext'
 import {PublicationsColumns} from '../core/TableColumns'
 import PublicationIndexFilter from '../partials/filters/IndexFilter'
 
 const PublicationIndex: React.FC = () => {
+  const {setPublisher} = useSupply()
   const {currentUser, hasRoles} = useAuth()
   const krysApp = useKrysApp()
 
@@ -25,6 +27,8 @@ const PublicationIndex: React.FC = () => {
   const [showFilter, setShowFilter] = useState<boolean>(false)
 
   useEffect(() => {
+    // setPublisher(null)
+
     krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATIONS, PageTypes.INDEX))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

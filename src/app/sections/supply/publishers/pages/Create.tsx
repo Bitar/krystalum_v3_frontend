@@ -29,7 +29,7 @@ import {defaultFormFields, FormFields, PublisherSchema} from '../core/form'
 import {usePublisher} from '../core/PublisherContext'
 
 const PublisherCreate: React.FC = () => {
-  const {setPublisher} = useSupply()
+  const {setPublisher, setShowPublisherAlert} = useSupply()
   const {options} = usePublisher()
   const krysApp = useKrysApp()
   const navigate = useNavigate()
@@ -72,6 +72,7 @@ const PublisherCreate: React.FC = () => {
         })
 
         setPublisher(response)
+        setShowPublisherAlert(true)
 
         navigate(`/supply/publications/create`)
       },

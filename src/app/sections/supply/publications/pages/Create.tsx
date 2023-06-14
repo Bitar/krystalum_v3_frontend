@@ -34,7 +34,7 @@ import {defaultFormFields, FormFields, publicationSchema} from '../core/form'
 import {usePublication} from '../core/PublicationContext'
 
 const PublicationCreate: React.FC = () => {
-  const {setPublisher, publisher} = useSupply()
+  const {setPublisher, publisher, showPublisherAlert, setShowPublisherAlert} = useSupply()
   const {publishers, options} = usePublication()
 
   const krysApp = useKrysApp()
@@ -135,6 +135,7 @@ const PublicationCreate: React.FC = () => {
         navigate(url)
 
         setPublisher(null)
+        setShowPublisherAlert(false)
       },
       setFormErrors
     )
@@ -149,12 +150,12 @@ const PublicationCreate: React.FC = () => {
       <KTCardBody>
         <FormErrors errorMessages={formErrors} />
 
-        {publisher && (
+        {showPublisherAlert && publisher && (
           <Alert
             color='success'
             title='Success!'
             messages={[
-              `Please fill out the form below to create a publication related to the publisher you have created '${publisher.name}'.`,
+              `Please fill out the form below to create a publication related to the publisher '${publisher.name}' that you have created.`,
             ]}
           />
         )}

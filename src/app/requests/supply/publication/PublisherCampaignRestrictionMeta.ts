@@ -35,22 +35,3 @@ export const storePublicationCampaignRestrictionMeta = async (
       return error
     })
 }
-
-export const updatePublicationCampaignRestrictionMeta = async (
-  publication: Publication,
-  id: number,
-  publicationCampaignRestrictionMeta: any
-): Promise<PublicationCampaignRestrictionMeta | AxiosError | undefined> => {
-  let url = `${ENDPOINT}/${publication.id}/${ENDPOINT_ADDITION}`
-
-  let formData = createFormData(publicationCampaignRestrictionMeta)
-
-  formData.append('_method', 'put')
-
-  return await axios
-    .post(url + '/' + id, formData)
-    .then((response) => response.data.data)
-    .catch((error) => {
-      return error
-    })
-}

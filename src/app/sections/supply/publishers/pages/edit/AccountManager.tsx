@@ -144,6 +144,7 @@ const PublisherAccountManager: React.FC = () => {
                   onChange={(e) => {
                     genericSingleSelectOnChangeHandler(e, form, setForm, 'user_id')
                   }}
+                  ref={accountManagersSelectRef}
                 />
 
                 <div className='mt-1 text-danger'>{errors?.user_id ? errors?.user_id : null}</div>

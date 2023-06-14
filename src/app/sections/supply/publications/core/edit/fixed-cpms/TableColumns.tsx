@@ -2,6 +2,7 @@ import React from 'react'
 import {Column} from 'react-table'
 import {QUERIES} from '../../../../../../../_metronic/helpers'
 import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum'
+import {formatNumber} from '../../../../../../helpers/dataManipulation'
 import {PublicationFixedCpm} from '../../../../../../models/supply/publication/PublicationFixedCpm'
 import {Restricted} from '../../../../../../modules/auth/AuthAccessControl'
 import {ActionsCell} from '../../../../../../modules/table/columns/ActionsCell'
@@ -53,7 +54,7 @@ const PublicationFixedCpmColumns: ReadonlyArray<Column<PublicationFixedCpm>> = [
     id: 'price',
     Cell: ({...props}) => (
       <TextCell
-        text={`${props.data[props.row.index].price} ${
+        text={`${formatNumber(props.data[props.row.index].price)} ${
           props.data[props.row.index].currency.currency
         }`}
       />

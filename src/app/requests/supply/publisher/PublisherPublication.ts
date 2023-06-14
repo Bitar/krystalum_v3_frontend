@@ -17,7 +17,7 @@ export const getPublisherPublications = (
 
   return axios
     .get(url)
-    .then((response: AxiosResponse<PublicationPaginate>) => response.data.data)
+    .then((response: AxiosResponse<PublicationPaginate>) => response.data)
     .catch((error) => {
       return error
     })
