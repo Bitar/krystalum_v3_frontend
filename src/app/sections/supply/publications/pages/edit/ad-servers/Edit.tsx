@@ -1,6 +1,6 @@
 import {Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
-import {useParams} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 import Select from 'react-select'
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader'
@@ -14,7 +14,7 @@ import {
   genericSingleSelectOnChangeHandler,
 } from '../../../../../../helpers/form'
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator'
-import {submitRequest} from '../../../../../../helpers/requests'
+import {getErrorPage, submitRequest} from '../../../../../../helpers/requests'
 import {Sections} from '../../../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables'
 import {AdServer} from '../../../../../../models/misc/AdServer'
@@ -33,6 +33,7 @@ import {usePublicationEdit} from '../../../core/PublicationEditContext'
 
 const PublicationAdServerEdit: React.FC = () => {
   const {cid} = useParams()
+  const navigate = useNavigate()
 
   const {options} = usePublication()
   const {publication} = usePublicationEdit()
@@ -51,19 +52,20 @@ const PublicationAdServerEdit: React.FC = () => {
   useEffect(() => {
     if (publication && cid) {
       // get the publication ad server we need to edit from the database
-      submitRequest(
-        getPublicationAdServer,
-        [publication, parseInt(cid)],
-        (response) => {
+      submitRequest(getPublicationAdServer, [publication, parseInt(cid)], (response) => {
+        let errorPage = getErrorPage(response)
+
+        if (errorPage) {
+          navigate(errorPage)
+        } else {
           // we were able to fetch current publication ad server to edit
           setPublicationAdServer(response)
 
           // we are getting the response as ad sever and not publication ad server
           // response is: {id, name}
           setForm({ad_server_id: response.id})
-        },
-        setFormErrors
-      )
+        }
+      })
 
       const excludedAdServersNames: string[] = publication.adServers
         ? publication.adServers?.map((adServer) => adServer.name)

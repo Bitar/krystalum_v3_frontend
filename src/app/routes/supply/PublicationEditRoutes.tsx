@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react'
-import {Outlet, Route, Routes, useParams} from 'react-router-dom'
+import {Outlet, Route, Routes, useNavigate, useParams} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {SuspenseView} from '../../components/misc/SuspenseView'
-import {submitRequest} from '../../helpers/requests'
+import {getErrorPage, submitRequest} from '../../helpers/requests'
 import {Sections} from '../../helpers/sections'
 import {getPublication} from '../../requests/supply/publication/Publication'
 import {usePublicationEdit} from '../../sections/supply/publications/core/PublicationEditContext'
@@ -22,11 +22,19 @@ const PublicationEditRoutes: React.FC = () => {
 
   const {id} = useParams()
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     if (id) {
       // get the publication we need to edit from the database
       submitRequest(getPublication, [id], (response) => {
-        setPublication(response)
+        let errorPage = getErrorPage(response)
+
+        if (errorPage) {
+          navigate(errorPage)
+        } else {
+          setPublication(response)
+        }
       })
     }
 

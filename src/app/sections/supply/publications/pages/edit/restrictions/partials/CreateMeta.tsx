@@ -1,12 +1,13 @@
 import {Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
 import {FormControl, FormGroup} from 'react-bootstrap'
+import {useNavigate} from 'react-router-dom'
 import FormErrors from '../../../../../../../components/forms/FormErrors'
 import KrysFormFooter from '../../../../../../../components/forms/KrysFormFooter'
 import KrysFormLabel from '../../../../../../../components/forms/KrysFormLabel'
 import {AlertMessageGenerator} from '../../../../../../../helpers/AlertMessageGenerator'
 import {genericOnChangeHandler} from '../../../../../../../helpers/form'
-import {submitRequest} from '../../../../../../../helpers/requests'
+import {getErrorPage, submitRequest} from '../../../../../../../helpers/requests'
 import {Actions, KrysToastType} from '../../../../../../../helpers/variables'
 import {useKrysApp} from '../../../../../../../modules/general/KrysApp'
 import {
@@ -24,6 +25,8 @@ const PublicationCampaignRestrictionMetaCreate: React.FC = () => {
   const {publication} = usePublicationEdit()
   const krysApp = useKrysApp()
 
+  const navigate = useNavigate()
+
   const [form, setForm] = useState<PublicationCampaignRestrictionMetaFormFields>(
     defaultPublicationCampaignRestrictionMetaFormFields
   )
@@ -32,17 +35,18 @@ const PublicationCampaignRestrictionMetaCreate: React.FC = () => {
   useEffect(() => {
     if (publication) {
       // get the publication restriction meta
-      submitRequest(
-        getPublicationCampaignRestrictionMeta,
-        [publication],
-        (response) => {
+      submitRequest(getPublicationCampaignRestrictionMeta, [publication], (response) => {
+        let errorPage = getErrorPage(response)
+
+        if (errorPage) {
+          navigate(errorPage)
+        } else {
           // set the form to be the publication's restriction meta details
           const {campaign_restriction_meta} = response
 
           setForm({campaign_restriction_meta: campaign_restriction_meta})
-        },
-        setFormErrors
-      )
+        }
+      })
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

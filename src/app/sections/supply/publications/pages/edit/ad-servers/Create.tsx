@@ -163,7 +163,7 @@ const PublicationAdServerCreate: React.FC = () => {
             requestFunction={getPublicationAdServers}
             requestId={publication.id}
             columnsArray={PublicationAdServersColumns}
-          ></KrysInnerTable>
+          />
         )}
       </KTCardBody>
     </KTCard>

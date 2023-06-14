@@ -323,7 +323,7 @@ const PublicationCampaignRestrictionCreate: React.FC<Props> = ({
           requestId={publication.id}
           columnsArray={PublicationCampaignRestrictionsColumns}
           filters={filters}
-        ></KrysInnerTable>
+        />
       )}
     </>
   )

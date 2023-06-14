@@ -296,7 +296,7 @@ const PublicationAnalyticCreate: React.FC = () => {
             requestId={publication.id}
             columnsArray={PublicationAnalyticsColumns}
             filters={filters}
-          ></KrysInnerTable>
+          />
         )}
       </KTCardBody>
     </KTCard>

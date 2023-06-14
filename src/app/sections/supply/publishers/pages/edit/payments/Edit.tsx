@@ -1,6 +1,6 @@
 import {Field, Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
-import {useParams} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader'
 import FormErrors from '../../../../../../components/forms/FormErrors'
@@ -9,7 +9,7 @@ import KrysFormLabel from '../../../../../../components/forms/KrysFormLabel'
 import {AlertMessageGenerator} from '../../../../../../helpers/AlertMessageGenerator'
 import {genericOnChangeHandler} from '../../../../../../helpers/form'
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator'
-import {submitRequest} from '../../../../../../helpers/requests'
+import {getErrorPage, submitRequest} from '../../../../../../helpers/requests'
 import {Sections} from '../../../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables'
 import {PublisherPayment} from '../../../../../../models/supply/publisher/PublisherPayment'
@@ -28,29 +28,31 @@ import {
 
 const PublisherPaymentEdit: React.FC = () => {
   const {publisher} = useSupply()
+  const krysApp = useKrysApp()
+
   const {cid} = useParams()
+  const navigate = useNavigate()
 
   const [publisherPayment, setPublisherPayment] = useState<PublisherPayment | null>(null)
   const [form, setForm] = useState<PublisherPaymentFormFields>(defaultPublisherPaymentFormFields)
   const [formErrors, setFormErrors] = useState<string[]>([])
 
-  const krysApp = useKrysApp()
-
   useEffect(() => {
     if (publisher && cid) {
       // get the publisher payments we need to edit from the database
-      submitRequest(
-        getPublisherPayment,
-        [publisher, parseInt(cid)],
-        (response) => {
+      submitRequest(getPublisherPayment, [publisher, parseInt(cid)], (response) => {
+        let errorPage = getErrorPage(response)
+
+        if (errorPage) {
+          navigate(errorPage)
+        } else {
           // we were able to fetch current publisher payments to edit
           setPublisherPayment(response)
 
           // we also set the form to be the publisher's payments details
           setForm(fillEditForm(response))
-        },
-        setFormErrors
-      )
+        }
+      })
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

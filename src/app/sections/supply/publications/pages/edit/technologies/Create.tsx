@@ -164,7 +164,7 @@ const PublicationTechnologyCreate: React.FC = () => {
             requestFunction={getPublicationTechnologies}
             requestId={publication.id}
             columnsArray={PublicationTechnologiesColumns}
-          ></KrysInnerTable>
+          />
         )}
       </KTCardBody>
     </KTCard>

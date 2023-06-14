@@ -1,10 +1,9 @@
 import {Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
-import {useParams} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 import Select from 'react-select'
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader'
-import Alert from '../../../../../../components/alerts/Alert'
 import FormErrors from '../../../../../../components/forms/FormErrors'
 import {indentOptions} from '../../../../../../components/forms/IndentOptions'
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter'
@@ -15,7 +14,7 @@ import {
   genericSingleSelectOnChangeHandler,
 } from '../../../../../../helpers/form'
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator'
-import {submitRequest} from '../../../../../../helpers/requests'
+import {getErrorPage, submitRequest} from '../../../../../../helpers/requests'
 import {Sections} from '../../../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables'
 import {PublicationFormat} from '../../../../../../models/supply/publication/PublicationFormat'
@@ -29,12 +28,12 @@ import {
   PublicationFormatEditFormFields,
   publicationFormatSchema,
 } from '../../../core/edit/formats/form'
-import {checkFormats} from '../../../core/helpers'
 import {usePublication} from '../../../core/PublicationContext'
 import {usePublicationEdit} from '../../../core/PublicationEditContext'
 
 const PublicationFormatEdit: React.FC = () => {
   const {cid} = useParams()
+  const navigate = useNavigate()
 
   const {options} = usePublication()
   const {publication} = usePublicationEdit()
@@ -44,7 +43,6 @@ const PublicationFormatEdit: React.FC = () => {
     defaultPublicationFormatEditFormFields
   )
   const [formErrors, setFormErrors] = useState<string[]>([])
-  const [alertMessages, setAlertMessages] = useState<string[]>([])
 
   const [publicationFormat, setPublicationFormat] = useState<PublicationFormat | null>(null)
 
@@ -53,10 +51,12 @@ const PublicationFormatEdit: React.FC = () => {
   useEffect(() => {
     if (publication && cid) {
       // get the publication format we need to edit from the database
-      submitRequest(
-        getPublicationFormat,
-        [publication, parseInt(cid)],
-        (response) => {
+      submitRequest(getPublicationFormat, [publication, parseInt(cid)], (response) => {
+        let errorPage = getErrorPage(response)
+
+        if (errorPage) {
+          navigate(errorPage)
+        } else {
           // we were able to fetch current publication format to edit
           setPublicationFormat(response)
 
@@ -64,9 +64,8 @@ const PublicationFormatEdit: React.FC = () => {
           const {format, type, ...currentPublicationFormat} = response
 
           setForm({...currentPublicationFormat, format_id: format.id, type: type.id})
-        },
-        setFormErrors
-      )
+        }
+      })
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -92,29 +91,23 @@ const PublicationFormatEdit: React.FC = () => {
 
   const handleEdit = (e: any, fns: any) => {
     if (publication && publicationFormat) {
-      const message: string = checkFormats(publication, formats, form.format_id, form.type)
-
-      if (message !== '') {
-        setAlertMessages((prevMessage) => [...prevMessage, message])
-      } else {
-        // we need to update the publication format's data by doing API call with form
-        submitRequest(
-          updatePublicationFormat,
-          [publication, publicationFormat.id, form],
-          (response) => {
-            krysApp.setAlert({
-              message: new AlertMessageGenerator(
-                'publication format',
-                Actions.EDIT,
-                KrysToastType.SUCCESS
-              ).message,
-              type: KrysToastType.SUCCESS,
-            })
-          },
-          setFormErrors,
-          fns
-        )
-      }
+      // we need to update the publication format's data by doing API call with form
+      submitRequest(
+        updatePublicationFormat,
+        [publication, publicationFormat.id, form],
+        (response) => {
+          krysApp.setAlert({
+            message: new AlertMessageGenerator(
+              'publication format',
+              Actions.EDIT,
+              KrysToastType.SUCCESS
+            ).message,
+            type: KrysToastType.SUCCESS,
+          })
+        },
+        setFormErrors,
+        fns
+      )
     }
   }
 
@@ -124,10 +117,6 @@ const PublicationFormatEdit: React.FC = () => {
 
       <KTCardBody>
         <FormErrors errorMessages={formErrors} />
-
-        {alertMessages.length > 0 && (
-          <Alert title='Warning!' messages={alertMessages} setMessages={setAlertMessages} />
-        )}
 
         <Formik
           initialValues={form}

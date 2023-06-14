@@ -14,12 +14,10 @@ import {PageTypes} from '../../../../helpers/variables'
 import {useAuth} from '../../../../modules/auth'
 import {useKrysApp} from '../../../../modules/general/KrysApp'
 import {EXPORT_ENDPOINT, getPublishers} from '../../../../requests/supply/publisher/Publisher'
-import {useSupply} from '../../shared/SupplyContext'
 import {getPublisherColumns} from '../core/TableColumns'
 import PublisherIndexFilter from '../partials/filters/IndexFilter'
 
 const PublisherIndex: React.FC = () => {
-  const {setPublisher} = useSupply()
   const {currentUser, hasRoles} = useAuth()
   const krysApp = useKrysApp()
 
@@ -27,8 +25,6 @@ const PublisherIndex: React.FC = () => {
   const [showFilter, setShowFilter] = useState<boolean>(false)
 
   useEffect(() => {
-    // setPublisher(null)
-
     krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLISHERS, PageTypes.INDEX))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -51,7 +47,7 @@ const PublisherIndex: React.FC = () => {
         showFilter={showFilter}
         setExportQuery={setExportQuery}
         FilterComponent={PublisherIndexFilter}
-      ></KrysIndex>
+      />
 
       {!hasRoles(currentUser, [RoleEnum.PUBLISHER]) && (
         <>

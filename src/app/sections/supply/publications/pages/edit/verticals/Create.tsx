@@ -166,7 +166,7 @@ const PublicationVerticalCreate: React.FC = () => {
             requestFunction={getPublicationVerticals}
             requestId={publication.id}
             columnsArray={PublicationVerticalsColumns}
-          ></KrysInnerTable>
+          />
         )}
       </KTCardBody>
     </KTCard>

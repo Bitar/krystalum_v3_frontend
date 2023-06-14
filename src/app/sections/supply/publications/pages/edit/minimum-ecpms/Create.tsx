@@ -50,10 +50,6 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
   const {formats, regions, countries} = options
   const {currencies} = editOptions
 
-  const selectChangeHandler = (e: any, key: string) => {
-    genericSingleSelectOnChangeHandler(e, form, setForm, key)
-  }
-
   const multiSelectChangeHandler = (e: any, key: string) => {
     genericMultiSelectOnChangeHandler(e, form, setForm, key)
   }
@@ -260,7 +256,7 @@ const PublicationMinimumEcpmCreate: React.FC = () => {
             requestFunction={getPublicationMinimumEcpms}
             requestId={publication.id}
             columnsArray={PublicationMinimumEcpmColumns}
-          ></KrysInnerTable>
+          />
         )}
       </KTCardBody>
     </KTCard>

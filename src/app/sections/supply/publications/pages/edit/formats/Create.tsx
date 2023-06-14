@@ -3,7 +3,6 @@ import React, {useRef, useState} from 'react'
 import Select from 'react-select'
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader'
-import Alert from '../../../../../../components/alerts/Alert'
 import FormErrors from '../../../../../../components/forms/FormErrors'
 import {indentOptions} from '../../../../../../components/forms/IndentOptions'
 import KrysFormFooter from '../../../../../../components/forms/KrysFormFooter'
@@ -28,7 +27,6 @@ import {
   publicationFormatSchema,
 } from '../../../core/edit/formats/form'
 import {PublicationFormatsColumns} from '../../../core/edit/formats/TableColumns'
-import {checkFormats} from '../../../core/helpers'
 import {usePublication} from '../../../core/PublicationContext'
 import {usePublicationEdit} from '../../../core/PublicationEditContext'
 
@@ -40,7 +38,6 @@ const PublicationFormatCreate: React.FC = () => {
   const [form, setForm] = useState<PublicationFormatFormFields>(defaultPublicationFormatFormFields)
   const [formErrors, setFormErrors] = useState<string[]>([])
   const [refreshTable, setRefreshTable] = useState<boolean>(false)
-  const [alertMessages, setAlertMessages] = useState<string[]>([])
 
   const formatsSelectRef = useRef<any>(null)
   const formatTypesSelectRef = useRef<any>(null)
@@ -64,49 +61,31 @@ const PublicationFormatCreate: React.FC = () => {
 
   const handleCreate = (e: any, fns: any) => {
     if (publication) {
-      setAlertMessages([])
-
       // as long as we are updating the create form, we should set the table refresh to false
       setRefreshTable(false)
 
-      let ignoredFormats: string[] = []
+      // send API request to create the publication formats
+      submitRequest(
+        storePublicationFormat,
+        [publication, form],
+        (response) => {
+          krysApp.setAlert({
+            message: new AlertMessageGenerator(
+              'publication format',
+              Actions.CREATE,
+              KrysToastType.SUCCESS
+            ).message,
+            type: KrysToastType.SUCCESS,
+          })
 
-      const updatedFormatIds = form.format_ids.filter((formatId) => {
-        const message: string = checkFormats(publication, formats, formatId, form.type)
+          // now that we have a new record successfully we need to refresh the table
+          setRefreshTable(true)
 
-        if (message !== '') {
-          setAlertMessages((prevAlertMessage) => [...prevAlertMessage, message])
-
-          return false
-        }
-
-        return true
-      })
-
-      if (updatedFormatIds.length > 0) {
-        // send API request to create the publication formats
-        submitRequest(
-          storePublicationFormat,
-          [publication, {...form, format_ids: updatedFormatIds}],
-          (response) => {
-            krysApp.setAlert({
-              message: new AlertMessageGenerator(
-                'publication format',
-                Actions.CREATE,
-                KrysToastType.SUCCESS
-              ).message,
-              type: KrysToastType.SUCCESS,
-            })
-
-            // now that we have a new record successfully we need to refresh the table
-            setRefreshTable(true)
-
-            setPublication(response)
-          },
-          setFormErrors,
-          fns
-        )
-      }
+          setPublication(response)
+        },
+        setFormErrors,
+        fns
+      )
 
       // clear the selected values from dropdown
       formatsSelectRef.current?.clearValue()
@@ -126,10 +105,6 @@ const PublicationFormatCreate: React.FC = () => {
 
       <KTCardBody>
         <FormErrors errorMessages={formErrors} />
-
-        {alertMessages.length > 0 && (
-          <Alert title='Warning!' messages={alertMessages} setMessages={setAlertMessages} />
-        )}
 
         <Formik
           initialValues={form}
@@ -195,7 +170,7 @@ const PublicationFormatCreate: React.FC = () => {
             requestFunction={getPublicationFormats}
             requestId={publication.id}
             columnsArray={PublicationFormatsColumns}
-          ></KrysInnerTable>
+          />
         )}
       </KTCardBody>
     </KTCard>

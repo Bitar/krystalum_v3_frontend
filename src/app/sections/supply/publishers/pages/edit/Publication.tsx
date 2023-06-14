@@ -28,7 +28,7 @@ const PublisherPublication: React.FC = () => {
             requestFunction={getPublisherPublications}
             requestId={publisher.id}
             columnsArray={PublisherPublicationsColumns}
-          ></KrysInnerTable>
+          />
         ) : (
           <></>
         )}

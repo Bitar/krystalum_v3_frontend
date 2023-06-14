@@ -190,7 +190,7 @@ const PublisherPaymentCreate: React.FC = () => {
             requestFunction={getPublisherPayments}
             requestId={publisher.id}
             columnsArray={PublisherPaymentsColumns}
-          ></KrysInnerTable>
+          />
         )}
       </KTCardBody>
     </KTCard>

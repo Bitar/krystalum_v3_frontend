@@ -19,7 +19,6 @@ import {PublicationsColumns} from '../core/TableColumns'
 import PublicationIndexFilter from '../partials/filters/IndexFilter'
 
 const PublicationIndex: React.FC = () => {
-  const {setPublisher} = useSupply()
   const {currentUser, hasRoles} = useAuth()
   const krysApp = useKrysApp()
 
@@ -27,8 +26,6 @@ const PublicationIndex: React.FC = () => {
   const [showFilter, setShowFilter] = useState<boolean>(false)
 
   useEffect(() => {
-    // setPublisher(null)
-
     krysApp.setPageTitle(generatePageTitle(Sections.SUPPLY_PUBLICATIONS, PageTypes.INDEX))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,6 +1,6 @@
 import {Field, Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
-import {useParams} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 import Select from 'react-select'
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader'
@@ -15,7 +15,7 @@ import {
   genericSingleSelectOnChangeHandler,
 } from '../../../../../../helpers/form'
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator'
-import {submitRequest} from '../../../../../../helpers/requests'
+import {getErrorPage, submitRequest} from '../../../../../../helpers/requests'
 import {Sections} from '../../../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables'
 import {PublicationAnalytic} from '../../../../../../models/supply/publication/PublicationAnalytic'
@@ -35,6 +35,7 @@ import {usePublicationEdit} from '../../../core/PublicationEditContext'
 
 const PublicationAnalyticEdit: React.FC = () => {
   const {cid} = useParams()
+  const navigate = useNavigate()
 
   const {options} = usePublication()
   const {publication, editOptions} = usePublicationEdit()
@@ -53,18 +54,19 @@ const PublicationAnalyticEdit: React.FC = () => {
   useEffect(() => {
     if (publication && cid) {
       // get the publication analytics we need to edit from the database
-      submitRequest(
-        getPublicationAnalytic,
-        [publication, parseInt(cid)],
-        (response) => {
+      submitRequest(getPublicationAnalytic, [publication, parseInt(cid)], (response) => {
+        let errorPage = getErrorPage(response)
+
+        if (errorPage) {
+          navigate(errorPage)
+        } else {
           // we were able to fetch current publication analytics to edit
           setPublicationAnalytic(response)
 
           // we also set the form to be the publication's analytics details
           setForm(fillEditForm(response))
-        },
-        setFormErrors
-      )
+        }
+      })
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

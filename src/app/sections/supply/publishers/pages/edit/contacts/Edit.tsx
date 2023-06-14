@@ -1,6 +1,6 @@
 import {Field, Form, Formik} from 'formik'
 import React, {useEffect, useState} from 'react'
-import {useParams} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 import Select from 'react-select'
 import {KTCard, KTCardBody} from '../../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../../_metronic/helpers/components/KTCardHeader'
@@ -13,7 +13,7 @@ import {
   genericSingleSelectOnChangeHandler,
 } from '../../../../../../helpers/form'
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator'
-import {submitRequest} from '../../../../../../helpers/requests'
+import {getErrorPage, submitRequest} from '../../../../../../helpers/requests'
 import {Sections} from '../../../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables'
 import {PublisherContact} from '../../../../../../models/supply/publisher/PublisherContact'
@@ -36,6 +36,7 @@ const PublisherContactEdit: React.FC = () => {
   const krysApp = useKrysApp()
 
   const {cid} = useParams()
+  const navigate = useNavigate()
 
   const [publisherContact, setPublisherContact] = useState<PublisherContact | null>(null)
   const [form, setForm] = useState<PublisherContactFormFields>(defaultPublisherContactFormFields)
@@ -46,10 +47,12 @@ const PublisherContactEdit: React.FC = () => {
   useEffect(() => {
     if (publisher && cid) {
       // get the publisher contacts we need to edit from the database
-      submitRequest(
-        getPublisherContact,
-        [publisher, parseInt(cid)],
-        (response) => {
+      submitRequest(getPublisherContact, [publisher, parseInt(cid)], (response) => {
+        let errorPage = getErrorPage(response)
+
+        if (errorPage) {
+          navigate(errorPage)
+        } else {
           // we were able to fetch current publisher contacts to edit
           setPublisherContact(response)
 
@@ -57,9 +60,8 @@ const PublisherContactEdit: React.FC = () => {
           const {contactType, ...currentPublisherContact} = response
 
           setForm({...currentPublisherContact, type: contactType?.id})
-        },
-        setFormErrors
-      )
+        }
+      })
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

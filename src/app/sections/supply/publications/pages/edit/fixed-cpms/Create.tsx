@@ -255,7 +255,7 @@ const PublicationFixedCpmCreate: React.FC = () => {
             requestFunction={getPublicationFixedCpms}
             requestId={publication.id}
             columnsArray={PublicationFixedCpmColumns}
-          ></KrysInnerTable>
+          />
         )}
       </KTCardBody>
     </KTCard>

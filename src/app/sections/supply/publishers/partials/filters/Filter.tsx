@@ -1,11 +1,11 @@
 import {Field, Form, Formik} from 'formik'
 import React, {Dispatch, SetStateAction, useEffect, useRef, useState} from 'react'
 import {Col, Collapse, Row} from 'react-bootstrap'
+import {useNavigate} from 'react-router-dom'
 import Select from 'react-select'
 import {DateRangePicker} from 'rsuite'
 import {DateRange} from 'rsuite/DateRangePicker'
 import FilterFormFooter from '../../../../../components/forms/FilterFormFooter'
-import FormErrors from '../../../../../components/forms/FormErrors'
 import KrysFormLabel from '../../../../../components/forms/KrysFormLabel'
 import {RoleEnum} from '../../../../../enums/RoleEnum'
 import {createDateFromString} from '../../../../../helpers/dateFormatter'
@@ -15,7 +15,7 @@ import {
   genericMultiSelectOnChangeHandler,
   genericOnChangeHandler,
 } from '../../../../../helpers/form'
-import {submitRequest} from '../../../../../helpers/requests'
+import {getErrorPage, submitRequest} from '../../../../../helpers/requests'
 import {User} from '../../../../../models/iam/User'
 import {useAuth} from '../../../../../modules/auth'
 import {useQueryRequest} from '../../../../../modules/table/QueryRequestProvider'
@@ -32,13 +32,13 @@ interface Props {
 
 const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, setFilters}) => {
   const {currentUser, hasAnyRoles} = useAuth()
-  const {updateState} = useQueryRequest()
-
   const {options} = usePublisher()
+
+  const {updateState} = useQueryRequest()
+  const navigate = useNavigate()
 
   const [accountManagers, setAccountManagers] = useState<User[]>([])
 
-  const [filterErrors, setFilterErrors] = useState<string[]>([])
   const [reset, setReset] = useState<boolean>(false)
 
   const {countries, regions, tiers} = options
@@ -46,14 +46,15 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
   useEffect(() => {
     if (!hasAnyRoles(currentUser, [RoleEnum.PUBLISHER])) {
       // get all the account manager users
-      submitRequest(
-        getAllUsers,
-        ['filter[roles][]=12&filter[roles][]=5'],
-        (response) => {
+      submitRequest(getAllUsers, ['filter[roles][]=12&filter[roles][]=5'], (response) => {
+        let errorPage = getErrorPage(response)
+
+        if (errorPage) {
+          navigate(errorPage)
+        } else {
           setAccountManagers(response)
-        },
-        setFilterErrors
-      )
+        }
+      })
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -116,8 +117,6 @@ const PublisherFilter: React.FC<Props> = ({showFilter, setExportQuery, filters, 
       <Row id='#publishers-list-filter'>
         <Col>
           <div className='card card-rounded bg-primary bg-opacity-5 p-10 mb-15'>
-            <FormErrors errorMessages={filterErrors} />
-
             <Formik
               initialValues={{}}
               validationSchema={FilterSchema}

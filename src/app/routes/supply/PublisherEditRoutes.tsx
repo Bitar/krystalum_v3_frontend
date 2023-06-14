@@ -3,7 +3,7 @@ import {Outlet, Route, Routes, useNavigate, useParams} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 
 import {SuspenseView} from '../../components/misc/SuspenseView'
-import {submitRequest} from '../../helpers/requests'
+import {getErrorPage, submitRequest} from '../../helpers/requests'
 import {Sections} from '../../helpers/sections'
 import {getPublisher} from '../../requests/supply/publisher/Publisher'
 import PublisherEdit from '../../sections/supply/publishers/pages/Edit'
@@ -23,7 +23,13 @@ const PublisherEditRoutes: React.FC = () => {
     if (id) {
       // get the publisher we need to edit from the database
       submitRequest(getPublisher, [id], (response) => {
-        setPublisher(response)
+        let errorPage = getErrorPage(response)
+
+        if (errorPage) {
+          navigate(errorPage)
+        } else {
+          setPublisher(response)
+        }
       })
     }
 

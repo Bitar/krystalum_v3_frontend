@@ -1,6 +1,7 @@
 import {createContext, Dispatch, FC, SetStateAction, useContext, useEffect, useState} from 'react'
+import {useNavigate} from 'react-router-dom'
 import {WithChildren} from '../../../../../_metronic/helpers'
-import {submitRequest} from '../../../../helpers/requests'
+import {getErrorPage, submitRequest} from '../../../../helpers/requests'
 import {DEFAULT_PUBLICATION_EDIT_OPTIONS} from '../../../../helpers/settings'
 import {PublicationEditOptions} from '../../../../models/supply/Options'
 import {Publication} from '../../../../models/supply/publication/Publication'
@@ -33,6 +34,8 @@ export const usePublicationEdit = () => {
 }
 
 export const PublicationEditProvider: FC<WithChildren> = ({children}) => {
+  const navigate = useNavigate()
+
   const [publication, setPublication] = useState<Publication | null>(null)
   const [refresh, setRefresh] = useState<boolean>(false)
 
@@ -47,7 +50,13 @@ export const PublicationEditProvider: FC<WithChildren> = ({children}) => {
   useEffect(() => {
     // get the list of all publication edit options
     submitRequest(getPublicationEditOptions, [], (response) => {
-      setEditOptions(response)
+      let errorPage = getErrorPage(response)
+
+      if (errorPage) {
+        navigate(errorPage)
+      } else {
+        setEditOptions(response)
+      }
     })
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

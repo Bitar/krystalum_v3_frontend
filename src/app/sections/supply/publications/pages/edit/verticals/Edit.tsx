@@ -15,7 +15,7 @@ import {
   genericSingleSelectOnChangeHandler,
 } from '../../../../../../helpers/form'
 import {generatePageTitle} from '../../../../../../helpers/pageTitleGenerator'
-import {submitRequest} from '../../../../../../helpers/requests'
+import {getErrorPage, submitRequest} from '../../../../../../helpers/requests'
 import {Sections} from '../../../../../../helpers/sections'
 import {Actions, KrysToastType, PageTypes} from '../../../../../../helpers/variables'
 import {Vertical} from '../../../../../../models/misc/Vertical'
@@ -55,10 +55,12 @@ const PublicationVerticalEdit: React.FC = () => {
   useEffect(() => {
     if (publication && cid) {
       // get the publication vertical we need to edit from the database
-      submitRequest(
-        getPublicationVertical,
-        [publication, parseInt(cid)],
-        (response) => {
+      submitRequest(getPublicationVertical, [publication, parseInt(cid)], (response) => {
+        let errorPage = getErrorPage(response)
+
+        if (errorPage) {
+          navigate(errorPage)
+        } else {
           // we were able to fetch current publication vertical to edit
           setPublicationVertical(response)
 
@@ -66,9 +68,8 @@ const PublicationVerticalEdit: React.FC = () => {
           const {vertical, ...currentPublicationVertical} = response
 
           setForm({...currentPublicationVertical, vertical_id: vertical.id})
-        },
-        setFormErrors
-      )
+        }
+      })
 
       const excludedVerticalsNames: string[] = publication.verticals
         ? publication.verticals?.map((vertical) => vertical.vertical.name)

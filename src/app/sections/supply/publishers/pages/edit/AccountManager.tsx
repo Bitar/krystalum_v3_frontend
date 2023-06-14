@@ -1,5 +1,6 @@
 import {Form, Formik} from 'formik'
 import React, {useEffect, useRef, useState} from 'react'
+import {useNavigate} from 'react-router-dom'
 import Select from 'react-select'
 import {KTCard, KTCardBody, QUERIES} from '../../../../../../_metronic/helpers'
 import {KTCardHeader} from '../../../../../../_metronic/helpers/components/KTCardHeader'
@@ -14,7 +15,7 @@ import {
   genericOnChangeHandler,
   genericSingleSelectOnChangeHandler,
 } from '../../../../../helpers/form'
-import {submitRequest} from '../../../../../helpers/requests'
+import {getErrorPage, submitRequest} from '../../../../../helpers/requests'
 import {Actions, KrysToastType} from '../../../../../helpers/variables'
 import {User} from '../../../../../models/iam/User'
 import {useAuth} from '../../../../../modules/auth'
@@ -36,6 +37,7 @@ const PublisherAccountManager: React.FC = () => {
   const {currentUser, hasAnyRoles} = useAuth()
   const {publisher} = useSupply()
   const krysApp = useKrysApp()
+  const navigate = useNavigate()
 
   const [form, setForm] = useState<PublisherAccountManagerFormFields>(
     defaultPublisherAccountManagerFormFields
@@ -52,25 +54,22 @@ const PublisherAccountManager: React.FC = () => {
   useEffect(() => {
     if (publisher && !hasAnyRoles(currentUser, [RoleEnum.PUBLISHER])) {
       // get all the account manager users
-      submitRequest(
-        getAllUsers,
-        ['filter[roles][]=12&filter[roles][]=5'],
-        (response) => {
+      submitRequest(getAllUsers, ['filter[roles][]=12&filter[roles][]=5'], (response) => {
+        let errorPage = getErrorPage(response)
+
+        if (errorPage) {
+          navigate(errorPage)
+        } else {
           setAllAccountManagers(response)
           setAccountManagers(
             response.filter((user: User) => user.id !== publisher.accountManager?.id)
           )
-        },
-        setFormErrors
-      )
+        }
+      })
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [publisher])
-
-  const selectChangeHandler = (e: any, key: string) => {
-    genericSingleSelectOnChangeHandler(e, form, setForm, key)
-  }
 
   const onChangeHandler = (e: any) => {
     // as long as we are updating the create form, we should set the table refresh to false
@@ -166,7 +165,7 @@ const PublisherAccountManager: React.FC = () => {
             requestId={publisher.id}
             columnsArray={PublisherAccountManagersColumns}
             showSearchFilter={false}
-          ></KrysInnerTable>
+          />
         )}
       </KTCardBody>
     </KTCard>

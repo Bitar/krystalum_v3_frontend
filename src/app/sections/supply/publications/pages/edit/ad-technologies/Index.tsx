@@ -22,7 +22,7 @@ const PublicationAdTechnologyIndex: React.FC = () => {
             requestFunction={getPublicationAdTechnologies}
             requestId={publication.id}
             columnsArray={PublicationAdTechnologiesColumns}
-          ></KrysInnerTable>
+          />
         )}
       </KTCardBody>
     </KTCard>
