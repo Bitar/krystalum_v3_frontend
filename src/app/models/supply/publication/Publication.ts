@@ -32,7 +32,3 @@ export type Publication = {
 }
 
 export type PublicationPaginate = Response<Publication[]>
-
-export type PublicationList = {
-  data: Publication[]
-}

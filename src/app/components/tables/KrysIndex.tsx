@@ -1,73 +1,80 @@
-import React, {Dispatch, useMemo} from 'react';
-import {Column} from 'react-table';
+import React, {Dispatch, useMemo} from 'react'
+import {Column} from 'react-table'
 
-import {KTCard, KTCardBody} from '../../../_metronic/helpers';
+import {KTCard, KTCardBody} from '../../../_metronic/helpers'
 
-import {QueryRequestProvider} from '../../modules/table/QueryRequestProvider';
+import {QueryRequestProvider} from '../../modules/table/QueryRequestProvider'
 import {
-    QueryResponseProvider,
-    useQueryResponseData,
-    useQueryResponseLoading
-} from '../../modules/table/QueryResponseProvider';
-import {ListViewProvider} from '../../modules/table/ListViewProvider';
-import {KTCardHeader, KTCardHeaderProps} from '../../../_metronic/helpers/components/KTCardHeader';
-import KrysTable from './KrysTable';
+  QueryResponseProvider,
+  useQueryResponseData,
+  useQueryResponseLoading,
+} from '../../modules/table/QueryResponseProvider'
+import {ListViewProvider} from '../../modules/table/ListViewProvider'
+import {KTCardHeader, KTCardHeaderProps} from '../../../_metronic/helpers/components/KTCardHeader'
+import KrysTable from './KrysTable'
 
 type Props = {
-    queryId: string,
-    requestFunction: (query?: string) => Promise<any>,
-    columnsArray: readonly Column<any>[],
-    cardHeader: KTCardHeaderProps,
-    showFilter: boolean,
-    setExportQuery: Dispatch<React.SetStateAction<string>>,
-    FilterComponent: React.FC<{ showFilter: boolean, setExportQuery: Dispatch<React.SetStateAction<string>> }>
+  queryId: string
+  requestFunction: (query?: string) => Promise<any>
+  columnsArray: readonly Column<any>[]
+  cardHeader: KTCardHeaderProps
+  showFilter: boolean
+  setExportQuery: Dispatch<React.SetStateAction<string>>
+  FilterComponent: React.FC<{
+    showFilter: boolean
+    setExportQuery: Dispatch<React.SetStateAction<string>>
+  }>
 }
 
 type TableProps = {
-    columnsArray: readonly Column<any>[]
+  columnsArray: readonly Column<any>[]
 }
 
 const KrysIndex: React.FC<Props> = ({
-                                        queryId,
-                                        requestFunction,
-                                        columnsArray,
-                                        cardHeader,
-                                        showFilter,
-                                        setExportQuery,
-                                        FilterComponent
-                                    }) => {
+  queryId,
+  requestFunction,
+  columnsArray,
+  cardHeader,
+  showFilter,
+  setExportQuery,
+  FilterComponent,
+}) => {
+  return (
+    <QueryRequestProvider>
+      <QueryResponseProvider id={queryId} requestFunction={requestFunction}>
+        <ListViewProvider>
+          <KTCard>
+            <KTCardHeader text={cardHeader.text} actions={cardHeader.actions} />
 
-    return (
-        <QueryRequestProvider>
-            <QueryResponseProvider id={queryId} requestFunction={requestFunction}>
-                <ListViewProvider>
-                    <KTCard>
-                        <KTCardHeader text={cardHeader.text}
-                                      actions={cardHeader.actions}/>
-
-                        <KTCardBody>
-                            <FilterComponent showFilter={showFilter} setExportQuery={setExportQuery}/>
-                            <IndexTable columnsArray={columnsArray}/>
-                        </KTCardBody>
-                    </KTCard>
-                </ListViewProvider>
-            </QueryResponseProvider>
-        </QueryRequestProvider>
-    )
+            <KTCardBody>
+              <FilterComponent showFilter={showFilter} setExportQuery={setExportQuery} />
+              <IndexTable columnsArray={columnsArray} />
+            </KTCardBody>
+          </KTCard>
+        </ListViewProvider>
+      </QueryResponseProvider>
+    </QueryRequestProvider>
+  )
 }
 
 const IndexTable = ({columnsArray}: TableProps) => {
-    const modelData = useQueryResponseData();
-    const isLoading = useQueryResponseLoading();
-    const data = useMemo(() => modelData, [modelData]);
-    const columns = useMemo(() => columnsArray,
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        []);
+  const modelData = useQueryResponseData()
+  const isLoading = useQueryResponseLoading()
+  const data = useMemo(() => modelData, [modelData])
+  const columns = useMemo(
+    () => columnsArray,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  )
 
-    return (
-        <KrysTable data={data} columns={columns} model={modelData.length > 0 ? modelData[0] : null}
-                   isLoading={isLoading}/>
-    )
+  return (
+    <KrysTable
+      data={data}
+      columns={columns}
+      model={modelData.length > 0 ? modelData[0] : null}
+      isLoading={isLoading}
+    />
+  )
 }
 
-export default KrysIndex;
+export default KrysIndex

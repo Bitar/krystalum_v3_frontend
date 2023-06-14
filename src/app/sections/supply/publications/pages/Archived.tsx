@@ -26,23 +26,21 @@ const PublicationArchived: React.FC = () => {
   }, [])
 
   return (
-    <>
-      <KrysIndex
-        queryId={QUERIES.PUBLICATION_ARCHIVED_LIST}
-        requestFunction={getArchivedPublications}
-        columnsArray={PublicationsColumns}
-        cardHeader={{
-          text: 'All Archived Publications',
-          actions: [
-            new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
-            new FilterCardAction('publications-list-filter', showFilter, setShowFilter),
-          ],
-        }}
-        showFilter={showFilter}
-        setExportQuery={setExportQuery}
-        FilterComponent={PublicationArchivedFilter}
-      ></KrysIndex>
-    </>
+    <KrysIndex
+      queryId={QUERIES.PUBLICATION_ARCHIVED_LIST}
+      requestFunction={getArchivedPublications}
+      columnsArray={PublicationsColumns}
+      cardHeader={{
+        text: 'All Archived Publications',
+        actions: [
+          new ExportCardAction(exportQuery, EXPORT_ENDPOINT),
+          new FilterCardAction('publications-list-filter', showFilter, setShowFilter),
+        ],
+      }}
+      showFilter={showFilter}
+      setExportQuery={setExportQuery}
+      FilterComponent={PublicationArchivedFilter}
+    />
   )
 }
 

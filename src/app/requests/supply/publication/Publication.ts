@@ -1,10 +1,6 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
 import {createFormData} from '../../../helpers/requests'
-import {
-  Publication,
-  PublicationList,
-  PublicationPaginate,
-} from '../../../models/supply/publication/Publication'
+import {Publication, PublicationPaginate} from '../../../models/supply/publication/Publication'
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publications`
@@ -15,10 +11,10 @@ export const INCLUDES = 'include[]=info&include[]=languages'
 export const SHOW_INCLUDES =
   'include[]=info&include[]=languages&include[]=formats&include[]=verticals&include[]=adServers&include[]=technologies'
 
-export const getAllPublications = async (): Promise<PublicationList[] | AxiosError | undefined> => {
+export const getAllPublications = async (): Promise<Publication[] | AxiosError | undefined> => {
   return axios
     .get(ENDPOINT + '/all?sort[]=name')
-    .then((response: AxiosResponse<PublicationList>) => response.data.data)
+    .then((response: AxiosResponse<PublicationPaginate>) => response.data.data)
     .catch((error) => {
       return error
     })
@@ -48,7 +44,7 @@ export const getArchivedPublications = (query?: String): Promise<PublicationPagi
 
   return axios
     .get(url)
-    .then((response: AxiosResponse<PublicationPaginate>) => response.data.data)
+    .then((response: AxiosResponse<PublicationPaginate>) => response.data)
     .catch((error) => {
       return error
     })

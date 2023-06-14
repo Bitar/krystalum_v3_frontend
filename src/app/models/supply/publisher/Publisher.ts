@@ -18,7 +18,3 @@ export type Publisher = {
 }
 
 export type PublisherPaginate = Response<Publisher[]>
-
-export type PublisherList = {
-  data: Publisher[]
-}

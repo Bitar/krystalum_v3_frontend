@@ -1,10 +1,6 @@
 import axios, {AxiosError, AxiosResponse} from 'axios'
 import {createFormData} from '../../../helpers/requests'
-import {
-  Publisher,
-  PublisherList,
-  PublisherPaginate,
-} from '../../../models/supply/publisher/Publisher'
+import {Publisher, PublisherPaginate} from '../../../models/supply/publisher/Publisher'
 
 const API_URL = process.env.REACT_APP_API_URL
 const ENDPOINT = `${API_URL}/supply/publishers`
@@ -17,7 +13,7 @@ export const INCLUDES =
 export const getAllPublishers = async (): Promise<Publisher[] | AxiosError | undefined> => {
   return axios
     .get(ENDPOINT + '/all?sort[]=name')
-    .then((response: AxiosResponse<PublisherList>) => response.data.data)
+    .then((response: AxiosResponse<PublisherPaginate>) => response.data.data)
     .catch((error) => {
       return error
     })
@@ -47,7 +43,7 @@ export const getArchivedPublishers = (query?: String): Promise<PublisherPaginate
 
   return axios
     .get(url)
-    .then((response: AxiosResponse<PublisherPaginate>) => response.data.data)
+    .then((response: AxiosResponse<PublisherPaginate>) => response.data)
     .catch((error) => {
       return error
     })
