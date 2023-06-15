@@ -1,11 +1,12 @@
 import * as Yup from 'yup'
 import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum'
+import {getEnumIds} from '../../../../../../helpers/dataManipulation'
 import {DEFAULT_CAMPAIGN_RESTRICTION_TYPE} from '../../../../../../helpers/settings'
 import {PublicationCampaignRestriction} from '../../../../../../models/supply/publication/PublicationCampaignRestriction'
 
 export interface PublicationCampaignRestrictionFormFields {
   type: string
-  geo_type: string
+  geo_type: number
   geo_ids: number[]
   format_ids: number[]
   campaign_type_ids?: number[]
@@ -16,7 +17,7 @@ export interface PublicationCampaignRestrictionFormFields {
 export const defaultPublicationCampaignRestrictionFormFields: PublicationCampaignRestrictionFormFields =
   {
     type: DEFAULT_CAMPAIGN_RESTRICTION_TYPE.id,
-    geo_type: '',
+    geo_type: 0,
     geo_ids: [],
     format_ids: [],
   }
@@ -40,7 +41,7 @@ export const defaultCampaignRestrictionsFilterFields = {
 
 export const publicationCampaignRestrictionSchema = (isEdit: boolean) => {
   let schema = {
-    geo_type: Yup.string().oneOf(Object.values(GeoTypeEnum)).required(),
+    geo_type: Yup.number().oneOf(getEnumIds(GeoTypeEnum)).required(),
     format_ids: Yup.array()
       .of(Yup.number())
       .required()

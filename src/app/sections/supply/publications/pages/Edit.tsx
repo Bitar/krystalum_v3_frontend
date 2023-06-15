@@ -19,7 +19,7 @@ import PublicationTechnologyCreate from './edit/technologies/Create'
 import PublicationVerticalCreate from './edit/verticals/Create'
 
 const PublicationEdit: React.FC = () => {
-  const {publication} = usePublicationEdit()
+  const {publication, tabActiveKey} = usePublicationEdit()
   const krysApp = useKrysApp()
 
   useEffect(() => {
@@ -92,7 +92,7 @@ const PublicationEdit: React.FC = () => {
       <KTCardHeader text='Edit Publication' />
 
       <KTCardBody>
-        <Tab.Container defaultActiveKey='settingsNav-0'>
+        <Tab.Container defaultActiveKey={`${tabActiveKey !== '' ? tabActiveKey : 'settingsNav-0'}`}>
           <div className='row'>
             <div className='col-lg-4 col-xl-3'>
               <Nav variant='pills' className='flex-column settings-nav'>

@@ -1,11 +1,12 @@
 import * as Yup from 'yup'
 import {GeoTypeEnum} from '../../../../../../enums/Supply/GeoTypeEnum'
+import {getEnumIds} from '../../../../../../helpers/dataManipulation'
 import {DEFAULT_CURRENCY} from '../../../../../../helpers/settings'
 import {PublicationMinimumEcpm} from '../../../../../../models/supply/publication/PublicationMinimumEcpm'
 
 export interface PublicationMinimumEcpmFormFields {
   format_ids: number[]
-  geo_type: string
+  geo_type: number
   geo_ids: number[]
   rate: number
   currency_id: number
@@ -13,7 +14,7 @@ export interface PublicationMinimumEcpmFormFields {
 
 export const defaultPublicationMinimumEcpmFormFields: PublicationMinimumEcpmFormFields = {
   format_ids: [],
-  geo_type: '',
+  geo_type: 0,
   geo_ids: [],
   rate: 0,
   currency_id: DEFAULT_CURRENCY.id,
@@ -35,7 +36,7 @@ export const defaultPublicationMinimumEcpmEditFormFields: PublicationMinimumEcpm
 
 export const publicationMinimumEcpmSchema = (isEdit: boolean) => {
   let schema = {
-    geo_type: Yup.string().oneOf(Object.values(GeoTypeEnum)).required(),
+    geo_type: Yup.number().oneOf(getEnumIds(GeoTypeEnum)).required(),
     ...(isEdit
       ? {
           format_id: Yup.number().required().min(1, 'format is a required field'),

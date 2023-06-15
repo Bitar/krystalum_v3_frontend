@@ -26,7 +26,7 @@ export type AnalyticType = {
 }
 
 export type GeoType = {
-  id: string
+  id: number
   name: string
 }
 

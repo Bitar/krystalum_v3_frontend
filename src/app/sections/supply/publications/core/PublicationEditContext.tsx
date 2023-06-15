@@ -15,6 +15,8 @@ interface Props {
   handleRefresh: () => void
   editOptions: PublicationEditOptions
   setEditOptions: Dispatch<SetStateAction<PublicationEditOptions>>
+  tabActiveKey: string
+  setTabActiveKey: Dispatch<SetStateAction<string>>
 }
 
 const defaultPublicationEditContext = {
@@ -25,6 +27,8 @@ const defaultPublicationEditContext = {
   handleRefresh: () => {},
   editOptions: DEFAULT_PUBLICATION_EDIT_OPTIONS,
   setEditOptions: () => {},
+  tabActiveKey: '',
+  setTabActiveKey: () => {},
 }
 
 export const PublicationEditContext = createContext<Props>(defaultPublicationEditContext)
@@ -38,10 +42,10 @@ export const PublicationEditProvider: FC<WithChildren> = ({children}) => {
 
   const [publication, setPublication] = useState<Publication | null>(null)
   const [refresh, setRefresh] = useState<boolean>(false)
-
   const [editOptions, setEditOptions] = useState<PublicationEditOptions>(
     DEFAULT_PUBLICATION_EDIT_OPTIONS
   )
+  const [tabActiveKey, setTabActiveKey] = useState<string>('')
 
   const handleRefresh = () => {
     setRefresh(!refresh)
@@ -72,6 +76,8 @@ export const PublicationEditProvider: FC<WithChildren> = ({children}) => {
         handleRefresh,
         editOptions,
         setEditOptions,
+        tabActiveKey,
+        setTabActiveKey,
       }}
     >
       {children}
